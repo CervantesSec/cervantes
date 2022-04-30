@@ -1,0 +1,142 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@model LoginModel
+
+@inject IViewLocalizer Localizer
+
+
+@{
+    ViewData["Title"] = @Localizer["Login"];
+        var culture = CultureInfo.CurrentCulture.Name;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cervantes | Login</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/lib/theme/css/adminlte.css">
+    <link href="~/lib/fontawesome/css/all.css" rel="stylesheet">
+
+</head>
+
+<body class="hold-transition login-page">
+<div class="login-box">
+  <!-- /.login-logo -->
+  <div class="card">
+      <div class="card-header text-center bg-dark">
+          <a class="h1">
+              <img src="/img/logo.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8;height: 50px">
+                Cervantes
+          </a>
+      </div>
+    <div class="card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+
+        <form id="account" method="post" asp-route-culture="@culture">
+        <div class="input-group mb-3">
+          <input type="email" asp-for="Input.Email" class="form-control" placeholder="Email">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" asp-for="Input.Password" class="form-control" placeholder="Password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" asp-for="Input.RememberMe" id="remember">
+              <label for="remember">
+                Remember Me
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-dark btn-block">Sign In</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+        
+
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+<!-- /.login-box -->
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/theme/js/adminlte.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
+</body>
+</html>
+
+
+@*
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h1 localize-content>Login</h1>
+        <section>
+            <form id="account" method="post" asp-route-culture="@culture">
+                <h4>Use a local account to log in.</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe">
+                            <input asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-dark" localize-content>Log in</button>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <a localize-content id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    </p>
+                    <p>
+                        <a localize-content asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                    </p>
+                    <p>
+                        <a localize-content id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+   
+</div>
+*@
+
+

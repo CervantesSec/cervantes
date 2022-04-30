@@ -1,0 +1,175 @@
+﻿@using System.Net
+@model Cervantes.Web.Models.ClientDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-briefcase"></i> @Model.Client.Name</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item"><a asp-controller="Client" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item active" localize-content>Details</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-2">
+    
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                  <div class="card-body box-profile">
+                    <div class="text-center">
+                      <img class="img-fluid img-circle"
+                           src="@Url.Content(Model.Client.ImagePath)"
+                           alt="LogoClient" style="height: 200px;">
+                    </div>
+    
+                      <h3 class="profile-username text-center">@Model.Client.Name</h3>
+                      <div class="info-box mb-3">
+                          <span class="info-box-icon bg-info"><i class="fas fa-user"></i></span>
+                      
+                          <div class="info-box-content">
+                              <span class="info-box-text" localize-content>Created by</span>
+                              <span class="info-box-number">@Model.Client.User.FullName</span>
+                          </div>
+                          <!-- /.info-box-content -->
+                      </div>
+                      <div class="info-box mb-3">
+                                                <span class="info-box-icon bg-teal"><i class="fas fa-calendar"></i></span>
+                                            
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text" localize-content>Created on</span>
+                                                    <span class="info-box-number">@Model.Client.CreatedDate</span>
+                                                </div>
+                                                <!-- /.info-box-content -->
+                                            </div>
+                      
+
+
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                                <a class="btn btn-default" asp-controller="Client" asp-action="Index" localize-content>Back</a>
+                       @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                    {
+                        <a class="btn btn-outline-warning" asp-area="" asp-controller="Client" asp-action="Edit" asp-route-id="@Model.Client.Id" localize-content><i class="fas fa-edit"></i> Edit</a>
+
+                    }
+              </div>
+              <!-- /.col -->
+              <div class="col-md-10">
+                <div class="card">
+                  <div class="card-header p-2">
+                    <ul class="nav nav-pills">
+                      <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab"><span localize-content>Details</span></a></li>
+                      <li class="nav-item"><a class="nav-link" href="#projects" data-toggle="tab"><span localize-content>Projects</span></a></li>
+                    </ul>
+                  </div><!-- /.card-header -->
+                  <div class="card-body">
+                    <div class="tab-content">
+                      <div class="active tab-pane" id="details">
+                        <dl>
+                            <dt><p localize-content>Contact Name</p></dt>
+                            <hr>
+                            <dd>@Html.DisplayFor(model => model.Client.ContactName)</dd>
+                            <dt> <p localize-content>Contact Phone</p></dt>
+                            <hr>
+                            <dd>@Html.DisplayFor(model => model.Client.ContactPhone)</dd>
+                            <dt><p localize-content>Contact Email</p></dt>
+                            <hr>
+                            <dd>@Html.DisplayFor(model => model.Client.ContactEmail)</dd>
+                            <dt><p localize-content>URL</p></dt>
+                            <hr>
+                            <dd>@Html.DisplayFor(model => model.Client.Url)</dd>
+                              <dt><p localize-content>Description</p></dt>
+                            <hr>
+                            <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Client.Description))</dd>
+                        </dl>
+                      </div>
+                      <!-- /.tab-pane -->
+                      <div class="tab-pane" id="projects">
+                        
+                          @if(Model.Project.FirstOrDefault() != null){
+                            <!--Table-->
+                            <table id="projectResults" class="table table-bordered table-hover" width="100%">
+                                <!--Table head-->
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th><i class="fas fa-folder"></i> <span localize-content>Name</span></th>
+                                        <th><i class="fas fa-project-diagram"></i> <span localize-content>Type</span></th>
+                                        <th><i class="fas fa-tasks"></i> <span localize-content>Status</span></th>
+                                        <th><i class="fas fa-calendar"></i> <span localize-content>Start Date</span></th>
+                                        <th><i class="fas fa-calendar-check"></i> <span localize-content>End Date</span></th>
+                                        <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
+                                    </tr>
+                                </thead>
+                                <!--Table head-->
+                                <!--Table body-->
+                                <tbody>
+
+                                    @foreach (var project in Model.Project)
+                                    {
+                                        <tr>
+                                            <td>                  
+                                                @project.Name                 
+                                            </td>
+                                            <td>@project.ProjectType</td>
+                                            <td>@project.Status</td>
+                                            <td>@project.StartDate</td>
+                                            <td>@project.EndDate</td>
+                                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                                                                        {
+                                                                            <td>
+                                                                                <a class="btn btn-tool" asp-controller="Project" asp-action="Details" asp-route-id="@project.Id" localize-content><i class="fas fa-eye"></i></a>
+                                                                                <a class="btn btn-tool" asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id" localize-content><i class="fas fa-edit"></i></a>
+                                                                                <a class="btn btn-tool" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id" localize-content ><i class="fas fa-trash"></i></a>
+                                                                            </td>
+                                            
+                                                                        }
+                                                                     else
+                                                                     {
+                                                                         <td><a class="btn btn-tool" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id" localize-content ><i class="fas fa-trash"></i></a></td>
+                                                                         
+                                                                     }
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                                <!--Table body-->
+                            </table>
+                            <!--Table-->
+                            }
+
+                      </div>
+                      <!-- /.tab-pane -->
+    
+                    </div>
+                    <!-- /.tab-content -->
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div><!-- /.container-fluid -->        
+
+</section>

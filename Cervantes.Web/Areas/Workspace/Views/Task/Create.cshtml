@@ -1,0 +1,122 @@
+﻿@using Cervantes.CORE
+@model Cervantes.Web.Areas.Workspace.Models.TaskCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Task";
+}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-folder"></i> Create Task</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item" localize-content>Workspace</li>
+              <li class="breadcrumb-item" localize-content>@Model.Project.Name</li>
+              <li class="breadcrumb-item active" localize-content>Create Tasks</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+         <div class="card">
+    <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+            <form asp-area="Workspace" asp-controller="Task" asp-action="Create" method="post" asp-route-project="@Model.Project.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label" localize-content>Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label" localize-content>Description</label>
+                <textarea id="description" asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+                        <div class="form-group">
+                <label asp-for="StartDate" class="control-label" localize-content>Start Date</label>
+                <input asp-for="StartDate" class="form-control"  value="2021-01-01"/>
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label" localize-content>End Date</label>
+                <input asp-for="EndDate" class="form-control"  value="2021-01-01" data-date-format="mm/dd/yyyy hh:mm:ss" />
+                <span asp-validation-for="EndDate" class="text-danger" ></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetId" class="control-label" localize-content>Target</label>
+                @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label" localize-content>Task Status</label>
+                @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList<Cervantes.CORE.TaskStatus>(),new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <a class="btn btn-default" asp-area="Workspace" asp-controller="Task" asp-action="Index" asp-route-project="@Model.Project.Id">Back</a>
+                <button type="submit" class="btn btn-dark" localize-content>Create</button>
+       
+            </div>
+        </form>
+            </div>
+        </div>
+           </div>
+        </div>
+    </section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+     <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+    <script>
+  $(document).ready(function() {
+      $('#description').summernote({
+      height: 300,
+      callbacks: {
+              onImageUpload: function(image) {
+                  uploadImage(image[0]);
+              }
+              }
+      });
+      });
+    
+    function uploadImage(image) {
+        var data = new FormData();
+        data.append("image", image);
+        $.ajax({
+            url: '@Url.Action("UploadTask","Image", new { Area = "" })',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: "post",
+            success: function(FileUrl) {
+                var imgNode = document.createElement('img');  
+                imgNode.src = FileUrl;  
+                $('#description').summernote('insertNode', imgNode); 
+            },
+            error: function(data) {
+                alert(data.responseText); 
+            }
+        });
+    }
+   
+
+         $(document).ready(function () {
+  bsCustomFileInput.init();
+});
+
+
+         </script>
+}

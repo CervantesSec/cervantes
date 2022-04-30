@@ -1,0 +1,365 @@
+﻿@using Cervantes.CORE
+@using TaskStatus = Cervantes.CORE.TaskStatus
+@model Cervantes.Web.Areas.Workspace.Models.TaskViewModel
+
+@{
+    ViewData["Title"] = "My Tasks";
+}
+
+@{
+    if (TempData["deleted"] != null)
+    {
+<div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Task deleted successfully!</strong>
+            
+        </div>
+    }
+
+    if (TempData["created"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Task created successfully!</strong>
+            
+        </div>
+    }
+
+    if (TempData["edited"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Task edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>@TempData["error"].ToString()</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["editedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Task note edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["addedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Task note added successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["deletedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Task note edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+  
+  if (TempData["editedAttachment"] != null)
+  {
+    <div class="alert alert-success alert-dismissible">
+      <strong localize-content>Task attachment edited successfully!</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    </div>
+  }
+    
+  if (TempData["addedAttachment"] != null)
+  {
+    <div class="alert alert-success alert-dismissible">
+      <strong localize-content>Task attachment added successfully!</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    </div>
+  }
+    
+  if (TempData["deletedAttachment"] != null)
+  {
+    <div class="alert alert-success alert-dismissible">
+      <strong localize-content>Task attachment edited successfully!</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    </div>
+  }
+
+}
+
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-tasks"></i> My Tasks</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item" localize-content>Workspace</li>
+              <li class="breadcrumb-item" localize-content>@Model.Project.Name</li>
+              <li class="breadcrumb-item active" localize-content>My Tasks</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        @if(Model.Tasks.FirstOrDefault() == null){
+                   <div class="row justify-content-center">
+        <div class="col-md-2">
+         <div class="card card-row card-secondary">
+          <div class="card-header">
+            <h3 class="card-title" localize-content>
+              Backlog
+            </h3>
+          </div>
+          <div class="card-body" localize-content>
+              No Tasks
+        </div>    
+            
+          </div>
+        </div>
+
+        <div class="col-md-2">
+        <div class="card card-row card-primary">
+          <div class="card-header">
+            <h3 class="card-title" localize-content>
+              To Do
+            </h3>
+          </div>
+          <div class="card-body" localize-content>
+              No Tasks
+          </div>
+        </div>
+        </div>
+
+        <div class="col-md-2">
+        <div class="card card-row card-default">
+          <div class="card-header bg-info">
+            <h3 class="card-title" localize-content>
+              In Progress
+            </h3>
+          </div>
+          <div class="card-body" localize-content>
+              No Tasks
+          </div>
+        </div>
+        </div>
+
+        <div class="col-md-2">
+                <div class="card card-row card-default">
+          <div class="card-header bg-danger">
+            <h3 class="card-title" localize-content>
+              Blocked
+            </h3>
+          </div>
+          <div class="card-body" localize-content>
+              No Tasks
+          </div>
+        </div>
+        </div>
+
+        <div class="col-md-2">
+        <div class="card card-row card-success">
+          <div class="card-header">
+            <h3 class="card-title" localize-content>
+              Done
+            </h3>
+          </div>
+          <div class="card-body" localize-content>
+              No Tasks
+            </div>
+          </div>
+        </div>
+        </div>
+        }
+    else
+    {
+
+      <div class="row justify-content-center">
+            <div class="col-md-2">
+                <div class="card card-row card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title" localize-content>
+                            Backlog
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach ( var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.Backlog))
+                        {
+                              <div class="card card-primary card-outline">
+                              <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-eye"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-pen"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                                                                                        <i class="fas fa-trash"></i>
+                                                                                                      </a>
+                                </div>
+                              </div>
+                            </div>
+                        }
+
+
+
+        </div>    
+
+          </div>
+        </div>
+
+        <div class="col-md-2">
+        <div class="card card-row card-primary">
+          <div class="card-header">
+            <h3 class="card-title" localize-content>
+              To Do
+            </h3>
+          </div>
+          <div class="card-body">
+                        @foreach (var task in Model.Tasks.Where(x => x.Status == TaskStatus.ToDo))
+                        {
+                              <div class="card card-primary card-outline">
+                              <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-eye"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-pen"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                                                                                        <i class="fas fa-trash"></i>
+                                                                                                      </a>
+                                </div>
+                              </div>
+                            </div>
+                        }
+
+          </div>
+        </div>
+        </div>
+
+        <div class="col-md-2">
+        <div class="card card-row card-default">
+          <div class="card-header bg-info">
+            <h3 class="card-title" localize-content>
+              In Progress
+            </h3>
+          </div>
+          <div class="card-body">
+            @foreach ( var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.InProgress))
+                        {
+                              <div class="card card-primary card-outline">
+                              <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-eye"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-pen"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                                                                                        <i class="fas fa-trash"></i>
+                                                                                                      </a>
+                                </div>
+                              </div>
+                            </div>
+                        }
+
+          </div>
+        </div>
+        </div>
+
+        <div class="col-md-2">
+                <div class="card card-row card-default">
+          <div class="card-header bg-danger">
+            <h3 class="card-title" localize-content>
+              Blocked
+            </h3>
+          </div>
+          <div class="card-body">
+            @foreach ( var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.Blocked))
+                        {
+                              <div class="card card-primary card-outline">
+                              <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-eye"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-pen"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                                                                                        <i class="fas fa-trash"></i>
+                                                                                                      </a>
+                                </div>
+                              </div>
+                            </div>
+                        }
+
+          </div>
+        </div>
+        </div>
+
+        <div class="col-md-2">
+        <div class="card card-row card-success">
+          <div class="card-header">
+            <h3 class="card-title" localize-content>
+              Done
+            </h3>
+          </div>
+          <div class="card-body">
+                       @foreach ( var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.Done))
+                        {
+                              <div class="card card-primary card-outline">
+                              <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-eye"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                    <i class="fas fa-pen"></i>
+                                  </a>
+                                  <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                                                      <i class="fas fa-trash"></i>
+                                                                    </a>
+                                </div>
+                              </div>
+                            </div>
+                        }
+
+            </div>
+          </div>
+        </div>
+        </div>
+        
+        }
+    </section>
+  @section Scripts{
+<script>
+
+
+</script>
+      }
+    
+
+
+
+

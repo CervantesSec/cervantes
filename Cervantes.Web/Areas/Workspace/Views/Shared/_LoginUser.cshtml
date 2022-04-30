@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Cervantes.CORE
+@using System.Globalization
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+	@{
+	var culture = CultureInfo.CurrentCulture.Name;
+}
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+	
+	  <li class="nav-item dropdown show">
+				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle user-action" aria-expanded="true">
+				 <span><i class="fas fa-user"></i> @User.Identity.Name <b class="caret"></b></span>
+				 </a>
+				<div class="dropdown-menu">
+					<a  class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" asp-route-culture="@culture" title="Manage" localize-content><i class="fas fa-user"></i> <span localize-content>Profile</span></a>
+					<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Email" asp-route-culture="@culture" title="Manage" localize-content><i class="fas fa-envelope"></i> <span localize-content>Email</span></a>
+					<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" asp-route-culture="@culture" title="Manage" localize-content><i class="fas fa-key"></i> <span localize-content>Password</span></a>
+					<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/TwoFactorAuthentication" asp-route-culture="@culture" title="Manage" localize-content><i class="fas fa-unlock"></i> <span localize-content>Two-factor authentication</span></a>
+					<div class="divider dropdown-divider"></div>
+					<a class="dropdown-item" asp-area="" asp-controller="Note" asp-action="Index" asp-route-culture="@culture" title="Manage" localize-content><i class="fas fa-sticky-note"></i> <span localize-content>My Notes</span></a>
+					<a class="dropdown-item" asp-area="" asp-controller="Note" asp-action="Create" asp-route-culture="@culture" title="Manage" localize-content><i class="fas fa-plus"></i> <span localize-content>Create Note</span></a>
+					<div class="divider dropdown-divider"></div>
+							<form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-culture="@culture" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" localize-content>
+								<button  type="submit" class="dropdown-item" localize-content><i class="fas fa-sign-out-alt"></i> <span localize-content>Logout</span></button>
+							</form>
+				</div>
+			</li>
+}
+else
+{
+	<li class="nav-item">
+		<a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login" asp-route-culture="@culture" localize-content>Login</a>
+	</li>
+}
+
+
+

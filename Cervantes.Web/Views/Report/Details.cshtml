@@ -1,0 +1,84 @@
+﻿@using System.Net
+@model Cervantes.CORE.Report
+
+@{
+    ViewData["Title"] = "Report Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-file"></i> @Model.Name</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item"><a asp-controller="Client" asp-action="Index" localize-content>Report</a></li>
+              <li class="breadcrumb-item active" localize-content>Details</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+
+        
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-2">
+    
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                  <div class="card-body box-profile">
+                    <div class="text-center">
+                      
+                    </div>
+    
+                    <h3 class="profile-username text-center">@Model.Name</h3>
+                    <dt><p localize-content>Version</p></dt>
+                    <hr>
+                    <dd>@Html.DisplayFor(model => model.Version)</dd>
+                    <dt><p localize-content>Created by</p></dt>
+                    <hr>
+                    <dd>@Html.DisplayFor(model => model.User.UserName)</dd>
+                    <dt> <p localize-content>Created on</p></dt>
+                    <hr>
+                    <dd>@Html.DisplayFor(model => model.CreatedDate)</dd>
+                    <dt> <p localize-content>Description</p></dt>
+                    <hr>
+                    <dd>@Html.DisplayFor(model => model.Description)</dd> 
+
+
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-10">
+              <div class="card">
+                <div class="card-header p-2">
+                  <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab">Details</a></li>                    </ul>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                  <div class="tab-content">
+                    <div class="active tab-pane" id="details">
+                      <object class="col-md-12" data="~/@Model.FilePath" height="1000">
+                        <div>No online PDF viewer installed</div>
+                      </object>
+                    </div>
+                    <!-- /.tab-pane -->
+    
+                  </div>
+
+                </div>
+              </div>
+              
+</section>

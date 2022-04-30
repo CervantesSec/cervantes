@@ -1,0 +1,146 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <UserSecretsId>aspnet-Cervantes.Web-4BE0D898-2103-41BB-B089-6686E1489E52</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LazZiya.ExpressLocalization" Version="4.0.4" />
+    <PackageReference Include="LazZiya.TagHelpers" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
+    <PackageReference Include="NLog" Version="4.7.15" />
+    <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.2.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="TinyMCE" Version="6.0.1" />
+    <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cervantes.Application\Cervantes.Application.csproj" />
+    <ProjectReference Include="..\Cervantes.CORE\Cervantes.CORE.csproj" />
+    <ProjectReference Include="..\Cervantes.DAL\Cervantes.DAL.csproj" />
+    <ProjectReference Include="..\Cervantes.IFR\Cervantes.IFR.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Workspace\Data\" />
+    <Folder Include="wwwroot\Attachments\Images\Clients\" />
+    <Folder Include="wwwroot\Attachments\Images\Tasks" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\..\Desktop\wkhtmltoimage">
+      <Link>Rotativa\MacOS\wkhtmltoimage</Link>
+    </Content>
+    <Content Include="..\..\..\Desktop\wkhtmltopdf">
+      <Link>Rotativa\MacOS\wkhtmltopdf</Link>
+    </Content>
+    <Content Include="..\..\..\Downloads\libwkhtmltox.so">
+      <Link>Rotativa\Linux\libwkhtmltox.so</Link>
+    </Content>
+    <Content Include="..\..\..\Downloads\wkhtmltopdf">
+      <Link>Rotativa\Linux\wkhtmltopdf</Link>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Rotativa\MacOS\wkhtmltoimage.exe" />
+    <None Include="wwwroot\Rotativa\MacOS\wkhtmltopdf.exe" />
+    <None Include="wwwroot\Rotativa\Windows\wkhtmltoimage.exe" />
+    <None Include="wwwroot\Rotativa\Windows\wkhtmltopdf.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\CHANGELOG.md" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\icons\default\icons.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\jquery.tinymce.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\langs\README.md" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\license.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\advlist\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\anchor\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\autolink\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\autoresize\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\autosave\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\bbcode\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\charmap\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\code\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\codesample\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\colorpicker\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\contextmenu\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\directionality\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\emoticons\js\emojiimages.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\emoticons\js\emojiimages.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\emoticons\js\emojis.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\emoticons\js\emojis.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\emoticons\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\fullpage\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\fullscreen\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\help\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\hr\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\image\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\imagetools\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\importcss\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\insertdatetime\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\legacyoutput\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\link\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\lists\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\media\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\nonbreaking\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\noneditable\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\pagebreak\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\paste\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\preview\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\print\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\quickbars\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\save\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\searchreplace\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\spellchecker\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\tabfocus\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\table\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\template\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\textcolor\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\textpattern\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\toc\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\visualblocks\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\visualchars\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\plugins\wordcount\plugin.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\content\dark\content.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\content\default\content.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\content\document\content.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\content\writer\content.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide-dark\content.inline.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide-dark\content.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide-dark\content.mobile.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide-dark\fonts\tinymce-mobile.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide-dark\skin.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide-dark\skin.mobile.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide-dark\skin.shadowdom.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide\content.inline.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide\content.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide\content.mobile.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide\fonts\tinymce-mobile.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide\skin.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide\skin.mobile.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\skins\ui\oxide\skin.shadowdom.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\themes\mobile\theme.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\themes\silver\theme.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\tinymce.d.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\js\tinymce\tinymce.min.js" />
+  </ItemGroup>
+
+</Project>

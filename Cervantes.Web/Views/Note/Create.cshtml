@@ -1,0 +1,101 @@
+﻿@model Cervantes.CORE.Note
+
+@{
+    ViewData["Title"] = "Create Document";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-briefcase"></i> Create Note</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item"><a asp-controller="Note" asp-action="Index" localize-content>Note</a></li>
+              <li class="breadcrumb-item active" localize-content>Create</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+    <div class="card-body">
+
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <form asp-area="" asp-controller="Note" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea id="description" asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                  <a class="btn btn-default" asp-action="Index" localize-content>Back</a>
+                <button type="submit" class="btn btn-dark" localize-content>Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+    </div>
+</div>
+
+ </section>
+  
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#description').summernote({
+        height: 500,
+        callbacks: {
+                onImageUpload: function(image) {
+                    uploadImage(image[0]);
+                }
+                }
+        });
+        });
+      
+      function uploadImage(image) {
+          var data = new FormData();
+          data.append("image", image);
+          $.ajax({
+              url: '@Url.Action("UploadNote","Image")',
+              cache: false,
+              contentType: false,
+              processData: false,
+              data: data,
+              type: "post",
+              success: function(FileUrl) {
+                  var imgNode = document.createElement('img');  
+                  imgNode.src = FileUrl;  
+                  $('#description').summernote('insertNode', imgNode); 
+              },
+              error: function(data) {
+                  alert(data.responseText); 
+              }
+          });
+      }
+     
+
+         $(document).ready(function () {
+  bsCustomFileInput.init();
+});
+         </script>
+        }

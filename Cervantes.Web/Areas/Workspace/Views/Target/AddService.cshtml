@@ -1,0 +1,123 @@
+﻿@using System.Net
+@using Cervantes.CORE
+@model Cervantes.Web.Areas.Workspace.Models.TargetServiceViewModel
+
+@{
+    ViewData["Title"] = "Add Service";
+}
+
+@{
+
+}
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-bullseye"></i> Create Service</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item" localize-content><a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspaces</a></li>
+                                          <li class="breadcrumb-item" localize-content><a asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Target</a></li>
+                                          <li class="breadcrumb-item active" localize-content>Add Service</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+    
+          <div class="card">
+    <div class="card-body">
+
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <form asp-area="Workspace" asp-controller="Target" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Target.Id" />
+            <div class="form-group">
+                <label asp-for="TargetService.Name" class="control-label"></label>
+                <input asp-for="TargetService.Name" class="form-control" />
+                <span asp-validation-for="TargetService.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetService.Version" class="control-label"></label>
+                <textarea id="description" asp-for="TargetService.Version" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="TargetService.Version" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetService.Port" class="control-label"></label>
+                <textarea id="description" asp-for="TargetService.Port" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="TargetService.Port" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetService.Description" class="control-label"></label>
+                <textarea id="description" asp-for="TargetService.Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="TargetService.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetService.Note" class="control-label"></label>
+                <textarea id="description" asp-for="TargetService.Note" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="TargetService.Note" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                  <a class="btn btn-default" asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Back</a>
+                <input type="submit" class="btn btn-dark" localize-content></input>
+            </div>
+        </form>
+    </div>
+</div>
+    </div>
+</div>
+
+
+</section>
+
+           
+  @section Scripts{
+<script>
+
+$(document).ready(function() {
+      $('#description').summernote({
+      height: 300,
+      callbacks: {
+              onImageUpload: function(image) {
+                  uploadImage(image[0]);
+              }
+              }
+      });
+      });
+    
+    function uploadImage(image) {
+        var data = new FormData();
+        data.append("image", image);
+        $.ajax({
+            url: '@Url.Action("UploadTarget","Image",new { Area = "" })',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: "post",
+            success: function(FileUrl) {
+                var imgNode = document.createElement('img');  
+                imgNode.src = FileUrl;  
+                $('#description').summernote('insertNode', imgNode); 
+            },
+            error: function(data) {
+                alert(data.responseText); 
+            }
+        });
+    }
+   
+         $(document).ready(function () {
+          bsCustomFileInput.init();
+            });
+
+</script>
+}                       

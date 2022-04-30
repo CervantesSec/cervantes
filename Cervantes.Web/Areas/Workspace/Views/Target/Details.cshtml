@@ -1,0 +1,355 @@
+﻿@using System.Net
+@using Cervantes.CORE
+@model Cervantes.Web.Areas.Workspace.Models.TargetDetailsViewModel
+
+@{
+    ViewData["Title"] = "Target Details";
+}
+
+@{
+
+    if (TempData["addedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Note added to task successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Note deleted from task successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["addedAttachment"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Attachment added to task successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+     if (TempData["deletedAttachment"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Attachment deleted from task successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["errorAttachment"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced adding an Attachment!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-folder"></i> @Model.Project.Name</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item" localize-content><a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspaces</a></li>
+                                          <li class="breadcrumb-item" localize-content><a asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Target</a></li>
+                                          <li class="breadcrumb-item active" localize-content>Details</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-2">
+    
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                  <div class="card-body box-profile">
+                    <div class="text-center">
+                    @switch(Model.Target.Type)
+                    {
+                        case TargetType.IP:
+                            <span class="img-fluid img-circle"><i class="fas fa-ethernet fa-3x"></i></span>
+                            break;
+                        case TargetType.Hostname:
+                             <span class="img-fluid img-circle"><i class="fas fa-compass fa-3x"></i></span>
+                            break;
+                        case TargetType.CIDR:
+                            <span class="img-fluid img-circle"><i class="fas fa-network-wired fa-3x"></i></span>
+                            break;
+                        case TargetType.URL:
+                            <span class="img-fluid img-circle"><i class="fas fa-at fa-3x"></i></span>
+                            break;
+                        case TargetType.Binary:
+                            <span class="mg-fluid img-circle"><i class="fas fa-file-alt fa-3x"></i></span>
+                            break;
+                        default:
+                            <span class="profile-user-img img-fluid img-circle"></span>
+                            break;
+
+                    }
+                    </div>
+    
+                      <h3 class="profile-username text-center">@Model.Target.Name</h3>  
+                      <div class="info-box mb-3">
+                          <span class="info-box-icon bg-info"><i class="fas fa-user"></i></span>
+                          <div class="info-box-content">
+                              <span class="info-box-text" localize-content>Created by</span>
+                              <span class="info-box-number">@Model.Target.User.FullName</span>
+                          </div>
+                      </div>
+                      
+                      <div class="info-box mb-3">
+                          <span class="info-box-icon bg-gray"><i class="fas fa-align-left"></i></span>
+                          <div class="info-box-content">
+                              <span class="info-box-text" localize-content>Description</span>
+                              <span class="info-box-number">@Html.Raw(@WebUtility.HtmlDecode(Model.Target.Description))</span>
+                          </div>
+                      </div>
+                      
+
+
+                          </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <a class="btn btn-light" asp-area="Workspace" asp-controller="Target" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>Back</a>
+                <a class="btn btn-outline-warning" asp-area="Workspace" asp-controller="Target" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@Model.Target.Id" localize-content>Edit</a>
+              </div>
+              <!-- /.col -->
+              <div class="col-md-10">
+                <div class="card">
+                  <div class="card-header p-2">
+                    <ul class="nav nav-pills">
+                      <li class="nav-item"><a class="nav-link active" href="#services" data-toggle="tab"><span localize-content>Services</span></a></li>                      
+                    </ul>
+                  </div><!-- /.card-header -->
+                  <div class="card-body">
+                    <div class="tab-content">
+                     
+                      <div class="active tab-pane" id="services">
+                        
+                          <table id="servicesResults" class="table table-bordered table-hover projects" width="100%">
+                              <!--Table head-->
+                              <thead class="thead-dark">
+                              <tr>
+                                  <th><i class="fas fa-server"></i> <span localize-content>Name</span></th>
+                                  <th><i class="fas fa-network-wired"></i> <span localize-content>Port</span></th>
+                                  <th><i class="fas fa-code-branch"></i> <span localize-content>Version</span></th>
+                                  <th><i class="fas fa-user"></i> <span localize-content>Added by</span></th>
+                                  <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
+                              </tr>
+                              </thead>
+                              <!--Table head-->
+                              <!--Table body-->
+                              <tbody>
+
+                              @foreach (var service in Model.TargetServices)
+                              {
+                                  <tr>
+                                      <td>@service.Name</td>
+                                      <td>@service.Port</td>
+                                      <td>@service.Version</td>
+                                      <td>@service.User.FullName</td>
+                                      @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                                      {
+                                          <td>
+                                              <a asp-area="Workspace" asp-controller="Target" asp-action="Service" asp-route-project="@Model.Project.Id" asp-route-id="@service.Id" class="btn btn-tool">
+                                                  <i class="fas fa-eye"></i>
+                                              </a>
+                                              <a asp-area="Workspace" asp-controller="Target" asp-action="EditService" asp-route-project="@Model.Project.Id" asp-route-id="@service.Id" asp-route-target="@Model.Target.Id" class="btn btn-tool">
+                                                  <i class="fas fa-edit"></i>
+                                              </a>
+                                              <a asp-area="Workspace" asp-controller="Target" asp-action="DeleteService" asp-route-project="@Model.Project.Id" asp-route-id="@service.Id" asp-route-target="@Model.Target.Id" class="btn btn-tool">
+                                                  <i class="fas fa-trash"></i>
+                                                  </a>
+                                          </td>
+
+                                      }
+                                      else{
+                                          <a asp-area="Workspace" asp-controller="Target" asp-action="Service" asp-route-project="@Model.Project.Id" asp-route-id="@service.Id" class="btn btn-tool">
+                                              <i class="fas fa-eye"></i>
+                                          </a>
+                                      }
+
+                                  </tr>
+                              }
+
+                              </tbody>
+                              <!--Table body-->
+                          </table>
+                          
+                          <!--Modal Init-->
+                          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addServiceModal" localize-content>
+                                                        Add Service
+                                                      </button>
+                          
+                                                      <!-- Modal -->
+                                                      <div class="modal fade" id="addServiceModal" tabindex="-1" role="dialog" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-xl" role="document">
+                                                          <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <h5 class="modal-title" id="addMemberModalLabel" localize-content>Add Service To Target</h5>
+                                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                              </button>
+                                                            </div>
+                                                            <form asp-area="Workspace" asp-controller="Target" asp-action="AddService" asp-route-project="@Model.Project.Id" asp-route-target="@Model.Target.Id" method="post" enctype="multipart/form-data">
+                                                            <div class="modal-body">
+                                                                <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
+                                                                <input asp-for="Target.Id" type="hidden" id="target" name="target"/>
+                                                               <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                                <div class="form-group">
+                                                                              <label class="control-label" localize-content>Name</label>
+                                                                              <input type="text" class="form-control" id="name" name="name"/>
+                                                                              <span class="text-danger"></span>
+                                                                
+                                                                    </div>
+                                                                          <div class="form-group">
+                                                                              <label class="control-label">Version</label>
+                                                                              <input type="text" class="form-control" name="version" id="version" />
+                                                                              <span class="text-danger"></span>
+                                                                          </div>
+                                                                          <div class="form-group">
+                                                                              <label class="control-label" localize-content>Port</label>
+                                                                              <input type="number" class="form-control" id="PORT" name="PORT" />
+                                                                              <span class="text-danger"></span>
+                                                                          </div>
+                                                                          <div class="form-group">
+                                                                              <label  class="control-label" localize-content>Description</label>
+                                                                              <textarea id="description" name="description" class="form-control" rows="4"></textarea>
+                                                                              <span class="text-danger"></span>
+                                                                          </div>
+                                                                          <div class="form-group">
+                                                                              <label class="control-label" localize-content>Note</label>
+                                                                              <textarea id="note" class="form-control" rows="4" name="note"></textarea>
+                                                                              <span class="text-danger"></span>
+                                                                          </div>
+                                                          
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                              <button type="button" class="btn btn-default" data-dismiss="modal" localize-content>Close</button>
+                                                              <button type="submit" class="btn btn-dark" localize-content>Add</button>
+                                                            </div>
+                                                             </form>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                          <!--Modal Close-->
+                          
+                          
+
+                      </div>
+                      <!-- /.tab-pane -->
+
+                    </div>
+                    <!-- /.tab-content -->
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div><!-- /.container-fluid --> 
+    
+
+
+
+</section>
+
+           
+  @section Scripts{
+<script>
+
+    $(document).ready(function () {
+        $('#servicesResults').DataTable({
+            "responsive": true
+        });
+
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+         $(document).ready(function () {
+  bsCustomFileInput.init();
+});
+         
+         $(document).ready(function() {
+                  $('#description').summernote({
+                  height: 300,
+                  callbacks: {
+                          onImageUpload: function(image) {
+                              uploadImage(image[0]);
+                          }
+                          }
+                  });
+                  });
+                
+                function uploadImage(image) {
+                    var data = new FormData();
+                    data.append("image", image);
+                    $.ajax({
+                        url: '@Url.Action("UploadTarget","Image", new {Area = ""})',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        type: "post",
+                        success: function(FileUrl) {
+                            var imgNode = document.createElement('img');  
+                            imgNode.src = FileUrl;  
+                            $('#description').summernote('insertNode', imgNode); 
+                        },
+                        error: function(data) {
+                            alert(data.responseText); 
+                        }
+                    });
+                }
+                
+                $(document).ready(function() {
+                         $('#note').summernote({
+                         height: 300,
+                         callbacks: {
+                                 onImageUpload: function(image) {
+                                     uploadImage(image[0]);
+                                 }
+                                 }
+                         });
+                         });
+                       
+                       function uploadImage(image) {
+                           var data = new FormData();
+                           data.append("image", image);
+                           $.ajax({
+                               url: '@Url.Action("UploadTarget","Image", new {Area = ""})',
+                               cache: false,
+                               contentType: false,
+                               processData: false,
+                               data: data,
+                               type: "post",
+                               success: function(FileUrl) {
+                                   var imgNode = document.createElement('img');  
+                                   imgNode.src = FileUrl;  
+                                   $('#note').summernote('insertNode', imgNode); 
+                               },
+                               error: function(data) {
+                                   alert(data.responseText); 
+                               }
+                           });
+                       }
+
+</script>
+}                       

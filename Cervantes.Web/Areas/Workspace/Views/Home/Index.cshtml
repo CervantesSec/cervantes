@@ -1,0 +1,443 @@
+﻿@using Cervantes.CORE
+@model Cervantes.Web.Areas.Workspace.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Workspace Dashboard";
+}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-tachometer-alt"></i> Dashboard: @Model.Project.Name</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item" localize-content>Workspace</li>
+              <li class="breadcrumb-item" localize-content>@Model.Project.Name</li>
+              <li class="breadcrumb-item active" localize-content>Dashboard</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+    <div class="row">
+                      <div class="col-md-2">
+    
+                <!-- Profile Image -->
+                <div class="card card-outline">
+                  <div class="card-body box-profile">
+                    <div class="text-center">
+                      <img class="img-fluid img-circle"
+                           src="@Url.Content(Model.Project.Client.ImagePath)"
+                           alt="LogoClient" style="height:200px;">
+                    </div>
+    
+                    <h3 class="profile-username text-center">@Model.Project.Name</h3>
+                    <dt><p localize-content>Client</p></dt>
+                    <hr>
+                    <dd><a asp-area="" asp-controller="Client" asp-action="Details" asp-route-id="@Model.Project.Client.Id" localize-content><span class="btn btn-outline-dark btn-sm"><i class="fas fa-briefcase"></i> @Model.Project.Client.Name</span></a></dd>
+                    <dt> <p localize-content>Start Date</p></dt>
+                    <hr>
+                    <dd>@Html.DisplayFor(model => model.Project.StartDate)</dd>      
+                    <dt> <p localize-content>End Date</p></dt>
+                    <hr>
+                    <dd>@Html.DisplayFor(model => model.Project.EndDate)</dd> 
+                    <dt> <p localize-content>Created by</p></dt>
+                    <hr>
+                    <dd>@Html.DisplayFor(model => model.Project.User.FullName)</dd>
+
+                    <dt> <p localize-content>Project Type</p></dt>
+                    <hr>
+                       @switch(Model.Project.ProjectType)
+                    {
+                        case ProjectType.BlackBox:
+                            <dd><span class="badge badge-dark">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
+                            break;
+                        case ProjectType.GrayBox:
+                             <dd><span class="badge badge-secondary">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
+                            break;
+                        case ProjectType.WhiteBox:
+                            <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
+                            break;
+                        default:
+                            <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
+                            break;
+
+                    }
+
+                    <dt> <p localize-content>Status</p></dt>
+                    <hr>
+                    @switch(Model.Project.Status)
+                    {
+                        case ProjectStatus.Active:
+                            <dd><span class="badge badge-success">@Html.DisplayFor(model => model.Project.Status)</span></dd>
+                            break;
+                        case ProjectStatus.Archived:
+                             <dd><span class="badge badge-secondary">@Html.DisplayFor(model => model.Project.Status)</span></dd>
+                            break;
+                        case ProjectStatus.Waiting:
+                            <dd><span class="badge badge-info">@Html.DisplayFor(model => model.Project.Status)</span></dd>
+                            break;
+                        default:
+                            <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.Status)</span></dd>
+                            break;
+
+                    }  
+
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+
+              
+               <div class="col-md-10">
+             <div class="row">
+          <!-- /.col -->
+          <div class="col-md-2">
+            <div class="info-box mb-3 bg-danger">
+              <span class="info-box-icon bg-danger"><i class="fas fa-bug"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text" localize-content>Vulnerabilities</span>
+                <span class="info-box-number">@Model.VulnNumber</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+
+          <!-- fix for small devices only -->
+          <div class="clearfix hidden-md-up"></div>
+
+          <div class="col-md-2">
+            <div class="info-box mb-3 bg-success">
+              <span class="info-box-icon bg-success"><i class="fas fa-tasks"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text" localize-content>Tasks</span>
+                <span class="info-box-number">@Model.TasksNumber</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-2">
+            <div class="info-box mb-3 bg-orange">
+              <span class="info-box-icon bg-orange"><i class="fas fa-bullseye"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text" localize-content>Targets</span>
+                <span class="info-box-number">@Model.TargetsNumber</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+
+              <div class="col-md-2">
+            <div class="info-box mb-3 bg-info">
+              <span class="info-box-icon bg-info"><i class="fas fa-users"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text" localize-content>Members</span>
+                <span class="info-box-number">@Model.MembersNumber</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+
+                        <div class="col-md-2">
+            <div class="info-box mb-3 bg-warning">
+              <span class="info-box-icon bg-warning"><i class="fas fa-sticky-note"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text" localize-content>Notes</span>
+                <span class="info-box-number">@Model.NotesNumber</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+             <div class="col-md-2">
+               <div class="info-box mb-3 bg-primary">
+                 <span class="info-box-icon bg-primary"><i class="fas fa-sticky-note"></i></span>
+
+                 <div class="info-box-content">
+                   <span class="info-box-text" localize-content>Attachments</span>
+                   <span class="info-box-number">@Model.AttachmentsNumber</span>
+                 </div>
+                 <!-- /.info-box-content -->
+               </div>
+               <!-- /.info-box -->
+             </div>
+             </div>
+             
+             
+               <div class="row">
+
+                 <div class="col-md-4">
+                   <div class="card h-100">
+                     <div class="card-header">
+                       <h3 class="card-title" localize-content>My Tasks</h3>
+                     </div>
+                     <!-- /.card-header -->
+                     <div class="card-body">
+                       <div class="row">
+                         
+
+                           @foreach (var task in Model.Tasks)
+                           {
+                             <div class="info-box">
+                               <span class="info-box-icon bg-success elevation-1"><i class="fas fa-tasks"></i></span>
+                                                  
+                               <div class="info-box-content">
+                                 <span class="info-box-text" localize-content><a asp-area="Workspace" asp-action="Details" asp-controller="Task" asp-route-id="@task.Id">@task.Name</a></span>
+                                 <span class="info-box-number">
+                                   @task.Status
+                                 </span>
+                               </div>
+                               <!-- /.info-box-content -->
+                             </div>
+                           }
+                           
+
+                       </div>
+                       <!-- /.row -->
+                     </div>
+                     <!-- /.footer -->
+                   </div>
+                 </div>
+
+                 <div class="col-md-4">
+                   <div class="card h-100">
+                     <div class="card-header">
+                       <h3 class="card-title" localize-content>Targets</h3>
+                     </div>
+                     <!-- /.card-header -->
+                     <div class="card-body">
+                       <div class="row">
+                         
+                           @foreach (var target in Model.Targets)
+                           {
+                             <div class="info-box">
+                               <span class="info-box-icon bg-orange elevation-1"><i class="fas fa-bullseye"></i></span>
+                                                                               
+                               <div class="info-box-content">
+                                 <span class="info-box-text" localize-content><a asp-area="Workspace" asp-action="Details" asp-controller="Target" asp-route-id="@target.Id">@target.Name</a></span>
+                                 <span class="info-box-number">
+                                   @target.Type
+                                   </span>
+                                 </div>
+                                                            <!-- /.info-box-content -->
+                               </div>
+                           }
+
+
+
+                       </div>
+                       <!-- /.row -->
+                     </div>
+                     <!-- /.footer -->
+                   </div>
+                 </div>
+
+
+                 <div class="col-md-4">
+                   <div class="card h-100">
+                     <div class="card-header">
+                       <h3 class="card-title" localize-content>Members</h3>
+                     </div>
+                     <!-- /.card-header -->
+                     <div class="card-body">
+                       <div class="row">
+                         
+                           @foreach (var members in Model.Members)
+                           {
+                             <div class="info-box">
+                               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
+                                                                               
+                               <div class="info-box-content">
+                                 <span class="info-box-text" localize-content><a asp-area="" asp-action="Details" asp-controller="User" asp-route-id="@members.User.Id">@members.User.FullName</a></span>
+                                 <span class="info-box-number">
+                                   @members.User.Email
+                                   </span>
+                                 </div>
+                                                            <!-- /.info-box-content -->
+                               </div>
+                           }
+
+                         <!-- /.col -->
+                       </div>
+                       <!-- /.row -->
+                     </div>
+                     <!-- /.footer -->
+                   </div>
+                 </div>
+             
+               </div>
+               <br/>
+             <div class="row">
+
+                        <div class="col-md-4">
+             <div class="card h-100">
+              <div class="card-header">
+                <h3 class="card-title" localize-content>Recent Vulnerabilities</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="row">
+                  
+
+                                @foreach (var vuln in Model.Vulns)
+                                {
+                                  <div class="info-box">
+                                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bug"></i></span>
+                                                  
+                                    <div class="info-box-content">
+                                      <span class="info-box-text" localize-content><a asp-area="Workspace" asp-action="Details" asp-controller="Vuln" asp-route-id="@vuln.Id">@vuln.Name</a></span>
+                                      <span class="info-box-number">
+                                        @vuln.Status
+                                      </span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                  </div>
+                                }
+
+    
+              </div>
+              <!-- /.footer -->
+            </div>
+                 </div>
+                 </div>
+
+                             <div class="col-md-4">
+             <div class="card h-100">
+              <div class="card-header">
+                <h3 class="card-title" localize-content>Vulnerabilities by Severity</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="chart-responsive"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                      <canvas id="vulnSeverity" style="display: block; width: 180px; height: 90px;" class="chartjs-render-monitor" width="180" height="90"></canvas>
+                    </div>
+                    <!-- ./chart-responsive -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-4">
+                    <ul class="chart-legend clearfix">
+                      <li><i class="far fa-circle text-info"></i> Info</li>
+                      <li><i class="far fa-circle text-success"></i> Low</li>
+                      <li><i class="far fa-circle text-warning"></i> Medium</li>
+                      <li><i class="far fa-circle text-orange"></i> High</li>
+                      <li><i class="far fa-circle text-danger"></i> Critical</li>
+                    </ul>
+                  </div>
+                  <!-- /.col -->
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.footer -->
+            </div>
+                 </div>
+
+
+             <div class="col-md-4">
+             <div class="card h-100">
+              <div class="card-header">
+                <h3 class="card-title" localize-content>Recent Notes</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="row">
+
+
+                                @foreach (var note in Model.Notes)
+                                {
+                                  <div class="info-box">
+                                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-sticky-note"></i></span>
+                                                  
+                                    <div class="info-box-content">
+                                      <span class="info-box-text" localize-content><a asp-area="" asp-action="Details" asp-controller="Project" asp-route-id="@note.Project.Id">@note.Name</a></span>
+                                      <span class="info-box-number">
+                                        @note.User.FullName
+                                      </span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                  </div>
+                                }
+                            
+
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.footer -->
+            </div>
+            </div>
+            </div>
+
+            </div>
+            </div>
+    </section>
+    <!-- /.content -->
+  <!-- /.content-wrapper -->
+
+ 
+
+
+@section Scripts{
+<script>
+
+
+var xVulnValues = ["Info, Low, Medium, High, Critical"  ];
+var yVulnValues = [@Model.VulnInfo, @Model.VulnLow, @Model.VulnMedium, @Model.VulnHigh, @Model.VulnCritical];
+var VulnColors = [
+  "#17a2b8",
+  "#28a745",
+  "#ffc107",
+  "#ff851b",
+  "#dc3545",
+];
+
+new Chart("vulnSeverity", {
+  type: "pie",
+  data: {
+    labels: xVulnValues,
+    datasets: [{
+      backgroundColor: VulnColors,
+      data: yVulnValues
+    }]
+  },
+  options: {
+      responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      }},
+    title: {
+      display: true,
+      text: "Vulnerabilities by Severity"
+    },
+},
+});
+</script>
+}
+    
+
+
+
+
+

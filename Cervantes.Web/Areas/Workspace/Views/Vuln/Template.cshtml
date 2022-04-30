@@ -1,0 +1,277 @@
+@using Cervantes.CORE
+@model VulnCreateViewModel
+
+@{
+    ViewData["Title"] = "Edit Vuln";
+}
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-bug"></i> Edit Vulnerability</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+              <li class="breadcrumb-item" localize-content>Workspace</li>
+              <li class="breadcrumb-item" localize-content>Vuln</li>
+              <li class="breadcrumb-item active" localize-content>Template</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+    <!-- Main content -->
+<section class="content">
+
+
+    <div class="col-md-12">
+        <form asp-area="Workspace" asp-controller="Vuln" asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <div class="card">
+                <div class="card-header p-2">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab"><span localize-content>Details</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#poc" data-toggle="tab"><span localize-content>Exploitation</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#remediation" data-toggle="tab"><span localize-content>Remediation</span></a></li>
+                    </ul>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="details">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Template" class="control-label" localize-content>Template</label>
+                                <input asp-for="Template" class="form-control" />
+                                <span asp-validation-for="Template" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label" localize-content>Name</label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="cve" class="control-label">CVE</label>
+                                <input asp-for="cve" class="form-control" />
+                                <span asp-validation-for="cve" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label" localize-content>Description</label>
+                                <textarea id="descriptionTxt" asp-for="Description" class="form-control" rows="4"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Category</label>
+                                @Html.DropDownListFor(m => m.VulnCategoryId, Model.VulnCatList, "--Select--", new { @class = "form-control" })
+                                <span asp-validation-for="VulnCategory" class="text-danger"></span>
+                            </div> 
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Risk</label>
+                                @Html.DropDownListFor(model => model.Risk, Html.GetEnumSelectList<VulnRisk>(),new { @class = "form-control" })
+                                <span asp-validation-for="Risk" class="text-danger"></span>
+                            </div> 
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Status</label>
+                                @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList<VulnStatus>(),new { @class = "form-control" })
+                                <span asp-validation-for="Status" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Impact" class="control-label" localize-content>Impact</label>
+                                <textarea id="impact" asp-for="Impact" class="form-control" rows="4"></textarea>
+                                <span asp-validation-for="Impact" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Target</label>
+                                @Html.DropDownListFor(model => model.TargetId, Model.TargetList,new { @class = "form-control" })
+                                <span asp-validation-for="Target" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CVSS3" class="control-label"></label>
+                                <input asp-for="CVSS3" class="form-control" rows="4"></input>
+                                <span asp-validation-for="CVSS3" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CVSSVector" class="control-label"></label>
+                                <input asp-for="CVSSVector" class="form-control" rows="4"></input>
+                                <span asp-validation-for="CVSSVector" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="poc">
+                            <div class="form-group">
+                                <label asp-for="ProofOfConcept" class="control-label" localize-content>Proof Of Concept</label>
+                                <textarea id="pocTxt" asp-for="ProofOfConcept" class="form-control" rows="4"></textarea>
+                                <span asp-validation-for="ProofOfConcept" class="text-danger"></span>
+                            </div>
+
+                        </div>
+
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="remediation">
+                            <div class="form-group">
+                                <label asp-for="Remediation" class="control-label" localize-content>Remediation</label>
+                                <textarea id="remediationTxt" asp-for="Remediation" class="form-control" rows="4"></textarea>
+                                <span asp-validation-for="Remediation" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Complexity</label>
+                                @Html.DropDownListFor(model => model.RemediationComplexity, Html.GetEnumSelectList<RemediationComplexity>(),new { @class = "form-control" })
+                                <span asp-validation-for="RemediationComplexity" class="text-danger"></span>
+                            </div> 
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Priority</label>
+                                @Html.DropDownListFor(model => model.RemediationPriority, Html.GetEnumSelectList<RemediationPriority>(),new { @class = "form-control" })
+                                <span asp-validation-for="RemediationPriority" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+    
+                    </div>
+                    <!-- /.tab-content -->
+                </div><!-- /.card-body -->
+
+           
+
+            </div>
+            <!-- /.card -->
+            <div class="form-group">
+                <a class="btn btn-default" asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Back</a>
+                <button type="submit" class="btn btn-dark" localize-content>Edit</button>
+                    
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script>
+  $(document).ready(function() { 
+          $('#descriptionTxt').summernote({
+          height: 300,
+          callbacks: {
+                  onImageUpload: function(image) {
+                      uploadImage(image[0]);
+                  }
+                  }
+          });
+              $('#impact').summernote({
+                        height: 300,
+                        callbacks: {
+                                onImageUpload: function(image) {
+                                    uploadImage2(image[0]);
+                                }
+                                }
+                        });    
+              
+              $('#pocTxt').summernote({
+                        height: 300,
+                        callbacks: {
+                                onImageUpload: function(image) {
+                                    uploadImage3(image[0]);
+                                }
+                                }
+                        });
+              
+              $('#remediationTxt').summernote({
+                        height: 300,
+                        callbacks: {
+                                onImageUpload: function(image) {
+                                    uploadImage4(image[0]);
+                                }
+                                }
+                        });
+          });
+  
+        
+        function uploadImage(image) {
+            var data = new FormData();
+            data.append("image", image);
+            $.ajax({
+                url: '@Url.Action("UploadVuln","Image",new { Area = "" })',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: data,
+                type: "post",
+                success: function(FileUrl) {
+                    var imgNode = document.createElement('img');  
+                    imgNode.src = FileUrl;  
+                    $('#descriptionTxt').summernote('insertNode', imgNode); 
+                },
+                error: function(data) {
+                    alert(data.responseText); 
+                }
+            });
+        }
+        
+        function uploadImage2(image) {
+                    var data = new FormData();
+                    data.append("image", image);
+                    $.ajax({
+                        url: '@Url.Action("UploadVuln","Image",new { Area = "" })',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        type: "post",
+                        success: function(FileUrl) {
+                            var imgNode = document.createElement('img');  
+                            imgNode.src = FileUrl;  
+                            $('#impact').summernote('insertNode', imgNode); 
+                        },
+                        error: function(data) {
+                            alert(data.responseText); 
+                        }
+                    });
+                }
+                
+                function uploadImage3(image) {
+                                    var data = new FormData();
+                                    data.append("image", image);
+                                    $.ajax({
+                                        url: '@Url.Action("UploadVuln","Image",new { Area = "" })',
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+                                        data: data,
+                                        type: "post",
+                                        success: function(FileUrl) {
+                                            var imgNode = document.createElement('img');  
+                                            imgNode.src = FileUrl;  
+                                            $('#pocTxt').summernote('insertNode', imgNode); 
+                                        },
+                                        error: function(data) {
+                                            alert(data.responseText); 
+                                        }
+                                    });
+                                }
+                                
+                                function uploadImage4(image) {
+                                                                    var data = new FormData();
+                                                                    data.append("image", image);
+                                                                    $.ajax({
+                                                                        url: '@Url.Action("UploadVuln","Image",new { Area = "" })',
+                                                                        cache: false,
+                                                                        contentType: false,
+                                                                        processData: false,
+                                                                        data: data,
+                                                                        type: "post",
+                                                                        success: function(FileUrl) {
+                                                                            var imgNode = document.createElement('img');  
+                                                                            imgNode.src = FileUrl;  
+                                                                            $('#remediationTxt').summernote('insertNode', imgNode); 
+                                                                        },
+                                                                        error: function(data) {
+                                                                            alert(data.responseText); 
+                                                                        }
+                                                                    });
+                                                                }
+       
+    
+    
+    </script>
+}

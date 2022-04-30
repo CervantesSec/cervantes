@@ -1,0 +1,244 @@
+﻿@using System.Net
+@using Cervantes.CORE
+@model Cervantes.Web.Areas.Workspace.Models.TargetServiceViewModel
+
+@{
+    ViewData["Title"] = "Service Details";
+}
+
+@{
+
+    if (TempData["addedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Note added to task successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Note deleted from task successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["addedAttachment"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Attachment added to task successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+     if (TempData["deletedAttachment"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Attachment deleted from task successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["errorAttachment"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced adding an Attachment!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-folder"></i> @Model.Project.Name</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+             <li class="breadcrumb-item" localize-content><a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspaces</a></li>
+                                         <li class="breadcrumb-item" localize-content><a asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Target</a></li>
+                                         <li class="breadcrumb-item active" localize-content>Service</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-2">
+    
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                  <div class="card-body box-profile">
+                    <div class="text-center">
+                    @switch(Model.Target.Type)
+                    {
+                        case TargetType.IP:
+                            <span class="profile-user-img img-fluid img-circle"><i class="fas fa-ethernet"></i></span>
+                            break;
+                        case TargetType.Hostname:
+                             <span class="profile-user-img img-fluid img-circle"><i class="fas fa-compass"></i></span>
+                            break;
+                        case TargetType.CIDR:
+                            <span class="profile-user-img img-fluid img-circle"><i class="fas fa-network-wired"></i></span>
+                            break;
+                        case TargetType.URL:
+                            <span class="profile-user-img img-fluid img-circle"><i class="fas fa-at"></i></span>
+                            break;
+                        case TargetType.Binary:
+                            <span class="profile-user-img img-fluid img-circle"><i class="fas fa-file-alt"></i></span>
+                            break;
+                        default:
+                            <span class="profile-user-img img-fluid img-circle"></span>
+                            break;
+
+                    }
+                    </div>
+    
+                    <h3 class="profile-username text-center">@Model.Target.Name</h3>              
+                    <dt> <p localize-content>Created by</p></dt>
+                    <hr>
+                    <dd>@Html.DisplayFor(model => model.Target.User.FullName)</dd>
+                    <dt><p localize-content>Description</p></dt>
+                            <hr>
+                            <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Target.Description))</dd>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-10">
+                <div class="card">
+                  <div class="card-header p-2">
+                    <ul class="nav nav-pills">
+                      <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab">Services</a></li>                      
+                    </ul>
+                  </div><!-- /.card-header -->
+                  <div class="card-body">
+                    <div class="tab-content">
+                     
+                      <div class="active tab-pane" id="details">
+                         <h4>@Model.TargetService.Name</h4>              
+                        <dt> <p localize-content>Version</p></dt>
+                        <hr>
+                        <dd>@Html.DisplayFor(model => model.TargetService.Version)</dd>
+                        <dt><p localize-content>Port</p></dt>
+                        <hr>
+                        <dd>@Html.DisplayFor(model => model.TargetService.Port)</dd>
+                        <dt><p localize-content>Description</p></dt>
+                        <hr>
+                        <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.TargetService.Description))</dd>
+                        <dt><p localize-content>Note</p></dt>
+                        <hr>
+                         <dd>@Html.DisplayFor(model => model.TargetService.Note)</dd>
+
+                      </div>
+                      <!-- /.tab-pane -->
+
+                    </div>
+                    <!-- /.tab-content -->
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div><!-- /.container-fluid --> 
+    
+
+
+
+</section>
+
+           
+  @section Scripts{
+<script>
+
+    $(document).ready(function () {
+        $('#servicesResults').DataTable({
+            "responsive": true
+        });
+
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+     var useDarkMode = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+        tinymce.init({
+          selector: 'textarea#noteDescription',
+          plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
+          imagetools_cors_hosts: ['picsum.photos'],
+          menubar: 'file edit view insert format tools table help',
+          toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+          toolbar_sticky: true,
+          autosave_ask_before_unload: true,
+          autosave_interval: '30s',
+          autosave_prefix: '{path}{query}-{id}-',
+          autosave_restore_when_empty: false,
+          autosave_retention: '2m',
+          image_advtab: true,
+          link_list: [
+            { title: 'My page 1', value: 'https://www.tiny.cloud' },
+            { title: 'My page 2', value: 'http://www.moxiecode.com' }
+          ],
+          image_list: [
+            { title: 'My page 1', value: 'https://www.tiny.cloud' },
+            { title: 'My page 2', value: 'http://www.moxiecode.com' }
+          ],
+          image_class_list: [
+            { title: 'None', value: '' },
+            { title: 'Some class', value: 'class-name' }
+          ],
+          importcss_append: true,
+          file_picker_callback: function (callback, value, meta) {
+            /* Provide file and text for the link dialog */
+            if (meta.filetype === 'file') {
+              callback('https://www.google.com/logos/google.jpg', { text: 'My text' });
+            }
+
+            /* Provide image and alt text for the image dialog */
+            if (meta.filetype === 'image') {
+              callback('https://www.google.com/logos/google.jpg', { alt: 'My alt text' });
+            }
+
+            /* Provide alternative source and posted for the media dialog */
+            if (meta.filetype === 'media') {
+              callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.google.com/logos/google.jpg' });
+            }
+          },
+          templates: [
+                { title: 'New Table', description: 'creates a new table', content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>' },
+            { title: 'Starting my story', description: 'A cure for writers block', content: 'Once upon a time...' },
+            { title: 'New list with dates', description: 'New List with dates', content: '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>' }
+          ],
+          template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+          template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+          height: 600,
+          image_caption: true,
+          quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+          noneditable_noneditable_class: 'mceNonEditable',
+          toolbar_mode: 'sliding',
+          contextmenu: 'link image imagetools table',
+          skin: useDarkMode ? 'oxide-dark' : 'oxide',
+          content_css: useDarkMode ? 'dark' : 'default',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+         });
+
+
+         $(document).ready(function () {
+  bsCustomFileInput.init();
+});
+
+</script>
+}                       

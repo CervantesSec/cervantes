@@ -1,0 +1,318 @@
+﻿@using System.Net
+@model Cervantes.Web.Areas.Workspace.Models.TaskDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-tasks"></i> @Model.Task.Name</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+                    <li class="breadcrumb-item" localize-content>Workspace</li>
+                    <li class="breadcrumb-item" localize-content>@Model.Project.Name</li>
+                    <li class="breadcrumb-item" localize-content>Task</li>
+                    <li class="breadcrumb-item" localize-content>Details</li>
+                    <li class="breadcrumb-item active" localize-content>@Model.Task.Name</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr />
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <span class="img-fluid img-circle"><i class="fas fa-tasks fa-3x"></i></span>
+                        </div>
+
+                        <h3 class="profile-username text-center">@Model.Task.Name</h3>
+                        <dt><p localize-content>Created by</p></dt>
+                        <hr>
+                        <dd>@Html.DisplayFor(model => model.Task.CreatedUser.FullName)</dd>
+                        <dt> <p localize-content>Asigned To</p></dt>
+                        <hr>
+                        <dd>@Html.DisplayFor(model => model.Task.AsignedUser.FullName)</dd>
+                        <dt><p localize-content>Start Date</p></dt>
+                        <hr>
+                        <dd>@Html.DisplayFor(model => model.Task.StartDate)</dd>
+                        <dt> <p localize-content>End Date</p></dt>
+                        <hr>
+                        <dd>@Html.DisplayFor(model => model.Task.EndDate)</dd>
+
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab"><span localize-content>Details</span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="#notes" data-toggle="tab"><span localize-content>Notes</span> <span class="badge badge-danger">@Model.Notes.Count()</span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="#attachments" data-toggle="tab"><span localize-content>Attachments</span> <span class="badge badge-danger">@Model.Attachments.Count()</span></a></li>
+
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="details">
+                                <dl>
+                                    <dt><p localize-content>Description</p></dt>
+                                    <hr>
+                                    <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Task.Description))</dd>
+                                </dl>
+                            </div>
+
+                            <div class="tab-pane" id="notes">
+
+                                 <table id="noteResults" class="table table-bordered table-hover projects" width="100%">
+                            <!--Table head-->
+                            <thead>
+                                <tr>
+                                    <th localize-content>Name</th>
+                                    <th localize-content>Description</th>
+                                    <th localize-content>Created by</th>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                                        {
+                                            <th localize-content>Options</th>
+                                        }                             
+                                </tr>
+                            </thead>
+                            <!--Table head-->
+                            <!--Table body-->
+                            <tbody>
+
+                                @foreach (var note in Model.Notes)
+                                {
+                             <tr>
+                                        <td>@note.Name</td>
+                                        <td>@Html.Raw(@WebUtility.HtmlDecode(note.Description))</td>
+                                        <td>@note.User.FullName</td>
+                                         @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                                            {
+                                                <td>
+                                                    <form asp-area="Workspace" asp-controller="Task" asp-action="DeleteNote" method="post" enctype="multipart/form-data">
+                                                        <button type="submit" class="btn btn-danger btn-sm" asp-area="Workspace" asp-controller="Task" asp-action="DeleteNote" asp-route-task="@Model.Task.Id" asp-route-project="@Model.Project.Id" asp-route-id="@note.Id" localize-content><i class="fas fa-trash"></i> Delete </button>
+                                                    </form>
+                                                </td>
+
+                                            }
+
+                                    </tr>
+                                }
+
+                            </tbody>
+                            <!--Table body-->
+                        </table>
+
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                          {
+                              <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addNoteModal" localize-content>
+                              Add Note
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="addNoteModalLabel" localize-content>Add Note to Task</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <form asp-area="Workspace" asp-controller="Task" asp-action="AddNote" method="post" enctype="multipart/form-data">
+                                  <div class="modal-body">
+
+                                    <input asp-for="Task.Id" type="hidden" id="task" name="task"/>
+
+                                     <div class="form-group">
+                                        <label class="control-label" localize-content>Name</label>
+                                        <input type="text" class="form-control"  id="noteName" name="noteName"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" localize-content>Description</label>
+                                        <textarea class="form-control" id="noteDescription" name="noteDescription"></textarea>
+                                    </div>
+                                    
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal" localize-content>Close</button>
+                                      <button type="submit" class="btn btn-success" localize-content>Add</button>
+                                   
+                                  </div>
+                                   </form>
+                                </div>
+                              </div>
+                            </div>
+                              
+
+                            }
+
+
+
+                            </div>
+
+                            <div class="tab-pane" id="attachments">
+
+                                  <table id="attachmentsResults" class="table table-bordered table-hover projects" width="100%">
+                            <!--Table head-->
+                            <thead>
+                                <tr>
+                                    <th localize-content>Name</th>
+                                    <th localize-content>File</th>
+                                    <th localize-content>Uploaded by</th>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                                        {
+                                            <th localize-content>Options</th>
+                                        }                             
+                                </tr>
+                            </thead>
+                            <!--Table head-->
+                            <!--Table body-->
+                            <tbody>
+
+                                @foreach (var attachment in Model.Attachments)
+                                {
+                             <tr>
+                                        <td>@attachment.Name</td>
+                                        <td>@attachment.FilePath</td>
+                                        <td>@attachment.User.FullName</td>
+                                         @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                                            {
+                                                <td>
+                                                    <form asp-action="DeleteAttachment" method="post" enctype="multipart/form-data">
+                                                        <button type="submit" class="btn btn-danger btn-sm" asp-area="Workspace" asp-controller="Task" asp-action="DeleteAttachment" asp-route-project="@Model.Project.Id" asp-route-task="@Model.Task.Id" asp-route-id="@attachment.Id" localize-content><i class="fas fa-trash"></i> Delete </button>
+                                                    </form>
+                                                </td>
+
+                                            }
+
+                                    </tr>
+                                }
+
+                            </tbody>
+                            <!--Table body-->
+                        </table>
+
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                          {
+                              <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addAttachmentModal" localize-content>
+                              Add Attachment
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="addAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="addAttachmentModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="addAttachmentModalLabel" localize-content>Add Attachment to Task</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <form asp-action="AddAttachment" method="post" enctype="multipart/form-data">
+                                  <div class="modal-body">
+
+                                    <input asp-for="Task.Id" type="hidden" id="task" name="task"/>
+
+                                     <div class="form-group">
+                                        <label class="control-label" localize-content>Name</label>
+                                        <input type="text" class="form-control"  id="attachmentName" name="attachmentName"/>
+                                    </div>
+
+                                               <div class="form-group">
+                                               <label for="upload" localize-content>Select File</label>
+                                                <div class="input-group">
+                                                  <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="upload" name="upload">
+                                                    <label class="custom-file-label" for="upload" localize-content>Choose File</label>
+                                                  </div>
+
+                                                </div>
+                                         </div>
+                                    
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal" localize-content>Close</button>
+                                      <button type="submit" class="btn btn-success" localize-content>Add</button>
+                                  </div>
+                                   </form>
+                                </div>
+                              </div>
+                            </div>
+                              
+
+                            }
+
+                            </div>
+
+
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+
+</section>
+
+ @section Scripts{
+<script>
+
+    $(document).ready(function () {
+        $('#membersResults').DataTable({
+            "responsive": true
+        });
+        $('#targetsResults').DataTable({
+            "responsive": true
+        });
+        $('#tasksResults').DataTable({
+            "responsive": true
+        });
+        $('#vulnResults').DataTable({
+            "responsive": true
+        });
+        $('#noteResults').DataTable({
+            "responsive": true
+        });
+        $('#attachmentsResults').DataTable({
+            "responsive": true
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+
+         $(document).ready(function () {
+  bsCustomFileInput.init();
+});
+
+</script>
+}                       

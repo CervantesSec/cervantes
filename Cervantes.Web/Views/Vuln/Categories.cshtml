@@ -1,0 +1,129 @@
+﻿@using Cervantes.CORE
+@model IEnumerable<VulnCategory>
+
+@{
+    ViewData["Title"] = "Vuln Categories";
+}
+@{
+    if (TempData["deleted"] != null)
+    {
+<div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Vuln category deleted successfully!</strong>
+            
+        </div>
+    }
+
+    if (TempData["created"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Vuln category created successfully!</strong>
+            
+        </div>
+    }
+
+    if (TempData["edited"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Vuln category edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>@TempData["error"].ToString()</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 localize-content><i class="fas fa-bug"></i> Vulnerability Categories</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
+                <li class="breadcrumb-item active"><a asp-controller="Vuln" asp-action="Index" localize-content>Vulnerability</a></li>
+                <li class="breadcrumb-item active" localize-content>Categories</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+      <hr />
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        
+<div class="card">
+    <div class="card-body">
+
+    
+         @if(Model.FirstOrDefault() != null){
+        <!--Table-->
+        <table id="vulnCategories" class="table table-bordered table-hover" width="100%">
+            <!--Table head-->
+            <thead>
+                <tr>
+                    <th localize-content>Name</th>
+                    <th localize-content>Description</th>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                        {
+                            <th localize-content>Options</th>
+                        }                             
+                </tr>
+            </thead>
+            <!--Table head-->
+            <!--Table body-->
+            <tbody>
+
+                @foreach(var cat in Model)
+                {
+                    <tr>
+                        <td>@cat.Name</td>
+                        <td>@cat.Description</td>
+                         @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                            {
+                                <td>
+                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="EditCategory" asp-route-id="@cat.Id" localize-content><i class="fas fa-edit"></i></a>
+                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="DeleteCategory" asp-route-id="@cat.Id" localize-content ><i class="fas fa-trash"></i></a>
+                                </td>
+
+                            }
+
+                    </tr>
+                }
+
+            </tbody>
+            <!--Table body-->
+        </table>
+        <!--Table-->
+        }
+
+        </div>
+        </div>
+    </section>
+    <!-- /.content -->
+  <!-- /.content-wrapper -->
+
+  @section Scripts{
+<script>
+
+    $(document).ready(function () {
+        $('#vulnCategories').DataTable({
+            "responsive": true
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+
+</script>
+}
