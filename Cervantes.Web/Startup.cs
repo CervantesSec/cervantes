@@ -137,7 +137,6 @@ namespace Cervantes.Web
 
             app.UseRequestLocalization();
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapAreaControllerRoute(

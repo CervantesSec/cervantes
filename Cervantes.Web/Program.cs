@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cervantes.Web
 {
@@ -42,10 +43,15 @@ namespace Cervantes.Web
 
                     try
                     {
+                        
+                        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                        db.Database.Migrate();
+                        
                         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                         var vulnCategoryManager = serviceProvider.GetRequiredService<Contracts.IVulnCategoryManager>();
                         var organizationManager = serviceProvider.GetRequiredService<Contracts.IOrganizationManager>();
+                        
                         DataInitializer.SeedData(userManager, roleManager, vulnCategoryManager, organizationManager);
                     }
                     catch (Exception ex)

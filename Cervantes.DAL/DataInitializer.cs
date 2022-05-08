@@ -18,11 +18,11 @@ namespace Cervantes.DAL
 
         private static void SeedUsers(UserManager<ApplicationUser> userManager)
         {
-            if (userManager.FindByEmailAsync("admin@cervantes.com").Result == null)
+            if (userManager.FindByEmailAsync("admin@cervantes.local").Result == null)
             {
                 ApplicationUser user = new ApplicationUser();
-                user.UserName = "admin@cervantes.com";
-                user.Email = "admin@cervantes.com";
+                user.UserName = "admin@cervantes.local";
+                user.Email = "admin@cervantes.local";
 
                 IdentityResult result = userManager.CreateAsync(user, "Admin123.").Result;
 

@@ -41,20 +41,36 @@
                         </div>
 
                         <h3 class="profile-username text-center">@Model.Task.Name</h3>
-                        <dt><p localize-content>Created by</p></dt>
-                        <hr>
-                        <dd>@Html.DisplayFor(model => model.Task.CreatedUser.FullName)</dd>
-                        <dt> <p localize-content>Asigned To</p></dt>
-                        <hr>
-                        <dd>@Html.DisplayFor(model => model.Task.AsignedUser.FullName)</dd>
-                        <dt><p localize-content>Start Date</p></dt>
-                        <hr>
-                        <dd>@Html.DisplayFor(model => model.Task.StartDate)</dd>
-                        <dt> <p localize-content>End Date</p></dt>
-                        <hr>
-                        <dd>@Html.DisplayFor(model => model.Task.EndDate)</dd>
-
-
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-info"><i class="fas fa-user"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" localize-content>Created by</span>
+                                <span class="info-box-number">@Model.Task.CreatedUser.FullName</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-warning"><i class="fas fa-user-check"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" localize-content>Asigned To</span>
+                                <span class="info-box-number">@Model.Task.AsignedUser.FullName</span>
+                            </div>
+                        </div>
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-teal"><i class="fas fa-calendar"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" localize-content>Start Date</span>
+                                <span class="info-box-number">@Model.Task.StartDate</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-danger"><i class="fas fa-calendar-check"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" localize-content>End Date</span>
+                                <span class="info-box-number">@Model.Task.EndDate</span>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -85,15 +101,13 @@
 
                                  <table id="noteResults" class="table table-bordered table-hover projects" width="100%">
                             <!--Table head-->
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
-                                    <th localize-content>Name</th>
-                                    <th localize-content>Description</th>
-                                    <th localize-content>Created by</th>
-                                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                                        {
-                                            <th localize-content>Options</th>
-                                        }                             
+                                    <th><i class="fas fa-tasks"></i> <span localize-content>Name</span></th>
+                                    <th><i class="fas fa-text"></i> <span localize-content>Description</span></th>
+                                    <th><i class="fas fa-user"></i> <span localize-content>Created by</span></th>
+                                    <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
+                                    
                                 </tr>
                             </thead>
                             <!--Table head-->
@@ -178,15 +192,13 @@
 
                                   <table id="attachmentsResults" class="table table-bordered table-hover projects" width="100%">
                             <!--Table head-->
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
-                                    <th localize-content>Name</th>
-                                    <th localize-content>File</th>
-                                    <th localize-content>Uploaded by</th>
-                                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                                        {
-                                            <th localize-content>Options</th>
-                                        }                             
+                                    <th><i class="fas fa-file"></i> <span localize-content>Name</span></th>
+                                    <th><i class="fas fa-download"></i> <span localize-content>File</span></th>
+                                    <th><i class="fas fa-user"></i> <span localize-content>Uploaded by</span></th>
+                                    <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
+                                    
                                 </tr>
                             </thead>
                             <!--Table head-->
@@ -197,7 +209,9 @@
                                 {
                              <tr>
                                         <td>@attachment.Name</td>
-                                        <td>@attachment.FilePath</td>
+                                        <td><a href="@Url.Content(@attachment.FilePath)" target="_blank">
+                                            <i class="fas fa-download"></i> @attachment.Name
+                                        </a></td>
                                         <td>@attachment.User.FullName</td>
                                          @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                                             {

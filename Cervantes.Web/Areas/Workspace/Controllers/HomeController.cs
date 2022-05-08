@@ -51,10 +51,10 @@ namespace Cervantes.Web.Areas.Workspace.Controllers
                 {
                     Project = projectManager.GetById(project),
                     Members = projectUserManager.GetAll().Where(x => x.ProjectId == project).ToList(),
-                    Vulns = vulnManager.GetAll().Where(x => x.ProjectId == project).OrderByDescending(x => x.CreatedDate).Take(10),
-                    Tasks = taskManager.GetAll().Where(x => x.AsignedUserId == User.FindFirstValue(ClaimTypes.NameIdentifier) && x.ProjectId == project),
-                    Targets = targetManager.GetAll().Where(x => x.ProjectId == project),
-                    Notes = projectNoteManager.GetAll().Where(x => x.ProjectId == project),
+                    Vulns = vulnManager.GetAll().Where(x => x.ProjectId == project).OrderByDescending(x => x.CreatedDate).Take(5),
+                    Tasks = taskManager.GetAll().Where(x => x.AsignedUserId == User.FindFirstValue(ClaimTypes.NameIdentifier) && x.ProjectId == project).Take(5).OrderBy(x => x.StartDate),
+                    Targets = targetManager.GetAll().Where(x => x.ProjectId == project).Take(5).OrderByDescending(x => x.Id),
+                    Notes = projectNoteManager.GetAll().Where(x => x.ProjectId == project).Take(5).OrderByDescending(x => x.Id),
                     VulnNumber = vulnManager.GetAll().Where(x => x.ProjectId == project).Count(),
                     TasksNumber = taskManager.GetAll().Where(x => x.ProjectId == project).Count(),
                     TargetsNumber = targetManager.GetAll().Where(x => x.ProjectId == project).Count(),
@@ -92,5 +92,8 @@ namespace Cervantes.Web.Areas.Workspace.Controllers
 
             return LocalRedirect(returnUrl);
         }
+        
+        
+
     }
 }

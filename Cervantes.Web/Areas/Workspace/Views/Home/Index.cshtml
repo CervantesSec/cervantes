@@ -40,56 +40,95 @@
                     </div>
     
                     <h3 class="profile-username text-center">@Model.Project.Name</h3>
-                    <dt><p localize-content>Client</p></dt>
-                    <hr>
-                    <dd><a asp-area="" asp-controller="Client" asp-action="Details" asp-route-id="@Model.Project.Client.Id" localize-content><span class="btn btn-outline-dark btn-sm"><i class="fas fa-briefcase"></i> @Model.Project.Client.Name</span></a></dd>
-                    <dt> <p localize-content>Start Date</p></dt>
-                    <hr>
-                    <dd>@Html.DisplayFor(model => model.Project.StartDate)</dd>      
-                    <dt> <p localize-content>End Date</p></dt>
-                    <hr>
-                    <dd>@Html.DisplayFor(model => model.Project.EndDate)</dd> 
-                    <dt> <p localize-content>Created by</p></dt>
-                    <hr>
-                    <dd>@Html.DisplayFor(model => model.Project.User.FullName)</dd>
-
-                    <dt> <p localize-content>Project Type</p></dt>
-                    <hr>
-                       @switch(Model.Project.ProjectType)
-                    {
-                        case ProjectType.BlackBox:
-                            <dd><span class="badge badge-dark">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
-                            break;
-                        case ProjectType.GrayBox:
-                             <dd><span class="badge badge-secondary">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
-                            break;
-                        case ProjectType.WhiteBox:
-                            <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
-                            break;
-                        default:
-                            <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
-                            break;
-
-                    }
-
-                    <dt> <p localize-content>Status</p></dt>
-                    <hr>
-                    @switch(Model.Project.Status)
-                    {
-                        case ProjectStatus.Active:
-                            <dd><span class="badge badge-success">@Html.DisplayFor(model => model.Project.Status)</span></dd>
-                            break;
-                        case ProjectStatus.Archived:
-                             <dd><span class="badge badge-secondary">@Html.DisplayFor(model => model.Project.Status)</span></dd>
-                            break;
-                        case ProjectStatus.Waiting:
-                            <dd><span class="badge badge-info">@Html.DisplayFor(model => model.Project.Status)</span></dd>
-                            break;
-                        default:
-                            <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.Status)</span></dd>
-                            break;
-
-                    }  
+                    <div class="info-box mb-3">
+                                              <span class="info-box-icon bg-dark"><i class="fas fa-briefcase"></i></span>
+                                                                
+                                              <div class="info-box-content">
+                                                  <span class="info-box-text" localize-content>Client</span>
+                                                  <span class="info-box-number"><a asp-controller="Client" asp-action="Details" asp-route-id="@Model.Project.Client.Id" localize-content><span class="btn btn-outline-dark btn-sm"><i class="fas fa-briefcase"></i> @Model.Project.Client.Name</span></a></span>
+                                              </div>
+                                              <!-- /.info-box-content -->
+                                          </div>
+                                          <div class="info-box mb-3">
+                                              <span class="info-box-icon bg-teal"><i class="fas fa-calendar"></i></span>
+                                                                                      
+                                              <div class="info-box-content">
+                                                  <span class="info-box-text" localize-content>Start Date</span>
+                                                  <span class="info-box-number">@Model.Project.StartDate</span>
+                                              </div>
+                                              <!-- /.info-box-content -->
+                                          </div>
+                                          <div class="info-box mb-3">
+                                              <span class="info-box-icon bg-danger"><i class="fas fa-calendar-check"></i></span>
+                                                                                                            
+                                              <div class="info-box-content">
+                                                  <span class="info-box-text" localize-content>End Date</span>
+                                                  <span class="info-box-number">@Model.Project.EndDate</span>
+                                              </div>
+                                              <!-- /.info-box-content -->
+                                          </div>
+                                          <div class="info-box mb-3">
+                                              <span class="info-box-icon bg-info"><i class="fas fa-user"></i></span>
+                                                                                                                                  
+                                              <div class="info-box-content">
+                                                  <span class="info-box-text" localize-content>Created by</span>
+                                                  <span class="info-box-number">@Model.Project.User.FullName</span>
+                                              </div>
+                                              <!-- /.info-box-content -->
+                                          </div>
+                                          <div class="info-box mb-3">
+                                              <span class="info-box-icon bg-indigo"><i class="fas fa-project-diagram"></i></span>
+                                                                                                                                                        
+                                              <div class="info-box-content">
+                                                  <span class="info-box-indigo" localize-content>Project Type</span>
+                                                  <span class="info-box-number">
+                                                      @switch(Model.Project.ProjectType)
+                                                      {
+                                                          case ProjectType.BlackBox:
+                                                              <dd><span class="badge badge-dark">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
+                                                              break;
+                                                          case ProjectType.GrayBox:
+                                                              <dd><span class="badge badge-secondary">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
+                                                              break;
+                                                          case ProjectType.WhiteBox:
+                                                              <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
+                                                              break;
+                                                          default:
+                                                              <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.ProjectType)</span></dd>
+                                                              break;
+                                                      
+                                                      }
+                                                        
+                                                  </span>
+                                              </div>
+                                              <!-- /.info-box-content -->
+                                          </div>
+                                          <div class="info-box mb-3">
+                                              <span class="info-box-icon bg-warning"><i class="fas fa-tasks"></i></span>
+                                                                                                                                                        
+                                              <div class="info-box-content">
+                                                  <span class="info-box-text" localize-content>Status</span>
+                                                  <span class="info-box-number">
+                                                      @switch(Model.Project.Status)
+                                                                          {
+                                                                              case ProjectStatus.Active:
+                                                                                  <dd><span class="badge badge-success">@Html.DisplayFor(model => model.Project.Status)</span></dd>
+                                                                                  break;
+                                                                              case ProjectStatus.Archived:
+                                                                                   <dd><span class="badge badge-secondary">@Html.DisplayFor(model => model.Project.Status)</span></dd>
+                                                                                  break;
+                                                                              case ProjectStatus.Waiting:
+                                                                                  <dd><span class="badge badge-info">@Html.DisplayFor(model => model.Project.Status)</span></dd>
+                                                                                  break;
+                                                                              default:
+                                                                                  <dd><span class="badge badge-light">@Html.DisplayFor(model => model.Project.Status)</span></dd>
+                                                                                  break;
+                                                      
+                                                                          }
+                                                  </span>
+                                              </div>
+                                              <!-- /.info-box-content -->
+                                          </div>
 
                   </div>
                   <!-- /.card-body -->

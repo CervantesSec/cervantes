@@ -46,7 +46,7 @@ namespace Cervantes.Web.Areas.Workspace.Controllers
                 VulnViewModel model = new VulnViewModel
                 {
                     Project = projectManager.GetById(project),
-                    Vulns = vulnManager.GetAll().Where(x => x.ProjectId == project).ToList()
+                    Vulns = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Template == false).ToList()
                 };
                 return View(model);
             }
@@ -264,6 +264,7 @@ namespace Cervantes.Web.Areas.Workspace.Controllers
                 result.Remediation = model.Remediation;
                 result.RemediationComplexity = model.RemediationComplexity;
                 result.RemediationPriority = model.RemediationPriority;
+                result.CreatedDate = result.CreatedDate;
 
 
                 vulnManager.Context.SaveChanges();
@@ -330,7 +331,7 @@ namespace Cervantes.Web.Areas.Workspace.Controllers
                 VulnViewModel model = new VulnViewModel
                 {
                     Project = projectManager.GetById(project),
-                    Vulns = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Template == true).ToList()
+                    Vulns = vulnManager.GetAll().Where(x => x.Template == true).ToList()
                 };
                 return View(model);
             }
@@ -421,6 +422,7 @@ namespace Cervantes.Web.Areas.Workspace.Controllers
             try
             {
                 var result = vulnManager.GetById(id);
+                result.Id = 0;
                 result.Name = model.Name;
                 result.Template = model.Template;
                 result.cve = model.cve;
@@ -436,6 +438,8 @@ namespace Cervantes.Web.Areas.Workspace.Controllers
                 result.Remediation = model.Remediation;
                 result.RemediationComplexity = model.RemediationComplexity;
                 result.RemediationPriority = model.RemediationPriority;
+                result.ProjectId = project;
+                result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 vulnManager.Add(result);
                 vulnManager.Context.SaveChanges();

@@ -448,6 +448,7 @@ namespace Cervantes.Web.Controllers
                 result.EndDate = model.EndDate.ToUniversalTime();
                 result.ProjectType = model.ProjectType;
                 result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                
 
                 projectManager.Add(result);
                 projectManager.Context.SaveChanges();
@@ -491,7 +492,7 @@ namespace Cervantes.Web.Controllers
                         projectUserManager.Add(user);
                         projectUserManager.Context.SaveChanges();
                         TempData["addedMember"] = "added";
-                        _logger.LogInformation("User: {0} Added new member Member: {1} on Project: {2}", User.FindFirstValue(ClaimTypes.Name), user.User.UserName, project);
+                        _logger.LogInformation("User: {0} Added new member Member on Project: {2}", User.FindFirstValue(ClaimTypes.Name), project);
                         return RedirectToAction("Details", "Project", new { id = project });
                     }
                     else
@@ -791,6 +792,19 @@ namespace Cervantes.Web.Controllers
 
 
             }
+
+        }
+        
+        public ActionResult Download(int id)
+        {
+
+            var attachment = projectAttachmentManager.GetById(id);
+
+            string filePath = Path.Combine(_appEnvironment.WebRootPath, attachment.FilePath);
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            return File(fileBytes, attachment.Name);
 
         }
 

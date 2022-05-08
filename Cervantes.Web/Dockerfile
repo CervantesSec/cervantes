@@ -23,3 +23,10 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Cervantes.Web.dll"]
+
+RUN apt update
+RUN apt install -y wkhtmltopdf
+RUN rm /app/wwwroot/Rotativa/Linux/wkhtmltoimage
+RUN rm /app/wwwroot/Rotativa/Linux/wkhtmltopdf
+RUN cp /usr/bin/wkhtmltoimage /app/wwwroot/Rotativa/Linux/wkhtmltoimage
+RUN cp /usr/bin/wkhtmltopdf /app/wwwroot/Rotativa/Linux/wkhtmltopdf

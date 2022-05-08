@@ -122,20 +122,20 @@
                             <div class="info-box-content">
                                 <span class="info-box-text" localize-content>CVSS3 Score</span>
                                 <span class="info-box-number">
-                                    @if(Model.Vuln.CVSS3 < 2)
+                                    @if(Model.Vuln.CVSS3 <= 2)
                                     {
                                         <span class="badge badge-info"><i class="fas fa-info-circle"></i> @Model.Vuln.CVSS3</span>
                                                                                        
                                     }
-                                    else if (Model.Vuln.CVSS3 > 2 && Model.Vuln.CVSS3 < 4)
+                                    else if (Model.Vuln.CVSS3 > 2 && Model.Vuln.CVSS3 <= 4)
                                     {
                                         <span class="badge badge-success"><i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3</span>
                                     }
-                                    else if (Model.Vuln.CVSS3 > 4 && Model.Vuln.CVSS3 < 6)
+                                    else if (Model.Vuln.CVSS3 > 4 && Model.Vuln.CVSS3 <= 6)
                                     {
                                         <span class="badge badge-warning"><i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3</span>
                                     }
-                                    else if (Model.Vuln.CVSS3 > 6 && Model.Vuln.CVSS3 < 8)
+                                    else if (Model.Vuln.CVSS3 > 6 && Model.Vuln.CVSS3 <= 8)
                                     {
                                         <span class="badge badge-danger"><i class="fas fa-exclamation-circle"></i> @Model.Vuln.CVSS3</span>
                                     }
@@ -362,7 +362,9 @@
                                 {
                              <tr>
                                         <td>@attachment.Name</td>
-                                        <td>@attachment.FilePath</td>
+                                        <td><a href="@Url.Content(@attachment.FilePath)" target="_blank">
+                                            <i class="fas fa-download"></i> @attachment.Name
+                                        </a></td>
                                         <td>@attachment.User.FullName</td>
                                          @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                                             {

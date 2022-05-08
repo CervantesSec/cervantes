@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Workspace\Data\" />
+    <Folder Include="Rotativa\Linux" />
     <Folder Include="wwwroot\Attachments\Images\Clients\" />
     <Folder Include="wwwroot\Attachments\Images\Tasks" />
   </ItemGroup>
@@ -49,12 +50,6 @@
     </Content>
     <Content Include="..\..\..\Desktop\wkhtmltopdf">
       <Link>Rotativa\MacOS\wkhtmltopdf</Link>
-    </Content>
-    <Content Include="..\..\..\Downloads\libwkhtmltox.so">
-      <Link>Rotativa\Linux\libwkhtmltox.so</Link>
-    </Content>
-    <Content Include="..\..\..\Downloads\wkhtmltopdf">
-      <Link>Rotativa\Linux\wkhtmltopdf</Link>
     </Content>
   </ItemGroup>
 

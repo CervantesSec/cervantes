@@ -713,10 +713,7 @@
                                     <th><i class="fas fa-file"></i> <span localize-content>Name</span></th>
                                     <th><i class="fas fa-download"></i> <span localize-content>File</span></th>
                                     <th><i class="fas fa-user"></i> <span localize-content>Uploaded by</span></th>
-                                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                                        {
-                                            <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
-                                        }                             
+                                    <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
                                 </tr>
                             </thead>
                             <!--Table head-->
@@ -726,8 +723,13 @@
                                 @foreach (var attachment in Model.ProjectAttachments)
                                 {
                              <tr>
-                                        <td>@attachment.Name</td>
-                                        <td>@attachment.FilePath</td>
+                                 <td>@attachment.Name</td>
+                                 <td>
+                                     
+                                     <a href="@Url.Content(@attachment.FilePath)" target="_blank">
+                                         <i class="fas fa-download"></i> @attachment.Name
+                                     </a>
+                                 </td>
                                         <td>@attachment.User.FullName</td>
                                          @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                                             {
@@ -735,6 +737,7 @@
                                                     <form asp-action="DeleteAttachment" method="post" enctype="multipart/form-data">
                                                         <button type="submit" class="btn btn-tool" asp-controller="Project" asp-action="DeleteAttachment" asp-route-project="@attachment.ProjectId" asp-route-id="@attachment.Id" localize-content><i class="fas fa-trash"></i></button>
                                                     </form>
+                                                    
                                                 </td>
 
                                             }
