@@ -86,95 +86,100 @@
         <img src="~/img/logo_black.png" heigt="300" width="300"/>
         <h1>@Model.Organization.Name</h1>
     </div>
-    
+
 </div>
 
-    <br /><br />
+<br/><br/>
 
-        <div align="center" >
-           <h1>@Model.Project.Name</h1>
-           <p>Prepared by @Model.Organization.Name</p>
-            <h3>Prepared for: @Model.Project.Client.Name</h3>
-            <p>Start Date: @Model.Project.StartDate.DayOfWeek @Model.Project.StartDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Project.StartDate.Month) @Model.Project.StartDate.Year </p>
-            <p>End Date: @Model.Project.EndDate.DayOfWeek @Model.Project.EndDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Project.EndDate.Month) @Model.Project.EndDate.Year</p>
-    </div>
-      <br /><br />
-          <div align="center" >
-           <img src="@Url.Content(Model.Project.Client.ImagePath)" height="150" width="150"/>
-           <h1>@Model.Project.Client.Name</h1>
-    </div>
+<div align="center">
+    <h1>@Model.Project.Name</h1>
+    <p>Prepared by @Model.Organization.Name</p>
+    <h3>Prepared for: @Model.Project.Client.Name</h3>
+    <p>Start Date: @Model.Project.StartDate.DayOfWeek @Model.Project.StartDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Project.StartDate.Month) @Model.Project.StartDate.Year </p>
+    <p>End Date: @Model.Project.EndDate.DayOfWeek @Model.Project.EndDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Project.EndDate.Month) @Model.Project.EndDate.Year</p>
+</div>
+<br/><br/>
+<div align="center">
+    <img src="@Url.Content(Model.Project.Client.ImagePath)" height="150" width="150"/>
+    <h1>@Model.Project.Client.Name</h1>
+</div>
 
 <div style="break-after:page;page-break-after: always;"></div>
-        <div align="right" >
-           <h4>@Model.Organization.Name</h4>
-           <p>@Model.Organization.ContactEmail</p>
-           <p>@Model.Organization.ContactPhone</p>
-           <br />
-           <h4>@Model.Project.Client.Name</h4>
-           <p>@Model.Project.Client.ContactEmail</p>
-           <p>@Model.Project.Client.ContactPhone</p>
-    </div>
-<h1><a id="disclaimer">Disclaimer</a></h1>
+<div align="right">
+    <h4>@Model.Organization.Name</h4>
+    <p>@Model.Organization.ContactEmail</p>
+    <p>@Model.Organization.ContactPhone</p>
+    <br/>
+    <h4>@Model.Project.Client.Name</h4>
+    <p>@Model.Project.Client.ContactEmail</p>
+    <p>@Model.Project.Client.ContactPhone</p>
+</div>
+<h1>
+    <a id="disclaimer">Disclaimer</a>
+</h1>
 <p>
-No warranties, express or implied are given by @Model.Organization.Name with respect to accuracy, reliability, 
-quality, correctness, or freedom from error or omission of this work product, including any implied 
-warranties of merchantability, fitness for a specific purpose or non-infringement. This document is 
-delivered "as is", and @Model.Organization.Name shall not be liable for any inaccuracy thereof. @Model.Organization.Name does 
-not warrant that all errors in this work product shall be corrected. Except as expressly set forth in any 
-master services agreement or project assignment, @Model.Organization.Name is not assuming any obligations or 
-liabilities including but not limited to direct, indirect, incidental or consequential, special or exemplary 
-damages resulting from the use of or reliance upon any information in this document. This document 
-does not imply an endorsement of any of the companies or products mentioned.
+    No warranties, express or implied are given by @Model.Organization.Name with respect to accuracy, reliability,
+    quality, correctness, or freedom from error or omission of this work product, including any implied
+    warranties of merchantability, fitness for a specific purpose or non-infringement. This document is
+    delivered "as is", and @Model.Organization.Name shall not be liable for any inaccuracy thereof. @Model.Organization.Name does
+    not warrant that all errors in this work product shall be corrected. Except as expressly set forth in any
+    master services agreement or project assignment, @Model.Organization.Name is not assuming any obligations or
+    liabilities including but not limited to direct, indirect, incidental or consequential, special or exemplary
+    damages resulting from the use of or reliance upon any information in this document. This document
+    does not imply an endorsement of any of the companies or products mentioned.
 </p>
 <p>
-©@DateTime.Today.Year @Model.Organization.Name. All rights reserved. No part of this document may be reproduced, copied or 
-modified without the express written consent of the authors. Unless written permission is expressly 
-granted for other purposes, this document shall be treated at all times as the confidential and proprietary 
-material of PrimoConnect and may not be distributed or published to any third-party.
+    ©@DateTime.Today.Year @Model.Organization.Name. All rights reserved. No part of this document may be reproduced, copied or
+    modified without the express written consent of the authors. Unless written permission is expressly
+    granted for other purposes, this document shall be treated at all times as the confidential and proprietary
+    material of PrimoConnect and may not be distributed or published to any third-party.
 </p>
 
-    <div style="break-after:page;page-break-after: always;"></div>
+<div style="break-after:page;page-break-after: always;"></div>
 
 
-    <div style="break-after:page;page-break-after: always;"></div>
+<div style="break-after:page;page-break-after: always;"></div>
 
-    <h1><a id="document-control">Document Control</a></h1>
+<h1>
+    <a id="document-control">Document Control</a>
+</h1>
 
+<table>
+    <thead>
+    <tr>
+        <th>Date/Time</th>
+        <th>Version</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model.Reports != null)
+    {
+        @foreach (var rep in Model.Reports)
+        {
+            <tr>
+                <td>@rep.CreatedDate.DayOfWeek @rep.CreatedDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(@rep.CreatedDate.Month) @rep.CreatedDate.Year</td>
+                <td>@rep.Version</td>
+                <td>@rep.Description</td>
+            </tr>
+        }
+    }
+
+
+    </tbody>
+</table>
+
+
+<div style="break-after:page;page-break-after: always;"></div>
+
+
+<h1>
+    <a id="pentesting-team">Pentesting team</a>
+</h1>
+@if (Model.Users != null)
+{
     <table>
         <thead>
-        <tr>
-            <th>Date/Time</th>
-            <th>Version</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-            @if (Model.Reports != null)
-            {
-                @foreach (var rep in Model.Reports)
-                {
-                    <tr>
-                        <td>@rep.CreatedDate.DayOfWeek @rep.CreatedDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(@rep.CreatedDate.Month) @rep.CreatedDate.Year</td>
-                        <td>@rep.Version</td>
-                        <td>@rep.Description</td>
-                   </tr>
-                }
-            }
-           
- 
-        </tbody>
-    </table>
-
-
-
-<div style="break-after:page;page-break-after: always;"></div>
-
-
-    <h1><a id="pentesting-team">Pentesting team</a></h1>
-    @if (Model.Users != null) {
-
-        <table>
-            <thead>
         <tr>
             <th></th>
             <th>Name</th>
@@ -182,46 +187,57 @@ material of PrimoConnect and may not be distributed or published to any third-pa
             <th>Position</th>
         </tr>
         </thead>
-            <tbody>
-                @foreach(var user in Model.Users){
-                <tr>
-                    <td>
-                        @if (@user.User.Avatar != null)
-                                                {
-                                                    <img class="profile-user-img img-fluid img-circle"
-                                                                          src="@Url.Content(user.User.Avatar)"
-                                                                          alt="Avatar">
-                                                }
-                                                else
-                                                {
-                                                    <i class="fas fa-user"></i>
-                                                }
-                    </td>
-                    <td>
-                        <h3>@user.User.FullName</h3>
-                        
-                        
-                    </td>
-                    <td><p>@user.User.Email</p></td>
-                    <td><p>@user.User.Position</p></td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    }
+        <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>
+                    @if (@user.User.Avatar != null)
+                    {
+                        <img class="profile-user-img img-fluid img-circle"
+                             src="@Url.Content(user.User.Avatar)"
+                             alt="Avatar">
+                    }
+                    else
+                    {
+                        <i class="fas fa-user"></i>
+                    }
+                </td>
+                <td>
+                    <h3>@user.User.FullName</h3>
 
-    <div style="break-after:page;page-break-after: always;"></div>
 
-    <h1><a id="pentesting-team">1. Introduction</a></h1>
-    <p>This document presents the results of a Security Review for @Model.Project.Client.Name .
-This engagement aimed to verify to discover security vulnerabilities that could negatively affect the @Model.Project.Client.Name
-networks or systems</p>
+                </td>
+                <td>
+                    <p>@user.User.Email</p>
+                </td>
+                <td>
+                    <p>@user.User.Position</p>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<div style="break-after:page;page-break-after: always;"></div>
+
+<h1>
+    <a id="pentesting-team">1. Introduction</a>
+</h1>
+<p>
+    This document presents the results of a Security Review for @Model.Project.Client.Name .
+    This engagement aimed to verify to discover security vulnerabilities that could negatively affect the @Model.Project.Client.Name
+    networks or systems
+</p>
 
 <p>@Html.Raw(@WebUtility.HtmlDecode(Model.Project.Client.Description))</p>
 
-<p>For each vulnerability discovered during the
-assessment, @Model.Organization.Name attributed a risk severity rating and, whenever
-possible, validated the existence of the vulnerability with a working exploit code.</p>
+<p>
+    For each vulnerability discovered during the
+    assessment, @Model.Organization.Name attributed a risk severity rating and, whenever
+    possible, validated the existence of the vulnerability with a working exploit code.
+</p>
 
 <p>The main objectives of the assessment were the following:</p>
 <ul>
@@ -229,55 +245,58 @@ possible, validated the existence of the vulnerability with a working exploit co
     <li>Assess the level of secure coding practices present in the project</li>
     <li>Obtain evidences for each vulnerability and, if possible, develop a working exploit</li>
     <li>Document, in a clear and easy to reproduce manner, all procedures used to replicate the issue</li>
-<li> Recommend mitigation factors and fixes for each defect identified in the analysis</li>
-<li>Provide context with a real risk scenario based on a realistic threat model</li>
+    <li> Recommend mitigation factors and fixes for each defect identified in the analysis</li>
+    <li>Provide context with a real risk scenario based on a realistic threat model</li>
 </ul>
 
-    <h1><a id="project-description">2. Purpose</a></h1>
-    @Html.Raw(@WebUtility.HtmlDecode(Model.Project.Description))
+<h1>
+    <a id="project-description">2. Purpose</a>
+</h1>
+@Html.Raw(@WebUtility.HtmlDecode(Model.Project.Description))
 
-    <h1><a id="targets">3. Scope</a></h1>
-    <p>In accordance with the contract signed between @Model.Organization.Name and @Model.Project.Client.Name, the penetration test was 
-performed between @Model.Project.StartDate.DayOfWeek @Model.Project.StartDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Project.StartDate.Month) @Model.Project.StartDate.Year and 
- @Model.Project.EndDate.DayOfWeek @Model.Project.EndDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Project.EndDate.Month) @Model.Project.EndDate.Year.</p>
+<h1>
+    <a id="targets">3. Scope</a>
+</h1>
+<p>
+    In accordance with the contract signed between @Model.Organization.Name and @Model.Project.Client.Name, the penetration test was
+    performed between @Model.Project.StartDate.DayOfWeek @Model.Project.StartDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Project.StartDate.Month) @Model.Project.StartDate.Year and
+    @Model.Project.EndDate.DayOfWeek @Model.Project.EndDate.Day @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Project.EndDate.Month) @Model.Project.EndDate.Year.
+</p>
 
 <p>The scope of the test was limited to targets listed below. </p>
 
-    @if (Model.Targets != null)
-    {
+@if (Model.Targets != null)
+{
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var target in Model.Targets)
+        {
+            <tr>
+                <td>@target.Name</td>
+                <td>@target.Type</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
 
-        
-
-           
-            <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                </tr>
-            </thead>
-            <tbody>
-               @foreach (var target in Model.Targets)
-               {
-                   <tr>
-                       <td>@target.Name</td>
-                       <td>@target.Type</td>
-                   </tr>
-               }
-            </tbody>
-        </table>
-
-            
-
-    }
-
-    <h1><a id="methodlogy">4. Methodology</a></h1>
-    <p>The methodology consisted of 7 of steps beginning with the determination of test scope, and ending 
-with reporting. These tests were performed by security experts using potential attackers’ modes of 
-operation while controlling execution to prevent harm to the systems being tested. The approach 
-included but is not limited to manual and automated vulnerability scans, verification of findings 
-(automated and otherwise). This verification step and manual scanning process eliminated false 
-positives and erroneous outputs, resulting in more efficient tests. </p>
+<h1>
+    <a id="methodlogy">4. Methodology</a>
+</h1>
+<p>
+    The methodology consisted of 7 of steps beginning with the determination of test scope, and ending
+    with reporting. These tests were performed by security experts using potential attackers’ modes of
+    operation while controlling execution to prevent harm to the systems being tested. The approach
+    included but is not limited to manual and automated vulnerability scans, verification of findings
+    (automated and otherwise). This verification step and manual scanning process eliminated false
+    positives and erroneous outputs, resulting in more efficient tests.
+</p>
 
 <ul>
     <li>Determining scope of the test</li>
@@ -290,100 +309,104 @@ positives and erroneous outputs, resulting in more efficient tests. </p>
 </ul>
 
 
-        <h1><a id="findings-overview">4. Findings overview</a></h1>
-        <p>The following sections list both vulnerabilities and implementation issues spotted during
-            the testing period. Note that findings are listed  by
-            their degree of severity and impact. The aforementioned severity rank is simply given in
-            brackets following the title heading for each vulnerability</p>
-            <br /><br />
-        <table>
-            <thead>
-                <tr>
-                    <th>Severity</th>
-                    <th>Count</th>
-                </tr>
-            </thead>
-            <tbody>
-              
-                    
-                
-                <tr>
-                    <td style="background-color:#dc3545">Critical</td>
-                    <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Critical).Count()</td>
-                </tr>
-                <tr>
-                    <td style="background-color:#fd7e14">High</td>
-                    <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.High).Count()</td>
-                </tr>
-                <tr>
-                    <td style="background-color:#ffc107">Medium</td>
-                    <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Medium).Count()</td>
-                </tr>
-                <tr>
-                    <td style="background-color:#28a745">Low</td>
-                    <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Low).Count()</td>
-                </tr>
-                <tr>
-                    <td style="background-color:#007bff">Info</td>
-                    <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Info).Count()</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <br /><br /><br />
-        <table>
-            <tbody>
-            @foreach (var critical in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Critical))
-            {
-                <tr>                 
-                    <td colspan="2" align="center" style="background-color:#dc3545; color:white">@critical.Name - @critical.cve</td>
-                </tr>
-                <tr>
-                        <td colspan="2">Risk: @critical.Risk - @critical.VulnCategory.Name</td>
-                </tr>
-            }
-             @foreach (var high in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.High))
-            {
-                <tr>                 
-                    <td colspan="2" align="center" style="background-color:#fd7e14; color:white">@high.Name - @high.cve</td>
-                </tr>
-                <tr>
-                        <td colspan="2">Risk: @high.Risk - @high.VulnCategory.Name</td>
-                </tr>
-            }
-            @foreach (var medium in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Medium))
-            {
-                <tr>                 
-                    <td colspan="2" align="center" style="background-color:#ffc107; color:white">@medium.Name - @medium.cve</td>
-                </tr>
-                <tr>
-                        <td colspan="2">Risk: @medium.Risk - @medium.VulnCategory.Name</td>
-                </tr>
-            }
-            @foreach (var low in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Low))
-            {
-                <tr>                 
-                    <td colspan="2" align="center" style="background-color:#28a745; color:white">@low.Name - @low.cve</td>
-                </tr>
-                <tr>
-                        <td colspan="2">Risk: @low.Risk - @low.VulnCategory.Name</td>
-                </tr>
-            }
-             @foreach (var info in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Info))
-            {
-                <tr>                 
-                    <td colspan="2" align="center" style="background-color:#007bff; color:white">@info.Name - @info.cve</td>
-                </tr>
-                <tr>
-                        <td colspan="2">Risk: @info.Risk - @info.VulnCategory.Name</td>
-                </tr>
-            }
-            </tbody>
-        </table>
+<h1>
+    <a id="findings-overview">4. Findings overview</a>
+</h1>
+<p>
+    The following sections list both vulnerabilities and implementation issues spotted during
+    the testing period. Note that findings are listed by
+    their degree of severity and impact. The aforementioned severity rank is simply given in
+    brackets following the title heading for each vulnerability
+</p>
+<br/><br/>
+<table>
+    <thead>
+    <tr>
+        <th>Severity</th>
+        <th>Count</th>
+    </tr>
+    </thead>
+    <tbody>
 
 
+    <tr>
+        <td style="background-color:#dc3545">Critical</td>
+        <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Critical).Count()</td>
+    </tr>
+    <tr>
+        <td style="background-color:#fd7e14">High</td>
+        <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.High).Count()</td>
+    </tr>
+    <tr>
+        <td style="background-color:#ffc107">Medium</td>
+        <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Medium).Count()</td>
+    </tr>
+    <tr>
+        <td style="background-color:#28a745">Low</td>
+        <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Low).Count()</td>
+    </tr>
+    <tr>
+        <td style="background-color:#007bff">Info</td>
+        <td>@Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Info).Count()</td>
+    </tr>
+    </tbody>
+</table>
 
-<h1><a id="findings-overview">5. Findings Classification</a></h1>
+<br/><br/><br/>
+<table>
+    <tbody>
+    @foreach (var critical in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Critical))
+    {
+        <tr>
+            <td colspan="2" align="center" style="background-color:#dc3545; color:white">@critical.Name - @critical.cve</td>
+        </tr>
+        <tr>
+            <td colspan="2">Risk: @critical.Risk - @critical.VulnCategory.Name</td>
+        </tr>
+    }
+    @foreach (var high in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.High))
+    {
+        <tr>
+            <td colspan="2" align="center" style="background-color:#fd7e14; color:white">@high.Name - @high.cve</td>
+        </tr>
+        <tr>
+            <td colspan="2">Risk: @high.Risk - @high.VulnCategory.Name</td>
+        </tr>
+    }
+    @foreach (var medium in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Medium))
+    {
+        <tr>
+            <td colspan="2" align="center" style="background-color:#ffc107; color:white">@medium.Name - @medium.cve</td>
+        </tr>
+        <tr>
+            <td colspan="2">Risk: @medium.Risk - @medium.VulnCategory.Name</td>
+        </tr>
+    }
+    @foreach (var low in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Low))
+    {
+        <tr>
+            <td colspan="2" align="center" style="background-color:#28a745; color:white">@low.Name - @low.cve</td>
+        </tr>
+        <tr>
+            <td colspan="2">Risk: @low.Risk - @low.VulnCategory.Name</td>
+        </tr>
+    }
+    @foreach (var info in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Info))
+    {
+        <tr>
+            <td colspan="2" align="center" style="background-color:#007bff; color:white">@info.Name - @info.cve</td>
+        </tr>
+        <tr>
+            <td colspan="2">Risk: @info.Risk - @info.VulnCategory.Name</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+<h1>
+    <a id="findings-overview">5. Findings Classification</a>
+</h1>
 <p>Each vulnerability or risk identified has been labeled as a finding and categorized as a Critical, High, Medium, Low or Informational Risk which ar defined as:</p>
 
 <h2>Critical</h2>
@@ -396,7 +419,7 @@ positives and erroneous outputs, resulting in more efficient tests. </p>
 
 <h2>Medium</h2>
 <p>These vulnerabilities should be addressed promptly in a timely manner.</p>
-<p>Exploitation is often difficult to exploit and requires social engineering, existing access, or  special circumstances.</p>
+<p>Exploitation is often difficult to exploit and requires social engineering, existing access, or special circumstances.</p>
 
 <h2>Low</h2>
 <p>The vulnerabilities should be noted and addressed at a later date.</p>
@@ -407,388 +430,528 @@ positives and erroneous outputs, resulting in more efficient tests. </p>
 <p>These issues are for informational purposes oly and likely do not represent actual threat.</p>
 
 
-<h1><a id="vulns">6. Vulnerabilities</a></h1>
-@if(Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Critical).Count() != 0){
-<h2>Critical Risk Findings</h2>
+<h1>
+    <a id="vulns">6. Vulnerabilities</a>
+</h1>
+@if (Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Critical).Count() != 0)
+{
+    <h2>Critical Risk Findings</h2>
 
-        @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Critical))
-        {
+    @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Critical))
+    {
+        <div>
 
-            <div>
-               
-           
-                <table>
-                    <tbody>
-                         <tr>
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><h3>@vuln.Name - @vuln.cve</h3></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Category</strong></td>
-                            <td>@vuln.VulnCategory.Name</td>
-                        </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Risk</strong></td>
-                            <td>@vuln.Risk</td>
-                        </tr>
+            <table>
+                <tbody>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <h3>@vuln.Name - @vuln.cve</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Category</strong>
+                    </td>
+                    <td>@vuln.VulnCategory.Name</td>
+                </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>CVSS3 Score</strong></td>
-                            <td><a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Target Affected</strong></td>
-                            <td>@vuln.Target.Name (@vuln.Target.Type)</td>
-                        </tr>
-                        <tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Risk</strong>
+                    </td>
+                    <td>@vuln.Risk</td>
+                </tr>
 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Description</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Impact</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Proof of concept</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation</strong></td>
-                        </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>CVSS3 Score</strong>
+                    </td>
+                    <td>
+                        <a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Target Affected</strong>
+                    </td>
+                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                </tr>
+                <tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Complexity</strong></td>
-                            <td>@vuln.RemediationComplexity</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Priority</strong></td>
-                            <td>@vuln.RemediationPriority</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation Description</strong></td>
-                        </tr>
-                         <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Impact</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Proof of concept</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation</strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Complexity</strong>
+                    </td>
+                    <td>@vuln.RemediationComplexity</td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Priority</strong>
+                    </td>
+                    <td>@vuln.RemediationPriority</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
-        <br /><br />
-        }
+        <br/>
+        <br/>
     }
+}
 
-        @if(Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.High).Count() != 0){
-        <h2>High Risk Findings</h2>
-        @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.High))
-        {
-                       <div>
-               
-           
-                <table>
-                    <tbody>
-                         <tr>
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><h3>@vuln.Name - @vuln.cve</h3></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Category</strong></td>
-                            <td>@vuln.VulnCategory.Name</td>
-                        </tr>
+@if (Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.High).Count() != 0)
+{
+    <h2>High Risk Findings</h2>
+    @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.High))
+    {
+        <div>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Risk</strong></td>
-                            <td>@vuln.Risk</td>
-                        </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>CVSS3 Score</strong></td>
-                            <td><a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Target Affected</strong></td>
-                            <td>@vuln.Target.Name (@vuln.Target.Type)</td>
-                        </tr>
-                        <tr>
+            <table>
+                <tbody>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <h3>@vuln.Name - @vuln.cve</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Category</strong>
+                    </td>
+                    <td>@vuln.VulnCategory.Name</td>
+                </tr>
 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Description</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Impact</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Proof of concept</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation</strong></td>
-                        </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Risk</strong>
+                    </td>
+                    <td>@vuln.Risk</td>
+                </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Complexity</strong></td>
-                            <td>@vuln.RemediationComplexity</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Priority</strong></td>
-                            <td>@vuln.RemediationPriority</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation Description</strong></td>
-                        </tr>
-                         <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>CVSS3 Score</strong>
+                    </td>
+                    <td>
+                        <a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Target Affected</strong>
+                    </td>
+                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                </tr>
+                <tr>
+
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Impact</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Proof of concept</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation</strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Complexity</strong>
+                    </td>
+                    <td>@vuln.RemediationComplexity</td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Priority</strong>
+                    </td>
+                    <td>@vuln.RemediationPriority</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
-        <br /><br />
-        }
+        <br/>
+        <br/>
     }
+}
 
-        @if(Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Medium).Count() != 0){
-        <h2>Medium Risk Findings</h2>
+@if (Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Medium).Count() != 0)
+{
+    <h2>Medium Risk Findings</h2>
 
-        @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Medium))
-        {
-            <div>
-               
-           
-                <table>
-                    <tbody>
-                         <tr>
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><h3>@vuln.Name - @vuln.cve</h3></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Category</strong></td>
-                            <td>@vuln.VulnCategory.Name</td>
-                        </tr>
+    @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Medium))
+    {
+        <div>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Risk</strong></td>
-                            <td>@vuln.Risk</td>
-                        </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>CVSS3 Score</strong></td>
-                            <td><a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Target Affected</strong></td>
-                            <td>@vuln.Target.Name (@vuln.Target.Type)</td>
-                        </tr>
-                        <tr>
+            <table>
+                <tbody>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <h3>@vuln.Name - @vuln.cve</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Category</strong>
+                    </td>
+                    <td>@vuln.VulnCategory.Name</td>
+                </tr>
 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Description</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Impact</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Proof of concept</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation</strong></td>
-                        </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Risk</strong>
+                    </td>
+                    <td>@vuln.Risk</td>
+                </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Complexity</strong></td>
-                            <td>@vuln.RemediationComplexity</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Priority</strong></td>
-                            <td>@vuln.RemediationPriority</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation Description</strong></td>
-                        </tr>
-                         <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>CVSS3 Score</strong>
+                    </td>
+                    <td>
+                        <a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Target Affected</strong>
+                    </td>
+                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                </tr>
+                <tr>
+
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Impact</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Proof of concept</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation</strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Complexity</strong>
+                    </td>
+                    <td>@vuln.RemediationComplexity</td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Priority</strong>
+                    </td>
+                    <td>@vuln.RemediationPriority</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
-        <br /><br />
-        }
+        <br/>
+        <br/>
     }
+}
 
-        @if(Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Low).Count() != 0){
-        <h2>Low Risk Findings</h2>
+@if (Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Low).Count() != 0)
+{
+    <h2>Low Risk Findings</h2>
 
-        @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Low))
-        {
-                       <div>
-               
-           
-                <table>
-                    <tbody>
-                         <tr>
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><h3>@vuln.Name - @vuln.cve</h3></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Category</strong></td>
-                            <td>@vuln.VulnCategory.Name</td>
-                        </tr>
+    @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Low))
+    {
+        <div>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Risk</strong></td>
-                            <td>@vuln.Risk</td>
-                        </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>CVSS3 Score</strong></td>
-                            <td><a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Target Affected</strong></td>
-                            <td>@vuln.Target.Name (@vuln.Target.Type)</td>
-                        </tr>
-                        <tr>
+            <table>
+                <tbody>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <h3>@vuln.Name - @vuln.cve</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Category</strong>
+                    </td>
+                    <td>@vuln.VulnCategory.Name</td>
+                </tr>
 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Description</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Impact</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Proof of concept</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation</strong></td>
-                        </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Risk</strong>
+                    </td>
+                    <td>@vuln.Risk</td>
+                </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Complexity</strong></td>
-                            <td>@vuln.RemediationComplexity</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Priority</strong></td>
-                            <td>@vuln.RemediationPriority</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation Description</strong></td>
-                        </tr>
-                         <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>CVSS3 Score</strong>
+                    </td>
+                    <td>
+                        <a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Target Affected</strong>
+                    </td>
+                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                </tr>
+                <tr>
+
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Impact</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Proof of concept</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation</strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Complexity</strong>
+                    </td>
+                    <td>@vuln.RemediationComplexity</td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Priority</strong>
+                    </td>
+                    <td>@vuln.RemediationPriority</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
-        <br /><br />
-        }
+        <br/>
+        <br/>
     }
+}
 
-        @if(Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Info).Count() != 0){
-        <h2>Informational Risk Findings</h2>
+@if (Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Info).Count() != 0)
+{
+    <h2>Informational Risk Findings</h2>
 
-         @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Info))
-        {
+    @foreach (var vuln in Model.Vulns.Where(x => x.Risk == Cervantes.CORE.VulnRisk.Info))
+    {
+        <div>
 
-                                          <div>
-               
-           
-                <table>
-                    <tbody>
-                         <tr>
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><h3>@vuln.Name - @vuln.cve</h3></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Category</strong></td>
-                            <td>@vuln.VulnCategory.Name</td>
-                        </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Risk</strong></td>
-                            <td>@vuln.Risk</td>
-                        </tr>
+            <table>
+                <tbody>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <h3>@vuln.Name - @vuln.cve</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Category</strong>
+                    </td>
+                    <td>@vuln.VulnCategory.Name</td>
+                </tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>CVSS3 Score</strong></td>
-                            <td><a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a></td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Target Affected</strong></td>
-                            <td>@vuln.Target.Name (@vuln.Target.Type)</td>
-                        </tr>
-                        <tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Risk</strong>
+                    </td>
+                    <td>@vuln.Risk</td>
+                </tr>
 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Description</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Impact</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Proof of concept</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation</strong></td>
-                        </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>CVSS3 Score</strong>
+                    </td>
+                    <td>
+                        <a href="https://www.first.org/cvss/calculator/3.0#@vuln.CVSSVector">@vuln.CVSS3</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Target Affected</strong>
+                    </td>
+                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                </tr>
+                <tr>
 
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Complexity</strong></td>
-                            <td>@vuln.RemediationComplexity</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:#6c757d; color:white"><strong>Remediation Priority</strong></td>
-                            <td>@vuln.RemediationPriority</td>
-                        </tr>
-                        <tr>                 
-                            <td colspan="2" align="center" style="background-color:#6c757d; color:white"><strong>Remediation Description</strong></td>
-                        </tr>
-                         <tr>
-                            <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Description))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Impact</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Impact))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Proof of concept</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.ProofOfConcept))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation</strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Complexity</strong>
+                    </td>
+                    <td>@vuln.RemediationComplexity</td>
+                </tr>
+                <tr>
+                    <td style="background-color:#6c757d; color:white">
+                        <strong>Remediation Priority</strong>
+                    </td>
+                    <td>@vuln.RemediationPriority</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color:#6c757d; color:white">
+                        <strong>Remediation Description</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">@Html.Raw(@WebUtility.HtmlDecode(vuln.Remediation))</td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
-        <br /><br />
-        }
-        }
-    
+        <br/>
+        <br/>
+    }
+}
+
 
 
 

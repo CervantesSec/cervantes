@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.CORE
+namespace Cervantes.CORE;
+
+public enum ProjectStatus
 {
-    public enum ProjectStatus
-    {
-        Active = 0,
-        Archived = 1,
-        Waiting = 2
-    }
+    Active = 0,
+    Archived = 1,
+    Waiting = 2
 }

@@ -10,78 +10,82 @@
 
 }
 
-    <section class="content-header">
-      <div class="container-fluid">
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-bullseye"></i> <span localize-content>Edit Service</span></h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item" localize-content>Workspace</li>
-              <li class="breadcrumb-item" localize-content>Target</li>
-              <li class="breadcrumb-item active" localize-content>Create</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content>
+                    <i class="fas fa-bullseye"></i> <span localize-content>Edit Service</span>
+                </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>Workspace</li>
+                    <li class="breadcrumb-item" localize-content>Target</li>
+                    <li class="breadcrumb-item active" localize-content>Create</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
-    
-    <!-- Main content -->
-    <section class="content">
-    
-          <div class="card">
-    <div class="card-body">
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <form asp-area="Workspace" asp-controller="Target" asp-action="EditService" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TargetService.Id" />
-            <div class="form-group">
-                <label asp-for="TargetService.Name" class="control-label" localize-content>Name</label>
-                <input type="text" asp-for="TargetService.Name" class="form-control" />
-                <span asp-validation-for="TargetService.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TargetService.Version" class="control-label" localize-content>Version</label>
-                <input type="text" asp-for="TargetService.Version" class="form-control" rows="4"/>
-                <span asp-validation-for="TargetService.Version" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TargetService.Port" class="control-label" localize-content>Port</label>
-                <input type="number" asp-for="TargetService.Port" class="form-control"/>
-                <span asp-validation-for="TargetService.Port" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TargetService.Description" class="control-label" localize-content>Description</label>
-                <textarea id="description" asp-for="TargetService.Description" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="TargetService.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TargetService.Note" class="control-label" localize-content>Note</label>
-                <textarea id="note" asp-for="TargetService.Note" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="TargetService.Note" class="text-danger"></span>
-            </div>
+<!-- Main content -->
+<section class="content">
 
-            <div class="form-group">
-                <a class="btn btn-default" asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Back</a>
-                <button type="submit" class="btn btn-dark" localize-content>Edit</button>
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <form asp-area="Workspace" asp-controller="Target" asp-action="EditService" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="TargetService.Id"/>
+                        <div class="form-group">
+                            <label asp-for="TargetService.Name" class="control-label" localize-content>Name</label>
+                            <input type="text" asp-for="TargetService.Name" class="form-control"/>
+                            <span asp-validation-for="TargetService.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TargetService.Version" class="control-label" localize-content>Version</label>
+                            <input type="text" asp-for="TargetService.Version" class="form-control" rows="4"/>
+                            <span asp-validation-for="TargetService.Version" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TargetService.Port" class="control-label" localize-content>Port</label>
+                            <input type="number" asp-for="TargetService.Port" class="form-control"/>
+                            <span asp-validation-for="TargetService.Port" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TargetService.Description" class="control-label" localize-content>Description</label>
+                            <textarea id="description" asp-for="TargetService.Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="TargetService.Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TargetService.Note" class="control-label" localize-content>Note</label>
+                            <textarea id="note" asp-for="TargetService.Note" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="TargetService.Note" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <a class="btn btn-default" asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Back</a>
+                            <button type="submit" class="btn btn-dark" localize-content>Edit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-    </div>
-</div>
 
 
 </section>
 
-           
-  @section Scripts{
-<script>
+
+@section Scripts{
+    <script>
 
     $(document).ready(function() {
                   $('#description').summernote({
@@ -98,7 +102,7 @@
                     var data = new FormData();
                     data.append("image", image);
                     $.ajax({
-                        url: '@Url.Action("UploadTarget","Image", new {Area = ""})',
+                        url: '@Url.Action("UploadTarget", "Image", new {Area = ""})',
                         cache: false,
                         contentType: false,
                         processData: false,
@@ -130,7 +134,7 @@
                            var data = new FormData();
                            data.append("image", image);
                            $.ajax({
-                               url: '@Url.Action("UploadTarget","Image", new {Area = ""})',
+                               url: '@Url.Action("UploadTarget", "Image", new {Area = ""})',
                                cache: false,
                                contentType: false,
                                processData: false,
@@ -152,5 +156,4 @@
 });
 
 </script>
-}                       
-
+}

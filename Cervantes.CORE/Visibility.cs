@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.CORE
+namespace Cervantes.CORE;
+
+public enum Visibility
 {
-    public enum Visibility
-    {
-        Public = 0,
-        Private = 1
-    }
+    Public = 0,
+    Private = 1
 }

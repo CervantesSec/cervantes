@@ -6,19 +6,19 @@
 @{
     if (TempData["deleted"] != null)
     {
-<div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <strong localize-content>Client deleted successfully!</strong>
-            
+
         </div>
     }
 
     if (TempData["created"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <strong localize-content>Client created successfully!</strong>
-            
+
         </div>
     }
 
@@ -32,36 +32,38 @@
 
 }
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-eye"></i> System Logs</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Admin</a></li>
-              <li class="breadcrumb-item active" localize-content>System Logs</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-eye"></i> System Logs</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Admin</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>System Logs</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-    <!-- Main content -->
-    <section class="content">
-        
-<div class="card">
-    <div class="card-body">
+<!-- Main content -->
+<section class="content">
 
-    
-        <!--Table-->
-        <table id="logResults" class="table table-bordered table-hover" width="100%">
+    <div class="card">
+        <div class="card-body">
 
-            <!--Table head-->
-            <thead class="thead-dark">
+
+            <!--Table-->
+            <table id="logResults" class="table table-bordered table-hover" width="100%">
+
+                <!--Table head-->
+                <thead class="thead-dark">
                 <tr>
                     <th localize-content>Id</th>
                     <th localize-content>Created On</th>
@@ -69,88 +71,94 @@
                     <th localize-content>Message</th>
                     <th localize-content>Stack Trace</th>
                     <th localize-content>Exception</th>
-                    <th localize-content>Logger</th> 
-                    <th localize-content>Url</th> 
+                    <th localize-content>Logger</th>
+                    <th localize-content>Url</th>
                 </tr>
-            </thead>
-            <!--Table head-->
-            <!--Table body-->
-            <tbody>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
 
-                @foreach(var log in Model.Logs)
+                @foreach (var log in Model.Logs)
                 {
-                   switch (log.level)
-                   {
+                    switch (log.level)
+                    {
                         case "Debug":
-                        <tr class="bg-light">
+                            <tr class="bg-light">
                                 <td class="bg-light">@log.id</td>
                                 <td class="bg-light">@log.created_on/td>
                                 <td class="bg-light">@log.level</td>
                                 <td class="bg-light">@log.message</td>
-                                <td class="bg-light">@log.stack_trace</td> 
+                                <td class="bg-light">@log.stack_trace</td>
                                 <td class="bg-light">@log.exception</td>
                                 <td class="bg-light">@log.logger</td>
                                 <td class="bg-light">@log.url</td>
                             </tr>
-                                    break;
+                            break;
                         case "Info":
-                         <tr class="bg-info">
+                            <tr class="bg-info">
                                 <td class="bg-info">@log.id</td>
-                                                                <td class="bg-info">@log.created_on/td>
-                                                                <td class="bg-info">@log.level</td>
-                                                                <td class="bg-info">@log.message</td>
-                                                                <td class="bg-info">@log.stack_trace</td> 
-                                                                <td class="bg-info">@log.exception</td>
-                                                                <td class="bg-info">@log.logger</td>
-                                                                <td class="bg-info">@log.url</td>
+                                <td class="bg-info">@log.created_on/td>
+                                <td class="bg-info">@log.level</td>
+                                <td class="bg-info">@log.message</td>
+                                <td class="bg-info">@log.stack_trace</td>
+                                <td class="bg-info">@log.exception</td>
+                                <td class="bg-info">@log.logger</td>
+                                <td class="bg-info">@log.url</td>
                             </tr>
-                        break;
+                            break;
                         case "Error":
                             <tr class="bg-danger">
-                                  <td class="bg-danger">@log.id</td>
-                                                                <td class="bg-danger">@log.created_on/td>
-                                                                <td class="bg-danger">@log.level</td>
-                                                                <td class="bg-danger">@log.message</td>
-                                                                <td class="bg-danger">@log.stack_trace</td> 
-                                                                <td class="bg-danger">@log.exception</td>
-                                                                <td class="bg-danger">@log.logger</td>
-                                                                <td class="bg-danger">@log.url</td>
-                                </tr>
-                                break;
-                            case "Warn":
+                                <td class="bg-danger">@log.id</td>
+                                <td class="bg-danger">@log.created_on/td>
+                                <td class="bg-danger">@log.level</td>
+                                <td class="bg-danger">@log.message</td>
+                                <td class="bg-danger">@log.stack_trace</td>
+                                <td class="bg-danger">@log.exception</td>
+                                <td class="bg-danger">@log.logger</td>
+                                <td class="bg-danger">@log.url</td>
+                            </tr>
+                            break;
+                        case "Warn":
                             <tr class="bg-warning">
                                 <td class="bg-warning">@log.id</td>
-                                                                <td class="bg-warning">@log.created_on/td>
-                                                                <td class="bg-warning">@log.level</td>
-                                                                <td class="bg-warning">@log.message</td>
-                                                                <td class="bg-warning">@log.stack_trace</td> 
-                                                                <td class="bg-warning">@log.exception</td>
-                                                                <td class="bg-warning">@log.logger</td>
-                                                                <td class="bg-warning">@log.url</td>
-                                </tr>
-                                break;
-                        }
+                                <td class="bg-warning">@log.created_on/td>
+                                <td class="bg-warning">@log.level</td>
+                                <td class="bg-warning">@log.message</td>
+                                <td class="bg-warning">@log.stack_trace</td>
+                                <td class="bg-warning">@log.exception</td>
+                                <td class="bg-warning">@log.logger</td>
+                                <td class="bg-warning">@log.url</td>
+                            </tr>
+                            break;
+                    }
                 }
-                            
-                    
-                
 
-            </tbody>
-            <!--Table body-->
-        </table>
-        <!--Table-->
-        <a asp-area="" asp-controller="Log" asp-action="Export" localize-content class="btn btn-primary btn-sm"><i class="nav-icon fas fa-download"></i><p>Export</p></a>
-         <a asp-area="" asp-controller="Log" asp-action="" localize-content class="btn btn-danger btn-sm"><i class="nav-icon fas fa-trash"></i><p>Delete</p></a>
+
+
+
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
+            <a asp-area="" asp-controller="Log" asp-action="Export" localize-content class="btn btn-primary btn-sm">
+                <i class="nav-icon fas fa-download"></i>
+                <p>Export</p>
+            </a>
+            <a asp-area="" asp-controller="Log" asp-action="" localize-content class="btn btn-danger btn-sm">
+                <i class="nav-icon fas fa-trash"></i>
+                <p>Delete</p>
+            </a>
 
         </div>
-        
-        </div>
-    </section>
-    <!-- /.content -->
-  <!-- /.content-wrapper -->
 
-  @section Scripts{
-<script>
+    </div>
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+
+@section Scripts{
+    <script>
 
     $(document).ready(function () {
         $('#logResults').DataTable({
@@ -163,4 +171,3 @@
 
 </script>
 }
-

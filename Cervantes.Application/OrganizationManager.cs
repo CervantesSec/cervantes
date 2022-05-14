@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class OrganizationManager : GenericManager<Organization>, IOrganizationManager
 {
-    public class OrganizationManager: GenericManager<Organization>, IOrganizationManager
+    /// <summary>
+    /// Organization Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public OrganizationManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// Organization Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public OrganizationManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

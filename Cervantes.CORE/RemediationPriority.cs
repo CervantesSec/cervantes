@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.CORE
+namespace Cervantes.CORE;
+
+public enum RemediationPriority
 {
-    public enum RemediationPriority
-    {
-        Low = 1, 
-        Medium = 2, 
-        High = 3,
-    }
+    Low = 1,
+    Medium = 2,
+    High = 3
 }

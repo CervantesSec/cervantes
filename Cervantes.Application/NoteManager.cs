@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class NoteManager : GenericManager<Note>, INoteManager
 {
-    public class NoteManager: GenericManager<Note>, INoteManager
+    /// <summary>
+    /// Note Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public NoteManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// Note Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public NoteManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

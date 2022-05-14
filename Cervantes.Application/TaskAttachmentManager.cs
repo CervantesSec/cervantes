@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class TaskAttachmentManager : GenericManager<TaskAttachment>, ITaskAttachmentManager
 {
-    public class TaskAttachmentManager: GenericManager<TaskAttachment>, ITaskAttachmentManager
+    /// <summary>
+    /// TaskAttachment Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public TaskAttachmentManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// TaskAttachment Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public TaskAttachmentManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

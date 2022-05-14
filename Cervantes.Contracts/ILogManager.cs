@@ -1,8 +1,7 @@
 ﻿using Cervantes.CORE;
 
-namespace Cervantes.Contracts
+namespace Cervantes.Contracts;
+
+public interface ILogManager : IGenericManager<Log>
 {
-    public interface ILogManager : IGenericManager<Log>
-    {
-    }
 }

@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class DocumentManager : GenericManager<Document>, IDocumentManager
 {
-    public class DocumentManager: GenericManager<Document>, IDocumentManager
+    /// <summary>
+    /// Document Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public DocumentManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// Document Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public DocumentManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

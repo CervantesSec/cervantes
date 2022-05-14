@@ -1,6 +1,5 @@
-﻿namespace Cervantes.Web.LocalizationResources
+﻿namespace Cervantes.Web.LocalizationResources;
+
+public class ExpressLocalizationResource
 {
-    public class ExpressLocalizationResource
-    {
-    }
 }

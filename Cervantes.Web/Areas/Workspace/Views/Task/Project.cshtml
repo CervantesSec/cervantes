@@ -5,259 +5,276 @@
     ViewData["Title"] = "Project Tasks";
 }
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-tasks"></i> Project Tasks</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item" localize-content>Workspace</li>
-              <li class="breadcrumb-item" localize-content>@Model.Project.Name</li>
-              <li class="breadcrumb-item active" localize-content>My Tasks</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-        @if(Model.Tasks.FirstOrDefault() == null){
-                   <div class="row justify-content-center">
-        <div class="col-md-2">
-         <div class="card card-row card-secondary">
-          <div class="card-header">
-            <h3 class="card-title">
-              Backlog
-            </h3>
-          </div>
-          <div class="card-body">
-              No Tasks
-        </div>    
-            
-          </div>
-        </div>
-
-        <div class="col-md-2">
-        <div class="card card-row card-primary">
-          <div class="card-header">
-            <h3 class="card-title">
-              To Do
-            </h3>
-          </div>
-          <div class="card-body">
-              No Tasks
-          </div>
-        </div>
-        </div>
-
-        <div class="col-md-2">
-        <div class="card card-row card-default">
-          <div class="card-header bg-info">
-            <h3 class="card-title">
-              In Progress
-            </h3>
-          </div>
-          <div class="card-body">
-              No Tasks
-          </div>
-        </div>
-        </div>
-
-        <div class="col-md-2">
-                <div class="card card-row card-default">
-          <div class="card-header bg-danger">
-            <h3 class="card-title">
-              Blocked
-            </h3>
-          </div>
-          <div class="card-body">
-              No Tasks
-          </div>
-        </div>
-        </div>
-
-        <div class="col-md-2">
-        <div class="card card-row card-success">
-          <div class="card-header">
-            <h3 class="card-title">
-              Done
-            </h3>
-          </div>
-          <div class="card-body">
-              No Tasks
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-tasks"></i> Project Tasks</h1>
             </div>
-          </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspace</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>@Model.Project.Name</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Project Tasks</li>
+                </ol>
+            </div>
         </div>
-        </div>
-        }
-    else
-    {
-      <div class="row justify-content-center">
-            <div class="col-md-2">
-                <div class="card card-row card-secondary">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            Backlog
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        @foreach (var task in Model.Tasks.Where( x=> x.Status == Cervantes.CORE.TaskStatus.Backlog))
-                        {
-                              <div class="card card-primary card-outline">
-                              <div class="card-header">
-                                <h5 class="card-title">@task.Name</h5>
-                                <div class="card-tools">
-                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-eye"></i>
-                                  </a>
-                                  <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                        }
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-
-
-        </div>    
-
-          </div>
-        </div>
-
+<!-- Main content -->
+<section class="content">
+@if (Model.Tasks.FirstOrDefault() == null)
+{
+    <div class="row justify-content-center">
         <div class="col-md-2">
-        <div class="card card-row card-primary">
-          <div class="card-header">
-            <h3 class="card-title">
-              To Do
-            </h3>
-          </div>
-          <div class="card-body">
-            @foreach (var task in Model.Tasks.Where( x=> x.Status == Cervantes.CORE.TaskStatus.ToDo))
-            {
-                              <div class="card card-primary card-outline">
-                              <div class="card-header">
-                                <h5 class="card-title">@task.Name</h5>
-                                <div class="card-tools">
-                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-eye"></i>
-                                  </a>
-                                  <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                        }
-
-          </div>
-        </div>
-        </div>
-
-        <div class="col-md-2">
-        <div class="card card-row card-default">
-          <div class="card-header bg-info">
-            <h3 class="card-title">
-              In Progress
-            </h3>
-          </div>
-          <div class="card-body">
-            @foreach (var task in Model.Tasks.Where( x=> x.Status == Cervantes.CORE.TaskStatus.InProgress))
-            {
-                              <div class="card card-primary card-outline">
-                              <div class="card-header">
-                                <h5 class="card-title">@task.Name</h5>
-                                <div class="card-tools">
-                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-eye"></i>
-                                  </a>
-                                  <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                        }
-
-          </div>
-        </div>
-        </div>
-
-        <div class="col-md-2">
-                <div class="card card-row card-default">
-          <div class="card-header bg-danger">
-            <h3 class="card-title">
-              Blocked
-            </h3>
-          </div>
-          <div class="card-body">
-            @foreach (var task in Model.Tasks.Where( x=> x.Status == Cervantes.CORE.TaskStatus.Blocked))
-            {
-                              <div class="card card-primary card-outline">
-                              <div class="card-header">
-                                <h5 class="card-title">@task.Name</h5>
-                                <div class="card-tools">
-                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-eye"></i>
-                                  </a>
-                                  <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                        }
-
-          </div>
-        </div>
-        </div>
-
-        <div class="col-md-2">
-        <div class="card card-row card-success">
-          <div class="card-header">
-            <h3 class="card-title">
-              Done
-            </h3>
-          </div>
-          <div class="card-body">
-            @foreach (var task in Model.Tasks.Where( x=> x.Status == Cervantes.CORE.TaskStatus.Done))
-            {
-                              <div class="card card-primary card-outline">
-                              <div class="card-header">
-                                <h5 class="card-title">@task.Name</h5>
-                                <div class="card-tools">
-                                   <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-eye"></i>
-                                  </a>
-                                  <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                        }
+            <div class="card card-row card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Backlog
+                    </h3>
+                </div>
+                <div class="card-body">
+                    No Tasks
+                </div>
 
             </div>
-          </div>
         </div>
+
+        <div class="col-md-2">
+            <div class="card card-row card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        To Do
+                    </h3>
+                </div>
+                <div class="card-body">
+                    No Tasks
+                </div>
+            </div>
         </div>
-        
-        }
-    </section>
-  @section Scripts{
-<script>
+
+        <div class="col-md-2">
+            <div class="card card-row card-default">
+                <div class="card-header bg-info">
+                    <h3 class="card-title">
+                        In Progress
+                    </h3>
+                </div>
+                <div class="card-body">
+                    No Tasks
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card card-row card-default">
+                <div class="card-header bg-danger">
+                    <h3 class="card-title">
+                        Blocked
+                    </h3>
+                </div>
+                <div class="card-body">
+                    No Tasks
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card card-row card-success">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Done
+                    </h3>
+                </div>
+                <div class="card-body">
+                    No Tasks
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row justify-content-center">
+        <div class="col-md-2">
+            <div class="card card-row card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Backlog
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @foreach (var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.Backlog))
+                    {
+                        <div class="card card-gray card-outline">
+                            <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card card-row card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        To Do
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @foreach (var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.ToDo))
+                    {
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card card-row card-default">
+                <div class="card-header bg-info">
+                    <h3 class="card-title">
+                        In Progress
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @foreach (var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.InProgress))
+                    {
+                        <div class="card card-info card-outline">
+                            <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card card-row card-default">
+                <div class="card-header bg-danger">
+                    <h3 class="card-title">
+                        Blocked
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @foreach (var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.Blocked))
+                    {
+                        <div class="card card-danger card-outline">
+                            <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card card-row card-success">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Done
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @foreach (var task in Model.Tasks.Where(x => x.Status == Cervantes.CORE.TaskStatus.Done))
+                    {
+                        <div class="card card-success card-outline">
+                            <div class="card-header">
+                                <h5 class="card-title">@task.Name</h5>
+                                <div class="card-tools">
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="EditProject" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a asp-area="Workspace" asp-controller="Task" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@task.Id" class="btn btn-tool">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</section>
+
+@section Scripts{
+    <script>
 
 
 </script>
-      }
-    
-
-
-
-
+}

@@ -5,113 +5,117 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-user"></i> Edit @Model.User.FullName</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item"><a asp-controller="User" asp-action="Index" localize-content>User</a></li>
-              <li class="breadcrumb-item active" localize-content>Create</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-user"></i> Edit @Model.User.FullName</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="User" asp-action="Index" localize-content>User</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Create</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
-    
-    <!-- Main content -->
-    <section class="content">
-<div class="card">
-    <div class="card-body">
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-<div class="row justify-content-center">
-    <div class="col-md-12">
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="User.FullName" class="control-label"></label>
-                <input asp-for="User.FullName" class="form-control" />
-                <span asp-validation-for="User.FullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.UserName" class="control-label"></label>
-                <input asp-for="User.UserName" class="form-control" />
-                <span asp-validation-for="User.UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Email" class="control-label"></label>
-                <input asp-for="User.Email" class="form-control" />
-                <span asp-validation-for="User.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.PhoneNumber" class="control-label"></label>
-                <input asp-for="User.PhoneNumber" class="form-control" />
-                <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Description" class="control-label"></label>
-                <textarea id="description" asp-for="User.Description" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="User.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>New Password</label>
-                <input asp-for="User.Password" class="form-control" type="password" />
-                <span asp-validation-for="User.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Position"></label>
-                <input asp-for="User.Position" class="form-control" />
-                <span asp-validation-for="User.Position" class="text-danger"></span>
-            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-12">
 
-            <div class="form-group">
-            <label class="control-label col-md-2">Role</label>
-      
-                @Html.DropDownListFor(m => m.Option, Model.ItemList, new { @class = "form-control" })
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="User.FullName" class="control-label"></label>
+                            <input asp-for="User.FullName" class="form-control"/>
+                            <span asp-validation-for="User.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="User.UserName" class="control-label"></label>
+                            <input asp-for="User.UserName" class="form-control"/>
+                            <span asp-validation-for="User.UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="User.Email" class="control-label"></label>
+                            <input asp-for="User.Email" class="form-control"/>
+                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="User.PhoneNumber" class="control-label"></label>
+                            <input asp-for="User.PhoneNumber" class="form-control"/>
+                            <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="User.Description" class="control-label"></label>
+                            <textarea id="description" asp-for="User.Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="User.Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input asp-for="User.Password" class="form-control" type="password"/>
+                            <span asp-validation-for="User.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="User.Position"></label>
+                            <input asp-for="User.Position" class="form-control"/>
+                            <span asp-validation-for="User.Position" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Role</label>
+
+                            @Html.DropDownListFor(m => m.Option, Model.ItemList, new {@class = "form-control"})
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload" localize-content>Avatar</label>
+                            @if (Model.User.Avatar != null)
+                            {
+                                <div>
+                                    <img src="@Model.User.Avatar" class="img-circle elevation-2" alt="User Image" height="100" width="100">
+                                    <a class="btn btn-danger btn-sm" asp-controller="User" asp-action="DeleteAvatar" asp-route-id="@Model.User.Id" as localize-content><i class="fas fa-trash"></i> Delete Avatar</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="upload" name="upload">
+                                        <label class="custom-file-label" for="upload" localize-content>Choose File</label>
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <a class="btn btn-default" asp-action="Index" localize-content>Back</a>
+                            <input type="submit" class="btn btn-dark" localize-content></input>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="upload" localize-content>Avatar</label>
-                    @if (Model.User.Avatar != null)
-                    {
-                       <div>
-                      <img src="@Model.User.Avatar" class="img-circle elevation-2" alt="User Image" height="100" width="100">
-                       <a class="btn btn-danger btn-sm" asp-controller="User" asp-action="DeleteAvatar" asp-route-id="@Model.User.Id" as localize-content><i class="fas fa-trash"></i> Delete Avatar</a>
-                       </div>
-                    }
-                    else
-                    {
-                        <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="upload" name="upload">
-                        <label class="custom-file-label" for="upload" localize-content>Choose File</label>
-                      </div>
-
-                    </div>
-                    }
-                                   
-             </div>
-            
-
-              <div class="form-group">
-                  <a class="btn btn-default" asp-action="Index" localize-content>Back</a>
-                <input type="submit" class="btn btn-dark" localize-content></input>
-            </div>
-        </form>
         </div>
-        </div>
-        </div>
-        </div>
+    </div>
 </section>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -129,7 +133,7 @@
                     var data = new FormData();
                     data.append("image", image);
                     $.ajax({
-                        url: '@Url.Action("UploadUser","Image")',
+                        url: '@Url.Action("UploadUser", "Image")',
                         cache: false,
                         contentType: false,
                         processData: false,
@@ -150,4 +154,4 @@
               bsCustomFileInput.init();
             });
          </script>
-        }
+}

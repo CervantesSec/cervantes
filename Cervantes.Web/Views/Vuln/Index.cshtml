@@ -6,136 +6,196 @@
 }
 
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-bug"></i> Vulnerabilities</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item" localize-content>Vulnerabilities</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-bug"></i> Vulnerabilities</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>Vulnerabilities</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-    <!-- Main content -->
-    <section class="content">
-       <div class="card">
-    <div class="card-body">
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
 
-    
-         
-                <!--Table-->
-                <table id="vulnResults" class="table table-bordered table-hover" width="100%">
-                    <!--Table head-->
-            <thead class="thead-dark">
-                        <tr>
-                            <th><i class="fas fa-bug"></i> <span localize-content>Name</span></th>
-                            <th><i class="fas fa-folder"></i> <span localize-content>Project</span></th>
-                            <th><i class="fas fa-virus"></i> <span localize-content>CVE</span></th>
-                            <th><i class="fas fa-biohazard"></i> <span localize-content>Risk</span></th>
-                            <th><i class="fas fa-tasks"></i> <span localize-content>Status</span></th>
-                            <th><i class="fas fa-project-diagram"></i> <span localize-content>Category</span></th>
-                            <th><i class="fas fa-calendar"></i> <span localize-content>Created Date</span></th>
-                            <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>                           
-                        </tr>
-                    </thead>
-                    <!--Table head-->
-                    <!--Table body-->
-            <tbody>
 
-                        @foreach (var vuln in Model)
+            <!--Table-->
+            <table id="vulnResults" class="table table-bordered table-hover" width="100%">
+                <!--Table head-->
+                <thead class="thead-dark">
+                <tr>
+                    <th>
+                        <i class="fas fa-bug"></i> <span localize-content>Name</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-folder"></i> <span localize-content>Project</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-virus"></i> <span localize-content>CVE</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-biohazard"></i> <span localize-content>Risk</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-tasks"></i> <span localize-content>Status</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-project-diagram"></i> <span localize-content>Category</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-calendar"></i> <span localize-content>Created Date</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                    </th>
+                </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+
+                @foreach (var vuln in Model)
+                {
+                    <tr>
+                        <td>@vuln.Name</td>
+                        <td>
+                            <a class="btn btn-outline-dark" asp-area="" asp-controller="Project" asp-action="Details" asp-route-id="@vuln.ProjectId" localize-content>
+                                <i class="fas fa-folder"></i> @vuln.Project.Name
+                            </a>
+                        </td>
+                        <td>@vuln.cve</td>
+                        @switch (vuln.Risk)
                         {
-                            <tr>
-                                <td>@vuln.Name</td>
-                                <td><a class="btn btn-outline-dark" asp-area="" asp-controller="Project" asp-action="Details" asp-route-id="@vuln.ProjectId" localize-content><i class="fas fa-folder"></i> @vuln.Project.Name</a></td>
-                                <td>@vuln.cve</td>
-                                @switch(vuln.Risk)
-                                                                        {
-                                                                            case VulnRisk.Info:
-                                                                                <td><span class="badge badge-info"><i class="fas fa-info-circle"></i> @vuln.Risk</span></td>
-                                                                                break;
-                                                                            case VulnRisk.Low:
-                                                                                 <td><span class="badge badge-success"><i class="fas fa-exclamation"></i> @vuln.Risk</span></td>
-                                                                                break;
-                                                                            case VulnRisk.Medium:
-                                                                                <td><span class="badge badge-warning"><i class="fas fa-exclamation"></i> @vuln.Risk</span></td>
-                                                                                break;
-                                                                            case VulnRisk.High:
-                                                                                <td><span class="badge badge-danger"><i class="fas fa-exclamation-circle"></i> @vuln.Risk</span></td>
-                                                                                break;
-                                                                            case VulnRisk.Critical:
-                                                                                <td><span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> @vuln.Risk</span></td>
-                                                                                break;
-                                                                            default:
-                                                                                <td><span class="badge badge-light">@vuln.Risk</span></td>
-                                                                                break;
-                                
-                                                                        }
-                               
-                                @switch (vuln.Status)
-                                {
-                                    case VulnStatus.Open:
-                                        <td><span class="badge badge-info">@vuln.Status</span></td>
-                                        break;
-                                    case VulnStatus.Confirmed:
-                                        <td><span class="badge badge-danger">@vuln.Status</span></td>
-                                        break;
-                                    case VulnStatus.Accepted:
-                                        <td><span class="badge badge-warning">@vuln.Status</span></td>
-                                        break;
-                                    case VulnStatus.Resolved:
-                                        <td><span class="badge badge-success">@vuln.Status</span></td>
-                                        break;
-                                    case VulnStatus.OutOfScope:
-                                        <td><span class="badge badge-indigo">@vuln.Status</span></td>
-                                        break;
-                                    case VulnStatus.Invalid:
-                                        <td><span class="badge badge-gray">@vuln.Status</span></td>
-                                        break;
-                                    default:
-                                        <td><span class="badge badge-light">@vuln.Status</span></td>
-                                        break;
-                                }
-                                <td>@vuln.VulnCategory.Name</td>
-                                <td>@vuln.CreatedDate.ToUniversalTime()</td>
-                                @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                                {
-                                    <td>
-                                        <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id" class="btn btn-tool">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" localize-content><i class="fas fa-edit"></i></a>
-                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Delete" asp-route-id="@vuln.Id" localize-content ><i class="fas fa-trash"></i></a>
-                                    </td>
-
-                                }
-                                else
-                                {
-                                    <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id" class="btn btn-tool">
-                                        <i class="fas fa-eye"></i>
-                                        </a>
-                                }
-
-                            </tr>
+                            case VulnRisk.Info:
+                                <td>
+                                    <span class="badge badge-info">
+                                        <i class="fas fa-info-circle"></i> @vuln.Risk
+                                    </span>
+                                </td>
+                                break;
+                            case VulnRisk.Low:
+                                <td>
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-exclamation"></i> @vuln.Risk
+                                    </span>
+                                </td>
+                                break;
+                            case VulnRisk.Medium:
+                                <td>
+                                    <span class="badge badge-warning">
+                                        <i class="fas fa-exclamation"></i> @vuln.Risk
+                                    </span>
+                                </td>
+                                break;
+                            case VulnRisk.High:
+                                <td>
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-exclamation-circle"></i> @vuln.Risk
+                                    </span>
+                                </td>
+                                break;
+                            case VulnRisk.Critical:
+                                <td>
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-exclamation-triangle"></i> @vuln.Risk
+                                    </span>
+                                </td>
+                                break;
+                            default:
+                                <td>
+                                    <span class="badge badge-light">@vuln.Risk</span>
+                                </td>
+                                break;
                         }
 
-                    </tbody>
-                    <!--Table body-->
-        </table>
-                <!--Table-->
-            
+                        @switch (vuln.Status)
+                        {
+                            case VulnStatus.Open:
+                                <td>
+                                    <span class="badge badge-info">@vuln.Status</span>
+                                </td>
+                                break;
+                            case VulnStatus.Confirmed:
+                                <td>
+                                    <span class="badge badge-danger">@vuln.Status</span>
+                                </td>
+                                break;
+                            case VulnStatus.Accepted:
+                                <td>
+                                    <span class="badge badge-warning">@vuln.Status</span>
+                                </td>
+                                break;
+                            case VulnStatus.Resolved:
+                                <td>
+                                    <span class="badge badge-success">@vuln.Status</span>
+                                </td>
+                                break;
+                            case VulnStatus.OutOfScope:
+                                <td>
+                                    <span class="badge badge-indigo">@vuln.Status</span>
+                                </td>
+                                break;
+                            case VulnStatus.Invalid:
+                                <td>
+                                    <span class="badge badge-gray">@vuln.Status</span>
+                                </td>
+                                break;
+                            default:
+                                <td>
+                                    <span class="badge badge-light">@vuln.Status</span>
+                                </td>
+                                break;
+                        }
+                        <td>@vuln.VulnCategory.Name</td>
+                        <td>@vuln.CreatedDate.ToUniversalTime()</td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                        {
+                            <td>
+                                <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id" class="btn btn-tool">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" localize-content>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Delete" asp-route-id="@vuln.Id" localize-content>
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id" class="btn btn-tool">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        }
+
+                    </tr>
+                }
+
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
+
         </div>
-        </div>
-    </section>
-  @section Scripts{
-<script>
+    </div>
+</section>
+
+@section Scripts{
+    <script>
         $(document).ready(function () {
         $('#vulnResults').DataTable({
             "responsive": true
@@ -144,9 +204,4 @@
     });
 
 </script>
-      }
-    
-
-
-
-
+}

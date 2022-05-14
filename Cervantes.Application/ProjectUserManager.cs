@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class ProjectUserManager : GenericManager<ProjectUser>, IProjectUserManager
 {
-    public class ProjectUserManager: GenericManager<ProjectUser>, IProjectUserManager
+    /// <summary>
+    /// ProjectUser Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public ProjectUserManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// ProjectUser Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public ProjectUserManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

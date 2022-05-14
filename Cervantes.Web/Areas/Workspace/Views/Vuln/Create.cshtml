@@ -5,37 +5,52 @@
     ViewData["Title"] = "Create Vuln";
 }
 
-    <section class="content-header">
-      <div class="container-fluid">
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-bug"></i> Create Vulnerability</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item" localize-content>Workspace</li>
-              <li class="breadcrumb-item" localize-content>Vuln</li>
-              <li class="breadcrumb-item active" localize-content>Create</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-bug"></i> Create Vulnerability</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>Workspace</li>
+                    <li class="breadcrumb-item" localize-content>Vuln</li>
+                    <li class="breadcrumb-item active" localize-content>Create</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
-    <!-- Main content -->
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+<!-- Main content -->
 <section class="content">
 
 
     <div class="col-md-12">
         <form asp-area="Workspace" asp-controller="Vuln" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills">
-                        <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab"><span localize-content>Details</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="#poc" data-toggle="tab"><span localize-content>Exploitation</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="#remediation" data-toggle="tab"><span localize-content>Remediation</span></a></li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#details" data-toggle="tab">
+                                <span localize-content>Details</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#poc" data-toggle="tab">
+                                <span localize-content>Exploitation</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#remediation" data-toggle="tab">
+                                <span localize-content>Remediation</span>
+                            </a>
+                        </li>
                     </ul>
                 </div><!-- /.card-header -->
                 <div class="card-body">
@@ -44,17 +59,17 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="Template" class="control-label" localize-content>Template</label>
-                                <input asp-for="Template" class="form-control" />
+                                <input asp-for="Template" class="form-control"/>
                                 <span asp-validation-for="Template" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Name" class="control-label" localize-content>Name</label>
-                                <input asp-for="Name" class="form-control" />
+                                <input asp-for="Name" class="form-control"/>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="cve" class="control-label">CVE</label>
-                                <input asp-for="cve" class="form-control" />
+                                <input asp-for="cve" class="form-control"/>
                                 <span asp-validation-for="cve" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -64,17 +79,17 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label" localize-content>Category</label>
-                                @Html.DropDownListFor(m => m.VulnCategoryId, Model.VulnCatList, "--Select--", new { @class = "form-control" })
-                                <span asp-validation-for="VulnCategory" class="text-danger"></span>
-                            </div> 
+                                @Html.DropDownListFor(m => m.VulnCategoryId, Model.VulnCatList, new {@class = "form-control"})
+                                <span asp-validation-for="VulnCategoryId" class="text-danger"></span>
+                            </div>
                             <div class="form-group">
                                 <label class="control-label" localize-content>Risk</label>
-                                @Html.DropDownListFor(model => model.Risk, Html.GetEnumSelectList<VulnRisk>(),new { @class = "form-control" })
+                                @Html.DropDownListFor(model => model.Risk, Html.GetEnumSelectList<VulnRisk>(), new {@class = "form-control"})
                                 <span asp-validation-for="Risk" class="text-danger"></span>
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label class="control-label" localize-content>Status</label>
-                                @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList<VulnStatus>(),new { @class = "form-control" })
+                                @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList<VulnStatus>(), new {@class = "form-control"})
                                 <span asp-validation-for="Status" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -84,7 +99,7 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="TargetId" class="control-label" localize-content>Target</label>
-                                @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new { @class = "form-control" })
+                                @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new {@class = "form-control"})
                                 <span asp-validation-for="Target" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -117,30 +132,29 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label" localize-content>Complexity</label>
-                                @Html.DropDownListFor(model => model.RemediationComplexity, Html.GetEnumSelectList<RemediationComplexity>(),new { @class = "form-control" })
+                                @Html.DropDownListFor(model => model.RemediationComplexity, Html.GetEnumSelectList<RemediationComplexity>(), new {@class = "form-control"})
                                 <span asp-validation-for="RemediationComplexity" class="text-danger"></span>
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label class="control-label" localize-content>Priority</label>
-                                @Html.DropDownListFor(model => model.RemediationPriority, Html.GetEnumSelectList<RemediationPriority>(),new { @class = "form-control" })
+                                @Html.DropDownListFor(model => model.RemediationPriority, Html.GetEnumSelectList<RemediationPriority>(), new {@class = "form-control"})
                                 <span asp-validation-for="RemediationPriority" class="text-danger"></span>
                             </div>
                         </div>
                         <!-- /.tab-pane -->
                         <!-- /.tab-pane -->
-    
+
                     </div>
                     <!-- /.tab-content -->
                 </div><!-- /.card-body -->
 
-           
 
             </div>
             <!-- /.card -->
             <div class="form-group">
                 <a class="btn btn-default" asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Back</a>
                 <button type="submit" class="btn btn-dark" localize-content>Create</button>
-             
+
             </div>
         </form>
     </div>
@@ -191,7 +205,7 @@
             var data = new FormData();
             data.append("image", image);
             $.ajax({
-                url: '@Url.Action("UploadVuln","Image",new { Area = "" })',
+                url: '@Url.Action("UploadVuln", "Image", new {Area = ""})',
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -212,7 +226,7 @@
                     var data = new FormData();
                     data.append("image", image);
                     $.ajax({
-                        url: '@Url.Action("UploadVuln","Image",new { Area = "" })',
+                        url: '@Url.Action("UploadVuln", "Image", new {Area = ""})',
                         cache: false,
                         contentType: false,
                         processData: false,
@@ -233,7 +247,7 @@
                                     var data = new FormData();
                                     data.append("image", image);
                                     $.ajax({
-                                        url: '@Url.Action("UploadVuln","Image",new { Area = "" })',
+                                        url: '@Url.Action("UploadVuln", "Image", new {Area = ""})',
                                         cache: false,
                                         contentType: false,
                                         processData: false,
@@ -254,7 +268,7 @@
                                                                     var data = new FormData();
                                                                     data.append("image", image);
                                                                     $.ajax({
-                                                                        url: '@Url.Action("UploadVuln","Image",new { Area = "" })',
+                                                                        url: '@Url.Action("UploadVuln", "Image", new {Area = ""})',
                                                                         cache: false,
                                                                         contentType: false,
                                                                         processData: false,

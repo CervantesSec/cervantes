@@ -1,127 +1,133 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="2fa has been disabled. You can reenable 2fa when you setup an authenticator app" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="2fa has been disabled. You can reenable 2fa when you setup an authenticator app" xml:space="preserve">
     <value>2fa ha sido deshabilitado. Puede volver a activar 2fa cuando se configura una aplicación autenticador</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="&lt;p&gt;&#xA;        &lt;span class=&quot;glyphicon glyphicon-warning-sign&quot;&gt;&lt;/span&gt;&#xA;        &lt;strong&gt;If you reset your authenticator key your authenticator app will not work until you reconfigure it.&lt;/strong&gt;&#xA;    &lt;/p&gt;&#xA;    &lt;p&gt;&#xA;        This process disables 2FA until you verify your authenticator app.&#xA;        If you do not complete your authenticator app configuration you may lose access to your account.&#xA;    &lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;p&gt;&#xA;        &lt;span class=&quot;glyphicon glyphicon-warning-sign&quot;&gt;&lt;/span&gt;&#xA;        &lt;strong&gt;If you reset your authenticator key your authenticator app will not work until you reconfigure it.&lt;/strong&gt;&#xA;    &lt;/p&gt;&#xA;    &lt;p&gt;&#xA;        This process disables 2FA until you verify your authenticator app.&#xA;        If you do not complete your authenticator app configuration you may lose access to your account.&#xA;    &lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;P&gt;
         &lt;Span class = "glyphicon glyphicon-advertencia-signo"&gt; &lt;/ span&gt;
         &lt;Strong&gt; Si restablece su clave autenticador su aplicación autenticador no funcionará hasta que vuelva a configurar la misma. &lt;/ Strong&gt;
@@ -130,9 +136,10 @@
         Este proceso inhabilita 2FA hasta que verifique la aplicación autenticador.
         Si usted no completa la configuración de su aplicación autenticador puede perder el acceso a su cuenta.
     &lt;/ P&gt;</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ResetAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ResetAuthenticator.cshtml</comment>
   </data>
-  <data name="&lt;p&gt;&#xA;        &lt;span class=&quot;glyphicon glyphicon-warning-sign&quot;&gt;&lt;/span&gt;&#xA;        &lt;strong&gt;Put these codes in a safe place.&lt;/strong&gt;&#xA;    &lt;/p&gt;&#xA;    &lt;p&gt;&#xA;        If you lose your device and don't have the recovery codes you will lose access to your account.&#xA;    &lt;/p&gt;&#xA;    &lt;p&gt;&#xA;        Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key&#xA;        used in an authenticator app you should &lt;a href=&quot;{0}&quot;&gt;reset your authenticator keys.&lt;/a&gt;&#xA;    &lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;p&gt;&#xA;        &lt;span class=&quot;glyphicon glyphicon-warning-sign&quot;&gt;&lt;/span&gt;&#xA;        &lt;strong&gt;Put these codes in a safe place.&lt;/strong&gt;&#xA;    &lt;/p&gt;&#xA;    &lt;p&gt;&#xA;        If you lose your device and don't have the recovery codes you will lose access to your account.&#xA;    &lt;/p&gt;&#xA;    &lt;p&gt;&#xA;        Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key&#xA;        used in an authenticator app you should &lt;a href=&quot;{0}&quot;&gt;reset your authenticator keys.&lt;/a&gt;&#xA;    &lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;P&gt;
         &lt;Span class = "glyphicon glyphicon-advertencia-signo"&gt; &lt;/ span&gt;
         &lt;Strong&gt; Ponga estos códigos en un lugar seguro. &lt;/ Strong&gt;
@@ -144,942 +151,976 @@
         Generar nuevos códigos de recuperación no cambia las claves utilizadas en aplicaciones autenticador. Si desea cambiar la clave
         utilizado en una aplicación autentificador debe &lt;a href="{0}"&gt; restablecer las llaves del autenticador. &lt;/a&gt;
     &lt;/ P&gt;</value>
-    <comment>Areas/Identity/Pages/Account/Manage/GenerateRecoveryCodes.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/GenerateRecoveryCodes.cshtml</comment>
   </data>
-  <data name="&lt;p&gt;&#xA;        Swapping to the &lt;strong&gt;Development&lt;/strong&gt; environment displays detailed information about the error that occurred.&#xA;    &lt;/p&gt;&#xA;    &lt;p&gt;&#xA;        &lt;strong&gt;The Development environment shouldn't be enabled for deployed applications.&lt;/strong&gt; It can result in displaying sensitive information from exceptions to end users. For local debugging, enable the &lt;strong&gt;Development&lt;/strong&gt; environment by setting the &lt;strong&gt;ASPNETCORE_ENVIRONMENT&lt;/strong&gt; environment variable to &lt;strong&gt;Development&lt;/strong&gt; and restarting the app.&#xA;    &lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;p&gt;&#xA;        Swapping to the &lt;strong&gt;Development&lt;/strong&gt; environment displays detailed information about the error that occurred.&#xA;    &lt;/p&gt;&#xA;    &lt;p&gt;&#xA;        &lt;strong&gt;The Development environment shouldn't be enabled for deployed applications.&lt;/strong&gt; It can result in displaying sensitive information from exceptions to end users. For local debugging, enable the &lt;strong&gt;Development&lt;/strong&gt; environment by setting the &lt;strong&gt;ASPNETCORE_ENVIRONMENT&lt;/strong&gt; environment variable to &lt;strong&gt;Development&lt;/strong&gt; and restarting the app.&#xA;    &lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;P&gt;
         El intercambio en el &lt;strong&gt; Desarrollo &lt;/ strong&gt; muestra la información del entorno detallada sobre el error que se produjo.
     &lt;/ P&gt;
     &lt;P&gt;
         &lt;Strong&gt; El entorno de desarrollo no debe ser habilitado para que las aplicaciones implementadas. &lt;/ Strong&gt; Puede resultar en la visualización de la información sensible de excepciones a los usuarios finales. Para la depuración local, permitirá a la &lt;strong&gt; Desarrollo &lt;/ strong&gt; medio ambiente mediante el establecimiento de la &lt;strong&gt; ASPNETCORE_ENVIRONMENT &lt;/ strong&gt; variable de entorno a &lt;strong&gt; Desarrollo &lt;/ strong&gt; y reiniciar la aplicación.
     &lt;/ P&gt;</value>
-    <comment>Pages/Error.cshtml</comment>
+        <comment>Pages/Error.cshtml</comment>
   </data>
-  <data name="&lt;p&gt;Your account contains personal data that you have given us. This page allows you to download or delete that data.&lt;/p&gt;&#xA;            &lt;p&gt;&#xA;                &lt;strong&gt;Deleting this data will permanently remove your account, and this cannot be recovered.&lt;/strong&gt;&#xA;            &lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;p&gt;Your account contains personal data that you have given us. This page allows you to download or delete that data.&lt;/p&gt;&#xA;            &lt;p&gt;&#xA;                &lt;strong&gt;Deleting this data will permanently remove your account, and this cannot be recovered.&lt;/strong&gt;&#xA;            &lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;P&gt; Su cuenta contiene los datos personales que nos has dado. Esta página le permite descargar o eliminar dichos datos. &lt;/ P&gt;
             &lt;P&gt;
                 &lt;Strong&gt; La eliminación de estos datos se eliminará permanentemente su cuenta, y esto no puede ser recuperado. &lt;/ Strong&gt;
             &lt;/ P&gt;</value>
-    <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
   </data>
-  <data name="&lt;strong&gt;You have 1 recovery code left.&lt;/strong&gt;&#xA;            &lt;p&gt;You can &lt;a href=&quot;{0}&quot;&gt;generate a new set of recovery codes&lt;/a&gt;.&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;strong&gt;You have 1 recovery code left.&lt;/strong&gt;&#xA;            &lt;p&gt;You can &lt;a href=&quot;{0}&quot;&gt;generate a new set of recovery codes&lt;/a&gt;.&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;Strong&gt; tiene código 1 de recuperación de la izquierda. &lt;/ Strong&gt;
             &lt;P&gt; Puede &lt;a href="{0}"&gt; generar un nuevo conjunto de códigos de recuperación &lt;/a&gt;. &lt;/ P&gt;</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="&lt;strong&gt;You have no recovery codes left.&lt;/strong&gt;&#xA;            &lt;p&gt;You must &lt;a href=&quot;{0}&quot;&gt;generate a new set of recovery codes&lt;/a&gt; before you can log in with a recovery code.&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;strong&gt;You have no recovery codes left.&lt;/strong&gt;&#xA;            &lt;p&gt;You must &lt;a href=&quot;{0}&quot;&gt;generate a new set of recovery codes&lt;/a&gt; before you can log in with a recovery code.&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;Strong&gt; No tiene códigos de recuperación izquierda. &lt;/ Strong&gt;
             &lt;P&gt; Debe &lt;a href="{0}"&gt; generar un nuevo conjunto de códigos de recuperación &lt;/a&gt; antes de iniciar la sesión con un código de recuperación. &lt;/ P&gt;</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="&lt;strong&gt;You have {0} recovery codes left.&lt;/strong&gt;&#xA;            &lt;p&gt;You should &lt;a href=&quot;{1}&quot;&gt;generate a new set of recovery codes&lt;/a&gt;.&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;strong&gt;You have {0} recovery codes left.&lt;/strong&gt;&#xA;            &lt;p&gt;You should &lt;a href=&quot;{1}&quot;&gt;generate a new set of recovery codes&lt;/a&gt;.&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;Strong&gt; {0} ha códigos de recuperación de la izquierda. &lt;/ Strong&gt;
             &lt;P&gt; Debe &lt;a href="{1}"&gt; generar un nuevo conjunto de códigos de recuperación &lt;/a&gt;. &lt;/ P&gt;</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="Access denied" xml:space="preserve">
+    <data name="Access denied" xml:space="preserve">
     <value>Acceso denegado</value>
-    <comment>Areas/Identity/Pages/Account/AccessDenied.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/AccessDenied.cshtml</comment>
   </data>
-  <data name="Add another service to log in." xml:space="preserve">
+    <data name="Add another service to log in." xml:space="preserve">
     <value>Añadir otro servicio para conectarse.</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
   </data>
-  <data name="Add authenticator app" xml:space="preserve">
+    <data name="Add authenticator app" xml:space="preserve">
     <value>Añadir aplicación autenticador</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="An error occurred while processing your request." xml:space="preserve">
+    <data name="An error occurred while processing your request." xml:space="preserve">
     <value>Se produjo un error al procesar su solicitud.</value>
-    <comment>Pages/Error.cshtml</comment>
+        <comment>Pages/Error.cshtml</comment>
   </data>
-  <data name="Associate your {0} account." xml:space="preserve">
+    <data name="Associate your {0} account." xml:space="preserve">
     <value>Asociar su cuenta {0}.</value>
-    <comment>Areas/Identity/Pages/Account/ExternalLogin.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ExternalLogin.cshtml</comment>
   </data>
-  <data name="Change password" xml:space="preserve">
+    <data name="Change password" xml:space="preserve">
     <value>Cambiar la contraseña</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ChangePassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ChangePassword.cshtml</comment>
   </data>
-  <data name="Change your account settings" xml:space="preserve">
+    <data name="Change your account settings" xml:space="preserve">
     <value>Cambiar la configuración de cuenta</value>
-    <comment>Areas/Identity/Pages/Account/Manage/_Layout.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/_Layout.cshtml</comment>
   </data>
-  <data name="Configure authenticator app" xml:space="preserve">
+    <data name="Configure authenticator app" xml:space="preserve">
     <value>Configurar aplicación autenticador</value>
-    <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
   </data>
-  <data name="Confirm email" xml:space="preserve">
+    <data name="Confirm email" xml:space="preserve">
     <value>Confirmar correo electrónico</value>
-    <comment>Areas/Identity/Pages/Account/ConfirmEmail.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ConfirmEmail.cshtml</comment>
   </data>
-  <data name="Confirm your email" xml:space="preserve">
+    <data name="Confirm your email" xml:space="preserve">
     <value>Confirme su email</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Create a new account." xml:space="preserve">
+    <data name="Create a new account." xml:space="preserve">
     <value>Crea una cuenta nueva.</value>
-    <comment>Areas/Identity/Pages/Account/Register.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Register.cshtml</comment>
   </data>
-  <data name="Development Mode" xml:space="preserve">
+    <data name="Development Mode" xml:space="preserve">
     <value>Modo de desarrollo</value>
-    <comment>Pages/Error.cshtml</comment>
+        <comment>Pages/Error.cshtml</comment>
   </data>
-  <data name="Disable 2FA" xml:space="preserve">
+    <data name="Disable 2FA" xml:space="preserve">
     <value>Desactivar 2FA</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="Don't have access to your authenticator device? You can &lt;a id=&quot;recovery-code-login&quot; href=&quot;{0}&quot;&gt;log in with a recovery code&lt;/a&gt;." xml:space="preserve">
+    <data name="Don't have access to your authenticator device? You can &lt;a id=&quot;recovery-code-login&quot; href=&quot;{0}&quot;&gt;log in with a recovery code&lt;/a&gt;."
+          xml:space="preserve">
     <value>No tienen acceso a su dispositivo autenticador? Puede &lt;a id="recovery-code-login" href="{0}"&gt; iniciar sesión con un código de recuperación &lt;/a&gt;.</value>
-    <comment>Areas/Identity/Pages/Account/LoginWith2fa.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/LoginWith2fa.cshtml</comment>
   </data>
-  <data name="Download" xml:space="preserve">
+    <data name="Download" xml:space="preserve">
     <value>Descargar</value>
-    <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
   </data>
-  <data name="Download a two-factor authenticator app like Microsoft Authenticator for &lt;a href=&quot;{0}&quot;&gt;Windows Phone&lt;/a&gt;, &lt;a href=&quot;{1}&quot;&gt;Android&lt;/a&gt; and &lt;a href=&quot;{2}&quot;&gt;iOS&lt;/a&gt; or" xml:space="preserve">
+    <data name="Download a two-factor authenticator app like Microsoft Authenticator for &lt;a href=&quot;{0}&quot;&gt;Windows Phone&lt;/a&gt;, &lt;a href=&quot;{1}&quot;&gt;Android&lt;/a&gt; and &lt;a href=&quot;{2}&quot;&gt;iOS&lt;/a&gt; or"
+          xml:space="preserve">
     <value>Descargar una aplicación de autenticador de dos factores como Microsoft autenticador para &lt;a href="{0}"&gt; de Windows &lt;/a&gt; teléfono, &lt;a href="{1}"&gt; Android &lt;/a&gt; y &lt;a href = "{ 2} "&gt; iOS o &lt;/a&gt;</value>
-    <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
   </data>
-  <data name="Download Your Data" xml:space="preserve">
+    <data name="Download Your Data" xml:space="preserve">
     <value>Su descarga de datos</value>
-    <comment>Areas/Identity/Pages/Account/Manage/DownloadPersonalData.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/DownloadPersonalData.cshtml</comment>
   </data>
-  <data name="Enter your email." xml:space="preserve">
+    <data name="Enter your email." xml:space="preserve">
     <value>Introduce tu correo electrónico.</value>
-    <comment>Areas/Identity/Pages/Account/ForgotPassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ForgotPassword.cshtml</comment>
   </data>
-  <data name="Error" xml:space="preserve">
+    <data name="Error" xml:space="preserve">
     <value>Error</value>
-    <comment>Pages/Error.cshtml</comment>
+        <comment>Pages/Error.cshtml</comment>
   </data>
-  <data name="Error from external provider: {0}" xml:space="preserve">
+    <data name="Error from external provider: {0}" xml:space="preserve">
     <value>Error de proveedor externo: {0}</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Error loading external login information during confirmation." xml:space="preserve">
+    <data name="Error loading external login information during confirmation." xml:space="preserve">
     <value>Error al cargar información de acceso externo durante la confirmación.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Error loading external login information." xml:space="preserve">
+    <data name="Error loading external login information." xml:space="preserve">
     <value>Error al cargar información de acceso externo.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="External logins" xml:space="preserve">
+    <data name="External logins" xml:space="preserve">
     <value>inicios de sesión externos</value>
-    <comment>Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml</comment>
   </data>
-  <data name="Forget this browser" xml:space="preserve">
+    <data name="Forget this browser" xml:space="preserve">
     <value>Olvidar este navegador</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="Forgot password confirmation" xml:space="preserve">
+    <data name="Forgot password confirmation" xml:space="preserve">
     <value>confirmación de contraseña olvidados</value>
-    <comment>Areas/Identity/Pages/Account/ForgotPasswordConfirmation.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ForgotPasswordConfirmation.cshtml</comment>
   </data>
-  <data name="Forgot your password?" xml:space="preserve">
+    <data name="Forgot your password?" xml:space="preserve">
     <value>¿Olvidaste tu contraseña?</value>
-    <comment>Areas/Identity/Pages/Account/ForgotPassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ForgotPassword.cshtml</comment>
   </data>
-  <data name="Generate Recovery Codes" xml:space="preserve">
+    <data name="Generate Recovery Codes" xml:space="preserve">
     <value>Generar códigos de recuperación</value>
-    <comment>Areas/Identity/Pages/Account/Manage/GenerateRecoveryCodes.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/GenerateRecoveryCodes.cshtml</comment>
   </data>
-  <data name="Generate two-factor authentication (2FA) recovery codes" xml:space="preserve">
+    <data name="Generate two-factor authentication (2FA) recovery codes" xml:space="preserve">
     <value>Generar autenticación de dos factores (2FA) códigos de recuperación</value>
-    <comment>Areas/Identity/Pages/Account/Manage/GenerateRecoveryCodes.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/GenerateRecoveryCodes.cshtml</comment>
   </data>
-  <data name="Google Authenticator for &lt;a href=&quot;{3}&quot;&gt;Android&lt;/a&gt; and &lt;a href=&quot;{4}&quot;&gt;iOS&lt;/a&gt;." xml:space="preserve">
+    <data name="Google Authenticator for &lt;a href=&quot;{3}&quot;&gt;Android&lt;/a&gt; and &lt;a href=&quot;{4}&quot;&gt;iOS&lt;/a&gt;."
+          xml:space="preserve">
     <value>Google Authenticator para &lt;a href="{3}"&gt; &lt;/a&gt; Android y iOS &lt;a href="{4}"&gt; &lt;/a&gt;.</value>
-    <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
   </data>
-  <data name="Hello {0}!" xml:space="preserve">
+    <data name="Hello {0}!" xml:space="preserve">
     <value>Hola {0}!</value>
-    <comment>Pages/Shared/_LoginPartial.cshtml</comment>
+        <comment>Pages/Shared/_LoginPartial.cshtml</comment>
   </data>
-  <data name="Home" xml:space="preserve">
+    <data name="Home" xml:space="preserve">
     <value>Inicio</value>
-    <comment>Pages/Shared/_Layout.cshtml</comment>
+        <comment>Pages/Shared/_Layout.cshtml</comment>
   </data>
-  <data name="Invalid authenticator code." xml:space="preserve">
+    <data name="Invalid authenticator code." xml:space="preserve">
     <value>autenticador código válido.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Invalid login attempt." xml:space="preserve">
+    <data name="Invalid login attempt." xml:space="preserve">
     <value>intento de acceso no válido.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Invalid recovery code entered." xml:space="preserve">
+    <data name="Invalid recovery code entered." xml:space="preserve">
     <value>código de recuperación introducida no es válida.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Learn about &lt;a href=&quot;{0}&quot;&gt;building Web apps with ASP.NET Core&lt;/a&gt;." xml:space="preserve">
+    <data name="Learn about &lt;a href=&quot;{0}&quot;&gt;building Web apps with ASP.NET Core&lt;/a&gt;."
+          xml:space="preserve">
     <value>Aprender sobre &lt;a href="{0}"&gt; la creación de aplicaciones Web con ASP.NET Core &lt;/a&gt;.</value>
-    <comment>Pages/Index.cshtml</comment>
+        <comment>Pages/Index.cshtml</comment>
   </data>
-  <data name="Locked out" xml:space="preserve">
+    <data name="Locked out" xml:space="preserve">
     <value>Bloqueado</value>
-    <comment>Areas/Identity/Pages/Account/Lockout.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Lockout.cshtml</comment>
   </data>
-  <data name="Log in" xml:space="preserve">
+    <data name="Log in" xml:space="preserve">
     <value>Iniciar sesión</value>
-    <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
   </data>
-  <data name="Log in using your external account" xml:space="preserve">
+    <data name="Log in using your external account" xml:space="preserve">
     <value>Inicie sesión con su cuenta externa</value>
-    <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
   </data>
-  <data name="Log out" xml:space="preserve">
+    <data name="Log out" xml:space="preserve">
     <value>Cerrar sesión</value>
-    <comment>Areas/Identity/Pages/Account/Logout.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Logout.cshtml</comment>
   </data>
-  <data name="Login" xml:space="preserve">
+    <data name="Login" xml:space="preserve">
     <value>Iniciar sesión</value>
-    <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
   </data>
-  <data name="Manage" xml:space="preserve">
+    <data name="Manage" xml:space="preserve">
     <value>Gestionar</value>
-    <comment>Pages/Shared/_LoginPartial.cshtml</comment>
+        <comment>Pages/Shared/_LoginPartial.cshtml</comment>
   </data>
-  <data name="Manage your account" xml:space="preserve">
+    <data name="Manage your account" xml:space="preserve">
     <value>Maneja tu cuenta</value>
-    <comment>Areas/Identity/Pages/Account/Manage/_Layout.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/_Layout.cshtml</comment>
   </data>
-  <data name="Manage your external logins" xml:space="preserve">
+    <data name="Manage your external logins" xml:space="preserve">
     <value>Administrar sus conexiones externas</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
   </data>
-  <data name="Once you have scanned the QR code or input the key above, your two factor authentication app will provide you with a unique code. Enter the code in the confirmation box below." xml:space="preserve">
+    <data name="Once you have scanned the QR code or input the key above, your two factor authentication app will provide you with a unique code. Enter the code in the confirmation box below."
+          xml:space="preserve">
     <value>Una vez que haya escaneado el código QR o la entrada de la clave anterior, su aplicación para la autenticación de dos factores le proporcionará un código único. Introducir el código en el cuadro de confirmación a continuación.</value>
-    <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
   </data>
-  <data name="Password" xml:space="preserve">
+    <data name="Password" xml:space="preserve">
     <value>Contraseña</value>
-    <comment>Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml</comment>
   </data>
-  <data name="Password not correct." xml:space="preserve">
+    <data name="Password not correct." xml:space="preserve">
     <value>Contraseña no es correcta.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Personal Data" xml:space="preserve">
+    <data name="Personal Data" xml:space="preserve">
     <value>Información personal</value>
-    <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
   </data>
-  <data name="Please check your email to reset your password." xml:space="preserve">
+    <data name="Please check your email to reset your password." xml:space="preserve">
     <value>Por favor, consultar su correo electrónico para restablecer su contraseña.</value>
-    <comment>Areas/Identity/Pages/Account/ForgotPasswordConfirmation.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ForgotPasswordConfirmation.cshtml</comment>
   </data>
-  <data name="Please confirm your account by &lt;a href='{0}'&gt;clicking here&lt;/a&gt;." xml:space="preserve">
+    <data name="Please confirm your account by &lt;a href='{0}'&gt;clicking here&lt;/a&gt;." xml:space="preserve">
     <value>Por favor confirmar su cuenta por &lt;a href='{0}'&gt; clic aquí &lt;/a&gt;.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Please enter a valid number." xml:space="preserve">
+    <data name="Please enter a valid number." xml:space="preserve">
     <value>Por favor ingrese un número valido.</value>
-    <comment>Pages/SampleForm.cshtml</comment>
+        <comment>Pages/SampleForm.cshtml</comment>
   </data>
-  <data name="Please reset your password by &lt;a href='{0}'&gt;clicking here&lt;/a&gt;." xml:space="preserve">
+    <data name="Please reset your password by &lt;a href='{0}'&gt;clicking here&lt;/a&gt;." xml:space="preserve">
     <value>Por favor, restablecer la contraseña por &lt;a href='{0}'&gt; clic aquí &lt;/a&gt;.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Privacy" xml:space="preserve">
+    <data name="Privacy" xml:space="preserve">
     <value>Privacidad</value>
-    <comment>Pages/Shared/_Layout.cshtml</comment>
+        <comment>Pages/Shared/_Layout.cshtml</comment>
   </data>
-  <data name="Privacy Policy" xml:space="preserve">
+    <data name="Privacy Policy" xml:space="preserve">
     <value>Política de privacidad</value>
-    <comment>Pages/Privacy.cshtml</comment>
+        <comment>Pages/Privacy.cshtml</comment>
   </data>
-  <data name="Profile" xml:space="preserve">
+    <data name="Profile" xml:space="preserve">
     <value>Perfil</value>
-    <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
   </data>
-  <data name="Recovery code verification" xml:space="preserve">
+    <data name="Recovery code verification" xml:space="preserve">
     <value>verificación de código de recuperación</value>
-    <comment>Areas/Identity/Pages/Account/LoginWithRecoveryCode.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/LoginWithRecoveryCode.cshtml</comment>
   </data>
-  <data name="Register" xml:space="preserve">
+    <data name="Register" xml:space="preserve">
     <value>Registro</value>
-    <comment>Areas/Identity/Pages/Account/ExternalLogin.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ExternalLogin.cshtml</comment>
   </data>
-  <data name="Register as a new user" xml:space="preserve">
+    <data name="Register as a new user" xml:space="preserve">
     <value>registrar como usuario nuevo</value>
-    <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
   </data>
-  <data name="Registered Logins" xml:space="preserve">
+    <data name="Registered Logins" xml:space="preserve">
     <value>inicios de sesión registrados</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
   </data>
-  <data name="Remember me?" xml:space="preserve">
+    <data name="Remember me?" xml:space="preserve">
     <value>¿Recuérdame?</value>
-    <comment>Login.cshtml</comment>
+        <comment>Login.cshtml</comment>
   </data>
-  <data name="Remove this login from your account" xml:space="preserve">
+    <data name="Remove this login from your account" xml:space="preserve">
     <value>Eliminar esta entrada de su cuenta</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
   </data>
-  <data name="Remove {0}" xml:space="preserve">
+    <data name="Remove {0}" xml:space="preserve">
     <value>Retire {0}</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
   </data>
-  <data name="Request ID:" xml:space="preserve">
+    <data name="Request ID:" xml:space="preserve">
     <value>ID de solicitud:</value>
-    <comment>Pages/Error.cshtml</comment>
+        <comment>Pages/Error.cshtml</comment>
   </data>
-  <data name="Reset" xml:space="preserve">
+    <data name="Reset" xml:space="preserve">
     <value>Reiniciar</value>
-    <comment>Areas/Identity/Pages/Account/ResetPassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ResetPassword.cshtml</comment>
   </data>
-  <data name="Reset authenticator app" xml:space="preserve">
+    <data name="Reset authenticator app" xml:space="preserve">
     <value>aplicación autenticador de reposición</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="Reset authenticator key" xml:space="preserve">
+    <data name="Reset authenticator key" xml:space="preserve">
     <value>Restablecer clave autenticador</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ResetAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ResetAuthenticator.cshtml</comment>
   </data>
-  <data name="Reset password" xml:space="preserve">
+    <data name="Reset password" xml:space="preserve">
     <value>Restablecer la contraseña</value>
-    <comment>Areas/Identity/Pages/Account/ResetPassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ResetPassword.cshtml</comment>
   </data>
-  <data name="Reset password confirmation" xml:space="preserve">
+    <data name="Reset password confirmation" xml:space="preserve">
     <value>confirmación de restablecimiento de contraseña</value>
-    <comment>Areas/Identity/Pages/Account/ResetPasswordConfirmation.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ResetPasswordConfirmation.cshtml</comment>
   </data>
-  <data name="Reset recovery codes" xml:space="preserve">
+    <data name="Reset recovery codes" xml:space="preserve">
     <value>Restablecer los códigos de recuperación</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="Reset your password." xml:space="preserve">
+    <data name="Reset your password." xml:space="preserve">
     <value>Restablecer su contraseña.</value>
-    <comment>Areas/Identity/Pages/Account/ResetPassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ResetPassword.cshtml</comment>
   </data>
-  <data name="Sample Form" xml:space="preserve">
+    <data name="Sample Form" xml:space="preserve">
     <value>Ejemplo de Formulario</value>
-    <comment>Pages/SampleForm.cshtml</comment>
+        <comment>Pages/SampleForm.cshtml</comment>
   </data>
-  <data name="Save" xml:space="preserve">
+    <data name="Save" xml:space="preserve">
     <value>Salvar</value>
-    <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
   </data>
-  <data name="Send verification email" xml:space="preserve">
+    <data name="Send verification email" xml:space="preserve">
     <value>Envia un correo electronico de verificación</value>
-    <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
   </data>
-  <data name="Set password" xml:space="preserve">
+    <data name="Set password" xml:space="preserve">
     <value>Configurar la clave</value>
-    <comment>Areas/Identity/Pages/Account/Manage/SetPassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/SetPassword.cshtml</comment>
   </data>
-  <data name="Setup authenticator app" xml:space="preserve">
+    <data name="Setup authenticator app" xml:space="preserve">
     <value>aplicación de configuración de autenticador</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="Submit" xml:space="preserve">
+    <data name="Submit" xml:space="preserve">
     <value>Enviar</value>
-    <comment>Areas/Identity/Pages/Account/ForgotPassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ForgotPassword.cshtml</comment>
   </data>
-  <data name="Thank you for confirming your email." xml:space="preserve">
+    <data name="Thank you for confirming your email." xml:space="preserve">
     <value>Gracias por confirmar su correo electrónico usted.</value>
-    <comment>Areas/Identity/Pages/Account/ConfirmEmail.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ConfirmEmail.cshtml</comment>
   </data>
-  <data name="The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code." xml:space="preserve">
+    <data name="The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code."
+          xml:space="preserve">
     <value>El explorador actual ha sido olvidado. Cuando vuelve a entrar de nuevo desde este navegador se le pedirá su código 2fa.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="The external login was added." xml:space="preserve">
+    <data name="The external login was added." xml:space="preserve">
     <value>Se añadió la entrada externa.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="The external login was removed." xml:space="preserve">
+    <data name="The external login was removed." xml:space="preserve">
     <value>Se retiró la entrada externa.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="There are no external authentication services configured. See &lt;a href='https://go.microsoft.com/fwlink/?LinkID=532715'&gt;this article&lt;/a&gt; for details on setting up this ASP.NET application to support logging in via external services." xml:space="preserve">
+    <data name="There are no external authentication services configured. See &lt;a href='https://go.microsoft.com/fwlink/?LinkID=532715'&gt;this article&lt;/a&gt; for details on setting up this ASP.NET application to support logging in via external services."
+          xml:space="preserve">
     <value>No hay servicios de autenticación externos configurados. Ver &lt;a href='https://go.microsoft.com/fwlink/?LinkID=532715'&gt; este artículo &lt;/a&gt; para obtener detalles sobre la configuración de esta aplicación ASP.NET para apoyar ingresar a través de servicios externos.</value>
-    <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
   </data>
-  <data name="This account has been locked out, please try again later." xml:space="preserve">
+    <data name="This account has been locked out, please try again later." xml:space="preserve">
     <value>Esta cuenta ha sido bloqueada, por favor intente de nuevo más tarde.</value>
-    <comment>Areas/Identity/Pages/Account/Lockout.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Lockout.cshtml</comment>
   </data>
-  <data name="To enable QR code generation please read our &lt;a href=&quot;{0}&quot;&gt;documentation&lt;/a&gt;." xml:space="preserve">
+    <data name="To enable QR code generation please read our &lt;a href=&quot;{0}&quot;&gt;documentation&lt;/a&gt;."
+          xml:space="preserve">
     <value>Para habilitar la generación de código QR lea nuestra documentación href="{0}"&gt; &lt;a &lt;/a&gt;.</value>
-    <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
   </data>
-  <data name="To use an authenticator app go through the following steps:" xml:space="preserve">
+    <data name="To use an authenticator app go through the following steps:" xml:space="preserve">
     <value>Para usar una aplicación autenticador ir a través de los siguientes pasos:</value>
-    <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
   </data>
-  <data name="Two-factor authentication" xml:space="preserve">
+    <data name="Two-factor authentication" xml:space="preserve">
     <value>Autenticación de dos factores</value>
-    <comment>Areas/Identity/Pages/Account/LoginWith2fa.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/LoginWith2fa.cshtml</comment>
   </data>
-  <data name="Two-factor authentication (2FA)" xml:space="preserve">
+    <data name="Two-factor authentication (2FA)" xml:space="preserve">
     <value>autenticación de dos factores (2FA)</value>
-    <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
   </data>
-  <data name="Update password" xml:space="preserve">
+    <data name="Update password" xml:space="preserve">
     <value>Actualiza contraseña</value>
-    <comment>Areas/Identity/Pages/Account/Manage/ChangePassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/ChangePassword.cshtml</comment>
   </data>
-  <data name="Use a local account to log in." xml:space="preserve">
+    <data name="Use a local account to log in." xml:space="preserve">
     <value>Utilizar una cuenta local para iniciar sesión.</value>
-    <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
   </data>
-  <data name="Use another service to log in." xml:space="preserve">
+    <data name="Use another service to log in." xml:space="preserve">
     <value>Utilizar otro servicio para conectarse.</value>
-    <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
   </data>
-  <data name="Use this page to detail your site's privacy policy." xml:space="preserve">
+    <data name="Use this page to detail your site's privacy policy." xml:space="preserve">
     <value>Utilice esta página para la política de privacidad del detalle de su sitio.</value>
-    <comment>Pages/Privacy.cshtml</comment>
+        <comment>Pages/Privacy.cshtml</comment>
   </data>
-  <data name="Use this space to summarize your privacy and cookie use policy. &lt;a href=&quot;{0}&quot;&gt;Learn More&lt;/a&gt;.&#xA;        &lt;button type=&quot;button&quot; class=&quot;accept-policy close&quot; data-dismiss=&quot;alert&quot; aria-label=&quot;Close&quot; data-cookie-string=&quot;{1}&quot;&gt;&#xA;            &lt;span aria-hidden=&quot;true&quot;&gt;Accept&lt;/span&gt;&#xA;        &lt;/button&gt;" xml:space="preserve">
+    <data name="Use this space to summarize your privacy and cookie use policy. &lt;a href=&quot;{0}&quot;&gt;Learn More&lt;/a&gt;.&#xA;        &lt;button type=&quot;button&quot; class=&quot;accept-policy close&quot; data-dismiss=&quot;alert&quot; aria-label=&quot;Close&quot; data-cookie-string=&quot;{1}&quot;&gt;&#xA;            &lt;span aria-hidden=&quot;true&quot;&gt;Accept&lt;/span&gt;&#xA;        &lt;/button&gt;"
+          xml:space="preserve">
     <value>Utiliza este espacio para resumir su privacidad y la política de uso de cookies. &lt;a href="{0}"&gt; Más información &lt;/a&gt;.
         &lt;= Tipo de botón de clase "botón" = "aceptar la política estrecha" desechan datos = "alerta" aria-label = "Cerrar"-galleta-cadena de datos = "{1}"&gt;
             &lt;Span aria oculta-= "true"&gt; Aceptar &lt;/ span&gt;
         &lt;/ Botón&gt;</value>
-    <comment>Pages/Shared/_CookieConsentPartial.cshtml</comment>
+        <comment>Pages/Shared/_CookieConsentPartial.cshtml</comment>
   </data>
-  <data name="Verification Code" xml:space="preserve">
+    <data name="Verification Code" xml:space="preserve">
     <value>Código de verificación</value>
-    <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
   </data>
-  <data name="Verification email sent. Please check your email." xml:space="preserve">
+    <data name="Verification email sent. Please check your email." xml:space="preserve">
     <value>El mensaje de verificación ha sido enviado. Por favor revise su correo electrónico.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Verify" xml:space="preserve">
+    <data name="Verify" xml:space="preserve">
     <value>Verificar</value>
-    <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
   </data>
-  <data name="Welcome" xml:space="preserve">
+    <data name="Welcome" xml:space="preserve">
     <value>Bienvenido</value>
-    <comment>Pages/Index.cshtml</comment>
+        <comment>Pages/Index.cshtml</comment>
   </data>
-  <data name="You do not have a local username/password for this site. Add a local account so you can log in without an external login." xml:space="preserve">
+    <data name="You do not have a local username/password for this site. Add a local account so you can log in without an external login."
+          xml:space="preserve">
     <value>Usted no tiene un nombre de usuario / contraseña local para este sitio. Añadir una cuenta local para que pueda iniciar la sesión sin una entrada externa.</value>
-    <comment>Areas/Identity/Pages/Account/Manage/SetPassword.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Manage/SetPassword.cshtml</comment>
   </data>
-  <data name="You do not have access to this resource." xml:space="preserve">
+    <data name="You do not have access to this resource." xml:space="preserve">
     <value>Usted no tiene acceso a este recurso.</value>
-    <comment>Areas/Identity/Pages/Account/AccessDenied.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/AccessDenied.cshtml</comment>
   </data>
-  <data name="You have generated new recovery codes." xml:space="preserve">
+    <data name="You have generated new recovery codes." xml:space="preserve">
     <value>Que haya generado nuevos códigos de recuperación.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again." xml:space="preserve">
+    <data name="You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again."
+          xml:space="preserve">
     <value>Ha solicitado una sesión con un código de recuperación. Este inicio de sesión no será recordado hasta que proporcione un código de aplicación autenticador al iniciar la sesión o desactivar 2FA y conectarse de nuevo.</value>
-    <comment>Areas/Identity/Pages/Account/LoginWithRecoveryCode.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/LoginWithRecoveryCode.cshtml</comment>
   </data>
-  <data name="You have successfully logged out of the application." xml:space="preserve">
+    <data name="You have successfully logged out of the application." xml:space="preserve">
     <value>Ha iniciado sesión con éxito de la aplicación.</value>
-    <comment>Areas/Identity/Pages/Account/Logout.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/Logout.cshtml</comment>
   </data>
-  <data name="You've successfully authenticated with &lt;strong&gt;{0}&lt;/strong&gt;. Please enter an email address for this site below and click the Register button to finish logging in." xml:space="preserve">
+    <data name="You've successfully authenticated with &lt;strong&gt;{0}&lt;/strong&gt;. Please enter an email address for this site below and click the Register button to finish logging in."
+          xml:space="preserve">
     <value>Usted ha autenticado con éxito con &lt;strong&gt; {0} &lt;/ strong&gt;. Por favor, introduzca una dirección de correo electrónico para este sitio Web más abajo y haga clic en el botón Registrar para terminar el registro en.</value>
-    <comment>Areas/Identity/Pages/Account/ExternalLogin.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ExternalLogin.cshtml</comment>
   </data>
-  <data name="Your authenticator app has been verified." xml:space="preserve">
+    <data name="Your authenticator app has been verified." xml:space="preserve">
     <value>Su aplicación autenticador ha sido verificada.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Your authenticator app key has been reset, you will need to configure your authenticator app using the new key." xml:space="preserve">
+    <data name="Your authenticator app key has been reset, you will need to configure your authenticator app using the new key."
+          xml:space="preserve">
     <value>Su clave de aplicación autenticador se ha restablecido, tendrá que configurar su aplicación autenticador usando la nueva clave.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Your login is protected with an authenticator app. Enter your authenticator code below." xml:space="preserve">
+    <data name="Your login is protected with an authenticator app. Enter your authenticator code below."
+          xml:space="preserve">
     <value>Su nombre de usuario está protegido con una aplicación autenticador. Introduzca su código autenticador a continuación.</value>
-    <comment>Areas/Identity/Pages/Account/LoginWith2fa.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/LoginWith2fa.cshtml</comment>
   </data>
-  <data name="Your password has been changed." xml:space="preserve">
+    <data name="Your password has been changed." xml:space="preserve">
     <value>Tu contraseña ha sido cambiada.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Your password has been reset. Please &lt;a href=&quot;{0}&quot;&gt;click here to log in&lt;/a&gt;." xml:space="preserve">
+    <data name="Your password has been reset. Please &lt;a href=&quot;{0}&quot;&gt;click here to log in&lt;/a&gt;."
+          xml:space="preserve">
     <value>Tu contraseña ha sido restablecida. &lt;a href="{0}"&gt; haga clic aquí para iniciar sesión &lt;/a&gt;.</value>
-    <comment>Areas/Identity/Pages/Account/ResetPasswordConfirmation.cshtml</comment>
+        <comment>Areas/Identity/Pages/Account/ResetPasswordConfirmation.cshtml</comment>
   </data>
-  <data name="Your password has been set." xml:space="preserve">
+    <data name="Your password has been set." xml:space="preserve">
     <value>Su contraseña ha sido establecida.</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Your profile has been updated" xml:space="preserve">
+    <data name="Your profile has been updated" xml:space="preserve">
     <value>Tu perfil ha sido actualizado</value>
-    <comment>Custom back end message</comment>
+        <comment>Custom back end message</comment>
   </data>
-  <data name="Projects" xml:space="preserve">
+    <data name="Projects" xml:space="preserve">
     <value>Proyectos</value>
   </data>
-  <data name="Clients" xml:space="preserve">
+    <data name="Clients" xml:space="preserve">
     <value>Clientes</value>
   </data>
-  <data name="Name" xml:space="preserve">
+    <data name="Name" xml:space="preserve">
     <value>Nombre</value>
   </data>
-  <data name="Description" xml:space="preserve">
+    <data name="Description" xml:space="preserve">
     <value>Descripción</value>
   </data>
-  <data name="Contact Name" xml:space="preserve">
+    <data name="Contact Name" xml:space="preserve">
     <value>Nombre de Contacto</value>
   </data>
-  <data name="Contact Email" xml:space="preserve">
+    <data name="Contact Email" xml:space="preserve">
     <value>Email de Contacto</value>
   </data>
-  <data name="Contact Phone" xml:space="preserve">
+    <data name="Contact Phone" xml:space="preserve">
     <value>Teléfono de Contacto</value>
   </data>
-  <data name="Back" xml:space="preserve">
+    <data name="Back" xml:space="preserve">
     <value>Volver</value>
   </data>
-  <data name="Create Client" xml:space="preserve">
+    <data name="Create Client" xml:space="preserve">
     <value>Crear Cliente</value>
   </data>
-  <data name="Create" xml:space="preserve">
+    <data name="Create" xml:space="preserve">
     <value>Crear</value>
   </data>
-  <data name="Edit" xml:space="preserve">
+    <data name="Edit" xml:space="preserve">
     <value>Editar</value>
   </data>
-  <data name="Delete" xml:space="preserve">
+    <data name="Delete" xml:space="preserve">
     <value>Eliminar</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-plus&quot;&gt;&lt;/i&gt; Create" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-plus&quot;&gt;&lt;/i&gt; Create" xml:space="preserve">
     <value>&lt;i class="fas fa-plus"&gt;&lt;/i&gt; Crear</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-edit&quot;&gt;&lt;/i&gt; Edit" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-edit&quot;&gt;&lt;/i&gt; Edit" xml:space="preserve">
     <value>&lt;i class="fas fa-edit"&gt;&lt;/i&gt; Editar</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-trash&quot;&gt;&lt;/i&gt; Delete" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-trash&quot;&gt;&lt;/i&gt; Delete" xml:space="preserve">
     <value>&lt;i class="fas fa-trash"&gt;&lt;/i&gt; Eliminar</value>
   </data>
-  <data name="Options" xml:space="preserve">
+    <data name="Options" xml:space="preserve">
     <value>Opciones</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Clients" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Clients" xml:space="preserve">
     <value>&lt;i class="fas fa-briefcase"&gt;&lt;/i&gt; Clientes</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Edit Client" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Edit Client" xml:space="preserve">
     <value>&lt;i class="fas fa-briefcase"&gt;&lt;/i&gt; Editar Cliente</value>
   </data>
-  <data name="Client edited successfully!" xml:space="preserve">
+    <data name="Client edited successfully!" xml:space="preserve">
     <value>Cliente editado correctamente!</value>
   </data>
-  <data name="Client created successfully!" xml:space="preserve">
+    <data name="Client created successfully!" xml:space="preserve">
     <value>Cliente creado correctamente!</value>
   </data>
-  <data name="Client deleted successfully!" xml:space="preserve">
+    <data name="Client deleted successfully!" xml:space="preserve">
     <value>Cliente eliminado correctamente!</value>
   </data>
-  <data name="Are you sure you want to delete this?" xml:space="preserve">
+    <data name="Are you sure you want to delete this?" xml:space="preserve">
     <value>Estas seguro de que quieres eliminar esto?</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Delete Client" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Delete Client" xml:space="preserve">
     <value>&lt;i class="fas fa-briefcase"&gt;&lt;/i&gt; Eliminar Cliente</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-list nav-icon&quot;&gt;&lt;/i&gt;&lt;p&gt;List&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-list nav-icon&quot;&gt;&lt;/i&gt;&lt;p&gt;List&lt;/p&gt;" xml:space="preserve">
     <value>&lt;i class="fas fa-list nav-icon"&gt;&lt;/i&gt;&lt;p&gt;Lista&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-plus nav-icon&quot;&gt;&lt;/i&gt;&lt;p&gt;Create&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-plus nav-icon&quot;&gt;&lt;/i&gt;&lt;p&gt;Create&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="fas fa-plus nav-icon"&gt;&lt;/i&gt;&lt;p&gt;Crear&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-home&quot;&gt;&lt;/i&gt;&lt;p&gt;Home&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-home&quot;&gt;&lt;/i&gt;&lt;p&gt;Home&lt;/p&gt;" xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-home"&gt;&lt;/i&gt;&lt;p&gt;Inicio&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-folder&quot;&gt;&lt;/i&gt;&lt;p&gt;Projects&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-folder&quot;&gt;&lt;/i&gt;&lt;p&gt;Projects&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-folder"&gt;&lt;/i&gt;&lt;p&gt;Proyectos&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-briefcase&quot;&gt;&lt;/i&gt;&lt;p&gt;Clients&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-briefcase&quot;&gt;&lt;/i&gt;&lt;p&gt;Clients&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-briefcase"&gt;&lt;/i&gt;&lt;p&gt;Clientes&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
   </data>
-  <data name="Select Image" xml:space="preserve">
+    <data name="Select Image" xml:space="preserve">
     <value>Seleccionar Imagen</value>
   </data>
-  <data name="Choose File" xml:space="preserve">
+    <data name="Choose File" xml:space="preserve">
     <value>Elegir Archivo</value>
   </data>
-  <data name="Upload" xml:space="preserve">
+    <data name="Upload" xml:space="preserve">
     <value>Subir</value>
   </data>
-  <data name="Details" xml:space="preserve">
+    <data name="Details" xml:space="preserve">
     <value>Detalles</value>
   </data>
-  <data name="Created by" xml:space="preserve">
+    <data name="Created by" xml:space="preserve">
     <value>Creado por</value>
   </data>
-  <data name="Created on" xml:space="preserve">
+    <data name="Created on" xml:space="preserve">
     <value>Creado el</value>
   </data>
-  <data name="&lt;span class=&quot;info-box-text&quot;&gt;Projects&lt;/span&gt;" xml:space="preserve">
+    <data name="&lt;span class=&quot;info-box-text&quot;&gt;Projects&lt;/span&gt;" xml:space="preserve">
     <value>&lt;span class="info-box-text"&gt;Proyectos&lt;/span&gt;</value>
   </data>
-  <data name="&lt;span class=&quot;info-box-text&quot;&gt;Vulnerabilities&lt;/span&gt;" xml:space="preserve">
+    <data name="&lt;span class=&quot;info-box-text&quot;&gt;Vulnerabilities&lt;/span&gt;" xml:space="preserve">
     <value>&lt;span class="info-box-text"&gt;Vulnerabilidades&lt;/span&gt;</value>
   </data>
-  <data name="&lt;span class=&quot;info-box-text&quot;&gt;Tasks&lt;/span&gt;" xml:space="preserve">
+    <data name="&lt;span class=&quot;info-box-text&quot;&gt;Tasks&lt;/span&gt;" xml:space="preserve">
     <value>&lt;span class="info-box-text"&gt;Tareas&lt;/span&gt;</value>
   </data>
-  <data name="&lt;span class=&quot;info-box-text&quot;&gt;Clients&lt;/span&gt;" xml:space="preserve">
+    <data name="&lt;span class=&quot;info-box-text&quot;&gt;Clients&lt;/span&gt;" xml:space="preserve">
     <value>&lt;span class="info-box-text"&gt;Clientes&lt;/span&gt;</value>
   </data>
-  <data name="&lt;h3 class=&quot;card-title&quot;&gt;Projects Percentages&lt;/h3&gt;" xml:space="preserve">
+    <data name="&lt;h3 class=&quot;card-title&quot;&gt;Projects Percentages&lt;/h3&gt;" xml:space="preserve">
     <value>&lt;h3 class="card-title"&gt;Porcentajes Proyectos&lt;/h3&gt;</value>
   </data>
-  <data name="&lt;h3 class=&quot;card-title&quot;&gt;Active Projects&lt;/h3&gt;" xml:space="preserve">
+    <data name="&lt;h3 class=&quot;card-title&quot;&gt;Active Projects&lt;/h3&gt;" xml:space="preserve">
     <value>&lt;h3 class="card-title"&gt;Proyectos Activos&lt;/h3&gt;</value>
   </data>
-  <data name="&lt;h3 class=&quot;card-title&quot;&gt;Recent Clients&lt;/h3&gt;" xml:space="preserve">
+    <data name="&lt;h3 class=&quot;card-title&quot;&gt;Recent Clients&lt;/h3&gt;" xml:space="preserve">
     <value>&lt;h3 class="card-title"&gt;Clientes Recientes&lt;/h3&gt;</value>
   </data>
-  <data name="&lt;h3 class=&quot;card-title&quot;&gt;Recent Documents&lt;/h3&gt;" xml:space="preserve">
+    <data name="&lt;h3 class=&quot;card-title&quot;&gt;Recent Documents&lt;/h3&gt;" xml:space="preserve">
     <value>&lt;h3 class="card-title"&gt;Documentos Recientes&lt;/h3&gt;</value>
   </data>
-  <data name="&lt;h3 class=&quot;card-title&quot;&gt;Recent Vulnerabilities&lt;/h3&gt;" xml:space="preserve">
+    <data name="&lt;h3 class=&quot;card-title&quot;&gt;Recent Vulnerabilities&lt;/h3&gt;" xml:space="preserve">
     <value>&lt;h3 class="card-title"&gt;Vulnerabilidades Recientes&lt;/h3&gt;</value>
   </data>
-  <data name="&lt;h3 class=&quot;card-title&quot;&gt;Vulnerabilities Status&lt;/h3&gt;" xml:space="preserve">
+    <data name="&lt;h3 class=&quot;card-title&quot;&gt;Vulnerabilities Status&lt;/h3&gt;" xml:space="preserve">
     <value>&lt;h3 class="card-title"&gt;Estado Vulnerabilidades&lt;/h3&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-building&quot;&gt;&lt;/i&gt;&lt;p&gt;My Workspaces&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-building&quot;&gt;&lt;/i&gt;&lt;p&gt;My Workspaces&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-building"&gt;&lt;/i&gt;&lt;p&gt;Mi Esapcio de Trabajo&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-clone nav-icon&quot;&gt;&lt;/i&gt;&lt;p&gt;Templates&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-clone nav-icon&quot;&gt;&lt;/i&gt;&lt;p&gt;Templates&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="fas fa-clone nav-icon"&gt;&lt;/i&gt;&lt;p&gt;Plantillas&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-file&quot;&gt;&lt;/i&gt;&lt;p&gt;Documents&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-file&quot;&gt;&lt;/i&gt;&lt;p&gt;Documents&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-file"&gt;&lt;/i&gt;&lt;p&gt;Documentos&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-users&quot;&gt;&lt;/i&gt;&lt;p&gt;Users&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-users&quot;&gt;&lt;/i&gt;&lt;p&gt;Users&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-users"&gt;&lt;/i&gt;&lt;p&gt;Usuarios&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-sitemap&quot;&gt;&lt;/i&gt;&lt;p&gt;Organization&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-sitemap&quot;&gt;&lt;/i&gt;&lt;p&gt;Organization&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-sitemap"&gt;&lt;/i&gt;&lt;p&gt;Organización&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-eye&quot;&gt;&lt;/i&gt;&lt;p&gt;System Logs&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-eye&quot;&gt;&lt;/i&gt;&lt;p&gt;System Logs&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-eye"&gt;&lt;/i&gt;&lt;p&gt;Logs de Sistema&lt;/p&gt;</value>
   </data>
-  <data name="Tasks" xml:space="preserve">
+    <data name="Tasks" xml:space="preserve">
     <value>Tareas</value>
   </data>
-  <data name="Vulnerabilities" xml:space="preserve">
+    <data name="Vulnerabilities" xml:space="preserve">
     <value>Vulnerabilidades</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-building&quot;&gt;&lt;/i&gt; My Workspaces" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-building&quot;&gt;&lt;/i&gt; My Workspaces" xml:space="preserve">
     <value>&lt;i class="fas fa-building"&gt;&lt;/i&gt; Mi Espacio de Trabajo</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Projects" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Projects" xml:space="preserve">
     <value>&lt;i class="fas fa-folder"&gt;&lt;/i&gt; Proyectos</value>
   </data>
-  <data name="Client" xml:space="preserve">
+    <data name="Client" xml:space="preserve">
     <value>Cliente</value>
   </data>
-  <data name="Type" xml:space="preserve">
+    <data name="Type" xml:space="preserve">
     <value>Tipo</value>
   </data>
-  <data name="Status" xml:space="preserve">
+    <data name="Status" xml:space="preserve">
     <value>Estado</value>
   </data>
-  <data name="Start Date" xml:space="preserve">
+    <data name="Start Date" xml:space="preserve">
     <value>Fecha Inicio</value>
   </data>
-  <data name="End Date" xml:space="preserve">
+    <data name="End Date" xml:space="preserve">
     <value>Fecha Final</value>
   </data>
-  <data name="Project Status" xml:space="preserve">
+    <data name="Project Status" xml:space="preserve">
     <value>Estado del Proyecto</value>
   </data>
-  <data name="Project Type" xml:space="preserve">
+    <data name="Project Type" xml:space="preserve">
     <value>Tipo de Proyecto</value>
   </data>
-  <data name="Template" xml:space="preserve">
+    <data name="Template" xml:space="preserve">
     <value>Plantilla</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Create Project" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Create Project" xml:space="preserve">
     <value>&lt;i class="fas fa-folder"&gt;&lt;/i&gt; Crear Proyecto</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Delete Project" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Delete Project" xml:space="preserve">
     <value>&lt;i class="fas fa-briefcase"&gt;&lt;/i&gt; Borrar proyecto</value>
   </data>
-  <data name="Add" xml:space="preserve">
+    <data name="Add" xml:space="preserve">
     <value>Añadir</value>
   </data>
-  <data name="Close" xml:space="preserve">
+    <data name="Close" xml:space="preserve">
     <value>Cerrar</value>
   </data>
-  <data name="Add Member" xml:space="preserve">
+    <data name="Add Member" xml:space="preserve">
     <value>Añadir Miembro</value>
   </data>
-  <data name="Add Member to Project" xml:space="preserve">
+    <data name="Add Member to Project" xml:space="preserve">
     <value>Añadir Miembro al Proyecto</value>
   </data>
-  <data name="User" xml:space="preserve">
+    <data name="User" xml:space="preserve">
     <value>Usuario</value>
   </data>
-  <data name="&lt;a class=&quot;nav-link active&quot; href=&quot;#details&quot; data-toggle=&quot;tab&quot;&gt;Details&lt;/a&gt;" xml:space="preserve">
+    <data name="&lt;a class=&quot;nav-link active&quot; href=&quot;#details&quot; data-toggle=&quot;tab&quot;&gt;Details&lt;/a&gt;"
+          xml:space="preserve">
     <value>&lt;a class="nav-link active" href="#details" data-toggle="tab"&gt;Detalles&lt;/a&gt;</value>
   </data>
-  <data name="Notes" xml:space="preserve">
+    <data name="Notes" xml:space="preserve">
     <value>Notas</value>
   </data>
-  <data name="Attachments" xml:space="preserve">
+    <data name="Attachments" xml:space="preserve">
     <value>Adjuntos</value>
   </data>
-  <data name="Targets" xml:space="preserve">
+    <data name="Targets" xml:space="preserve">
     <value>Objetivos</value>
   </data>
-  <data name="Reports" xml:space="preserve">
+    <data name="Reports" xml:space="preserve">
     <value>Informes</value>
   </data>
-  <data name="Members" xml:space="preserve">
+    <data name="Members" xml:space="preserve">
     <value>Miembros</value>
   </data>
-  <data name="Add Target" xml:space="preserve">
+    <data name="Add Target" xml:space="preserve">
     <value>Añadir Objetivo</value>
   </data>
-  <data name="Add Target to Project" xml:space="preserve">
+    <data name="Add Target to Project" xml:space="preserve">
     <value>Añadir Objetivo al Proyecto</value>
   </data>
-  <data name="Target Type" xml:space="preserve">
+    <data name="Target Type" xml:space="preserve">
     <value>Tipo de Objetivo</value>
   </data>
-  <data name="Name / IP / CIDR / URL" xml:space="preserve">
+    <data name="Name / IP / CIDR / URL" xml:space="preserve">
     <value>Nombre / IP / CIDR / URL</value>
   </data>
-  <data name="Target" xml:space="preserve">
+    <data name="Target" xml:space="preserve">
     <value>Objetivo</value>
   </data>
-  <data name="Asigned To" xml:space="preserve">
+    <data name="Asigned To" xml:space="preserve">
     <value>Asignado a</value>
   </data>
-  <data name="Risk" xml:space="preserve">
+    <data name="Risk" xml:space="preserve">
     <value>Riesgo</value>
   </data>
-  <data name="Category" xml:space="preserve">
+    <data name="Category" xml:space="preserve">
     <value>Categoría</value>
   </data>
-  <data name="CVSS3 Score" xml:space="preserve">
+    <data name="CVSS3 Score" xml:space="preserve">
     <value>Calificación CVSS3</value>
   </data>
-  <data name="Visibility" xml:space="preserve">
+    <data name="Visibility" xml:space="preserve">
     <value>Visibilidad</value>
   </data>
-  <data name="File" xml:space="preserve">
+    <data name="File" xml:space="preserve">
     <value>Archivo</value>
   </data>
-  <data name="Uploaded by" xml:space="preserve">
+    <data name="Uploaded by" xml:space="preserve">
     <value>Subido por</value>
   </data>
-  <data name="Add Attachment" xml:space="preserve">
+    <data name="Add Attachment" xml:space="preserve">
     <value>Añadir Adjunto</value>
   </data>
-  <data name="Add Attachment to Project" xml:space="preserve">
+    <data name="Add Attachment to Project" xml:space="preserve">
     <value>Añadir adjunto al Proyecto</value>
   </data>
-  <data name="Select File" xml:space="preserve">
+    <data name="Select File" xml:space="preserve">
     <value>Seleccionar Archivo</value>
   </data>
-  <data name="Creation Date" xml:space="preserve">
+    <data name="Creation Date" xml:space="preserve">
     <value>Fecha de Creación</value>
   </data>
-  <data name="Generate Report" xml:space="preserve">
+    <data name="Generate Report" xml:space="preserve">
     <value>Generar Informe</value>
   </data>
-  <data name="Generate" xml:space="preserve">
+    <data name="Generate" xml:space="preserve">
     <value>Generar</value>
   </data>
-  <data name="Language" xml:space="preserve">
+    <data name="Language" xml:space="preserve">
     <value>Idioma</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Project Templates" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Project Templates" xml:space="preserve">
     <value>&lt;i class="fas fa-folder"&gt;&lt;/i&gt; Plantillas de Proyectos</value>
   </data>
-  <data name="Select Document" xml:space="preserve">
+    <data name="Select Document" xml:space="preserve">
     <value>Seleccionar Documento</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Create Document" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Create Document" xml:space="preserve">
     <value>&lt;i class="fas fa-briefcase"&gt;&lt;/i&gt; Crear Documento</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Edit Document" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Edit Document" xml:space="preserve">
     <value>&lt;i class="fas fa-briefcase"&gt;&lt;/i&gt; Editar Documento</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-building&quot;&gt;&lt;/i&gt; View" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-building&quot;&gt;&lt;/i&gt; View" xml:space="preserve">
     <value>&lt;i class="fas fa-building"&gt;&lt;/i&gt; Ver</value>
   </data>
-  <data name="My Tasks" xml:space="preserve">
+    <data name="My Tasks" xml:space="preserve">
     <value>Mis Tareas</value>
   </data>
-  <data name="Vulnerabilities by Severity" xml:space="preserve">
+    <data name="Vulnerabilities by Severity" xml:space="preserve">
     <value>Vulnerabilidades por Severidad</value>
   </data>
-  <data name="Recent Notes" xml:space="preserve">
+    <data name="Recent Notes" xml:space="preserve">
     <value>Notas recientes</value>
   </data>
-  <data name="Recent Vulnerabilities" xml:space="preserve">
+    <data name="Recent Vulnerabilities" xml:space="preserve">
     <value>Vulnerabilidades Recientes</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-bullseye&quot;&gt;&lt;/i&gt;&lt;p&gt;Targets&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-bullseye&quot;&gt;&lt;/i&gt;&lt;p&gt;Targets&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-bullseye"&gt;&lt;/i&gt;&lt;p&gt;Objetivos&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-tasks&quot;&gt;&lt;/i&gt;&lt;p&gt;Tasks&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-tasks&quot;&gt;&lt;/i&gt;&lt;p&gt;Tasks&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-tasks"&gt;&lt;/i&gt;&lt;p&gt;Tareas&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-bug&quot;&gt;&lt;/i&gt;&lt;p&gt;Vulnerabilities&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-bug&quot;&gt;&lt;/i&gt;&lt;p&gt;Vulnerabilities&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-bug"&gt;&lt;/i&gt;&lt;p&gt;Vulnerabilidades&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
   </data>
-  <data name="Added by" xml:space="preserve">
+    <data name="Added by" xml:space="preserve">
     <value>Añadido por</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-bullseye&quot;&gt;&lt;/i&gt; Create Target" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-bullseye&quot;&gt;&lt;/i&gt; Create Target" xml:space="preserve">
     <value>&lt;i class="fas fa-bullseye"&gt;&lt;/i&gt; Crear Objetivo</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-bullseye&quot;&gt;&lt;/i&gt; Targets" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-bullseye&quot;&gt;&lt;/i&gt; Targets" xml:space="preserve">
     <value>&lt;i class="fas fa-bullseye"&gt;&lt;/i&gt; Objetivos</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-bullseye&quot;&gt;&lt;/i&gt; Edit Target" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-bullseye&quot;&gt;&lt;/i&gt; Edit Target" xml:space="preserve">
     <value>&lt;i class="fas fa-bullseye"&gt;&lt;/i&gt; Editar Objetivo</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-bullseye&quot;&gt;&lt;/i&gt; Delete Target" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-bullseye&quot;&gt;&lt;/i&gt; Delete Target" xml:space="preserve">
     <value>&lt;i class="fas fa-bullseye"&gt;&lt;/i&gt; Eliminar Objetivo</value>
   </data>
-  <data name="Port" xml:space="preserve">
+    <data name="Port" xml:space="preserve">
     <value>Puerto</value>
   </data>
-  <data name="Services" xml:space="preserve">
+    <data name="Services" xml:space="preserve">
     <value>Servicios</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-tasks&quot;&gt;&lt;/i&gt; My Tasks" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-tasks&quot;&gt;&lt;/i&gt; My Tasks" xml:space="preserve">
     <value>&lt;i class="fas fa-tasks"&gt;&lt;/i&gt; Mis Tareas</value>
   </data>
-  <data name="No Tasks" xml:space="preserve">
+    <data name="No Tasks" xml:space="preserve">
     <value>Sin Tareas</value>
   </data>
-  <data name="Done" xml:space="preserve">
+    <data name="Done" xml:space="preserve">
     <value>Hecho</value>
   </data>
-  <data name="Blocked" xml:space="preserve">
+    <data name="Blocked" xml:space="preserve">
     <value>Bloqueado</value>
   </data>
-  <data name="In Progress" xml:space="preserve">
+    <data name="In Progress" xml:space="preserve">
     <value>En Progreso</value>
   </data>
-  <data name="Task Status" xml:space="preserve">
+    <data name="Task Status" xml:space="preserve">
     <value>Estado de la Tarea</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Create Task" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Create Task" xml:space="preserve">
     <value>&lt;i class="fas fa-folder"&gt;&lt;/i&gt;  Crear Tarea</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Edit Task" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Edit Task" xml:space="preserve">
     <value>&lt;i class="fas fa-folder"&gt;&lt;/i&gt; Editar Tarea</value>
   </data>
-  <data name="Add Note to Task" xml:space="preserve">
+    <data name="Add Note to Task" xml:space="preserve">
     <value>Añadir Nota a la Tarea</value>
   </data>
-  <data name="Add Attachment to Task" xml:space="preserve">
+    <data name="Add Attachment to Task" xml:space="preserve">
     <value>Añadir Adjunto a la Nota</value>
   </data>
-  <data name="Add Note" xml:space="preserve">
+    <data name="Add Note" xml:space="preserve">
     <value>Añadir Nota</value>
   </data>
-  <data name="Created Date" xml:space="preserve">
+    <data name="Created Date" xml:space="preserve">
     <value>Fecha de Creación</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-tasks&quot;&gt;&lt;/i&gt; Delete Task" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-tasks&quot;&gt;&lt;/i&gt; Delete Task" xml:space="preserve">
     <value>&lt;i class="fas fa-tasks"&gt;&lt;/i&gt; Eliminar Tarea</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-bug&quot;&gt;&lt;/i&gt; Create Vulnerability" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-bug&quot;&gt;&lt;/i&gt; Create Vulnerability" xml:space="preserve">
     <value>&lt;i class="fas fa-bug"&gt;&lt;/i&gt; Crear Vulnerabilidad</value>
   </data>
-  <data name="Exploitation" xml:space="preserve">
+    <data name="Exploitation" xml:space="preserve">
     <value>Explotación</value>
   </data>
-  <data name="Remediation" xml:space="preserve">
+    <data name="Remediation" xml:space="preserve">
     <value>Remediación</value>
   </data>
-  <data name="Impact" xml:space="preserve">
+    <data name="Impact" xml:space="preserve">
     <value>Impacto</value>
   </data>
-  <data name="Proof Of Concept" xml:space="preserve">
+    <data name="Proof Of Concept" xml:space="preserve">
     <value>Prueba de Concepto</value>
   </data>
-  <data name="Complexity" xml:space="preserve">
+    <data name="Complexity" xml:space="preserve">
     <value>Complejidad</value>
   </data>
-  <data name="Priority" xml:space="preserve">
+    <data name="Priority" xml:space="preserve">
     <value>Prioridad</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-bug&quot;&gt;&lt;/i&gt; Vulnerabilities" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-bug&quot;&gt;&lt;/i&gt; Vulnerabilities" xml:space="preserve">
     <value>&lt;i class="fas fa-bug"&gt;&lt;/i&gt; Vulnerabilidades</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-bug&quot;&gt;&lt;/i&gt; Edit Vulnerability" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-bug&quot;&gt;&lt;/i&gt; Edit Vulnerability" xml:space="preserve">
     <value>&lt;i class="fas fa-bug"&gt;&lt;/i&gt; Editar Vulnerabilidad</value>
   </data>
-  <data name="Add Note to Vuln" xml:space="preserve">
+    <data name="Add Note to Vuln" xml:space="preserve">
     <value>Añadir Nota a la Vulnerabilidad</value>
   </data>
-  <data name="Add Attachment to Vuln" xml:space="preserve">
+    <data name="Add Attachment to Vuln" xml:space="preserve">
     <value>Añadir Adjunto a la Vulnerabilidad</value>
   </data>
-  <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Vulnerability Categories" xml:space="preserve">
+    <data name="&lt;i class=&quot;fas fa-briefcase&quot;&gt;&lt;/i&gt; Vulnerability Categories" xml:space="preserve">
     <value>&lt;i class="fas fa-briefcase"&gt;&lt;/i&gt; Categorías de Vulenrabilidades</value>
   </data>
-  <data name="Categories" xml:space="preserve">
+    <data name="Categories" xml:space="preserve">
     <value>Categorías</value>
   </data>
-  <data name="&lt;i class=&quot;nav-icon fas fa-bug&quot;&gt;&lt;/i&gt;&lt;p&gt;Vulnerabilities &lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;" xml:space="preserve">
+    <data name="&lt;i class=&quot;nav-icon fas fa-bug&quot;&gt;&lt;/i&gt;&lt;p&gt;Vulnerabilities &lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
+          xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-bug"&gt;&lt;/i&gt;&lt;p&gt;Vulnerabilidades &lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
   </data>
-  <data name="Vulnerability" xml:space="preserve">
+    <data name="Vulnerability" xml:space="preserve">
     <value>Vulnerabilidad</value>
   </data>
-  <data name="Active" xml:space="preserve">
+    <data name="Active" xml:space="preserve">
     <value>Activo</value>
   </data>
-  <data name="Archived" xml:space="preserve">
+    <data name="Archived" xml:space="preserve">
     <value>Archivado</value>
   </data>
-  <data name="Waiting" xml:space="preserve">
+    <data name="Waiting" xml:space="preserve">
     <value>Esperando</value>
   </data>
-  <data name="Open" xml:space="preserve">
+    <data name="Open" xml:space="preserve">
     <value>Abierto</value>
   </data>
-  <data name="Confirmed" xml:space="preserve">
+    <data name="Confirmed" xml:space="preserve">
     <value>Confirmado</value>
   </data>
-  <data name="Accepted" xml:space="preserve">
+    <data name="Accepted" xml:space="preserve">
     <value>Aceptado</value>
   </data>
-  <data name="Resolved" xml:space="preserve">
+    <data name="Resolved" xml:space="preserve">
     <value>Resuelto</value>
   </data>
-  <data name="Out Of Scope" xml:space="preserve">
+    <data name="Out Of Scope" xml:space="preserve">
     <value>Fuera de Alcance</value>
   </data>
-  <data name="Invalid" xml:space="preserve">
+    <data name="Invalid" xml:space="preserve">
     <value>Inválido</value>
   </data>
-  <data name="Email" xml:space="preserve">
+    <data name="Email" xml:space="preserve">
     <value>Correo Electrónico</value>
   </data>
-  <data name="My Notes" xml:space="preserve">
+    <data name="My Notes" xml:space="preserve">
     <value>Mis Notas</value>
   </data>
-  <data name="Create Note" xml:space="preserve">
+    <data name="Create Note" xml:space="preserve">
     <value>Crear Nota</value>
   </data>
-  <data name="Add Service" xml:space="preserve">
+    <data name="Add Service" xml:space="preserve">
     <value>Añadir Servicio</value>
   </data>
-  <data name="Note" xml:space="preserve">
+    <data name="Note" xml:space="preserve">
     <value>Nota</value>
   </data>
-  <data name="Add Service To Target" xml:space="preserve">
+    <data name="Add Service To Target" xml:space="preserve">
     <value>Añadir Servicio al Objetivo</value>
   </data>
-  <data name="Edit Service" xml:space="preserve">
+    <data name="Edit Service" xml:space="preserve">
     <value>Editar Servicio</value>
   </data>
-  <data name="Delete Service" xml:space="preserve">
+    <data name="Delete Service" xml:space="preserve">
     <value>Eliminar Servicio</value>
   </data>
 </root>

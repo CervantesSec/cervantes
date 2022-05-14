@@ -1,6 +1,6 @@
 ﻿@using System.Net
 @using Cervantes.CORE
-@model Cervantes.CORE.Target
+@model TargetCreateViewModel
 
 @{
     ViewData["Title"] = "Create Target";
@@ -10,66 +10,76 @@
 
 }
 
-    <section class="content-header">
-      <div class="container-fluid">
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-bullseye"></i> Create Target</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item" localize-content><a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspaces</a></li>
-              <li class="breadcrumb-item" localize-content><a asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Target</a></li>
-              <li class="breadcrumb-item active" localize-content>Create</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-bullseye"></i> Create Target</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspace</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>@Model.Project.Name</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Target</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Create</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
-    
-    <!-- Main content -->
-    <section class="content">
-    
-          <div class="card">
-    <div class="card-body">
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <form asp-area="Workspace" asp-controller="Target" asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label" localize-content>Name</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label" localize-content>Description</label>
-                <textarea id="description" asp-for="Description" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                                        <label class="control-label" localize-content>Target Type</label>
-                                        @Html.DropDownListFor(model => model.Type, Html.GetEnumSelectList<TargetType>(),new { @class = "form-control" })
-                                    </div> 
+<!-- Main content -->
+<section class="content">
 
-            <div class="form-group">
-                <a class="btn btn-default" asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Back</a>
-                <button type="submit" class="btn btn-dark" localize-content>Create</button>
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <form asp-area="Workspace" asp-controller="Target" asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label" localize-content>Name</label>
+                            <input asp-for="Name" class="form-control"/>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label" localize-content>Description</label>
+                            <textarea id="description" asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" localize-content>Target Type</label>
+                            @Html.DropDownListFor(model => model.Type, Html.GetEnumSelectList<TargetType>(), new {@class = "form-control"})
+                        </div>
+                        <span asp-validation-for="Type" class="text-danger"></span>
+
+                        <div class="form-group">
+                            <a class="btn btn-default" asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Back</a>
+                            <button type="submit" class="btn btn-dark" localize-content>Create</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-    </div>
-</div>
 
 
 </section>
 
-           
+
 @section Scripts{
-<script>
+    <script>
 
   $(document).ready(function() {
       $('#description').summernote({
@@ -86,7 +96,7 @@
         var data = new FormData();
         data.append("image", image);
         $.ajax({
-            url: '@Url.Action("UploadTarget","Image",new { Area = "" })',
+            url: '@Url.Action("UploadTarget", "Image", new {Area = ""})',
             cache: false,
             contentType: false,
             processData: false,
@@ -108,4 +118,4 @@
 });
 
 </script>
-}                       
+}

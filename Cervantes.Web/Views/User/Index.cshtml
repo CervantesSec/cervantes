@@ -6,19 +6,19 @@
 @{
     if (TempData["deleted"] != null)
     {
-       <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <strong localize-content>User deleted successfully!</strong>
-            
+
         </div>
     }
 
     if (TempData["created"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <strong localize-content>User created successfully!</strong>
-            
+
         </div>
     }
 
@@ -29,7 +29,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-    
+
     if (TempData["avatar_deleted"] != null)
     {
         <div class="alert alert-success alert-dismissible">
@@ -37,7 +37,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-    
+
     if (TempData["error"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
@@ -48,113 +48,145 @@
 
 
 }
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-briefcase"></i> Users</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item active" localize-content>Clients</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-briefcase"></i> Users</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Clients</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="card">
-    <div class="card-body">
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
 
-         @if(Model.FirstOrDefault() != null){
-        <!--Table-->
-        <table id="clientResults" class="table table-bordered table-hover" width="100%">
-            <!--Table head-->
-            <thead class="thead-dark">
-                <tr>
-                    <th><i class="fas fa-address-book"></i> <span localize-content>Full Name</span></th>
-                    <th><i class="fas fa-user"></i> <span localize-content>User Name</span></th>
-                    <th><i class="fas fa-check-circle"></i> <span localize-content>Email Confirmed</span></th>
-                    <th><i class="fas fa-check-double"></i> <span localize-content>2FA Enabled</span></th>
-                    <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
-                    
-                </tr>
-            </thead>
-            <!--Table head-->
-            <!--Table body-->
-            <tbody>
-
-                @foreach (var user in Model)
-                {
+            @if (Model.FirstOrDefault() != null)
+            {
+                <!--Table-->
+                <table id="clientResults" class="table table-bordered table-hover" width="100%">
+                    <!--Table head-->
+                    <thead class="thead-dark">
                     <tr>
-                        <td>@user.FullName</td>
-                        <td>                  
-                            @user.UserName                      
-                        </td>
-                        
+                        <th>
+                            <i class="fas fa-address-book"></i> <span localize-content>Full Name</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-user"></i> <span localize-content>User Name</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-check-circle"></i> <span localize-content>Email Confirmed</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-check-double"></i> <span localize-content>2FA Enabled</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <!--Table head-->
+                    <!--Table body-->
+                    <tbody>
+
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.FullName</td>
+                            <td>
+                                @user.UserName
+                            </td>
+
                             @switch (@user.EmailConfirmed)
                             {
                                 case false:
-                                    
-                                    <td><span class="badge badge-danger"><i class="fas fa-times-circle"></i></span></td>
+
+                                    <td>
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-times-circle"></i>
+                                        </span>
+                                    </td>
                                     break;
                                 case true:
-                                    <td><span class="badge badge-success"><i class="fas fa-check-circle"></i></span></td>
+                                    <td>
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle"></i>
+                                        </span>
+                                    </td>
                                     break;
-                                        
                             }
-                       
-                         @switch (@user.TwoFactorEnabled)
-                                                    {
-                                                        case false:
-                                                            
-                                                            <td><span class="badge badge-danger"><i class="fas fa-times-circle"></i></span></td>
-                                                            break;
-                                                        case true:
-                                                            <td><span class="badge badge-success"><i class="fas fa-check-circle"></i></span></td>
-                                                            break;
-                                                                
-                                                    }
-                         @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+
+                            @switch (@user.TwoFactorEnabled)
+                            {
+                                case false:
+
+                                    <td>
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-times-circle"></i>
+                                        </span>
+                                    </td>
+                                    break;
+                                case true:
+                                    <td>
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle"></i>
+                                        </span>
+                                    </td>
+                                    break;
+                            }
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                             {
                                 <td>
-                                    <a class="btn btn-tool" asp-controller="User" asp-action="Details" asp-route-id="@user.Id" localize-content><i class="fas fa-eye"></i></a>
-                                    <a class="btn btn-tool" asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" localize-content><i class="fas fa-edit"></i></a>
-                                    <a class="btn btn-tool" asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" localize-content ><i class="fas fa-trash"></i></a>
+                                    <a class="btn btn-tool" asp-controller="User" asp-action="Details" asp-route-id="@user.Id" localize-content>
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-tool" asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" localize-content>
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-tool" asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" localize-content>
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
-
                             }
 
-                    </tr>
-                }
+                        </tr>
+                    }
 
-            </tbody>
-            <!--Table body-->
-        </table>
-        <!--Table-->
-        }
-        @if(Model.FirstOrDefault() == null)
-        {
-            <div class="alert alert-dismissible alert-info">
-              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-              <h4 class="alert-heading">Warning!</h4>
-              <p class="mb-0">Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, <a href="#" class="alert-link">vel scelerisque nisl consectetur et</a>.</p>
-            </div>
-        }
+                    </tbody>
+                    <!--Table body-->
+                </table>
+                <!--Table-->
+            }
+            @if (Model.FirstOrDefault() == null)
+            {
+                <div class="alert alert-dismissible alert-info">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <h4 class="alert-heading">Warning!</h4>
+                    <p class="mb-0">Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, <a href="#" class="alert-link">vel scelerisque nisl consectetur et</a>.</p>
+                </div>
+            }
         </div>
-        </div>
+    </div>
 
-    </section>
-    <!-- /.content -->
-  <!-- /.content-wrapper -->
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
 
-  @section Scripts{
-<script>
+@section Scripts{
+    <script>
 
     $(document).ready(function () {
         $('#clientResults').DataTable({
@@ -166,17 +198,3 @@
 
 </script>
 }
-
-
-
-
-
-
-
-
-    
-
-
-
-
-

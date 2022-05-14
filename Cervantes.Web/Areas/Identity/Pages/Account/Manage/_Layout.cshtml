@@ -1,7 +1,7 @@
 ﻿@{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
     {
-        Layout = (string)parentLayout;
+        Layout = (string) parentLayout;
     }
     else
     {
@@ -9,39 +9,39 @@
     }
 }
 
-  <section class="content-header">
-      <div class="container-fluid">
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-user"></i> Manage your account</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-user"></i> Manage your account</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
 
-            </ol>
-          </div>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
 <section class="content">
- <div class="card">
-     <div class="card-body">
-         <div>
-             <div class="row">
-                 <div class="col-md-3">
-                     <partial name="_ManageNav" />
-                 </div>
-                 <div class="col-md-9">
-                     @RenderBody()
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
- </section>
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <partial name="_ManageNav"/>
+                    </div>
+                    <div class="col-md-9">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
-    @RenderSection("Scripts", required: false)
+    @RenderSection("Scripts", false)
 }

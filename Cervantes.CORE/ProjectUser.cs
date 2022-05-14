@@ -6,36 +6,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.CORE
+namespace Cervantes.CORE;
+
+public class ProjectUser
 {
-    public class ProjectUser
-    {
-        /// <summary>
-        /// Id Project User
-        /// </summary>
-        [Key]
-        public int Id { get; set; }
+    /// <summary>
+    /// Id Project User
+    /// </summary>
+    [Key]
+    public int Id { get; set; }
 
-        /// <summary>
-        /// User associated
-        /// </summary>
-        public virtual ApplicationUser User { get; set; }
+    /// <summary>
+    /// User associated
+    /// </summary>
+    public virtual ApplicationUser User { get; set; }
 
-        /// <summary>
-        /// Id user
-        /// </summary>
-        [ForeignKey("User")]
-        public string UserId { get; set; }
+    /// <summary>
+    /// Id user
+    /// </summary>
+    [ForeignKey("User")]
+    public string UserId { get; set; }
 
-        /// <summary>
-        /// Project Associated
-        /// </summary>
-        public virtual Project Project { get; set; }
+    /// <summary>
+    /// Project Associated
+    /// </summary>
+    public virtual Project Project { get; set; }
 
-        /// <summary>
-        /// Id Project
-        /// </summary>
-        [ForeignKey("Project")]
-        public int ProjectId { get; set; }
-    }
+    /// <summary>
+    /// Id Project
+    /// </summary>
+    [ForeignKey("Project")]
+    public int ProjectId { get; set; }
 }

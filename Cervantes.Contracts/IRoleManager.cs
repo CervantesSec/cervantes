@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 
-namespace Cervantes.Contracts
+namespace Cervantes.Contracts;
+
+public interface IRoleManager : IGenericManager<IdentityRole>
 {
-    public interface IRoleManager: IGenericManager<IdentityRole>
-    {
-        IQueryable<IdentityRole> GetByName(string name);
-    }
+    IQueryable<IdentityRole> GetByName(string name);
 }

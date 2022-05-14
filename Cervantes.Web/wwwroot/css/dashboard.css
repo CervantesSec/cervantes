@@ -1,5 +1,4 @@
 ﻿
-
 body {
     font-size: .875rem;
 }
@@ -39,19 +38,19 @@ body {
     color: #333;
 }
 
-    .sidebar .nav-link .feather {
-        margin-right: 4px;
-        color: #999;
-    }
+.sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #999;
+}
 
-    .sidebar .nav-link.active {
-        color: #007bff;
-    }
+.sidebar .nav-link.active {
+    color: #007bff;
+}
 
-        .sidebar .nav-link:hover .feather,
-        .sidebar .nav-link.active .feather {
-            color: inherit;
-        }
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+    color: inherit;
+}
 
 .sidebar-heading {
     font-size: .75rem;
@@ -82,10 +81,10 @@ body {
     border-color: rgba(255, 255, 255, .1);
 }
 
-    .form-control-dark:focus {
-        border-color: transparent;
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
-    }
+.form-control-dark:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
 
 /*
  * Utilities

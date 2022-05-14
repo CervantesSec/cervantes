@@ -4,78 +4,82 @@
     ViewData["Title"] = "Delete Vulnerability";
 }
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-briefcase"></i> Delete Vulnerability</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-                <li class="breadcrumb-item" localize-content><a asp-controller="Vuln" asp-action="Index" localize-content>Vulnerability</a></li>
-              <li class="breadcrumb-item active" localize-content>Delete</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-briefcase"></i> Delete Vulnerability</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-controller="Vuln" asp-action="Index" localize-content>Vulnerability</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Delete</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
-    
-    <!-- Main content -->
-    <section class="content">
-         <div class="card">
-    <div class="card-body">
-<h3 localize-content>Are you sure you want to delete this?</h3>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-<div>
- 
-    <dl class="row">
-        <dt class = "col-sm-2" localize-content>
-            Name
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2" localize-content>
-                    Project
-                </dt>
-                <dd class = "col-sm-10">
-                    @Html.DisplayFor(model => model.Project.Name)
-                </dd>
-        <dt class = "col-sm-2" localize-content>
-            CVSS3 Score
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CVSS3)
-        </dd>
-           <dt class = "col-sm-2" localize-content>
-            Risk
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Risk)
-        </dd>
-           <dt class = "col-sm-2" localize-content>
-            Status
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-           <dt class = "col-sm-2" localize-content>
-            Target
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Target.Name)
-        </dd>
-    </dl>
-    
-    <form asp-controller="Vuln" asp-action="Delete" method="post" enctype="multipart/form-data">
-        <input type="hidden" asp-for="Id" />
-        <a class="btn btn-light" asp-action="Index" localize-content>Back</a>
-        <button type="submit" class="btn btn-outline-danger" localize-content>Delete</button>
-    </form>
-</div>
-</div>
-</div>
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+            <h3 localize-content>Are you sure you want to delete this?</h3>
+
+            <div>
+
+                <dl class="row">
+                    <dt class="col-sm-2" localize-content>
+                        Name
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt class="col-sm-2" localize-content>
+                        Project
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Project.Name)
+                    </dd>
+                    <dt class="col-sm-2" localize-content>
+                        CVSS3 Score
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.CVSS3)
+                    </dd>
+                    <dt class="col-sm-2" localize-content>
+                        Risk
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Risk)
+                    </dd>
+                    <dt class="col-sm-2" localize-content>
+                        Status
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Status)
+                    </dd>
+                    <dt class="col-sm-2" localize-content>
+                        Target
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Target.Name)
+                    </dd>
+                </dl>
+
+                <form asp-controller="Vuln" asp-action="Delete" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id"/>
+                    <a class="btn btn-light" asp-action="Index" localize-content>Back</a>
+                    <button type="submit" class="btn btn-outline-danger" localize-content>Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </section>

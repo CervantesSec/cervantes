@@ -6,79 +6,87 @@
     ViewData["Title"] = "Wokrspaces";
 }
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-building"></i> My Workspaces</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item active" localize-content>Workspaces</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-building"></i> My Workspaces</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Workspaces</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-    <!-- Main content -->
-    <section class="content">
-   
-            <div class="col-md-12">
-                <div class="row">
-                 @foreach (var project in Model)
-    {
-        
+<!-- Main content -->
+<section class="content">
+
+    <div class="col-md-12">
+        <div class="row">
+            @foreach (var project in Model)
+            {
                 <div class="col-md-3">
-                
-                    
-                <div class="card card-primary card-outline">
-                  <div class="card-body box-profile">
-                    <div class="text-center">
-                      <img class="img-fluid img-circle"
-                           src="@Url.Content(project.Client.ImagePath)"
-                           alt="LogoClient" style="height:200px;">
+
+
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <img class="img-fluid img-circle"
+                                     src="@Url.Content(project.Client.ImagePath)"
+                                     alt="LogoClient" style="height:200px;">
+                            </div>
+                            <h3 class="profile-username text-center">@project.Name</h3>
+                            <div class="text-center">
+                                @switch (project.Status)
+                                {
+                                    case ProjectStatus.Active:
+                                        <h4>
+                                            <span class="badge badge-success">@project.Status</span>
+                                        </h4>
+                                        break;
+                                    case ProjectStatus.Archived:
+                                        <h4>
+                                            <span class="badge badge-secondary">@project.Status</span>
+                                        </h4>
+                                        break;
+                                    case ProjectStatus.Waiting:
+                                        <h4>
+                                            <span class="badge badge-info">@project.Status</span>
+                                        </h4>
+                                        break;
+                                    default:
+                                        <h4>
+                                            <span class="badge badge-light">@project.Status</span>
+                                        </h4>
+                                        break;
+                                }
+
+                                <a class="btn btn-outline-dark" asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@project.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name" localize-content><i class="fas fa-building"></i> View</a>
+
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <h3 class="profile-username text-center">@project.Name</h3>
-                    <div class="text-center">
-                    @switch(project.Status)
-                    {
-                        case ProjectStatus.Active:
-                            <h4><span class="badge badge-success">@project.Status</span></h4>
-                            break;
-                        case ProjectStatus.Archived:
-                             <h4><span class="badge badge-secondary">@project.Status</span></h4>
-                            break;
-                        case ProjectStatus.Waiting:
-                            <h4><span class="badge badge-info">@project.Status</span></h4>
-                            break;
-                        default:
-                            <h4><span class="badge badge-light">@project.Status</span></h4>
-                            break;
-                    } 
-
-                    <a class="btn btn-outline-dark" asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@project.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name" localize-content><i class="fas fa-building"></i> View</a>
-
-                    </div>
-                  </div>
-                  <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
-                </div>
-            
-              }
-              </div>
-              </div>
-    
-    </section>
-    <!-- /.content -->
-  <!-- /.content-wrapper -->
+            }
+        </div>
+    </div>
 
-  @section Scripts{
-<script>
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+
+@section Scripts{
+    <script>
 
 
 

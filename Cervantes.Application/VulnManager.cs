@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class VulnManager : GenericManager<Vuln>, IVulnManager
 {
-    public class VulnManager: GenericManager<Vuln>, IVulnManager
+    /// <summary>
+    /// Vuln Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public VulnManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// Vuln Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public VulnManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

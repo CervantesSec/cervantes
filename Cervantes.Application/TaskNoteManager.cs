@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class TaskNoteManager : GenericManager<TaskNote>, ITaskNoteManager
 {
-    public class TaskNoteManager: GenericManager<TaskNote>, ITaskNoteManager
+    /// <summary>
+    /// TaskNote Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public TaskNoteManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// TaskNote Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public TaskNoteManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

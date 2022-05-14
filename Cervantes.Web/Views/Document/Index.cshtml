@@ -7,19 +7,19 @@
 @{
     if (TempData["deleted"] != null)
     {
-<div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <strong localize-content>Document deleted successfully!</strong>
-            
+
         </div>
     }
 
     if (TempData["created"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <strong localize-content>Document created successfully!</strong>
-            
+
         </div>
     }
 
@@ -30,7 +30,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-    
+
     if (TempData["error"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
@@ -41,53 +41,63 @@
 
 }
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fa fa-file"></i> Documents</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item active" localize-content>Documents</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fa fa-file"></i> Documents</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Documents</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-    <!-- Main content -->
-    <section class="content">
-        
-<div class="card">
-    <div class="card-body">
+<!-- Main content -->
+<section class="content">
 
-   
-        <!--Table-->
-        <table id="clientResults" class="table table-bordered table-hover" width="100%">
-            <!--Table head-->
-            <thead class="thead-dark">
+    <div class="card">
+        <div class="card-body">
+
+
+            <!--Table-->
+            <table id="clientResults" class="table table-bordered table-hover" width="100%">
+                <!--Table head-->
+                <thead class="thead-dark">
                 <tr>
-                    <th><i class="fas fa-file"></i> <span localize-content>Name</span></th>
-                    <th><i class="fas fa-align-left"></i> <span localize-content>Description</span></th>
-                    <th><i class="fas fa-user"></i> <span localize-content>Uploaded by</span></th>
-                    <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
+                    <th>
+                        <i class="fas fa-file"></i> <span localize-content>Name</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-align-left"></i> <span localize-content>Description</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-user"></i> <span localize-content>Uploaded by</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                    </th>
 
-                    </tr>
-            </thead>
-            <!--Table head-->
-            <!--Table body-->
-            <tbody>
+                </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
                 @if (Model != null)
                 {
                     @foreach (var doc in Model)
                     {
                         <tr>
-                            <td>                  
-                                @doc.Name                    
+                            <td>
+                                @doc.Name
                             </td>
                             <td>@Html.Raw(@WebUtility.HtmlDecode(doc.Description))</td>
                             <td>@doc.User.FullName</td>
@@ -103,38 +113,37 @@
                                     <a asp-area="" asp-controller="Document" asp-action="Delete" asp-route-id="@doc.Id" class="btn btn-tool">
                                         <i class="fas fa-trash"></i>
                                     </a>
-                                    
-                                </td>
 
+                                </td>
                             }
                             else
                             {
                                 <td>
-                            <a asp-area="" asp-controller="Document" asp-action="Details" asp-route-id="@doc.Id" class="btn btn-tool">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            </td>
+                                    <a asp-area="" asp-controller="Document" asp-action="Details" asp-route-id="@doc.Id" class="btn btn-tool">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
                             }
 
                         </tr>
                     }
                 }
-                
 
-            </tbody>
-            <!--Table body-->
-        </table>
-        <!--Table-->
+
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
 
 
         </div>
-        </div>
-    </section>
-    <!-- /.content -->
-  <!-- /.content-wrapper -->
+    </div>
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
 
-  @section Scripts{
-<script>
+@section Scripts{
+    <script>
 
     $(document).ready(function () {
         $('#clientResults').DataTable({
@@ -146,17 +155,3 @@
 
 </script>
 }
-
-
-
-
-
-
-
-
-    
-
-
-
-
-

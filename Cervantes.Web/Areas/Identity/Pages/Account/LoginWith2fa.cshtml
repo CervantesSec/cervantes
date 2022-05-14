@@ -5,22 +5,22 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<hr />
+<hr/>
 <p>Your login is protected with an authenticator app. Enter your authenticator code below.</p>
 <div class="row">
     <div class="col-md-4">
         <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
-            <input asp-for="RememberMe" type="hidden" />
+            <input asp-for="RememberMe" type="hidden"/>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Input.TwoFactorCode"></label>
-                <input asp-for="Input.TwoFactorCode" class="form-control" autocomplete="off" />
+                <input asp-for="Input.TwoFactorCode" class="form-control" autocomplete="off"/>
                 <span asp-validation-for="Input.TwoFactorCode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <div class="checkbox">
                     <label asp-for="Input.RememberMachine">
-                        <input asp-for="Input.RememberMachine" />
+                        <input asp-for="Input.RememberMachine"/>
                         @Html.DisplayNameFor(m => m.Input.RememberMachine)
                     </label>
                 </div>
@@ -37,5 +37,5 @@
 </p>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }

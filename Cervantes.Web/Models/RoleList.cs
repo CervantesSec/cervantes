@@ -1,14 +1,14 @@
-﻿namespace Cervantes.Web.Models
+﻿namespace Cervantes.Web.Models;
+
+public class RoleList
 {
-    public class RoleList
-    {
-        /// <summary>
-        /// Role Name
-        /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// Role Id
-        /// </summary>
-        public string Id { get; set; }
-    }
+    /// <summary>
+    /// Role Name
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// Role Id
+    /// </summary>
+    public string Id { get; set; }
 }

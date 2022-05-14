@@ -13,8 +13,7 @@
             define(['jquery', 'datatables.net-zf', 'datatables.net-fixedcolumns'], function ($) {
                 return factory($);
             });
-        }
-        else if (typeof exports === 'object') {
+        } else if (typeof exports === 'object') {
             // CommonJS
             module.exports = function (root, $) {
                 if (!root) {
@@ -30,8 +29,7 @@
                 }
                 return factory($);
             };
-        }
-        else {
+        } else {
             // Browser
             factory(jQuery);
         }

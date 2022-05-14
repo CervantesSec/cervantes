@@ -7,7 +7,7 @@
 
 @{
     ViewData["Title"] = @Localizer["Login"];
-        var culture = CultureInfo.CurrentCulture.Name;
+    var culture = CultureInfo.CurrentCulture.Name;
     Layout = null;
 }
 
@@ -28,56 +28,64 @@
 
 <body class="hold-transition login-page">
 <div class="login-box">
-  <!-- /.login-logo -->
-  <div class="card">
-      <div class="card-header text-center bg-dark">
-          <a class="h1">
-              <img src="/img/logo.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8;height: 50px">
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-header text-center bg-dark">
+            <a class="h1">
+                <img src="/img/logo.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8;height: 50px">
                 Cervantes
-          </a>
-      </div>
-    <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+            </a>
+        </div>
+        <div class="card-body">
+            <p class="login-box-msg">Sign in to start your session</p>
 
-        <form id="account" method="post" asp-route-culture="@culture">
-        <div class="input-group mb-3">
-          <input type="email" asp-for="Input.Email" class="form-control" placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" asp-for="Input.Password" class="form-control" placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" asp-for="Input.RememberMe" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-dark btn-block">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-        
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible">
+                    <strong localize-content>Login Failed. Incorrect username or password</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                </div>
+            }
 
+            <form id="account" method="post" asp-route-culture="@culture">
+                <div class="input-group mb-3">
+                    <input type="email" asp-for="Input.Email" class="form-control" placeholder="Email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" asp-for="Input.Password" class="form-control" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" asp-for="Input.RememberMe" id="remember">
+                            <label for="remember">
+                                Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-dark btn-block">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+
+        </div>
+        <!-- /.card-body -->
     </div>
-    <!-- /.card-body -->
-  </div>
-  <!-- /.card -->
+    <!-- /.card -->
 </div>
 <!-- /.login-box -->
 
@@ -85,8 +93,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/theme/js/adminlte.min.js"></script>
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }
+
 </body>
 </html>
 
@@ -138,5 +147,3 @@
    
 </div>
 *@
-
-

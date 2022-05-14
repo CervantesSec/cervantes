@@ -8,18 +8,18 @@
     if (TempData["deleted"] != null)
     {
         <div class="alert alert-dismissible alert-success fade show" role="alert">
-    <strong localize-content>Project deleted successfully!</strong>
-    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
-      </button>
-</div>
+            <strong localize-content>Project deleted successfully!</strong>
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
     }
 
     if (TempData["created"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <strong localize-content>Project created successfully!</strong>
-            
+
         </div>
     }
 
@@ -30,7 +30,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-    
+
     if (TempData["error"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
@@ -38,123 +38,165 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-    
+
 
 
 }
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-folder"></i> Projects</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item active" localize-content>Projects</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-folder"></i> Projects</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Projects</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="card">
-    <div class="card-body">
-        <!--Table-->
-        <table id="projectResults" class="table table-bordered table-hover" width="100%">
-            <!--Table head-->
-            <thead class="thead-dark">
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+            <!--Table-->
+            <table id="projectResults" class="table table-bordered table-hover" width="100%">
+                <!--Table head-->
+                <thead class="thead-dark">
                 <tr>
-                    <th><i class="fas fa-folder"></i> <span localize-content>Name</span></th>
-                    <th><i class="fas fa-briefcase"></i> <span localize-content>Client</span></th>
-                    <th><i class="fas fa-project-diagram"></i> <span localize-content>Type</span></th>
-                    <th><i class="fas fa-tasks"></i> <span localize-content>Status</span></th>
-                    <th><i class="fas fa-calendar"></i> <span localize-content>Start Date</span></th>
-                    <th><i class="fas fa-calendar-check"></i> <span localize-content>End Date</span></th>
-                    <th><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
-                                                  
+                    <th>
+                        <i class="fas fa-folder"></i> <span localize-content>Name</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-briefcase"></i> <span localize-content>Client</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-project-diagram"></i> <span localize-content>Type</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-tasks"></i> <span localize-content>Status</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-calendar"></i> <span localize-content>Start Date</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-calendar-check"></i> <span localize-content>End Date</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                    </th>
+
                 </tr>
-            </thead>
-            <!--Table head-->
-            <!--Table body-->
-            <tbody>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
 
                 @foreach (var project in Model)
                 {
                     <tr>
-                        <td>                  
-                             @project.Name                      
+                        <td>
+                            @project.Name
                         </td>
-                        <td><a asp-controller="Client" asp-action="Details" asp-route-id="@project.ClientId" localize-content><span class="btn btn-outline-dark btn-sm"><i class="fas fa-briefcase"></i> @project.Client.Name</span></a></td>
-                         @switch(@project.ProjectType)
-                                                          {
-                                                              case ProjectType.BlackBox:
-                                                                  <td><span class="badge badge-dark">@project.ProjectType</span></td>
-                                                                  break;
-                                                              case ProjectType.GrayBox:
-                                                                  <td><span class="badge badge-secondary">@project.ProjectType</span></td>
-                                                                  break;
-                                                              case ProjectType.WhiteBox:
-                                                                  <td><span class="badge badge-light">@project.ProjectType</span></td>
-                                                                  break;
-                                                              default:
-                                                                  <td><span class="badge badge-light">@project.ProjectType</span></td>
-                                                                  break;
-                                                          
-                                                          }
-                        
-                            @switch (@project.Status)
-                            {
-                                case ProjectStatus.Active:
-                                    <td><span class="badge badge-success">@project.Status</span></td>
-                                    break;
-                                case ProjectStatus.Archived:
-                                    <td><span class="badge badge-info">@project.Status</span></td>
-                                    break;
-                                case ProjectStatus.Waiting:
-                                    <td><span class="badge badge-warning">@project.Status</span></td>
-                                    break;
-                                    
-                            }
-                        
+                        <td>
+                            <a asp-controller="Client" asp-action="Details" asp-route-id="@project.ClientId" localize-content>
+                                <span class="btn btn-outline-dark btn-sm">
+                                    <i class="fas fa-briefcase"></i> @project.Client.Name
+                                </span>
+                            </a>
+                        </td>
+                        @switch (@project.ProjectType)
+                        {
+                            case ProjectType.BlackBox:
+                                <td>
+                                    <span class="badge badge-dark">@project.ProjectType</span>
+                                </td>
+                                break;
+                            case ProjectType.GrayBox:
+                                <td>
+                                    <span class="badge badge-secondary">@project.ProjectType</span>
+                                </td>
+                                break;
+                            case ProjectType.WhiteBox:
+                                <td>
+                                    <span class="badge badge-light">@project.ProjectType</span>
+                                </td>
+                                break;
+                            default:
+                                <td>
+                                    <span class="badge badge-light">@project.ProjectType</span>
+                                </td>
+                                break;
+                        }
+
+                        @switch (@project.Status)
+                        {
+                            case ProjectStatus.Active:
+                                <td>
+                                    <span class="badge badge-success">@project.Status</span>
+                                </td>
+                                break;
+                            case ProjectStatus.Archived:
+                                <td>
+                                    <span class="badge badge-info">@project.Status</span>
+                                </td>
+                                break;
+                            case ProjectStatus.Waiting:
+                                <td>
+                                    <span class="badge badge-warning">@project.Status</span>
+                                </td>
+                                break;
+                        }
+
                         <td>@project.StartDate</td>
                         <td>@project.EndDate</td>
-                         @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                            {
-                                <td>
-                                    <a class="btn btn-tool" asp-controller="Project" asp-action="Details" asp-route-id="@project.Id" localize-content><i class="fas fa-eye"></i></a>
-                                    <a class="btn btn-tool" asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id" localize-content><i class="fas fa-edit"></i></a>
-                                    <a class="btn btn-tool" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id" localize-content ><i class="fas fa-trash"></i></a>
-                                </td>
-
-                            }
-                         else
-                         {
-                             <td><a class="btn btn-tool" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id" localize-content ><i class="fas fa-trash"></i></a></td>
-                             
-                         }
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                        {
+                            <td>
+                                <a class="btn btn-tool" asp-controller="Project" asp-action="Details" asp-route-id="@project.Id" localize-content>
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a class="btn btn-tool" asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id" localize-content>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-tool" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id" localize-content>
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a class="btn btn-tool" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id" localize-content>
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        }
 
                     </tr>
                 }
 
-            </tbody>
-            <!--Table body-->
-        </table>
-        <!--Table-->
- 
-        </div>
-        </div>
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
 
-    </section>
-    <!-- /.content -->
-  <!-- /.content-wrapper -->
+        </div>
+    </div>
 
-  @section Scripts{
-<script>
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+
+@section Scripts{
+    <script>
 
     $(document).ready(function () {
         $('#projectResults').DataTable({

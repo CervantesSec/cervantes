@@ -5,7 +5,7 @@ using Cervantes.CORE;
 
 namespace Cervantes.Application;
 
-public class NotificationsManager: GenericManager<Notifications>, INotificationsManager
+public class NotificationsManager : GenericManager<Notifications>, INotificationsManager
 {
     /// <summary>
     /// Note Manager Constructor
@@ -14,7 +14,7 @@ public class NotificationsManager: GenericManager<Notifications>, INotifications
     public NotificationsManager(IApplicationDbContext context) : base(context)
     {
     }
-    
+
     /// <summary>
     /// Get entity by id key
     /// </summary>

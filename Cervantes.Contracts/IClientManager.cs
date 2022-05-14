@@ -1,8 +1,7 @@
 ﻿using Cervantes.CORE;
 
-namespace Cervantes.Contracts
+namespace Cervantes.Contracts;
+
+public interface IClientManager : IGenericManager<Client>
 {
-    public interface IClientManager : IGenericManager<Client>
-    {
-    }
 }

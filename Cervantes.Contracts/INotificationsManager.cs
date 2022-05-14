@@ -3,7 +3,7 @@ using Cervantes.CORE;
 
 namespace Cervantes.Contracts;
 
-public interface INotificationsManager: IGenericManager<Notifications>
+public interface INotificationsManager : IGenericManager<Notifications>
 {
-     IEnumerable<Notifications> GetById(string id);
+    IEnumerable<Notifications> GetById(string id);
 }

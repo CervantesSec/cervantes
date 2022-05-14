@@ -6,108 +6,128 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-file"></i> @Model.Name</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-              <li class="breadcrumb-item"><a asp-controller="Client" asp-action="Index" localize-content>Document</a></li>
-              <li class="breadcrumb-item active" localize-content>Details</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content>
+                    <i class="fas fa-file"></i> @Model.Name
+                </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Client" asp-action="Index" localize-content>Document</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Details</li>
+                </ol>
+            </div>
 
 
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
-    
-    <!-- Main content -->
-    <section class="content">
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-        
-        <div class="container-fluid">
-            <div class="row">
-              <div class="col-md-2">
-    
-                <!-- Profile Image -->
-                <div class="card card-primary card-outline">
-                  <div class="card-body box-profile">
-                    <div class="text-center">
-                      <span class="img-fluid img-circle"><i class="fas fa-file fa-3x"></i></span>
-                    </div>
-    
-                    <h3 class="profile-username text-center">@Model.Name</h3>
-                    <div class="info-box mb-3">
-                      <span class="info-box-icon bg-info"><i class="fas fa-user"></i></span>
-                      <div class="info-box-content">
+<!-- Main content -->
+<section class="content">
+
+
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-md-2">
+
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <span class="img-fluid img-circle">
+                        <i class="fas fa-file fa-3x"></i>
+                    </span>
+                </div>
+
+                <h3 class="profile-username text-center">@Model.Name</h3>
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-info">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <div class="info-box-content">
                         <span class="info-box-text" localize-content>Created by</span>
                         <span class="info-box-number">@Model.User.FullName</span>
-                      </div>
-                      <!-- /.info-box-content -->
                     </div>
-                    <div class="info-box mb-3">
-                      <span class="info-box-icon bg-teal"><i class="fas fa-calendar"></i></span>
-                      <div class="info-box-content">
+                    <!-- /.info-box-content -->
+                </div>
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-teal">
+                        <i class="fas fa-calendar"></i>
+                    </span>
+                    <div class="info-box-content">
                         <span class="info-box-text" localize-content>Created on</span>
                         <span class="info-box-number">@Model.CreatedDate</span>
-                      </div>
-                      <!-- /.info-box-content -->
                     </div>
-                    <div class="info-box mb-3">
-                      <span class="info-box-icon bg-gray"><i class="far fa-align-left"></i></span>
-                      <div class="info-box-content">
+                    <!-- /.info-box-content -->
+                </div>
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-gray">
+                        <i class="far fa-align-left"></i>
+                    </span>
+                    <div class="info-box-content">
                         <span class="info-box-text" localize-content>Description</span>
                         <span class="info-box-number">@Html.Raw(@WebUtility.HtmlDecode(@Model.Description))</span>
-                      </div>
-                      <!-- /.info-box-content -->
                     </div>
-                    <div class="info-box mb-3">
-                      <span class="info-box-icon bg-warning"><i class="far fa-eye"></i></span>
-                      <div class="info-box-content">
+                    <!-- /.info-box-content -->
+                </div>
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-warning">
+                        <i class="far fa-eye"></i>
+                    </span>
+                    <div class="info-box-content">
                         <span class="info-box-text" localize-content>Visibility</span>
                         <span class="info-box-number">@Model.Visibility</span>
-                      </div>
-                      <!-- /.info-box-content -->
                     </div>
-                    
-
-                  </div>
-                  <!-- /.card-body -->
+                    <!-- /.info-box-content -->
                 </div>
-                <!-- /.card -->
-                <a class="btn btn-default" asp-controller="Document" asp-action="Index" localize-content>Back</a>
-           @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <a class="btn btn-default" asp-controller="Document" asp-action="Index" localize-content>Back</a>
+        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
         {
             <a class="btn btn-outline-warning" asp-area="" asp-controller="Document" asp-action="Edit" asp-route-id="@Model.Id" localize-content><i class="fas fa-edit"></i> Edit</a>
-
         }
-              </div>
-              <!-- /.col -->
-              <div class="col-md-10">
-                <div class="card">
-                  <div class="card-header p-2">
-                    <ul class="nav nav-pills">
-                      <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab"><span localize-content>Details</span></a></li>                    </ul>
-                  </div><!-- /.card-header -->
-                  <div class="card-body">
-                    <div class="tab-content">
-                      <div class="active tab-pane" id="details">
-                        <object class="col-md-12" data="@Model.FilePath" height="1000">
-                            <div>No online PDF viewer installed</div>
-                        </object>
-                      </div>
-                      <!-- /.tab-pane -->
-    
-                    </div>
+    </div>
+    <!-- /.col -->
+    <div class="col-md-10">
+    <div class="card">
+        <div class="card-header p-2">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#details" data-toggle="tab">
+                        <span localize-content>Details</span>
+                    </a>
+                </li>
+            </ul>
+        </div><!-- /.card-header -->
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="active tab-pane" id="details">
+                    <object class="col-md-12" data="@Model.FilePath" height="1000">
+                        <div>No online PDF viewer installed</div>
+                    </object>
+                </div>
+                <!-- /.tab-pane -->
 
-</div>
-</div>
+            </div>
+
+        </div>
+    </div>
 
 
 </section>

@@ -1,6 +1,5 @@
-﻿namespace Cervantes.Application
+﻿namespace Cervantes.Application;
+
+public class ReportViewModel
 {
-    public class ReportViewModel
-    {
-    }
 }

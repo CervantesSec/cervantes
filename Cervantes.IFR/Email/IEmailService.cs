@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cervantes.IFR.Email
+namespace Cervantes.IFR.Email;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        void Send(EmailMessage emailMessage);
-        
-    }
+    void Send(EmailMessage emailMessage);
 }

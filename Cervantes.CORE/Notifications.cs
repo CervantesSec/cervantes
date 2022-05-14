@@ -6,17 +6,15 @@ namespace Cervantes.CORE;
 
 public class Notifications
 {
-    [Key]
-    public int Id { get; set; }
-    
+    [Key] public int Id { get; set; }
+
     public virtual ApplicationUser User { get; set; }
-    
-    [ForeignKey("User")]
-    public string UserId { get; set; }
-    
+
+    [ForeignKey("User")] public string UserId { get; set; }
+
     public DateTime Date { get; set; }
-    
+
     public string Message { get; set; }
-    
+
     public bool Read { get; set; }
 }

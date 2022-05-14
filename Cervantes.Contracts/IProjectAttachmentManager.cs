@@ -5,9 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Contracts
+namespace Cervantes.Contracts;
+
+public interface IProjectAttachmentManager : IGenericManager<ProjectAttachment>
 {
-    public interface IProjectAttachmentManager: IGenericManager<ProjectAttachment>
-    {
-    }
 }

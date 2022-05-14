@@ -1,9 +1,8 @@
 ﻿using Cervantes.CORE;
 
-namespace Cervantes.Contracts
+namespace Cervantes.Contracts;
+
+public interface IUserManager : IGenericManager<ApplicationUser>
 {
-    public interface IUserManager : IGenericManager<ApplicationUser>
-    {
-        ApplicationUser GetByUserId(string id);
-    }
+    ApplicationUser GetByUserId(string id);
 }

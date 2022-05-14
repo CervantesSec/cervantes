@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class TargetManager : GenericManager<Target>, ITargetManager
 {
-    public class TargetManager: GenericManager<Target>, ITargetManager
+    /// <summary>
+    /// Target Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public TargetManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// Target Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public TargetManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

@@ -6,10 +6,12 @@
 
     var $;
     var dataTable;
+
     function setJQuery(jq) {
         $ = jq;
         dataTable = $.fn.dataTable;
     }
+
     var FixedColumns = /** @class */ (function () {
         function FixedColumns(settings, opts) {
             var _this = this;
@@ -54,9 +56,9 @@
                 leftTopBlocker: $('<div>')
                     .css(blockerCSS)
                     .css({
-                    left: 0,
-                    top: 0
-                })
+                        left: 0,
+                        top: 0
+                    })
                     .addClass(this.classes.leftTopBlocker),
                 rightBottomBlocker: $('<div>')
                     .css(blockerCSS)
@@ -65,17 +67,16 @@
                 rightTopBlocker: $('<div>')
                     .css(blockerCSS)
                     .css({
-                    right: 0,
-                    top: 0
-                })
+                        right: 0,
+                        top: 0
+                    })
                     .addClass(this.classes.rightTopBlocker)
             };
             if (this.s.dt.settings()[0]._bInitComplete) {
                 // Fixed Columns Initialisation
                 this._addStyles();
                 this._setKeyTableListener();
-            }
-            else {
+            } else {
                 table.one('preInit.dt', function () {
                     // Fixed Columns Initialisation
                     _this._addStyles();
@@ -86,6 +87,7 @@
             table.settings()[0]._fixedColumns = this;
             return this;
         }
+
         /**
          * Getter/Setter for the fixedColumns.left property
          *
@@ -182,8 +184,7 @@
                     colFooter
                         .css(this._getCellCSS(true, distLeft, 'left'))
                         .addClass(this.classes.fixedLeft);
-                }
-                else {
+                } else {
                     // Iteriate through all of the rows, making sure they aren't currently trying to fix left
                     for (var _a = 0, rows_2 = rows; _a < rows_2.length; _a++) {
                         var row = rows_2[_a];
@@ -214,8 +215,7 @@
                 if (this.s.rtl) {
                     this.dom.leftTopBlocker.outerHeight(headerHeight);
                     parentDiv.append(this.dom.leftTopBlocker);
-                }
-                else {
+                } else {
                     this.dom.rightTopBlocker.outerHeight(headerHeight);
                     parentDiv.append(this.dom.rightTopBlocker);
                 }
@@ -225,8 +225,7 @@
                 if (this.s.rtl) {
                     this.dom.leftBottomBlocker.outerHeight(footerHeight);
                     parentDiv.append(this.dom.leftBottomBlocker);
-                }
-                else {
+                } else {
                     this.dom.rightBottomBlocker.outerHeight(footerHeight);
                     parentDiv.append(this.dom.rightBottomBlocker);
                 }
@@ -266,8 +265,7 @@
                     colFooter
                         .css(this._getCellCSS(true, distRight, 'right'))
                         .addClass(this.classes.fixedRight);
-                }
-                else {
+                } else {
                     // Iteriate through all of the rows, making sure they aren't currently trying to fix right
                     for (var _c = 0, rows_4 = rows; _c < rows_4.length; _c++) {
                         var row = rows_4[_c];
@@ -298,8 +296,7 @@
                 if (!this.s.rtl) {
                     this.dom.rightTopBlocker.outerHeight(headerHeight);
                     parentDiv.append(this.dom.rightTopBlocker);
-                }
-                else {
+                } else {
                     this.dom.leftTopBlocker.outerHeight(headerHeight);
                     parentDiv.append(this.dom.leftTopBlocker);
                 }
@@ -309,8 +306,7 @@
                 if (!this.s.rtl) {
                     this.dom.rightBottomBlocker.outerHeight(footerHeight);
                     parentDiv.append(this.dom.rightBottomBlocker);
-                }
-                else {
+                } else {
                     this.dom.leftBottomBlocker.outerHeight(footerHeight);
                     parentDiv.append(this.dom.leftBottomBlocker);
                 }
@@ -335,8 +331,7 @@
                         position: 'sticky',
                         right: dist + (header ? this.s.barWidth : 0) + 'px'
                     };
-            }
-            else {
+            } else {
                 return !this.s.rtl ?
                     {
                         position: 'sticky',
@@ -365,8 +360,7 @@
                         position: '',
                         right: ''
                     };
-            }
-            else {
+            } else {
                 return !this.s.rtl ?
                     {
                         position: '',
@@ -457,8 +451,7 @@
             define(['jquery', 'datatables.net'], function ($) {
                 return factory($, window, document);
             });
-        }
-        else if (typeof exports === 'object') {
+        } else if (typeof exports === 'object') {
             // CommonJS
             module.exports = function (root, $) {
                 if (!root) {
@@ -470,8 +463,7 @@
                 }
                 return factory($, root, root.document);
             };
-        }
-        else {
+        } else {
             // Browser - assume jQuery has already been loaded
             factory(window.jQuery, window, document);
         }
@@ -489,8 +481,7 @@
             if (newVal !== undefined) {
                 ctx._fixedColumns.left(newVal);
                 return this;
-            }
-            else {
+            } else {
                 return ctx._fixedColumns.left();
             }
         });
@@ -499,8 +490,7 @@
             if (newVal !== undefined) {
                 ctx._fixedColumns.right(newVal);
                 return this;
-            }
-            else {
+            } else {
                 return ctx._fixedColumns.right();
             }
         });
@@ -510,8 +500,7 @@
                     $(node).removeAttr('active').removeClass('active');
                     dt.fixedColumns().left(0);
                     dt.fixedColumns().right(0);
-                }
-                else {
+                } else {
                     $(node).attr('active', true).addClass('active');
                     dt.fixedColumns().left(config.config.left);
                     dt.fixedColumns().right(config.config.right);
@@ -530,8 +519,11 @@
             },
             text: null
         };
+
         function _init(settings, options) {
-            if (options === void 0) { options = null; }
+            if (options === void 0) {
+                options = null;
+            }
             var api = new dataTable.Api(settings);
             var opts = options
                 ? options
@@ -539,6 +531,7 @@
             var fixedColumns = new FixedColumns(api, opts);
             return fixedColumns;
         }
+
         // Attach a listener to the document which listens for DataTables initialisation
         // events so we can automatically initialise
         $(document).on('init.dt.dtfc', function (e, settings) {

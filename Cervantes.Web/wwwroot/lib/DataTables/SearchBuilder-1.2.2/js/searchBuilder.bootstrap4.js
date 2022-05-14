@@ -10,8 +10,7 @@
             define(['jquery', 'datatables.net-bs4', 'datatables.net-searchbuilder'], function ($) {
                 return factory($);
             });
-        }
-        else if (typeof exports === 'object') {
+        } else if (typeof exports === 'object') {
             // CommonJS
             module.exports = function (root, $) {
                 if (!root) {
@@ -27,8 +26,7 @@
                 }
                 return factory($);
             };
-        }
-        else {
+        } else {
             // Browser
             factory(jQuery);
         }

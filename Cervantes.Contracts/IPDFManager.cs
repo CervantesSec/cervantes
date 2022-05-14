@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Cervantes.Contracts
+namespace Cervantes.Contracts;
+
+public interface IPDFManager
 {
-    public interface IPDFManager
-    {
-        Task<byte[]> Create();
-    }
+    Task<byte[]> Create();
 }

@@ -11,74 +11,70 @@ using NLog.Web;
 using System;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cervantes.Web
+namespace Cervantes.Web;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+        logger.Debug("init main");
+        //CreateHostBuilder(args).Build().Run();
+        try
         {
-            var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-            logger.Debug("init main");
             //CreateHostBuilder(args).Build().Run();
-            try
+            var host = CreateHostBuilder(args).Build();
+
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
+
+            // NLog: Setup NLog for Dependency injection
+            builder.Logging.ClearProviders();
+            builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+            builder.Host.UseNLog();
+
+
+            using (var scope = host.Services.CreateScope())
             {
+                var serviceProvider = scope.ServiceProvider;
 
-                //CreateHostBuilder(args).Build().Run();
-                var host = CreateHostBuilder(args).Build();
-
-                var builder = WebApplication.CreateBuilder(args);
-
-                // Add services to the container.
-                builder.Services.AddControllersWithViews();
-
-                // NLog: Setup NLog for Dependency injection
-                builder.Logging.ClearProviders();
-                builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                builder.Host.UseNLog();
-
-
-                using (var scope = host.Services.CreateScope())
+                try
                 {
-                    var serviceProvider = scope.ServiceProvider;
+                    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    db.Database.Migrate();
 
-                    try
-                    {
-                        
-                        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                        db.Database.Migrate();
-                        
-                        var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                        var vulnCategoryManager = serviceProvider.GetRequiredService<Contracts.IVulnCategoryManager>();
-                        var organizationManager = serviceProvider.GetRequiredService<Contracts.IOrganizationManager>();
-                        
-                        DataInitializer.SeedData(userManager, roleManager, vulnCategoryManager, organizationManager);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw;
-                    }
+                    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                    var vulnCategoryManager = serviceProvider.GetRequiredService<Contracts.IVulnCategoryManager>();
+                    var organizationManager = serviceProvider.GetRequiredService<Contracts.IOrganizationManager>();
+
+                    DataInitializer.SeedData(userManager, roleManager, vulnCategoryManager, organizationManager);
                 }
-
-                host.Run();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Stopped program because of exception");
-                throw;
-            }
-            finally
-            {
-                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
-                NLog.LogManager.Shutdown();
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+                catch (Exception ex)
                 {
-                    webBuilder.UseStartup<Startup>();
-                }).UseNLog();
+                    throw;
+                }
+            }
+
+            host.Run();
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Stopped program because of exception");
+            throw;
+        }
+        finally
+        {
+            // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+            LogManager.Shutdown();
+        }
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); }).UseNLog();
     }
 }

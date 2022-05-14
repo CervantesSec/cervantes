@@ -6,44 +6,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.CORE
+namespace Cervantes.CORE;
+
+public class TaskAttachment
 {
-    public class TaskAttachment
-    {
-        /// <summary>
-        /// Task Attachment Id
-        /// </summary>
-        [Key]
-        public int Id { get; set; }
-        /// <summary>
-        /// TaskAttachment Name
-        /// </summary>
-        public string Name { get; set; }
+    /// <summary>
+    /// Task Attachment Id
+    /// </summary>
+    [Key]
+    public int Id { get; set; }
 
-        /// <summary>
-        /// TaskAttachment Path
-        /// </summary>
-        public string FilePath { get; set; }
-        /// <summary>
-        /// User who created the attachment
-        /// </summary>
-        public virtual ApplicationUser User { get; set; }
+    /// <summary>
+    /// TaskAttachment Name
+    /// </summary>
+    public string Name { get; set; }
 
-        /// <summary>
-        /// Id user
-        /// </summary>
-        [ForeignKey("User")]
-        public string UserId { get; set; }
+    /// <summary>
+    /// TaskAttachment Path
+    /// </summary>
+    public string FilePath { get; set; }
 
-        /// <summary>
-        /// Project Associated
-        /// </summary>
-        public virtual Task Task { get; set; }
+    /// <summary>
+    /// User who created the attachment
+    /// </summary>
+    public virtual ApplicationUser User { get; set; }
 
-        /// <summary>
-        /// Id Project
-        /// </summary>
-        [ForeignKey("Task")]
-        public int TaskId { get; set; }
-    }
+    /// <summary>
+    /// Id user
+    /// </summary>
+    [ForeignKey("User")]
+    public string UserId { get; set; }
+
+    /// <summary>
+    /// Project Associated
+    /// </summary>
+    public virtual Task Task { get; set; }
+
+    /// <summary>
+    /// Id Project
+    /// </summary>
+    [ForeignKey("Task")]
+    public int TaskId { get; set; }
 }

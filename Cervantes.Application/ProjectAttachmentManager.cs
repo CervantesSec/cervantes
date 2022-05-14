@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cervantes.Application
+namespace Cervantes.Application;
+
+public class ProjectAttachmentManager : GenericManager<ProjectAttachment>, IProjectAttachmentManager
 {
-    public class ProjectAttachmentManager: GenericManager<ProjectAttachment>, IProjectAttachmentManager
+    /// <summary>
+    /// ProjectAttachment Manager Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    public ProjectAttachmentManager(IApplicationDbContext context) : base(context)
     {
-        /// <summary>
-        /// ProjectAttachment Manager Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public ProjectAttachmentManager(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

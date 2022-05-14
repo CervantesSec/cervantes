@@ -5,83 +5,92 @@
     ViewData["Title"] = "Create Task";
 }
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 localize-content><i class="fas fa-folder"></i> Create Task</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" localize-content>Home</a></li>
-                <li class="breadcrumb-item" localize-content>Workspace</li>
-                <li class="breadcrumb-item" localize-content>Tasks</li>
-              <li class="breadcrumb-item active" localize-content>Create Task Project</li>
-            </ol>
-          </div>
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-folder"></i> Create Task</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspace</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>@Model.Project.Name</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Task" asp-action="Project" asp-route-project="@Model.Project.Id" localize-content>Tasks</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Create</li>
+                </ol>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-      <hr />
-    </section>
-    
-    <!-- Main content -->
-    <section class="content">
-         <div class="card">
-    <div class="card-body">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-            <form asp-area="Workspace" asp-controller="Task" asp-action="CreateProject" method="post" asp-route-project="@Model.Project.Id" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label">Name</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <form asp-area="Workspace" asp-controller="Task" asp-action="CreateProject" method="post" asp-route-project="@Model.Project.Id" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Description" class="control-label">Description</label>
-                <textarea id="description" asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
                         <div class="form-group">
-                <label asp-for="StartDate" class="control-label">Start Date</label>
-                <input asp-for="StartDate" class="form-control"  value="2021-01-01"/>
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDate" class="control-label">End Date</label>
-                <input asp-for="EndDate" class="form-control"  value="2021-01-01" data-date-format="mm/dd/yyyy hh:mm:ss" />
-                <span asp-validation-for="EndDate" class="text-danger" ></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AsignedUserId" class="control-label">Asigned To</label>
-                @Html.DropDownListFor(m => m.AsignedUserId, Model.UsersList, "--Select--", new { @class = "form-control" })
-            </div>
-            <div class="form-group">
-                <label asp-for="TargetId" class="control-label">Target</label>
-                @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new { @class = "form-control" })
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label">Task Status</label>
-                @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList<Cervantes.CORE.TaskStatus>(),new { @class = "form-control" })
-            </div>
+                            <label asp-for="Name" class="control-label">Name</label>
+                            <input asp-for="Name" class="form-control"/>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group">
-                <a class="btn btn-default" asp-area="Workspace" asp-controller="Task" asp-action="Index" asp-route-project="@Model.Project.Id">Back</a>
-                <input type="submit" value="Create" class="btn btn-dark" />
-            </div>
-        </form>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label">Description</label>
+                            <textarea id="description" asp-for="Description" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="StartDate" class="control-label">Start Date</label>
+                            <input asp-for="StartDate" class="form-control" value="2021-01-01"/>
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="EndDate" class="control-label">End Date</label>
+                            <input asp-for="EndDate" class="form-control" value="2021-01-01" data-date-format="mm/dd/yyyy hh:mm:ss"/>
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AsignedUserId" class="control-label">Asigned To</label>
+                            @Html.DropDownListFor(m => m.AsignedUserId, Model.UsersList, "--Select--", new {@class = "form-control"})
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TargetId" class="control-label">Target</label>
+                            @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new {@class = "form-control"})
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Status" class="control-label">Task Status</label>
+                            @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList<Cervantes.CORE.TaskStatus>(), new {@class = "form-control"})
+                        </div>
+
+                        <div class="form-group">
+                            <a class="btn btn-default" asp-area="Workspace" asp-controller="Task" asp-action="Index" asp-route-project="@Model.Project.Id">Back</a>
+                            <input type="submit" value="Create" class="btn btn-dark"/>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-           </div>
-        </div>
-    </section>
+    </div>
+</section>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-     <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
     <script>
   $(document).ready(function() {
       $('#description').summernote({
@@ -98,7 +107,7 @@
         var data = new FormData();
         data.append("image", image);
         $.ajax({
-            url: '@Url.Action("UploadTask","Image",new { Area = "" })',
+            url: '@Url.Action("UploadTask", "Image", new {Area = ""})',
             cache: false,
             contentType: false,
             processData: false,
