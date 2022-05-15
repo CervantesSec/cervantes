@@ -251,10 +251,10 @@
         <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
   </data>
     <data name="Download a two-factor authenticator app like Microsoft Authenticator for &lt;a href=&quot;{0}&quot;&gt;Windows Phone&lt;/a&gt;, &lt;a href=&quot;{1}&quot;&gt;Android&lt;/a&gt; and &lt;a href=&quot;{2}&quot;&gt;iOS&lt;/a&gt; or"
-          xml:space="preserve">
-    <value>Descargar una aplicación de autenticador de dos factores como Microsoft autenticador para &lt;a href="{0}"&gt; de Windows &lt;/a&gt; teléfono, &lt;a href="{1}"&gt; Android &lt;/a&gt; y &lt;a href = "{ 2} "&gt; iOS o &lt;/a&gt;</value>
-        <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
-  </data>
+      xml:space="preserve">
+      <value>Descarga una aplicación de doble autneticación como Microsoft autenticador para &lt;a href="{0}"&gt; de Windows &lt;/a&gt; teléfono, &lt;a href="{1}"&gt; Android &lt;/a&gt; y &lt;a href = "{ 2} "&gt; iOS o &lt;/a&gt;</value>
+      <comment>Areas/Identity/Pages/Account/Manage/EnableAuthenticator.cshtml</comment>
+    </data>
     <data name="Download Your Data" xml:space="preserve">
     <value>Su descarga de datos</value>
         <comment>Areas/Identity/Pages/Account/Manage/DownloadPersonalData.cshtml</comment>
@@ -378,7 +378,7 @@
     <value>Contraseña no es correcta.</value>
         <comment>Custom back end message</comment>
   </data>
-    <data name="Personal Data" xml:space="preserve">
+    <data name="Personal data" xml:space="preserve">
     <value>Información personal</value>
         <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
   </data>
@@ -447,9 +447,9 @@
         <comment>Areas/Identity/Pages/Account/ResetPassword.cshtml</comment>
   </data>
     <data name="Reset authenticator app" xml:space="preserve">
-    <value>aplicación autenticador de reposición</value>
-        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
-  </data>
+      <value>Reset doble factor de autenticación</value>
+      <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+    </data>
     <data name="Reset authenticator key" xml:space="preserve">
     <value>Restablecer clave autenticador</value>
         <comment>Areas/Identity/Pages/Account/Manage/ResetAuthenticator.cshtml</comment>
@@ -475,9 +475,9 @@
         <comment>Pages/SampleForm.cshtml</comment>
   </data>
     <data name="Save" xml:space="preserve">
-    <value>Salvar</value>
-        <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
-  </data>
+      <value>Guardar</value>
+      <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
+    </data>
     <data name="Send verification email" xml:space="preserve">
     <value>Envia un correo electronico de verificación</value>
         <comment>Areas/Identity/Pages/Account/Manage/Index.cshtml</comment>
@@ -487,9 +487,9 @@
         <comment>Areas/Identity/Pages/Account/Manage/SetPassword.cshtml</comment>
   </data>
     <data name="Setup authenticator app" xml:space="preserve">
-    <value>aplicación de configuración de autenticador</value>
-        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
-  </data>
+      <value>Configurar aplicación de doble autenticación</value>
+      <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+    </data>
     <data name="Submit" xml:space="preserve">
     <value>Enviar</value>
         <comment>Areas/Identity/Pages/Account/ForgotPassword.cshtml</comment>
@@ -534,13 +534,13 @@
         <comment>Areas/Identity/Pages/Account/LoginWith2fa.cshtml</comment>
   </data>
     <data name="Two-factor authentication (2FA)" xml:space="preserve">
-    <value>autenticación de dos factores (2FA)</value>
-        <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
-  </data>
+      <value>Autenticación de dos factores (2FA)</value>
+      <comment>Areas/Identity/Pages/Account/Manage/TwoFactorAuthentication.cshtml</comment>
+    </data>
     <data name="Update password" xml:space="preserve">
-    <value>Actualiza contraseña</value>
-        <comment>Areas/Identity/Pages/Account/Manage/ChangePassword.cshtml</comment>
-  </data>
+      <value>Actualizar contraseña</value>
+      <comment>Areas/Identity/Pages/Account/Manage/ChangePassword.cshtml</comment>
+    </data>
     <data name="Use a local account to log in." xml:space="preserve">
     <value>Utilizar una cuenta local para iniciar sesión.</value>
         <comment>Areas/Identity/Pages/Account/Login.cshtml</comment>
@@ -714,10 +714,6 @@
     <data name="&lt;i class=&quot;nav-icon fas fa-home&quot;&gt;&lt;/i&gt;&lt;p&gt;Home&lt;/p&gt;" xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-home"&gt;&lt;/i&gt;&lt;p&gt;Inicio&lt;/p&gt;</value>
   </data>
-    <data name="&lt;i class=&quot;nav-icon fas fa-folder&quot;&gt;&lt;/i&gt;&lt;p&gt;Projects&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
-          xml:space="preserve">
-    <value>&lt;i class="nav-icon fas fa-folder"&gt;&lt;/i&gt;&lt;p&gt;Proyectos&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
-  </data>
     <data name="&lt;i class=&quot;nav-icon fas fa-briefcase&quot;&gt;&lt;/i&gt;&lt;p&gt;Clients&lt;i class=&quot;right fas fa-angle-left&quot;&gt;&lt;/i&gt;&lt;/p&gt;"
           xml:space="preserve">
     <value>&lt;i class="nav-icon fas fa-briefcase"&gt;&lt;/i&gt;&lt;p&gt;Clientes&lt;i class="right fas fa-angle-left"&gt;&lt;/i&gt;&lt;/p&gt;</value>
@@ -770,10 +766,6 @@
     <data name="&lt;h3 class=&quot;card-title&quot;&gt;Vulnerabilities Status&lt;/h3&gt;" xml:space="preserve">
     <value>&lt;h3 class="card-title"&gt;Estado Vulnerabilidades&lt;/h3&gt;</value>
   </data>
-    <data name="&lt;i class=&quot;nav-icon fas fa-building&quot;&gt;&lt;/i&gt;&lt;p&gt;My Workspaces&lt;/p&gt;"
-          xml:space="preserve">
-    <value>&lt;i class="nav-icon fas fa-building"&gt;&lt;/i&gt;&lt;p&gt;Mi Esapcio de Trabajo&lt;/p&gt;</value>
-  </data>
     <data name="&lt;i class=&quot;fas fa-clone nav-icon&quot;&gt;&lt;/i&gt;&lt;p&gt;Templates&lt;/p&gt;"
           xml:space="preserve">
     <value>&lt;i class="fas fa-clone nav-icon"&gt;&lt;/i&gt;&lt;p&gt;Plantillas&lt;/p&gt;</value>
@@ -800,9 +792,9 @@
     <data name="Vulnerabilities" xml:space="preserve">
     <value>Vulnerabilidades</value>
   </data>
-    <data name="&lt;i class=&quot;fas fa-building&quot;&gt;&lt;/i&gt; My Workspaces" xml:space="preserve">
-    <value>&lt;i class="fas fa-building"&gt;&lt;/i&gt; Mi Espacio de Trabajo</value>
-  </data>
+    <data name="My Workspaces" xml:space="preserve">
+      <value>Mis Espacios de Trabajo</value>
+    </data>
     <data name="&lt;i class=&quot;fas fa-folder&quot;&gt;&lt;/i&gt; Projects" xml:space="preserve">
     <value>&lt;i class="fas fa-folder"&gt;&lt;/i&gt; Proyectos</value>
   </data>
@@ -1123,4 +1115,89 @@
     <data name="Delete Service" xml:space="preserve">
     <value>Eliminar Servicio</value>
   </data>
+    <data name="Username" xml:space="preserve">
+      <value>Nombre de Usuario</value>
+    </data>
+    <data name="Manage Email" xml:space="preserve">
+      <value>Gestiona tu correo electrónico</value>
+    </data>
+    <data name="This process disables 2FA until you verify your authenticator app.         If you do not complete your authenticator app configuration you may lose access to your account." xml:space="preserve">
+      <value>Este proceso desactiva el 2FA hasta que verifiques tu aplicación de autenticación.
+Si no completas la configuración de tu aplicación de autenticación, puedes perder el acceso a tu cuenta.</value>
+    </data>
+    <data name="List" xml:space="preserve">
+      <value>Lista</value>
+    </data>
+    <data name="Templates" xml:space="preserve">
+      <value>Plantillas</value>
+    </data>
+    <data name="Organization" xml:space="preserve">
+      <value>Organización</value>
+    </data>
+    <data name="Application Logs" xml:space="preserve">
+      <value>Logs de Aplicación</value>
+    </data>
+    <data name="Documents" xml:space="preserve">
+      <value>Documentos</value>
+    </data>
+    <data name="Users" xml:space="preserve">
+      <value>Usuarios</value>
+    </data>
+    <data name="2FA Enabled" xml:space="preserve">
+      <value>2FA Habilitado</value>
+    </data>
+    <data name="Full Name" xml:space="preserve">
+      <value>Nombre Completo</value>
+    </data>
+    <data name="Email Confirmed" xml:space="preserve">
+      <value>Correo electrónico confirmado</value>
+    </data>
+    <data name="Role" xml:space="preserve">
+      <value>Permisos</value>
+    </data>
+    <data name="Position" xml:space="preserve">
+      <value>Posición</value>
+    </data>
+    <data name="Create User" xml:space="preserve">
+      <value>Crear Usuario</value>
+    </data>
+    <data name="New Password" xml:space="preserve">
+      <value>Nueva Contraseña</value>
+    </data>
+    <data name="Phone Number" xml:space="preserve">
+      <value>Número de teléfono</value>
+    </data>
+    <data name="Edit Organization" xml:space="preserve">
+      <value>Editar Organización</value>
+    </data>
+    <data name="Organization Logo" xml:space="preserve">
+      <value>Logo de la Organización</value>
+    </data>
+    <data name="Level" xml:space="preserve">
+      <value>Nivel</value>
+    </data>
+    <data name="Message" xml:space="preserve">
+      <value>Mensaje</value>
+    </data>
+    <data name="Stack Trace" xml:space="preserve">
+      <value>Rastreo de Pila</value>
+    </data>
+    <data name="Exception" xml:space="preserve">
+      <value>Excepción</value>
+    </data>
+    <data name="Export" xml:space="preserve">
+      <value>Exportar</value>
+    </data>
+    <data name="Delete User" xml:space="preserve">
+      <value>Eliminar Usuario</value>
+    </data>
+    <data name="Delete Vulnerability" xml:space="preserve">
+      <value>Eliminar Vulnerabilidad</value>
+    </data>
+    <data name="Delete Note" xml:space="preserve">
+      <value>Eliminar Nota</value>
+    </data>
+    <data name="Edit Note" xml:space="preserve">
+      <value>Editar Nota</value>
+    </data>
 </root>

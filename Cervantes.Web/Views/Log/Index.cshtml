@@ -1,7 +1,7 @@
 ﻿@model LogViewModel
 
 @{
-    ViewData["Title"] = "System Logs";
+    ViewData["Title"] = "Application Logs";
 }
 @{
     if (TempData["deleted"] != null)
@@ -37,14 +37,14 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-eye"></i> System Logs</h1>
+                <h1 localize-content><i class="fas fa-eye"></i> <span localize-content>Application Logs</span></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
                         <a asp-controller="Home" asp-action="Index" localize-content>Admin</a>
                     </li>
-                    <li class="breadcrumb-item active" localize-content>System Logs</li>
+                    <li class="breadcrumb-item active" localize-content>Application Logs</li>
                 </ol>
             </div>
         </div>
@@ -65,14 +65,14 @@
                 <!--Table head-->
                 <thead class="thead-dark">
                 <tr>
-                    <th localize-content>Id</th>
-                    <th localize-content>Created On</th>
-                    <th localize-content>Level</th>
-                    <th localize-content>Message</th>
-                    <th localize-content>Stack Trace</th>
-                    <th localize-content>Exception</th>
-                    <th localize-content>Logger</th>
-                    <th localize-content>Url</th>
+                    <th><i class="fas fa-id-badge"></i> <span localize-content>Id</span></th>
+                    <th><i class="fas fa-calendar"></i> <span localize-content>Created on</span></th>
+                    <th><i class="fas fa-level-up-alt"></i> <span localize-content>Level</span></th>
+                    <th><i class="fas fa-comment"></i> <span localize-content>Message</span></th>
+                    <th><i class="fas fa-fingerprint"></i> <span localize-content>Stack Trace</span></th>
+                    <th><i class="fas fa-exclamation-circle"></i> <span localize-content>Exception</span></th>
+                    <th><i class="fas fa-pen"></i> <span localize-content>Logger</span></th>
+                    <th><i class="fas fa-at"></i> <span localize-content>Url</span></th>
                 </tr>
                 </thead>
                 <!--Table head-->
@@ -143,11 +143,11 @@
             <!--Table-->
             <a asp-area="" asp-controller="Log" asp-action="Export" localize-content class="btn btn-primary btn-sm">
                 <i class="nav-icon fas fa-download"></i>
-                <p>Export</p>
+                <p localize-content>Export</p>
             </a>
             <a asp-area="" asp-controller="Log" asp-action="" localize-content class="btn btn-danger btn-sm">
                 <i class="nav-icon fas fa-trash"></i>
-                <p>Delete</p>
+                <p localize-content>Delete</p>
             </a>
 
         </div>

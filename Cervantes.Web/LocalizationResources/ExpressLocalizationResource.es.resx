@@ -173,9 +173,9 @@
         <comment>DataAnnotations: ValidationAttribute_Cannot_Set_ErrorMessage_And_Resource</comment>
   </data>
     <data name="Email" xml:space="preserve">
-    <value>Email</value>
+        <value>Correo electrónico</value>
         <comment>DataAnnotations: Custom value</comment>
-  </data>
+    </data>
     <data name="Email '{0}' is already taken." xml:space="preserve">
     <value>Email '{0}' ya está en uso.</value>
         <comment>Identity: DuplicateEmail</comment>
@@ -259,9 +259,9 @@
         <comment>DataAnnotations: Custom value</comment>
   </data>
     <data name="Recovery code redemption failed." xml:space="preserve">
-    <value>código de recuperación de la redención falló.</value>
+        <value>El código de recuperación de la redención falló.</value>
         <comment>Identity: RecoveryCodeRedemptionFailed</comment>
-  </data>
+    </data>
     <data name="Role name '{0}' is already taken." xml:space="preserve">
     <value>Nombre de la función '{0}' ya está en uso.</value>
         <comment>Identity: DuplicateRoleName</comment>
@@ -503,8 +503,8 @@
         <comment>DataAnnotations: CompareAttribute_MustMatch</comment>
   </data>
     <data name="Current password" xml:space="preserve">
-    <value>Contraseña actual!</value>
-  </data>
+        <value>Contraseña actual</value>
+    </data>
     <data name="New password" xml:space="preserve">
     <value>Nueva contraseña</value>
   </data>
@@ -524,6 +524,15 @@
     <value>¿Recuerdas este dispositivo?</value>
   </data>
     <data name="Confirm new password" xml:space="preserve">
-    <value>¡Confirma tu nueva contraseña!</value>
-  </data>
+        <value>Confirma tu nueva contraseña</value>
+    </data>
+    <data name="Username" xml:space="preserve">
+        <value>Nombre de Usuario</value>
+    </data>
+    <data name="New email" xml:space="preserve">
+        <value>Nuevo correo electrónico</value>
+    </data>
+    <data name="Once you have scanned the QR code or input the key above, your two factor authentication app will provide you with a unique code. Enter the code in the confirmation box below." xml:space="preserve">
+        <value>Una vez que haya escaneado el código QR o la entrada de la clave anterior, su aplicación para la autenticación de dos factores le proporcionará un código único. Introducir el código en el cuadro de confirmación a continuación.</value>
+    </data>
 </root>

@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-user"></i> Create User</h1>
+                <h1 localize-content><i class="fas fa-user"></i> <span localize-content>Create User</span></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -39,43 +39,43 @@
                     <form asp-action="Create" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="FullName" class="control-label"></label>
+                            <label asp-for="FullName" class="control-label" localize-content>Full Name</label>
                             <input asp-for="FullName" class="form-control"/>
                             <span asp-validation-for="FullName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="UserName" class="control-label"></label>
+                            <label asp-for="UserName" class="control-label" localize-content>Username</label>
                             <input type="email" asp-for="UserName" class="form-control"/>
                             <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Email" class="control-label"></label>
+                            <label asp-for="Email" class="control-label" localize-content>Email</label>
                             <input type="email" asp-for="Email" class="form-control"/>
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="PhoneNumber" class="control-label"></label>
+                            <label asp-for="PhoneNumber" class="control-label" localize-content>Phone Number</label>
                             <input type="tel" asp-for="PhoneNumber" class="form-control"/>
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Description" class="control-label"></label>
+                            <label asp-for="Description" class="control-label" localize-content>Description</label>
                             <textarea id="description" asp-for="Description" class="form-control" rows="4"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Password"></label>
+                            <label asp-for="Password" localize-content>Password</label>
                             <input asp-for="Password" class="form-control" type="password"/>
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Position"></label>
+                            <label asp-for="Position" localize-content>Position</label>
                             <input asp-for="Position" class="form-control"/>
                             <span asp-validation-for="Position" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-md-2">Role</label>
+                            <label class="control-label col-md-2" localize-content>Role</label>
 
                             @Html.DropDownListFor(m => m.Option, Model.ItemList, new {@class = "form-control"})
                             <span asp-validation-for="Role" class="text-danger"></span>

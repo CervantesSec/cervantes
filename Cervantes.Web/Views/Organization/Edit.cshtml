@@ -21,7 +21,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-sitemap"></i> Edit Organization</h1>
+                <h1 localize-content><i class="fas fa-sitemap"></i> <span localize-content>Edit Organization</span></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -50,34 +50,34 @@
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="Name" class="control-label"></label>
+                            <label asp-for="Name" class="control-label" localize-content>Name</label>
                             <input asp-for="Name" class="form-control"/>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="ContactName" class="control-label"></label>
+                            <label asp-for="ContactName" class="control-label" localize-content>Contact Name</label>
                             <input asp-for="ContactName" class="form-control"/>
                             <span asp-validation-for="ContactName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="ContactEmail" class="control-label"></label>
+                            <label asp-for="ContactEmail" class="control-label" localize-content>Contact Email</label>
                             <input asp-for="ContactEmail" class="form-control"/>
                             <span asp-validation-for="ContactEmail" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="ContactPhone" class="control-label"></label>
+                            <label asp-for="ContactPhone" class="control-label" localize-content>Contact Phone</label>
                             <input asp-for="ContactPhone" class="form-control"/>
                             <span asp-validation-for="ContactPhone" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="Url" class="control-label"></label>
+                            <label asp-for="Url" class="control-label">URL</label>
                             <input asp-for="Url" class="form-control"/>
                             <span asp-validation-for="Url" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="Description" class="control-label"></label>
+                            <label asp-for="Description" class="control-label" localize-content>Description</label>
                             <textarea id="description" asp-for="Description" class="form-control" rows="4"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>

@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-user"></i> Edit @Model.User.FullName</h1>
+                <h1 localize-content><i class="fas fa-user"></i> <span localize-content>Edit</span> @Model.User.FullName</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -20,7 +20,7 @@
                     <li class="breadcrumb-item">
                         <a asp-controller="User" asp-action="Index" localize-content>User</a>
                     </li>
-                    <li class="breadcrumb-item active" localize-content>Create</li>
+                    <li class="breadcrumb-item active" localize-content>Edit</li>
                 </ol>
             </div>
         </div>
@@ -39,44 +39,43 @@
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="User.FullName" class="control-label"></label>
+                            <label asp-for="User.FullName" class="control-label" localize-content>Full Name</label>
                             <input asp-for="User.FullName" class="form-control"/>
                             <span asp-validation-for="User.FullName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.UserName" class="control-label"></label>
+                            <label asp-for="User.UserName" class="control-label" localize-content>Username</label>
                             <input asp-for="User.UserName" class="form-control"/>
                             <span asp-validation-for="User.UserName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.Email" class="control-label"></label>
+                            <label asp-for="User.Email" class="control-label" localize-content>Email</label>
                             <input asp-for="User.Email" class="form-control"/>
                             <span asp-validation-for="User.Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.PhoneNumber" class="control-label"></label>
+                            <label asp-for="User.PhoneNumber" class="control-label" localize-content>PhoneNumber</label>
                             <input asp-for="User.PhoneNumber" class="form-control"/>
                             <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.Description" class="control-label"></label>
+                            <label asp-for="User.Description" class="control-label" localize-content>Description</label>
                             <textarea id="description" asp-for="User.Description" class="form-control" rows="4"></textarea>
                             <span asp-validation-for="User.Description" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label>New Password</label>
+                            <label localize-content>New Password</label>
                             <input asp-for="User.Password" class="form-control" type="password"/>
                             <span asp-validation-for="User.Password" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.Position"></label>
+                            <label asp-for="User.Position" localize-content>Position</label>
                             <input asp-for="User.Position" class="form-control"/>
                             <span asp-validation-for="User.Position" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-md-2">Role</label>
-
+                            <label class="control-label col-md-2" localize-content>Role</label>
                             @Html.DropDownListFor(m => m.Option, Model.ItemList, new {@class = "form-control"})
                         </div>
 

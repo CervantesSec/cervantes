@@ -76,14 +76,11 @@
                 <!--Table-->
                 <table id="vulnCategories" class="table table-bordered table-hover" width="100%">
                     <!--Table head-->
-                    <thead>
+                    <thead class="thead-dark">
                     <tr>
-                        <th localize-content>Name</th>
-                        <th localize-content>Description</th>
-                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                        {
-                            <th localize-content>Options</th>
-                        }
+                        <th localize-content><i class="fas fa-bug"></i> <span localize-content>Name</span></th>
+                        <th localize-content><i class="fas fa-align-left"></i> <span localize-content>Description</span></th>
+                        <th localize-content><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
                     </tr>
                     </thead>
                     <!--Table head-->
