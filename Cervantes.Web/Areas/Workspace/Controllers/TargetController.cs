@@ -7,9 +7,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 [Area("Workspace")]
 public class TargetController : Controller
 {
@@ -17,6 +18,7 @@ public class TargetController : Controller
     private ITargetManager targetManager = null;
     private ITargetServicesManager targetServicesManager = null;
     private IProjectManager projectManager = null;
+    private IProjectUserManager projectUserManager = null;
 
     /// <summary>
     /// Target Controller Constructor
@@ -25,11 +27,12 @@ public class TargetController : Controller
     /// <param name="targetServicesManager">TargetServiceManager</param>
     /// <param name="projectManager">ProjectManager</param>
     public TargetController(ITargetManager targetManager, ITargetServicesManager targetServicesManager,
-        IProjectManager projectManager, ILogger<TargetController> logger)
+        IProjectManager projectManager,IProjectUserManager projectUserManager, ILogger<TargetController> logger)
     {
         this.targetManager = targetManager;
         this.targetServicesManager = targetServicesManager;
         this.projectManager = projectManager;
+        this.projectUserManager = projectUserManager;
         _logger = logger;
     }
 
@@ -42,6 +45,11 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new TargetViewModel
             {
                 Project = projectManager.GetById(project),
@@ -69,6 +77,11 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new TargetDetailsViewModel
             {
                 Project = projectManager.GetById(project),
@@ -91,9 +104,19 @@ public class TargetController : Controller
     /// Method retur creation form of Traget
     /// </summary>
     /// <returns></returns>
-    public ActionResult Create()
+    public ActionResult Create(int project)
     {
-        return View();
+        var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+        if (user == null)
+        {
+            return RedirectToAction("Index", "Workspaces",new {area =""});
+        }
+
+        TargetCreateViewModel model = new TargetCreateViewModel
+        {
+            Project = projectManager.GetById(project)
+        };
+        return View(model);
     }
 
     /// <summary>
@@ -108,6 +131,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (!ModelState.IsValid) return View(model);
             var target = new Target
             {
@@ -145,6 +174,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = targetManager.GetById(id);
             return View(model);
         }
@@ -171,6 +206,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = targetManager.GetById(model.Id);
             result.Name = model.Name;
             result.Type = model.Type;
@@ -203,6 +244,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = targetManager.GetById(id);
             return View(model);
         }
@@ -230,6 +277,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = targetManager.GetById(id);
             if (result != null)
             {
@@ -263,6 +316,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new TargetServiceViewModel
             {
                 Project = projectManager.GetById(project),
@@ -288,6 +347,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (target != 0 && project != 0)
             {
                 var service = new TargetServices()
@@ -326,6 +391,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new TargetServiceViewModel
             {
                 Project = projectManager.GetById(project),
@@ -351,6 +422,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = targetServicesManager.GetById(model.TargetService.Id);
             result.Name = model.TargetService.Name;
             result.Version = model.TargetService.Version;
@@ -377,6 +454,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = targetServicesManager.GetById(id);
             return View(model);
         }
@@ -397,6 +480,12 @@ public class TargetController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = targetServicesManager.GetById(id);
             if (result != null)
             {

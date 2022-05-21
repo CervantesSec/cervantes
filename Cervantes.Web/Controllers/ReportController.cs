@@ -10,9 +10,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cervantes.Web.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 public class ReportController : Controller
 {
     private readonly ILogger<ReportController> _logger = null;

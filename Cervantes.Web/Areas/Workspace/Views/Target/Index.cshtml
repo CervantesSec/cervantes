@@ -166,9 +166,7 @@
                         }
                         <td>@Html.Raw(@WebUtility.HtmlDecode(@target.Description))</td>
                         <td>@target.User.FullName</td>
-                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                        {
-                            <td>
+                        <td>
                                 <a asp-area="Workspace" asp-controller="Target" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@target.Id" class="btn btn-tool">
                                     <i class="fas fa-eye"></i>
                                 </a>
@@ -179,13 +177,6 @@
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>
-                        }
-                        else
-                        {
-                            <a asp-area="Workspace" asp-controller="Target" asp-action="Service" asp-route-project="@Model.Project.Id" asp-route-id="@target.Id" class="btn btn-tool">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        }
                     </tr>
                 }
 

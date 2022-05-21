@@ -9,4 +9,5 @@ namespace Cervantes.Contracts;
 
 public interface IProjectUserManager : IGenericManager<ProjectUser>
 {
+    ProjectUser VerifyUser(int project, string user);
 }

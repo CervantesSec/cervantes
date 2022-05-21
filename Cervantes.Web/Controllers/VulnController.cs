@@ -10,10 +10,11 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using Cervantes.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cervantes.Web.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 public class VulnController : Controller
 {
     private IVulnManager vulnManager = null;

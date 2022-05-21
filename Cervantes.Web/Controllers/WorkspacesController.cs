@@ -4,10 +4,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Cervantes.Web.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 public class WorkspacesController : Controller
 {
     private readonly ILogger<WorkspacesController> _logger = null;
@@ -36,9 +37,9 @@ public class WorkspacesController : Controller
             }
             else
             {
-                //var projects = projectUserManager.GetAll().Where(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).Select(y => y.ProjectId);
-                //var model = projectManager.GetAll().Where(x => projects.Contains(x.Id));
-                return View();
+                var projects = projectUserManager.GetAll().Where(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).Select(y => y.ProjectId).ToList();
+                var model = projectManager.GetAll().Where(x => projects.Contains(x.Id)).ToList();
+                return View(model);
             }
         }
         catch (Exception ex)

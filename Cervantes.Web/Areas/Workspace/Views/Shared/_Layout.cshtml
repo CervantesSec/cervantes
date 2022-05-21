@@ -276,20 +276,25 @@
 
             </a>
         </li>
-        <li class="nav-item">
-            <a asp-area="Workspace" asp-controller="Task" asp-action="Project" asp-route-culture="@culture" class="nav-link">
-                <i class="fas fa-folder nav-icon"></i>
-                <p localize-content>Project Tasks</p>
+        
+        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+        {
+            <li class="nav-item">
+                <a asp-area="Workspace" asp-controller="Task" asp-action="Project" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-folder nav-icon"></i>
+                    <p localize-content>Project Tasks</p>
 
-            </a>
-        </li>
-        <li class="nav-item">
-            <a asp-area="Workspace" asp-controller="Task" asp-action="CreateProject" asp-route-culture="@culture" class="nav-link">
-                <i class="fas fa-folder-open nav-icon"></i>
-                <p localize-content>Create Project Task</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Workspace" asp-controller="Task" asp-action="CreateProject" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-folder-open nav-icon"></i>
+                    <p localize-content>Create Project Task</p>
 
-            </a>
-        </li>
+                </a>
+            </li>
+        }
+       
 
     </ul>
 </li>
@@ -380,11 +385,11 @@
 </div>
 <!-- /.content-wrapper -->
 
-<footer class="main-footer">
+<footer class="main-footer bg-dark">
     <div class="float-right d-none d-sm-block">
         <b>Version</b> Alpha-0.1
     </div>
-    <strong>Copyright &copy; @DateTime.Now.Year <a href="https://github.com/mesquidar/Cervantes">Cervantes</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; @DateTime.Now.Year <a href="https://github.com/CervantesSec">Cervantes</a>.</strong> All rights reserved.
 </footer>
 
 <!-- Control Sidebar -->

@@ -9,9 +9,11 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cervantes.Web.Controllers;
 
+[Authorize(Roles = "Admin,SuperUser,User")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

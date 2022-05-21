@@ -14,7 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 [Area("Workspace")]
 public class TaskController : Controller
 {
@@ -45,6 +45,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new TaskViewModel
             {
                 Project = projectManager.GetById(project),
@@ -68,10 +74,16 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new TaskViewModel
             {
                 Project = projectManager.GetById(project),
-                Tasks = taskManager.GetAll().Where(x => x.ProjectId == project)
+                Tasks = taskManager.GetAll().Where(x => x.ProjectId == project).ToList()
             };
             return View(model);
         }
@@ -90,6 +102,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new TaskDetailsViewModel
             {
                 Project = projectManager.GetById(project),
@@ -114,6 +132,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new TaskCreateViewModel
             {
                 TargetId = e.Id,
@@ -150,6 +174,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var task = new Task
             {
                 Name = model.Name,
@@ -185,6 +215,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var targets = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new TaskCreateViewModel
             {
                 TargetId = e.Id,
@@ -265,6 +301,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = taskManager.GetById(id);
 
 
@@ -314,6 +356,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = taskManager.GetById(id);
             result.Name = model.Name;
             result.Description = model.Description;
@@ -338,7 +386,8 @@ public class TaskController : Controller
             return View();
         }
     }
-
+    
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult EditProject(int project, int id)
     {
         try
@@ -391,7 +440,9 @@ public class TaskController : Controller
         }
     }
 
+    
     // POST: TaskController/Edit/5
+    [Authorize(Roles = "Admin,SuperUser")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult EditProject(int project, TaskCreateViewModel model, int id)
@@ -429,6 +480,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = taskManager.GetById(id);
             return View(result);
         }
@@ -449,6 +506,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = taskManager.GetById(id);
             if (result != null)
             {
@@ -476,6 +539,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (form != null)
             {
                 var note = new TaskNote
@@ -513,6 +582,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (id != 0)
             {
                 var result = taskNoteManager.GetById(id);
@@ -545,6 +620,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (form != null && upload != null)
             {
                 var file = Request.Form.Files["upload"];
@@ -607,6 +688,12 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (id != 0)
             {
                 var result = taskAttachmentManager.GetById(id);

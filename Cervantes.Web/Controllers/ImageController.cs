@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace Cervantes.Web.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 public class ImageController : Controller
 {
     private readonly IHostingEnvironment _appEnvironment;

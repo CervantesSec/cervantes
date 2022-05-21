@@ -3,7 +3,17 @@
 @model IEnumerable<Cervantes.CORE.Project>
 
 @{
-    ViewData["Title"] = "Wokrspaces";
+    ViewData["Title"] = "Workspaces";
+}
+
+@{
+    if (TempData["userProject"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible">
+            <strong localize-content><i class="fas fa-exclamation-circle"></i> You are not included in the project!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
 }
 
 <!-- Content Header (Page header) -->

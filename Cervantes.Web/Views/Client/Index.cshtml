@@ -87,12 +87,9 @@
                     <th localize-content>
                         <i class="fas fa-phone"></i> <span localize-content>Contact Phone</span>
                     </th>
-                    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                    {
-                        <th localize-content>
+                    <th localize-content>
                             <i class="fas fa-cog"></i> <span localize-content>Options</span>
                         </th>
-                    }
                 </tr>
                 </thead>
                 <!--Table head-->

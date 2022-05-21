@@ -12,7 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 
 namespace Cervantes.Web.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 public class ClientController : Controller
 {
     private readonly ILogger<ClientController> _logger = null;

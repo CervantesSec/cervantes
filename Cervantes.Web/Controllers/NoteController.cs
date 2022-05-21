@@ -10,7 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 
 namespace Cervantes.Web.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 public class NoteController : Controller
 {
     private readonly ILogger<NoteController> _logger = null;

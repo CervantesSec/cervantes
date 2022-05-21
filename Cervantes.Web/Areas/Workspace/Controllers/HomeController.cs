@@ -6,12 +6,14 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
+using Cervantes.Web.Controllers;
 using Cervantes.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using DashboardViewModel = Cervantes.Web.Areas.Workspace.Models.DashboardViewModel;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 [Area("Workspace")]
 public class HomeController : Controller
 {
@@ -48,37 +50,46 @@ public class HomeController : Controller
     {
         try
         {
-            var model = new DashboardViewModel
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
             {
-                Project = projectManager.GetById(project),
-                Members = projectUserManager.GetAll().Where(x => x.ProjectId == project).ToList(),
-                Vulns = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Template == false)
-                    .OrderByDescending(x => x.CreatedDate).Take(5),
-                Tasks = taskManager.GetAll()
-                    .Where(x => x.AsignedUserId == User.FindFirstValue(ClaimTypes.NameIdentifier) &&
-                                x.ProjectId == project).Take(5).OrderBy(x => x.StartDate),
-                Targets =
-                    targetManager.GetAll().Where(x => x.ProjectId == project).Take(5).OrderByDescending(x => x.Id),
-                Notes = projectNoteManager.GetAll().Where(x => x.ProjectId == project).Take(5)
-                    .OrderByDescending(x => x.Id),
-                VulnNumber = vulnManager.GetAll().Where(x => x.ProjectId == project).Count(),
-                TasksNumber = taskManager.GetAll().Where(x => x.ProjectId == project).Count(),
-                TargetsNumber = targetManager.GetAll().Where(x => x.ProjectId == project).Count(),
-                MembersNumber = projectUserManager.GetAll().Where(x => x.ProjectId == project).Count(),
-                NotesNumber = projectNoteManager.GetAll().Where(x => x.ProjectId == project).Count(),
-                AttachmentsNumber = projectAttachmentManager.GetAll().Where(x => x.ProjectId == project).Count(),
-                VulnInfo = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.Info)
-                    .Count(),
-                VulnLow =
-                    vulnManager.GetAll().Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.Low).Count(),
-                VulnMedium = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.Medium)
-                    .Count(),
-                VulnHigh = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.High)
-                    .Count(),
-                VulnCritical = vulnManager.GetAll()
-                    .Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.Critical).Count()
-            };
-            return View(model);
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+        
+                var model = new DashboardViewModel
+                {
+                    Project = projectManager.GetById(project),
+                    Members = projectUserManager.GetAll().Where(x => x.ProjectId == project).ToList(),
+                    Vulns = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Template == false)
+                        .OrderByDescending(x => x.CreatedDate).Take(5),
+                    Tasks = taskManager.GetAll()
+                        .Where(x => x.AsignedUserId == User.FindFirstValue(ClaimTypes.NameIdentifier) &&
+                                    x.ProjectId == project).Take(5).OrderBy(x => x.StartDate),
+                    Targets =
+                        targetManager.GetAll().Where(x => x.ProjectId == project).Take(5).OrderByDescending(x => x.Id),
+                    Notes = projectNoteManager.GetAll().Where(x => x.ProjectId == project).Take(5)
+                        .OrderByDescending(x => x.Id),
+                    VulnNumber = vulnManager.GetAll().Where(x => x.ProjectId == project).Count(),
+                    TasksNumber = taskManager.GetAll().Where(x => x.ProjectId == project).Count(),
+                    TargetsNumber = targetManager.GetAll().Where(x => x.ProjectId == project).Count(),
+                    MembersNumber = projectUserManager.GetAll().Where(x => x.ProjectId == project).Count(),
+                    NotesNumber = projectNoteManager.GetAll().Where(x => x.ProjectId == project).Count(),
+                    AttachmentsNumber = projectAttachmentManager.GetAll().Where(x => x.ProjectId == project).Count(),
+                    VulnInfo = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.Info)
+                        .Count(),
+                    VulnLow =
+                        vulnManager.GetAll().Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.Low).Count(),
+                    VulnMedium = vulnManager.GetAll()
+                        .Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.Medium)
+                        .Count(),
+                    VulnHigh = vulnManager.GetAll().Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.High)
+                        .Count(),
+                    VulnCritical = vulnManager.GetAll()
+                        .Where(x => x.ProjectId == project && x.Risk == CORE.VulnRisk.Critical).Count()
+                };
+                return View(model);
+            
         }
         catch (Exception e)
         {

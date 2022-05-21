@@ -329,7 +329,7 @@ public class UserController : Controller
             result.UserName = model.User.UserName;
             result.Email = model.User.Email;
             result.Description = model.User.Description;
-            if (model.User.Password != null) result.PasswordHash = hasher.HashPassword(model.User.Password);
+            if (model.User.ConfirmPassword != null) result.PasswordHash = hasher.HashPassword(model.User.ConfirmPassword);
             result.Position = model.User.Position;
             result.PhoneNumber = model.User.PhoneNumber;
 

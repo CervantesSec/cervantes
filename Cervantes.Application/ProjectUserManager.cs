@@ -17,4 +17,9 @@ public class ProjectUserManager : GenericManager<ProjectUser>, IProjectUserManag
     public ProjectUserManager(IApplicationDbContext context) : base(context)
     {
     }
+
+    public ProjectUser VerifyUser(int project,string user)
+    {
+        return Context.Set<ProjectUser>().Where(x => x.ProjectId == project && x.UserId == user).FirstOrDefault();
+    }
 }

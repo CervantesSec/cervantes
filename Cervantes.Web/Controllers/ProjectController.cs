@@ -14,7 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 
 namespace Cervantes.Web.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 public class ProjectController : Controller
 {
     private readonly ILogger<ProjectController> _logger = null;
@@ -353,6 +353,7 @@ public class ProjectController : Controller
     /// Method show all template projects
     /// </summary>
     /// <returns></returns>
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Templates()
     {
         try
@@ -384,6 +385,7 @@ public class ProjectController : Controller
     /// </summary>
     /// <param name="id">Project Id</param>
     /// <returns></returns>
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Template(int id)
     {
         try
@@ -793,5 +795,44 @@ public class ProjectController : Controller
         var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
         return File(fileBytes, attachment.Name);
+    }
+    
+    /// <summary>
+    /// Method Index show all projects
+    /// </summary>
+    /// <returns></returns>
+    public ActionResult MyProject()
+    {
+        try
+        {
+            var model = projectManager.GetAll().Where(x => x.Template == false).Select(e => new ProjectViewModel
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Client = e.Client,
+                ProjectType = e.ProjectType,
+                Status = e.Status,
+                StartDate = e.StartDate,
+                EndDate = e.EndDate,
+                ClientId = e.ClientId
+            });
+
+            if (model != null)
+            {
+                return View(model);
+            }
+            else
+            {
+                TempData["empty"] = "No clients introduced";
+                return View();
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["error"] = "loading project";
+            _logger.LogError(ex, "An error ocurred adding loading Projects. User: {0}",
+                User.FindFirstValue(ClaimTypes.Name));
+            return View();
+        }
     }
 }

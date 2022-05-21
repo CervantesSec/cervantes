@@ -11,9 +11,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
-
+[Authorize(Roles = "Admin,SuperUser,User")]
 [Area("Workspace")]
 public class VulnController : Controller
 {
@@ -23,13 +24,14 @@ public class VulnController : Controller
     private IVulnCategoryManager vulnCategoryManager = null;
     private IVulnNoteManager vulnNoteManager = null;
     private IVulnAttachmentManager vulnAttachmentManager = null;
+    private IProjectUserManager projectUserManager = null;
     private readonly IHostingEnvironment _appEnvironment;
     private readonly ILogger<VulnController> _logger = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
-        IVulnAttachmentManager vulnAttachmentManager, IHostingEnvironment _appEnvironment)
+        IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -37,6 +39,7 @@ public class VulnController : Controller
         this.vulnCategoryManager = vulnCategoryManager;
         this.vulnAttachmentManager = vulnAttachmentManager;
         this.vulnNoteManager = vulnNoteManager;
+        this.projectUserManager = projectUserManager;
         this._appEnvironment = _appEnvironment;
         _logger = logger;
     }
@@ -46,6 +49,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new VulnViewModel
             {
                 Project = projectManager.GetById(project),
@@ -68,6 +77,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new VulnDetailsViewModel
             {
                 Project = projectManager.GetById(project),
@@ -91,6 +106,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
             {
                 TargetId = e.Id,
@@ -137,6 +158,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (!ModelState.IsValid)
             {
                 var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e =>
@@ -207,6 +234,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var vulnResult = vulnManager.GetById(id);
 
 
@@ -276,6 +309,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = vulnManager.GetById(id);
             result.Name = model.Name;
             result.Template = model.Template;
@@ -316,6 +355,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = vulnManager.GetById(id);
             return View(result);
         }
@@ -334,6 +379,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = vulnManager.GetById(id);
             if (result != null)
             {
@@ -359,6 +410,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var model = new VulnViewModel
             {
                 Project = projectManager.GetById(project),
@@ -380,6 +437,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var vulnResult = vulnManager.GetById(id);
 
 
@@ -449,6 +512,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             var result = vulnManager.GetById(id);
             result.Id = 0;
             result.Name = model.Name;
@@ -487,10 +556,16 @@ public class VulnController : Controller
     }
 
     [HttpPost]
-    public IActionResult AddNote(IFormCollection form)
+    public IActionResult AddNote(int project,IFormCollection form)
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (form != null)
             {
                 var note = new VulnNote
@@ -529,6 +604,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (id != 0)
             {
                 var result = vulnNoteManager.GetById(id);
@@ -556,10 +637,16 @@ public class VulnController : Controller
 
 
     [HttpPost]
-    public IActionResult AddAttachment(IFormCollection form, IFormFile upload)
+    public IActionResult AddAttachment(int project, IFormCollection form, IFormFile upload)
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (form != null && upload != null)
             {
                 var file = Request.Form.Files["upload"];
@@ -621,6 +708,12 @@ public class VulnController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
             if (id != 0)
             {
                 var result = vulnAttachmentManager.GetById(id);

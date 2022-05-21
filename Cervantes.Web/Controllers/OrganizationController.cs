@@ -8,9 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using Cervantes.CORE;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cervantes.Web.Controllers;
-
+[Authorize(Roles = "Admin")]
 public class OrganizationController : Controller
 {
     private readonly ILogger<OrganizationController> _logger = null;
