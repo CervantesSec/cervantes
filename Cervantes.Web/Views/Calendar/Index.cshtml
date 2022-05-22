@@ -1,0 +1,141 @@
+@using TaskStatus = Cervantes.CORE.TaskStatus
+@model CalendarViewModel
+
+@{
+  ViewData["Title"] = "Calendar";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-calendar"></i> Calendar</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Calendar</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-2">
+            <div class="sticky-top mb-3">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title"><i class="fas fa-info-circle"></i> Legend</h4>
+                </div>
+                <div class="card-body">
+                  <!-- the events -->
+                  <div id="external-events">
+                    <div class="external-event bg-dark">Projects</div>
+                    <div class="external-event bg-secondary">Task: Backlog</div>
+                    <div class="external-event bg-primary">Task: ToDo</div>
+                    <div class="external-event bg-info">Task: InProgress</div>
+                    <div class="external-event bg-danger">Task: Blocked</div>
+                    <div class="external-event bg-success">Task: Done</div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-md-10">
+            <div class="card card-primary">
+              <div class="card-body p-0">
+                <!-- THE CALENDAR -->
+                <div id="calendar"></div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+
+@section Styles{
+        <link href="~/lib/calendar/main.css" rel="stylesheet" />
+
+}
+@section Scripts{
+    <script src="~/lib/calendar/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+              var calendarEl = document.getElementById('calendar');
+              var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                        left  : 'prev,next today',
+                        center: 'title',
+                        right : 'dayGridMonth,timeGridWeek,timeGridDay'
+                      },
+                timeZone: 'UTC',
+                events: [
+                        @foreach (var project in Model.Projects)
+                        {
+                          @:{
+                            @:title : 'Project: @project.Name' ,
+                            @:start : '@project.StartDate.Year-@project.StartDate.ToString("MM")-@project.StartDate.ToString("dd")',
+                            @:end : '@project.EndDate.Year-@project.EndDate.ToString("MM")-@project.EndDate.ToString("dd")',
+                            @:backgroundColor: '#343a40', //red
+                            @:borderColor : '#343a40', //red
+                            @:allDay : true
+                          @:},
+                        }
+                        @foreach (var task in Model.Tasks)
+                        {
+                          @:{
+                          @:title : 'Project: @task.Name' ,
+                          @:start : '@task.StartDate.Year-@task.StartDate.ToString("MM")-@task.StartDate.ToString("dd")',
+                          @:end : '@task.EndDate.Year-@task.EndDate.ToString("MM")-@task.EndDate.ToString("dd")',
+                          @switch (task.Status)
+                          {
+                            case TaskStatus.Backlog:
+                              @:backgroundColor: '#6c757d',
+                              @:borderColor : '#6c757d',
+                              break;
+                            case  TaskStatus.ToDo:
+                              @:backgroundColor: '#007bff',
+                              @:borderColor : '#007bff',
+                              break;
+                            case TaskStatus.InProgress:
+                              @:backgroundColor: '#17a2b8',
+                              @:borderColor : '#17a2b8',
+                              break;
+                            case  TaskStatus.Blocked:
+                              @:backgroundColor: '#dc3545',
+                              @:borderColor : '#dc3545',
+                              break;
+                            case TaskStatus.Done:
+                              @:backgroundColor: '#28a745',
+                              @:borderColor : '#28a745',
+                              break;
+                          }
+                          @:allDay : true
+                          @:},
+                        }
+                                                
+                        
+                      ],
+              });
+              calendar.render();
+            });
+
+    </script>
+}

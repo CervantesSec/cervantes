@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using Cervantes.CORE;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -31,14 +32,14 @@ public class WorkspacesController : Controller
             if ((User.FindFirstValue(ClaimTypes.Role) == "Admin") |
                 (User.FindFirstValue(ClaimTypes.Role) == "SuperUser"))
             {
-                var model = projectManager.GetAll().Where(x => x.Template == false).ToList();
+                var model = projectManager.GetAll().Where(x => x.Template == false && x.Status == ProjectStatus.Active).ToList();
 
                 return View(model);
             }
             else
             {
                 var projects = projectUserManager.GetAll().Where(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).Select(y => y.ProjectId).ToList();
-                var model = projectManager.GetAll().Where(x => projects.Contains(x.Id)).ToList();
+                var model = projectManager.GetAll().Where(x => projects.Contains(x.Id) && x.Status == ProjectStatus.Active).ToList();
                 return View(model);
             }
         }

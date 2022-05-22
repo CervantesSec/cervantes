@@ -15,7 +15,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"] - Cervantes</title>
-
+    @RenderSection("Styles", required: false)
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Theme style -->
@@ -39,13 +39,13 @@
             </a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" asp-route-culture="@culture"  localize-content>Home</a>
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" asp-route-culture="@culture" localize-content>Home</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link" asp-area="" asp-controller="Workspaces" asp-action="Index" asp-route-culture="@culture"  localize-content>Workspace</a>
+            <a class="nav-link" asp-area="" asp-controller="Workspaces" asp-action="Index" asp-route-culture="@culture" localize-content>Workspace</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link" asp-area="" asp-controller="Project" asp-action="Index" asp-route-culture="@culture"  localize-content>Projects</a>
+            <a class="nav-link" asp-area="" asp-controller="Project" asp-action="Index" asp-route-culture="@culture" localize-content>Projects</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a class="nav-link" asp-area="" asp-controller="Client" asp-action="Index" asp-route-culture="@culture" localize-content>Clients</a>
@@ -88,218 +88,245 @@
 
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary sidebar-collapse elevation-4">
-    <!-- Brand Logo -->
-    <a asp-area="" asp-controller="Home" asp-route-culture="@culture" asp-action="Index"class="brand-link">
+<!-- Brand Logo -->
+<a asp-area="" asp-controller="Home" asp-route-culture="@culture" asp-action="Index"class="brand-link">
 
-        <img src="/img/logo.png" alt="Logo" class="brand-image" style="opacity: .8">
-        <span class="brand-text font-weight-light">Cervantes</span>
-    </a>
+    <img src="/img/logo.png" alt="Logo" class="brand-image" style="opacity: .8">
+    <span class="brand-text font-weight-light">Cervantes</span>
+</a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
+<!-- Sidebar -->
+<div class="sidebar">
 
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-legacy" data-widget="treeview" role="menu" data-accordion="false">
-                @if (User.IsInRole("Admin") || User.IsInRole("SuperUser") || User.IsInRole("User"))
-                {
+<!-- Sidebar Menu -->
+<nav class="mt-2">
+<ul class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-legacy" data-widget="treeview" role="menu" data-accordion="false">
+@if (User.IsInRole("Admin") || User.IsInRole("SuperUser") || User.IsInRole("User"))
+{
+    <li class="nav-header">GENERAL</li>
+    <li class="nav-item">
+        <a asp-controller="Home" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+            <i class="nav-icon fas fa-home"></i>
+            <p localize-content>Home</p>
+
+        </a>
+    </li>
+    <li class="nav-item">
+        <a asp-controller="Calendar" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+            <i class="nav-icon fas fa-calendar"></i>
+            <p localize-content>Calendar</p>
+
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a asp-controller="Workspaces" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+            <i class="nav-icon fas fa-building"></i>
+            <p localize-content>My Workspaces</p>
+
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+                <span localize-content>Projects</span><i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-controller="Project" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p localize-content>List</p>
+                </a>
+            </li>
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+            {
+                <li class="nav-item">
+                    <a asp-controller="Project" asp-action="Create" asp-route-culture="@culture" class="nav-link">
+                        <i class="fas fa-plus nav-icon"></i>
+                        <p localize-content>Create</p>
+
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Project" asp-action="Templates" asp-route-culture="@culture" localize-content class="nav-link">
+                        <i class="fas fa-clone nav-icon"></i>
+                        <p localize-content>Templates</p>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </li>
+
+    <li class="nav-item">
+        <a href="#" class="nav-link" localize-content>
+            <i class="nav-icon fas fa-briefcase"></i>
+            <p>
+                <span localize-content>Clients</span><i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-controller="Client" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p localize-content>List</p>
+
+                </a>
+            </li>
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+            {
+                <li class="nav-item">
+                    <a asp-controller="Client" asp-action="Create" asp-route-culture="@culture" class="nav-link">
+                        <i class="fas fa-plus nav-icon"></i>
+                        <p localize-content>Create</p>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+
+    <li class="nav-item">
+        <a href="#" class="nav-link" localize-content>
+            <i class="nav-icon fas fa-file"></i>
+            <p>
+                <span localize-content>Documents</span><i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-controller="Document" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p localize-content>List</p>
+                </a>
+            </li>
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+            {
+                <li class="nav-item">
+                    <a asp-controller="Document" asp-action="Create" asp-route-culture="@culture" class="nav-link">
+                        <i class="fas fa-plus nav-icon"></i>
+                        <p localize-content>Create</p>
+
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" localize-content>
+            <i class="nav-icon fas fa-bug"></i>
+            <p>
+                <span localize-content>Vulnerabilities</span><i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-controller="Vuln" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p localize-content>List</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Vuln" asp-action="Categories" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-project-diagram nav-icon"></i>
+                    <p localize-content>Categories</p>
+
+                </a>
+            </li>
+
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+            {
+                <li class="nav-item">
+                    <a asp-area="" asp-controller="Vuln" asp-action="CreateCategory" asp-route-culture="@culture" class="nav-link">
+                        <i class="fas fa-plus nav-icon"></i>
+                        <p localize-content>Create Category</p>
+
+                    </a>
+                </li>
+            }
 
 
-                    <li class="nav-header">GENERAL</li>
-                    <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                            <i class="nav-icon fas fa-home"></i>
-                            <p localize-content>Home</p>
-
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a asp-controller="Workspaces" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                            <i class="nav-icon fas fa-building"></i>
-                            <p localize-content>My Workspaces</p>
-
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-folder"></i>
-                            <p><span localize-content>Projects</span><i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a asp-controller="Project" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                                    <i class="fas fa-list nav-icon"></i>
-                                    <p localize-content>List</p>
-                                </a>
-                            </li>
-                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                            {
-                                <li class="nav-item">
-                                    <a asp-controller="Project" asp-action="Create" asp-route-culture="@culture" class="nav-link">
-                                        <i class="fas fa-plus nav-icon"></i>
-                                        <p localize-content>Create</p>
-
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="Project" asp-action="Templates" asp-route-culture="@culture" localize-content class="nav-link">
-                                        <i class="fas fa-clone nav-icon"></i>
-                                        <p localize-content>Templates</p>
-                                    </a>
-                                </li>
-                            }
-                            
-                        </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" localize-content>
-                            <i class="nav-icon fas fa-briefcase"></i>
-                            <p><span localize-content>Clients</span><i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a asp-controller="Client" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                                    <i class="fas fa-list nav-icon"></i>
-                                    <p localize-content>List</p>
-
-                                </a>
-                            </li>
-                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                            {
-                                <li class="nav-item">
-                                    <a asp-controller="Client" asp-action="Create" asp-route-culture="@culture" class="nav-link">
-                                        <i class="fas fa-plus nav-icon"></i>
-                                        <p localize-content>Create</p>
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" localize-content>
-                            <i class="nav-icon fas fa-file"></i>
-                            <p><span localize-content>Documents</span><i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a asp-controller="Document" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                                    <i class="fas fa-list nav-icon"></i>
-                                    <p localize-content>List</p>
-                                </a>
-                            </li>
-                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                            {
-                                <li class="nav-item">
-                                    <a asp-controller="Document" asp-action="Create" asp-route-culture="@culture" class="nav-link">
-                                        <i class="fas fa-plus nav-icon"></i>
-                                        <p localize-content>Create</p>
-
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" localize-content>
-                            <i class="nav-icon fas fa-bug"></i>
-                            <p><span localize-content>Vulnerabilities</span><i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a asp-controller="Vuln" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                                    <i class="fas fa-list nav-icon"></i>
-                                    <p localize-content>List</p>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a asp-controller="Vuln" asp-action="Categories" asp-route-culture="@culture" class="nav-link">
-                                    <i class="fas fa-project-diagram"></i>
-                                    <p localize-content>Categories</p>
-
-                                </a>
-                            </li>
-
-                        </ul>
-                    </li>
+        </ul>
+    </li>
 
 
-                    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                    {
-                        <li class="nav-header">ADMIN</li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" localize-content>
-                                <i class="nav-icon fas fa-users"></i>
-                                <p><span localize-content>Users</span><i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-controller="User" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                                        <i class="fas fa-list nav-icon"></i>
-                                        <p localize-content>List</p>
-                                    </a>
-                                </li>
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+    {
+        <li class="nav-header">ADMIN</li>
+        <li class="nav-item">
+            <a href="#" class="nav-link" localize-content>
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                    <span localize-content>Users</span><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a asp-controller="User" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+                        <i class="fas fa-list nav-icon"></i>
+                        <p localize-content>List</p>
+                    </a>
+                </li>
 
-                                <li class="nav-item">
-                                    <a asp-controller="User" asp-action="Create" asp-route-culture="@culture" class="nav-link">
-                                        <i class="fas fa-plus nav-icon"></i>
-                                        <p localize-content>Create</p>
+                <li class="nav-item">
+                    <a asp-controller="User" asp-action="Create" asp-route-culture="@culture" class="nav-link">
+                        <i class="fas fa-plus nav-icon"></i>
+                        <p localize-content>Create</p>
 
-                                    </a>
-                                </li>
+                    </a>
+                </li>
 
-                            </ul>
-                        </li>
-
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a asp-controller="Organization" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                                    <i class="nav-icon fas fa-sitemap"></i>
-                                    <p localize-content>Organization</p>
-
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-area="" asp-controller="Log" asp-action="Index" asp-route-culture="@culture" localize-content class="nav-link">
-                                    <i class="nav-icon fas fa-eye"></i>
-                                    <p localize-content>Application Logs</p>
-
-                                </a>
-                            </li>
-                        }
-
-                    }
-                }
-                
-                @if (User.IsInRole("Client"))
-                {
-                    <li class="nav-header">GENERAL</li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-folder"></i>
-                            <p><span localize-content>Projects</span><i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a asp-controller="Project" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                                    <i class="fas fa-list nav-icon"></i>
-                                    <p localize-content>List</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                }
             </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
+        </li>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a asp-controller="Organization" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+                    <i class="nav-icon fas fa-sitemap"></i>
+                    <p localize-content>Organization</p>
+
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Log" asp-action="Index" asp-route-culture="@culture" localize-content class="nav-link">
+                    <i class="nav-icon fas fa-eye"></i>
+                    <p localize-content>Application Logs</p>
+
+                </a>
+            </li>
+        }
+    }
+}
+
+@if (User.IsInRole("Client"))
+{
+    <li class="nav-header">GENERAL</li>
+    <li class="nav-item">
+        <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>
+                <span localize-content>Projects</span><i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-controller="Project" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p localize-content>List</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+}
+</ul>
+</nav>
+<!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->
 </aside>
 
 <!-- Content Wrapper. Contains page content -->
@@ -310,7 +337,7 @@
 
 <footer class="main-footer bg-dark">
     <div class="float-right d-none d-sm-block">
-        <b>Version</b> Alpha-0.1
+        <b>Version</b> Alpha-0.2
     </div>
     <strong>Copyright &copy; @DateTime.Now.Year <a href="https://github.com/CervantesSec">Cervantes</a>.</strong> All rights reserved.
 </footer>

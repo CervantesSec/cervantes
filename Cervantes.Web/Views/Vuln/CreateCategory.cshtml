@@ -1,15 +1,15 @@
-﻿@using Cervantes.CORE
+@using Cervantes.CORE
 @model VulnCategoryViewModel
 
 @{
-    ViewData["Title"] = "Edit Vuln Category";
+    ViewData["Title"] = "Create Vuln Category";
 }
 
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-bug"></i> Edit Vulnerability Category</h1>
+                <h1 localize-content><i class="fas fa-bug"></i> Create Vulnerability Category</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -19,7 +19,7 @@
                     <li class="breadcrumb-item" localize-content>
                         <a asp-controller="Vuln" asp-action="Index" localize-content>Vulnerability</a>
                     </li>
-                    <li class="breadcrumb-item active" localize-content>Edit Category</li>
+                    <li class="breadcrumb-item active" localize-content>Create Category</li>
                 </ol>
             </div>
         </div>
@@ -32,7 +32,7 @@
 <div class="card-body">
 
     <div class="col-md-12">
-        <form asp-area="" asp-controller="Vuln" asp-action="EditCategory" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+        <form asp-area="" asp-controller="Vuln" asp-action="CreateCategory" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id"/>
             <div class="form-group">
@@ -47,11 +47,12 @@
             </div>
             <div class="form-group">
                 <a class="btn btn-light" asp-action="Index" localize-content>Back</a>
-                <button type="submit" class="btn btn-dark" localize-content>Edit</button>
+                <button type="submit" class="btn btn-dark" localize-content>Create</button>
             </div>
 
         </form>
     </div>
+        
 </div>
 </div>
 </section>

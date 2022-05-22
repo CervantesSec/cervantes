@@ -96,6 +96,7 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Edit/5
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Edit(int id)
     {
         try
@@ -165,6 +166,7 @@ public class VulnController : Controller
     // POST: VulnController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Edit(int id, VulnCreateViewModel model)
     {
         try
@@ -203,6 +205,7 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Delete/5
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Delete(int id)
     {
         try
@@ -221,6 +224,7 @@ public class VulnController : Controller
     // POST: VulnController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Delete(int id, IFormCollection collection)
     {
         try
@@ -238,14 +242,14 @@ public class VulnController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error deleting vulns!";
-            _logger.LogError(e, "An error ocurred deleting a Vuln Workspace on. Vuln: {0}  User: {1}", id,
+            TempData["error"] = "Error Creating vuln category!";
+            _logger.LogError(e, "An error ocurred creating a Vuln category on. User: {0}", 
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return View("Categories");
         }
     }
 
-
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult CreateCategory()
     {
         return View();
@@ -254,24 +258,43 @@ public class VulnController : Controller
     // POST: VulnController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult CreateCategory(IFormCollection collection)
+    [Authorize(Roles = "Admin,SuperUser")]
+    public ActionResult CreateCategory(VulnCategoryViewModel model)
     {
         try
         {
-            return RedirectToAction(nameof(Index));
+            VulnCategory cat = new VulnCategory
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description
+            };
+            vulnCategoryManager.Add(cat);
+            vulnCategoryManager.Context.SaveChanges();
+            return RedirectToAction("Categories");
         }
-        catch
+        catch (Exception e)
         {
+            TempData["error"] = "Error deleting vulns!";
+            _logger.LogError(e, "An error ocurred creating a Vuln category on. User: {0}", 
+                User.FindFirstValue(ClaimTypes.Name));
             return View();
         }
     }
 
     // GET: VulnController/Edit/5
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult EditCategory(int id)
     {
         try
         {
-            var model = vulnCategoryManager.GetById(id);
+            var cat = vulnCategoryManager.GetById(id);
+            VulnCategoryViewModel model = new VulnCategoryViewModel
+            {
+                Id = cat.Id,
+                Name = cat.Name,
+                Description = cat.Description
+            };
             return View(model);
         }
         catch (Exception ex)
@@ -285,7 +308,8 @@ public class VulnController : Controller
     // POST: VulnController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult EditCategory(int id, VulnCategory model)
+    [Authorize(Roles = "Admin,SuperUser")]
+    public ActionResult EditCategory(int id, VulnCategoryViewModel model)
     {
         try
         {
@@ -305,6 +329,7 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Delete/5
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult DeleteCategory(int id)
     {
         try
@@ -323,6 +348,7 @@ public class VulnController : Controller
     // POST: VulnController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult DeleteCategory(int id, IFormCollection collection)
     {
         try

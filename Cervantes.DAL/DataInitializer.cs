@@ -23,6 +23,7 @@ public class DataInitializer
             var user = new ApplicationUser();
             user.UserName = "admin@cervantes.local";
             user.Email = "admin@cervantes.local";
+            user.FullName = "Admin";
 
             var result = userManager.CreateAsync(user, "Admin123.").Result;
 

@@ -106,7 +106,13 @@
 
     </a>
 </li>
+<li class="nav-item">
+        <a asp-controller="Calendar" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+            <i class="nav-icon fas fa-calendar"></i>
+            <p localize-content>Calendar</p>
 
+        </a>
+    </li>
 <li class="nav-item">
     <a asp-area="" asp-controller="Workspaces" asp-action="Index" asp-route-culture="@culture" class="nav-link">
         <i class="nav-icon fas fa-building"></i>
@@ -215,11 +221,22 @@
 
         <li class="nav-item">
             <a asp-area="" asp-controller="Vuln" asp-action="Categories" asp-route-culture="@culture" class="nav-link">
-                <i class="fas fa-project-diagram"></i>
+                <i class="fas fa-project-diagram nav-icon"></i>
                 <p localize-content>Categories</p>
 
             </a>
         </li>
+        
+        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+        {
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Vuln" asp-action="CreateCategory" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-plus nav-icon"></i>
+                    <p localize-content>Create Category</p>
+
+                </a>
+            </li>
+        }
 
     </ul>
 </li>
@@ -321,7 +338,7 @@
         </li>
         <li class="nav-item">
             <a asp-area="Workspace" asp-controller="Vuln" asp-action="Templates" asp-route-culture="@culture" class="nav-link">
-                <i class="fas fa-clone"></i>
+                <i class="fas fa-clone nav-icon"></i>
                 <p localize-content>Templates</p>
 
             </a>
@@ -387,7 +404,7 @@
 
 <footer class="main-footer bg-dark">
     <div class="float-right d-none d-sm-block">
-        <b>Version</b> Alpha-0.1
+        <b>Version</b> Alpha-0.2
     </div>
     <strong>Copyright &copy; @DateTime.Now.Year <a href="https://github.com/CervantesSec">Cervantes</a>.</strong> All rights reserved.
 </footer>
