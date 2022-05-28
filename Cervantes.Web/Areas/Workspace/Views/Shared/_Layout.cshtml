@@ -13,7 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"] - Cervantes</title>
-
+    @RenderSection("Styles", required: false)
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Theme style -->
@@ -107,7 +107,7 @@
     </a>
 </li>
 <li class="nav-item">
-        <a asp-controller="Calendar" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+        <a asp-area="" asp-controller="Calendar" asp-action="Index" asp-route-culture="@culture" class="nav-link">
             <i class="nav-icon fas fa-calendar"></i>
             <p localize-content>Calendar</p>
 

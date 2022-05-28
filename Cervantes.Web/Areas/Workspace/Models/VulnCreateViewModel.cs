@@ -53,7 +53,6 @@ public class VulnCreateViewModel
     /// <summary>
     /// Target Associated
     /// </summary>
-    [Required]
     public virtual Target Target { get; set; }
 
     /// <summary>

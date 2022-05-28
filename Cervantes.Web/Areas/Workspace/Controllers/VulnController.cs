@@ -164,36 +164,7 @@ public class VulnController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
-            if (!ModelState.IsValid)
-            {
-                var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e =>
-                    new VulnCreateViewModel
-                    {
-                        TargetId = e.Id,
-                        TargetName = e.Name
-                    }).ToList();
 
-                var targets = new List<SelectListItem>();
-
-                foreach (var item in result)
-                    targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
-
-                var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
-                {
-                    VulnCategoryId = e.Id,
-                    VulnCategoryName = e.Name
-                }).ToList();
-
-                var vulnCat = new List<SelectListItem>();
-
-                foreach (var item in result2)
-                    vulnCat.Add(new SelectListItem
-                        {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
-
-                model.VulnCatList = vulnCat;
-                model.TargetList = targets;
-                return View(model);
-            }
 
             var vuln = new Vuln
             {
