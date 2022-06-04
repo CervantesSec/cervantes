@@ -95,6 +95,22 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
+    
+    if (TempData["reportDeleted"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Report deleted successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["reportCreated"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Report created successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
 }
 
 <section class="content-header">
@@ -1030,9 +1046,11 @@
                     <a class="btn btn-tool" asp-area="" asp-controller="Report" asp-action="Download" asp-route-id="@report.Id" localize-content>
                         <i class="fas fa-download"></i>
                     </a>
-                    <a class="btn btn-tool" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id" localize-content>
-                        <i class="fas fa-trash"></i>
-                    </a>
+                    <form asp-area="" asp-action="Delete" asp-controller="Report" method="post" enctype="multipart/form-data">
+                        <button type="submit" class="btn btn-tool" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id" localize-content>
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        </form>
 
                 </td>
 

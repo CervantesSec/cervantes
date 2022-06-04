@@ -168,6 +168,7 @@ public class ReportController : Controller
             reportManager.Add(rep);
             reportManager.Context.SaveChanges();
 
+            TempData["reportCreated"] = "report created";
 
             return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
         }
@@ -202,6 +203,7 @@ public class ReportController : Controller
             reportManager.Context.SaveChanges();
             _logger.LogInformation("User: {0} deleted report {1} in Project: {2}", User.FindFirstValue(ClaimTypes.Name),
                 id, report.ProjectId);
+            TempData["reportDeleted"] = "report deleted";
             return RedirectToAction("Details", "Project", new {id = report.ProjectId});
         }
         catch (Exception ex)
