@@ -79,4 +79,15 @@ public class UserViewModel : IdentityUser
     [Required] public string Option { get; set; }
 
     public IEnumerable<Project> Project { get; set; }
+    
+    /// <summary>
+    /// Client asssociated to project
+    /// </summary>
+    public virtual Client Client { get; set; }
+
+    /// <summary>
+    /// Client ID
+    /// </summary>
+    public int ClientId { get; set; }
+    public IList<SelectListItem> ItemListClient { get; set; }
 }

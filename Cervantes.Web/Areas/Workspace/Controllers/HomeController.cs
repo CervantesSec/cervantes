@@ -50,6 +50,7 @@ public class HomeController : Controller
     {
         try
         {
+            
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {

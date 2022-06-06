@@ -14,7 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 
 namespace Cervantes.Web.Controllers;
-[Authorize(Roles = "Admin,SuperUser,User")]
+[Authorize(Roles = "Admin,SuperUser,User,Client")]
 public class ProjectController : Controller
 {
     private readonly ILogger<ProjectController> _logger = null;
@@ -59,6 +59,7 @@ public class ProjectController : Controller
     /// Method Index show all projects
     /// </summary>
     /// <returns></returns>
+    [Authorize(Roles = "Admin,SuperUser,User")]
     public ActionResult Index()
     {
         try
@@ -99,13 +100,55 @@ public class ProjectController : Controller
     /// </summary>
     /// <param name="id">Project Id</param>
     /// <returns></returns>
+    [Authorize(Roles = "Admin,SuperUser,User,Client")]
     public ActionResult Details(int id)
     {
         try
         {
+            
             var project = projectManager.GetById(id);
+            
+           
+            
             if (project != null)
             {
+                
+                if(User.FindFirstValue(ClaimTypes.Role) == "Client")
+                {
+                    var user = userManager.GetByUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    if (project.ClientId == user.ClientId)
+                    {
+                        var result2 = userManager.GetAll().Select(e => new ApplicationUser
+                        {
+                            Id = e.Id,
+                            FullName = e.FullName
+                        }).ToList();
+
+                        var users2 = new List<SelectListItem>();
+
+                        foreach (var item in result2)
+                            users2.Add(new SelectListItem {Text = item.FullName, Value = item.Id.ToString()});
+
+                        var model2 = new ProjectDetailsViewModel
+                        {
+                            Project = project,
+                            ProjectUsers = projectUserManager.GetAll().Where(x => x.ProjectId == id).ToList(),
+                            ProjectNotes = projectNoteManager.GetAll().Where(x => x.ProjectId == id),
+                            ProjectAttachments = projectAttachmentManager.GetAll().Where(x => x.ProjectId == id),
+                            Targets = targetManager.GetAll().Where(x => x.ProjectId == id),
+                            Tasks = taskManager.GetAll().Where(x => x.ProjectId == id),
+                            Users = users2.ToList(),
+                            Vulns = vulnManager.GetAll().Where(x => x.ProjectId == id).ToList(),
+                            Reports = reportManager.GetAll().Where(x => x.ProjectId == id)
+                        };
+                        return View(model2);
+                    }
+                    else
+                    {
+                        return RedirectToAction("MyProjects");
+                    }
+                }
+                
                 var result = userManager.GetAll().Select(e => new ApplicationUser
                 {
                     Id = e.Id,
@@ -786,6 +829,7 @@ public class ProjectController : Controller
         }
     }
 
+    [Authorize(Roles = "Admin,SuperUser,User,Client")]
     public ActionResult Download(int id)
     {
         var attachment = projectAttachmentManager.GetById(id);
@@ -798,14 +842,16 @@ public class ProjectController : Controller
     }
     
     /// <summary>
-    /// Method Index show all projects
+    /// Method show project for a client
     /// </summary>
     /// <returns></returns>
-    public ActionResult MyProject()
+    [Authorize(Roles = "Client")]
+    public ActionResult MyProjects()
     {
         try
         {
-            var model = projectManager.GetAll().Where(x => x.Template == false).Select(e => new ProjectViewModel
+            var user = userManager.GetByUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var model = projectManager.GetAll().Where(x => x.Template == false && x.ClientId == user.ClientId).Select(e => new ProjectViewModel
             {
                 Id = e.Id,
                 Name = e.Name,
@@ -816,16 +862,9 @@ public class ProjectController : Controller
                 EndDate = e.EndDate,
                 ClientId = e.ClientId
             });
+            
+            return View(model);
 
-            if (model != null)
-            {
-                return View(model);
-            }
-            else
-            {
-                TempData["empty"] = "No clients introduced";
-                return View();
-            }
         }
         catch (Exception ex)
         {

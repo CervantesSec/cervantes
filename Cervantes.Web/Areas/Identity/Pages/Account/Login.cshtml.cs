@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -77,6 +78,13 @@ public class LoginModel : PageModel
             var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, false);
             if (result.Succeeded)
             {
+                var user = await _userManager.FindByNameAsync(Input.Email);
+
+                if (await _userManager.IsInRoleAsync(user,"Client"))
+                {
+                    return RedirectToAction("MyProjects","Project");
+                }
+                
                 _logger.LogInformation("User logged in.");
                 return LocalRedirect(returnUrl);
             }

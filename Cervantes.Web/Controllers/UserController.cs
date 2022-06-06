@@ -24,6 +24,7 @@ public class UserController : Controller
     private IUserManager usrManager = null;
     private IProjectManager projectManager = null;
     private IRoleManager roleManager = null;
+    private IClientManager clientManager = null;
     private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
 
     /// <summary>
@@ -35,11 +36,12 @@ public class UserController : Controller
     /// <param name="_appEnvironment">IHostingEnviroment</param>
     public UserController(IUserManager usrManager, IRoleManager roleManager,
         Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, IProjectManager projectManager,
-        IHostingEnvironment _appEnvironment,
+       IClientManager clientManager, IHostingEnvironment _appEnvironment,
         ILogger<UserController> logger)
     {
         this.usrManager = usrManager;
         this.roleManager = roleManager;
+        this.clientManager = clientManager;
         this._appEnvironment = _appEnvironment;
         _userManager = userManager;
         this.projectManager = projectManager;
@@ -144,10 +146,21 @@ public class UserController : Controller
             var li = new List<SelectListItem>();
 
             foreach (var item in rol) li.Add(new SelectListItem {Text = item.Name, Value = item.Name});
+            
+            var clients = clientManager.GetAll().Select(e => new ClientViewModel
+            {
+                Id = e.Id,
+                Name = e.Name
+            }).ToList();
+
+            var liCli = new List<SelectListItem>();
+
+            foreach (var item in clients) liCli.Add(new SelectListItem {Text = item.Name, Value = item.Id.ToString()});
 
             var model = new UserViewModel
             {
-                ItemList = li
+                ItemList = li,
+                ItemListClient = liCli
             };
 
             return View(model);
@@ -186,22 +199,46 @@ public class UserController : Controller
                     file.CopyTo(fileStream);
                 }
 
-
-                var user = new ApplicationUser
+                var user = new ApplicationUser();
+                
+                if (model.Option == "Client")
                 {
-                    UserName = model.UserName,
-                    Email = model.Email,
-                    PasswordHash = hasher.HashPassword(model.Password),
-                    FullName = model.FullName,
-                    Avatar = "/Attachments/Images/Avatars/" + uniqueName,
-                    EmailConfirmed = true,
-                    NormalizedEmail = model.Email.ToUpper(),
-                    NormalizedUserName = model.UserName.ToUpper(),
-                    SecurityStamp = Guid.NewGuid().ToString(),
-                    PhoneNumber = model.PhoneNumber,
-                    Position = model.Position,
-                    Description = model.Description
-                };
+                    user = new ApplicationUser()
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email,
+                        PasswordHash = hasher.HashPassword(model.Password),
+                        FullName = model.FullName,
+                        Avatar = "/Attachments/Images/Avatars/" + uniqueName,
+                        EmailConfirmed = true,
+                        NormalizedEmail = model.Email.ToUpper(),
+                        NormalizedUserName = model.UserName.ToUpper(),
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        PhoneNumber = model.PhoneNumber,
+                        Position = model.Position,
+                        Description = model.Description,
+                        ClientId = model.ClientId
+                    };
+                }
+                else
+                {
+                    user = new ApplicationUser
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email,
+                        PasswordHash = hasher.HashPassword(model.Password),
+                        FullName = model.FullName,
+                        Avatar = "/Attachments/Images/Avatars/" + uniqueName,
+                        EmailConfirmed = true,
+                        NormalizedEmail = model.Email.ToUpper(),
+                        NormalizedUserName = model.UserName.ToUpper(),
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        PhoneNumber = model.PhoneNumber,
+                        Position = model.Position,
+                        Description = model.Description,
+                    };
+                }
+                
                 usrManager.Add(user);
                 usrManager.Context.SaveChanges();
                 _userManager.AddToRoleAsync(user, model.Option).Wait();

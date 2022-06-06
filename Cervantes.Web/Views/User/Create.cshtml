@@ -77,11 +77,18 @@
                         <div class="form-group">
                             <label class="control-label col-md-2" localize-content>Role</label>
 
-                            @Html.DropDownListFor(m => m.Option, Model.ItemList, new {@class = "form-control"})
+                            @Html.DropDownListFor(m => m.Option, Model.ItemList, new {@class = "form-control", @id= "role"})
                             <span asp-validation-for="Role" class="text-danger"></span>
 
                         </div>
-
+                        
+                        <div class="form-group" id="client" style="display:none;">
+                            <label asp-for="ClientId" class="control-label" localize-content>Client</label>
+                            @Html.DropDownListFor(m => m.ClientId, Model.ItemListClient, new {@class = "form-control"})
+                            <span asp-validation-for="Client" class="text-danger"></span>
+                        </div>
+                        
+                        
 
                         <div class="form-group">
                             <label for="upload" localize-content>Avatar</label>
@@ -146,5 +153,19 @@
                      $(document).ready(function () {
               bsCustomFileInput.init();
             });
+             
+             $(document).ready(function(){
+                 $('#role').on('change', function(){
+                 	var value = $(this).val(); 
+                     if (value == 'Client')
+                     {
+                         $("#client").show();
+                     }
+                     else
+                     {
+                         $("#client").hide();
+                     }
+                 });
+             });
          </script>
 }

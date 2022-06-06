@@ -24,4 +24,6 @@ public class ApplicationUser : IdentityUser
     /// User Position
     /// </summary>
     public string Position { get; set; }
+    
+    public int ClientId { get; set; }
 }
