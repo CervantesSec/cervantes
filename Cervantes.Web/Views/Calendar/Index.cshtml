@@ -101,7 +101,7 @@
                         @foreach (var task in Model.Tasks)
                         {
                           @:{
-                          @:title : 'Project: @task.Name' ,
+                          @:title : '@task.Name Project: @task.Project.Name' ,
                           @:start : '@task.StartDate.Year-@task.StartDate.ToString("MM")-@task.StartDate.ToString("dd")',
                           @:end : '@task.EndDate.Year-@task.EndDate.ToString("MM")-@task.EndDate.ToString("dd")',
                           @switch (task.Status)

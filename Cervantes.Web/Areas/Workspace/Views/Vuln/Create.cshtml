@@ -56,7 +56,6 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="active tab-pane" id="details">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="Template" class="control-label" localize-content>Template</label>
                                 <input asp-for="Template" class="form-control"/>
@@ -97,12 +96,25 @@
                                 <textarea id="impact" asp-for="Impact" class="form-control" rows="4"></textarea>
                                 <span asp-validation-for="Impact" class="text-danger"></span>
                             </div>
-                            <div class="form-group">
+                            @*<div class="form-group">
                                 <label asp-for="TargetId" class="control-label" localize-content>Target</label>
                                 @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new {@class = "form-control"})
                                 <span asp-validation-for="TargetId" class="text-danger"></span>
+                            </div>*@
+                            
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Target</label>
+                                <select class="target-multiple form-control" name="targets" multiple="multiple" data-placeholder="Select a Target" name="targets">
+                                    @foreach (var target in Model.TargetList)
+                                    {
+                                        <option value="@target.Value">@target.Text</option>
+                                    }
+                                </select>
+                                <span class="text-danger"></span>
                             </div>
+                            
 
+                            
                             <input type="hidden" asp-for="CVSS3" id="cvss3" class="form-control" rows="4"></input>
                             <input type="hidden" asp-for="CVSSVector" id ="cvssvector" class="form-control" rows="4"></input>
 
@@ -161,13 +173,17 @@
     </div>
 </section>
 @section Styles{
-        <link href="~/lib/cvssjs/cvss.css" rel="stylesheet" />
+    <link href="~/lib/cvssjs/cvss.css" rel="stylesheet" />
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet">
+
 }
 @section Scripts
 {
     <script src="~/lib/cvssjs/cvss.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
     <script>
   $(document).ready(function() { 
+          $('.target-multiple').select2();
           $('#descriptionTxt').summernote({
           height: 300,
           callbacks: {

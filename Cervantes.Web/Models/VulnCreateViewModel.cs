@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cervantes.Web.Models;
 
 public class VulnCreateViewModel
 {
+
     /// <summary>
     /// Id Vuln
     /// </summary>
@@ -20,6 +22,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Vuln Name
     /// </summary>
+    [Required]
     public string Name { get; set; }
 
     /// <summary>
@@ -56,9 +59,9 @@ public class VulnCreateViewModel
     /// Id Target
     /// </summary>
     public int TargetId { get; set; }
-
+    
     public string TargetName { get; set; }
-
+    
     /// <summary>
     /// VulnCategory Associated
     /// </summary>
@@ -67,6 +70,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Project
     /// </summary>
+    [Required]
     public int VulnCategoryId { get; set; }
 
     public string VulnCategoryName { get; set; }
@@ -74,58 +78,70 @@ public class VulnCreateViewModel
     /// <summary>
     /// Vuln Risk
     /// </summary>
+    [Required]
     public VulnRisk Risk { get; set; }
 
     /// <summary>
     /// Vulnerability Status
     /// </summary>
+    [Required]
     public VulnStatus Status { get; set; }
 
     /// <summary>
     /// CVE Associated to vuln
     /// </summary>
+    [Required]
     public string cve { get; set; }
 
     /// <summary>
     /// Vuln Description
     /// </summary>
+    [Required]
     public string Description { get; set; }
 
     /// <summary>
     /// Vuln POC
     /// </summary>
+    [Required]
     public string ProofOfConcept { get; set; }
 
     /// <summary>
     /// Vuln Impact
     /// </summary>
+    [Required]
     public string Impact { get; set; }
 
     /// <summary>
     /// Vuln CVSS3 Score
     /// </summary>
+    [Required]
     public float CVSS3 { get; set; }
 
     /// <summary>
     /// Vuln CVSS Vector
     /// </summary>
+    [Required]
     public string CVSSVector { get; set; }
 
     /// <summary>
     /// Vuln Remediation Description
     /// </summary>
+    [Required]
     public string Remediation { get; set; }
 
     /// <summary>
     /// Vuln Remediation Complexity
     /// </summary>
+    [Required]
     public RemediationComplexity RemediationComplexity { get; set; }
 
     /// <summary>
     /// Vuln Remediation Priority
     /// </summary>
+    [Required]
     public RemediationPriority RemediationPriority { get; set; }
 
     public IList<SelectListItem> TargetList { get; set; }
     public IList<SelectListItem> VulnCatList { get; set; }
+
 }

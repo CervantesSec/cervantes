@@ -40,7 +40,6 @@ public class TargetCreateViewModel
     /// <summary>
     /// Target Description
     /// </summary>
-    [Required]
     public string Description { get; set; }
 
     /// <summary>

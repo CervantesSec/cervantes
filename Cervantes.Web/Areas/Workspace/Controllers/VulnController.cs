@@ -158,41 +158,72 @@ public class VulnController : Controller
     {
         try
         {
-            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (user == null)
+            if (!ModelState.IsValid)
             {
-                TempData["userProject"] = "User is not in the project";
-                return RedirectToAction("Index", "Workspaces",new {area =""});
+                var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
+                {
+                    TargetId = e.Id,
+                    TargetName = e.Name
+                }).ToList();
+
+                var targets = new List<SelectListItem>();
+
+                foreach (var item in result)
+                    targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
+
+                var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
+                {
+                    VulnCategoryId = e.Id,
+                    VulnCategoryName = e.Name
+                }).ToList();
+
+                var vulnCat = new List<SelectListItem>();
+
+                foreach (var item in result2)
+                    vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
+                
+                model.TargetList = targets;
+                model.VulnCatList = vulnCat;
+                return View(model);
             }
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                if (user == null)
+                {
+                    TempData["userProject"] = "User is not in the project";
+                    return RedirectToAction("Index", "Workspaces", new {area = ""});
+                }
 
 
-            var vuln = new Vuln
-            {
-                Name = model.Name,
-                ProjectId = project,
-                Template = model.Template,
-                cve = model.cve,
-                Description = model.Description,
-                VulnCategoryId = model.VulnCategoryId,
-                Risk = model.Risk,
-                Status = model.Status,
-                Impact = model.Impact,
-                TargetId = model.TargetId,
-                CVSS3 = model.CVSS3,
-                CVSSVector = model.CVSSVector,
-                ProofOfConcept = model.ProofOfConcept,
-                Remediation = model.Remediation,
-                RemediationComplexity = model.RemediationComplexity,
-                RemediationPriority = model.RemediationPriority,
-                CreatedDate = DateTime.Now.ToUniversalTime(),
-                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
-            };
-            vulnManager.Add(vuln);
-            vulnManager.Context.SaveChanges();
-            TempData["added"] = "added";
-            _logger.LogInformation("User: {0} Created a new Vuln on Project {1}", User.FindFirstValue(ClaimTypes.Name),
-                project);
-            return RedirectToAction(nameof(Index));
+                var vuln = new Vuln
+                {
+                    Name = model.Name,
+                    ProjectId = project,
+                    Template = model.Template,
+                    cve = model.cve,
+                    Description = model.Description,
+                    VulnCategoryId = model.VulnCategoryId,
+                    Risk = model.Risk,
+                    Status = model.Status,
+                    Impact = model.Impact,
+                    TargetId = model.TargetId.GetHashCode(),
+                    CVSS3 = model.CVSS3,
+                    CVSSVector = model.CVSSVector,
+                    ProofOfConcept = model.ProofOfConcept,
+                    Remediation = model.Remediation,
+                    RemediationComplexity = model.RemediationComplexity,
+                    RemediationPriority = model.RemediationPriority,
+                    CreatedDate = DateTime.Now.ToUniversalTime(),
+                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                };
+                vulnManager.Add(vuln);
+                vulnManager.Context.SaveChanges();
+                TempData["added"] = "added";
+                _logger.LogInformation("User: {0} Created a new Vuln on Project {1}",
+                    User.FindFirstValue(ClaimTypes.Name),
+                    project);
+                return RedirectToAction(nameof(Index));
+            
+
         }
         catch
         {

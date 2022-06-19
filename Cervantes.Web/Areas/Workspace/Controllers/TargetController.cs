@@ -131,6 +131,11 @@ public class TargetController : Controller
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                model.Project = projectManager.GetById(project);
+                return View("Create", model);
+            }
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {

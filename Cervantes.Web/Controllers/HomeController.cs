@@ -57,7 +57,7 @@ public class HomeController : Controller
                 RecentDocuments = documentManager.GetAll().OrderByDescending(x => x.Id).Take(5)
                     .OrderByDescending(x => x.CreatedDate),
                 RecentVulns = vulnManager.GetAll().Where(x => x.Template == false).Take(5)
-                    .OrderByDescending(x => x.CreatedDate),
+                    .OrderByDescending(x => x.CreatedDate).ToList(),
                 ProjectPercetagesActive =
                     projectManager.GetAll().Where(x => x.Status == CORE.ProjectStatus.Active).Count(),
                 ProjectPercetagesArchived =
