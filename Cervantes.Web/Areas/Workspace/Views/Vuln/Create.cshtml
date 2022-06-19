@@ -96,12 +96,13 @@
                                 <textarea id="impact" asp-for="Impact" class="form-control" rows="4"></textarea>
                                 <span asp-validation-for="Impact" class="text-danger"></span>
                             </div>
-                            @*<div class="form-group">
+                            <div class="form-group">
                                 <label asp-for="TargetId" class="control-label" localize-content>Target</label>
                                 @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new {@class = "form-control"})
                                 <span asp-validation-for="TargetId" class="text-danger"></span>
-                            </div>*@
+                            </div>
                             
+                            @*
                             <div class="form-group">
                                 <label class="control-label" localize-content>Target</label>
                                 <select class="target-multiple form-control" name="targets" multiple="multiple" data-placeholder="Select a Target" name="targets">
@@ -112,6 +113,7 @@
                                 </select>
                                 <span class="text-danger"></span>
                             </div>
+                            *@
                             
 
                             
