@@ -30,12 +30,14 @@ public class ProjectViewModel
     /// Project Start Date
     /// </summary>
     [Required]
+    [DataType(DataType.Date)]
     public DateTime StartDate { get; set; }
 
     /// <summary>
     /// Project End Date
     /// </summary>
     [Required]
+    [DataType(DataType.Date)]
     public DateTime EndDate { get; set; }
 
     /// <summary>

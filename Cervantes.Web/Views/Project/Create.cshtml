@@ -2,7 +2,7 @@
 @model Cervantes.Web.Models.ProjectViewModel
 
 @{
-    ViewData["Title"] = "Create Client";
+    ViewData["Title"] = "Create Project";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -36,7 +36,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <form asp-action="Create" method="post" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group form-check">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="Template"/> <strong localize-content>Template</strong>
@@ -55,12 +55,12 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="StartDate" class="control-label" localize-content>Start Date</label>
-                            <input asp-for="StartDate" class="form-control" value="2021-01-01"/>
+                            <input type="date" asp-for="StartDate" class="form-control" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")" min="@DateTime.MinValue.Date.ToString("yyyy-MM-dd")" max="@DateTime.MaxValue.Date.ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="EndDate" class="control-label" localize-content>End Date</label>
-                            <input asp-for="EndDate" class="form-control" value="2021-01-01" data-date-format="mm/dd/yyyy hh:mm:ss"/>
+                            <input type="date" asp-for="EndDate" class="form-control" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")" min="@DateTime.Today.Date.ToString("yyyy-MM-dd")" max="@DateTime.MaxValue.Date.ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                         <div class="form-group">

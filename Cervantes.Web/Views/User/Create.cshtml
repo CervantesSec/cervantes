@@ -44,11 +44,6 @@
                             <span asp-validation-for="FullName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="UserName" class="control-label" localize-content>Username</label>
-                            <input type="email" asp-for="UserName" class="form-control"/>
-                            <span asp-validation-for="UserName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
                             <label asp-for="Email" class="control-label" localize-content>Email</label>
                             <input type="email" asp-for="Email" class="form-control"/>
                             <span asp-validation-for="Email" class="text-danger"></span>
@@ -77,7 +72,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-2" localize-content>Role</label>
 
-                            @Html.DropDownListFor(m => m.Option, Model.ItemList, new {@class = "form-control", @id= "role"})
+                            @Html.DropDownListFor(m => m.Option, Model.ItemList, new {@class = "form-control"})
                             <span asp-validation-for="Role" class="text-danger"></span>
 
                         </div>

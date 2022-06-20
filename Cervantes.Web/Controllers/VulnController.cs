@@ -538,4 +538,116 @@ public class VulnController : Controller
             return RedirectToAction("Details", "Vuln", new {id = vuln});
         }
     }
+    
+    public ActionResult Templates(int project)
+    {
+        try
+        {
+
+            var model = vulnManager.GetAll().Where(x => x.Template == true).ToList();
+            return View(model);
+        }
+        catch (Exception e)
+        {
+            TempData["error"] = "Error loading vulns!";
+
+            _logger.LogError(e, "An error ocurred loading Vuln Workspace Templates. Project: {1} User: {2}", project,
+                User.FindFirstValue(ClaimTypes.Name));
+            return View();
+        }
+    }
+    
+     public ActionResult TemplateEdit(int project, int id)
+    {
+        try
+        {
+
+            var vulnResult = vulnManager.GetById(id);
+            ;
+            var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
+            {
+                VulnCategoryId = e.Id,
+                VulnCategoryName = e.Name
+            }).ToList();
+
+            var vulnCat = new List<SelectListItem>();
+
+            foreach (var item in result2)
+                vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
+
+
+            var model = new VulnCreateViewModel
+            {
+                Name = vulnResult.Name,
+                Project = projectManager.GetById(project),
+                ProjectId = project,
+                Template = true,
+                cve = vulnResult.cve,
+                Description = vulnResult.Description,
+                VulnCategoryId = vulnResult.VulnCategoryId,
+                Risk = vulnResult.Risk,
+                Status = vulnResult.Status,
+                Impact = vulnResult.Impact,
+                TargetId = vulnResult.TargetId,
+                CVSS3 = vulnResult.CVSS3,
+                CVSSVector = vulnResult.CVSSVector,
+                ProofOfConcept = vulnResult.ProofOfConcept,
+                Remediation = vulnResult.Remediation,
+                RemediationComplexity = vulnResult.RemediationComplexity,
+                RemediationPriority = vulnResult.RemediationPriority,
+                CreatedDate = vulnResult.CreatedDate,
+                UserId = vulnResult.UserId,
+                VulnCatList = vulnCat
+            };
+
+            return View(model);
+        }
+        catch (Exception e)
+        {
+            TempData["error"] = "Error loading vuln!";
+            _logger.LogError(e, "An error ocurred loading Vuln Workspace edit PROJECT form.Project: {0} User: {1}",
+                project, User.FindFirstValue(ClaimTypes.Name));
+            return View();
+        }
+    }
+        
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult TemplateEdit(int id,VulnCreateViewModel model)
+    {
+        try
+        {
+
+            var result = vulnManager.GetById(model.Id);
+            result.Name = model.Name;
+            result.Template = model.Template;
+            result.cve = model.cve;
+            result.Description = model.Description;
+            result.VulnCategoryId = model.VulnCategoryId;
+            result.Risk = model.Risk;
+            result.Status = model.Status;
+            result.Impact = model.Impact;
+            result.CVSS3 = model.CVSS3;
+            result.CVSSVector = model.CVSSVector;
+            result.ProofOfConcept = model.ProofOfConcept;
+            result.Remediation = model.Remediation;
+            result.RemediationComplexity = model.RemediationComplexity;
+            result.RemediationPriority = model.RemediationPriority;
+            result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            vulnManager.Context.SaveChanges();
+            TempData["edited"] = "edited";
+            _logger.LogInformation("User: {0} edited Vuln Template: {1}", User.FindFirstValue(ClaimTypes.Name), id
+                );
+
+            return RedirectToAction("Templates");
+        }
+        catch (Exception e)
+        {
+            TempData["error"] = "Error editing vuln!";
+            _logger.LogError(e, "An error ocurred editing a Vuln Workspace on. Task: {0} Project: {1} User: {2}", id,
+              User.FindFirstValue(ClaimTypes.Name));
+            return View("Templates");
+        }
+    }
 }

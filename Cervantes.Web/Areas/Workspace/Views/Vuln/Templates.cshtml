@@ -280,27 +280,22 @@
                                 break;
                         }
                         <td>@vuln.VulnCategory.Name</td>
-                        <td>@vuln.CreatedDate.ToUniversalTime()</td>
-                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                        {
-                            <td>
+                        <td>@vuln.CreatedDate.ToShortDateString()</td>
+                        <td>
                                 <a asp-area="Workspace" asp-controller="Vuln" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" class="btn btn-tool">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vuln" asp-action="Template" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" localize-content>
+                                <a asp-area="Workspace" asp-controller="Vuln" asp-action="Template" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" class="btn btn-tool">
+                                    <i class="fas fa-clone"></i>
+                                    </a>
+                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vuln" asp-action="TemplateEdit" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" localize-content>
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vuln" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" localize-content>
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>
-                        }
-                        else
-                        {
-                            <a asp-area="Workspace" asp-controller="Vuln" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" class="btn btn-tool">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        }
+
 
                     </tr>
                 }

@@ -58,6 +58,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Target
     /// </summary>
+    [Required]
     public int TargetId { get; set; }
     
     public string TargetName { get; set; }
@@ -70,7 +71,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Project
     /// </summary>
-    [Required]
+    
     public int VulnCategoryId { get; set; }
 
     public string VulnCategoryName { get; set; }

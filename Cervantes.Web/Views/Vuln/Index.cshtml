@@ -160,7 +160,7 @@
                                 break;
                         }
                         <td>@vuln.VulnCategory.Name</td>
-                        <td>@vuln.CreatedDate.ToUniversalTime()</td>
+                        <td>@vuln.CreatedDate.ToShortDateString()</td>
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                         {
                             <td>

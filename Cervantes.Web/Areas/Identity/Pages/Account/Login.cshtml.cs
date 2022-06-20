@@ -99,7 +99,6 @@ public class LoginModel : PageModel
             else
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                TempData["error"] = "Error login";
                 return Page();
             }
         }

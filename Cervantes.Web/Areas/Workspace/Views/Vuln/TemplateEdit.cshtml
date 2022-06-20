@@ -2,14 +2,14 @@
 @model VulnCreateViewModel
 
 @{
-    ViewData["Title"] = "Create Vuln";
+    ViewData["Title"] = "Edit Template Vuln";
 }
 
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-bug"></i> Create Vulnerability</h1>
+                <h1 localize-content><i class="fas fa-bug"></i> Edit Template Vulnerability</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -30,7 +30,7 @@
 
 
     <div class="col-md-12">
-        <form asp-area="Workspace" asp-controller="Vuln" asp-action="Template" method="post" enctype="multipart/form-data">
+        <form asp-area="Workspace" asp-controller="Vuln" asp-action="TemplateEdit" method="post" enctype="multipart/form-data">
 
             <div class="card">
                 <div class="card-header p-2">
@@ -152,7 +152,7 @@
             <!-- /.card -->
             <div class="form-group">
                 <a class="btn btn-default" asp-area="Workspace" asp-controller="Vuln" asp-action="Templates" localize-content>Back</a>
-                <button type="submit" class="btn btn-dark" localize-content>Create</button>
+                <button type="submit" class="btn btn-dark" localize-content>Edit</button>
 
             </div>
         </form>

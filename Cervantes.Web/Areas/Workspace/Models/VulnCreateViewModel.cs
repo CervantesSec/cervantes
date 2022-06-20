@@ -27,7 +27,6 @@ public class VulnCreateViewModel
     /// <summary>
     /// Vuln Created Date
     /// </summary>
-    [Required]
     public DateTime CreatedDate { get; set; }
 
     /// <summary>
@@ -61,12 +60,11 @@ public class VulnCreateViewModel
     [Required]
     public int TargetId { get; set; }
 
-    [Required] public string TargetName { get; set; }
+    public string TargetName { get; set; }
 
     /// <summary>
     /// VulnCategory Associated
     /// </summary>
-    [Required]
     public virtual VulnCategory VulnCategory { get; set; }
 
     /// <summary>
@@ -75,7 +73,7 @@ public class VulnCreateViewModel
     [Required]
     public int VulnCategoryId { get; set; }
 
-    [Required] public string VulnCategoryName { get; set; }
+    public string VulnCategoryName { get; set; }
 
     /// <summary>
     /// Vuln Risk

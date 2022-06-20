@@ -50,7 +50,6 @@
         <Content Include="..\..\..\Desktop\wkhtmltopdf">
             <Link>Rotativa\MacOS\wkhtmltopdf</Link>
         </Content>
-        <Content Include="wwwroot\lib\select2\.DS_Store" />
     </ItemGroup>
 
     <ItemGroup>

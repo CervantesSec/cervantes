@@ -107,8 +107,8 @@
                         </td>
                         <td>@project.ProjectType</td>
                         <td>@project.Status</td>
-                        <td>@project.StartDate</td>
-                        <td>@project.EndDate</td>
+                        <td>@project.StartDate.ToShortDateString()</td>
+                        <td>@project.EndDate.ToShortDateString()</td>
                         <td>
                             @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                             {

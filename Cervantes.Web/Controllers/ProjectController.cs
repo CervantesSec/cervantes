@@ -234,13 +234,14 @@ public class ProjectController : Controller
         try
         {
             var item = model.ItemList;
+            
 
             var project = new Project
             {
                 Name = model.Name,
                 Description = model.Description,
-                StartDate = model.StartDate.ToUniversalTime(),
-                EndDate = model.EndDate.ToUniversalTime(),
+                StartDate = model.StartDate.ToUniversalTime().AddDays(1),
+                EndDate = model.EndDate.ToUniversalTime().AddDays(1),
                 ClientId = model.ClientId,
                 ProjectType = model.ProjectType,
                 Status = model.Status,

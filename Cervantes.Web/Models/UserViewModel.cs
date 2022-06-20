@@ -18,7 +18,6 @@ public class UserViewModel : IdentityUser
     /// <summary>
     /// User  name
     /// </summary>
-    [Required]
     public string UserName { get; set; }
 
     /// <summary>
@@ -36,7 +35,6 @@ public class UserViewModel : IdentityUser
     /// <summary>
     /// User avatar
     /// </summary>
-    [Required]
     public string Avatar { get; set; }
 
     /// <summary>
@@ -76,7 +74,7 @@ public class UserViewModel : IdentityUser
 
     public RoleList Role { get; set; }
     public IList<SelectListItem> ItemList { get; set; }
-    [Required] public string Option { get; set; }
+    public string Option { get; set; }
 
     public IEnumerable<Project> Project { get; set; }
     

@@ -186,6 +186,34 @@ public class UserController : Controller
     {
         try
         {
+
+            if (!ModelState.IsValid)
+            {
+                var rol = roleManager.GetAll().Select(e => new RoleList
+                {
+                    Id = e.Id.ToString(),
+                    Name = e.Name
+                }).ToList();
+
+                var li = new List<SelectListItem>();
+
+                foreach (var item in rol) li.Add(new SelectListItem {Text = item.Name, Value = item.Name});
+            
+                var clients = clientManager.GetAll().Select(e => new ClientViewModel
+                {
+                    Id = e.Id,
+                    Name = e.Name
+                }).ToList();
+
+                var liCli = new List<SelectListItem>();
+
+                foreach (var item in clients) liCli.Add(new SelectListItem {Text = item.Name, Value = item.Id.ToString()});
+
+                model.ItemList = li;
+                model.ItemListClient = liCli;
+                return View("Create", model);
+            }
+            
             var file = Request.Form.Files["upload"];
             var hasher = new PasswordHasher();
 
@@ -203,47 +231,42 @@ public class UserController : Controller
                 
                 if (model.Option == "Client")
                 {
-                    user = new ApplicationUser()
-                    {
-                        UserName = model.UserName,
-                        Email = model.Email,
-                        PasswordHash = hasher.HashPassword(model.Password),
-                        FullName = model.FullName,
-                        Avatar = "/Attachments/Images/Avatars/" + uniqueName,
-                        EmailConfirmed = true,
-                        NormalizedEmail = model.Email.ToUpper(),
-                        NormalizedUserName = model.UserName.ToUpper(),
-                        SecurityStamp = Guid.NewGuid().ToString(),
-                        PhoneNumber = model.PhoneNumber,
-                        Position = model.Position,
-                        Description = model.Description,
-                        ClientId = model.ClientId
-                    };
+
+                    user.UserName = model.Email;
+                        user.Email = model.Email;
+                        user.PasswordHash = hasher.HashPassword(model.Password);
+                        user.FullName = model.FullName;
+                        user.Avatar = "/Attachments/Images/Avatars/" + uniqueName;
+                        user.EmailConfirmed = true;
+                        user.NormalizedEmail = model.Email.ToUpper();
+                        user.NormalizedUserName = model.Email.ToUpper();
+                        user.SecurityStamp = Guid.NewGuid().ToString();
+                        user.PhoneNumber = model.PhoneNumber;
+                        user.Position = model.Position;
+                        user.Description = model.Description;
+                        user.ClientId = model.ClientId;
+
                 }
                 else
                 {
-                    user = new ApplicationUser
-                    {
-                        UserName = model.UserName,
-                        Email = model.Email,
-                        PasswordHash = hasher.HashPassword(model.Password),
-                        FullName = model.FullName,
-                        Avatar = "/Attachments/Images/Avatars/" + uniqueName,
-                        EmailConfirmed = true,
-                        NormalizedEmail = model.Email.ToUpper(),
-                        NormalizedUserName = model.UserName.ToUpper(),
-                        SecurityStamp = Guid.NewGuid().ToString(),
-                        PhoneNumber = model.PhoneNumber,
-                        Position = model.Position,
-                        Description = model.Description,
-                    };
+                    user.UserName = model.Email;
+                    user.Email = model.Email;
+                    user.PasswordHash = hasher.HashPassword(model.Password);
+                    user.FullName = model.FullName;
+                    user.Avatar = "/Attachments/Images/Avatars/" + uniqueName;
+                    user.EmailConfirmed = true;
+                    user.NormalizedEmail = model.Email.ToUpper();
+                    user.NormalizedUserName = model.Email.ToUpper();
+                    user.SecurityStamp = Guid.NewGuid().ToString();
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.Position = model.Position;
+                    user.Description = model.Description;
+                    
                 }
                 
                 usrManager.Add(user);
                 usrManager.Context.SaveChanges();
                 _userManager.AddToRoleAsync(user, model.Option).Wait();
-
-
                 TempData["created"] = "created";
                 _logger.LogInformation("User: {0} Created a new User: {1}",
                     User.FindFirstValue(ClaimTypes.Name),
@@ -256,7 +279,7 @@ public class UserController : Controller
             {
                 var user = new ApplicationUser
                 {
-                    UserName = model.UserName,
+                    UserName = model.Email,
                     Email = model.Email,
                     PasswordHash = hasher.HashPassword(model.Password),
                     FullName = model.FullName,
@@ -363,7 +386,7 @@ public class UserController : Controller
             var hasher = new PasswordHasher();
             var result = usrManager.GetByUserId(id);
             result.FullName = model.User.FullName;
-            result.UserName = model.User.UserName;
+            result.UserName = model.User.Email;
             result.Email = model.User.Email;
             result.Description = model.User.Description;
             if (model.User.ConfirmPassword != null) result.PasswordHash = hasher.HashPassword(model.User.ConfirmPassword);

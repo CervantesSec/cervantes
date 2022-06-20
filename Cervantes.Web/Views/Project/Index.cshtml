@@ -155,8 +155,8 @@
                                 break;
                         }
 
-                        <td>@project.StartDate</td>
-                        <td>@project.EndDate</td>
+                        <td>@project.StartDate.ToShortDateString()</td>
+                        <td>@project.EndDate.ToShortDateString()</td>
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                         {
                             <td>
