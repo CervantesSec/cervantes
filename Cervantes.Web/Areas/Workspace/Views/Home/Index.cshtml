@@ -70,7 +70,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text" localize-content>Start Date</span>
-                    <span class="info-box-number">@Model.Project.StartDate</span>
+                    <span class="info-box-number">@Model.Project.StartDate.ToShortDateString()</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -81,7 +81,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text" localize-content>End Date</span>
-                    <span class="info-box-number">@Model.Project.EndDate</span>
+                    <span class="info-box-number">@Model.Project.EndDate.ToShortDateString()</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>

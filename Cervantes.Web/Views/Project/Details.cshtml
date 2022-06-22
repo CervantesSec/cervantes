@@ -381,13 +381,13 @@
                 @if (@members.User.Avatar != null)
                 {
                     <td>
-                        <img alt="Avatar" class="table-avatar" src="@Url.Content(members.User.Avatar)">
+                        <img alt="Avatar" class="table-avatar" src="@Url.Content(members.User.Avatar)" style="height: 1.25rem; width: 1.25rem;" />
                     </td>
                 }
                 else
                 {
                     <td>
-                        <i class="fas fa-user"></i>
+                        <i class="fas fa-user table-avatar" style="font-size: 1.25rem;"></i>
                     </td>
                 }
 
@@ -624,8 +624,8 @@
             <tr>
                 <td>@tasks.Name</td>
                 <td>@Html.Raw(@WebUtility.HtmlDecode(@tasks.Description))</td>
-                <td>@tasks.StartDate</td>
-                <td>@tasks.EndDate</td>
+                <td>@tasks.StartDate.ToShortDateString()</td>
+                <td>@tasks.EndDate.ToShortDateString()</td>
                 <td>@tasks.AsignedUser.FullName</td>
                 <td>@tasks.Target.Name</td>
 
@@ -1037,7 +1037,7 @@
                 <td>@report.Version</td>
                 <td>@report.Description</td>
                 <td>@report.Language</td>
-                <td>@report.CreatedDate</td>
+                <td>@report.CreatedDate.ToShortDateString()</td>
                 <td>@report.User.FullName</td>
                 <td>
                     <a class="btn btn-tool" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id" localize-content>

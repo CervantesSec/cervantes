@@ -77,7 +77,7 @@
                 </span>
                 <div class="info-box-content">
                     <span class="info-box-text" localize-content>Start Date</span>
-                    <span class="info-box-number">@Model.Task.StartDate</span>
+                    <span class="info-box-number">@Model.Task.StartDate.ToShortDateString()</span>
                 </div>
             </div>
 
@@ -87,7 +87,7 @@
                 </span>
                 <div class="info-box-content">
                     <span class="info-box-text" localize-content>End Date</span>
-                    <span class="info-box-number">@Model.Task.EndDate</span>
+                    <span class="info-box-number">@Model.Task.EndDate.ToShortDateString()</span>
                 </div>
             </div>
         </div>

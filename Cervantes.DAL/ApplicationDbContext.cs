@@ -110,4 +110,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     public DbSet<Log> Logs { get; set; }
     public DbSet<Report> Reports { get; set; }
+    public DbSet<Vault> Vaults { get; set; }
 }

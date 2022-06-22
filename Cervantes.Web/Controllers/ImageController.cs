@@ -204,4 +204,25 @@ public class ImageController : Controller
 
         return Json(Convert.ToString(vReturnImagePath));
     }
+    
+    [HttpPost]
+    public JsonResult UploadVault(IFormFile image)
+    {
+        var vReturnImagePath = string.Empty;
+        if (image.Length > 0)
+        {
+            var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Images/Vault");
+            var uniqueName = Guid.NewGuid().ToString() + "_" + image.FileName;
+            using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+            {
+                image.CopyTo(fileStream);
+            }
+
+            vReturnImagePath = "/Attachments/Images/Vault/" + uniqueName;
+            //here to add Image Path to You Database ,  
+            TempData["message"] = string.Format("Image was Added Successfully");
+        }
+
+        return Json(Convert.ToString(vReturnImagePath));
+    }
 }

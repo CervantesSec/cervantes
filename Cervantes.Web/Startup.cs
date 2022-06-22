@@ -74,6 +74,7 @@ public class Startup
         services.AddScoped<ILogManager, LogManager>();
         services.AddScoped<IReportManager, ReportManager>();
         services.AddScoped<INotificationsManager, NotificationsManager>();
+        services.AddScoped<IVaultManager, VaultManager>();
 
 
         var cultures = new[]

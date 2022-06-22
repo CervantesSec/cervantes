@@ -240,7 +240,7 @@
                                     <a asp-area="" asp-controller="Document" asp-action="Details" asp-route-id="@doc.Id">@doc.Name</a>
                                 </span>
                                 <span class="info-box-number">
-                                    @doc.CreatedDate
+                                    @doc.CreatedDate.ToShortDateString()
                                 </span>
                             </div>
                             <!-- /.info-box-content -->

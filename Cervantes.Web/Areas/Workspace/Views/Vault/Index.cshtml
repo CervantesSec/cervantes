@@ -1,0 +1,212 @@
+@using System.Net
+@using Cervantes.CORE
+@model VaultIndexViewModel
+
+@{
+    ViewData["Title"] = "Data Vaults";
+}
+@{
+    if (TempData["deleted"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Target deleted successfully!</strong>
+
+        </div>
+    }
+
+    if (TempData["addedTarget"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Target created successfully!</strong>
+
+        </div>
+    }
+
+    if (TempData["edited"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Target edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>@TempData["error"].ToString()</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["editedService"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Target edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["addedService"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Target edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedService"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Target edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-bullseye"></i> Targets</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspace</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>@Model.Project.Name</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Targets</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="card">
+        <div class="card-body">
+
+
+            <!--Table-->
+            <table id="vaultResults" class="table table-bordered table-hover" width="100%">
+                <!--Table head-->
+                <thead class="thead-dark">
+                <tr>
+                    <th>
+                        <i class="fas fa-bullseye"></i> <span localize-content>Name</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-project-diagram"></i> <span localize-content>Type</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-align-left"></i> <span localize-content>Description</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-user"></i> <span localize-content>Created Date</span>
+                    </th>
+                    
+                    <th>
+                        <i class="fas fa-user"></i> <span localize-content>Added by</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                    </th>
+
+                </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+
+                @foreach (var vault in Model.Vaults)
+                {
+                    <tr>
+
+                        <td>@vault.Name</td>
+                        @switch (@vault.Type)
+                        {
+                            case VaultType.Key:
+                                <td>
+                                    <span class="badge badge-success">@vault.Type</span>
+                                </td>
+                                break;
+                            case VaultType.Note:
+                                <td>
+                                    <span class="badge badge-secondary">@vault.Type</span>
+                                </td>
+                                break;
+                            case VaultType.Other:
+                                <td>
+                                    <span class="badge badge-light">@vault.Type</span>
+                                </td>
+                                break;
+                            case VaultType.Password:
+                                <td>
+                                    <span class="badge badge-info">@vault.Type</span>
+                                </td>
+                                break;
+                            case VaultType.Token:
+                                <td>
+                                    <span class="badge badge-dark">@vault.Type</span>
+                                </td>
+                                break;
+                            case VaultType.User:
+                                <td>
+                                    <span class="badge badge-light">@vault.Type</span>
+                                </td>
+                                break;
+                        }
+                        <td>@Html.Raw(@WebUtility.HtmlDecode(@vault.Description))</td>
+                        <td>@vault.CreatedDate.ToShortDateString()</td>
+                        <td>@vault.User.FullName</td>
+                        <td>
+                                <a asp-area="Workspace" asp-controller="Vault" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@vault.Id" class="btn btn-tool">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vault" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@vault.Id" localize-content>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vault" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@vault.Id" localize-content>
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                    </tr>
+                }
+
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
+
+
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+
+@section Scripts{
+    <script>
+
+    $(document).ready(function () {
+        $('#vaultResults').DataTable({
+            "responsive": true
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+
+</script>
+}

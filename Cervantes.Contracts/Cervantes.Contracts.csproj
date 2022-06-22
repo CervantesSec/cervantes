@@ -5,11 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Cervantes.CORE\Cervantes.CORE.csproj"/>
+        <ProjectReference Include="..\Cervantes.CORE\Cervantes.CORE.csproj" />
     </ItemGroup>
 
 </Project>

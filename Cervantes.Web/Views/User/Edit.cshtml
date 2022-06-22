@@ -85,7 +85,10 @@
                             {
                                 <div>
                                     <img src="@Model.User.Avatar" class="img-circle elevation-2" alt="User Image" height="100" width="100">
-                                    <a class="btn btn-danger btn-sm" asp-controller="User" asp-action="DeleteAvatar" asp-route-id="@Model.User.Id" as localize-content><i class="fas fa-trash"></i> Delete Avatar</a>
+                                    <form asp-controller="User" asp-action="DeleteAvatar" method="post" enctype="multipart/form-data">
+                                        <button type="submit" class="btn btn-danger btn-sm" asp-controller="User" asp-action="DeleteAvatar" asp-route-id="@Model.User.Id" localize-content><i class="fas fa-trash"></i> Delete Avatar</button>
+                                    </form>
+                                    
                                 </div>
                             }
                             else

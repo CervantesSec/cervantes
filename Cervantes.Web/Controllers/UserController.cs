@@ -59,7 +59,7 @@ public class UserController : Controller
             var model = usrManager.GetAll().Select(e => new UserViewModel
             {
                 Id = e.Id,
-                UserName = e.UserName,
+                Email = e.Email,
                 FullName = e.FullName,
                 LockoutEnabled = e.LockoutEnabled,
                 TwoFactorEnabled = e.TwoFactorEnabled

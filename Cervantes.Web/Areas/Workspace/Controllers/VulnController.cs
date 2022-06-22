@@ -213,7 +213,7 @@ public class VulnController : Controller
                     Remediation = model.Remediation,
                     RemediationComplexity = model.RemediationComplexity,
                     RemediationPriority = model.RemediationPriority,
-                    CreatedDate = DateTime.Now.ToUniversalTime(),
+                    CreatedDate = DateTime.Now.ToUniversalTime().AddDays(1),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 };
                 vulnManager.Add(vuln);
@@ -540,6 +540,7 @@ public class VulnController : Controller
             result.RemediationPriority = model.RemediationPriority;
             result.ProjectId = project;
             result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            result.CreatedDate = DateTime.Now.ToUniversalTime().AddDays(1);
 
             vulnManager.Add(result);
             vulnManager.Context.SaveChanges();
