@@ -48,6 +48,8 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
+                            <i class="fas fa-database fa-5x"></i>
+                            <br/>
                             @switch (@Model.Type)
                             {
                                 case VaultType.Key:
@@ -94,8 +96,16 @@
                                 <span class="info-box-number">@Model.User.FullName</span>
                             </div>
                         </div>
-
-
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-success">
+                                <i class="fas fa-calendar"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" localize-content>Created Date</span>
+                                <span class="info-box-number">@Model.CreatedDate.ToShortDateString()</span>
+                            </div>
+                        </div>
+                        
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -119,7 +129,34 @@
                         <div class="tab-content">
 
                             <div class="active tab-pane" id="details">
+                                <dl>
+                                    <dt>
+                                        <p localize-content>Description</p>
+                                    </dt>
+                                    <hr>
+                                    <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Description))</dd>
 
+                                    <dt>
+                                        <p localize-content>Value</p>
+                                    </dt>
+                                    <hr>
+                                    <dd>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="password" asp-for="Value" value="@Model.Value" class="form-control" id="valueTxt" disabled>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <span class="fas fa-eye" onclick="showValue()"> Show</span>
+                                                    </div>
+                                                </div>
+                                        
+                                            </div>
+                                        </div>
+                                        
+                                    </dd>
+                                    
+                                </dl>
+                                
 
                             </div>
                             <!-- /.tab-pane -->
@@ -174,6 +211,15 @@
                         }
                     });
                 }
+                function showValue() {
+                  var x = document.getElementById("valueTxt");
+                  if (x.type === "password") {
+                    x.type = "text";
+                  } else {
+                    x.type = "password";
+                  }
+                }
+                
            
 </script>
 }

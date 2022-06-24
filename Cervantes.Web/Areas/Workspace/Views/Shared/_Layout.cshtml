@@ -412,6 +412,31 @@
         </a>
     </li>
     <li class="nav-item">
+        <a href="#" class="nav-link" localize-content>
+            <i class="nav-icon fas fa-database"></i>
+            <p>
+                <span localize-content>Backup</span><i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Backup" asp-action="Index" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-download nav-icon"></i>
+                    <p localize-content>Backup</p>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Backup" asp-action="Restore" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-upload nav-icon"></i>
+                    <p localize-content>Restore</p>
+            
+                </a>
+            </li>
+            
+        </ul>
+    </li>
+    <li class="nav-item">
         <a asp-area="" asp-controller="Log" asp-action="Index" asp-route-culture="@culture" class="nav-link">
             <i class="nav-icon fas fa-eye"></i>
             <p localize-content>Application Logs</p>

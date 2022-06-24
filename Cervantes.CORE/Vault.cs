@@ -19,4 +19,5 @@ public class Vault
     public virtual ApplicationUser User { get; set; }
     [ForeignKey("User")]
     public string UserId { get; set; }
+    
 }

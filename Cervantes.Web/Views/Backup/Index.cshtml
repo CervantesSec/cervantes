@@ -1,0 +1,67 @@
+@model IEnumerable<Cervantes.Web.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "Backup";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-download"></i> <span localize-content>Backup</span></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Backup</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+
+                    <h3><i class="fas fa-database"></i> Data</h3>
+                    <p>Backup all the data (Projects, Vulnerabilities, Clients,...)</p>
+                
+                    <div class="text-center">
+                        <form asp-area="" asp-controller="Backup" asp-action="BackupData" method="post">
+                            <button type="submit" class="btn btn-dark"><i class="fas fa-download"></i> Save</button>
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="col-md-6 justify-content-center">
+            <div class="card">
+                <div class="card-body">
+                    <h3><i class="fas fa-file"></i> Attachments</h3>
+                    <p>Backup all the attachments (Images, Reports,...)</p>
+                    <div class="text-center">
+                                        <form asp-area="" asp-controller="Backup" asp-action="BackupAttachments" method="post">
+                                            <button type="submit" class="btn btn-dark"><i class="fas fa-download"></i> Save</button>
+                                        </form>
+                                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+

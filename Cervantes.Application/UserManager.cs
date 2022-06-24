@@ -32,6 +32,11 @@ public class UserManager : GenericManager<ApplicationUser>, IUserManager, IUserS
     {
         return Context.Set<ApplicationUser>().Find(id);
     }
+    
+    public ApplicationUser GetByEmail(string email)
+    {
+        return Context.Set<ApplicationUser>().Where(e => e.Email == email).FirstOrDefault();
+    }
 
     public Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
