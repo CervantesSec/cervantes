@@ -70,48 +70,50 @@
     <div class="card">
         <div class="card-body">
             
-                <!--Table-->
-                <table id="vulnCategories" class="table table-bordered table-hover" width="100%">
-                    <!--Table head-->
-                    <thead class="thead-dark">
+            <!--Table-->
+            <table id="vulnCategories" class="table table-bordered table-hover" width="100%">
+                <!--Table head-->
+                <thead class="thead-dark">
+                <tr>
+                    <th localize-content><i class="fas fa-bug"></i> <span localize-content>Name</span></th>
+                    <th localize-content><i class="fas fa-align-left"></i> <span localize-content>Description</span></th>
+                    <th localize-content><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
+                </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+
+                @foreach (var cat in Model)
+                {
                     <tr>
-                        <th localize-content><i class="fas fa-bug"></i> <span localize-content>Name</span></th>
-                        <th localize-content><i class="fas fa-align-left"></i> <span localize-content>Description</span></th>
-                        <th localize-content><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
+                        <td>@cat.Name</td>
+                        <td>@cat.Description</td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                        {
+                            <td>
+                                <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="EditCategory" asp-route-id="@cat.Id" localize-content>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="DeleteCategory" asp-route-id="@cat.Id" localize-content>
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        }
+
                     </tr>
-                    </thead>
-                    <!--Table head-->
-                    <!--Table body-->
-                    <tbody>
+                }
 
-                    @foreach (var cat in Model)
-                    {
-                        <tr>
-                            <td>@cat.Name</td>
-                            <td>@cat.Description</td>
-                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                            {
-                                <td>
-                                    <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="EditCategory" asp-route-id="@cat.Id" localize-content>
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="DeleteCategory" asp-route-id="@cat.Id" localize-content>
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            }
-
-                        </tr>
-                    }
-
-                    </tbody>
-                    <!--Table body-->
-                </table>
-                <!--Table-->
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
             
 
         </div>
     </div>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
+            <a asp-area="" asp-controller="Vuln" asp-action="CreateCategory" class="btn btn-dark"><i class="fas fa-project-diagram"></i> Create</a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->

@@ -217,6 +217,13 @@
         <_ContentIncludedByDefault Remove="wwwroot\__MACOSX\BackupAttachments_2022-06-23\Targets\._.gitignore" />
         <_ContentIncludedByDefault Remove="wwwroot\__MACOSX\BackupAttachments_2022-06-23\Task\._.gitignore" />
         <_ContentIncludedByDefault Remove="wwwroot\__MACOSX\BackupAttachments_2022-06-23\Vulns\._.gitignore" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\12058ba5-bce8-4993-89e5-6fd4415322ce_BackupData_2022-06-24.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\1a8acae3-cdee-47ef-b500-4748c5bca6ed_BackupData_2022-06-24.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\1b25f132-ce99-402d-a2cd-25fd159df080_BackupData_2022-06-24.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\37e13566-fecd-47ab-bd95-015e4899cc27_BackupData_2022-06-24.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\6ab82802-6982-4f6b-be3c-ca82aa3c4cba_BackupData_2022-06-24.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\6ed5712a-c795-4637-8039-d28d9b59fae2_BackupData_2022-06-24.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\b2336eb5-517d-4ac2-9d4d-faa31cca564d_BackupData_2022-06-24.json" />
     </ItemGroup>
 
 </Project>

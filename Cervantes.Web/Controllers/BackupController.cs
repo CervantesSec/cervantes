@@ -22,6 +22,7 @@ public class BackupController : Controller
     private readonly ILogger<BackupController> _logger = null;
     private IClientManager clientManager = null;
     private IUserManager userManager = null;
+    private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
     private IProjectManager projectManager = null;
     private IProjectUserManager projectUserManager = null;
     private IProjectNoteManager projectNoteManager = null;
@@ -42,7 +43,7 @@ public class BackupController : Controller
     private IVulnAttachmentManager vulnAttachmentManager = null;
     private readonly IHostingEnvironment _appEnvironment;
 
-    public BackupController(IUserManager userManager,IClientManager clientManager, IProjectManager projectManager,
+    public BackupController(IUserManager userManager, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> usrManager,IClientManager clientManager, IProjectManager projectManager,
         IProjectUserManager projectUserManager, IProjectNoteManager projectNoteManager, IDocumentManager documentManager,
         INoteManager noteManager, IOrganizationManager organizationManager, IReportManager reportManager,
         ITargetManager targetManager, ITargetServicesManager targetServicesManager, ITaskManager taskManager,
@@ -51,6 +52,7 @@ public class BackupController : Controller
         IProjectAttachmentManager projectAttachmentManager,ILogger<BackupController> logger,IHostingEnvironment _appEnvironment)
     {
         this.userManager = userManager;
+        _userManager = usrManager;
         this.clientManager = clientManager;
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
@@ -436,10 +438,15 @@ public class BackupController : Controller
                 {
                     if (user.Email == "admin@cervantes.local")
                     {
-
+                        
                         var result = userManager.GetByEmail("admin@cervantes.local");
                         userManager.Remove(result);
                         userManager.Context.SaveChanges();
+                        userManager.Add(user);
+                        userManager.Context.SaveChanges();
+                        _userManager.AddToRoleAsync(user, "Admin").Wait();
+                        continue;
+                        
                     }
                     userManager.Add(user);
                     userManager.Context.SaveChanges();
@@ -564,6 +571,10 @@ public class BackupController : Controller
             {
                 foreach (var att in backupViewModel.TaskAttachments)
                 {
+                    if (att.UserId == backupViewModel.Users.Where(x => x.Email == "admin@cervantes.local").First().Id)
+                    {
+                        att.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    }
                     taskAttachmentManager.Add(att);
                     taskAttachmentManager.Context.SaveChanges();
                 }
@@ -573,6 +584,10 @@ public class BackupController : Controller
             {
                 foreach (var note in backupViewModel.TaskNotes)
                 {
+                    if (note.UserId == backupViewModel.Users.Where(x => x.Email == "admin@cervantes.local").First().Id)
+                    {
+                        note.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    }
                     taskNoteManager.Add(note);
                     taskNoteManager.Context.SaveChanges();
                 }
@@ -628,9 +643,10 @@ public class BackupController : Controller
                 }
             }
 
+            
+            TempData["restoredData"] = "restored";
             System.IO.File.Delete(Path.Combine(uploads, uniqueName));
             Directory.Delete(uploads);
-            TempData["restoredData"] = "restored";
             return View("Restore");
         }
         catch (Exception ex)

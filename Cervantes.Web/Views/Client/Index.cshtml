@@ -65,8 +65,7 @@
 
     <div class="card">
         <div class="card-body">
-
-
+            
             <!--Table-->
             <table id="clientResults" class="table table-bordered table-hover" width="100%">
                 <!--Table head-->
@@ -88,8 +87,8 @@
                         <i class="fas fa-phone"></i> <span localize-content>Contact Phone</span>
                     </th>
                     <th localize-content>
-                            <i class="fas fa-cog"></i> <span localize-content>Options</span>
-                        </th>
+                        <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                    </th>
                 </tr>
                 </thead>
                 <!--Table head-->
@@ -143,7 +142,10 @@
 
 
         </div>
+        
     </div>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
+    <a asp-area="" asp-controller="Client" asp-action="Create" class="btn btn-dark"><i class="fas fa-briefcase"></i> Create</a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->
