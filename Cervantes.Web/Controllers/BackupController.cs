@@ -450,6 +450,12 @@ public class BackupController : Controller
                     }
                     userManager.Add(user);
                     userManager.Context.SaveChanges();
+                    if (user.ClientId != 0)
+                    {
+                        _userManager.AddToRoleAsync(user, "Client").Wait();
+                        continue;
+                    }
+                    _userManager.AddToRoleAsync(user, "User").Wait();
                 }
             }
 

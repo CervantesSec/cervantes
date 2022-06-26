@@ -16,9 +16,11 @@
                     <li class="breadcrumb-item">
                         <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
                     </li>
-                    <li class="breadcrumb-item" localize-content>Workspace</li>
-                    <li class="breadcrumb-item" localize-content>Vuln</li>
+                    <li class="breadcrumb-item" localize-content><a asp-area="" asp-controller="Workspaces" asp-action="Index">Workspace</a></li>
+                    <li class="breadcrumb-item" localize-content><a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.Project.Id">@Model.Project.Name</a></li>
+                    <li class="breadcrumb-item" localize-content><a asp-area="Workspace" asp-controller="Vuln" asp-action="Index" asp-route-project="@Model.Project.Id">Vulns</a></li>
                     <li class="breadcrumb-item active" localize-content>Template</li>
+                    
                 </ol>
             </div>
         </div>

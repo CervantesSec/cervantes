@@ -167,16 +167,16 @@
                         <td>@Html.Raw(@WebUtility.HtmlDecode(@target.Description))</td>
                         <td>@target.User.FullName</td>
                         <td>
-                                <a asp-area="Workspace" asp-controller="Target" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@target.Id" class="btn btn-tool">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Target" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@target.Id" localize-content>
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Target" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@target.Id" localize-content>
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
+                            <a asp-area="Workspace" asp-controller="Target" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@target.Id" class="btn btn-tool">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a class="btn btn-tool" asp-area="Workspace" asp-controller="Target" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@target.Id" localize-content>
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="btn btn-tool" asp-area="Workspace" asp-controller="Target" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@target.Id" localize-content>
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
                     </tr>
                 }
 
@@ -188,6 +188,8 @@
 
         </div>
     </div>
+    <a asp-area="Workspace" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
+        <a asp-area="Workspace" asp-controller="Target" asp-action="Create" class="btn btn-dark"><i class="fas fa-bullseye"></i> Create</a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->

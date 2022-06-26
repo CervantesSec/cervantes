@@ -3,7 +3,7 @@
 @model VaultViewModel
 
 @{
-    ViewData["Title"] = "Data Details";
+    ViewData["Title"] = "Data Vault Details";
 }
 
 
@@ -12,7 +12,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 localize-content>
-                    <i class="fas fa-database"></i> @Model.Name
+                    <i class="fas fa-key"></i> @Model.Name
                 </h1>
             </div>
             <div class="col-sm-6">
@@ -27,7 +27,7 @@
                         <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>@Model.Project.Name</a>
                     </li>
                     <li class="breadcrumb-item" localize-content>
-                        <a asp-area="Workspace" asp-controller="Target" asp-action="Index" localize-content>Target</a>
+                        <a asp-area="Workspace" asp-controller="Vault" asp-action="Index" localize-content>Target</a>
                     </li>
                     <li class="breadcrumb-item active" localize-content>@Model.Name</li>
                 </ol>
@@ -48,7 +48,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <i class="fas fa-database fa-5x"></i>
+                            <i class="fas fa-key fa-5x"></i>
                             <br/>
                             @switch (@Model.Type)
                             {
