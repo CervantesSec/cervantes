@@ -137,7 +137,8 @@ public class VulnController : Controller
             var model = new VulnCreateViewModel
             {
                 TargetList = targets,
-                VulnCatList = vulnCat
+                VulnCatList = vulnCat,
+                Project = projectManager.GetById(project)
             };
 
             return View(model);
