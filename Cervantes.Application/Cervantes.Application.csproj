@@ -5,8 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DinkToPdf" Version="1.0.8" />
-        <PackageReference Include="RazorLight" Version="2.0.0" />
+        <PackageReference Include="RazorLight" Version="2.1.0" />
         <PackageReference Include="RazorLight.NetCore3" Version="3.0.2" />
     </ItemGroup>
 

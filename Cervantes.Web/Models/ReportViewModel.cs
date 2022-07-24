@@ -7,6 +7,7 @@ public class ReportViewModel
 {
     public Organization Organization { get; set; }
     public IEnumerable<Vuln> Vulns { get; set; }
+    public IEnumerable<VulnTargets> VulnTargets { get; set; }
     public IEnumerable<Target> Targets { get; set; }
 
     public IEnumerable<TargetServices> TargetServices { get; set; }

@@ -1,4 +1,5 @@
-﻿using Cervantes.CORE;
+﻿using System;
+using Cervantes.CORE;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -86,6 +87,6 @@ public class UserViewModel : IdentityUser
     /// <summary>
     /// Client ID
     /// </summary>
-    public int ClientId { get; set; }
+    public Guid ClientId { get; set; }
     public IList<SelectListItem> ItemListClient { get; set; }
 }

@@ -79,7 +79,7 @@ public class ClientController : Controller
     /// </summary>
     /// <param name="id">Client Id</param>
     /// <returns>Client</returns>
-    public ActionResult Details(int id)
+    public ActionResult Details(Guid id)
     {
         try
         {
@@ -103,7 +103,7 @@ public class ClientController : Controller
             Redirect("Error");
         }
 
-        return View();
+        return RedirectToAction("Index");
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ public class ClientController : Controller
 
             _logger.LogError(ex, "An error ocurred adding a new Client. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Create");
         }
     }
 
@@ -172,7 +172,7 @@ public class ClientController : Controller
     /// <param name="id">Client Id</param>
     /// <returns></returns>
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Edit(int id)
+    public ActionResult Edit(Guid id)
     {
         try
         {
@@ -196,7 +196,7 @@ public class ClientController : Controller
 
             _logger.LogError(ex, "An error ocurred loading edit form on Client Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -209,7 +209,7 @@ public class ClientController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Edit(int id, ClientViewModel model)
+    public ActionResult Edit(Guid id, ClientViewModel model)
     {
         try
         {
@@ -232,7 +232,7 @@ public class ClientController : Controller
 
             _logger.LogError(ex, "An error ocurred editing Client Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Edit");
         }
     }
 
@@ -242,7 +242,7 @@ public class ClientController : Controller
     /// <param name="id">Client Id</param>
     /// <returns></returns>
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         try
         {
@@ -284,7 +284,7 @@ public class ClientController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Delete(int id, IFormCollection collection)
+    public ActionResult Delete(Guid id, IFormCollection collection)
     {
         try
         {
@@ -305,7 +305,7 @@ public class ClientController : Controller
 
             _logger.LogError(ex, "An error ocurred deleteing Client Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 }

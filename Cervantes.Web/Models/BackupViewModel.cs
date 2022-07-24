@@ -21,9 +21,13 @@ public class BackupViewModel
     public IEnumerable<Task> Tasks { get; set; }
     public IEnumerable<TaskAttachment> TaskAttachments { get; set; }
     public IEnumerable<TaskNote> TaskNotes { get; set; }
+    public IEnumerable<TaskTargets> TaskTargets { get; set; }
+
     public IEnumerable<Vault> Vaults { get; set; }
     public IEnumerable<VulnCategory> VulnCategories { get; set; }
     public IEnumerable<Vuln> Vulns { get; set; }
     public IEnumerable<VulnAttachment> VulnAttachments { get; set; }
     public IEnumerable<VulnNote> VulnNotes { get; set; }
+    public IEnumerable<VulnTargets> VulnTargets { get; set; }
+
 }

@@ -6,18 +6,18 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -29,10 +29,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Cervantes.Contracts\Cervantes.Contracts.csproj" />
         <ProjectReference Include="..\Cervantes.CORE\Cervantes.CORE.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>

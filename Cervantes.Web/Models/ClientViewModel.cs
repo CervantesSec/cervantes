@@ -9,7 +9,7 @@ public class ClientViewModel
     /// <summary>
     /// Porject Note Id
     /// </summary>
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Note Name

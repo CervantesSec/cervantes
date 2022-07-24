@@ -27,12 +27,13 @@ public class ReportController : Controller
     private ITaskManager taskManager = null;
     private IUserManager userManager = null;
     private IVulnManager vulnManager = null;
+    private IVulnTargetManager vulnTargetManager = null;
     private IOrganizationManager organizationManager = null;
     private IReportManager reportManager = null;
 
     public ReportController(IProjectManager projectManager, IClientManager clientManager,
         IOrganizationManager organizationManager, IProjectUserManager projectUserManager,
-        IProjectNoteManager projectNoteManager,
+        IProjectNoteManager projectNoteManager, IVulnTargetManager vulnTargetManager,
         IProjectAttachmentManager projectAttachmentManager, ITargetManager targetManager, ITaskManager taskManager,
         IUserManager userManager, IVulnManager vulnManager, IHostingEnvironment _appEnvironment,
         ILogger<ReportController> logger, IReportManager reportManager)
@@ -47,51 +48,30 @@ public class ReportController : Controller
         this.taskManager = taskManager;
         this.userManager = userManager;
         this.vulnManager = vulnManager;
+        this.vulnTargetManager = vulnTargetManager;
         this._appEnvironment = _appEnvironment;
         this.reportManager = reportManager;
         _logger = logger;
     }
 
-    /*public IActionResult Index(int id)
-    {
-        try
-        {
-            ReportViewModel model = new ReportViewModel
-            {
-                Organization = organizationManager.GetById(1),
-                Project = projectManager.GetById(id),
-                Vulns = vulnManager.GetAll().Where(x => x.ProjectId == id),
-                Targets = targetManager.GetAll().Where(x => x.ProjectId == id),
-                Users = projectUserManager.GetAll().Where(x => x.ProjectId == id),
-                Reports = reportManager.GetAll().Where(x => x.ProjectId == id),
-            };
-
-
-            return new ViewAsPdf(model, ViewData);
-
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error ocurred generating report for Project: {0}. User: {1}", id, User.FindFirstValue(ClaimTypes.Name));
-            return View();
-        }
-    }*/
 
     [HttpPost]
     public IActionResult Generate(IFormCollection form)
     {
         try
         {
-            var pro = projectManager.GetById(int.Parse(form["project"]));
-
+            var pro = projectManager.GetById(Guid.Parse(form["project"]));
+            var vul = vulnManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).Select(y => y.Id)
+                .ToList();
             var model = new ReportViewModel
             {
-                Organization = organizationManager.GetById(1),
+                Organization = organizationManager.GetAll().First(),
                 Project = pro,
-                Vulns = vulnManager.GetAll().Where(x => x.ProjectId == int.Parse(form["project"])).ToList(),
-                Targets = targetManager.GetAll().Where(x => x.ProjectId == int.Parse(form["project"])).ToList(),
-                Users = projectUserManager.GetAll().Where(x => x.ProjectId == int.Parse(form["project"])).ToList(),
-                Reports = reportManager.GetAll().Where(x => x.ProjectId == int.Parse(form["project"])).ToList()
+                Vulns = vulnManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
+                Targets = targetManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
+                Users = projectUserManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
+                Reports = reportManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
+                VulnTargets = vulnTargetManager.GetAll().Where(x => vul.Contains(x.VulnId))
             };
 
 
@@ -104,7 +84,7 @@ public class ReportController : Controller
                 using (var fileStream =
                        new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create, FileAccess.Write))
                 {
-                    if (form["language"] == "0")
+                    if (form["language"] == "2")
                     {
                         var pdfResult = new ViewAsPdf
                         {
@@ -118,7 +98,7 @@ public class ReportController : Controller
                         var pdfData = pdfResult.BuildFile(ControllerContext).Result;
                         fileStream.Write(pdfData, 0, pdfData.Length);
                     }
-                    else if (form["language"] == "1")
+                    else if (form["language"] == "2")
                     {
                         var pdfResult = new ViewAsPdf
                         {
@@ -156,7 +136,7 @@ public class ReportController : Controller
             var rep = new Report
             {
                 Name = form["reportName"],
-                ProjectId = int.Parse(form["project"]),
+                ProjectId = Guid.Parse(form["project"]),
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 CreatedDate = DateTime.Now.ToUniversalTime(),
                 Description = form["description"],
@@ -170,17 +150,17 @@ public class ReportController : Controller
 
             TempData["reportCreated"] = "report created";
 
-            return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+            return RedirectToAction("Details", "Project", new {id = form["project"]});
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error ocurred generating report for Project: {0}. User: {1}",
-                int.Parse(form["project"]), User.FindFirstValue(ClaimTypes.Name));
-            return View();
+                form["project"], User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Index","Project");
         }
     }
 
-    public ActionResult Download(int id)
+    public ActionResult Download(Guid id)
     {
         var report = reportManager.GetById(id);
 
@@ -193,7 +173,7 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         try
         {
@@ -215,7 +195,7 @@ public class ReportController : Controller
     }
 
 
-    public IActionResult Details(int id)
+    public IActionResult Details(Guid id)
     {
         try
         {

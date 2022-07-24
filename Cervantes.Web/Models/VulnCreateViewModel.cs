@@ -12,7 +12,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Vuln
     /// </summary>
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Is vuln template
@@ -48,7 +48,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Project
     /// </summary>
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     /// <summary>
     /// Target Associated
@@ -59,7 +59,7 @@ public class VulnCreateViewModel
     /// Id Target
     /// </summary>
     [Required]
-    public int TargetId { get; set; }
+    public Guid TargetId { get; set; }
     
     public string TargetName { get; set; }
     
@@ -72,7 +72,7 @@ public class VulnCreateViewModel
     /// Id Project
     /// </summary>
     
-    public int VulnCategoryId { get; set; }
+    public Guid VulnCategoryId { get; set; }
 
     public string VulnCategoryName { get; set; }
 

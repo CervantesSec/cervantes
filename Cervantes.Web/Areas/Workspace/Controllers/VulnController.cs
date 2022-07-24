@@ -24,12 +24,13 @@ public class VulnController : Controller
     private IVulnCategoryManager vulnCategoryManager = null;
     private IVulnNoteManager vulnNoteManager = null;
     private IVulnAttachmentManager vulnAttachmentManager = null;
+    private IVulnTargetManager vulnTargetManager = null;
     private IProjectUserManager projectUserManager = null;
     private readonly IHostingEnvironment _appEnvironment;
     private readonly ILogger<VulnController> _logger = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
-        ITargetManager targetManager,
+        ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment)
     {
@@ -39,13 +40,14 @@ public class VulnController : Controller
         this.vulnCategoryManager = vulnCategoryManager;
         this.vulnAttachmentManager = vulnAttachmentManager;
         this.vulnNoteManager = vulnNoteManager;
+        this.vulnTargetManager = vulnTargetManager;
         this.projectUserManager = projectUserManager;
         this._appEnvironment = _appEnvironment;
         _logger = logger;
     }
 
     // GET: VulnController
-    public ActionResult Index(int project)
+    public ActionResult Index(Guid project)
     {
         try
         {
@@ -73,7 +75,7 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Details/5
-    public ActionResult Details(int project, int id)
+    public ActionResult Details(Guid project, Guid id)
     {
         try
         {
@@ -83,12 +85,26 @@ public class VulnController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
+            
+            var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
+            {
+                TargetId = e.Id,
+                TargetName = e.Name
+            }).ToList();
+
+            var targets = new List<SelectListItem>();
+
+            foreach (var item in result)
+                targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
+            
             var model = new VulnDetailsViewModel
             {
                 Project = projectManager.GetById(project),
                 Vuln = vulnManager.GetById(id),
                 Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
-                Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id)
+                Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
+                Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
+                TargetList = targets
             };
             return View(model);
         }
@@ -102,7 +118,7 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Create
-    public ActionResult Create(int project)
+    public ActionResult Create(Guid project)
     {
         try
         {
@@ -155,7 +171,7 @@ public class VulnController : Controller
     // POST: VulnController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(int project, VulnCreateViewModel model)
+    public ActionResult Create(Guid project, VulnCreateViewModel model)
     {
         try
         {
@@ -207,7 +223,6 @@ public class VulnController : Controller
                     Risk = model.Risk,
                     Status = model.Status,
                     Impact = model.Impact,
-                    TargetId = model.TargetId.GetHashCode(),
                     CVSS3 = model.CVSS3,
                     CVSSVector = model.CVSSVector,
                     ProofOfConcept = model.ProofOfConcept,
@@ -219,6 +234,22 @@ public class VulnController : Controller
                 };
                 vulnManager.Add(vuln);
                 vulnManager.Context.SaveChanges();
+
+                if (model.SelectedTargets != null)
+                {
+                    foreach (var tar in model.SelectedTargets)
+                    {
+                        VulnTargets vulnTargets = new VulnTargets
+                        {
+                            VulnId = vuln.Id,
+                            TargetId = tar
+                        };
+                        vulnTargetManager.Add(vulnTargets);
+                    }
+
+                    vulnTargetManager.Context.SaveChanges();
+                }
+                
                 TempData["added"] = "added";
                 _logger.LogInformation("User: {0} Created a new Vuln on Project {1}",
                     User.FindFirstValue(ClaimTypes.Name),
@@ -234,7 +265,7 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Edit/5
-    public ActionResult Edit(int project, int id)
+    public ActionResult Edit(Guid project, Guid id)
     {
         try
         {
@@ -282,7 +313,6 @@ public class VulnController : Controller
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
-                TargetId = vulnResult.TargetId,
                 CVSS3 = vulnResult.CVSS3,
                 CVSSVector = vulnResult.CVSSVector,
                 ProofOfConcept = vulnResult.ProofOfConcept,
@@ -292,7 +322,8 @@ public class VulnController : Controller
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
                 TargetList = targets,
-                VulnCatList = vulnCat
+                VulnCatList = vulnCat,
+                SelectedTargets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).Select(e => e.Id).ToList()
             };
 
             return View(model);
@@ -309,7 +340,7 @@ public class VulnController : Controller
     // POST: VulnController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(int project, VulnCreateViewModel model, int id)
+    public ActionResult Edit(Guid project, VulnCreateViewModel model, Guid id)
     {
         try
         {
@@ -328,7 +359,6 @@ public class VulnController : Controller
             result.Risk = model.Risk;
             result.Status = model.Status;
             result.Impact = model.Impact;
-            result.TargetId = model.TargetId;
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
             result.ProofOfConcept = model.ProofOfConcept;
@@ -355,7 +385,7 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Delete/5
-    public ActionResult Delete(int project, int id)
+    public ActionResult Delete(Guid project, Guid id)
     {
         try
         {
@@ -379,7 +409,7 @@ public class VulnController : Controller
     // POST: VulnController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int project, int id, IFormCollection collection)
+    public ActionResult Delete(Guid project, Guid id, IFormCollection collection)
     {
         try
         {
@@ -410,7 +440,7 @@ public class VulnController : Controller
         }
     }
 
-    public ActionResult Templates(int project)
+    public ActionResult Templates(Guid project)
     {
         try
         {
@@ -437,7 +467,7 @@ public class VulnController : Controller
         }
     }
 
-    public ActionResult Template(int project, int id)
+    public ActionResult Template(Guid project, Guid id)
     {
         try
         {
@@ -485,7 +515,6 @@ public class VulnController : Controller
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
-                TargetId = vulnResult.TargetId,
                 CVSS3 = vulnResult.CVSS3,
                 CVSSVector = vulnResult.CVSSVector,
                 ProofOfConcept = vulnResult.ProofOfConcept,
@@ -512,7 +541,7 @@ public class VulnController : Controller
     // POST: VulnController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Template(int project, VulnCreateViewModel model, int id)
+    public ActionResult Template(Guid project, VulnCreateViewModel model, Guid id)
     {
         try
         {
@@ -523,7 +552,6 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var result = vulnManager.GetById(id);
-            result.Id = 0;
             result.Name = model.Name;
             result.Template = model.Template;
             result.cve = model.cve;
@@ -532,7 +560,6 @@ public class VulnController : Controller
             result.Risk = model.Risk;
             result.Status = model.Status;
             result.Impact = model.Impact;
-            result.TargetId = model.TargetId;
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
             result.ProofOfConcept = model.ProofOfConcept;
@@ -560,7 +587,7 @@ public class VulnController : Controller
         }
     }
     
-        public ActionResult TemplateEdit(int project, int id)
+        public ActionResult TemplateEdit(Guid project, Guid id)
     {
         try
         {
@@ -608,7 +635,6 @@ public class VulnController : Controller
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
-                TargetId = vulnResult.TargetId,
                 CVSS3 = vulnResult.CVSS3,
                 CVSSVector = vulnResult.CVSSVector,
                 ProofOfConcept = vulnResult.ProofOfConcept,
@@ -634,7 +660,7 @@ public class VulnController : Controller
         
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult TemplateEdit(int project, VulnCreateViewModel model, int id)
+    public ActionResult TemplateEdit(Guid project, VulnCreateViewModel model, Guid id)
     {
         try
         {
@@ -645,7 +671,6 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var result = vulnManager.GetById(id);
-            result.Id = model.Id;
             result.Name = model.Name;
             result.Template = model.Template;
             result.cve = model.cve;
@@ -654,7 +679,6 @@ public class VulnController : Controller
             result.Risk = model.Risk;
             result.Status = model.Status;
             result.Impact = model.Impact;
-            result.TargetId = model.TargetId;
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
             result.ProofOfConcept = model.ProofOfConcept;
@@ -681,7 +705,7 @@ public class VulnController : Controller
     }
 
     [HttpPost]
-    public IActionResult AddNote(int project,IFormCollection form)
+    public IActionResult AddNote(Guid project,IFormCollection form)
     {
         try
         {
@@ -699,33 +723,33 @@ public class VulnController : Controller
                     Description = form["noteDescription"],
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     Visibility = (Visibility) Enum.ToObject(typeof(Visibility), int.Parse(form["Visibility"])),
-                    VulnId = int.Parse(form["vulnId"])
+                    VulnId = Guid.Parse(form["vulnId"])
                 };
 
                 vulnNoteManager.Add(note);
                 vulnNoteManager.Context.SaveChanges();
                 TempData["addedNote"] = "added";
                 _logger.LogInformation("User: {0} Added new note: {1} on Vuln: {2}",
-                    User.FindFirstValue(ClaimTypes.Name), note.Name, int.Parse(form["vulnId"]));
-                return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                    User.FindFirstValue(ClaimTypes.Name), note.Name, form["vulnId"]);
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
             else
             {
-                return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
         }
         catch (Exception ex)
         {
             TempData["error"] = "Error adding note vuln!";
-            _logger.LogError(ex, "An error ocurred adding a Note on Vuln: {1}. User: {2}", int.Parse(form["vulnId"]),
+            _logger.LogError(ex, "An error ocurred adding a Note on Vuln: {1}. User: {2}", form["vulnId"],
                 User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+            return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
         }
     }
 
 
     [HttpPost]
-    public IActionResult DeleteNote(int id, int project, int vuln)
+    public IActionResult DeleteNote(Guid id, Guid project, Guid vuln)
     {
         try
         {
@@ -735,7 +759,7 @@ public class VulnController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
-            if (id != 0)
+            if (id != null)
             {
                 var result = vulnNoteManager.GetById(id);
 
@@ -762,7 +786,7 @@ public class VulnController : Controller
 
 
     [HttpPost]
-    public IActionResult AddAttachment(int project, IFormCollection form, IFormFile upload)
+    public IActionResult AddAttachment(Guid project, IFormCollection form, IFormFile upload)
     {
         try
         {
@@ -799,7 +823,7 @@ public class VulnController : Controller
                 var attachment = new VulnAttachment
                 {
                     Name = form["attachmentName"],
-                    VulnId = int.Parse(form["vulnId"]),
+                    VulnId = Guid.Parse(form["vulnId"]),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     FilePath = "/Attachments/Project/" + form["vulnId"] + "/" + uniqueName
                 };
@@ -808,28 +832,28 @@ public class VulnController : Controller
                 vulnAttachmentManager.Context.SaveChanges();
                 TempData["addedAttachment"] = "added";
                 _logger.LogInformation("User: {0} Added an attachment: {1} on Vuln: {2}",
-                    User.FindFirstValue(ClaimTypes.Name), attachment.Name, int.Parse(form["vulnId"]));
-                return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                    User.FindFirstValue(ClaimTypes.Name), attachment.Name, form["vulnId"]);
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
             else
             {
                 TempData["errorAttachment"] = "added";
                 _logger.LogError("An error ocurred adding an Attachment on Vuln: {1}. User: {2}",
-                    int.Parse(form["vulnId"]), User.FindFirstValue(ClaimTypes.Name));
-                return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                    form["vulnId"], User.FindFirstValue(ClaimTypes.Name));
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
         }
         catch (Exception ex)
         {
             TempData["error"] = "Error adding attachment to vuln!";
             _logger.LogError(ex, "An error ocurred adding an Attachment on Vuln: {1}. User: {2}",
-                int.Parse(form["project"]), User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                form["project"], User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
         }
     }
 
     [HttpPost]
-    public IActionResult DeleteAttachment(int id, int project, int vuln)
+    public IActionResult DeleteAttachment(Guid id, Guid project, Guid vuln)
     {
         try
         {
@@ -839,7 +863,7 @@ public class VulnController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
-            if (id != 0)
+            if (id != null)
             {
                 var result = vulnAttachmentManager.GetById(id);
 
@@ -866,6 +890,90 @@ public class VulnController : Controller
             _logger.LogError(ex, "An error ocurred deleting an Attachment on Vuln: {1}. User: {2}", vuln,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Vuln", new {id = vuln});
+        }
+    }
+    
+    public IActionResult DeleteTarget(Guid id, Guid project, Guid vuln)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+            if (id != null)
+            {
+                var result = vulnTargetManager.GetById(id);
+
+                vulnTargetManager.Remove(result);
+                vulnTargetManager.Context.SaveChanges();
+                TempData["deletedNote"] = "deleted";
+                _logger.LogInformation("User: {0} Deleted vuln target: {1} on Vuln: {2}", User.FindFirstValue(ClaimTypes.Name),
+                    result.Id, vuln);
+                return RedirectToAction("Details", "Vuln", new {id = result.VulnId});
+            }
+            else
+            {
+                return RedirectToAction("Details", "Vuln", new {id = vuln});
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["error"] = "Error deleting vuln note!";
+            _logger.LogError(ex, "An error ocurred deleting a Note on Project: {1}. User: {2}", project,
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Vuln", new {id = vuln});
+        }
+    }
+    
+    [HttpPost]
+    public IActionResult AddTarget(Guid project,IFormCollection form)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+            if (form != null)
+            {
+
+               var result = vulnTargetManager.GetAll().Where(x => x.TargetId == Guid.Parse(form["TargetId"]) && x.VulnId == Guid.Parse(form["vulnId"])).FirstOrDefault();
+                if (result != null)
+                {
+                    TempData["targetExists"] = "exists";
+                    return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
+                }
+                
+                var tar = new VulnTargets
+                {
+                    TargetId = Guid.Parse(form["TargetId"]),
+                    VulnId = Guid.Parse(form["vulnId"]),
+                    
+                };
+
+                vulnTargetManager.Add(tar);
+                vulnTargetManager.Context.SaveChanges();
+                TempData["addedTarget"] = "added";
+                _logger.LogInformation("User: {0} Added new target: {1} on Vuln: {2}",
+                    User.FindFirstValue(ClaimTypes.Name), tar.Id, form["vulnId"]);
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
+            }
+            else
+            {
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["error"] = "Error adding note vuln!";
+            _logger.LogError(ex, "An error ocurred adding a Note on Vuln: {1}. User: {2}", form["vulnId"],
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
         }
     }
 }

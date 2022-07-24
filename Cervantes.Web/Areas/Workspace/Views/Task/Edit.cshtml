@@ -59,14 +59,16 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="StartDate" class="control-label" localize-content>Start Date</label>
-                            <input asp-for="StartDate" class="form-control"/>
+                            <input type="date" asp-for="StartDate" class="form-control" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")" min="@DateTime.MinValue.Date.ToString("yyyy-MM-dd")" max="@DateTime.MaxValue.Date.ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
+                        
                         <div class="form-group">
                             <label asp-for="EndDate" class="control-label" localize-content>End Date</label>
-                            <input asp-for="EndDate" class="form-control"/>
+                            <input type="date" asp-for="EndDate" class="form-control" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")" min="@DateTime.Today.Date.ToString("yyyy-MM-dd")" max="@DateTime.MaxValue.Date.ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
+                        
                         <div class="form-group">
                             <label asp-for="TargetId" class="control-label" localize-content>Target</label>
                             @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new {@class = "form-control"})

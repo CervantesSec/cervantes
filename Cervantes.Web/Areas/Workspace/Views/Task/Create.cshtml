@@ -56,20 +56,21 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="StartDate" class="control-label" localize-content>Start Date</label>
-                            <input asp-for="StartDate" class="form-control" value="2021-01-01"/>
+                            <input type="date" asp-for="StartDate" class="form-control" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")" min="@DateTime.MinValue.Date.ToString("yyyy-MM-dd")" max="@DateTime.MaxValue.Date.ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
+                        
                         <div class="form-group">
                             <label asp-for="EndDate" class="control-label" localize-content>End Date</label>
-                            <input asp-for="EndDate" class="form-control" value="2021-01-01" data-date-format="mm/dd/yyyy hh:mm:ss"/>
+                            <input type="date" asp-for="EndDate" class="form-control" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")" min="@DateTime.Today.Date.ToString("yyyy-MM-dd")" max="@DateTime.MaxValue.Date.ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
+                        
                         <div class="form-group">
                             <label asp-for="TargetId" class="control-label" localize-content>Target</label>
-                            @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new {@class = "form-control"})
-                            <span asp-validation-for="TargetId" class="text-danger"></span>
-
+                            @Html.DropDownListFor(m => m.SelectedTargets, Model.TargetList, new {@class = "form-control targets", @multiple="multiple"})
                         </div>
+                        
                         <div class="form-group">
                             <label asp-for="Status" class="control-label" localize-content>Task Status</label>
                             @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList<Cervantes.CORE.TaskStatus>(), new {@class = "form-control"})
@@ -89,10 +90,20 @@
     </div>
 </section>
 
+@section Styles{
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet">
+
+}
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+        <script src="~/lib/select2/js/select2.full.min.js"></script>
+
     <script>
+    $(document).ready(function() {
+            $('.targets').select2();
+           
+    });
   $(document).ready(function() {
       $('#description').summernote({
       height: 300,

@@ -14,7 +14,8 @@ public class ProjectNote
     /// Porject Note Id
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Note Name
@@ -29,12 +30,12 @@ public class ProjectNote
     /// <summary>
     /// User who created project
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
     public string UserId { get; set; }
 
     /// <summary>
@@ -45,8 +46,7 @@ public class ProjectNote
     /// <summary>
     /// Id Project
     /// </summary>
-    [ForeignKey("Project")]
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     /// <summary>
     /// Visibility of the project note

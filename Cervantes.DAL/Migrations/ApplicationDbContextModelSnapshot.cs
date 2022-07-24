@@ -33,8 +33,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Avatar")
                         .HasColumnType("text");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -103,12 +103,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Client", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("serial")
-                        .HasColumnOrder(1);
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ContactEmail")
                         .HasColumnType("text");
@@ -146,11 +143,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Document", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -213,11 +208,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Note", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -274,20 +267,21 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Project", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("serial");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Language")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -318,11 +312,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.ProjectAttachment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("FilePath")
                         .HasColumnType("text");
@@ -330,8 +322,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -347,11 +339,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.ProjectNote", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -359,8 +349,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -379,14 +369,12 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.ProjectUser", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -402,11 +390,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Report", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -423,8 +409,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -443,11 +429,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Target", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -455,8 +439,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -475,11 +459,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.TargetServices", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -493,8 +475,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<int>("Port")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TargetId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("TargetId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -513,11 +495,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Task", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("AsignedUserId")
                         .HasColumnType("text");
@@ -534,16 +514,13 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TargetId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("Template")
@@ -557,18 +534,14 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("TargetId");
-
                     b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("Cervantes.CORE.TaskAttachment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("FilePath")
                         .HasColumnType("text");
@@ -576,8 +549,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("TaskId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -593,11 +566,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.TaskNote", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -605,8 +576,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("TaskId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -623,13 +594,32 @@ namespace Cervantes.DAL.Migrations
                     b.ToTable("TaskNotes");
                 });
 
+            modelBuilder.Entity("Cervantes.CORE.TaskTargets", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TargetId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TargetId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TaskTargets");
+                });
+
             modelBuilder.Entity("Cervantes.CORE.Vault", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -640,8 +630,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -663,11 +653,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Vuln", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<float>("CVSS3")
                         .HasColumnType("real");
@@ -687,8 +675,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ProofOfConcept")
                         .HasColumnType("text");
@@ -708,17 +696,14 @@ namespace Cervantes.DAL.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TargetId")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("Template")
                         .HasColumnType("boolean");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.Property<int>("VulnCategoryId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("VulnCategoryId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("cve")
                         .HasColumnType("text");
@@ -726,8 +711,6 @@ namespace Cervantes.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("TargetId");
 
                     b.HasIndex("UserId");
 
@@ -738,11 +721,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.VulnAttachment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("FilePath")
                         .HasColumnType("text");
@@ -753,8 +734,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.Property<int>("VulnId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("VulnId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -767,11 +748,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.VulnCategory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -786,11 +765,9 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.VulnNote", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -804,8 +781,8 @@ namespace Cervantes.DAL.Migrations
                     b.Property<int>("Visibility")
                         .HasColumnType("integer");
 
-                    b.Property<int>("VulnId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("VulnId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -814,6 +791,27 @@ namespace Cervantes.DAL.Migrations
                     b.HasIndex("VulnId");
 
                     b.ToTable("VulnNotes");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.VulnTargets", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TargetId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("VulnId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TargetId");
+
+                    b.HasIndex("VulnId");
+
+                    b.ToTable("VulnTargets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1114,19 +1112,11 @@ namespace Cervantes.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cervantes.CORE.Target", "Target")
-                        .WithMany()
-                        .HasForeignKey("TargetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AsignedUser");
 
                     b.Navigation("CreatedUser");
 
                     b.Navigation("Project");
-
-                    b.Navigation("Target");
                 });
 
             modelBuilder.Entity("Cervantes.CORE.TaskAttachment", b =>
@@ -1163,6 +1153,25 @@ namespace Cervantes.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Cervantes.CORE.TaskTargets", b =>
+                {
+                    b.HasOne("Cervantes.CORE.Target", "Target")
+                        .WithMany()
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cervantes.CORE.Task", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Target");
+
+                    b.Navigation("Task");
+                });
+
             modelBuilder.Entity("Cervantes.CORE.Vault", b =>
                 {
                     b.HasOne("Cervantes.CORE.Project", "Project")
@@ -1188,12 +1197,6 @@ namespace Cervantes.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cervantes.CORE.Target", "Target")
-                        .WithMany()
-                        .HasForeignKey("TargetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Cervantes.CORE.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -1205,8 +1208,6 @@ namespace Cervantes.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
-
-                    b.Navigation("Target");
 
                     b.Navigation("User");
 
@@ -1243,6 +1244,25 @@ namespace Cervantes.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+
+                    b.Navigation("Vuln");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.VulnTargets", b =>
+                {
+                    b.HasOne("Cervantes.CORE.Target", "Target")
+                        .WithMany()
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cervantes.CORE.Vuln", "Vuln")
+                        .WithMany()
+                        .HasForeignKey("VulnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Target");
 
                     b.Navigation("Vuln");
                 });

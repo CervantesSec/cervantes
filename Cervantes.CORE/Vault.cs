@@ -7,17 +7,18 @@ namespace Cervantes.CORE;
 public class Vault
 {
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
+    [ForeignKey("ProjectId")]
     public virtual Project Project { get; set; }
-    [ForeignKey("Project")]
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
     public string Name { get; set; }
     public VaultType Type { get; set; }
     public string Description { get; set; }
     public string Value { get; set; }
     public DateTime CreatedDate { get; set; }
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
-    [ForeignKey("User")]
     public string UserId { get; set; }
     
 }

@@ -39,6 +39,12 @@ public class GenericManager<T> : IGenericManager<T>
         return entity;
     }
 
+    public T Update(T entity)
+    {
+        Context.Set<T>().Update(entity);
+        return entity;
+    }
+
     /// <summary>
     /// Add entity to data context async
     /// </summary>
@@ -76,7 +82,7 @@ public class GenericManager<T> : IGenericManager<T>
     /// </summary>
     /// <param name="id">id</param>
     /// <returns>Entity</returns>
-    public T GetById(int id)
+    public T GetById(Guid id)
     {
         return GetById(new object[] {id});
     }
@@ -89,4 +95,6 @@ public class GenericManager<T> : IGenericManager<T>
     {
         return Context.Set<T>();
     }
+    
+    
 }

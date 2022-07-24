@@ -41,7 +41,7 @@ public class TargetController : Controller
     /// </summary>
     /// <param name="project">project id</param>
     /// <returns></returns>
-    public ActionResult Index(int project)
+    public ActionResult Index(Guid project)
     {
         try
         {
@@ -73,7 +73,7 @@ public class TargetController : Controller
     /// <param name="project">Project Id</param>
     /// <param name="id">Target Id</param>
     /// <returns></returns>
-    public ActionResult Details(int project, int id)
+    public ActionResult Details(Guid project, Guid id)
     {
         try
         {
@@ -104,7 +104,7 @@ public class TargetController : Controller
     /// Method retur creation form of Traget
     /// </summary>
     /// <returns></returns>
-    public ActionResult Create(int project)
+    public ActionResult Create(Guid project)
     {
         var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
         if (user == null)
@@ -127,7 +127,7 @@ public class TargetController : Controller
     /// <returns></returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(int project, TargetCreateViewModel model)
+    public ActionResult Create(Guid project, TargetCreateViewModel model)
     {
         try
         {
@@ -175,7 +175,7 @@ public class TargetController : Controller
     /// <param name="project">Project Id</param>
     /// <param name="id">Target Id</param>
     /// <returns></returns>
-    public ActionResult Edit(int project, int id)
+    public ActionResult Edit(Guid project, Guid id)
     {
         try
         {
@@ -207,7 +207,7 @@ public class TargetController : Controller
     /// <returns></returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(int project, Target model)
+    public ActionResult Edit(Guid project, Target model)
     {
         try
         {
@@ -245,7 +245,7 @@ public class TargetController : Controller
     /// <param name="project">Porject Id</param>
     /// <param name="id">Target Id</param>
     /// <returns></returns>
-    public ActionResult Delete(int project, int id)
+    public ActionResult Delete(Guid project, Guid id)
     {
         try
         {
@@ -278,7 +278,7 @@ public class TargetController : Controller
     /// <returns></returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int project, int id, IFormCollection collection)
+    public ActionResult Delete(Guid project, Guid id, IFormCollection collection)
     {
         try
         {
@@ -317,7 +317,7 @@ public class TargetController : Controller
     /// <param name="project">Project Id</param>
     /// <param name="id">Target Service Id</param>
     /// <returns></returns>
-    public ActionResult Service(int project, int id)
+    public ActionResult Service(Guid project, Guid id)
     {
         try
         {
@@ -348,7 +348,7 @@ public class TargetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult AddService(int project, int target, IFormCollection form)
+    public ActionResult AddService(Guid project, Guid target, IFormCollection form)
     {
         try
         {
@@ -358,7 +358,7 @@ public class TargetController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
-            if (target != 0 && project != 0)
+            if (target != null && project != null)
             {
                 var service = new TargetServices()
                 {
@@ -392,7 +392,7 @@ public class TargetController : Controller
     }
 
 
-    public ActionResult EditService(int project, int id, int target)
+    public ActionResult EditService(Guid project, Guid id, Guid target)
     {
         try
         {
@@ -423,7 +423,7 @@ public class TargetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult EditService(int project, TargetServiceViewModel model)
+    public ActionResult EditService(Guid project, TargetServiceViewModel model)
     {
         try
         {
@@ -455,7 +455,7 @@ public class TargetController : Controller
         }
     }
 
-    public ActionResult DeleteService(int project, int id)
+    public ActionResult DeleteService(Guid project, Guid id)
     {
         try
         {
@@ -481,7 +481,7 @@ public class TargetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult DeleteService(int project, int id, IFormCollection collection)
+    public ActionResult DeleteService(Guid project, Guid id, IFormCollection collection)
     {
         try
         {

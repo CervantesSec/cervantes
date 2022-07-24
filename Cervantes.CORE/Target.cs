@@ -14,29 +14,30 @@ public class Target
     /// Id Vuln
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// User who created project
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
     public string UserId { get; set; }
 
     /// <summary>
     /// Project Associated
     /// </summary>
+    [ForeignKey("ProjectId")]
     public virtual Project Project { get; set; }
 
     /// <summary>
     /// Id Project
     /// </summary>
-    [ForeignKey("Project")]
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     /// <summary>
     /// Target Name

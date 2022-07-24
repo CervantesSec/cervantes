@@ -1,38 +1,37 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cervantes.CORE;
 
-public class Note
+public class TaskTargets
 {
     /// <summary>
-    /// Porject Note Id
+    /// Task Target Id
     /// </summary>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
-
+    
     /// <summary>
-    /// Note Name
+    /// Task
     /// </summary>
-    public string Name { get; set; }
-
+    [ForeignKey("TaskId")]
+    public virtual Task Task { get; set; }
+    
     /// <summary>
-    /// Note description
+    /// TaskId
     /// </summary>
-    public string Description { get; set; }
-
+    public Guid TaskId { get; set; }
+    
     /// <summary>
-    /// User who created project
+    /// Target
     /// </summary>
-    [ForeignKey("UserId")]
-    public virtual ApplicationUser User { get; set; }
-
+    [ForeignKey("TargetId")]
+    public virtual Target Target { get; set; }
     /// <summary>
-    /// Id user
+    /// Target Id
     /// </summary>
-    public string UserId { get; set; }
-
-    public DateTime CreatedDate { get; set; }
+    public Guid TargetId { get; set; }
+    
 }

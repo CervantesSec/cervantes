@@ -217,16 +217,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-orange">
-                    <i class="fas fa-bullseye"></i>
-                </span>
-                <div class="info-box-content">
-                    <span class="info-box-text" localize-content>Target</span>
-                    <span class="info-box-number">@Model.Vuln.Target.Name</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
+
 
 
         </div>
@@ -260,13 +251,19 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="#targets" data-toggle="tab">
+                <span localize-content>Targets</span> <span class="badge badge-danger">@Model.Targets.Count()</span>
+            </a>
+        </li>
+        
+        <li class="nav-item">
             <a class="nav-link" href="#notes" data-toggle="tab">
-                <span localize-content>Notes</span>
+                <span localize-content>Notes</span> <span class="badge badge-danger">@Model.Notes.Count()</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#attachments" data-toggle="tab">
-                <span localize-content>Attachments</span>
+                <span localize-content>Attachments</span> <span class="badge badge-danger">@Model.Attachments.Count()</span>
             </a>
         </li>
     </ul>
@@ -319,6 +316,40 @@
     <dd>@Html.DisplayFor(model => model.Vuln.RemediationPriority)</dd>
 </div>
 
+<div class="tab-pane" id="targets">
+    <table id="noteResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-sticky-note"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-align-left"></i> <span localize-content>Description</span>
+            </th>
+            <th>
+                <i class="fas fa-user"></i> <span localize-content>Type</span>
+            </th>
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+  
+        @foreach (var target in Model.Targets)
+        {
+            <tr>
+                <td>@target.Target.Name</td>
+                <td>@Html.Raw(@WebUtility.HtmlDecode(target.Target.Description))</td>
+                <td>@target.Target.Type</td>
+            </tr>
+        }
+  
+        </tbody>
+        <!--Table body-->
+    </table>
+    
+</div>
 
 <div class="tab-pane" id="notes">
     <table id="noteResults" class="table table-bordered table-hover projects" width="100%">

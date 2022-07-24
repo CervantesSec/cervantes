@@ -15,7 +15,8 @@ public class Project
     /// </summary>
     ///
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Project Name
@@ -40,24 +41,24 @@ public class Project
     /// <summary>
     /// User who created project
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
     public string UserId { get; set; }
 
     /// <summary>
     /// Client asssociated to project
     /// </summary>
+    [ForeignKey("ClientId")]
     public virtual Client Client { get; set; }
 
     /// <summary>
     /// Client ID
     /// </summary>
-    [ForeignKey("Client")]
-    public int ClientId { get; set; }
+    public Guid ClientId { get; set; }
 
     /// <summary>
     /// Is project a template
@@ -73,4 +74,9 @@ public class Project
     /// Project Type
     /// </summary>
     public ProjectType ProjectType { get; set; }
+    
+    /// <summary>
+    /// Project Language
+    /// </summary>
+    public Language Language { get; set; }
 }

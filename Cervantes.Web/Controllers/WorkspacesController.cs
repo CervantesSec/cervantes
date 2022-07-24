@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using Cervantes.CORE;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Cervantes.Web.Controllers;

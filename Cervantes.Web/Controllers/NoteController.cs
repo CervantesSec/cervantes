@@ -94,7 +94,7 @@ public class NoteController : Controller
         }
     }
 
-    public ActionResult Edit(int id)
+    public ActionResult Edit(Guid id)
     {
         try
         {
@@ -120,7 +120,7 @@ public class NoteController : Controller
     // POST: DocumentController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(int id, Document model)
+    public ActionResult Edit(Guid id, Document model)
     {
         try
         {
@@ -148,7 +148,7 @@ public class NoteController : Controller
     }
 
     // GET: DocumentController/Delete/5
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         try
         {
@@ -180,7 +180,7 @@ public class NoteController : Controller
     // POST: DocumentController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id, IFormCollection collection)
+    public ActionResult Delete(Guid id, IFormCollection collection)
     {
         try
         {
@@ -208,7 +208,7 @@ public class NoteController : Controller
         }
     }
 
-    public ActionResult Details(int id)
+    public ActionResult Details(Guid id)
     {
         try
         {

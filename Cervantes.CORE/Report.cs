@@ -10,22 +10,25 @@ public class Report
     /// Porject Note Id
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// User who created project
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
     public string UserId { get; set; }
 
+    [ForeignKey("ProjectId")]
     public virtual Project Project { get; set; }
-
-    public int ProjectId { get; set; }
+    
+    
+    public Guid ProjectId { get; set; }
 
     /// <summary>
     /// Created Date

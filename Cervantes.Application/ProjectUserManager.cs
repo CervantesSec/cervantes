@@ -18,8 +18,8 @@ public class ProjectUserManager : GenericManager<ProjectUser>, IProjectUserManag
     {
     }
 
-    public ProjectUser VerifyUser(int project,string user)
+    public ProjectUser VerifyUser(Guid project,string user)
     {
-        return Context.Set<ProjectUser>().Where(x => x.ProjectId == project && x.UserId == user).FirstOrDefault();
+        return Context.Set<ProjectUser>().Where(x => x.ProjectId == project&& x.UserId == user).FirstOrDefault();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cervantes.CORE;
@@ -25,5 +26,5 @@ public class ApplicationUser : IdentityUser
     /// </summary>
     public string Position { get; set; }
     
-    public int ClientId { get; set; }
+    public Guid ClientId { get; set; }
 }

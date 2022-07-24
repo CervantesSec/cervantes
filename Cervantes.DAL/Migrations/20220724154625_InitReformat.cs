@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Cervantes.DAL.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitReformat : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,6 +33,7 @@ namespace Cervantes.DAL.Migrations
                     Avatar = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Position = table.Column<string>(type: "text", nullable: true),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -95,8 +96,7 @@ namespace Cervantes.DAL.Migrations
                 name: "VulnCategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true)
                 },
@@ -215,8 +215,7 @@ namespace Cervantes.DAL.Migrations
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
@@ -241,8 +240,7 @@ namespace Cervantes.DAL.Migrations
                 name: "Documents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     FilePath = table.Column<string>(type: "text", nullable: true),
@@ -264,8 +262,7 @@ namespace Cervantes.DAL.Migrations
                 name: "Notes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: true),
@@ -285,17 +282,17 @@ namespace Cervantes.DAL.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    ClientId = table.Column<int>(type: "integer", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
                     Template = table.Column<bool>(type: "boolean", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
-                    ProjectType = table.Column<int>(type: "integer", nullable: false)
+                    ProjectType = table.Column<int>(type: "integer", nullable: false),
+                    Language = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -317,12 +314,11 @@ namespace Cervantes.DAL.Migrations
                 name: "ProjectAttachments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     FilePath = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false)
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -344,12 +340,11 @@ namespace Cervantes.DAL.Migrations
                 name: "ProjectNotes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     Visibility = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -372,10 +367,9 @@ namespace Cervantes.DAL.Migrations
                 name: "ProjectUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false)
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -397,15 +391,15 @@ namespace Cervantes.DAL.Migrations
                 name: "Reports",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Version = table.Column<string>(type: "text", nullable: true),
-                    FilePath = table.Column<string>(type: "text", nullable: true)
+                    FilePath = table.Column<string>(type: "text", nullable: true),
+                    Language = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -427,10 +421,9 @@ namespace Cervantes.DAL.Migrations
                 name: "Targets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Type = table.Column<int>(type: "integer", nullable: false)
@@ -452,50 +445,18 @@ namespace Cervantes.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TargetServices",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: true),
-                    TargetId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Port = table.Column<int>(type: "integer", nullable: false),
-                    Version = table.Column<string>(type: "text", nullable: true),
-                    Note = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TargetServices", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TargetServices_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TargetServices_Targets_TargetId",
-                        column: x => x.TargetId,
-                        principalTable: "Targets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tasks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Template = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedUserId = table.Column<string>(type: "text", nullable: true),
                     AsignedUserId = table.Column<string>(type: "text", nullable: true),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    TargetId = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -517,10 +478,33 @@ namespace Cervantes.DAL.Migrations
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vaults",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Value = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vaults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tasks_Targets_TargetId",
-                        column: x => x.TargetId,
-                        principalTable: "Targets",
+                        name: "FK_Vaults_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Vaults_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -529,15 +513,13 @@ namespace Cervantes.DAL.Migrations
                 name: "Vulns",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Template = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
-                    TargetId = table.Column<int>(type: "integer", nullable: false),
-                    VulnCategoryId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    VulnCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     Risk = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     cve = table.Column<string>(type: "text", nullable: true),
@@ -565,12 +547,6 @@ namespace Cervantes.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vulns_Targets_TargetId",
-                        column: x => x.TargetId,
-                        principalTable: "Targets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Vulns_VulnCategories_VulnCategoryId",
                         column: x => x.VulnCategoryId,
                         principalTable: "VulnCategories",
@@ -579,15 +555,43 @@ namespace Cervantes.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TargetServices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    TargetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Port = table.Column<int>(type: "integer", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: true),
+                    Note = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TargetServices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TargetServices_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TargetServices_Targets_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Targets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TaskAttachments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     FilePath = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    TaskId = table.Column<int>(type: "integer", nullable: false)
+                    TaskId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -609,12 +613,11 @@ namespace Cervantes.DAL.Migrations
                 name: "TaskNotes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    TaskId = table.Column<int>(type: "integer", nullable: false),
+                    TaskId = table.Column<Guid>(type: "uuid", nullable: false),
                     Visibility = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -634,15 +637,39 @@ namespace Cervantes.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TaskTargets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TaskId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TargetId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskTargets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TaskTargets_Targets_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Targets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskTargets_Tasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "VulnAttachments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     FilePath = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    VulnId = table.Column<int>(type: "integer", nullable: false)
+                    VulnId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -664,12 +691,11 @@ namespace Cervantes.DAL.Migrations
                 name: "VulnNotes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    VulnId = table.Column<int>(type: "integer", nullable: false),
+                    VulnId = table.Column<Guid>(type: "uuid", nullable: false),
                     Visibility = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -682,6 +708,31 @@ namespace Cervantes.DAL.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_VulnNotes_Vulns_VulnId",
+                        column: x => x.VulnId,
+                        principalTable: "Vulns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VulnTargets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    VulnId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TargetId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VulnTargets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VulnTargets_Targets_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Targets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VulnTargets_Vulns_VulnId",
                         column: x => x.VulnId,
                         principalTable: "Vulns",
                         principalColumn: "Id",
@@ -846,9 +897,24 @@ namespace Cervantes.DAL.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_TargetId",
-                table: "Tasks",
+                name: "IX_TaskTargets_TargetId",
+                table: "TaskTargets",
                 column: "TargetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskTargets_TaskId",
+                table: "TaskTargets",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vaults_ProjectId",
+                table: "Vaults",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vaults_UserId",
+                table: "Vaults",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VulnAttachments_UserId",
@@ -876,11 +942,6 @@ namespace Cervantes.DAL.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vulns_TargetId",
-                table: "Vulns",
-                column: "TargetId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Vulns_UserId",
                 table: "Vulns",
                 column: "UserId");
@@ -889,6 +950,16 @@ namespace Cervantes.DAL.Migrations
                 name: "IX_Vulns_VulnCategoryId",
                 table: "Vulns",
                 column: "VulnCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VulnTargets_TargetId",
+                table: "VulnTargets",
+                column: "TargetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VulnTargets_VulnId",
+                table: "VulnTargets",
+                column: "VulnId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -942,10 +1013,19 @@ namespace Cervantes.DAL.Migrations
                 name: "TaskNotes");
 
             migrationBuilder.DropTable(
+                name: "TaskTargets");
+
+            migrationBuilder.DropTable(
+                name: "Vaults");
+
+            migrationBuilder.DropTable(
                 name: "VulnAttachments");
 
             migrationBuilder.DropTable(
                 name: "VulnNotes");
+
+            migrationBuilder.DropTable(
+                name: "VulnTargets");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -954,16 +1034,16 @@ namespace Cervantes.DAL.Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
-                name: "Vulns");
-
-            migrationBuilder.DropTable(
                 name: "Targets");
 
             migrationBuilder.DropTable(
-                name: "VulnCategories");
+                name: "Vulns");
 
             migrationBuilder.DropTable(
                 name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "VulnCategories");
 
             migrationBuilder.DropTable(
                 name: "Clients");

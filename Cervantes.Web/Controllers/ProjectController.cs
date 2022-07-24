@@ -73,7 +73,8 @@ public class ProjectController : Controller
                 Status = e.Status,
                 StartDate = e.StartDate,
                 EndDate = e.EndDate,
-                ClientId = e.ClientId
+                ClientId = e.ClientId,
+                Language = e.Language
             });
 
             if (model != null)
@@ -101,7 +102,7 @@ public class ProjectController : Controller
     /// <param name="id">Project Id</param>
     /// <returns></returns>
     [Authorize(Roles = "Admin,SuperUser,User,Client")]
-    public ActionResult Details(int id)
+    public ActionResult Details(Guid id)
     {
         try
         {
@@ -246,7 +247,8 @@ public class ProjectController : Controller
                 ProjectType = model.ProjectType,
                 Status = model.Status,
                 Template = model.Template,
-                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                Language = model.Language
             };
             projectManager.Add(project);
             projectManager.Context.SaveChanges();
@@ -270,7 +272,7 @@ public class ProjectController : Controller
     /// <param name="id">Project Id</param>
     /// <returns></returns>
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Edit(int id)
+    public ActionResult Edit(Guid id)
     {
         try
         {
@@ -296,6 +298,7 @@ public class ProjectController : Controller
                 Client = project.Client,
                 ClientId = project.ClientId,
                 Status = project.Status,
+                Language = project.Language,
                 ProjectType = project.ProjectType,
                 ItemList = li
             };
@@ -320,7 +323,7 @@ public class ProjectController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Edit(int id, ProjectViewModel model)
+    public ActionResult Edit(Guid id, ProjectViewModel model)
     {
         try
         {
@@ -330,6 +333,7 @@ public class ProjectController : Controller
             result.Description = model.Description;
             result.Template = model.Template;
             result.ClientId = model.ClientId;
+            result.Language = model.Language;
             result.StartDate = model.StartDate.ToUniversalTime();
             result.EndDate = model.EndDate.ToUniversalTime();
             result.ProjectType = model.ProjectType;
@@ -349,7 +353,7 @@ public class ProjectController : Controller
 
     // GET: ProjectController/Delete/5
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         try
         {
@@ -370,7 +374,7 @@ public class ProjectController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Delete(int id, IFormCollection collection)
+    public ActionResult Delete(Guid id, IFormCollection collection)
     {
         try
         {
@@ -430,7 +434,7 @@ public class ProjectController : Controller
     /// <param name="id">Project Id</param>
     /// <returns></returns>
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Template(int id)
+    public ActionResult Template(Guid id)
     {
         try
         {
@@ -473,7 +477,7 @@ public class ProjectController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Template(int id, ProjectViewModel model)
+    public ActionResult Template(Guid id, ProjectViewModel model)
     {
         try
         {
@@ -514,7 +518,7 @@ public class ProjectController : Controller
     [Authorize(Roles = "Admin,SuperUser")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult AddMember(int project, string users)
+    public IActionResult AddMember(Guid project, string users)
     {
         try
         {
@@ -565,7 +569,7 @@ public class ProjectController : Controller
     [Authorize(Roles = "Admin,SuperUser")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteMember(int project, string user)
+    public IActionResult DeleteMember(Guid project, string user)
     {
         try
         {
@@ -602,7 +606,7 @@ public class ProjectController : Controller
                 {
                     Name = form["name"],
                     Description = form["description"],
-                    ProjectId = int.Parse(form["project"]),
+                    ProjectId = Guid.Parse(form["project"]),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     Type = (TargetType) Enum.ToObject(typeof(TargetType), int.Parse(form["TargetType"]))
                 };
@@ -611,31 +615,31 @@ public class ProjectController : Controller
                 targetManager.Context.SaveChanges();
                 TempData["addedTarget"] = "added";
                 _logger.LogInformation("User: {0} Added new target: {1} on Project: {2}",
-                    User.FindFirstValue(ClaimTypes.Name), target.Name, int.Parse(form["project"]));
-                return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                    User.FindFirstValue(ClaimTypes.Name), target.Name, form["project"]);
+                return RedirectToAction("Details", "Project", new {id = form["project"]});
             }
             else
             {
-                return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                return RedirectToAction("Details", "Project", new {id = form["project"]});
             }
         }
         catch (Exception ex)
         {
             TempData["error"] = "adding target to ";
             _logger.LogError(ex, "An error ocurred adding a new Target on Project: {0}. User: {1}",
-                int.Parse(form["project"]), User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                form["project"], User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Project", new {id = form["project"]});
         }
     }
 
     [Authorize(Roles = "Admin,SuperUser")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteTarget(int target, int project)
+    public IActionResult DeleteTarget(Guid target, Guid project)
     {
         try
         {
-            if (target != 0)
+            if (target != null)
             {
                 var result = targetManager.GetById(target);
 
@@ -671,7 +675,7 @@ public class ProjectController : Controller
                 {
                     Name = form["noteName"],
                     Description = form["noteDescription"],
-                    ProjectId = int.Parse(form["project"]),
+                    ProjectId = Guid.Parse(form["project"]),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     Visibility = (Visibility) Enum.ToObject(typeof(Visibility), int.Parse(form["Visibility"]))
                 };
@@ -680,31 +684,31 @@ public class ProjectController : Controller
                 projectNoteManager.Context.SaveChanges();
                 TempData["addedNote"] = "added";
                 _logger.LogInformation("User: {0} Added new note: {1} on Project: {2}",
-                    User.FindFirstValue(ClaimTypes.Name), note.Name, int.Parse(form["project"]));
-                return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                    User.FindFirstValue(ClaimTypes.Name), note.Name, form["project"]);
+                return RedirectToAction("Details", "Project", new {id = form["project"]});
             }
             else
             {
-                return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                return RedirectToAction("Details", "Project", new {id = form["project"]});
             }
         }
         catch (Exception ex)
         {
             TempData["error"] = "adding note to ";
             _logger.LogError(ex, "An error ocurred adding a Note on Project: {1}. User: {2}",
-                int.Parse(form["project"]), User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                form["project"], User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Project", new {id = form["project"]});
         }
     }
 
     [Authorize(Roles = "Admin,SuperUser")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteNote(int id, int project)
+    public IActionResult DeleteNote(Guid id, Guid project)
     {
         try
         {
-            if (id != 0)
+            if (id != null)
             {
                 var result = projectNoteManager.GetById(id);
 
@@ -764,7 +768,7 @@ public class ProjectController : Controller
                 var note = new ProjectAttachment
                 {
                     Name = form["attachmentName"],
-                    ProjectId = int.Parse(form["project"]),
+                    ProjectId = Guid.Parse(form["project"]),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     FilePath = "/Attachments/Project/" + form["project"] + "/" + uniqueName
                 };
@@ -773,34 +777,34 @@ public class ProjectController : Controller
                 projectAttachmentManager.Context.SaveChanges();
                 TempData["addedAttachment"] = "added";
                 _logger.LogInformation("User: {0} Added an attachment: {1} on Project: {2}",
-                    User.FindFirstValue(ClaimTypes.Name), note.Name, int.Parse(form["project"]));
-                return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                    User.FindFirstValue(ClaimTypes.Name), note.Name, form["project"]);
+                return RedirectToAction("Details", "Project", new {id = form["project"]});
             }
             else
             {
                 TempData["errorAttachment"] = "added";
                 _logger.LogError("An error ocurred adding an Attachment on Project: {1}. User: {2}",
-                    int.Parse(form["project"]), User.FindFirstValue(ClaimTypes.Name));
-                return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                    form["project"], User.FindFirstValue(ClaimTypes.Name));
+                return RedirectToAction("Details", "Project", new {id = form["project"]});
             }
         }
         catch (Exception ex)
         {
             TempData["error"] = "adding attachment to ";
             _logger.LogError(ex, "An error ocurred adding an Attachment on Project: {1}. User: {2}",
-                int.Parse(form["project"]), User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Project", new {id = int.Parse(form["project"])});
+                form["project"], User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Project", new {id = form["project"]});
         }
     }
 
     [Authorize(Roles = "Admin,SuperUser")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteAttachment(int id, int project)
+    public IActionResult DeleteAttachment(Guid id, Guid project)
     {
         try
         {
-            if (id != 0)
+            if (id != null)
             {
                 var result = projectAttachmentManager.GetById(id);
 
@@ -831,7 +835,7 @@ public class ProjectController : Controller
     }
 
     [Authorize(Roles = "Admin,SuperUser,User,Client")]
-    public ActionResult Download(int id)
+    public ActionResult Download(Guid id)
     {
         var attachment = projectAttachmentManager.GetById(id);
 

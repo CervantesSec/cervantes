@@ -8,7 +8,7 @@ namespace Cervantes.Web.Areas.Workspace.Models;
 
 public class TaskCreateViewModel
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Is vuln template
@@ -44,18 +44,20 @@ public class TaskCreateViewModel
     /// <summary>
     /// Id Project
     /// </summary>
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     /// <summary>
     /// Task Start Date
     /// </summary>
     [Required]
+    [DataType(DataType.Date)]
     public DateTime StartDate { get; set; }
 
     /// <summary>
     /// Task End Date
     /// </summary>
     [Required]
+    [DataType(DataType.Date)]
     public DateTime EndDate { get; set; }
 
     /// <summary>
@@ -79,8 +81,10 @@ public class TaskCreateViewModel
     /// <summary>
     /// Id Target
     /// </summary>
-    [Required]
-    public int TargetId { get; set; }
+    public Guid TargetId { get; set; }
+    
+    public List<Guid> SelectedTargets { get; set; }
+
 
     /// <summary>
     /// Task status

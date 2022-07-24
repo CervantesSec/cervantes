@@ -9,23 +9,21 @@
     <ItemGroup>
         <PackageReference Include="LazZiya.ExpressLocalization" Version="4.0.4" />
         <PackageReference Include="LazZiya.TagHelpers" Version="6.0.2" />
-        <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6">
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.6" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.7" />
         <PackageReference Include="NLog" Version="5.0.1" />
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.0.0" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.0" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
         <PackageReference Include="Rotativa.AspNetCore" Version="1.2.0" />
-        <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
         <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.2" />
     </ItemGroup>
 
@@ -224,6 +222,11 @@
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\6ab82802-6982-4f6b-be3c-ca82aa3c4cba_BackupData_2022-06-24.json" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\6ed5712a-c795-4637-8039-d28d9b59fae2_BackupData_2022-06-24.json" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\b2336eb5-517d-4ac2-9d4d-faa31cca564d_BackupData_2022-06-24.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\19ec5164-bbd3-4471-90f5-f27b56337e02\277da0aa-9700-416d-894c-a86ecc215513_test.pdf" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\19ec5164-bbd3-4471-90f5-f27b56337e02\4f765e91-a270-4d6a-afcb-5c4d5f283db0_test.pdf" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\19ec5164-bbd3-4471-90f5-f27b56337e02\68dba44a-820c-416a-9b69-0a15e2f39b0d_test.pdf" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\19ec5164-bbd3-4471-90f5-f27b56337e02\7a842db0-3721-4997-a1b1-eb746bdaedd7_test.pdf" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\679d9adf-1c56-4c26-b07e-c1b8ec8b95f3_BackupData_2022-06-24.json" />
     </ItemGroup>
 
 </Project>

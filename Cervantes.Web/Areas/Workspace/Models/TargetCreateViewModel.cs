@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Cervantes.CORE;
@@ -9,7 +10,7 @@ public class TargetCreateViewModel
     /// <summary>
     /// Id Vuln
     /// </summary>
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// User who created project
@@ -29,7 +30,7 @@ public class TargetCreateViewModel
     /// <summary>
     /// Id Project
     /// </summary>
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     /// <summary>
     /// Target Name

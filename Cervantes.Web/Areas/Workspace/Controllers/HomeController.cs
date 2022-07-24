@@ -46,7 +46,7 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public ActionResult Index(int project)
+    public ActionResult Index(Guid project)
     {
         try
         {

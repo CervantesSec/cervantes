@@ -1,3 +1,4 @@
+using System;
 using Cervantes.Application;
 using Cervantes.Contracts;
 using Cervantes.CORE;
@@ -64,11 +65,13 @@ public class Startup
         services.AddScoped<ITargetServicesManager, TargetServicesManager>();
         services.AddScoped<ITaskManager, TaskManager>();
         services.AddScoped<ITaskNoteManager, TaskNoteManager>();
+        services.AddScoped<ITaskTargetManager, TaskTargetManager>();
         services.AddScoped<ITaskAttachmentManager, TaskAttachmentManager>();
         services.AddScoped<IVulnManager, VulnManager>();
         services.AddScoped<IVulnCategoryManager, VulnCategoryManager>();
         services.AddScoped<IVulnNoteManager, VulnNoteManager>();
         services.AddScoped<IVulnAttachmentManager, VulnAttachmentManager>();
+        services.AddScoped<IVulnTargetManager, VulnTargetManager>();
         services.AddScoped<IDocumentManager, DocumentManager>();
         services.AddScoped<INoteManager, NoteManager>();
         services.AddScoped<ILogManager, LogManager>();

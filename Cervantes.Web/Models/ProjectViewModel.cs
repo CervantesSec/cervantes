@@ -12,7 +12,7 @@ public class ProjectViewModel
     /// Project Id
     /// </summary>
     ///
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Project Name
@@ -60,7 +60,7 @@ public class ProjectViewModel
     /// Client ID
     /// </summary>
     [Required]
-    public int ClientId { get; set; }
+    public Guid ClientId { get; set; }
 
     /// <summary>
     /// Is project a template
@@ -82,4 +82,10 @@ public class ProjectViewModel
     /// </summary>
     [Required]
     public ProjectType ProjectType { get; set; }
+    
+    /// <summary>
+    /// Project Language
+    /// </summary>
+    [Required]
+    public Language Language { get; set; }
 }

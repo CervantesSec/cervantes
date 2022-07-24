@@ -58,15 +58,17 @@
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="StartDate" class="control-label">Start Date</label>
-                            <input asp-for="StartDate" class="form-control" value="StartDate"/>
+                            <label asp-for="StartDate" class="control-label" localize-content>Start Date</label>
+                            <input type="date" asp-for="StartDate" class="form-control" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")" min="@DateTime.MinValue.Date.ToString("yyyy-MM-dd")" max="@DateTime.MaxValue.Date.ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
+                        
                         <div class="form-group">
-                            <label asp-for="EndDate" class="control-label">End Date</label>
-                            <input asp-for="EndDate" class="form-control" value="EndDate" data-date-format="mm/dd/yyyy hh:mm:ss"/>
+                            <label asp-for="EndDate" class="control-label" localize-content>End Date</label>
+                            <input type="date" asp-for="EndDate" class="form-control" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")" min="@DateTime.Today.Date.ToString("yyyy-MM-dd")" max="@DateTime.MaxValue.Date.ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
+                        
                         <div class="form-group">
                             <label asp-for="AsignedUserId" class="control-label">Asigned To</label>
                             @Html.DropDownListFor(m => m.AsignedUserId, Model.UsersList, "--Select--", new {@class = "form-control"})

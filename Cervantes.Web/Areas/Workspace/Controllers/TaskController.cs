@@ -25,11 +25,12 @@ public class TaskController : Controller
     private ITaskManager taskManager = null;
     private ITaskNoteManager taskNoteManager = null;
     private ITaskAttachmentManager taskAttachmentManager = null;
+    private ITaskTargetManager taskTargetManager = null;
     private ITargetManager targetManager = null;
 
     public TaskController(IHostingEnvironment _appEnvironment, ITaskManager taskManager, IProjectManager projectManager,
         ITargetManager targetManager, ITaskNoteManager taskNoteManager, ITaskAttachmentManager taskAttachmentManager,
-        IProjectUserManager projectUserManager, ILogger<TaskController> logger)
+        IProjectUserManager projectUserManager, ITaskTargetManager taskTargetManager, ILogger<TaskController> logger)
     {
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
@@ -37,11 +38,12 @@ public class TaskController : Controller
         this.targetManager = targetManager;
         this.taskNoteManager = taskNoteManager;
         this.taskAttachmentManager = taskAttachmentManager;
+        this.taskTargetManager = taskTargetManager;
         this._appEnvironment = _appEnvironment;
         _logger = logger;
     }
 
-    public ActionResult Index(int project)
+    public ActionResult Index(Guid project)
     {
         try
         {
@@ -70,7 +72,7 @@ public class TaskController : Controller
         }
     }
 
-    public ActionResult Project(int project)
+    public ActionResult Project(Guid project)
     {
         try
         {
@@ -98,7 +100,7 @@ public class TaskController : Controller
     }
 
     // GET: TaskController/Details/5
-    public ActionResult Details(int project, int id)
+    public ActionResult Details(Guid project, Guid id)
     {
         try
         {
@@ -108,12 +110,27 @@ public class TaskController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
+            
+            var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
+            {
+                TargetId = e.Id,
+                TargetName = e.Name
+            }).ToList();
+
+            var targets = new List<SelectListItem>();
+
+            foreach (var item in result)
+                targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
+            
             var model = new TaskDetailsViewModel
             {
                 Project = projectManager.GetById(project),
                 Task = taskManager.GetById(id),
                 Notes = taskNoteManager.GetAll().Where(x => x.TaskId == id),
-                Attachments = taskAttachmentManager.GetAll().Where(x => x.TaskId == id)
+                Attachments = taskAttachmentManager.GetAll().Where(x => x.TaskId == id),
+                Targets = taskTargetManager.GetAll().Where(x => x.TaskId == id).ToList(),
+                TargetList = targets
+
             };
             return View(model);
         }
@@ -128,7 +145,7 @@ public class TaskController : Controller
     }
 
     // GET: TaskController/Create
-    public ActionResult Create(int project)
+    public ActionResult Create(Guid project)
     {
         try
         {
@@ -170,7 +187,7 @@ public class TaskController : Controller
     // POST: TaskController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(int project, TaskCreateViewModel model)
+    public ActionResult Create(Guid project, TaskCreateViewModel model)
     {
         try
         {
@@ -185,7 +202,6 @@ public class TaskController : Controller
                 Name = model.Name,
                 Description = model.Description,
                 ProjectId = project,
-                TargetId = model.TargetId,
                 StartDate = model.StartDate.ToUniversalTime(),
                 EndDate = model.EndDate.ToUniversalTime(),
                 Status = model.Status,
@@ -195,6 +211,22 @@ public class TaskController : Controller
 
             taskManager.Add(task);
             taskManager.Context.SaveChanges();
+            
+            if (model.SelectedTargets != null)
+            {
+                foreach (var tar in model.SelectedTargets)
+                {
+                    TaskTargets taskTargets = new TaskTargets
+                    {
+                        TaskId = task.Id,
+                        TargetId = tar
+                    };
+                    taskTargetManager.Add(taskTargets);
+                }
+
+                taskTargetManager.Context.SaveChanges();
+            }
+            
             TempData["added"] = "added";
             _logger.LogInformation("User: {0} Created a new Task on Project {1}", User.FindFirstValue(ClaimTypes.Name),
                 project);
@@ -211,7 +243,7 @@ public class TaskController : Controller
     }
 
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult CreateProject(int project)
+    public ActionResult CreateProject(Guid project)
     {
         try
         {
@@ -261,7 +293,7 @@ public class TaskController : Controller
     [Authorize(Roles = "Admin,SuperUser")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult CreateProject(int project, TaskCreateViewModel model)
+    public ActionResult CreateProject(Guid project, TaskCreateViewModel model)
     {
         try
         {
@@ -270,7 +302,6 @@ public class TaskController : Controller
                 Name = model.Name,
                 Description = model.Description,
                 ProjectId = project,
-                TargetId = model.TargetId,
                 StartDate = model.StartDate.ToUniversalTime(),
                 EndDate = model.EndDate.ToUniversalTime(),
                 Status = model.Status,
@@ -280,6 +311,21 @@ public class TaskController : Controller
 
             taskManager.Add(task);
             taskManager.Context.SaveChanges();
+            if (model.SelectedTargets != null)
+            {
+                foreach (var tar in model.SelectedTargets)
+                {
+                    TaskTargets taskTargets = new TaskTargets
+                    {
+                        TaskId = task.Id,
+                        TargetId = tar
+                    };
+                    taskTargetManager.Add(taskTargets);
+                }
+
+                taskTargetManager.Context.SaveChanges();
+            }
+            
             TempData["added"] = "added";
             _logger.LogInformation("User: {0} Created a new Task Project on Project {1}",
                 User.FindFirstValue(ClaimTypes.Name), project);
@@ -297,7 +343,7 @@ public class TaskController : Controller
 
 
     // GET: TaskController/Edit/5
-    public ActionResult Edit(int project, int id)
+    public ActionResult Edit(Guid project, Guid id)
     {
         try
         {
@@ -327,7 +373,6 @@ public class TaskController : Controller
                 Id = id,
                 Name = result.Name,
                 Description = result.Description,
-                TargetId = result.TargetId,
                 AsignedUserId = result.AsignedUserId,
                 CreatedUserId = result.CreatedUserId,
                 StartDate = result.StartDate.ToUniversalTime(),
@@ -352,7 +397,7 @@ public class TaskController : Controller
     // POST: TaskController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(int project, TaskCreateViewModel model, int id)
+    public ActionResult Edit(Guid project, TaskCreateViewModel model, Guid id)
     {
         try
         {
@@ -365,7 +410,6 @@ public class TaskController : Controller
             var result = taskManager.GetById(id);
             result.Name = model.Name;
             result.Description = model.Description;
-            result.TargetId = model.TargetId;
             result.EndDate = model.EndDate.ToUniversalTime();
             result.Status = model.Status;
             result.StartDate = model.StartDate.ToUniversalTime();
@@ -388,7 +432,7 @@ public class TaskController : Controller
     }
     
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult EditProject(int project, int id)
+    public ActionResult EditProject(Guid project, Guid id)
     {
         try
         {
@@ -418,7 +462,6 @@ public class TaskController : Controller
                 Id = id,
                 Name = result.Name,
                 Description = result.Description,
-                TargetId = result.TargetId,
                 AsignedUserId = result.AsignedUserId,
                 StartDate = result.StartDate.ToUniversalTime(),
                 EndDate = result.EndDate.ToUniversalTime(),
@@ -445,14 +488,13 @@ public class TaskController : Controller
     [Authorize(Roles = "Admin,SuperUser")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult EditProject(int project, TaskCreateViewModel model, int id)
+    public ActionResult EditProject(Guid project, TaskCreateViewModel model, Guid id)
     {
         try
         {
             var result = taskManager.GetById(id);
             result.Name = model.Name;
             result.Description = model.Description;
-            result.TargetId = model.TargetId;
             result.EndDate = model.EndDate.ToUniversalTime();
             result.Status = model.Status;
             result.StartDate = model.StartDate.ToUniversalTime();
@@ -476,7 +518,7 @@ public class TaskController : Controller
     }
 
     // GET: TaskController/Delete/5
-    public ActionResult Delete(int project, int id)
+    public ActionResult Delete(Guid project, Guid id)
     {
         try
         {
@@ -502,7 +544,7 @@ public class TaskController : Controller
     // POST: TaskController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int project, int id, IFormCollection collection)
+    public ActionResult Delete(Guid project, Guid id, IFormCollection collection)
     {
         try
         {
@@ -535,7 +577,7 @@ public class TaskController : Controller
     }
 
     [HttpPost]
-    public IActionResult AddNote(int project, IFormCollection form)
+    public IActionResult AddNote(Guid project, IFormCollection form)
     {
         try
         {
@@ -551,7 +593,7 @@ public class TaskController : Controller
                 {
                     Name = form["noteName"],
                     Description = form["noteDescription"],
-                    TaskId = int.Parse(form["task"]),
+                    TaskId = Guid.Parse(form["task"]),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 };
 
@@ -559,26 +601,26 @@ public class TaskController : Controller
                 taskNoteManager.Context.SaveChanges();
                 TempData["addedNote"] = "added";
                 _logger.LogInformation("User: {0} added Task Note on Task: {1} on Project {2}",
-                    User.FindFirstValue(ClaimTypes.Name), int.Parse(form["task"]), project);
-                return RedirectToAction("Details", "Task", new {project = project, id = int.Parse(form["task"])});
+                    User.FindFirstValue(ClaimTypes.Name), form["task"], project);
+                return RedirectToAction("Details", "Task", new {project = project, id = form["task"]});
             }
             else
             {
-                return RedirectToAction("Details", "Project", new {project = project, id = int.Parse(form["task"])});
+                return RedirectToAction("Details", "Project", new {project = project, id = form["task"]});
             }
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error adding task note!";
+            TempData["errorAddNote"] = "Error adding task note!";
 
             _logger.LogError(e, "An error ocurred adding a Task Note Workspace on. Task: {0} Project: {1} User: {2}",
-                int.Parse(form["task"]), project, User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Project", new {project = project, id = int.Parse(form["task"])});
+                form["task"], project, User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Project", new {project = project, id = form["task"]});
         }
     }
 
     [HttpPost]
-    public IActionResult DeleteNote(int task, int project, int id)
+    public IActionResult DeleteNote(Guid task, Guid project, Guid id)
     {
         try
         {
@@ -588,7 +630,7 @@ public class TaskController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
-            if (id != 0)
+            if (id != null)
             {
                 var result = taskNoteManager.GetById(id);
 
@@ -606,7 +648,7 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error deleting task note!";
+            TempData["errorDeleteNote"] = "Error deleting task note!";
 
             _logger.LogError(e, "An error ocurred deleting a Task Note Workspace on. Task: {0} Project: {1} User: {2}",
                 task, project, User.FindFirstValue(ClaimTypes.Name));
@@ -616,7 +658,7 @@ public class TaskController : Controller
 
 
     [HttpPost]
-    public IActionResult AddAttachment(int project, int task, IFormCollection form, IFormFile upload)
+    public IActionResult AddAttachment(Guid project, Guid task, IFormCollection form, IFormFile upload)
     {
         try
         {
@@ -653,7 +695,7 @@ public class TaskController : Controller
                 var note = new TaskAttachment
                 {
                     Name = form["attachmentName"],
-                    TaskId = int.Parse(form["task"]),
+                    TaskId = Guid.Parse(form["task"]),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     FilePath = "/Attachments/Task/" + form["task"] + "/" + uniqueName
                 };
@@ -663,28 +705,28 @@ public class TaskController : Controller
                 TempData["addedAttachment"] = "added";
                 _logger.LogInformation("User: {0} added Task Attachment on Task: {1} on Project {2}",
                     User.FindFirstValue(ClaimTypes.Name), task, project);
-                return RedirectToAction("Details", "Task", new {project = project, id = int.Parse(form["task"])});
+                return RedirectToAction("Details", "Task", new {project = project, id = form["task"]});
             }
             else
             {
                 TempData["errorAttachment"] = "added";
-                return RedirectToAction("Details", "Task", new {project = project, id = int.Parse(form["task"])});
+                return RedirectToAction("Details", "Task", new {project = project, id = form["task"]});
             }
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error adding task attachment!";
+            TempData["errorAddAttachemnt"] = "Error adding task attachment!";
 
             _logger.LogError(ex,
                 "An error ocurred adding a Task Attachement Workspace on. Task: {0} Project: {1} User: {2}",
-                int.Parse(form["task"]), project, User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Task", new {project = project, id = int.Parse(form["task"])});
+                form["task"], project, User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Task", new {project = project, id = form["task"]});
         }
     }
 
 
     [HttpPost]
-    public IActionResult DeleteAttachment(int id, int project, int task)
+    public IActionResult DeleteAttachment(Guid id, Guid project, Guid task)
     {
         try
         {
@@ -694,7 +736,7 @@ public class TaskController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
-            if (id != 0)
+            if (id != null)
             {
                 var result = taskAttachmentManager.GetById(id);
 
@@ -715,12 +757,96 @@ public class TaskController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting task attachment!";
+            TempData["errorDeleteAttachemnt"] = "Error deleting task attachment!";
 
             _logger.LogError(ex,
                 "An error ocurred deleting a Task Attachement Workspace on. Task: {0} Project: {1} User: {2}", task,
                 project, User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Task", new {project = project, id = task});
+        }
+    }
+    
+     public IActionResult DeleteTarget(Guid id, Guid project, Guid task)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+            if (id != null)
+            {
+                var result = taskTargetManager.GetById(id);
+
+                taskTargetManager.Remove(result);
+                taskTargetManager.Context.SaveChanges();
+                TempData["deletedTarget"] = "deleted";
+                _logger.LogInformation("User: {0} Deleted task target: {1} on Vuln: {2}", User.FindFirstValue(ClaimTypes.Name),
+                    result.Id, task);
+                return RedirectToAction("Details", "Task", new {id = result.TaskId});
+            }
+            else
+            {
+                return RedirectToAction("Details", "Task", new {id = task});
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["errorDeleting"] = "Error deleting Task target!";
+            _logger.LogError(ex, "An error ocurred deleting a task target on Project: {1}. User: {2}", project,
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Task", new {id = task});
+        }
+    }
+    
+    [HttpPost]
+    public IActionResult AddTarget(Guid project,IFormCollection form)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+            if (form != null)
+            {
+
+               var result = taskTargetManager.GetAll().Where(x => x.TargetId == Guid.Parse(form["TargetId"]) && x.TaskId == Guid.Parse(form["taskId"])).FirstOrDefault();
+                if (result != null)
+                {
+                    TempData["targetExists"] = "exists";
+                    return RedirectToAction("Details", "Vuln", new {id = form["taskId"]});
+                }
+                
+                var tar = new TaskTargets
+                {
+                    TargetId = Guid.Parse(form["TargetId"]),
+                    TaskId = Guid.Parse(form["taskId"]),
+                    
+                };
+
+                taskTargetManager.Add(tar);
+                taskTargetManager.Context.SaveChanges();
+                TempData["addedTarget"] = "added";
+                _logger.LogInformation("User: {0} Added new target: {1} on Task: {2}",
+                    User.FindFirstValue(ClaimTypes.Name), tar.Id, form["taskId"]);
+                return RedirectToAction("Details", "Task", new {id = form["taskId"]});
+            }
+            else
+            {
+                return RedirectToAction("Details", "Task", new {id = form["taskId"]});
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["errorAdding"] = "Error adding note vuln!";
+            _logger.LogError(ex, "An error ocurred adding a target on Task: {1}. User: {2}", form["taskId"],
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Task", new {id = form["taskId"]});
         }
     }
 }

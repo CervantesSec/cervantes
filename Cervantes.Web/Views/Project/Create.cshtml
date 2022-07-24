@@ -49,6 +49,13 @@
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Language" class="control-label" localize-content>Language</label>
+                            @Html.DropDownListFor(model => model.Language, Html.GetEnumSelectList<Language>(), new {@class = "form-control"})
+                            <span asp-validation-for="Language" class="text-danger"></span>
+                        
+                        </div>
+                        
+                        <div class="form-group">
                             <label asp-for="Description" class="control-label" localize-content>Description</label>
                             <textarea id="description" asp-for="Description" class="form-control"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>

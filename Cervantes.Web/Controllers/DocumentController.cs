@@ -62,13 +62,14 @@ public class DocumentController : Controller
         }
     }
 
-    public IActionResult Details(int id)
+    public IActionResult Details(Guid id)
     {
         try
         {
             var doc = documentManager.GetById(id);
             var model = new Document
             {
+                Id = doc.Id,
                 Name = doc.Name,
                 Description = doc.Description,
                 UserId = doc.UserId,
@@ -158,7 +159,7 @@ public class DocumentController : Controller
     }
 
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Edit(int id)
+    public ActionResult Edit(Guid id)
     {
         try
         {
@@ -186,7 +187,7 @@ public class DocumentController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Edit(int id, Document model)
+    public ActionResult Edit(Guid id, Document model)
     {
         try
         {
@@ -210,7 +211,7 @@ public class DocumentController : Controller
     }
 
     // GET: DocumentController/Delete/5
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         try
         {
@@ -243,7 +244,7 @@ public class DocumentController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Delete(int id, IFormCollection collection)
+    public ActionResult Delete(Guid id, IFormCollection collection)
     {
         try
         {

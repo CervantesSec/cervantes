@@ -27,7 +27,7 @@ public class VaultController : Controller
         _logger = logger;
     }
     // GET
-    public IActionResult Index(int project)
+    public IActionResult Index(Guid project)
     {
         try
         {
@@ -54,7 +54,7 @@ public class VaultController : Controller
         }
     }
 
-    public IActionResult Create(int project)
+    public IActionResult Create(Guid project)
     {
         try
         {
@@ -81,7 +81,7 @@ public class VaultController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(int project,VaultViewModel model)
+    public IActionResult Create(Guid project,VaultViewModel model)
     {
         try
         {
@@ -120,7 +120,7 @@ public class VaultController : Controller
         }
     }
 
-    public IActionResult Edit(int project, int id)
+    public IActionResult Edit(Guid project, Guid id)
     {
         try
         {
@@ -156,7 +156,7 @@ public class VaultController : Controller
     }
     
     [HttpPost]
-    public IActionResult Edit(int project, int id, VaultViewModel model)
+    public IActionResult Edit(Guid project, Guid id, VaultViewModel model)
     {
         try
         {
@@ -187,7 +187,7 @@ public class VaultController : Controller
         }
     }
 
-    public IActionResult Delete(int project, int id)
+    public IActionResult Delete(Guid project, Guid id)
     {
         try
         {
@@ -212,7 +212,7 @@ public class VaultController : Controller
     }
     
     [HttpPost]
-    public IActionResult Delete(int project, int id,IFormCollection form)
+    public IActionResult Delete(Guid project, Guid id,IFormCollection form)
     {
         try
         {
@@ -240,7 +240,7 @@ public class VaultController : Controller
         }
     }
 
-    public IActionResult Details(int project, int id)
+    public IActionResult Details(Guid project, Guid id)
     {
         try
         {

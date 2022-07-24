@@ -14,7 +14,8 @@ public class TaskNote
     /// Task Note Id
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Task Name
@@ -29,24 +30,24 @@ public class TaskNote
     /// <summary>
     /// User who created project
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
     public string UserId { get; set; }
 
     /// <summary>
     /// Task Associated
     /// </summary>
+    [ForeignKey("TaskId")]
     public virtual Task Task { get; set; }
 
     /// <summary>
     /// Id Project
     /// </summary>
-    [ForeignKey("Task")]
-    public int TaskId { get; set; }
+    public Guid TaskId { get; set; }
 
     /// <summary>
     /// Visibility of the task note

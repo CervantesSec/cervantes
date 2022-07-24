@@ -172,6 +172,20 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
+            
+             <div class="info-box mb-3">
+                            <span class="info-box-icon bg-primary">
+                                <i class="fas fa-language"></i>
+                            </span>
+            
+                            <div class="info-box-content">
+                                <span class="info-box-text" localize-content>Language</span>
+                                <span class="info-box-number">
+                                    @Model.Project.Language
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
             <div class="info-box mb-3">
                 <span class="info-box-icon bg-teal">
                     <i class="fas fa-calendar"></i>
@@ -627,8 +641,6 @@
                 <td>@tasks.StartDate.ToShortDateString()</td>
                 <td>@tasks.EndDate.ToShortDateString()</td>
                 <td>@tasks.AsignedUser.FullName</td>
-                <td>@tasks.Target.Name</td>
-
             </tr>
         }
 
@@ -762,7 +774,6 @@
 
                 <td>@vulns.Status</td>
                 <td>@vulns.VulnCategory.Name</td>
-                <td>@vulns.Target.Name</td>
 
             </tr>
         }

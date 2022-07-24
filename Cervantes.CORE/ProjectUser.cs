@@ -14,27 +14,29 @@ public class ProjectUser
     /// Id Project User
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// User associated
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
+    
     public string UserId { get; set; }
 
     /// <summary>
     /// Project Associated
     /// </summary>
+    [ForeignKey("ProjectId")]
     public virtual Project Project { get; set; }
 
     /// <summary>
     /// Id Project
     /// </summary>
-    [ForeignKey("Project")]
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 }

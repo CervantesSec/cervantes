@@ -36,20 +36,22 @@ public class BackupController : Controller
     private ITaskManager taskManager = null;
     private ITaskNoteManager taskNoteManager = null;
     private ITaskAttachmentManager taskAttachmentManager = null;
+    private ITaskTargetManager taskTargetManager = null;
     private IVaultManager vaultManager = null;
     private IVulnCategoryManager vulnCategoryManager = null;
     private IVulnManager vulnManager = null;
     private IVulnNoteManager vulnNoteManager = null;
     private IVulnAttachmentManager vulnAttachmentManager = null;
+    private IVulnTargetManager vulnTargetManager = null;
     private readonly IHostingEnvironment _appEnvironment;
 
     public BackupController(IUserManager userManager, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> usrManager,IClientManager clientManager, IProjectManager projectManager,
         IProjectUserManager projectUserManager, IProjectNoteManager projectNoteManager, IDocumentManager documentManager,
         INoteManager noteManager, IOrganizationManager organizationManager, IReportManager reportManager,
-        ITargetManager targetManager, ITargetServicesManager targetServicesManager, ITaskManager taskManager,
+        ITargetManager targetManager, ITargetServicesManager targetServicesManager, ITaskManager taskManager, ITaskTargetManager taskTargetManager,
         ITaskNoteManager taskNoteManager, ITaskAttachmentManager taskAttachmentManager, IVaultManager vaultManager,
         IVulnManager vulnManager, IVulnNoteManager vulnNoteManager, IVulnAttachmentManager vulnAttachmentManager, IVulnCategoryManager vulnCategoryManager,
-        IProjectAttachmentManager projectAttachmentManager,ILogger<BackupController> logger,IHostingEnvironment _appEnvironment)
+        IProjectAttachmentManager projectAttachmentManager,IVulnTargetManager vulnTargetManager ,ILogger<BackupController> logger,IHostingEnvironment _appEnvironment)
     {
         this.userManager = userManager;
         _userManager = usrManager;
@@ -67,11 +69,13 @@ public class BackupController : Controller
         this.taskManager = taskManager;
         this.taskNoteManager = taskNoteManager;
         this.taskAttachmentManager = taskAttachmentManager;
+        this.taskTargetManager = taskTargetManager;
         this.vaultManager = vaultManager;
         this.vulnCategoryManager = vulnCategoryManager;
         this.vulnManager = vulnManager;
         this.vulnAttachmentManager = vulnAttachmentManager;
         this.vulnNoteManager = vulnNoteManager;
+        this.vulnTargetManager = vulnTargetManager;
         _logger = logger;
         this._appEnvironment = _appEnvironment;
 
@@ -112,6 +116,7 @@ public class BackupController : Controller
                     Description = x.Description,
                     UserId = x.UserId,
                     Status = x.Status,
+                    Language = x.Language,
                     ClientId = x.ClientId,
                     ProjectType = x.ProjectType,
                     Template = x.Template,
@@ -164,7 +169,7 @@ public class BackupController : Controller
                     CreatedDate = x.CreatedDate,
                     
                 }).ToList(),
-                Organization = organizationManager.GetById(1),
+                Organization = organizationManager.GetAll().First(),
                 Reports = reportManager.GetAll().Select(x => new Report
                 {
                     Id = x.Id,
@@ -209,7 +214,6 @@ public class BackupController : Controller
                     EndDate = X.EndDate,
                     Name = X.Name,
                     Description = X.Description,
-                    TargetId = X.TargetId,
                     Status = X.Status
                 }).ToList(),
                 TaskAttachments = taskAttachmentManager.GetAll().Select(x => new TaskAttachment
@@ -229,6 +233,12 @@ public class BackupController : Controller
                     TaskId = x.TaskId,
                     Visibility = x.Visibility
                 }).ToList(),
+                TaskTargets = taskTargetManager.GetAll().Select(x => new TaskTargets
+                {
+                    Id = x.Id,
+                    TargetId = x.TargetId,
+                    TaskId = x.TaskId
+                }),
                 Vaults = vaultManager.GetAll().Select(x => new Vault
                 {
                     Id = x.Id,
@@ -249,7 +259,6 @@ public class BackupController : Controller
                     CreatedDate = x.CreatedDate,
                     UserId = x.UserId,
                     ProjectId = x.ProjectId,
-                    TargetId = x.TargetId,
                     VulnCategoryId = x.VulnCategoryId,
                     Risk = x.Risk,
                     Status = x.Status,
@@ -278,7 +287,13 @@ public class BackupController : Controller
                     Description = x.Description,
                     UserId = x.UserId,
                     VulnId = x.VulnId
-                }).ToList()
+                }).ToList(),
+                VulnTargets = vulnTargetManager.GetAll().Select(x => new VulnTargets
+                {
+                    Id = x.Id,
+                    VulnId = x.VulnId,
+                    TargetId = x.TargetId
+                })
 
 
 
@@ -450,7 +465,7 @@ public class BackupController : Controller
                     }
                     userManager.Add(user);
                     userManager.Context.SaveChanges();
-                    if (user.ClientId != 0)
+                    if (user.ClientId != null)
                     {
                         _userManager.AddToRoleAsync(user, "Client").Wait();
                         continue;
@@ -464,8 +479,9 @@ public class BackupController : Controller
                 foreach (var client in backupViewModel.Clients)
                 {
                     clientManager.Add(client);
-                    clientManager.Context.SaveChanges();
+                    
                 }
+                clientManager.Context.SaveChanges();
             }
             
             if (backupViewModel.Projects != null)
@@ -473,8 +489,9 @@ public class BackupController : Controller
                 foreach (var project in backupViewModel.Projects)
                 {
                     projectManager.Add(project);
-                    projectManager.Context.SaveChanges();
                 }
+                projectManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.ProjectAttachments != null)
@@ -482,8 +499,9 @@ public class BackupController : Controller
                 foreach (var attachment in backupViewModel.ProjectAttachments)
                 {
                     projectAttachmentManager.Add(attachment);
-                    projectAttachmentManager.Context.SaveChanges();
                 }
+                projectAttachmentManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.ProjectNotes != null)
@@ -491,8 +509,9 @@ public class BackupController : Controller
                 foreach (var note in backupViewModel.ProjectNotes)
                 {
                     projectNoteManager.Add(note);
-                    projectNoteManager.Context.SaveChanges();
                 }
+                projectNoteManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.ProjectUsers != null)
@@ -500,8 +519,9 @@ public class BackupController : Controller
                 foreach (var user in backupViewModel.ProjectUsers)
                 {
                     projectUserManager.Add(user);
-                    projectUserManager.Context.SaveChanges();
                 }
+                projectUserManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.Documents != null)
@@ -509,8 +529,9 @@ public class BackupController : Controller
                 foreach (var doc in backupViewModel.Documents)
                 {
                     documentManager.Add(doc);
-                    documentManager.Context.SaveChanges();
+                    
                 }
+                documentManager.Context.SaveChanges();
             }
             
             if (backupViewModel.Notes != null)
@@ -518,13 +539,14 @@ public class BackupController : Controller
                 foreach (var note in backupViewModel.Notes)
                 {
                     noteManager.Add(note);
-                    noteManager.Context.SaveChanges();
                 }
+                noteManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.Organization != null)
             {
-                var org = organizationManager.GetById(1);
+                var org = organizationManager.GetAll().First();
                 org.Name = backupViewModel.Organization.Name;
                 org.Description = backupViewModel.Organization.Description;
                 org.Url = backupViewModel.Organization.Url;
@@ -542,8 +564,9 @@ public class BackupController : Controller
                 foreach (var rep in backupViewModel.Reports)
                 {
                     reportManager.Add(rep);
-                    reportManager.Context.SaveChanges();
                 }
+                reportManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.Targets != null)
@@ -551,8 +574,9 @@ public class BackupController : Controller
                 foreach (var target in backupViewModel.Targets)
                 {
                     targetManager.Add(target);
-                    targetManager.Context.SaveChanges();
                 }
+                targetManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.TargetServices != null)
@@ -560,8 +584,9 @@ public class BackupController : Controller
                 foreach (var services in backupViewModel.TargetServices)
                 {
                     targetServicesManager.Add(services);
-                    targetServicesManager.Context.SaveChanges();
                 }
+                targetServicesManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.Tasks != null)
@@ -569,34 +594,39 @@ public class BackupController : Controller
                 foreach (var task in backupViewModel.Tasks)
                 {
                     taskManager.Add(task);
-                    taskManager.Context.SaveChanges();
                 }
+                taskManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.TaskAttachments != null)
             {
                 foreach (var att in backupViewModel.TaskAttachments)
                 {
-                    if (att.UserId == backupViewModel.Users.Where(x => x.Email == "admin@cervantes.local").First().Id)
-                    {
-                        att.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    }
                     taskAttachmentManager.Add(att);
-                    taskAttachmentManager.Context.SaveChanges();
                 }
+                taskAttachmentManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.TaskNotes != null)
             {
                 foreach (var note in backupViewModel.TaskNotes)
                 {
-                    if (note.UserId == backupViewModel.Users.Where(x => x.Email == "admin@cervantes.local").First().Id)
-                    {
-                        note.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    }
                     taskNoteManager.Add(note);
-                    taskNoteManager.Context.SaveChanges();
                 }
+                taskNoteManager.Context.SaveChanges();
+
+            }
+            
+            if (backupViewModel.TaskTargets != null)
+            {
+                foreach (var tar in backupViewModel.TaskTargets)
+                {
+                    taskTargetManager.Add(tar);
+                }
+                taskTargetManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.Vaults != null)
@@ -604,8 +634,9 @@ public class BackupController : Controller
                 foreach (var vault in backupViewModel.Vaults)
                 {
                     vaultManager.Add(vault);
-                    vaultManager.Context.SaveChanges();
                 }
+                vaultManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.VulnCategories != null)
@@ -616,8 +647,9 @@ public class BackupController : Controller
                     if (result == null)
                     {
                         vulnCategoryManager.Add(cat);
-                        vulnCategoryManager.Context.SaveChanges();
                     }
+                    vulnCategoryManager.Context.SaveChanges();
+
                    
                 }
             }
@@ -627,8 +659,9 @@ public class BackupController : Controller
                 foreach (var vulns in backupViewModel.Vulns)
                 {
                     vulnManager.Add(vulns);
-                    vulnManager.Context.SaveChanges();
                 }
+                vulnManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.VulnAttachments != null)
@@ -636,8 +669,9 @@ public class BackupController : Controller
                 foreach (var att in backupViewModel.VulnAttachments)
                 {
                     vulnAttachmentManager.Add(att);
-                    vulnAttachmentManager.Context.SaveChanges();
                 }
+                vulnAttachmentManager.Context.SaveChanges();
+
             }
             
             if (backupViewModel.VulnNotes != null)
@@ -645,8 +679,18 @@ public class BackupController : Controller
                 foreach (var note in backupViewModel.VulnNotes)
                 {
                     vulnNoteManager.Add(note);
-                    vulnNoteManager.Context.SaveChanges();
                 }
+                vulnNoteManager.Context.SaveChanges();
+
+            }
+            
+            if (backupViewModel.VulnTargets != null)
+            {
+                foreach (var vuln in backupViewModel.VulnTargets)
+                {
+                    vulnTargetManager.Add(vuln);
+                }
+                vulnTargetManager.Context.SaveChanges();
             }
 
             

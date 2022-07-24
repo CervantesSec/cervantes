@@ -10,7 +10,8 @@ public class Vuln
     /// Id Vuln
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Is vuln template
@@ -30,46 +31,35 @@ public class Vuln
     /// <summary>
     /// User who created project
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
     public string UserId { get; set; }
 
     /// <summary>
     /// Project Associated
     /// </summary>
+    [ForeignKey("ProjectId")]
     public virtual Project Project { get; set; }
 
     /// <summary>
     /// Id Project
     /// </summary>
-    [ForeignKey("Project")]
-    public int ProjectId { get; set; }
-
-    /// <summary>
-    /// Target Associated
-    /// </summary>
-    public virtual Target Target { get; set; }
-
-    /// <summary>
-    /// Id Target
-    /// </summary>
-    [ForeignKey("Target")]
-    public int TargetId { get; set; }
-
+    public Guid ProjectId { get; set; }
+    
     /// <summary>
     /// VulnCategory Associated
     /// </summary>
+    [ForeignKey("VulnCategoryId")]
     public virtual VulnCategory VulnCategory { get; set; }
 
     /// <summary>
     /// Id Project
     /// </summary>
-    [ForeignKey("VulnCategory")]
-    public int VulnCategoryId { get; set; }
+    public Guid VulnCategoryId { get; set; }
 
     /// <summary>
     /// Vuln Risk
@@ -80,7 +70,7 @@ public class Vuln
     /// Vulnerability Status
     /// </summary>
     public VulnStatus Status { get; set; }
-
+    
     /// <summary>
     /// CVE Associated to vuln
     /// </summary>

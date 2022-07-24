@@ -14,7 +14,9 @@ public class VulnNote
     /// Porject Note Id
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Note Name
@@ -29,24 +31,24 @@ public class VulnNote
     /// <summary>
     /// User who created project
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
     public string UserId { get; set; }
 
     /// <summary>
     /// Project Associated
     /// </summary>
+    [ForeignKey("VulnId")]
     public virtual Vuln Vuln { get; set; }
 
     /// <summary>
     /// Id Project
     /// </summary>
-    [ForeignKey("Vuln")]
-    public int VulnId { get; set; }
+    public Guid VulnId { get; set; }
 
     /// <summary>
     /// Visibility of the vuln note

@@ -7,7 +7,7 @@ public class OrganizationViewModel
     /// <summary>
     /// Organization Id
     /// </summary>
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// Organization Name

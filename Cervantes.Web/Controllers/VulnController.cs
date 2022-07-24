@@ -23,11 +23,12 @@ public class VulnController : Controller
     private IVulnCategoryManager vulnCategoryManager = null;
     private IVulnNoteManager vulnNoteManager = null;
     private IVulnAttachmentManager vulnAttachmentManager = null;
+    private IVulnTargetManager vulnTargetManager = null;
     private readonly IHostingEnvironment _appEnvironment;
     private readonly ILogger<VulnController> _logger = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
-        ITargetManager targetManager,
+        ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IHostingEnvironment _appEnvironment)
     {
@@ -37,6 +38,7 @@ public class VulnController : Controller
         this.vulnCategoryManager = vulnCategoryManager;
         this.vulnAttachmentManager = vulnAttachmentManager;
         this.vulnNoteManager = vulnNoteManager;
+        this.vulnTargetManager = vulnTargetManager;
         this._appEnvironment = _appEnvironment;
         _logger = logger;
     }
@@ -74,7 +76,7 @@ public class VulnController : Controller
 
 
     // GET: VulnController/Details/5
-    public ActionResult Details(int id)
+    public ActionResult Details(Guid id)
     {
         try
         {
@@ -82,7 +84,8 @@ public class VulnController : Controller
             {
                 Vuln = vulnManager.GetById(id),
                 Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
-                Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id)
+                Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
+                Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList()
             };
             return View(model);
         }
@@ -97,7 +100,7 @@ public class VulnController : Controller
 
     // GET: VulnController/Edit/5
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Edit(int id)
+    public ActionResult Edit(Guid id)
     {
         try
         {
@@ -139,7 +142,6 @@ public class VulnController : Controller
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
-                TargetId = vulnResult.TargetId,
                 CVSS3 = vulnResult.CVSS3,
                 CVSSVector = vulnResult.CVSSVector,
                 ProofOfConcept = vulnResult.ProofOfConcept,
@@ -167,7 +169,7 @@ public class VulnController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Edit(int id, VulnCreateViewModel model)
+    public ActionResult Edit(Guid id, VulnCreateViewModel model)
     {
         try
         {
@@ -180,7 +182,6 @@ public class VulnController : Controller
             result.Risk = model.Risk;
             result.Status = model.Status;
             result.Impact = model.Impact;
-            result.TargetId = model.TargetId;
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
             result.ProofOfConcept = model.ProofOfConcept;
@@ -206,7 +207,7 @@ public class VulnController : Controller
 
     // GET: VulnController/Delete/5
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         try
         {
@@ -225,7 +226,7 @@ public class VulnController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Delete(int id, IFormCollection collection)
+    public ActionResult Delete(Guid id, IFormCollection collection)
     {
         try
         {
@@ -265,7 +266,6 @@ public class VulnController : Controller
         {
             VulnCategory cat = new VulnCategory
             {
-                Id = model.Id,
                 Name = model.Name,
                 Description = model.Description
             };
@@ -284,7 +284,7 @@ public class VulnController : Controller
 
     // GET: VulnController/Edit/5
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult EditCategory(int id)
+    public ActionResult EditCategory(Guid id)
     {
         try
         {
@@ -309,7 +309,7 @@ public class VulnController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult EditCategory(int id, VulnCategoryViewModel model)
+    public ActionResult EditCategory(Guid id, VulnCategoryViewModel model)
     {
         try
         {
@@ -330,7 +330,7 @@ public class VulnController : Controller
 
     // GET: VulnController/Delete/5
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult DeleteCategory(int id)
+    public ActionResult DeleteCategory(Guid id)
     {
         try
         {
@@ -349,7 +349,7 @@ public class VulnController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult DeleteCategory(int id, IFormCollection collection)
+    public ActionResult DeleteCategory(Guid id, IFormCollection collection)
     {
         try
         {
@@ -387,37 +387,37 @@ public class VulnController : Controller
                     Description = form["noteDescription"],
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     Visibility = (Visibility) Enum.ToObject(typeof(Visibility), int.Parse(form["Visibility"])),
-                    VulnId = int.Parse(form["vulnId"])
+                    VulnId = Guid.Parse(form["vulnId"])
                 };
 
                 vulnNoteManager.Add(note);
                 vulnNoteManager.Context.SaveChanges();
                 TempData["addedNote"] = "added";
                 _logger.LogInformation("User: {0} Added new note: {1} on Vuln: {2}",
-                    User.FindFirstValue(ClaimTypes.Name), note.Name, int.Parse(form["vulnId"]));
-                return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                    User.FindFirstValue(ClaimTypes.Name), note.Name, form["vulnId"]);
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
             else
             {
-                return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
         }
         catch (Exception ex)
         {
             TempData["error"] = "Error adding note vuln!";
-            _logger.LogError(ex, "An error ocurred adding a Note on Vuln: {1}. User: {2}", int.Parse(form["vulnId"]),
+            _logger.LogError(ex, "An error ocurred adding a Note on Vuln: {1}. User: {2}", form["vulnId"],
                 User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+            return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
         }
     }
 
 
     [HttpPost]
-    public IActionResult DeleteNote(int id, int project, int vuln)
+    public IActionResult DeleteNote(Guid id, Guid project, Guid vuln)
     {
         try
         {
-            if (id != 0)
+            if (id != null)
             {
                 var result = vulnNoteManager.GetById(id);
 
@@ -475,7 +475,7 @@ public class VulnController : Controller
                 var attachment = new VulnAttachment
                 {
                     Name = form["attachmentName"],
-                    VulnId = int.Parse(form["vulnId"]),
+                    VulnId = Guid.Parse(form["vulnId"]),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     FilePath = "/Attachments/Project/" + form["vulnId"] + "/" + uniqueName
                 };
@@ -484,32 +484,32 @@ public class VulnController : Controller
                 vulnAttachmentManager.Context.SaveChanges();
                 TempData["addedAttachment"] = "added";
                 _logger.LogInformation("User: {0} Added an attachment: {1} on Vuln: {2}",
-                    User.FindFirstValue(ClaimTypes.Name), attachment.Name, int.Parse(form["vulnId"]));
-                return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                    User.FindFirstValue(ClaimTypes.Name), attachment.Name, form["vulnId"]);
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
             else
             {
                 TempData["errorAttachment"] = "added";
                 _logger.LogError("An error ocurred adding an Attachment on Vuln: {1}. User: {2}",
-                    int.Parse(form["vulnId"]), User.FindFirstValue(ClaimTypes.Name));
-                return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                    form["vulnId"], User.FindFirstValue(ClaimTypes.Name));
+                return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
         }
         catch (Exception ex)
         {
             TempData["error"] = "Error adding attachment to vuln!";
             _logger.LogError(ex, "An error ocurred adding an Attachment on Vuln: {1}. User: {2}",
-                int.Parse(form["project"]), User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Details", "Vuln", new {id = int.Parse(form["vulnId"])});
+                form["project"], User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
         }
     }
 
     [HttpPost]
-    public IActionResult DeleteAttachment(int id, int project, int vuln)
+    public IActionResult DeleteAttachment(Guid id, Guid project, Guid vuln)
     {
         try
         {
-            if (id != 0)
+            if (id != null)
             {
                 var result = vulnAttachmentManager.GetById(id);
 
@@ -539,7 +539,7 @@ public class VulnController : Controller
         }
     }
     
-    public ActionResult Templates(int project)
+    public ActionResult Templates(Guid project)
     {
         try
         {
@@ -557,7 +557,7 @@ public class VulnController : Controller
         }
     }
     
-     public ActionResult TemplateEdit(int project, int id)
+     public ActionResult TemplateEdit(Guid project, Guid id)
     {
         try
         {
@@ -588,7 +588,6 @@ public class VulnController : Controller
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
-                TargetId = vulnResult.TargetId,
                 CVSS3 = vulnResult.CVSS3,
                 CVSSVector = vulnResult.CVSSVector,
                 ProofOfConcept = vulnResult.ProofOfConcept,
@@ -613,7 +612,7 @@ public class VulnController : Controller
         
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult TemplateEdit(int id,VulnCreateViewModel model)
+    public ActionResult TemplateEdit(string id,VulnCreateViewModel model)
     {
         try
         {

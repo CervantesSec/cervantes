@@ -473,9 +473,15 @@
                 </tr>
                 <tr>
                     <td style="background-color:#6c757d; color:white">
-                        <strong>Target Affected</strong>
+                        <strong>Targets Affected</strong>
                     </td>
-                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                    <td>
+                        
+                        @foreach (var tar in Model.VulnTargets.Where(x => x.VulnId == @vuln.Id))
+                        {
+                            <span>@tar.Target.Name,</span>
+                        }
+                    </td>
                 </tr>
                 <tr>
 
@@ -576,9 +582,16 @@
                 </tr>
                 <tr>
                     <td style="background-color:#6c757d; color:white">
-                        <strong>Target Affected</strong>
+                        <strong>Targets Affected</strong>
                     </td>
-                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                    <td>
+                                            
+                        @foreach (var tar in Model.VulnTargets.Where(x => x.VulnId == @vuln.Id))
+                        {
+                            <span>@tar.Target.Name,</span>
+                        }
+                    </td>
+                    
                 </tr>
                 <tr>
 
@@ -680,9 +693,16 @@
                 </tr>
                 <tr>
                     <td style="background-color:#6c757d; color:white">
-                        <strong>Target Affected</strong>
+                        <strong>Targets Affected</strong>
                     </td>
-                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                    <td>
+                                            
+                        @foreach (var tar in Model.VulnTargets.Where(x => x.VulnId == @vuln.Id))
+                        {
+                            <span>@tar.Target.Name,</span>
+                        }
+                    </td>
+                    
                 </tr>
                 <tr>
 
@@ -784,9 +804,16 @@
                 </tr>
                 <tr>
                     <td style="background-color:#6c757d; color:white">
-                        <strong>Target Affected</strong>
+                        <strong>Targets Affected</strong>
                     </td>
-                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                    <td>
+                                            
+                        @foreach (var tar in Model.VulnTargets.Where(x => x.VulnId == @vuln.Id))
+                        {
+                            <span>@tar.Target.Name,</span>
+                        }
+                    </td>
+                    
                 </tr>
                 <tr>
 
@@ -888,9 +915,16 @@
                 </tr>
                 <tr>
                     <td style="background-color:#6c757d; color:white">
-                        <strong>Target Affected</strong>
+                        <strong>Targets Affected</strong>
                     </td>
-                    <td>@vuln.Target.Name (@vuln.Target.Type)</td>
+                    <td>
+                                            
+                        @foreach (var tar in Model.VulnTargets.Where(x => x.VulnId == @vuln.Id))
+                        {
+                            <span>@tar.Target.Name,</span>
+                        }
+                    </td>
+                    
                 </tr>
                 <tr>
 

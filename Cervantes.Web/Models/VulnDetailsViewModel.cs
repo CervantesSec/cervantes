@@ -10,7 +10,7 @@ public class VulnDetailsViewModel
     public Vuln Vuln { get; set; }
     public IEnumerable<VulnNote> Notes { get; set; }
     public IEnumerable<VulnAttachment> Attachments { get; set; }
-
+    public IEnumerable<VulnTargets> Targets { get; set; }
     /// <summary>
     /// File Uploaded
     /// </summary>

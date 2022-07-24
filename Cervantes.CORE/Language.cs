@@ -2,6 +2,6 @@ namespace Cervantes.CORE;
 
 public enum Language
 {
-    English = 0,
-    Español = 1
+    English = 1,
+    Español = 2
 }

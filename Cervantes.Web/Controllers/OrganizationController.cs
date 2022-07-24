@@ -37,7 +37,7 @@ public class OrganizationController : Controller
     {
         try
         {
-            var org = organizationManager.GetById(1);
+            var org = organizationManager.GetAll().First();
 
             if (org != null)
             {
@@ -77,7 +77,7 @@ public class OrganizationController : Controller
     {
         try
         {
-            var result = organizationManager.GetById(1);
+            var result = organizationManager.GetAll().First();
             result.Name = model.Name;
             result.Description = model.Description;
             result.ContactEmail = model.ContactEmail;
@@ -120,7 +120,7 @@ public class OrganizationController : Controller
     {
         try
         {
-            var org = organizationManager.GetById(id);
+            var org = organizationManager.GetAll().First();
             var pathFile = _appEnvironment.WebRootPath + org.ImagePath;
             if (System.IO.File.Exists(pathFile)) System.IO.File.Delete(pathFile);
 

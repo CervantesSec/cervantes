@@ -78,6 +78,10 @@
                         <i class="fas fa-briefcase"></i> <span localize-content>Client</span>
                     </th>
                     <th>
+                        <i class="fas fa-language"></i> <span localize-content>Language</span>
+                    </th>
+                    
+                    <th>
                         <i class="fas fa-project-diagram"></i> <span localize-content>Type</span>
                     </th>
                     <th>
@@ -112,6 +116,7 @@
                                 </span>
                             </a>
                         </td>
+                        <td>@project.Language</td>
                         @switch (@project.ProjectType)
                         {
                             case ProjectType.BlackBox:

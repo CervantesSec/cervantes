@@ -216,18 +216,6 @@
                 <!-- /.info-box-content -->
             </div>
 
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-orange">
-                    <i class="fas fa-bullseye"></i>
-                </span>
-                <div class="info-box-content">
-                    <span class="info-box-text" localize-content>Target</span>
-                    <span class="info-box-number">@Model.Vuln.Target.Name</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-
-
         </div>
         <!-- /.card-body -->
     </div>
@@ -259,13 +247,19 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="#targets" data-toggle="tab">
+                <span localize-content>Targets</span> <span class="badge badge-danger">@Model.Targets.Count()</span>
+            </a>
+        </li>
+        
+        <li class="nav-item">
             <a class="nav-link" href="#notes" data-toggle="tab">
-                <span localize-content>Notes</span>
+                <span localize-content>Notes</span> <span class="badge badge-danger">@Model.Notes.Count()</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#attachments" data-toggle="tab">
-                <span localize-content>Attachments</span>
+                <span localize-content>Attachments</span> <span class="badge badge-danger">@Model.Attachments.Count()</span>
             </a>
         </li>
     </ul>
@@ -316,6 +310,86 @@
     </dt>
     <hr>
     <dd>@Html.DisplayFor(model => model.Vuln.RemediationPriority)</dd>
+</div>
+
+<div class="tab-pane" id="targets">
+    <table id="noteResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-sticky-note"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-align-left"></i> <span localize-content>Description</span>
+            </th>
+            <th>
+                <i class="fas fa-user"></i> <span localize-content>Type</span>
+            </th>
+            <th>
+                <i class="fas fa-cog"></i> <span localize-content>Options</span>
+            </th>
+  
+  
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+  
+        @foreach (var target in Model.Targets)
+        {
+            <tr>
+                <td>@target.Target.Name</td>
+                <td>@Html.Raw(@WebUtility.HtmlDecode(target.Target.Description))</td>
+                <td>@target.Target.Type</td>
+                <td>
+                    <form asp-action="DeleteTarget" method="post" enctype="multipart/form-data">
+                        <button type="submit" class="btn btn-tool" asp-controller="Vuln" asp-action="DeleteTarget" asp-route-project="@Model.Vuln.ProjectId" asp-route-id="@target.Id" asp-route-vuln="@Model.Vuln.Id" localize-content><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+        }
+  
+        </tbody>
+        <!--Table body-->
+    </table>
+
+    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addTargetModal" localize-content>
+        Add Target
+    </button>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="addTargetModal" tabindex="-1" role="dialog" aria-labelledby="addTargetModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTargetModalLabel" localize-content>Add Target to Vuln</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-action="AddTarget" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+    
+                        <input asp-for="@Model.Project.Id" type="hidden" id="project" name="project"/>
+                        <input asp-for="@Model.Vuln.Id" type="hidden" id="vulnId" name="vulnId"/>
+                            
+                        <div class="form-group">
+                            <label class="control-label" localize-content>Visibility</label>
+                            @Html.DropDownListFor(model => model.TargetId, @Model.TargetList, new {@class = "form-control"})
+                        </div>
+    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" localize-content>Close</button>
+                        <button type="submit" class="btn btn-success">Add</button>
+    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 

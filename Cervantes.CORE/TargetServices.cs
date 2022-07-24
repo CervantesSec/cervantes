@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cervantes.CORE;
@@ -9,29 +10,30 @@ public class TargetServices
     /// Id Target Services
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// User who created targetservice
     /// </summary>
+    [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
 
     /// <summary>
     /// Id user
     /// </summary>
-    [ForeignKey("User")]
     public string UserId { get; set; }
 
     /// <summary>
     /// Target associated
     /// </summary>
+    [ForeignKey("TargetId")]
     public virtual Target Target { get; set; }
 
     /// <summary>
     /// Id taregt
     /// </summary>
-    [ForeignKey("Target")]
-    public int TargetId { get; set; }
+    public Guid TargetId { get; set; }
 
     /// <summary>
     /// Name of the service

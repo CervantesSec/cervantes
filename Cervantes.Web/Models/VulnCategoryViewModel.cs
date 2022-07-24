@@ -1,3 +1,5 @@
+using System;
+
 namespace Cervantes.Web.Models;
 
 public class VulnCategoryViewModel
@@ -5,7 +7,7 @@ public class VulnCategoryViewModel
     /// <summary>
     /// Vuln Category Id
     /// </summary>
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Vuln Category Name

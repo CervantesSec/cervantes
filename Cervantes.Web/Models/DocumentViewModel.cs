@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Cervantes.CORE;
 using Microsoft.AspNetCore.Http;
 
@@ -6,6 +7,7 @@ namespace Cervantes.Web.Models;
 
 public class DocumentViewModel
 {
+    public Guid Id { get; set; }
     [Required] public string Name { get; set; }
 
     /// <summary>

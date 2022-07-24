@@ -1,7 +1,6 @@
 ﻿using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.Web.Models;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cervantes.Web.Controllers;
 
@@ -215,7 +215,7 @@ public class UserController : Controller
             }
             
             var file = Request.Form.Files["upload"];
-            var hasher = new PasswordHasher();
+            var hasher = new PasswordHasher<ApplicationUser>();
 
 
             if (file != null)
@@ -234,7 +234,6 @@ public class UserController : Controller
 
                     user.UserName = model.Email;
                         user.Email = model.Email;
-                        user.PasswordHash = hasher.HashPassword(model.Password);
                         user.FullName = model.FullName;
                         user.Avatar = "/Attachments/Images/Avatars/" + uniqueName;
                         user.EmailConfirmed = true;
@@ -251,7 +250,6 @@ public class UserController : Controller
                 {
                     user.UserName = model.Email;
                     user.Email = model.Email;
-                    user.PasswordHash = hasher.HashPassword(model.Password);
                     user.FullName = model.FullName;
                     user.Avatar = "/Attachments/Images/Avatars/" + uniqueName;
                     user.EmailConfirmed = true;
@@ -265,6 +263,7 @@ public class UserController : Controller
                 }
                 
                 usrManager.Add(user);
+                user.PasswordHash = hasher.HashPassword(user, model.Password);
                 usrManager.Context.SaveChanges();
                 _userManager.AddToRoleAsync(user, model.Option).Wait();
                 TempData["created"] = "created";
@@ -281,7 +280,6 @@ public class UserController : Controller
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    PasswordHash = hasher.HashPassword(model.Password),
                     FullName = model.FullName,
                     Avatar = "",
                     EmailConfirmed = true,
@@ -293,6 +291,7 @@ public class UserController : Controller
                     Description = model.Description
                 };
                 usrManager.Add(user);
+                user.PasswordHash = hasher.HashPassword(user, model.Password);
                 usrManager.Context.SaveChanges();
                 _userManager.AddToRoleAsync(user, model.Option).Wait();
 
@@ -383,13 +382,13 @@ public class UserController : Controller
     {
         try
         {
-            var hasher = new PasswordHasher();
+            var hasher = new PasswordHasher<ApplicationUser>();
             var result = usrManager.GetByUserId(id);
             result.FullName = model.User.FullName;
             result.UserName = model.User.Email;
             result.Email = model.User.Email;
             result.Description = model.User.Description;
-            if (model.User.ConfirmPassword != null) result.PasswordHash = hasher.HashPassword(model.User.ConfirmPassword);
+            if (model.User.ConfirmPassword != null) result.PasswordHash = hasher.HashPassword(result,model.User.ConfirmPassword);
             result.Position = model.User.Position;
             result.PhoneNumber = model.User.PhoneNumber;
 

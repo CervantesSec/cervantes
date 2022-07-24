@@ -10,7 +10,8 @@ public class Task
     /// Id Task
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Is vuln template
@@ -20,35 +21,35 @@ public class Task
     /// <summary>
     /// User who created project
     /// </summary>
+    [ForeignKey("CreatedUserId")]
     public virtual ApplicationUser CreatedUser { get; set; }
 
     /// <summary>
     /// task created by
     /// </summary>
-    [ForeignKey("CreatedUser")]
     public string CreatedUserId { get; set; }
 
     /// <summary>
     /// User asigned project
     /// </summary>
+    [ForeignKey("AsignedUserId")]
     public virtual ApplicationUser AsignedUser { get; set; }
 
     /// <summary>
     /// Asined user id
     /// </summary>
-    [ForeignKey("AsignedUser")]
     public string AsignedUserId { get; set; }
 
     /// <summary>
     /// Project Associated
     /// </summary>
+    [ForeignKey("ProjectId")]
     public virtual Project Project { get; set; }
 
     /// <summary>
     /// Id Project
     /// </summary>
-    [ForeignKey("Project")]
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     /// <summary>
     /// Task Start Date
@@ -69,17 +70,6 @@ public class Task
     /// Task Description
     /// </summary>
     public string Description { get; set; }
-
-    /// <summary>
-    /// Target Associated
-    /// </summary>
-    public virtual Target Target { get; set; }
-
-    /// <summary>
-    /// Id Target
-    /// </summary>
-    [ForeignKey("Target")]
-    public int TargetId { get; set; }
 
     /// <summary>
     /// Task status

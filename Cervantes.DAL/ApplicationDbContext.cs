@@ -1,8 +1,11 @@
-﻿using Cervantes.Contracts;
+﻿using System;
+using Cervantes.Contracts;
 using Cervantes.CORE;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Task = Cervantes.CORE.Task;
+using Npgsql;
 
 namespace Cervantes.DAL;
 
@@ -20,14 +23,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     {
         return base.SaveChangesAsync();
     }
-
+    
     //public DbSet<ApplicationUser> Users { get; set; }
 
     /// <summary>
     /// Table Clients
     /// </summary>
     public DbSet<Client> Clients { get; set; }
-
+  
     /// <summary>
     /// Table Documents
     /// </summary>
@@ -89,6 +92,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<TaskNote> TaskNotes { get; set; }
 
     /// <summary>
+    /// Table Task Targets
+    /// </summary>
+    public DbSet<TaskTargets> TaskTargets { get; set; }
+    
+    /// <summary>
     /// Table Vulns
     /// </summary>
     public DbSet<Vuln> Vulns { get; set; }
@@ -107,6 +115,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     /// Table Vuln Notes
     /// </summary>
     public DbSet<VulnNote> VulnNotes { get; set; }
+    public DbSet<VulnTargets> VulnTargets { get; set; }
 
     public DbSet<Log> Logs { get; set; }
     public DbSet<Report> Reports { get; set; }

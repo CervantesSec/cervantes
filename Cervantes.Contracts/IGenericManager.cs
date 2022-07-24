@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -11,6 +12,6 @@ public interface IGenericManager<T> where T : class
     Task<T> AddAsync(T entity);
     IQueryable<T> GetAll();
     T GetById(object[] key);
-    T GetById(int id);
+    T GetById(Guid id);
     T Remove(T entity);
 }
