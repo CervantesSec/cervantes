@@ -16,6 +16,8 @@ public class BackupViewModel
     public IEnumerable<Note> Notes { get; set; }
     public Organization Organization { get; set; }
     public IEnumerable<Report> Reports { get; set; }
+    
+    public IEnumerable<ReportTemplate> ReportTemplates { get; set; }
     public IEnumerable<Target> Targets { get; set; }
     public IEnumerable<TargetServices> TargetServices { get; set; }
     public IEnumerable<Task> Tasks { get; set; }

@@ -83,34 +83,9 @@
   $(document).ready(function() {
       $('#description').summernote({
       height: 300,
-      callbacks: {
-              onImageUpload: function(image) {
-                  uploadImage(image[0]);
-              }
-              }
       });
       });
     
-    function uploadImage(image) {
-        var data = new FormData();
-        data.append("image", image);
-        $.ajax({
-            url: '@Url.Action("UploadTarget", "Image", new {Area = ""})',
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: data,
-            type: "post",
-            success: function(FileUrl) {
-                var imgNode = document.createElement('img');  
-                imgNode.src = FileUrl;  
-                $('#description').summernote('insertNode', imgNode); 
-            },
-            error: function(data) {
-                alert(data.responseText); 
-            }
-        });
-    }
    
 
          $(document).ready(function () {

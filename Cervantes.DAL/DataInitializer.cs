@@ -1,6 +1,8 @@
-﻿using Cervantes.CORE;
+﻿using System;
+using Cervantes.CORE;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Cervantes.DAL;
 
@@ -8,12 +10,13 @@ public class DataInitializer
 {
     public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
         Contracts.IVulnCategoryManager vulnCategoryManager,
-        Contracts.IOrganizationManager organizationManager)
+        Contracts.IOrganizationManager organizationManager, Contracts.IReportTemplateManager reportTemplateManager)
     {
         SeedRoles(roleManager);
         SeedUsers(userManager);
         SeedVulnCategories(vulnCategoryManager);
         SeedOrganization(organizationManager);
+        SeedTemplates(reportTemplateManager,userManager);
     }
 
     private static void SeedUsers(UserManager<ApplicationUser> userManager)
@@ -157,5 +160,33 @@ public class DataInitializer
             organizationManager.Add(org);
             organizationManager.Context.SaveChanges();
         }
+    }
+
+    public static void SeedTemplates(Contracts.IReportTemplateManager reportTemplateManager, UserManager<ApplicationUser> userManager)
+    {
+        if (reportTemplateManager.GetAll().Count() == 0)
+        {
+            ApplicationUser admin =  userManager.FindByEmailAsync("admin@cervantes.local").Result;
+            var templateEN = new ReportTemplate();
+            templateEN.Id = Guid.NewGuid();
+            templateEN.Name = "Default English";
+            templateEN.Description = "Default English Template";
+            templateEN.Language = Language.English;
+            templateEN.CreatedDate = DateTime.Now.ToUniversalTime();
+            templateEN.FilePath = "/Attachments/Templates/templateEN.dotx";
+            reportTemplateManager.Add(templateEN);
+            
+            var templateES = new ReportTemplate();
+            templateES.Id = Guid.NewGuid();
+            templateES.Name = "Default Español";
+            templateES.Description = "Default Spanish Template";
+            templateES.Language = Language.Español;
+            templateES.CreatedDate = DateTime.Now.ToUniversalTime();
+            templateES.FilePath = "/Attachments/Templates/templateES.dotx";
+            reportTemplateManager.Add(templateES);
+
+            reportTemplateManager.Context.SaveChanges();
+        }
+        
     }
 }

@@ -1,0 +1,87 @@
+@using Cervantes.CORE
+@model Cervantes.Web.Models.ReportTemplateViewModel
+
+@{
+    ViewData["Title"] = "Edit Report Template";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-file-word"></i> Edit Report Template</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Report" asp-action="Templates" localize-content>Reports</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Edit</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <form asp-controller="Report" asp-action="EditTemplate" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label" localize-content>Name</label>
+                            <input asp-for="Name" class="form-control"/>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label" localize-content>Description</label>
+                            <textarea id="description" asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Language" class="control-label" localize-content>Language</label>
+                            @Html.DropDownListFor(model => model.Language, Html.GetEnumSelectList<Language>(), new {@class = "form-control"})
+                            <span asp-validation-for="Language" class="text-danger"></span>
+                                                
+                        </div>
+                        
+                        <div class="form-group">
+                            <a class="btn btn-default" asp-controller="Report" asp-action="Templates" localize-content>Back</a>
+                            <button type="submit" class="btn btn-dark" localize-content>Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+    <script>
+    
+    $(document).ready(function() {
+      $('#description').summernote({
+      height: 300,
+      });
+      });
+   
+    
+    $(document).ready(function () {
+      bsCustomFileInput.init();
+    });
+         </script>
+}

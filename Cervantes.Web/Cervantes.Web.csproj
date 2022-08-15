@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="DocumentFormat.OpenXml" Version="2.17.1" />
+        <PackageReference Include="HtmlToOpenXml.dll" Version="2.3.0" />
         <PackageReference Include="LazZiya.ExpressLocalization" Version="4.0.4" />
         <PackageReference Include="LazZiya.TagHelpers" Version="6.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
@@ -23,8 +25,6 @@
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
         <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.0" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
-        <PackageReference Include="Rotativa.AspNetCore" Version="1.2.0" />
-        <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,9 +36,9 @@
 
     <ItemGroup>
         <Folder Include="Areas\Workspace\Data\" />
-        <Folder Include="Rotativa\Linux" />
         <Folder Include="wwwroot\Attachments\Images\Clients\" />
         <Folder Include="wwwroot\Attachments\Images\Tasks" />
+        <Folder Include="wwwroot\fonts" />
     </ItemGroup>
 
     <ItemGroup>
@@ -48,13 +48,6 @@
         <Content Include="..\..\..\Desktop\wkhtmltopdf">
             <Link>Rotativa\MacOS\wkhtmltopdf</Link>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="wwwroot\Rotativa\MacOS\wkhtmltoimage.exe" />
-        <None Include="wwwroot\Rotativa\MacOS\wkhtmltopdf.exe" />
-        <None Include="wwwroot\Rotativa\Windows\wkhtmltoimage.exe" />
-        <None Include="wwwroot\Rotativa\Windows\wkhtmltopdf.exe" />
     </ItemGroup>
 
     <ItemGroup>
@@ -227,6 +220,10 @@
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\19ec5164-bbd3-4471-90f5-f27b56337e02\68dba44a-820c-416a-9b69-0a15e2f39b0d_test.pdf" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\19ec5164-bbd3-4471-90f5-f27b56337e02\7a842db0-3721-4997-a1b1-eb746bdaedd7_test.pdf" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\679d9adf-1c56-4c26-b07e-c1b8ec8b95f3_BackupData_2022-06-24.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\1b500275-4ca6-44b8-8761-5d2637a0aa28_BackupData_2022-08-15.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\5207670f-0cdc-40f0-8b2c-bdd1bef011c6_BackupData_2022-08-15.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\74c4ddb2-9731-4565-a155-eb282779325d_BackupData_2022-08-15.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\a511c34b-8bb8-4534-9f7b-8d4c4a3fd11d_BackupData_2022-08-15.json" />
     </ItemGroup>
 
 </Project>

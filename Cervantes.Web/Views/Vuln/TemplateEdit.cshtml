@@ -165,124 +165,22 @@
   $(document).ready(function() { 
           $('#descriptionTxt').summernote({
           height: 300,
-          callbacks: {
-                  onImageUpload: function(image) {
-                      uploadImage(image[0]);
-                  }
-                  }
           });
               $('#impact').summernote({
                         height: 300,
-                        callbacks: {
-                                onImageUpload: function(image) {
-                                    uploadImage2(image[0]);
-                                }
-                                }
                         });    
               
               $('#pocTxt').summernote({
                         height: 300,
-                        callbacks: {
-                                onImageUpload: function(image) {
-                                    uploadImage3(image[0]);
-                                }
-                                }
                         });
               
               $('#remediationTxt').summernote({
                         height: 300,
-                        callbacks: {
-                                onImageUpload: function(image) {
-                                    uploadImage4(image[0]);
-                                }
-                                }
                         });
           });
   
-        
-        function uploadImage(image) {
-            var data = new FormData();
-            data.append("image", image);
-            $.ajax({
-                url: '@Url.Action("UploadVuln", "Image", new {Area = ""})',
-                cache: false,
-                contentType: false,
-                processData: false,
-                data: data,
-                type: "post",
-                success: function(FileUrl) {
-                    var imgNode = document.createElement('img');  
-                    imgNode.src = FileUrl;  
-                    $('#descriptionTxt').summernote('insertNode', imgNode); 
-                },
-                error: function(data) {
-                    alert(data.responseText); 
-                }
-            });
-        }
-        
-        function uploadImage2(image) {
-                    var data = new FormData();
-                    data.append("image", image);
-                    $.ajax({
-                        url: '@Url.Action("UploadVuln", "Image", new {Area = ""})',
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: data,
-                        type: "post",
-                        success: function(FileUrl) {
-                            var imgNode = document.createElement('img');  
-                            imgNode.src = FileUrl;  
-                            $('#impact').summernote('insertNode', imgNode); 
-                        },
-                        error: function(data) {
-                            alert(data.responseText); 
-                        }
-                    });
-                }
-                
-                function uploadImage3(image) {
-                                    var data = new FormData();
-                                    data.append("image", image);
-                                    $.ajax({
-                                        url: '@Url.Action("UploadVuln", "Image", new {Area = ""})',
-                                        cache: false,
-                                        contentType: false,
-                                        processData: false,
-                                        data: data,
-                                        type: "post",
-                                        success: function(FileUrl) {
-                                            var imgNode = document.createElement('img');  
-                                            imgNode.src = FileUrl;  
-                                            $('#pocTxt').summernote('insertNode', imgNode); 
-                                        },
-                                        error: function(data) {
-                                            alert(data.responseText); 
-                                        }
-                                    });
-                                }
-                                
-                                function uploadImage4(image) {
-                                                                    var data = new FormData();
-                                                                    data.append("image", image);
-                                                                    $.ajax({
-                                                                        url: '@Url.Action("UploadVuln", "Image", new {Area = ""})',
-                                                                        cache: false,
-                                                                        contentType: false,
-                                                                        processData: false,
-                                                                        data: data,
-                                                                        type: "post",
-                                                                        success: function(FileUrl) {
-                                                                            var imgNode = document.createElement('img');  
-                                                                            imgNode.src = FileUrl;  
-                                                                            $('#remediationTxt').summernote('insertNode', imgNode); 
-                                                                        },
-                                                                        error: function(data) {
-                                                                            alert(data.responseText); 
-                                                                        }
-                                                                    });
-                                                                }
+      
+
        
     var c = new CVSS("cvssboard", {
                         onchange: function() {

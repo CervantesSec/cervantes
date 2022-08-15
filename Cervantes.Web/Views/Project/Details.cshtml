@@ -1051,9 +1051,6 @@
                 <td>@report.CreatedDate.ToShortDateString()</td>
                 <td>@report.User.FullName</td>
                 <td>
-                    <a class="btn btn-tool" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id" localize-content>
-                        <i class="fas fa-eye"></i>
-                    </a>
                     <a class="btn btn-tool" asp-area="" asp-controller="Report" asp-action="Download" asp-route-id="@report.Id" localize-content>
                         <i class="fas fa-download"></i>
                     </a>
@@ -1091,7 +1088,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form asp-area="" asp-controller="Report" asp-action="Generate" method="post" enctype="multipart/form-data">
+                        <form asp-area="" asp-controller="Report" asp-action="GenerateDoc" method="post" enctype="multipart/form-data">
                             <div class="modal-body">
 
                                 <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
@@ -1102,7 +1099,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" localize-content>Version</label>
-                                    <input type="text" class="form-control" id="verion" name="version"/>
+                                    <input type="text" class="form-control" id="version" name="version"/>
                                 </div>
 
                                 <div class="form-group">
@@ -1111,8 +1108,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label" localize-content>Language</label>
-                                    @Html.DropDownListFor(model => model.Language, Html.GetEnumSelectList<Language>(), new {@class = "form-control", @name = "language", @id = "language"})
+                                    <label class="control-label" localize-content>Template</label>
+                                    @Html.DropDownListFor(m => m.ReportTemplates, Model.ReportTemplates, new {@class = "form-control", @id = "reportTemplate", @name = "reportTemplate"})
                                 </div>
 
                             </div>

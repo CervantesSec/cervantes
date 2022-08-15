@@ -49,8 +49,9 @@ public class Program
                     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                     var vulnCategoryManager = serviceProvider.GetRequiredService<Contracts.IVulnCategoryManager>();
                     var organizationManager = serviceProvider.GetRequiredService<Contracts.IOrganizationManager>();
+                    var reportTemplateManager = serviceProvider.GetRequiredService<Contracts.IReportTemplateManager>();
 
-                    DataInitializer.SeedData(userManager, roleManager, vulnCategoryManager, organizationManager);
+                    DataInitializer.SeedData(userManager, roleManager, vulnCategoryManager, organizationManager,reportTemplateManager);
                 }
                 catch (Exception ex)
                 {

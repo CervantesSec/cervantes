@@ -1,0 +1,124 @@
+@using System.Net
+@model IEnumerable<Cervantes.CORE.ReportTemplate>
+
+@{
+    ViewData["Title"] = "Reports Templates";
+}
+@{
+
+
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-file-word"></i> Report Templates</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Report Templates</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="card">
+        <div class="card-body">
+            
+            <!--Table-->
+            <table id="templateResults" class="table table-bordered table-hover" width="100%">
+                <!--Table head-->
+                <thead class="thead-dark">
+                <tr>
+                    <th localize-content>
+                        <i class="fas fa-address-book"></i> <span localize-content>Name</span>
+                    </th>
+                    <th localize-content>
+                        <i class="fas fa-link"></i> <span localize-content>Language</span>
+                    </th>
+                    <th localize-content>
+                        <i class="fas fa-id-badge"></i> <span localize-content>Description</span>
+                    </th>
+                    <th localize-content>
+                        <i class="fas fa-at"></i> <span localize-content>Created Date</span>
+                    </th>
+                    <th localize-content>
+                        <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                    </th>
+                </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+
+                @foreach (var report in Model)
+                {
+                    <tr>
+                        <td>
+                            @report.Name
+                        </td>
+                        <td>
+                            @report.Language
+                        </td>
+                        <td>@Html.Raw(@WebUtility.HtmlDecode(@report.Description))</td>
+                        <td>
+                            @report.CreatedDate.ToShortDateString()
+                        </td>
+                        <td>
+                            
+                            <a class="btn btn-tool" asp-controller="Report" asp-action="Template" asp-route-id="@report.Id" localize-content>
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            
+                            <a class="btn btn-tool" asp-controller="Report" asp-action="EditTemplate" asp-route-id="@report.Id" localize-content>
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            
+                            <a class="btn btn-tool" asp-controller="Report" asp-action="DeleteTemplate" asp-route-id="@report.Id" localize-content>
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            
+                        </td>
+   
+                        
+                    </tr>
+                }
+
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
+
+
+        </div>
+        
+    </div>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
+    <a asp-area="" asp-controller="Report" asp-action="CreateTemplate" class="btn btn-dark"><i class="fas fa-file-word"></i> Create</a>
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+
+@section Scripts{
+    <script>
+
+    $(document).ready(function () {
+        $('#templateResults').DataTable({
+            "responsive": true
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+
+</script>
+}

@@ -16,8 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
-using System.Runtime.InteropServices;
-using Wkhtmltopdf.NetCore;
 
 namespace Cervantes.Web;
 
@@ -76,6 +74,7 @@ public class Startup
         services.AddScoped<INoteManager, NoteManager>();
         services.AddScoped<ILogManager, LogManager>();
         services.AddScoped<IReportManager, ReportManager>();
+        services.AddScoped<IReportTemplateManager, ReportTemplateManager>();
         services.AddScoped<INotificationsManager, NotificationsManager>();
         services.AddScoped<IVaultManager, VaultManager>();
 
@@ -143,15 +142,6 @@ public class Startup
                 "{culture=en}/{controller=Home}/{action=Index}/{id?}");
             endpoints.MapRazorPages();
         });
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            Rotativa.AspNetCore.RotativaConfiguration.Setup((Microsoft.AspNetCore.Hosting.IHostingEnvironment) env,
-                "Rotativa\\Windows\\");
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            Rotativa.AspNetCore.RotativaConfiguration.Setup((Microsoft.AspNetCore.Hosting.IHostingEnvironment) env,
-                "Rotativa/MacOS/");
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            Rotativa.AspNetCore.RotativaConfiguration.Setup((Microsoft.AspNetCore.Hosting.IHostingEnvironment) env,
-                "Rotativa/Linux/");
+        
     }
 }

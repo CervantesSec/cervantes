@@ -473,9 +473,14 @@ public class UserController : Controller
             var user = usrManager.GetByUserId(id);
             if (user != null)
             {
+                if (user.Avatar != null)
+                {
+                    System.IO.File.Delete(_appEnvironment.WebRootPath+user.Avatar);
+                }
                 usrManager.Remove(user);
                 usrManager.Context.SaveChanges();
             }
+            
 
             TempData["deleted"] = "deleted";
             _logger.LogInformation("User: {0} Deleted User: {1}", User.FindFirstValue(ClaimTypes.Name), user.UserName);

@@ -19,6 +19,10 @@ public class ProjectDetailsViewModel
     public IEnumerable<Report> Reports { get; set; }
 
     public IList<SelectListItem> Users { get; set; }
+    
+    public IList<SelectListItem> ReportTemplates { get; set; }
+    
+    public string ReportTemplateId { get; set; }
 
     public TargetType TargetType { get; set; }
     public Visibility Visibility { get; set; }

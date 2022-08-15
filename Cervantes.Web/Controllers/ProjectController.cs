@@ -29,6 +29,7 @@ public class ProjectController : Controller
     private IUserManager userManager = null;
     private IVulnManager vulnManager = null;
     private IReportManager reportManager = null;
+    private IReportTemplateManager reportTemplateManager = null;
 
     /// <summary>
     /// ProjectController Constructor
@@ -39,7 +40,7 @@ public class ProjectController : Controller
         IProjectUserManager projectUserManager, IProjectNoteManager projectNoteManager,
         IProjectAttachmentManager projectAttachmentManager, ITargetManager targetManager, ITaskManager taskManager,
         IUserManager userManager, IVulnManager vulnManager, IHostingEnvironment _appEnvironment,
-        ILogger<ProjectController> logger, IReportManager reportManager)
+        ILogger<ProjectController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager)
     {
         this.projectManager = projectManager;
         this.clientManager = clientManager;
@@ -53,6 +54,7 @@ public class ProjectController : Controller
         this._appEnvironment = _appEnvironment;
         _logger = logger;
         this.reportManager = reportManager;
+        this.reportTemplateManager = reportTemplateManager;
     }
 
     /// <summary>
@@ -129,6 +131,16 @@ public class ProjectController : Controller
 
                         foreach (var item in result2)
                             users2.Add(new SelectListItem {Text = item.FullName, Value = item.Id.ToString()});
+                        
+                        var repTemplates = reportTemplateManager.GetAll().Where(x => x.Language == project.Language).Select(e => new ReportTemplate
+                        {
+                            Id = e.Id,
+                            Name = e.Name,
+                        }).ToList();
+
+                        var liRep = new List<SelectListItem>();
+
+                        foreach (var item in repTemplates) liRep.Add(new SelectListItem {Text = item.Name, Value = item.Id.ToString()});
 
                         var model2 = new ProjectDetailsViewModel
                         {
@@ -140,7 +152,8 @@ public class ProjectController : Controller
                             Tasks = taskManager.GetAll().Where(x => x.ProjectId == id),
                             Users = users2.ToList(),
                             Vulns = vulnManager.GetAll().Where(x => x.ProjectId == id).ToList(),
-                            Reports = reportManager.GetAll().Where(x => x.ProjectId == id)
+                            Reports = reportManager.GetAll().Where(x => x.ProjectId == id),
+                            ReportTemplates = liRep.ToList()
                         };
                         return View(model2);
                     }
@@ -160,6 +173,16 @@ public class ProjectController : Controller
 
                 foreach (var item in result)
                     users.Add(new SelectListItem {Text = item.FullName, Value = item.Id.ToString()});
+                
+                var repTemplates2 = reportTemplateManager.GetAll().Where(x => x.Language == project.Language).Select(e => new ReportTemplate
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                }).ToList();
+
+                var liRep2 = new List<SelectListItem>();
+
+                foreach (var item in repTemplates2) liRep2.Add(new SelectListItem {Text = item.Name, Value = item.Id.ToString()});
 
                 var model = new ProjectDetailsViewModel
                 {
@@ -171,7 +194,8 @@ public class ProjectController : Controller
                     Tasks = taskManager.GetAll().Where(x => x.ProjectId == id),
                     Users = users.ToList(),
                     Vulns = vulnManager.GetAll().Where(x => x.ProjectId == id).ToList(),
-                    Reports = reportManager.GetAll().Where(x => x.ProjectId == id)
+                    Reports = reportManager.GetAll().Where(x => x.ProjectId == id),
+                    ReportTemplates = liRep2.ToList()
                 };
                 return View(model);
             }

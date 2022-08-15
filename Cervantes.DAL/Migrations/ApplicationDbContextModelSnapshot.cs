@@ -17,7 +17,7 @@ namespace Cervantes.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -425,6 +425,37 @@ namespace Cervantes.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reports");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.ReportTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Language")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ReportTemplates");
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Target", b =>
@@ -1058,6 +1089,15 @@ namespace Cervantes.DAL.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.ReportTemplate", b =>
+                {
+                    b.HasOne("Cervantes.CORE.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

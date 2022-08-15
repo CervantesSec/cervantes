@@ -291,6 +291,10 @@ public class ClientController : Controller
             var client = clientManager.GetById(id);
             if (client != null)
             {
+                if (client.ImagePath != null)
+                {
+                    System.IO.File.Delete(_appEnvironment+client.ImagePath);
+                }
                 clientManager.Remove(client);
                 clientManager.Context.SaveChanges();
             }

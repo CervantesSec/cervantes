@@ -31,6 +31,7 @@ public class BackupController : Controller
     private INoteManager noteManager = null;
     private IOrganizationManager organizationManager = null;
     private IReportManager reportManager = null;
+    private IReportTemplateManager reportTemplateManager = null;
     private ITargetManager targetManager = null;
     private ITargetServicesManager targetServicesManager = null;
     private ITaskManager taskManager = null;
@@ -51,7 +52,7 @@ public class BackupController : Controller
         ITargetManager targetManager, ITargetServicesManager targetServicesManager, ITaskManager taskManager, ITaskTargetManager taskTargetManager,
         ITaskNoteManager taskNoteManager, ITaskAttachmentManager taskAttachmentManager, IVaultManager vaultManager,
         IVulnManager vulnManager, IVulnNoteManager vulnNoteManager, IVulnAttachmentManager vulnAttachmentManager, IVulnCategoryManager vulnCategoryManager,
-        IProjectAttachmentManager projectAttachmentManager,IVulnTargetManager vulnTargetManager ,ILogger<BackupController> logger,IHostingEnvironment _appEnvironment)
+        IProjectAttachmentManager projectAttachmentManager,IVulnTargetManager vulnTargetManager ,ILogger<BackupController> logger,IHostingEnvironment _appEnvironment,IReportTemplateManager reportTemplateManager )
     {
         this.userManager = userManager;
         _userManager = usrManager;
@@ -64,6 +65,7 @@ public class BackupController : Controller
         this.noteManager = noteManager;
         this.organizationManager = organizationManager;
         this.reportManager = reportManager;
+        this.reportTemplateManager = reportTemplateManager;
         this.targetManager = targetManager;
         this.targetServicesManager = targetServicesManager;
         this.taskManager = taskManager;
@@ -179,6 +181,17 @@ public class BackupController : Controller
                     Name = x.Name,
                     Description = x.Description,
                     Version = x.Version,
+                    FilePath = x.FilePath,
+                    Language = x.Language
+                    
+                }).ToList(),
+                ReportTemplates = reportTemplateManager.GetAll().Select(x => new ReportTemplate
+                {
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    CreatedDate = x.CreatedDate,
+                    Name = x.Name,
+                    Description = x.Description,
                     FilePath = x.FilePath,
                     Language = x.Language
                     
@@ -326,8 +339,8 @@ public class BackupController : Controller
     {
         try
         {
-            string startPath = Path.Combine(_appEnvironment.WebRootPath, "Attachments");
-            string zipPath = Path.Combine(_appEnvironment.WebRootPath, "")+@"result"+DateTime.Now.ToString("yyyy-MM-dd")+".zip";
+            string startPath = _appEnvironment.WebRootPath+ "/"+ "Attachments";
+            string zipPath = _appEnvironment.WebRootPath +"/"+@"result"+DateTime.Now.ToString()+".zip";
 
            ZipFile.CreateFromDirectory(startPath, zipPath);
 
@@ -373,7 +386,7 @@ public class BackupController : Controller
         try
         {
             var file = Request.Form.Files["uploadAttachments"];
-            var uploads = Path.Combine(_appEnvironment.WebRootPath, "Temp");
+            var uploads = _appEnvironment.WebRootPath + "/Temp";
             string extractPath = Path.Combine(_appEnvironment.WebRootPath, "");
             var uniqueName = "Attachments.zip";
 
