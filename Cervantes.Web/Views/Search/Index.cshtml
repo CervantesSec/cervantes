@@ -1,0 +1,334 @@
+@model Cervantes.Web.Models.SearchViewModel
+
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+    </div>
+</section>
+
+
+@if (Model.Search != null)
+{
+    <!-- Main content -->
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-area="" asp-controller="Search" asp-action="Search" method="post" enctype="multipart/form-data">
+                <div class="input-group input-group-lg">
+                    <input type="search" id="search" name="search" class="form-control form-control-lg" placeholder="Type your keywords here" value="@Model.Search">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-lg btn-default">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="row mt-3">
+    <div class="col-md-10 offset-md-1">
+    @if (Model.Clients.Count() == 0 && Model.Documents.Count() == 0 && Model.Projects.Count() == 0
+         && Model.Reports.Count() == 0 && Model.Targets.Count() == 0 && Model.Tasks.Count() == 0
+         && Model.Users.Count() == 0 && Model.Vaults.Count() == 0 && Model.Vulns.Count() == 0
+         && Model.TargetServices.Count() == 0 && Model.VulnCategories.Count() == 0)
+    {
+        <div class="list-group-item">
+            <div class="row">
+                <div class="col-auto">
+                </div>
+                <div class="col px-4">
+                    <div>
+                        <h3>No results</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.Users.Count() != 0)
+    {
+        foreach (var user in Model.Users)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-user fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">User</div>
+                            <h3>
+                                <a asp-area="" asp-controller="User" asp-action="Details" asp-route-id="@user.Id">@user.FullName</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@user.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+
+    @if (Model.Clients.Count() != 0)
+    {
+        foreach (var client in Model.Clients)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-briefcase fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Client</div>
+                            <h3>
+                                <a asp-area="" asp-controller="Client" asp-action="Details" asp-route-id="@client.Id">@client.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@client.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if (Model.Projects.Count() != 0)
+    {
+        foreach (var project in Model.Projects)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-folder fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Project</div>
+                            <h3>
+                                <a asp-area="" asp-controller="Project" asp-action="Details" asp-route-id="@project.Id">@project.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@project.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if (Model.Documents.Count() != 0)
+    {
+        foreach (var doc in Model.Documents)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-file fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Document</div>
+                            <h3>
+                                <a asp-area="" asp-controller="Document" asp-action="Details" asp-route-id="@doc.Id">@doc.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@doc.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    @if (Model.Reports.Count() != 0)
+    {
+        foreach (var rep in Model.Reports)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-file-word fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Report</div>
+                            <h3>
+                                <a asp-area="" asp-controller="Project" asp-action="Details" asp-route-id="@rep.ProjectId">@rep.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@rep.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if (Model.Targets.Count() != 0)
+    {
+        foreach (var target in Model.Targets)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-bullseye fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Target</div>
+                            <h3>
+                                <a asp-area="Workspace" asp-controller="Target" asp-action="Details" asp-route-id="@target.Id" asp-route-project="@target.ProjectId">@target.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@target.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if (Model.TargetServices.Count() != 0)
+    {
+        foreach (var service in Model.TargetServices)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-bullseye fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Target Service</div>
+                            <h3>
+                                <a asp-area="Workspace" asp-controller="Target" asp-action="Service" asp-route-id="@service.Id" asp-route-project="@service.Target.ProjectId">@service.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@service.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    @if (Model.Tasks.Count() != 0)
+    {
+        foreach (var task in Model.Tasks)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-list fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Task</div>
+                            <h3>
+                                <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-id="@task.Id" asp-route-project="@task.ProjectId">@task.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@task.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if (Model.Vaults.Count() != 0)
+    {
+        foreach (var vault in Model.Vaults)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-database fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Vault</div>
+                            <h3>
+                                <a asp-area="Workspace" asp-controller="Vault" asp-action="Details" asp-route-id="@vault.Id" asp-route-project="@vault.ProjectId">@vault.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@vault.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if (Model.Vulns.Count() != 0)
+    {
+        foreach (var vuln in Model.Vulns)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-bug fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Vuln</div>
+                            <h3>
+                                <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id">@vuln.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@vuln.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if (Model.VulnCategories.Count() != 0)
+    {
+        foreach (var cat in Model.VulnCategories)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-auto">
+                        <i class="fas fa-project-diagram fa-3x"></i>
+                    </div>
+                    <div class="col px-4">
+                        <div>
+                            <div class="float-right">Vuln Category</div>
+                            <h3>
+                                <a asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@cat.Id">@cat.Name</a>
+                            </h3>
+                            <p class="mb-0">@Html.Raw(@cat.Description)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+
+
+    </div>
+    </div>
+    </div>
+    </section>
+}
+else
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <form asp-area="" asp-controller="Search" asp-action="Search" id="search" name="search" method="post" enctype="multipart/form-data">
+                        <div class="input-group input-group-lg">
+                            <input type="search" class="form-control form-control-lg" placeholder="Type your keywords here" id="search" name="search">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-lg btn-default">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+}

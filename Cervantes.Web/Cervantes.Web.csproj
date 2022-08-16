@@ -224,6 +224,10 @@
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\5207670f-0cdc-40f0-8b2c-bdd1bef011c6_BackupData_2022-08-15.json" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\74c4ddb2-9731-4565-a155-eb282779325d_BackupData_2022-08-15.json" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Temp\a511c34b-8bb8-4534-9f7b-8d4c4a3fd11d_BackupData_2022-08-15.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\4c4830e6-959f-4a14-a2a0-e66f96d463fc\b5de3d32-4162-414f-90b4-d24ea293ec17_test_v2.docx" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\4c4830e6-959f-4a14-a2a0-e66f96d463fc\ee68d002-cfd0-4cb6-9ac8-0906df141872_test_v3.docx" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\4c4830e6-959f-4a14-a2a0-e66f96d463fc\ee9002c5-d2df-4ac8-bb52-e7db80396f9e_test_v1.docx" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\4c4830e6-959f-4a14-a2a0-e66f96d463fc\f8ff55ad-ba50-4f8b-8e9f-5fdb89d25d8f_test_v4.docx" />
     </ItemGroup>
 
 </Project>
