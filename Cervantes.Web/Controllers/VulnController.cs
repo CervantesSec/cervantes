@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
 using Cervantes.Web.Models;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -173,19 +175,20 @@ public class VulnController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = vulnManager.GetById(id);
             result.Name = model.Name;
             result.Template = model.Template;
             result.cve = model.cve;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.VulnCategoryId = model.VulnCategoryId;
             result.Risk = model.Risk;
             result.Status = model.Status;
-            result.Impact = model.Impact;
+            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = model.ProofOfConcept;
-            result.Remediation = model.Remediation;
+            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
             result.RemediationComplexity = model.RemediationComplexity;
             result.RemediationPriority = model.RemediationPriority;
 
@@ -264,10 +267,11 @@ public class VulnController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             VulnCategory cat = new VulnCategory
             {
                 Name = model.Name,
-                Description = model.Description
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description))
             };
             vulnCategoryManager.Add(cat);
             vulnCategoryManager.Context.SaveChanges();
@@ -313,9 +317,10 @@ public class VulnController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = vulnCategoryManager.GetById(id);
             result.Name = model.Name;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             vulnCategoryManager.Context.SaveChanges();
             _logger.LogInformation("User: {0} edited Vuln Category: {1}", User.FindFirstValue(ClaimTypes.Name), id);
             return RedirectToAction(nameof(Categories));
@@ -617,19 +622,20 @@ public class VulnController : Controller
         try
         {
 
+            var sanitizer = new HtmlSanitizer();
             var result = vulnManager.GetById(model.Id);
             result.Name = model.Name;
             result.Template = model.Template;
             result.cve = model.cve;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.VulnCategoryId = model.VulnCategoryId;
             result.Risk = model.Risk;
             result.Status = model.Status;
-            result.Impact = model.Impact;
+            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = model.ProofOfConcept;
-            result.Remediation = model.Remediation;
+            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
             result.RemediationComplexity = model.RemediationComplexity;
             result.RemediationPriority = model.RemediationPriority;
             result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

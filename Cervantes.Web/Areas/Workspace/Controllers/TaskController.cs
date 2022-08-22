@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using Ganss.XSS;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -191,6 +193,7 @@ public class TaskController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -200,7 +203,7 @@ public class TaskController : Controller
             var task = new Task
             {
                 Name = model.Name,
-                Description = model.Description,
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                 ProjectId = project,
                 StartDate = model.StartDate.ToUniversalTime(),
                 EndDate = model.EndDate.ToUniversalTime(),
@@ -297,10 +300,11 @@ public class TaskController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var task = new Task
             {
                 Name = model.Name,
-                Description = model.Description,
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                 ProjectId = project,
                 StartDate = model.StartDate.ToUniversalTime(),
                 EndDate = model.EndDate.ToUniversalTime(),
@@ -401,6 +405,7 @@ public class TaskController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -409,7 +414,7 @@ public class TaskController : Controller
             }
             var result = taskManager.GetById(id);
             result.Name = model.Name;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.EndDate = model.EndDate.ToUniversalTime();
             result.Status = model.Status;
             result.StartDate = model.StartDate.ToUniversalTime();
@@ -492,9 +497,10 @@ public class TaskController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = taskManager.GetById(id);
             result.Name = model.Name;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.EndDate = model.EndDate.ToUniversalTime();
             result.Status = model.Status;
             result.StartDate = model.StartDate.ToUniversalTime();

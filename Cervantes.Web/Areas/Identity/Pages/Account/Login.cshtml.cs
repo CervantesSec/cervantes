@@ -62,6 +62,7 @@ public class LoginModel : PageModel
 
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
+        
         ReturnUrl = returnUrl;
     }
 

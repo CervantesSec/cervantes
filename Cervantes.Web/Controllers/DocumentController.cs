@@ -10,6 +10,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using Ganss.XSS;
 
 namespace Cervantes.Web.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -105,6 +107,7 @@ public class DocumentController : Controller
         try
         {
             var file = Upload;
+            var sanitizer = new HtmlSanitizer();
 
             if (file != null)
             {
@@ -118,7 +121,7 @@ public class DocumentController : Controller
                 var doc = new Document
                 {
                     Name = model.Name,
-                    Description = model.Description,
+                    Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                     FilePath = "/Attachments/Documents/" + uniqueName,
                     CreatedDate = DateTime.Now.ToUniversalTime(),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
@@ -191,9 +194,10 @@ public class DocumentController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = documentManager.GetById(id);
             result.Name = model.Name;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
 
             documentManager.Context.SaveChanges();
             TempData["edited"] = "edited";

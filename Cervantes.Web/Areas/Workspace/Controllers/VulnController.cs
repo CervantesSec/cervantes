@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
@@ -175,6 +177,7 @@ public class VulnController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -208,6 +211,7 @@ public class VulnController : Controller
                 
                 model.TargetList = targets;
                 model.VulnCatList = vulnCat;
+                model.Project = projectManager.GetById(project);
                 return View(model);
             }
             
@@ -218,15 +222,15 @@ public class VulnController : Controller
                     ProjectId = project,
                     Template = model.Template,
                     cve = model.cve,
-                    Description = model.Description,
+                    Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                     VulnCategoryId = model.VulnCategoryId,
                     Risk = model.Risk,
                     Status = model.Status,
-                    Impact = model.Impact,
+                    Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact)),
                     CVSS3 = model.CVSS3,
                     CVSSVector = model.CVSSVector,
-                    ProofOfConcept = model.ProofOfConcept,
-                    Remediation = model.Remediation,
+                    ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept)),
+                    Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation)),
                     RemediationComplexity = model.RemediationComplexity,
                     RemediationPriority = model.RemediationPriority,
                     CreatedDate = DateTime.Now.ToUniversalTime().AddDays(1),
@@ -344,6 +348,7 @@ public class VulnController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -354,15 +359,15 @@ public class VulnController : Controller
             result.Name = model.Name;
             result.Template = model.Template;
             result.cve = model.cve;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.VulnCategoryId = model.VulnCategoryId;
             result.Risk = model.Risk;
             result.Status = model.Status;
-            result.Impact = model.Impact;
+            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = model.ProofOfConcept;
-            result.Remediation = model.Remediation;
+            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
             result.RemediationComplexity = model.RemediationComplexity;
             result.RemediationPriority = model.RemediationPriority;
             result.CreatedDate = result.CreatedDate;
@@ -545,6 +550,7 @@ public class VulnController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -555,15 +561,15 @@ public class VulnController : Controller
             result.Name = model.Name;
             result.Template = model.Template;
             result.cve = model.cve;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.VulnCategoryId = model.VulnCategoryId;
             result.Risk = model.Risk;
             result.Status = model.Status;
-            result.Impact = model.Impact;
+            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = model.ProofOfConcept;
-            result.Remediation = model.Remediation;
+            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
             result.RemediationComplexity = model.RemediationComplexity;
             result.RemediationPriority = model.RemediationPriority;
             result.ProjectId = project;
@@ -664,6 +670,7 @@ public class VulnController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -674,15 +681,15 @@ public class VulnController : Controller
             result.Name = model.Name;
             result.Template = model.Template;
             result.cve = model.cve;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.VulnCategoryId = model.VulnCategoryId;
             result.Risk = model.Risk;
             result.Status = model.Status;
-            result.Impact = model.Impact;
+            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
             result.CVSS3 = model.CVSS3;
             result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = model.ProofOfConcept;
-            result.Remediation = model.Remediation;
+            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
             result.RemediationComplexity = model.RemediationComplexity;
             result.RemediationPriority = model.RemediationPriority;
             result.ProjectId = project;

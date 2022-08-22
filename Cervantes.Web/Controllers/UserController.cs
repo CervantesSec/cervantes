@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cervantes.Web.Controllers;
@@ -187,6 +189,7 @@ public class UserController : Controller
         try
         {
 
+            var sanitizer = new HtmlSanitizer();
             if (!ModelState.IsValid)
             {
                 var rol = roleManager.GetAll().Select(e => new RoleList
@@ -242,7 +245,7 @@ public class UserController : Controller
                         user.SecurityStamp = Guid.NewGuid().ToString();
                         user.PhoneNumber = model.PhoneNumber;
                         user.Position = model.Position;
-                        user.Description = model.Description;
+                        user.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
                         user.ClientId = model.ClientId;
 
                 }
@@ -258,7 +261,7 @@ public class UserController : Controller
                     user.SecurityStamp = Guid.NewGuid().ToString();
                     user.PhoneNumber = model.PhoneNumber;
                     user.Position = model.Position;
-                    user.Description = model.Description;
+                    user.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
                     
                 }
                 
@@ -288,7 +291,7 @@ public class UserController : Controller
                     SecurityStamp = Guid.NewGuid().ToString(),
                     PhoneNumber = model.PhoneNumber,
                     Position = model.Position,
-                    Description = model.Description
+                    Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description))
                 };
                 usrManager.Add(user);
                 user.PasswordHash = hasher.HashPassword(user, model.Password);
@@ -382,12 +385,13 @@ public class UserController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var hasher = new PasswordHasher<ApplicationUser>();
             var result = usrManager.GetByUserId(id);
             result.FullName = model.User.FullName;
             result.UserName = model.User.Email;
             result.Email = model.User.Email;
-            result.Description = model.User.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.User.Description));
             if (model.User.ConfirmPassword != null) result.PasswordHash = hasher.HashPassword(result,model.User.ConfirmPassword);
             result.Position = model.User.Position;
             result.PhoneNumber = model.User.PhoneNumber;

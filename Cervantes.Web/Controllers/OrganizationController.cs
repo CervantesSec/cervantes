@@ -7,7 +7,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
 using Cervantes.CORE;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Cervantes.Web.Controllers;
@@ -77,9 +79,10 @@ public class OrganizationController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = organizationManager.GetAll().First();
             result.Name = model.Name;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.ContactEmail = model.ContactEmail;
             result.ContactName = model.ContactName;
             result.ContactPhone = model.ContactPhone;

@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using Ganss.XSS;
 
 namespace Cervantes.Web.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User,Client")]
@@ -152,7 +154,7 @@ public class ProjectController : Controller
                             Tasks = taskManager.GetAll().Where(x => x.ProjectId == id),
                             Users = users2.ToList(),
                             Vulns = vulnManager.GetAll().Where(x => x.ProjectId == id).ToList(),
-                            Reports = reportManager.GetAll().Where(x => x.ProjectId == id),
+                            Reports = reportManager.GetAll().Where(x => x.ProjectId == id).ToList(),
                             ReportTemplates = liRep.ToList()
                         };
                         return View(model2);
@@ -194,7 +196,7 @@ public class ProjectController : Controller
                     Tasks = taskManager.GetAll().Where(x => x.ProjectId == id),
                     Users = users.ToList(),
                     Vulns = vulnManager.GetAll().Where(x => x.ProjectId == id).ToList(),
-                    Reports = reportManager.GetAll().Where(x => x.ProjectId == id),
+                    Reports = reportManager.GetAll().Where(x => x.ProjectId == id).ToList(),
                     ReportTemplates = liRep2.ToList()
                 };
                 return View(model);
@@ -258,13 +260,14 @@ public class ProjectController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var item = model.ItemList;
             
 
             var project = new Project
             {
                 Name = model.Name,
-                Description = model.Description,
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                 StartDate = model.StartDate.ToUniversalTime().AddDays(1),
                 EndDate = model.EndDate.ToUniversalTime().AddDays(1),
                 ClientId = model.ClientId,
@@ -351,10 +354,11 @@ public class ProjectController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = projectManager.GetById(id);
             result.Name = model.Name;
             result.Status = model.Status;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.Template = model.Template;
             result.ClientId = model.ClientId;
             result.Language = model.Language;
@@ -505,10 +509,11 @@ public class ProjectController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = projectManager.GetById(id);
             result.Name = model.Name;
             result.Status = model.Status;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.Template = model.Template;
             result.ClientId = model.ClientId;
             result.StartDate = model.StartDate.ToUniversalTime();

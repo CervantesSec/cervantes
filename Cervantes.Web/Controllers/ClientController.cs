@@ -10,6 +10,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
+using System.Web;
+using Ganss.XSS;
 
 namespace Cervantes.Web.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -129,6 +132,8 @@ public class ClientController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
+
             var file = Request.Form.Files["upload"];
             var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Images/Clients");
             var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
@@ -140,7 +145,7 @@ public class ClientController : Controller
             var client = new Client
             {
                 Name = model.Name,
-                Description = model.Description,
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                 ContactPhone = model.ContactPhone,
                 ContactName = model.ContactName,
                 ContactEmail = model.ContactEmail,
@@ -213,9 +218,10 @@ public class ClientController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = clientManager.GetById(id);
             result.Name = model.Name;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.ContactEmail = model.ContactEmail;
             result.ContactName = model.ContactName;
             result.ContactPhone = model.ContactPhone;

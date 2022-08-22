@@ -24,7 +24,6 @@
                     <li class="breadcrumb-item">
                         <a asp-controller="Report" asp-action="Templates" localize-content>Reports</a>
                     </li>
-                    <li class="breadcrumb-item active" localize-content>@Model.Name</li>
                 </ol>
             </div>
         </div>
@@ -74,19 +73,6 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-info">
-                    <i class="fas fa-user"></i>
-                </span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text" localize-content>Created by</span>
-                    <span class="info-box-number">@Model.User.FullName</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            
         </div>
         <!-- /.card-body -->
     </div>

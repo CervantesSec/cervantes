@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.Web.Areas.Workspace.Models;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -85,6 +87,7 @@ public class VaultController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -94,7 +97,7 @@ public class VaultController : Controller
             var vault = new Vault
             {
                 Name = model.Name,
-                Description = model.Description,
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                 Type = model.Type,
                 Value = model.Value,
                 ProjectId = project,
@@ -160,6 +163,7 @@ public class VaultController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -168,7 +172,7 @@ public class VaultController : Controller
 
             var vault = vaultManager.GetById(id);
             vault.Name = model.Name;
-            vault.Description = model.Description;
+            vault.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             vault.Type = model.Type;
             vault.Value = model.Value;
 

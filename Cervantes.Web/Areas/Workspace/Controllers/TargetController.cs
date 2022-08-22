@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
@@ -136,6 +138,8 @@ public class TargetController : Controller
                 model.Project = projectManager.GetById(project);
                 return View("Create", model);
             }
+
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -147,7 +151,7 @@ public class TargetController : Controller
             {
                 Name = model.Name,
                 Type = model.Type,
-                Description = model.Description,
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                 ProjectId = project,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
@@ -217,10 +221,12 @@ public class TargetController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
+
+            var sanitizer = new HtmlSanitizer();
             var result = targetManager.GetById(model.Id);
             result.Name = model.Name;
             result.Type = model.Type;
-            result.Description = model.Description;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
             result.ProjectId = project;
 
             targetManager.Context.SaveChanges();
@@ -352,6 +358,7 @@ public class TargetController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -365,8 +372,8 @@ public class TargetController : Controller
                     Name = form["name"],
                     Version = form["version"],
                     Port = int.Parse(form["port"]),
-                    Description = form["description"],
-                    Note = form["note"],
+                    Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(form["description"])),
+                    Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(form["note"])),
                     UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                     TargetId = target
                 };
@@ -427,6 +434,7 @@ public class TargetController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -437,8 +445,8 @@ public class TargetController : Controller
             result.Name = model.TargetService.Name;
             result.Version = model.TargetService.Version;
             result.Port = model.TargetService.Port;
-            result.Description = model.TargetService.Description;
-            result.Note = model.TargetService.Note;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.TargetService.Description));
+            result.Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.TargetService.Note));
 
             targetServicesManager.Context.SaveChanges();
             TempData["editedService"] = "edit service";

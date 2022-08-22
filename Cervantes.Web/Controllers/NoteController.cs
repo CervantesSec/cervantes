@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using Ganss.XSS;
 
 namespace Cervantes.Web.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -72,10 +74,11 @@ public class NoteController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var note = new Note
             {
                 Name = model.Name,
-                Description = model.Description,
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                 CreatedDate = DateTime.Now.ToUniversalTime(),
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
@@ -124,11 +127,12 @@ public class NoteController : Controller
     {
         try
         {
+            var sanitizer = new HtmlSanitizer();
             var result = noteManager.GetById(id);
             if (result.UserId == User.FindFirstValue(ClaimTypes.Name))
             {
                 result.Name = model.Name;
-                result.Description = model.Description;
+                result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
 
                 noteManager.Context.SaveChanges();
                 TempData["edited"] = "edited";
