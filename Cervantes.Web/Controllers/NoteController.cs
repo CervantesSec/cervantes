@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using Cervantes.Web.Models;
 using Ganss.XSS;
 
 namespace Cervantes.Web.Controllers;
@@ -69,11 +70,15 @@ public class NoteController : Controller
     // POST: DocumentController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Create(Note model, IFormFile upload)
+    public ActionResult Create(NoteViewModel model, IFormFile upload)
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Create");
+            }
+            
             var sanitizer = new HtmlSanitizer();
             var note = new Note
             {
@@ -104,7 +109,7 @@ public class NoteController : Controller
             //obtenemos la categoria a editar mediante su id
             var result = noteManager.GetById(id);
 
-            var note = new Note
+            var note = new NoteViewModel()
             {
                 Name = result.Name,
                 Description = result.Description
@@ -123,10 +128,22 @@ public class NoteController : Controller
     // POST: DocumentController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(Guid id, Document model)
+    public ActionResult Edit(Guid id, NoteViewModel model)
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                var modelstate = noteManager.GetById(id);
+
+                var note = new NoteViewModel()
+                {
+                    Name = modelstate.Name,
+                    Description = modelstate.Description
+                };
+                return View(note);
+            }
+            
             var sanitizer = new HtmlSanitizer();
             var result = noteManager.GetById(id);
             if (result.UserId == User.FindFirstValue(ClaimTypes.Name))

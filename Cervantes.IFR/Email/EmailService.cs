@@ -17,7 +17,7 @@ public class EmailService : IEmailService
         _emailConfiguration = emailConfiguration;
     }
 
-    public void Send(EmailMessage emailMessage)
+    /*public void Send(EmailMessage emailMessage)
     {
         var message = new MimeMessage();
         message.To.AddRange(emailMessage.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
@@ -36,6 +36,42 @@ public class EmailService : IEmailService
             //The last parameter here is to use SSL (Which you should!)
             emailClient.Connect(_emailConfiguration.SmtpServer, _emailConfiguration.SmtpPort,
                 SecureSocketOptions.StartTls);
+
+            //Remove any OAuth functionality as we won't be using it. 
+            emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
+
+            emailClient.Authenticate(_emailConfiguration.SmtpUsername, _emailConfiguration.SmtpPassword);
+
+            emailClient.Send(message);
+
+            emailClient.Disconnect(true);
+        }
+    }*/
+    
+    public void Send(EmailMessage emailMessage)
+    {
+        if (_emailConfiguration.Enabled == false)
+        {
+            return;
+        }
+        
+        var message = new MimeMessage();
+        message.To.AddRange(emailMessage.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
+        var from = new MailboxAddress(_emailConfiguration.Name,_emailConfiguration.From);
+        message.From.Add(from);
+        message.Subject = emailMessage.Subject;
+        //We will say we are sending HTML. But there are options for plaintext etc. 
+        message.Body = new TextPart(TextFormat.Html)
+        {
+            Text = emailMessage.Content
+        };
+
+        //Be careful that the SmtpClient class is the one from Mailkit not the framework!
+        using (var emailClient = new SmtpClient())
+        {
+            //The last parameter here is to use SSL (Which you should!)
+            emailClient.Connect(_emailConfiguration.SmtpServer, _emailConfiguration.SmtpPort,
+                SecureSocketOptions.Auto);
 
             //Remove any OAuth functionality as we won't be using it. 
             emailClient.AuthenticationMechanisms.Remove("XOAUTH2");

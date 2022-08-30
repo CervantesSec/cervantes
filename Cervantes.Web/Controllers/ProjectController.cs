@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using Cervantes.IFR.Email;
 using Ganss.XSS;
 
 namespace Cervantes.Web.Controllers;
@@ -32,6 +33,7 @@ public class ProjectController : Controller
     private IVulnManager vulnManager = null;
     private IReportManager reportManager = null;
     private IReportTemplateManager reportTemplateManager = null;
+    private IEmailService email = null;
 
     /// <summary>
     /// ProjectController Constructor
@@ -42,7 +44,7 @@ public class ProjectController : Controller
         IProjectUserManager projectUserManager, IProjectNoteManager projectNoteManager,
         IProjectAttachmentManager projectAttachmentManager, ITargetManager targetManager, ITaskManager taskManager,
         IUserManager userManager, IVulnManager vulnManager, IHostingEnvironment _appEnvironment,
-        ILogger<ProjectController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager)
+        ILogger<ProjectController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager,IEmailService email)
     {
         this.projectManager = projectManager;
         this.clientManager = clientManager;
@@ -57,6 +59,7 @@ public class ProjectController : Controller
         _logger = logger;
         this.reportManager = reportManager;
         this.reportTemplateManager = reportTemplateManager;
+        this.email = email;
     }
 
     /// <summary>
@@ -567,6 +570,35 @@ public class ProjectController : Controller
                     TempData["addedMember"] = "added";
                     _logger.LogInformation("User: {0} Added new member Member on Project: {2}",
                         User.FindFirstValue(ClaimTypes.Name), project);
+
+                    var userRes = userManager.GetByUserId(user.UserId);
+                    var projectRes = projectManager.GetById(user.ProjectId);
+                    
+                    var to = new List<EmailAddress>();
+                    to.Add(new EmailAddress
+                    {
+                        Address = userRes.Email,
+                        Name = userRes.FullName,
+                    });
+
+                    StreamReader sr =new StreamReader(_appEnvironment.WebRootPath + "/Resources/Email/AddedToProject.html");
+                    string s = sr.ReadToEnd();
+                    s = s.Replace("{UserName}", userRes.FullName).
+                        Replace("{Project}",projectRes.Name).
+                        Replace("{StartDate}", projectRes.StartDate.ToShortDateString()).
+                        Replace("{EndDate}", projectRes.EndDate.ToShortDateString()).
+                        Replace("{Client}",projectRes.Client.Name).
+                        Replace("{CervantesLink}",HttpContext.Request.Scheme.ToString() +"://" + HttpContext.Request.Host.ToString() + "/en/Project/Details/"+project);
+                    sr.Close();
+                
+                    EmailMessage message = new EmailMessage
+                    {
+                        ToAddresses = to,
+                        Subject = "Cervantes - You have been added to a Project",
+                        Content = s
+                    };
+             
+                    email.Send(message);
                     return RedirectToAction("Details", "Project", new {id = project});
                 }
                 else

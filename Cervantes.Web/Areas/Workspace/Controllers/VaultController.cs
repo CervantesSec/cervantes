@@ -83,6 +83,7 @@ public class VaultController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Create(Guid project,VaultViewModel model)
     {
         try
@@ -92,6 +93,17 @@ public class VaultController : Controller
             if (user == null)
             {
                 return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+
+            if (!ModelState.IsValid)
+            {
+                VaultViewModel result = new VaultViewModel
+                {
+                    Project = projectManager.GetById(project)
+                };
+
+                return View("Create", result);
+
             }
 
             var vault = new Vault
@@ -159,6 +171,7 @@ public class VaultController : Controller
     }
     
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Edit(Guid project, Guid id, VaultViewModel model)
     {
         try
@@ -216,6 +229,7 @@ public class VaultController : Controller
     }
     
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Delete(Guid project, Guid id,IFormCollection form)
     {
         try

@@ -13,7 +13,9 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using Cervantes.IFR.Email;
 using Ganss.XSS;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cervantes.Web.Controllers;
@@ -28,6 +30,8 @@ public class UserController : Controller
     private IRoleManager roleManager = null;
     private IClientManager clientManager = null;
     private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
+    private IEmailService email = null;
+
 
     /// <summary>
     /// UserController Constructor
@@ -39,7 +43,7 @@ public class UserController : Controller
     public UserController(IUserManager usrManager, IRoleManager roleManager,
         Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, IProjectManager projectManager,
        IClientManager clientManager, IHostingEnvironment _appEnvironment,
-        ILogger<UserController> logger)
+        ILogger<UserController> logger, IEmailService email)
     {
         this.usrManager = usrManager;
         this.roleManager = roleManager;
@@ -47,6 +51,7 @@ public class UserController : Controller
         this._appEnvironment = _appEnvironment;
         _userManager = userManager;
         this.projectManager = projectManager;
+        this.email = email;
         _logger = logger;
     }
 
@@ -273,6 +278,28 @@ public class UserController : Controller
                 _logger.LogInformation("User: {0} Created a new User: {1}",
                     User.FindFirstValue(ClaimTypes.Name),
                     user.UserName);
+                
+                var to = new List<EmailAddress>();
+                to.Add(new EmailAddress
+                {
+                    Address = user.Email,
+                    Name = user.FullName,
+                });
+
+                StreamReader sr =new StreamReader(_appEnvironment.WebRootPath + "/Resources/Email/UserCreated.html");
+                string s = sr.ReadToEnd();
+                s = s.Replace("{UserName}", user.FullName).Replace("{CervantesLink}",HttpContext.Request.Scheme.ToString() +"://" + HttpContext.Request.Host.ToString() + "/Identity/Account/Login");
+                sr.Close();
+                
+                EmailMessage message = new EmailMessage
+                {
+                    ToAddresses = to,
+                    Subject = "Cervantes - Created User",
+                    Content = s
+                };
+             
+                email.Send(message);
+                
                 return RedirectToAction("Index");
             }
 
@@ -302,6 +329,28 @@ public class UserController : Controller
                 TempData["created"] = "created";
                 _logger.LogInformation("User: {0} Created a new User: {1}",
                     User.FindFirstValue(ClaimTypes.Name), user.UserName);
+                
+                var to = new List<EmailAddress>();
+                to.Add(new EmailAddress
+                {
+                    Address = user.Email,
+                    Name = user.FullName,
+                });
+
+                StreamReader sr =new StreamReader(_appEnvironment.WebRootPath + "/Resources/Email/UserCreated.html");
+                string s = sr.ReadToEnd();
+                s = s.Replace("{UserName}", user.FullName).Replace("{CervantesLink}",HttpContext.Request.Scheme.ToString() +"://" + HttpContext.Request.Host.ToString() + "/Identity/Account/Login");
+                sr.Close();
+                
+                EmailMessage message = new EmailMessage
+                {
+                    ToAddresses = to,
+                    Subject = "Cervantes - Created User",
+                    Content = s
+                };
+             
+                email.Send(message);
+                
                 return RedirectToAction("Index");
             }
         }

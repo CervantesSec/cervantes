@@ -83,16 +83,16 @@ git clone https://github.com/CervantesSec/cervantes.git
     }
   },
   "AllowedHosts": "*",
-  "EmailConfiguration": {
-    "SmtpServer": "smtp.office365.com",
-    "SmtpPort": 587,
-    "SmtpUsername": "EMAIL",
-    "SmtpPassword": "PASSWORD"
-  }
+   "EmailConfiguration": {
+    "Enabled": false,
+    "Name": "Cervantes",
+    "From": "cervantes@cervantes.local",
+    "SmtpServer": "localhost",
+    "SmtpPort": 1025,
+    "SmtpUsername": "cervantes@cervantes.local",
+    "SmtpPassword": "cervantes"
 }
 ```
-5. NOTE if your using linux install wkhtmltopdf and and copy the wkhtmltopdf and wkhtmltoimage from /usr/bin to /CERVANTES_PATH/Cervantes.Web/wwwroot/Rotativa/Linux/
-
 
 6. Run the project 
 
