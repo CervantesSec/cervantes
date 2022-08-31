@@ -91,6 +91,7 @@ git clone https://github.com/CervantesSec/cervantes.git
     "SmtpPort": 1025,
     "SmtpUsername": "cervantes@cervantes.local",
     "SmtpPassword": "cervantes"
+    }
 }
 ```
 
