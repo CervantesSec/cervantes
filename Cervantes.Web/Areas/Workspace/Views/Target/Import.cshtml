@@ -1,0 +1,77 @@
+@model IEnumerable<Cervantes.Web.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "Import Targets";
+}
+
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-bullseye"></i> <span localize-content>Targets</span></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Restore</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <h3><i class="fas fa-file-import"></i> Import Targets</h3>
+                    <p>Import your targets from nmap scan</p>
+                
+                    <div class="text-center">
+                        <form asp-area="" asp-controller="Backup" asp-action="RestoreData" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="upload" localize-content>Select Nmap Xml File</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="uploadData" name="uploadData">
+                                        <label class="custom-file-label" for="upload" localize-content>Choose File</label>
+                                    </div>
+                            
+                                </div>
+                               
+                            </div>
+                            
+                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Restore</button>
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+    
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+        <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+    <script>
+    $(document).ready(function () {
+          bsCustomFileInput.init();
+        });
+    </script>
+}
+

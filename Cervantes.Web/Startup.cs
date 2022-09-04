@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using Cervantes.IFR.Email;
+using Cervantes.IFR.Parsers.Nmap;
 
 namespace Cervantes.Web;
 
@@ -86,6 +87,7 @@ public class Startup
         services.AddScoped<IVaultManager, VaultManager>();
         services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<INmapParser, NmapParser>();
 
 
         var cultures = new[]

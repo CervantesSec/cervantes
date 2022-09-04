@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using Cervantes.IFR.Email;
 using Ganss.XSS;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
@@ -29,10 +30,13 @@ public class TaskController : Controller
     private ITaskAttachmentManager taskAttachmentManager = null;
     private ITaskTargetManager taskTargetManager = null;
     private ITargetManager targetManager = null;
+    private IEmailService email = null;
+    private IUserManager userManager = null;
 
     public TaskController(IHostingEnvironment _appEnvironment, ITaskManager taskManager, IProjectManager projectManager,
         ITargetManager targetManager, ITaskNoteManager taskNoteManager, ITaskAttachmentManager taskAttachmentManager,
-        IProjectUserManager projectUserManager, ITaskTargetManager taskTargetManager, ILogger<TaskController> logger)
+        IProjectUserManager projectUserManager, ITaskTargetManager taskTargetManager, ILogger<TaskController> logger, 
+        IUserManager userManager,IEmailService email)
     {
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
@@ -43,6 +47,8 @@ public class TaskController : Controller
         this.taskTargetManager = taskTargetManager;
         this._appEnvironment = _appEnvironment;
         _logger = logger;
+        this.email = email;
+        this.userManager = userManager;
     }
 
     public ActionResult Index(Guid project)
@@ -333,6 +339,36 @@ public class TaskController : Controller
             TempData["added"] = "added";
             _logger.LogInformation("User: {0} Created a new Task Project on Project {1}",
                 User.FindFirstValue(ClaimTypes.Name), project);
+
+            var projectRes = projectManager.GetById(project);
+            var userRes = userManager.GetByUserId(task.AsignedUserId);
+            var to = new List<EmailAddress>();
+            to.Add(new EmailAddress
+            {
+                Address = userRes.Email,
+                Name = userRes.FullName,
+            });
+
+            StreamReader sr =new StreamReader(_appEnvironment.WebRootPath + "/Resources/Email/AsignedTask.html");
+            string s = sr.ReadToEnd();
+            s = s.Replace("{UserName}", userRes.FullName).
+                Replace("{Project}",projectRes.Name).
+                Replace("{Task}",task.Name).
+                Replace("{StartDate}", task.StartDate.ToShortDateString()).
+                Replace("{EndDate}", task.EndDate.ToShortDateString()).
+                Replace("{Description}",task.Description).
+                Replace("{CervantesLink}",HttpContext.Request.Scheme.ToString() +"://" + HttpContext.Request.Host.ToString() + "/en/Workspace/"+project+"/Task/Details/"+task.Id);
+            sr.Close();
+                
+            EmailMessage message = new EmailMessage
+            {
+                ToAddresses = to,
+                Subject = "Cervantes - A new Task have been assigned to you",
+                Content = s
+            };
+             
+            email.Send(message);
+            
             return RedirectToAction(nameof(Index));
         }
         catch (Exception e)

@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using Cervantes.IFR.Parsers.Nmap;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -21,6 +24,9 @@ public class TargetController : Controller
     private ITargetServicesManager targetServicesManager = null;
     private IProjectManager projectManager = null;
     private IProjectUserManager projectUserManager = null;
+    private IProjectAttachmentManager projectAttachmentManager = null;
+    private INmapParser nmapParser = null;
+    private readonly IHostingEnvironment _appEnvironment;
 
     /// <summary>
     /// Target Controller Constructor
@@ -29,13 +35,17 @@ public class TargetController : Controller
     /// <param name="targetServicesManager">TargetServiceManager</param>
     /// <param name="projectManager">ProjectManager</param>
     public TargetController(ITargetManager targetManager, ITargetServicesManager targetServicesManager,
-        IProjectManager projectManager,IProjectUserManager projectUserManager, ILogger<TargetController> logger)
+        IProjectManager projectManager,IProjectUserManager projectUserManager, ILogger<TargetController> logger, 
+        IProjectAttachmentManager projectAttachmentManager,INmapParser nmapParser, IHostingEnvironment _appEnvironment)
     {
         this.targetManager = targetManager;
         this.targetServicesManager = targetServicesManager;
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
         _logger = logger;
+        this.projectAttachmentManager = projectAttachmentManager;
+        this.nmapParser = nmapParser;
+        this._appEnvironment = _appEnvironment;
     }
 
     /// <summary>
@@ -519,5 +529,59 @@ public class TargetController : Controller
                 project, User.FindFirstValue(ClaimTypes.Name));
             return View("Index");
         }
+    }
+
+    public IActionResult Import(Guid project)
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Import(Guid project,IFormFile upload)
+    {
+
+        if (upload != null)
+        {
+            
+            var file = upload;
+            var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Project/" + project + "/");
+            var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
+
+            if (Directory.Exists(uploads))
+            {
+                using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(uploads);
+
+                using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+            }
+
+            var attachment = new ProjectAttachment
+            {
+                Name = "Nmap Scan Upload",
+                ProjectId = project,
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                FilePath = "/Attachments/Project/" + project + "/" + uniqueName
+            };
+
+            projectAttachmentManager.Add(attachment);
+            projectAttachmentManager.Context.SaveChanges();
+            
+            nmapParser.Parse(attachment.FilePath);
+            
+            return RedirectToAction("Index", "Target", new {project = project});
+
+        }
+        
+        return RedirectToAction("Index", "Target", new {project = project});
     }
 }

@@ -8,4 +8,8 @@
         <PackageReference Include="MailKit" Version="3.3.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Cervantes.Contracts\Cervantes.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

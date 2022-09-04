@@ -275,7 +275,7 @@ public class ReportController : Controller
                         
                         var parentProjectDesc = text.Parent;
                         var projectDescription = converter.Parse(pro.Description);
-                        for (int i = 0; i < projectDescription.Count(); i++)
+                        for (int i = projectDescription.Count() - 1 ; i >= 0; i--)
                         {
                             parentProjectDesc.InsertAfterSelf(projectDescription.ElementAt(i));
                         }
@@ -303,7 +303,7 @@ public class ReportController : Controller
                         
                         var parentClientdescription = text.Parent;
                         var clientDescription = converter.Parse(pro.Client.Description);
-                        for (int i = 0; i < clientDescription.Count(); i++)
+                        for (int i = clientDescription.Count() - 1 ; i >= 0; i--)
                         {
                             parentClientdescription.InsertAfterSelf(clientDescription.ElementAt(i));
                         }
@@ -562,7 +562,7 @@ public class ReportController : Controller
                         case "VulnDescription":
                             var parentVulndescription = textDoc.Parent;
                             var vulnDescription = converter.Parse(vuln.Description);
-                            for (int i = 0; i < vulnDescription.Count(); i++)
+                            for (int i = vulnDescription.Count() - 1 ; i >= 0; i--)
                             {
                                 parentVulndescription.InsertAfterSelf(vulnDescription.ElementAt(i));
                             }
@@ -571,7 +571,7 @@ public class ReportController : Controller
                         case "VulnImpact":
                             var parentVulnImpact = textDoc.Parent;
                             var vulnImpact = converter.Parse(vuln.Impact);
-                            for (int i = 0; i < vulnImpact.Count(); i++)
+                            for (int i = vulnImpact.Count() - 1 ; i >= 0; i--)
                             {
                                 parentVulnImpact.InsertAfterSelf(vulnImpact.ElementAt(i));
                             }
@@ -580,7 +580,7 @@ public class ReportController : Controller
                         case "VulnPOC":
                             var parentVulnPoc = textDoc.Parent;
                             var vulnPoc = converter.Parse(vuln.ProofOfConcept);
-                            for (int i = 0; i < vulnPoc.Count(); i++)
+                            for (int i = vulnPoc.Count() - 1 ; i >= 0; i--)
                             {
                                 parentVulnPoc.InsertAfterSelf(vulnPoc.ElementAt(i));
                             }
@@ -589,7 +589,7 @@ public class ReportController : Controller
                         case "VulnRemediation":
                             var parentVulnRemediation = textDoc.Parent;
                             var vulnRemediation = converter.Parse(vuln.Remediation);
-                            for (int i = 0; i < vulnRemediation.Count(); i++)
+                            for (int i = vulnRemediation.Count() - 1 ; i >= 0; i--)
                             {
                                 parentVulnRemediation.InsertAfterSelf(vulnRemediation.ElementAt(i));
                             }

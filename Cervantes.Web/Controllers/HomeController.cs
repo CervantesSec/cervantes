@@ -50,14 +50,14 @@ public class HomeController : Controller
                 VulnNumber = vulnManager.GetAll().Where(x => x.Template == false).Count(),
                 ClientNumber = clientManager.GetAll().Count(),
                 TasksNumber = taskManager.GetAll().Count(),
-                ActiveProjects = projectManager.GetAll().Where(x => x.Status == CORE.ProjectStatus.Active).Take(5)
-                    .OrderByDescending(x => x.EndDate),
-                RecentClients = clientManager.GetAll().OrderByDescending(x => x.Id).Take(5)
-                    .OrderByDescending(x => x.CreatedDate),
-                RecentDocuments = documentManager.GetAll().OrderByDescending(x => x.Id).Take(5)
-                    .OrderByDescending(x => x.CreatedDate),
-                RecentVulns = vulnManager.GetAll().Where(x => x.Template == false).Take(5)
-                    .OrderByDescending(x => x.CreatedDate).ToList(),
+                ActiveProjects = projectManager.GetAll().Where(x => x.Status == CORE.ProjectStatus.Active)
+                    .OrderByDescending(x => x.EndDate).Take(5),
+                RecentClients = clientManager.GetAll()
+                    .OrderByDescending(x => x.CreatedDate).Take(5),
+                RecentDocuments = documentManager.GetAll()
+                    .OrderByDescending(x => x.CreatedDate).Take(5),
+                RecentVulns = vulnManager.GetAll().Where(x => x.Template == false)
+                    .OrderByDescending(x => x.CreatedDate).ToList().Take(5),
                 ProjectPercetagesActive =
                     projectManager.GetAll().Where(x => x.Status == CORE.ProjectStatus.Active).Count(),
                 ProjectPercetagesArchived =
