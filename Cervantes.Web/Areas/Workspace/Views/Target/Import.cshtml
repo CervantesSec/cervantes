@@ -1,4 +1,4 @@
-@model IEnumerable<Cervantes.Web.Models.UserViewModel>
+@model TargetImportViewModel
 
 @{
     ViewData["Title"] = "Import Targets";
@@ -38,20 +38,22 @@
                     <p>Import your targets from nmap scan</p>
                 
                     <div class="text-center">
-                        <form asp-area="" asp-controller="Backup" asp-action="RestoreData" method="post" enctype="multipart/form-data">
+                        <form asp-area="Workspace" asp-controller="Target" asp-action="Import" asp-route-project="@Model.Project" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
+                                <input type="hidden" id="project" name="project" value="@Model.Project">
                                 <label for="upload" localize-content>Select Nmap Xml File</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="uploadData" name="uploadData">
+                                        <input type="file" class="custom-file-input" id="upload" name="upload" accept="application/xml, text/xml">
                                         <label class="custom-file-label" for="upload" localize-content>Choose File</label>
                                     </div>
-                            
+
                                 </div>
-                               
+
                             </div>
-                            
-                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Restore</button>
+
+                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Upload</button>
                         </form>
                     </div>
                 </div>

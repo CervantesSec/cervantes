@@ -533,14 +533,32 @@ public class TargetController : Controller
 
     public IActionResult Import(Guid project)
     {
-        return View();
+        var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+        if (user == null)
+        {
+            TempData["userProject"] = "User is not in the project";
+            return RedirectToAction("Index", "Workspaces",new {area =""});
+        }
+        
+        TargetImportViewModel model = new TargetImportViewModel
+        {
+            Project = project
+        };
+        return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Import(Guid project,IFormFile upload)
+    public IActionResult Import(Guid project,TargetImportViewModel model)
     {
-
+        var user = projectUserManager.VerifyUser(model.Project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+        if (user == null)
+        {
+            TempData["userProject"] = "User is not in the project";
+            return RedirectToAction("Index", "Workspaces",new {area =""});
+        }
+        
+        var upload = Request.Form.Files["upload"];
         if (upload != null)
         {
             
@@ -568,7 +586,7 @@ public class TargetController : Controller
             var attachment = new ProjectAttachment
             {
                 Name = "Nmap Scan Upload",
-                ProjectId = project,
+                ProjectId = model.Project,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 FilePath = "/Attachments/Project/" + project + "/" + uniqueName
             };
@@ -576,7 +594,7 @@ public class TargetController : Controller
             projectAttachmentManager.Add(attachment);
             projectAttachmentManager.Context.SaveChanges();
             
-            nmapParser.Parse(attachment.FilePath);
+            nmapParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),attachment.FilePath);
             
             return RedirectToAction("Index", "Target", new {project = project});
 
