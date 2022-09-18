@@ -15,6 +15,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
 using HtmlToOpenXml;
 using Microsoft.AspNetCore.Authorization;
+using MimeDetective;
 
 namespace Cervantes.Web.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -692,7 +693,20 @@ public class ReportController : Controller
     {
         try
         {
-            var file = Request.Form.Files["upload"];
+            var file = model.upload;
+            
+            var Inspector = new ContentInspectorBuilder() {
+                Definitions = MimeDetective.Definitions.Default.FileTypes.Documents.MicrosoftOffice()
+            }.Build();
+            
+            var Results = Inspector.Inspect(file.OpenReadStream());
+            
+            if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+            {
+                TempData["fileNotPermitted"] = "User is not in the project";
+                return View("CreateTemplate");
+            }
+            
             var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Templates");
             var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
             using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))

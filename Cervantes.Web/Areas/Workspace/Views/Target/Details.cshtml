@@ -200,10 +200,8 @@
                                 <td>@service.Port</td>
                                 <td>@service.Version</td>
                                 <td>@service.User.FullName</td>
-                                @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                                {
-                                    <td>
-                                        <a asp-area="Workspace" asp-controller="Target" asp-action="Service" asp-route-project="@Model.Project.Id" asp-route-id="@service.Id" class="btn btn-tool">
+                                <td>
+                                        <a asp-area="Workspace" asp-controller="Target" asp-action="Service" asp-route-project="@Model.Project.Id" asp-route-target="@Model.Target.Id" asp-route-id="@service.Id" class="btn btn-tool">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <a asp-area="Workspace" asp-controller="Target" asp-action="EditService" asp-route-project="@Model.Project.Id" asp-route-id="@service.Id" asp-route-target="@Model.Target.Id" class="btn btn-tool">
@@ -213,14 +211,7 @@
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>
-                                }
-                                else
-                                {
-                                    <a asp-area="Workspace" asp-controller="Target" asp-action="Service" asp-route-project="@Model.Project.Id" asp-route-id="@service.Id" class="btn btn-tool">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                }
-
+                                
                             </tr>
                         }
 
@@ -323,66 +314,17 @@
          $(document).ready(function() {
                   $('#description').summernote({
                   height: 300,
-                  callbacks: {
-                          onImageUpload: function(image) {
-                              uploadImage(image[0]);
-                          }
-                          }
                   });
                   });
                 
-                function uploadImage(image) {
-                    var data = new FormData();
-                    data.append("image", image);
-                    $.ajax({
-                        url: '@Url.Action("UploadTarget", "Image", new {Area = ""})',
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: data,
-                        type: "post",
-                        success: function(FileUrl) {
-                            var imgNode = document.createElement('img');  
-                            imgNode.src = FileUrl;  
-                            $('#description').summernote('insertNode', imgNode); 
-                        },
-                        error: function(data) {
-                            alert(data.responseText); 
-                        }
-                    });
-                }
                 
                 $(document).ready(function() {
                          $('#note').summernote({
                          height: 300,
-                         callbacks: {
-                                 onImageUpload: function(image) {
-                                     uploadImage(image[0]);
-                                 }
-                                 }
                          });
                          });
                        
-                       function uploadImage(image) {
-                           var data = new FormData();
-                           data.append("image", image);
-                           $.ajax({
-                               url: '@Url.Action("UploadTarget", "Image", new {Area = ""})',
-                               cache: false,
-                               contentType: false,
-                               processData: false,
-                               data: data,
-                               type: "post",
-                               success: function(FileUrl) {
-                                   var imgNode = document.createElement('img');  
-                                   imgNode.src = FileUrl;  
-                                   $('#note').summernote('insertNode', imgNode); 
-                               },
-                               error: function(data) {
-                                   alert(data.responseText); 
-                               }
-                           });
-                       }
+
 
 </script>
 }

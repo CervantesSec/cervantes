@@ -5,21 +5,33 @@
     ViewData["Title"] = "Organization";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@if (TempData["error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible">
-        <strong localize-content>Error updating organization information!</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-    </div>
+@{
+    if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>Error updating organization information!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["error"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Organization information updated successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["fileNotPermitted"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>This file type is not permitted!</strong>
+
+        </div>
+    }
 }
 
-@if (TempData["error"] != null)
-{
-    <div class="alert alert-success alert-dismissible">
-        <strong localize-content>Organization information updated successfully!</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-    </div>
-}
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -99,7 +111,7 @@
                             {
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="upload" name="upload">
+                                        <input type="file" class="custom-file-input" id="upload" name="upload" accept="image/bmp, image/gif, image/ico, image/jpeg, image/png, image/tiff">
                                         <label class="custom-file-label" for="upload" localize-content>Choose File</label>
                                     </div>
 

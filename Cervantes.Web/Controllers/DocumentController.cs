@@ -11,7 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using Cervantes.Web.Areas.Workspace.Models;
 using Ganss.XSS;
+using MimeDetective;
 
 namespace Cervantes.Web.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -111,6 +113,19 @@ public class DocumentController : Controller
 
             if (file != null)
             {
+                var Inspector = new ContentInspectorBuilder() {
+                    Definitions = MimeDetective.Definitions.Default.FileTypes.Documents.All()
+                }.Build();
+            
+                var Results = Inspector.Inspect(file.OpenReadStream());
+
+                if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                {
+                    TempData["fileNotPermitted"] = "User is not in the project";
+                        return View("Create");
+                }
+
+                
                 var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Documents");
                 var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))

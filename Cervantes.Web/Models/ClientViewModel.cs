@@ -51,7 +51,7 @@ public class ClientViewModel
     /// File Uploaded
     /// </summary>
     [Required]
-    public IFormFile upload { get; set; }
+    public IFormFile Upload { get; set; }
 
     /// <summary>
     /// Client Image

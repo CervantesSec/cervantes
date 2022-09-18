@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Web;
 using Ganss.XSS;
+using MimeDetective;
 
 namespace Cervantes.Web.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -128,13 +129,26 @@ public class ClientController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,SuperUser")]
-    public ActionResult Create(ClientViewModel model, IFormFile upload)
+    public ActionResult Create(ClientViewModel model)
     {
         try
         {
+            
             var sanitizer = new HtmlSanitizer();
+            var file = model.Upload;
+            
+            var Inspector = new ContentInspectorBuilder() {
+                    Definitions = MimeDetective.Definitions.Default.FileTypes.Images.All()
+            }.Build();
+            
+                var Results = Inspector.Inspect(file.OpenReadStream());
 
-            var file = Request.Form.Files["upload"];
+                if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                {
+                    TempData["fileNotPermitted"] = "User is not in the project";
+                    return View("Create");
+                }
+            
             var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Images/Clients");
             var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
             using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))

@@ -17,6 +17,7 @@ using Cervantes.IFR.Email;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
+using MimeDetective;
 
 namespace Cervantes.Web.Controllers;
 
@@ -222,12 +223,46 @@ public class UserController : Controller
                 return View("Create", model);
             }
             
-            var file = Request.Form.Files["upload"];
+            var file = model.upload;
             var hasher = new PasswordHasher<ApplicationUser>();
 
 
             if (file != null)
             {
+                var Inspector = new ContentInspectorBuilder() {
+                    Definitions = MimeDetective.Definitions.Default.FileTypes.Images.All()
+                }.Build();
+            
+                var Results = Inspector.Inspect(file.OpenReadStream());
+
+                if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                {
+                    TempData["fileNotPermitted"] = "User is not in the project";
+                    var rol = roleManager.GetAll().Select(e => new RoleList
+                    {
+                        Id = e.Id.ToString(),
+                        Name = e.Name
+                    }).ToList();
+
+                    var li = new List<SelectListItem>();
+
+                    foreach (var item in rol) li.Add(new SelectListItem {Text = item.Name, Value = item.Name});
+            
+                    var clients = clientManager.GetAll().Select(e => new ClientViewModel
+                    {
+                        Id = e.Id,
+                        Name = e.Name
+                    }).ToList();
+
+                    var liCli = new List<SelectListItem>();
+
+                    foreach (var item in clients) liCli.Add(new SelectListItem {Text = item.Name, Value = item.Id.ToString()});
+
+                    model.ItemList = li;
+                    model.ItemListClient = liCli;
+                    return View("Create", model);
+                }
+                
                 var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Images/Avatars");
                 var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
@@ -446,9 +481,22 @@ public class UserController : Controller
             result.PhoneNumber = model.User.PhoneNumber;
 
 
-            if (Request.Form.Files["upload"] != null)
+            if (model.User.upload != null)
             {
-                var file = Request.Form.Files["upload"];
+                var file = model.User.upload;
+                
+                var Inspector = new ContentInspectorBuilder() {
+                    Definitions = MimeDetective.Definitions.Default.FileTypes.Images.All()
+                }.Build();
+            
+                var Results = Inspector.Inspect(file.OpenReadStream());
+
+                if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                {
+                    TempData["fileNotPermitted"] = "User is not in the project";
+                    return RedirectToAction("Edit",new {id = id});
+                }
+                
                 var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Images/Avatars");
                 var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))

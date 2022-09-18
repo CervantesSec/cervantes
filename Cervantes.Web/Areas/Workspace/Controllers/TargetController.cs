@@ -13,6 +13,8 @@ using Cervantes.IFR.Parsers.Nmap;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using MimeDetective;
+using MimeDetective.Definitions;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -331,9 +333,10 @@ public class TargetController : Controller
     /// Method return a Traget Service Details
     /// </summary>
     /// <param name="project">Project Id</param>
+    /// <param name="target">Target Id</param>
     /// <param name="id">Target Service Id</param>
     /// <returns></returns>
-    public ActionResult Service(Guid project, Guid id)
+    public ActionResult Service(Guid project, Guid target, Guid id)
     {
         try
         {
@@ -346,7 +349,7 @@ public class TargetController : Controller
             var model = new TargetServiceViewModel
             {
                 Project = projectManager.GetById(project),
-                Target = targetManager.GetById(id),
+                Target = targetManager.GetById(target),
                 TargetService = targetServicesManager.GetById(id)
             };
             return View(model);
@@ -561,8 +564,27 @@ public class TargetController : Controller
         var upload = Request.Form.Files["upload"];
         if (upload != null)
         {
-            
+
             var file = upload;
+
+            var Inspector = new ContentInspectorBuilder() {
+                Definitions = MimeDetective.Definitions.Default.FileTypes.Xml.All()
+            }.Build();
+            
+            var Results = Inspector.Inspect(file.OpenReadStream());
+
+            if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+           {
+               TempData["fileNotPermitted"] = "User is not in the project";
+               TargetImportViewModel modelError = new TargetImportViewModel
+               {
+                   Project = project
+               };
+               return View("Import", modelError);
+           }
+         
+
+            
             var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Project/" + project + "/");
             var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
 

@@ -22,6 +22,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.7" />
+        <PackageReference Include="Mime-Detective" Version="22.7.21" />
         <PackageReference Include="NLog" Version="5.0.1" />
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
         <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.0" />

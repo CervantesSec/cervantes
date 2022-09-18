@@ -5,6 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    if (TempData["fileNotPermitted"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>This file type is not permitted!</strong>
+
+        </div>
+    }
+    
+}
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
@@ -89,7 +100,7 @@
                             <label for="upload" localize-content>Avatar</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="upload" name="upload">
+                                    <input class="custom-file-input" asp-for="upload" accept="image/bmp, image/gif, image/ico, image/jpeg, image/png, image/tiff">
                                     <label class="custom-file-label" for="upload" localize-content>Select Image</label>
                                     <span asp-validation-for="Avatar" class="text-danger"></span>
 
