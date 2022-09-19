@@ -230,6 +230,17 @@
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\4c4830e6-959f-4a14-a2a0-e66f96d463fc\ee68d002-cfd0-4cb6-9ac8-0906df141872_test_v3.docx" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\4c4830e6-959f-4a14-a2a0-e66f96d463fc\ee9002c5-d2df-4ac8-bb52-e7db80396f9e_test_v1.docx" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\4c4830e6-959f-4a14-a2a0-e66f96d463fc\f8ff55ad-ba50-4f8b-8e9f-5fdb89d25d8f_test_v4.docx" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\08efb568-cd79-4f11-a084-5497cca0c413_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\1aad8102-e503-4c6b-ab5c-90ba6237f37b_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\1cdedaf4-3e8e-444b-92b1-ae753af92d21_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\255b20f9-e234-40ed-9a42-d55321b1278c_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\3bc01690-16c7-45b1-9b0b-9d7feeb8ea92_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\682dbecf-600c-4c14-85cc-604703696c74_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\6b160fdf-6b15-4e3d-927a-93d55f99ec60_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\c0c71a1e-015a-412c-ad21-7ad055b422e3_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\cd01c175-033e-441f-982c-2b60732b58ce_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\d15ef16a-9f2b-4f97-aa64-44a8f01c664e_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\ebdf93d5-48fd-4295-8933-07cd91c6e627_nmap.xml" />
     </ItemGroup>
 
 </Project>

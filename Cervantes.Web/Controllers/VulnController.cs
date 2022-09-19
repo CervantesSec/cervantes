@@ -176,6 +176,8 @@ public class VulnController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = vulnManager.GetById(id);
             result.Name = model.Name;
             result.Template = model.Template;
@@ -268,6 +270,8 @@ public class VulnController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             VulnCategory cat = new VulnCategory
             {
                 Name = model.Name,
@@ -318,6 +322,8 @@ public class VulnController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = vulnCategoryManager.GetById(id);
             result.Name = model.Name;
             result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
@@ -623,6 +629,8 @@ public class VulnController : Controller
         {
 
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = vulnManager.GetById(model.Id);
             result.Name = model.Name;
             result.Template = model.Template;

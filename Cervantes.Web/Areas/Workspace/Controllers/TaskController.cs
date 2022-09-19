@@ -200,6 +200,8 @@ public class TaskController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -307,6 +309,8 @@ public class TaskController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var task = new Task
             {
                 Name = model.Name,
@@ -442,6 +446,8 @@ public class TaskController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -534,6 +540,8 @@ public class TaskController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = taskManager.GetById(id);
             result.Name = model.Name;
             result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));

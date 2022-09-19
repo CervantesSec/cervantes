@@ -152,6 +152,8 @@ public class TargetController : Controller
             }
 
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -235,6 +237,8 @@ public class TargetController : Controller
             }
 
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = targetManager.GetById(model.Id);
             result.Name = model.Name;
             result.Type = model.Type;
@@ -372,6 +376,8 @@ public class TargetController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -448,6 +454,8 @@ public class TargetController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {

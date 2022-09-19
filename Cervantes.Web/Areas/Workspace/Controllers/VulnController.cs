@@ -178,6 +178,7 @@ public class VulnController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -349,6 +350,8 @@ public class VulnController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -551,6 +554,8 @@ public class VulnController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
@@ -671,6 +676,8 @@ public class VulnController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {

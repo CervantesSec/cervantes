@@ -264,6 +264,8 @@ public class ProjectController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var item = model.ItemList;
             
 
@@ -358,6 +360,8 @@ public class ProjectController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = projectManager.GetById(id);
             result.Name = model.Name;
             result.Status = model.Status;
@@ -513,6 +517,8 @@ public class ProjectController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = projectManager.GetById(id);
             result.Name = model.Name;
             result.Status = model.Status;

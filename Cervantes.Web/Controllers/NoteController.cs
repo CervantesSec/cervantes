@@ -80,6 +80,8 @@ public class NoteController : Controller
             }
             
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var note = new Note
             {
                 Name = model.Name,
@@ -145,6 +147,8 @@ public class NoteController : Controller
             }
             
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = noteManager.GetById(id);
             if (result.UserId == User.FindFirstValue(ClaimTypes.Name))
             {

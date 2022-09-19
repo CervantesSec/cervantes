@@ -135,6 +135,8 @@ public class ClientController : Controller
         {
             
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var file = model.Upload;
             
             var Inspector = new ContentInspectorBuilder() {
@@ -233,6 +235,8 @@ public class ClientController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = clientManager.GetById(id);
             result.Name = model.Name;
             result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));

@@ -196,6 +196,8 @@ public class UserController : Controller
         {
 
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             if (!ModelState.IsValid)
             {
                 var rol = roleManager.GetAll().Select(e => new RoleList
@@ -470,6 +472,8 @@ public class UserController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var hasher = new PasswordHasher<ApplicationUser>();
             var result = usrManager.GetByUserId(id);
             result.FullName = model.User.FullName;

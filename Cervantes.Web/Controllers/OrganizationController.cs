@@ -81,6 +81,8 @@ public class OrganizationController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = organizationManager.GetAll().First();
             result.Name = model.Name;
             result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));

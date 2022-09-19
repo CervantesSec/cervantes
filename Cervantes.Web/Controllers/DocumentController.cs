@@ -110,6 +110,8 @@ public class DocumentController : Controller
         {
             var file = Upload;
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
 
             if (file != null)
             {
@@ -210,6 +212,8 @@ public class DocumentController : Controller
         try
         {
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+
             var result = documentManager.GetById(id);
             result.Name = model.Name;
             result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
