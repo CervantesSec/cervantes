@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Web;
 using Cervantes.IFR.Email;
 using Ganss.XSS;
@@ -70,7 +71,8 @@ public class UserController : Controller
                 Email = e.Email,
                 FullName = e.FullName,
                 LockoutEnabled = e.LockoutEnabled,
-                TwoFactorEnabled = e.TwoFactorEnabled
+                TwoFactorEnabled = e.TwoFactorEnabled,
+                Position = e.Position,
             });
 
 
@@ -195,10 +197,16 @@ public class UserController : Controller
         try
         {
 
+            var hasNumber = new Regex(@"[0-9]+");
+            var hasUpperChar = new Regex(@"[A-Z]+");
+            var hasMinimum8Chars = new Regex(@".{8,}");
+
+            var isValidated = hasNumber.IsMatch(model.Password) && hasUpperChar.IsMatch(model.Password) && hasMinimum8Chars.IsMatch(model.Password);
+
             var sanitizer = new HtmlSanitizer();
             sanitizer.AllowedSchemes.Add("data");
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || isValidated == false)
             {
                 var rol = roleManager.GetAll().Select(e => new RoleList
                 {
@@ -222,8 +230,13 @@ public class UserController : Controller
 
                 model.ItemList = li;
                 model.ItemListClient = liCli;
+                if (isValidated == false)
+                {
+                    TempData["passwordRequirements"] = "password";
+                }
                 return View("Create", model);
             }
+            
             
             var file = model.upload;
             var hasher = new PasswordHasher<ApplicationUser>();
@@ -440,7 +453,8 @@ public class UserController : Controller
                         Avatar = user.Avatar,
                         Description = user.Description,
                         Position = user.Position,
-                        PhoneNumber = user.PhoneNumber
+                        PhoneNumber = user.PhoneNumber,
+                        LockoutEnabled = user.LockoutEnabled
                     },
                     Option = rolUser.Result.FirstOrDefault()
                 };
@@ -483,6 +497,7 @@ public class UserController : Controller
             if (model.User.ConfirmPassword != null) result.PasswordHash = hasher.HashPassword(result,model.User.ConfirmPassword);
             result.Position = model.User.Position;
             result.PhoneNumber = model.User.PhoneNumber;
+            result.LockoutEnabled = model.User.LockoutEnabled;
 
 
             if (model.User.upload != null)

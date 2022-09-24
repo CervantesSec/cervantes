@@ -61,7 +61,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="PhoneNumber" class="control-label" localize-content>Phone Number</label>
-                            <input type="tel" asp-for="PhoneNumber" class="form-control"/>
+                            <input type="text" asp-for="PhoneNumber" class="form-control" data-inputmask="'mask': '(+099) 999 99 99 99 [9999]'" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -70,10 +70,28 @@
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Password" localize-content>Password</label>
-                            <input asp-for="Password" class="form-control" type="password"/>
+                            <label class="control-label" localize-content>Password</label>
+                            <div class="input-group">
+                                <input type="password" asp-for="Password" class="pr-password form-control" id="password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-eye" onclick="showValue()"> Show</span>
+                                    </div>
+                                </div>
+                           
+                            </div>
+                            
                             <span asp-validation-for="Password" class="text-danger"></span>
+                                
+                                @{
+                                    if (TempData["passwordRequirements"] != null)
+                                    {
+                                        <span asp-validation-for="Password" class="text-danger">Password does not meet the minimum requirements</span>
+                                    }
+                                }
+                            
                         </div>
+                        
                         <div class="form-group">
                             <label asp-for="Position" localize-content>Position</label>
                             <input asp-for="Position" class="form-control"/>
@@ -120,10 +138,18 @@
         </div>
     </div>
 </section>
+@section Styles
+{
+        <link rel="stylesheet" href="~/lib/validate-password-requirements/css/jquery.passwordRequirements.css">
 
+}
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+    <script src="~/lib/validate-password-requirements/js/jquery.passwordRequirements.min.js"></script>
+    <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
+    <script src="~/lib/inputmask/bindings/inputmask.binding.js"></script>
+
     <script>
      $(document).ready(function() {
                $('#description').summernote({
@@ -147,6 +173,27 @@
                          $("#client").hide();
                      }
                  });
+                 
              });
+             
+              $(document).ready(function (){
+                         $(".pr-password").passwordRequirements({
+                             numCharacters: 8,           
+                               useLowercase: true,
+                               useUppercase: true,
+                               useNumbers: true,
+                               useSpecial: true
+
+                         });
+                     });
+             
+             function showValue() {
+               var x = document.getElementById("password");
+               if (x.type === "password") {
+                 x.type = "text";
+               } else {
+                 x.type = "password";
+               }
+             }
          </script>
 }

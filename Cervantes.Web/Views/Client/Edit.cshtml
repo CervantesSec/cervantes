@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Url" class="control-label">Url</label>
-                            <input asp-for="Url" class="form-control"/>
+                            <input asp-for="Url" class="form-control" data-inputmask="'alias': 'url'" />
                             <span asp-validation-for="Url" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -60,12 +60,12 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="ContactEmail" class="control-label" localize-content>Contact Email</label>
-                            <input asp-for="ContactEmail" class="form-control"/>
+                            <input type="email" asp-for="ContactEmail" class="form-control"/>
                             <span asp-validation-for="ContactEmail" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="ContactPhone" class="control-label" localize-content>Contact Phone</label>
-                            <input asp-for="ContactPhone" class="form-control"/>
+                            <input asp-for="ContactPhone" class="form-control" data-inputmask="'mask': '(+099) 999 99 99 99 [9999]'"/>
                             <span asp-validation-for="ContactPhone" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -83,6 +83,9 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
+    <script src="~/lib/inputmask/bindings/inputmask.binding.js"></script>
+    
     <script>
        $(document).ready(function() {
          $('#description').summernote({

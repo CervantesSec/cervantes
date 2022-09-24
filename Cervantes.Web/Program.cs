@@ -35,6 +35,13 @@ public class Program
             builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             builder.Host.UseNLog();
 
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
+            {
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
+                opt.Lockout.MaxFailedAccessAttempts = 5;
+            });
+
+
 
             using (var scope = host.Services.CreateScope())
             {

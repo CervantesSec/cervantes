@@ -49,24 +49,20 @@
 
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                         <div class="form-group">
                             <label asp-for="User.FullName" class="control-label" localize-content>Full Name</label>
                             <input asp-for="User.FullName" class="form-control"/>
                             <span asp-validation-for="User.FullName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.UserName" class="control-label" localize-content>Username</label>
-                            <input asp-for="User.UserName" class="form-control"/>
-                            <span asp-validation-for="User.UserName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
                             <label asp-for="User.Email" class="control-label" localize-content>Email</label>
-                            <input asp-for="User.Email" class="form-control"/>
+                            <input type="email" asp-for="User.Email" class="form-control"/>
                             <span asp-validation-for="User.Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="User.PhoneNumber" class="control-label" localize-content>PhoneNumber</label>
-                            <input asp-for="User.PhoneNumber" class="form-control"/>
+                            <input asp-for="User.PhoneNumber" class="form-control" data-inputmask="'mask': '(+099) 999 99 99 99 [9999]'" />
                             <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -114,8 +110,13 @@
                             }
 
                         </div>
-
-
+                        
+                        <div class="form-group">
+                            <label asp-for="User.LockoutEnabled" class="control-label" localize-content>Locked Out</label>
+                            <input asp-for="User.LockoutEnabled" class="form-control"/>
+                        </div>
+                        
+                        
                         <div class="form-group">
                             <a class="btn btn-default" asp-action="Index" localize-content>Back</a>
                             <input type="submit" class="btn btn-dark" localize-content></input>
@@ -130,6 +131,8 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+    <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
+        <script src="~/lib/inputmask/bindings/inputmask.binding.js"></script>
     <script>
         $(document).ready(function() {
                   $('#description').summernote({

@@ -53,7 +53,9 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1><i class="fas fa-user"></i> <span localize-content>Users</span></h1>
+                <h1>
+                    <i class="fas fa-user"></i> <span localize-content>Users</span>
+                </h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -87,8 +89,13 @@
                             <i class="fas fa-at"></i> <span localize-content>Email</span>
                         </th>
                         <th>
-                            <i class="fas fa-check-circle"></i> <span localize-content>Email Confirmed</span>
+                            <i class="fas fa-at"></i> <span localize-content>Position</span>
                         </th>
+                        
+                        <th>
+                            <i class="fas fa-lock"></i> <span localize-content>Locked Out</span>
+                        </th>
+
                         <th>
                             <i class="fas fa-check-double"></i> <span localize-content>2FA Enabled</span>
                         </th>
@@ -109,8 +116,12 @@
                             <td>
                                 @user.Email
                             </td>
-
-                            @switch (@user.EmailConfirmed)
+                            <td>
+                                @user.Position
+                            </td>
+                            
+                            
+                            @switch (@user.LockoutEnabled)
                             {
                                 case false:
 
@@ -128,6 +139,7 @@
                                     </td>
                                     break;
                             }
+                            
 
                             @switch (@user.TwoFactorEnabled)
                             {
@@ -180,7 +192,7 @@
             }
         </div>
     </div>
-<a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
     <a asp-area="" asp-controller="User" asp-action="Create" class="btn btn-dark"><i class="fas fa-user"></i> Create</a>
 </section>
 <!-- /.content -->

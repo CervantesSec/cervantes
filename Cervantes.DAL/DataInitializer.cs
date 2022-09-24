@@ -27,6 +27,7 @@ public class DataInitializer
             user.UserName = "admin@cervantes.local";
             user.Email = "admin@cervantes.local";
             user.FullName = "Admin";
+            user.Position = "Admin";
 
             var result = userManager.CreateAsync(user, "Admin123.").Result;
 
@@ -152,10 +153,10 @@ public class DataInitializer
             var org = new Organization();
             org.Id = 1;
             org.Name = "Cervantes";
-            org.Url = "https://github.com/mesquidar/Cervantes";
+            org.Url = "https://github.com/CervantesSec";
             org.ContactEmail = "cervantes@cervantes.com";
             org.ContactName = "Cervantes";
-            org.ContactPhone = "1111111";
+            org.ContactPhone = "+034 111 11 11 11";
             org.Description = "Cervantes Platform";
             organizationManager.Add(org);
             organizationManager.Context.SaveChanges();

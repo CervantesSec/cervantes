@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Cervantes.Contracts;
@@ -46,8 +47,6 @@ public class NmapParser: INmapParser
 
             var address = host.Element("address");
             
-            Console.Out.WriteLine(address.Attribute("addr").Value);
-
             Target target = new Target
             {
                 Name = address.Attribute("addr").Value,
@@ -72,16 +71,61 @@ public class NmapParser: INmapParser
                 var service = port.Element("service");
 
                 var name = service.Attribute("name").Value;
-                var product = service.Attribute("product").Value;
-                var version = service.Attribute("version").Value;
-                var info = service.Attribute("extrainfo").Value;
+
+                var product = "";
+                if (service.Attribute("product") != null)
+                {
+                    product = service.Attribute("product").Value;
+                }
+
+                 
+                var version = "";
+                if (service.Attribute("version") != null)
+                {
+                    version = service.Attribute("version").Value;
+                }
+                
+
+                var info = "";
+                if (service.Attribute("extrainfo") != null)
+                {
+                    info = service.Attribute("extrainfo").Value;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                if (port.Elements("script") != null)
+                {
+                    var scripts = port.Elements("script");
+                    foreach (var script in scripts)
+                    {
+                        string id = "";
+                        if (script.Attribute("id") != null)
+                        {
+                            id = script.Attribute("id").Value;
+                        }
+                        sb.AppendLine(id);
+                        sb.Append(Environment.NewLine);
+
+                        string output = "";
+                        if (script.Attribute("output") != null)
+                        {
+                            output = script.Attribute("output").Value;
+                        }
+
+                        sb.AppendLine(output);
+                        sb.Append(Environment.NewLine);
+
+                    }
+                    
+                }
+                
 
                 TargetServices targetService = new TargetServices
                 {
                     UserId = user,
                     TargetId = target.Id,
                     Name = product + " (" + name +")",
-                    Description = info,
+                    Description = info + Environment.NewLine + sb.ToString(),
                     Port = Int32.Parse(number),
                     Version = version
                     
