@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 using Cervantes.IFR.Email;
 using Cervantes.IFR.Parsers.Nmap;
+using NLog.Extensions.Logging;
 
 namespace Cervantes.Web;
 
@@ -140,7 +141,7 @@ public class Startup
         app.UseAuthorization();
 
         app.UseRequestLocalization();
-
+        
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapAreaControllerRoute(

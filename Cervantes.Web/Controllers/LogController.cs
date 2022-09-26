@@ -2,7 +2,6 @@
 using Cervantes.CORE;
 using Cervantes.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -31,15 +30,15 @@ public class LogController : Controller
         {
             var logs = logManager.GetAll().Select(e => new Log
             {
-                id = e.id,
-                level = e.level,
-                stack_trace = e.stack_trace,
-                message = e.message,
-                created_on = e.created_on,
-                exception = e.exception,
-                url = e.url,
-                logger = e.logger
-            });
+                Id = e.Id,
+                Level = e.Level,
+                StackTrace = e.StackTrace,
+                Message = e.Message,
+                CreatedOn = e.CreatedOn,
+                Exception = e.Exception,
+                Url = e.Url,
+                Logger = e.Logger
+            }).ToList();
 
             var model = new LogViewModel
             {
@@ -58,25 +57,62 @@ public class LogController : Controller
 
     public ActionResult Export()
     {
-        var logs = logManager.GetAll().Select(e => new Log
+        try
         {
-            id = e.id,
-            level = e.level,
-            stack_trace = e.stack_trace,
-            message = e.message,
-            created_on = e.created_on,
-            exception = e.exception,
-            url = e.url,
-            logger = e.logger
-        });
+            var logs = logManager.GetAll().Select(e => new Log
+            {
+                Id = e.Id,
+                Level = e.Level,
+                StackTrace = e.StackTrace,
+                Message = e.Message,
+                CreatedOn = e.CreatedOn,
+                Exception = e.Exception,
+                Url = e.Url,
+                Logger = e.Logger
+            });
 
-        var jsonString = JsonSerializer.Serialize(logs);
-        var fileName = "logs-export-" + DateTime.Now.ToString() + ".json";
-        var mimeType = "text/plain";
-        var fileBytes = Encoding.ASCII.GetBytes(jsonString);
-        return new FileContentResult(fileBytes, mimeType)
+            var jsonString = JsonSerializer.Serialize(logs);
+            var fileName = "logs-export-" + DateTime.Now.ToString() + ".json";
+            var mimeType = "text/plain";
+            var fileBytes = Encoding.ASCII.GetBytes(jsonString);
+            TempData["exported"] = "edited";
+            return new FileContentResult(fileBytes, mimeType)
+            {
+                FileDownloadName = fileName
+            };
+        }
+        catch (Exception e)
         {
-            FileDownloadName = fileName
-        };
+            TempData["errorExported"] = "edited";
+            _logger.LogError(e, "An error ocurred exporting logs. by User: {0}",
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Index");
+        }
+        
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Delete()
+    {
+        try
+        {
+            var logs = logManager.GetAll();
+            foreach (var log in logs)
+            {
+                logManager.Remove(log);
+            }
+
+            logManager.Context.SaveChanges();
+            TempData["logDeleted"] = "edited";
+            return RedirectToAction("Index");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred deleting logs. by User: {0}",
+                User.FindFirstValue(ClaimTypes.Name));
+            TempData["errorLogDeleted"] = "edited";
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -562,74 +562,85 @@ public class TargetController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Import(Guid project,TargetImportViewModel model)
     {
-        var user = projectUserManager.VerifyUser(model.Project, User.FindFirstValue(ClaimTypes.NameIdentifier));
-        if (user == null)
+        try
         {
-            TempData["userProject"] = "User is not in the project";
-            return RedirectToAction("Index", "Workspaces",new {area =""});
-        }
-        
-        var upload = Request.Form.Files["upload"];
-        if (upload != null)
-        {
-
-            var file = upload;
-
-            var Inspector = new ContentInspectorBuilder() {
-                Definitions = MimeDetective.Definitions.Default.FileTypes.Xml.All()
-            }.Build();
-            
-            var Results = Inspector.Inspect(file.OpenReadStream());
-
-            if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
-           {
-               TempData["fileNotPermitted"] = "User is not in the project";
-               TargetImportViewModel modelError = new TargetImportViewModel
-               {
-                   Project = project
-               };
-               return View("Import", modelError);
-           }
-         
-
-            
-            var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Project/" + project + "/");
-            var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
-
-            if (Directory.Exists(uploads))
+            var user = projectUserManager.VerifyUser(model.Project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
             {
-                using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
-                {
-                    file.CopyTo(fileStream);
-                }
-            }
-            else
-            {
-                Directory.CreateDirectory(uploads);
-
-                using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
-                {
-                    file.CopyTo(fileStream);
-                }
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces", new {area = ""});
             }
 
-            var attachment = new ProjectAttachment
+            var upload = Request.Form.Files["upload"];
+            if (upload != null)
             {
-                Name = "Nmap Scan Upload",
-                ProjectId = model.Project,
-                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                FilePath = "/Attachments/Project/" + project + "/" + uniqueName
-            };
 
-            projectAttachmentManager.Add(attachment);
-            projectAttachmentManager.Context.SaveChanges();
-            
-            nmapParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),attachment.FilePath);
-            
+                var file = upload;
+
+                var Inspector = new ContentInspectorBuilder()
+                {
+                    Definitions = MimeDetective.Definitions.Default.FileTypes.Xml.All()
+                }.Build();
+
+                var Results = Inspector.Inspect(file.OpenReadStream());
+
+                if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                {
+                    TempData["fileNotPermitted"] = "User is not in the project";
+                    TargetImportViewModel modelError = new TargetImportViewModel
+                    {
+                        Project = project
+                    };
+                    return View("Import", modelError);
+                }
+
+
+
+                var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Project/" + project + "/");
+                var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
+
+                if (Directory.Exists(uploads))
+                {
+                    using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(uploads);
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+
+                var attachment = new ProjectAttachment
+                {
+                    Name = "Nmap Scan Upload",
+                    ProjectId = model.Project,
+                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    FilePath = "/Attachments/Project/" + project + "/" + uniqueName
+                };
+
+                projectAttachmentManager.Add(attachment);
+                projectAttachmentManager.Context.SaveChanges();
+
+                nmapParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier), attachment.FilePath);
+                TempData["fileImported"] = "file imported";
+                return RedirectToAction("Index", "Target", new {project = project});
+
+            }
+
             return RedirectToAction("Index", "Target", new {project = project});
-
         }
-        
-        return RedirectToAction("Index", "Target", new {project = project});
+        catch (Exception e)
+        {
+            TempData["errorImporting"] = "Error deleting service!";
+            _logger.LogError(e, "An error ocurred importing Targets: Project: {0} User: {1}", project,
+               User.FindFirstValue(ClaimTypes.Name));
+            return View("Import");
+        }
     }
 }

@@ -5,11 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="RazorLight" Version="2.1.0" />
-        <PackageReference Include="RazorLight.NetCore3" Version="3.0.2" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Cervantes.Contracts\Cervantes.Contracts.csproj" />
         <ProjectReference Include="..\Cervantes.CORE\Cervantes.CORE.csproj" />
         <ProjectReference Include="..\Cervantes.DAL\Cervantes.DAL.csproj" />

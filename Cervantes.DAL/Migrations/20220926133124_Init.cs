@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Cervantes.DAL.Migrations
 {
-    public partial class InitReformat : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,19 +58,19 @@ namespace Cervantes.DAL.Migrations
                 name: "Logs",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    created_on = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    level = table.Column<string>(type: "text", nullable: true),
-                    message = table.Column<string>(type: "text", nullable: true),
-                    stack_trace = table.Column<string>(type: "text", nullable: true),
-                    exception = table.Column<string>(type: "text", nullable: true),
-                    logger = table.Column<string>(type: "text", nullable: true),
-                    url = table.Column<string>(type: "text", nullable: true)
+                    CreatedOn = table.Column<string>(type: "text", nullable: true),
+                    Level = table.Column<string>(type: "text", nullable: true),
+                    Message = table.Column<string>(type: "text", nullable: true),
+                    StackTrace = table.Column<string>(type: "text", nullable: true),
+                    Exception = table.Column<string>(type: "text", nullable: true),
+                    Logger = table.Column<string>(type: "text", nullable: true),
+                    Url = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Logs", x => x.id);
+                    table.PrimaryKey("PK_Logs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(

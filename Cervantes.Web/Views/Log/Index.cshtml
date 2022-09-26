@@ -4,28 +4,36 @@
     ViewData["Title"] = "Application Logs";
 }
 @{
-    if (TempData["deleted"] != null)
+    if (TempData["exported"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Client deleted successfully!</strong>
+            <strong localize-content>Logs exported successfully!</strong>
 
         </div>
     }
 
-    if (TempData["created"] != null)
+    if (TempData["errorExported"] != null)
     {
-        <div class="alert alert-success alert-dismissible">
+        <div class="alert alert-danger alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Client created successfully!</strong>
+            <strong localize-content>An error ocurred exporting the logs!</strong>
 
         </div>
     }
 
-    if (TempData["edited"] != null)
+    if (TempData["logDeleted"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Client edited successfully!</strong>
+            <strong localize-content>Logs deleted sucessfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorLogDeleted"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting logs!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -37,7 +45,9 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-eye"></i> <span localize-content>Application Logs</span></h1>
+                <h1 localize-content>
+                    <i class="fas fa-eye"></i> <span localize-content>Application Logs</span>
+                </h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -65,14 +75,30 @@
                 <!--Table head-->
                 <thead class="thead-dark">
                 <tr>
-                    <th><i class="fas fa-id-badge"></i> <span localize-content>Id</span></th>
-                    <th><i class="fas fa-calendar"></i> <span localize-content>Created on</span></th>
-                    <th><i class="fas fa-level-up-alt"></i> <span localize-content>Level</span></th>
-                    <th><i class="fas fa-comment"></i> <span localize-content>Message</span></th>
-                    <th><i class="fas fa-fingerprint"></i> <span localize-content>Stack Trace</span></th>
-                    <th><i class="fas fa-exclamation-circle"></i> <span localize-content>Exception</span></th>
-                    <th><i class="fas fa-pen"></i> <span localize-content>Logger</span></th>
-                    <th><i class="fas fa-at"></i> <span localize-content>Url</span></th>
+                    <th>
+                        <i class="fas fa-id-badge"></i> <span localize-content>Id</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-calendar"></i> <span localize-content>Created on</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-level-up-alt"></i> <span localize-content>Level</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-comment"></i> <span localize-content>Message</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-fingerprint"></i> <span localize-content>Stack Trace</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-exclamation-circle"></i> <span localize-content>Exception</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-pen"></i> <span localize-content>Logger</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-at"></i> <span localize-content>Url</span>
+                    </th>
                 </tr>
                 </thead>
                 <!--Table head-->
@@ -81,54 +107,55 @@
 
                 @foreach (var log in Model.Logs)
                 {
-                    switch (log.level)
+                    switch (log.Level)
                     {
                         case "Debug":
                             <tr class="bg-light">
-                                <td class="bg-light">@log.id</td>
-                                <td class="bg-light">@log.created_on/td>
-                                <td class="bg-light">@log.level</td>
-                                <td class="bg-light">@log.message</td>
-                                <td class="bg-light">@log.stack_trace</td>
-                                <td class="bg-light">@log.exception</td>
-                                <td class="bg-light">@log.logger</td>
-                                <td class="bg-light">@log.url</td>
+                                <td class="bg-light">@log.Id</td>
+                                <td class="bg-light">@log.CreatedOn</td>
+                                <td class="bg-light">@log.Level</td>
+                                <td class="bg-light">@log.Message</td>
+                                <td class="bg-light">@log.StackTrace</td>
+                                <td class="bg-light">@log.Exception</td>
+                                <td class="bg-light">@log.Logger</td>
+                                <td class="bg-light">@log.Url</td>
                             </tr>
                             break;
                         case "Info":
                             <tr class="bg-info">
-                                <td class="bg-info">@log.id</td>
-                                <td class="bg-info">@log.created_on/td>
-                                <td class="bg-info">@log.level</td>
-                                <td class="bg-info">@log.message</td>
-                                <td class="bg-info">@log.stack_trace</td>
-                                <td class="bg-info">@log.exception</td>
-                                <td class="bg-info">@log.logger</td>
-                                <td class="bg-info">@log.url</td>
+                                <td class="bg-info">@log.Id</td>
+                                <td class="bg-info">@log.CreatedOn</td>
+                                <td class="bg-info">@log.Level</td>
+                                <td class="bg-info">@log.Message</td>
+                                <td class="bg-info">@log.StackTrace</td>
+                                <td class="bg-info">@log.Exception</td>
+                                <td class="bg-info">@log.Logger</td>
+                                <td class="bg-info">@log.Url</td>
+
                             </tr>
                             break;
                         case "Error":
                             <tr class="bg-danger">
-                                <td class="bg-danger">@log.id</td>
-                                <td class="bg-danger">@log.created_on/td>
-                                <td class="bg-danger">@log.level</td>
-                                <td class="bg-danger">@log.message</td>
-                                <td class="bg-danger">@log.stack_trace</td>
-                                <td class="bg-danger">@log.exception</td>
-                                <td class="bg-danger">@log.logger</td>
-                                <td class="bg-danger">@log.url</td>
+                                <td class="bg-danger">@log.Id</td>
+                                <td class="bg-danger">@log.CreatedOn</td>
+                                <td class="bg-danger">@log.Level</td>
+                                <td class="bg-danger">@log.Message</td>
+                                <td class="bg-danger">@log.StackTrace</td>
+                                <td class="bg-danger">@log.Exception</td>
+                                <td class="bg-danger">@log.Logger</td>
+                                <td class="bg-danger">@log.Url</td>
                             </tr>
                             break;
                         case "Warn":
                             <tr class="bg-warning">
-                                <td class="bg-warning">@log.id</td>
-                                <td class="bg-warning">@log.created_on/td>
-                                <td class="bg-warning">@log.level</td>
-                                <td class="bg-warning">@log.message</td>
-                                <td class="bg-warning">@log.stack_trace</td>
-                                <td class="bg-warning">@log.exception</td>
-                                <td class="bg-warning">@log.logger</td>
-                                <td class="bg-warning">@log.url</td>
+                                <td class="bg-warning">@log.Id</td>
+                                <td class="bg-warning">@log.CreatedOn</td>
+                                <td class="bg-warning">@log.Level</td>
+                                <td class="bg-warning">@log.Message</td>
+                                <td class="bg-warning">@log.StackTrace</td>
+                                <td class="bg-warning">@log.Exception</td>
+                                <td class="bg-warning">@log.Logger</td>
+                                <td class="bg-warning">@log.Url</td>
                             </tr>
                             break;
                     }
@@ -145,10 +172,31 @@
                 <i class="nav-icon fas fa-download"></i>
                 <p localize-content>Export</p>
             </a>
-            <a asp-area="" asp-controller="Log" asp-action="" localize-content class="btn btn-danger btn-sm">
-                <i class="nav-icon fas fa-trash"></i>
+            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal">
+               <i class="nav-icon fas fa-trash"></i>
                 <p localize-content>Delete</p>
-            </a>
+            </button>
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to delete the logs?
+                  </div>
+                    <div class="modal-footer">
+                        <form asp-area="" asp-controller="Log" asp-action="Delete" method="post" enctype="multipart/form-data">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span localize-content>Close</span></button>
+                            <button type="submit" class="btn btn-danger"><span localize-content>Yes</span></button>
+                        </form>
+                    </div>
+                </div>
+              </div>
+            </div>
 
         </div>
 
@@ -162,7 +210,8 @@
 
     $(document).ready(function () {
         $('#logResults').DataTable({
-            "responsive": true
+            "responsive": true,
+            order: [[0, 'desc']]
         }
                     );
         $('.dataTables_length').addClass('bs-select');

@@ -12,14 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cervantes.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220815103402_InitReformat")]
-    partial class InitReformat
+    [Migration("20220926133124_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -176,34 +176,34 @@ namespace Cervantes.DAL.Migrations
 
             modelBuilder.Entity("Cervantes.CORE.Log", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("created_on")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("exception")
+                    b.Property<string>("CreatedOn")
                         .HasColumnType("text");
 
-                    b.Property<string>("level")
+                    b.Property<string>("Exception")
                         .HasColumnType("text");
 
-                    b.Property<string>("logger")
+                    b.Property<string>("Level")
                         .HasColumnType("text");
 
-                    b.Property<string>("message")
+                    b.Property<string>("Logger")
                         .HasColumnType("text");
 
-                    b.Property<string>("stack_trace")
+                    b.Property<string>("Message")
                         .HasColumnType("text");
 
-                    b.Property<string>("url")
+                    b.Property<string>("StackTrace")
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Logs");
                 });

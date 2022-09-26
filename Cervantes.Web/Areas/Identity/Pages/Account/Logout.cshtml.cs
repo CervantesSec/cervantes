@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Cervantes.CORE;
@@ -30,7 +31,7 @@ public class LogoutModel : PageModel
     public async Task<IActionResult> OnPost(string returnUrl = null)
     {
         await _signInManager.SignOutAsync();
-        _logger.LogInformation("User logged out.");
+        _logger.LogInformation("User logged out: {0}",User.FindFirstValue(ClaimTypes.Name));
         if (returnUrl != null)
             return LocalRedirect(returnUrl);
         else

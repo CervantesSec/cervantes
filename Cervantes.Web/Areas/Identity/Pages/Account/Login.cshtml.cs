@@ -92,7 +92,7 @@ public class LoginModel : PageModel
                     return RedirectToAction("MyProjects","Project");
                 }
                 
-                _logger.LogInformation("User logged in.");
+                _logger.LogInformation("User logged in: {0}",Input.Email);
                 return LocalRedirect(returnUrl);
             }
 

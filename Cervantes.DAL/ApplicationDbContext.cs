@@ -14,6 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
+    
 
     /// <summary>
     /// Implemnt save async method
@@ -118,6 +119,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<VulnTargets> VulnTargets { get; set; }
 
     public DbSet<Log> Logs { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder){
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Log>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+    }
+    
     public DbSet<Report> Reports { get; set; }
     public DbSet<Vault> Vaults { get; set; }
     public DbSet<ReportTemplate> ReportTemplates { get; set; }

@@ -7,26 +7,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DocumentFormat.OpenXml" Version="2.17.1" />
+        <PackageReference Include="DocumentFormat.OpenXml" Version="2.18.0" />
         <PackageReference Include="HtmlSanitizer" Version="7.1.542" />
         <PackageReference Include="HtmlToOpenXml.dll" Version="2.3.0" />
         <PackageReference Include="LazZiya.ExpressLocalization" Version="4.0.4" />
         <PackageReference Include="LazZiya.TagHelpers" Version="6.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.7" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.7" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.9" />
         <PackageReference Include="Mime-Detective" Version="22.7.21" />
-        <PackageReference Include="NLog" Version="5.0.1" />
+        <PackageReference Include="NLog" Version="5.0.4" />
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
+        <PackageReference Include="NLog.Database" Version="5.0.4" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.4" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
     </ItemGroup>
 
     <ItemGroup>
