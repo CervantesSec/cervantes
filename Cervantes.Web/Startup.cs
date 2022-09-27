@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using Cervantes.IFR.Email;
+using Cervantes.IFR.Jira;
 using Cervantes.IFR.Parsers.Nmap;
 using NLog.Extensions.Logging;
 
@@ -89,6 +90,8 @@ public class Startup
         services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<INmapParser, NmapParser>();
+        services.AddSingleton<IJiraConfiguration>(Configuration.GetSection("JiraConfiguration").Get<JiraConfiguration>());
+
 
 
         var cultures = new[]

@@ -443,19 +443,16 @@ public class UserController : Controller
                 var model = new UserEditViewModel
                 {
                     ItemList = li,
-                    User = new UserViewModel
-                    {
-                        Id = user.Id,
-                        UserName = user.UserName,
-                        FullName = user.FullName,
-                        TwoFactorEnabled = user.TwoFactorEnabled,
-                        Email = user.Email,
-                        Avatar = user.Avatar,
-                        Description = user.Description,
-                        Position = user.Position,
-                        PhoneNumber = user.PhoneNumber,
-                        LockoutEnabled = user.LockoutEnabled
-                    },
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FullName = user.FullName,
+                    TwoFactorEnabled = user.TwoFactorEnabled,
+                    Email = user.Email,
+                    Avatar = user.Avatar,
+                    Description = user.Description,
+                    Position = user.Position,
+                    PhoneNumber = user.PhoneNumber,
+                    LockoutEnabled = user.LockoutEnabled,
                     Option = rolUser.Result.FirstOrDefault()
                 };
 
@@ -490,19 +487,19 @@ public class UserController : Controller
 
             var hasher = new PasswordHasher<ApplicationUser>();
             var result = usrManager.GetByUserId(id);
-            result.FullName = model.User.FullName;
-            result.UserName = model.User.Email;
-            result.Email = model.User.Email;
-            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.User.Description));
-            if (model.User.ConfirmPassword != null) result.PasswordHash = hasher.HashPassword(result,model.User.ConfirmPassword);
-            result.Position = model.User.Position;
-            result.PhoneNumber = model.User.PhoneNumber;
-            result.LockoutEnabled = model.User.LockoutEnabled;
+            result.FullName = model.FullName;
+            result.UserName = model.Email;
+            result.Email = model.Email;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+            if (model.ConfirmPassword != null) result.PasswordHash = hasher.HashPassword(result,model.ConfirmPassword);
+            result.Position = model.Position;
+            result.PhoneNumber = model.PhoneNumber;
+            result.LockoutEnabled = model.LockoutEnabled;
 
 
-            if (model.User.upload != null)
+            if (model.upload != null)
             {
-                var file = model.User.upload;
+                var file = model.upload;
                 
                 var Inspector = new ContentInspectorBuilder() {
                     Definitions = MimeDetective.Definitions.Default.FileTypes.Images.All()
@@ -527,6 +524,9 @@ public class UserController : Controller
             }
 
             usrManager.Context.SaveChanges();
+            var role = _userManager.GetRolesAsync(result).Result.FirstOrDefault();
+
+            _userManager.RemoveFromRoleAsync(result,role).Wait();
             _userManager.AddToRoleAsync(result, model.Option).Wait();
 
 
@@ -615,7 +615,7 @@ public class UserController : Controller
         }
     }
 
-    [HttpPost]
+    
     public ActionResult DeleteAvatar(string id)
     {
         try

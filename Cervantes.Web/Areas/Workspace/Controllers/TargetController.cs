@@ -640,7 +640,7 @@ public class TargetController : Controller
             TempData["errorImporting"] = "Error deleting service!";
             _logger.LogError(e, "An error ocurred importing Targets: Project: {0} User: {1}", project,
                User.FindFirstValue(ClaimTypes.Name));
-            return View("Import");
+            return RedirectToAction("Import", "Target", new {project = project});
         }
     }
 }

@@ -242,6 +242,15 @@
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\cd01c175-033e-441f-982c-2b60732b58ce_nmap.xml" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\d15ef16a-9f2b-4f97-aa64-44a8f01c664e_nmap.xml" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\ebdf93d5-48fd-4295-8933-07cd91c6e627_nmap.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\5a0ff23b-7fb6-453b-90c8-b904c3108fe6_nmap_example.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\c1455120-1d00-4bab-b7a5-3b8db10f28b5_nmap_example.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\a7e9662d-165f-4d8b-8726-8ecf7ea419e0\d4004c77-71a2-44c9-bb72-7411771aa149_nmap_example.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\0fe77407-dba2-42f5-a324-4da238724981_10.2.5.0_Cervantes_test.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\18d5cc47-a05d-4059-b5b7-a4a077715fbe_10.2.5.0_Cervantes_test.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\2322ae4d-177e-4840-a164-fc14484d4ed6_nmap_example.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\3b4675b5-8244-4bfd-9fac-5eadcab2d987_10.2.5.0_Cervantes_test.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\3e14201f-fdd1-482a-82e7-3f408988b60d_10.2.5.0_Cervantes_test.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\619bc66a-25e9-44b9-8095-cf96763af571_10.2.5.0_Cervantes_test.xml" />
     </ItemGroup>
 
 </Project>

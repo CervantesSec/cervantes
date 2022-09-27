@@ -21,7 +21,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-user"></i> <span localize-content>Edit</span> @Model.User.FullName</h1>
+                <h1 localize-content><i class="fas fa-user"></i> <span localize-content>Edit</span> @Model.FullName</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -48,37 +48,37 @@
                 <div class="col-md-12">
 
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div asp-validation-summary="All" class="text-danger"></div>
 
                         <div class="form-group">
-                            <label asp-for="User.FullName" class="control-label" localize-content>Full Name</label>
-                            <input asp-for="User.FullName" class="form-control"/>
-                            <span asp-validation-for="User.FullName" class="text-danger"></span>
+                            <label asp-for="FullName" class="control-label" localize-content>Full Name</label>
+                            <input asp-for="FullName" class="form-control"/>
+                            <span asp-validation-for="FullName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.Email" class="control-label" localize-content>Email</label>
-                            <input type="email" asp-for="User.Email" class="form-control"/>
-                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                            <label asp-for="Email" class="control-label" localize-content>Email</label>
+                            <input type="email" asp-for="Email" class="form-control"/>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.PhoneNumber" class="control-label" localize-content>PhoneNumber</label>
-                            <input asp-for="User.PhoneNumber" class="form-control" data-inputmask="'mask': '(+099) 999 99 99 99 [9999]'" />
-                            <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+                            <label asp-for="PhoneNumber" class="control-label" localize-content>PhoneNumber</label>
+                            <input asp-for="PhoneNumber" class="form-control" data-inputmask="'mask': '(+099) 999 99 99 99 [9999]'" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.Description" class="control-label" localize-content>Description</label>
-                            <textarea id="description" asp-for="User.Description" class="form-control" rows="4"></textarea>
-                            <span asp-validation-for="User.Description" class="text-danger"></span>
+                            <label asp-for="Description" class="control-label" localize-content>Description</label>
+                            <textarea id="description" asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label localize-content>New Password</label>
-                            <input asp-for="User.ConfirmPassword" class="form-control" type="password"/>
-                            <span asp-validation-for="User.ConfirmPassword" class="text-danger"></span>
+                            <input asp-for="ConfirmPassword" class="pr-password form-control" type="password"/>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="User.Position" localize-content>Position</label>
-                            <input asp-for="User.Position" class="form-control"/>
-                            <span asp-validation-for="User.Position" class="text-danger"></span>
+                            <label asp-for="Position" localize-content>Position</label>
+                            <input asp-for="Position" class="form-control"/>
+                            <span asp-validation-for="Position" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
@@ -88,13 +88,11 @@
 
                         <div class="form-group">
                             <label for="upload" localize-content>Avatar</label>
-                            @if (Model.User.Avatar != null)
+                            @if (Model.Avatar != null)
                             {
                                 <div>
-                                    <img src="@Model.User.Avatar" class="img-circle elevation-2" alt="User Image" height="100" width="100">
-                                    <form asp-controller="User" asp-action="DeleteAvatar" method="post" enctype="multipart/form-data">
-                                        <button type="submit" class="btn btn-danger btn-sm" asp-controller="User" asp-action="DeleteAvatar" asp-route-id="@Model.User.Id" localize-content><i class="fas fa-trash"></i> Delete Avatar</button>
-                                    </form>
+                                    <img src="@Model.Avatar" class="img-circle elevation-2" alt="User Image" height="100" width="100">
+                                        <a class="btn btn-danger btn-sm" asp-controller="User" asp-action="DeleteAvatar" asp-route-id="@Model.Id" localize-content><i class="fas fa-trash"></i> Delete Avatar</a>
                                     
                                 </div>
                             }
@@ -102,7 +100,7 @@
                             {
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input class="custom-file-input" asp-for="User.upload" accept="image/bmp, image/gif, image/ico, image/jpeg, image/png, image/tiff">
+                                        <input class="custom-file-input" asp-for="upload" accept="image/bmp, image/gif, image/ico, image/jpeg, image/png, image/tiff">
                                         <label class="custom-file-label" for="upload" localize-content>Choose File</label>
                                     </div>
 
@@ -112,14 +110,20 @@
                         </div>
                         
                         <div class="form-group">
-                            <label asp-for="User.LockoutEnabled" class="control-label" localize-content>Locked Out</label>
-                            <input asp-for="User.LockoutEnabled" class="form-control"/>
+                            <label asp-for="LockoutEnabled" class="control-label" localize-content>Locked Out</label>
+                            <input asp-for="LockoutEnabled" class="form-control"/>
                         </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="TwoFactorEnabled" class="control-label" localize-content>TwoFactor Enabled</label>
+                            <input asp-for="TwoFactorEnabled" class="form-control"/>
+                        </div>
+                        
                         
                         
                         <div class="form-group">
                             <a class="btn btn-default" asp-action="Index" localize-content>Back</a>
-                            <input type="submit" class="btn btn-dark" localize-content></input>
+                            <button type="submit" class="btn btn-dark" localize-content>Edit</button>
                         </div>
                     </form>
                 </div>
@@ -131,6 +135,8 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+        <script src="~/lib/validate-password-requirements/js/jquery.passwordRequirements.min.js"></script>
+
     <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
         <script src="~/lib/inputmask/bindings/inputmask.binding.js"></script>
     <script>
@@ -144,5 +150,17 @@
                      $(document).ready(function () {
               bsCustomFileInput.init();
             });
+                     
+                      $(document).ready(function (){
+                                              $(".pr-password").passwordRequirements({
+                                                  numCharacters: 8,           
+                                                    useLowercase: true,
+                                                    useUppercase: true,
+                                                    useNumbers: true,
+                                                    useSpecial: true
+                     
+                                              });
+                                          });
+                      
          </script>
 }

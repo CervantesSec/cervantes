@@ -70,7 +70,16 @@ public class NmapParser: INmapParser
 
                 var service = port.Element("service");
 
-                var name = service.Attribute("name").Value;
+                if (service == null)
+                {
+                    continue;
+                }
+
+                var name = "No Name Info";
+                if (service.Attribute("name") != null)
+                {
+                    name = service.Attribute("name").Value;
+                }
 
                 var product = "";
                 if (service.Attribute("product") != null)

@@ -17,11 +17,7 @@ public class RoleManager : GenericManager<IdentityRole>, IRoleManager
     {
     }
 
-    /// <summary>
-    /// Método que retorna todos los pedidos de un usuario
-    /// </summary>
-    /// <param name="userId">Identificador de usuario</param>
-    /// <returns>Todos los pedidos del usuario</returns>
+
     public IQueryable<IdentityRole> GetByName(string name)
     {
         return Context.Set<IdentityRole>().Where(x => x.Name == name);

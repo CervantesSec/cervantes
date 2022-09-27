@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Atlassian.SDK" Version="13.0.0" />
         <PackageReference Include="MailKit" Version="3.4.1" />
     </ItemGroup>
 
