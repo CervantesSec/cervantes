@@ -23,5 +23,7 @@ public class VulnDetailsViewModel
     
     public IList<SelectListItem> TargetList { get; set; }
     public Guid TargetId { get; set; }
+    
+    public bool JiraEnabled { get; set; }
 
 }

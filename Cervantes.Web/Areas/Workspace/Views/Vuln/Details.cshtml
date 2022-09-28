@@ -233,33 +233,42 @@
     <ul class="nav nav-pills">
         <li class="nav-item">
             <a class="nav-link active" href="#details" data-toggle="tab">
-                <span localize-content>Details</span>
+                <i class="fas fa-eye"></i> <span localize-content>Details</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#exploitation" data-toggle="tab">
-                <span localize-content>Exploitation</span>
+                <i class="fas fa-bug"></i> <span localize-content>Exploitation</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#remediation" data-toggle="tab">
-                <span localize-content>Remediation</span>
+                <i class="fas fa-tools"></i> <span localize-content>Remediation</span>
             </a>
         </li>
+        @if (@Model.JiraEnabled == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="#jira" data-toggle="tab">
+                                    <i class="fab fa-jira"></i> <span localize-content>Jira</span>
+                                </a>
+                            </li>
+                        }
+        
         <li class="nav-item">
             <a class="nav-link" href="#targets" data-toggle="tab">
-                <span localize-content>Targets</span> <span class="badge badge-danger">@Model.Targets.Count()</span>
+                <i class="fas fa-bullseye"></i> <span localize-content>Targets</span> <span class="badge badge-danger">@Model.Targets.Count()</span>
             </a>
         </li>
         
         <li class="nav-item">
             <a class="nav-link" href="#notes" data-toggle="tab">
-                <span localize-content>Notes</span> <span class="badge badge-danger">@Model.Notes.Count()</span>
+                <i class="fas fa-sticky-note"></i> <span localize-content>Notes</span> <span class="badge badge-danger">@Model.Notes.Count()</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#attachments" data-toggle="tab">
-                <span localize-content>Attachments</span> <span class="badge badge-danger">@Model.Attachments.Count()</span>
+                <i class="fas fa-file"></i> <span localize-content>Attachments</span> <span class="badge badge-danger">@Model.Attachments.Count()</span>
             </a>
         </li>
     </ul>
@@ -596,6 +605,14 @@
         </div>
     }
 </div>
+
+@if (Model.JiraEnabled == true )
+{
+    <div class="tab-pane" id="jira">
+        <p>Jira</p>
+    </div>
+}
+
 
 </div>
 <!-- /.tab-content -->

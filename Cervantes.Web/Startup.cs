@@ -91,6 +91,7 @@ public class Startup
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<INmapParser, NmapParser>();
         services.AddSingleton<IJiraConfiguration>(Configuration.GetSection("JiraConfiguration").Get<JiraConfiguration>());
+        services.AddScoped<IJIraService, JiraService>();
 
 
 

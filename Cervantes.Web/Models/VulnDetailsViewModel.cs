@@ -17,4 +17,6 @@ public class VulnDetailsViewModel
     public IFormFile upload { get; set; }
 
     public Visibility Visibility { get; set; }
+    
+    public bool JiraEnabled { get; set; }
 }

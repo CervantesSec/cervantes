@@ -13,7 +13,7 @@ public class JiraService: IJIraService
         _jiraConfiguration = jiraConfiguration;
     }
 
-    public void CreateIssue(Vuln vuln)
+    public void CreateIssue(string vuln)
     {
         if (_jiraConfiguration.Enabled == false)
         {
@@ -23,7 +23,7 @@ public class JiraService: IJIraService
         var jira = Atlassian.Jira.Jira.CreateRestClient(_jiraConfiguration.Url, _jiraConfiguration.User,
             _jiraConfiguration.Password);
         
-        var issue = jira.CreateIssue("My Project");
+        var issue = jira.CreateIssue("Cervantes","CER");
         issue.Type = "Bug";
         issue.Priority = "Major";
         issue.Summary = "Issue Summary";
@@ -31,5 +31,10 @@ public class JiraService: IJIraService
         issue.SaveChangesAsync().Wait();
         
 
+    }
+
+    public bool JiraEnabled()
+    {
+        return _jiraConfiguration.Enabled;
     }
 }

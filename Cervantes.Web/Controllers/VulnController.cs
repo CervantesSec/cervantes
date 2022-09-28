@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using Cervantes.IFR.Jira;
 using Cervantes.Web.Models;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
@@ -28,11 +29,12 @@ public class VulnController : Controller
     private IVulnTargetManager vulnTargetManager = null;
     private readonly IHostingEnvironment _appEnvironment;
     private readonly ILogger<VulnController> _logger = null;
+    private IJIraService jiraService = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
-        IVulnAttachmentManager vulnAttachmentManager, IHostingEnvironment _appEnvironment)
+        IVulnAttachmentManager vulnAttachmentManager, IHostingEnvironment _appEnvironment, IJIraService jiraService)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -43,6 +45,7 @@ public class VulnController : Controller
         this.vulnTargetManager = vulnTargetManager;
         this._appEnvironment = _appEnvironment;
         _logger = logger;
+        this.jiraService = jiraService;
     }
 
     // GET: VulnController
@@ -87,7 +90,8 @@ public class VulnController : Controller
                 Vuln = vulnManager.GetById(id),
                 Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
                 Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
-                Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList()
+                Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
+                JiraEnabled = jiraService.JiraEnabled()
             };
             return View(model);
         }
@@ -662,5 +666,15 @@ public class VulnController : Controller
               User.FindFirstValue(ClaimTypes.Name));
             return View("Templates");
         }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult CreateIssueJira(IFormCollection form)
+    {
+        var vuln = form["vulnId"];
+        jiraService.CreateIssue(form["vulnId"]);
+        return RedirectToAction("Details", "Vuln", new {id = vuln});
+
     }
 }

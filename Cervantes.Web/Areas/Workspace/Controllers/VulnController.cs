@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using Cervantes.IFR.Jira;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 
@@ -30,11 +31,13 @@ public class VulnController : Controller
     private IProjectUserManager projectUserManager = null;
     private readonly IHostingEnvironment _appEnvironment;
     private readonly ILogger<VulnController> _logger = null;
+    private IJIraService jiraService = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
-        IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment)
+        IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment,
+        IJIraService jiraService)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -46,6 +49,7 @@ public class VulnController : Controller
         this.projectUserManager = projectUserManager;
         this._appEnvironment = _appEnvironment;
         _logger = logger;
+        this.jiraService = jiraService;
     }
 
     // GET: VulnController
@@ -106,7 +110,8 @@ public class VulnController : Controller
                 Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
                 Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
                 Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
-                TargetList = targets
+                TargetList = targets,
+                JiraEnabled = jiraService.JiraEnabled()
             };
             return View(model);
         }
