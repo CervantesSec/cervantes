@@ -32,12 +32,14 @@ public class VulnController : Controller
     private readonly IHostingEnvironment _appEnvironment;
     private readonly ILogger<VulnController> _logger = null;
     private IJIraService jiraService = null;
+    private IJiraManager jiraManager = null;
+    private IJiraCommentManager jiraCommentManager = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment,
-        IJIraService jiraService)
+        IJIraService jiraService, IJiraManager jiraManager, IJiraCommentManager jiraCommentManager)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -50,6 +52,8 @@ public class VulnController : Controller
         this._appEnvironment = _appEnvironment;
         _logger = logger;
         this.jiraService = jiraService;
+        this.jiraCommentManager = jiraCommentManager;
+        this.jiraManager = jiraManager;
     }
 
     // GET: VulnController
@@ -103,17 +107,64 @@ public class VulnController : Controller
             foreach (var item in result)
                 targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
             
-            var model = new VulnDetailsViewModel
+            var jiraEnabled = jiraService.JiraEnabled();
+            if (jiraEnabled == true)
             {
-                Project = projectManager.GetById(project),
-                Vuln = vulnManager.GetById(id),
-                Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
-                Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
-                Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
-                TargetList = targets,
-                JiraEnabled = jiraService.JiraEnabled()
-            };
-            return View(model);
+                var vuln = vulnManager.GetById(id);
+                
+                if (vuln.JiraCreated == true)
+                {
+                    var jira = jiraManager.GetByVulnId(id);
+                    //jiraService.Issue(jira.JiraKey);
+                    
+                    var model = new VulnDetailsViewModel
+                    {
+                        Project = projectManager.GetById(project),
+                        Vuln = vuln,
+                        Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
+                        Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
+                        Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
+                        TargetList = targets,
+                        JiraEnabled = jiraService.JiraEnabled(),
+                        Jira = jira,
+                        JiraComments = jiraCommentManager.GetAll().Where(x => x.JiraId == jira.Id).ToList()
+                
+                    };
+                    return View(model);
+                }
+                else
+                {
+
+                    var model = new VulnDetailsViewModel
+                    {
+                        Project = projectManager.GetById(project),
+                        Vuln = vuln,
+                        Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
+                        Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
+                        Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
+                        TargetList = targets,
+                        JiraEnabled = jiraService.JiraEnabled(),
+
+                    };
+                    return View(model);
+                }
+            }
+            else
+            {
+                var model = new VulnDetailsViewModel
+                {
+                    Project = projectManager.GetById(project),
+                    Vuln = vulnManager.GetById(id),
+                    Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
+                    Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
+                    Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
+                    TargetList = targets,
+                    JiraEnabled = jiraService.JiraEnabled()
+                };
+                return View(model);
+            }
+
+            
         }
         catch (Exception e)
         {

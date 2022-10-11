@@ -144,6 +144,9 @@
                         <i class="fas fa-calendar"></i> <span localize-content>Created Date</span>
                     </th>
                     <th>
+                        <i class="fas fa-user"></i> <span localize-content>Created by</span>
+                    </th>
+                    <th>
                         <i class="fas fa-cog"></i> <span localize-content>Options</span>
                     </th>
                 </tr>
@@ -280,6 +283,7 @@
                         }
                         <td>@vuln.VulnCategory.Name</td>
                         <td>@vuln.CreatedDate.ToShortDateString()</td>
+                        <td>@vuln.User.FullName</td>
 
                             <td>
                                 <a asp-area="Workspace" asp-controller="Vuln" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" class="btn btn-tool">

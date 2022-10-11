@@ -552,7 +552,8 @@ namespace Cervantes.DAL.Migrations
                     CVSSVector = table.Column<string>(type: "text", nullable: true),
                     Remediation = table.Column<string>(type: "text", nullable: true),
                     RemediationComplexity = table.Column<int>(type: "integer", nullable: false),
-                    RemediationPriority = table.Column<int>(type: "integer", nullable: false)
+                    RemediationPriority = table.Column<int>(type: "integer", nullable: false),
+                    JiraCreated = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -684,6 +685,50 @@ namespace Cervantes.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Jira",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    VulnId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    JiraIdentifier = table.Column<string>(type: "text", nullable: true),
+                    JiraKey = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Reporter = table.Column<string>(type: "text", nullable: true),
+                    Assignee = table.Column<string>(type: "text", nullable: true),
+                    JiraType = table.Column<string>(type: "text", nullable: true),
+                    Label = table.Column<string>(type: "text", nullable: true),
+                    Votes = table.Column<long>(type: "bigint", nullable: true),
+                    Interested = table.Column<string>(type: "text", nullable: true),
+                    JiraCreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    JiraUpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    JiraStatus = table.Column<string>(type: "text", nullable: true),
+                    JiraComponent = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<string>(type: "text", nullable: true),
+                    JiraProject = table.Column<string>(type: "text", nullable: true),
+                    Resolution = table.Column<string>(type: "text", nullable: true),
+                    ResolutionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    SecurityLevel = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Jira", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Jira_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Jira_Vulns_VulnId",
+                        column: x => x.VulnId,
+                        principalTable: "Vulns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "VulnAttachments",
                 columns: table => new
                 {
@@ -761,6 +806,32 @@ namespace Cervantes.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "JiraComments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    JiraId = table.Column<Guid>(type: "uuid", nullable: false),
+                    JiraIdComment = table.Column<string>(type: "text", nullable: true),
+                    Author = table.Column<string>(type: "text", nullable: true),
+                    Body = table.Column<string>(type: "text", nullable: true),
+                    GroupLevel = table.Column<string>(type: "text", nullable: true),
+                    RoleLevel = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdateAuthor = table.Column<string>(type: "text", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JiraComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_JiraComments_Jira_JiraId",
+                        column: x => x.JiraId,
+                        principalTable: "Jira",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -807,6 +878,21 @@ namespace Cervantes.DAL.Migrations
                 name: "IX_Documents_UserId",
                 table: "Documents",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jira_UserId",
+                table: "Jira",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jira_VulnId",
+                table: "Jira",
+                column: "VulnId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JiraComments_JiraId",
+                table: "JiraComments",
+                column: "JiraId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notes_UserId",
@@ -1010,6 +1096,9 @@ namespace Cervantes.DAL.Migrations
                 name: "Documents");
 
             migrationBuilder.DropTable(
+                name: "JiraComments");
+
+            migrationBuilder.DropTable(
                 name: "Logs");
 
             migrationBuilder.DropTable(
@@ -1059,6 +1148,9 @@ namespace Cervantes.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Jira");
 
             migrationBuilder.DropTable(
                 name: "Tasks");

@@ -25,5 +25,8 @@ public class VulnDetailsViewModel
     public Guid TargetId { get; set; }
     
     public bool JiraEnabled { get; set; }
+    
+    public Jira Jira { get; set; }
+    public IEnumerable<JiraComments> JiraComments { get; set; }
 
 }

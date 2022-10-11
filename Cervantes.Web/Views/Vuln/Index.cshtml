@@ -5,6 +5,16 @@
     ViewBag.Title = "Vulnerabilities";
 }
 
+@{
+    if (TempData["errorDetails"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred loading Vuln Details!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
+
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -58,6 +68,10 @@
                     <th>
                         <i class="fas fa-calendar"></i> <span localize-content>Created Date</span>
                     </th>
+                    <th>
+                        <i class="fas fa-user"></i> <span localize-content>Created by</span>
+                    </th>
+                    
                     <th>
                         <i class="fas fa-cog"></i> <span localize-content>Options</span>
                     </th>
@@ -161,8 +175,7 @@
                         }
                         <td>@vuln.VulnCategory.Name</td>
                         <td>@vuln.CreatedDate.ToShortDateString()</td>
-                        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-                        {
+                        <td>@vuln.User.FullName</td>
                             <td>
                                 <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id" class="btn btn-tool">
                                     <i class="fas fa-eye"></i>
@@ -174,15 +187,8 @@
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>
-                        }
-                        else
-                        {
-                            <td>
-                        <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id" class="btn btn-tool">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        </td>
-                        }
+                        
+
 
                     </tr>
                 }

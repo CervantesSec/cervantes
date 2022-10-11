@@ -97,8 +97,8 @@
 <div class="row">
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header" localize-content>
-                <h3 class="card-title">Projects Percentages</h3>
+            <div class="card-header bg-gray-dark" localize-content>
+                <h3 class="card-title"><i class="fas fa-chart-pie"></i> <span localize-content>Projects Percentages</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -144,8 +144,8 @@
 
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header" localize-content>
-                <h3 class="card-title">Active Projects</h3>
+            <div class="card-header bg-dark" localize-content>
+                <h3 class="card-title"><i class="fas fa-folder-open"></i> <span localize-content>Active Projects</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -154,7 +154,7 @@
                     {
                         @foreach (var project in Model.ActiveProjects)
                         {
-                            <div class="info-box">
+                            <div class="info-box bg-light">
                                 <span class="info-box-icon bg-info elevation-1">
                                     <i class="fas fa-folder"></i>
                                 </span>
@@ -181,8 +181,8 @@
 
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header" localize-content>
-                <h3 class="card-title">Recent Clients</h3>
+            <div class="card-header bg-dark" localize-content>
+                <h3 class="card-title"><i class="fas fa-briefcase"></i> <span localize-content>Recent Clients</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -191,7 +191,7 @@
                     {
                         @foreach (var clients in Model.RecentClients)
                         {
-                            <div class="info-box">
+                            <div class="info-box bg-light">
                                 <span class="info-box-icon bg-dark elevation-1">
                                     <i class="fas fa-briefcase"></i>
                                 </span>
@@ -220,8 +220,8 @@
 <div class="row">
 <div class="col-md-4">
     <div class="card h-100">
-        <div class="card-header" localize-content>
-            <h3 class="card-title">Recent Documents</h3>
+        <div class="card-header bg-dark" localize-content>
+            <h3 class="card-title"><i class="fas fa-file"></i> <span localize-content>Recent Documents</span></h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -230,7 +230,7 @@
                 {
                     @foreach (var doc in Model.RecentDocuments)
                     {
-                        <div class="info-box">
+                        <div class="info-box bg-light">
                             <span class="info-box-icon bg-indigo elevation-1">
                                 <i class="fas fa-file"></i>
                             </span>
@@ -256,8 +256,8 @@
 
 <div class="col-md-4">
     <div class="card h-100">
-        <div class="card-header" localize-content>
-            <h3 class="card-title">Recent Vulnerabilities</h3>
+        <div class="card-header bg-dark" localize-content>
+            <h3 class="card-title"><i class="fas fa-bug"></i> <span localize-content>Recent Vulnerabilities</span></h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -266,7 +266,7 @@
                 {
                     @foreach (var vulns in Model.RecentVulns)
                     {
-                        <div class="info-box">
+                        <div class="info-box bg-light">
                             <span class="info-box-icon bg-danger elevation-1">
                                 <i class="fas fa-bug"></i>
                             </span>
@@ -292,8 +292,8 @@
 
 <div class="col-md-4">
     <div class="card h-100">
-        <div class="card-header" localize-content>
-            <h3 class="card-title">Vulnerabilities Status</h3>
+        <div class="card-header bg-dark" localize-content>
+            <h3 class="card-title"><i class="fas fa-bug"></i> <span localize-content>Vulnerabilities Status</span></h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">

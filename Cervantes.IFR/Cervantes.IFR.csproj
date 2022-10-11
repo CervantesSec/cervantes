@@ -6,6 +6,8 @@
 
     <ItemGroup>
         <PackageReference Include="Atlassian.SDK" Version="13.0.0" />
+        <PackageReference Include="Html2JiraMarkup" Version="1.0.4" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
         <PackageReference Include="MailKit" Version="3.4.1" />
     </ItemGroup>
 

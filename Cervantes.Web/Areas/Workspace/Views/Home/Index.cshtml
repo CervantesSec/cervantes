@@ -37,7 +37,7 @@
 <div class="col-md-3">
 
     <!-- Profile Image -->
-    <div class="card card-outline">
+    <div class="card card-dark card-outline">
         <div class="card-body box-profile">
             <div class="text-center">
                 <img class="img-fluid img-circle"
@@ -63,7 +63,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-teal">
                     <i class="fas fa-calendar"></i>
                 </span>
@@ -74,7 +74,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-danger">
                     <i class="fas fa-calendar-check"></i>
                 </span>
@@ -85,7 +85,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-info">
                     <i class="fas fa-user"></i>
                 </span>
@@ -96,7 +96,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-indigo">
                     <i class="fas fa-project-diagram"></i>
                 </span>
@@ -132,7 +132,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-warning">
                     <i class="fas fa-tasks"></i>
                 </span>
@@ -278,8 +278,8 @@
 
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header">
-                <h3 class="card-title" localize-content>My Tasks</h3>
+            <div class="card-header bg-dark">
+                <h3 class="card-title" localize-content><i class="fas fa-tasks"></i> <span localize-content>My Tasks</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -288,7 +288,7 @@
 
                     @foreach (var task in Model.Tasks)
                     {
-                        <div class="info-box">
+                        <div class="info-box bg-light">
                             <span class="info-box-icon bg-success elevation-1">
                                 <i class="fas fa-tasks"></i>
                             </span>
@@ -315,8 +315,8 @@
 
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header">
-                <h3 class="card-title" localize-content>Targets</h3>
+            <div class="card-header bg-dark">
+                <h3 class="card-title" localize-content><i class="fas fa-bullseye"></i> <span localize-content>Targets</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -324,7 +324,7 @@
 
                     @foreach (var target in Model.Targets)
                     {
-                        <div class="info-box">
+                        <div class="info-box bg-light">
                             <span class="info-box-icon bg-orange elevation-1">
                                 <i class="fas fa-bullseye"></i>
                             </span>
@@ -353,8 +353,8 @@
 
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header">
-                <h3 class="card-title" localize-content>Members</h3>
+            <div class="card-header bg-dark">
+                <h3 class="card-title" localize-content><i class="fas fa-user"></i> <span localize-content>Members</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -362,7 +362,7 @@
 
                     @foreach (var members in Model.Members)
                     {
-                        <div class="info-box">
+                        <div class="info-box bg-light">
                             <span class="info-box-icon bg-info elevation-1">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -393,8 +393,8 @@
 
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header">
-                <h3 class="card-title" localize-content>Recent Vulnerabilities</h3>
+            <div class="card-header bg-dark">
+                <h3 class="card-title" localize-content><i class="fas fa-bug"></i> <span localize-content>Recent Vulnerabilities</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -403,7 +403,7 @@
 
                     @foreach (var vuln in Model.Vulns)
                     {
-                        <div class="info-box">
+                        <div class="info-box bg-light">
                             <span class="info-box-icon bg-danger elevation-1">
                                 <i class="fas fa-bug"></i>
                             </span>
@@ -429,8 +429,8 @@
 
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header">
-                <h3 class="card-title" localize-content>Vulnerabilities by Severity</h3>
+            <div class="card-header bg-dark">
+                <h3 class="card-title" localize-content><i class="fas fa-bug"></i> <span localize-content>Vulnerabilities by Severity</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -470,8 +470,8 @@
 
     <div class="col-md-4">
         <div class="card h-100">
-            <div class="card-header">
-                <h3 class="card-title" localize-content>Recent Notes</h3>
+            <div class="card-header bg-dark">
+                <h3 class="card-title" localize-content><i class="fas fa-sticky-note"></i> <span localize-content>Recent Notes</span></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -480,7 +480,7 @@
 
                     @foreach (var note in Model.Notes)
                     {
-                        <div class="info-box">
+                        <div class="info-box bg-light">
                             <span class="info-box-icon bg-warning elevation-1">
                                 <i class="fas fa-sticky-note"></i>
                             </span>

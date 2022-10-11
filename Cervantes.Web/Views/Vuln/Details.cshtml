@@ -46,6 +46,8 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
+
+
 }
 
 <section class="content-header">
@@ -82,7 +84,7 @@
 <div class="col-md-3">
 
     <!-- Profile Image -->
-    <div class="card card-primary card-outline">
+    <div class="card card-dark card-outline">
         <div class="card-body box-profile">
             <div class="text-center">
                 <span class="img-fluid img-circle">
@@ -91,7 +93,7 @@
             </div>
 
             <h3 class="profile-username text-center">@Model.Vuln.Name</h3>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-dark">
                     <i class="fas fa-folder"></i>
                 </span>
@@ -102,7 +104,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-info">
                     <i class="fas fa-user"></i>
                 </span>
@@ -113,7 +115,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-warning">
                     <i class="fas fa-project-diagram"></i>
                 </span>
@@ -124,7 +126,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-gray">
                     <i class="fas fa-virus"></i>
                 </span>
@@ -134,7 +136,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-maroon">
                     <i class="fas fa-radiation-alt"></i>
                 </span>
@@ -175,7 +177,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-danger">
                     <i class="fas fa-biohazard"></i>
                 </span>
@@ -219,7 +221,6 @@
             </div>
 
 
-
         </div>
         <!-- /.card-body -->
     </div>
@@ -232,99 +233,156 @@
 </div>
 <!-- /.col -->
 <div class="col-md-9">
-<div class="card">
-<div class="card-header p-2">
-    <ul class="nav nav-pills">
+<div class="card card-dark card-tabs">
+<div class="card-header p-0 pt-1">
+    <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" href="#details" data-toggle="tab">
+            <a class="nav-link active" href="#details" data-toggle="pill">
                 <i class="fas fa-eye"></i> <span localize-content>Details</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#exploitation" data-toggle="tab">
+            <a class="nav-link" href="#exploitation" data-toggle="pill">
                 <i class="fas fa-bug"></i> <span localize-content>Exploitation</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#remediation" data-toggle="tab">
+            <a class="nav-link" href="#remediation" data-toggle="pill">
                 <i class="fas fa-tools"></i> <span localize-content>Remediation</span>
             </a>
         </li>
         @if (@Model.JiraEnabled == true)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="#jira" data-toggle="tab">
-                            <i class="fab fa-jira"></i> <span localize-content>Jira</span>
-                        </a>
-                    </li>
-                }
-        
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="#jira" data-toggle="pill">
+                    <i class="fab fa-jira"></i> <span localize-content>Jira</span>
+                </a>
+            </li>
+        }
+
         <li class="nav-item">
-            <a class="nav-link" href="#targets" data-toggle="tab">
+            <a class="nav-link" href="#targets" data-toggle="pill">
                 <i class="fas fa-bullseye"></i> <span localize-content>Targets</span> <span class="badge badge-danger">@Model.Targets.Count()</span>
             </a>
         </li>
-        
+
         <li class="nav-item">
-            <a class="nav-link" href="#notes" data-toggle="tab">
+            <a class="nav-link" href="#notes" data-toggle="pill">
                 <i class="fas fa-sticky-note"></i> <span localize-content>Notes</span> <span class="badge badge-danger">@Model.Notes.Count()</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#attachments" data-toggle="tab">
+            <a class="nav-link" href="#attachments" data-toggle="pill">
                 <i class="fas fa-file"></i> <span localize-content>Attachments</span> <span class="badge badge-danger">@Model.Attachments.Count()</span>
             </a>
         </li>
-        
-        
+
+
     </ul>
 </div><!-- /.card-header -->
 <div class="card-body">
 <div class="tab-content">
 
 <div class="active tab-pane" id="details">
-    <dt>
-        <p localize-content>Description</p>
-    </dt>
-    <hr>
-    <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Vuln.Description))</dd>
 
-    <dt>
-        <p localize-content>Impact</p>
-    </dt>
-    <hr>
-    <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Vuln.Impact))</dd>
+    <div class="card bg-light">
+        <div class="card-header bg-gray">
+            <h3 class="card-title">
+                <i class="fas fa-align-left"></i>
+                <strong localize-content>Description</strong>
+            </h3>
+        </div>
+
+        <div class="card-body">
+           @Html.Raw(@WebUtility.HtmlDecode(Model.Vuln.Description))
+        </div>
+
+    </div>
+
+    <div class="card bg-light">
+        <div class="card-header bg-gray">
+            <h3 class="card-title">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong localize-content>Impact</strong>
+            </h3>
+        </div>
+    
+        <div class="card-body">
+            @Html.Raw(@WebUtility.HtmlDecode(Model.Vuln.Impact))
+        </div>
+    
+    </div>
 
 </div>
 <!-- /.tab-pane -->
 
 <div class="tab-pane" id="exploitation">
-    <dt>
-        <p localize-content>Proof Of Concept</p>
-    </dt>
-    <hr>
-    <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Vuln.ProofOfConcept))</dd>
 
+<div class="card bg-light">
+        <div class="card-header bg-gray">
+            <h3 class="card-title">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong localize-content>Proof Of Concept</strong>
+            </h3>
+        </div>
+    
+        <div class="card-body">
+            @Html.Raw(@WebUtility.HtmlDecode(Model.Vuln.ProofOfConcept))
+        </div>
+    
+    </div>
 </div>
 
 <div class="tab-pane" id="remediation">
-    <dt>
-        <p localize-content>Remediation</p>
-    </dt>
-    <hr>
-    <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Vuln.Remediation))</dd>
+    <div class="card bg-light">
+        <div class="card-header bg-gray">
+            <h3 class="card-title">
+                <i class="fas fa-tools"></i>
+                <strong localize-content>Remediation</strong>
+            </h3>
+        </div>
+        
+        <div class="card-body">
+            @Html.Raw(@WebUtility.HtmlDecode(Model.Vuln.Remediation))
+        </div>
+        
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-light">
+                <div class="card-header bg-gray">
+                    <h3 class="card-title">
+                        <i class="fas fa-project-diagram"></i>
+                        <strong localize-content>Complexity</strong>
+                    </h3>
+                </div>
+            
+                <div class="card-body">
+                    @Html.DisplayFor(model => model.Vuln.RemediationComplexity)
+                </div>
+            
+            </div>
+            
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-light">
+                <div class="card-header bg-gray">
+                    <h3 class="card-title">
+                        <i class="fas fa-tasks"></i>
+                        <strong localize-content>Priority</strong>
+                    </h3>
+                </div>
+            
+                <div class="card-body">
+                    @Html.DisplayFor(model => model.Vuln.RemediationPriority)
+                </div>
+            
+            </div>
+            
+        </div>
+    </div>
 
-    <dt>
-        <p localize-content>Complexity</p>
-    </dt>
-    <hr>
-    <dd>@Html.DisplayFor(model => model.Vuln.RemediationComplexity)</dd>
-
-    <dt>
-        <p localize-content>Priority</p>
-    </dt>
-    <hr>
-    <dd>@Html.DisplayFor(model => model.Vuln.RemediationPriority)</dd>
 </div>
 
 <div class="tab-pane" id="targets">
@@ -346,7 +404,7 @@
         <!--Table head-->
         <!--Table body-->
         <tbody>
-  
+
         @foreach (var target in Model.Targets)
         {
             <tr>
@@ -355,11 +413,11 @@
                 <td>@target.Target.Type</td>
             </tr>
         }
-  
+
         </tbody>
         <!--Table body-->
     </table>
-    
+
 </div>
 
 <div class="tab-pane" id="notes">
@@ -567,10 +625,291 @@
 @if (Model.JiraEnabled == true)
 {
     <div class="tab-pane" id="jira">
+    @if (Model.Vuln.JiraCreated == false)
+    {
         <form asp-area="" asp-controller="Vuln" asp-action="CreateIssueJira" method="post" enctype="multipart/form-data">
             <input asp-for="@Model.Vuln.Id" type="hidden" id="vulnId" name="vulnId" value="@Model.Vuln.Id"/>
-            <button type="submit"></button>
+            <button type="submit">Create</button>
         </form>
+    }
+    else
+    {
+        @if (Model.Jira != null)
+        {
+            <div class="row">
+                        <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+
+                        
+                        <div class="card bg-light">
+                    <div class="card-header bg-gray">
+                        <h3 class="card-title">
+                            <i class="fas fa-toolbox"></i>
+                            <strong localize-content>General</strong>
+                        </h3>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+                            <div class="row">
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fab fa-jira"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Jira Key</span>
+                                            <span class="info-box-number">@Model.Jira.JiraKey</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Assignee</span>
+                                            <span class="info-box-number">@Model.Jira.Assignee</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Priority</span>
+                                            <span class="info-box-number">@Model.Jira.Priority</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-tasks"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Status</span>
+                                            <span class="info-box-number">@Model.Jira.JiraStatus</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-user-lock"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Security Level</span>
+                                            <span class="info-box-number">@Model.Jira.SecurityLevel</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-calendar"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Created Date</span>
+                                            <span class="info-box-number">@Model.Jira.JiraCreatedDate</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-calendar-day"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Updated Date</span>
+                                            <span class="info-box-number">@Model.Jira.JiraUpdatedDate</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-calendar-times"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Due Date</span>
+                                            <span class="info-box-number">@Model.Jira.DueDate</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-check-circle"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Resolution</span>
+                                            <span class="info-box-number">@Model.Jira.Resolution</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-calendar-check"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Resolution Date</span>
+                                            <span class="info-box-number">@Model.Jira.ResolutionDate</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-tags"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Labels</span>
+                                            <span class="info-box-number">@Model.Jira.Label</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div class="info-box mb-3 bg-light" localize-content>
+                                        <span class="info-box-icon bg-light">
+                                            <i class="fas fa-wrench"></i>
+                                        </span>
+                    
+                                        <div class="info-box-content">
+                                            <span class="info-box-text" localize-content>Components</span>
+                                            <span class="info-box-number">@Model.Jira.JiraComponent</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                    
+                            </div>
+                    
+                    
+                    
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+                
+                <div class="card bg-light">
+                    <div class="card-header bg-gray">
+                        <h3 class="card-title">
+                            <i class="fas fa-comments"></i>
+                            <strong localize-content>Comments</strong>
+                        </h3>
+                    </div>
+                        
+                    <div class="card-body">
+                         
+                        <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+                            <h2>Comments</h2>
+                            <div class="accordion" id="comments">
+                                <div class="card bg-light">
+                                    <div class="card-header" id="commentshead1">
+                                        <a href="#" class="btn btn-header-link" data-toggle="collapse" data-target="#comments1"
+                                           aria-controls="comments1">
+                                            <i class="nav-icon fas fa-comments"></i> <strong localize-content>Comments</strong> <span class="badge badge-danger">@Model.JiraComments.Count()</span> <i class="right fas fa-angle-left"></i>
+                                        </a>
+                                    </div>
+
+                                    <div id="comments1" class="collapse" aria-labelledby="comments1" data-parent="#comments">
+                                        <div class="card-body">
+
+                                            @if (Model.JiraComments != null)
+                                            {
+                                                @foreach (var comment in Model.JiraComments)
+                                                {
+                                                    <div class="post">
+                                                        <div class="user-block">
+                                                            <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
+                                                            <span class="username">
+                                                                <a href="#">@comment.Author</a>
+                                                            </span>
+                                                            <span class="description">@comment.CreatedDate</span>
+                                                        </div>
+                                                        <!-- /.user-block -->
+                                                        <p>
+                                                            @comment.Body
+                                                        </p>
+                                                    </div>
+                                                }
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Add Comment to Issue</h4>
+                                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <textarea id="commentDescription" name="commentDescription" class="form-control" rows="4"></textarea>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        
+            </div>
+            </div>
+               
+        }
+    }
     </div>
 }
 
@@ -603,7 +942,12 @@
     $('.dataTables_length').addClass('bs-select');
                     });
                     
-                
+               $(document).ready(function() {
+                     $('#commentDescription').summernote({
+                     height: 300,
+                     });
+                     });
+                    
         
              $(document).ready(function () {
       bsCustomFileInput.init();

@@ -495,6 +495,7 @@ public class UserController : Controller
             result.Position = model.Position;
             result.PhoneNumber = model.PhoneNumber;
             result.LockoutEnabled = model.LockoutEnabled;
+            result.TwoFactorEnabled = model.TwoFactorEnabled;
 
 
             if (model.upload != null)

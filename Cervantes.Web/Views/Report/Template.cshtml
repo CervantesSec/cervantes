@@ -39,7 +39,7 @@
 <div class="col-md-2">
 
     <!-- Profile Image -->
-    <div class="card card-primary card-outline">
+    <div class="card card-dark card-outline">
         <div class="card-body box-profile">
             <div class="text-center">
                  <span class="img-fluid img-circle">
@@ -49,7 +49,7 @@
 
             <h3 class="profile-username text-center">@Model.Name</h3>
             
-             <div class="info-box mb-3">
+             <div class="info-box mb-3 bg-light">
                             <span class="info-box-icon bg-primary">
                                 <i class="fas fa-language"></i>
                             </span>
@@ -62,7 +62,7 @@
                             </div>
                             <!-- /.info-box-content -->
                         </div>
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-teal">
                     <i class="fas fa-calendar"></i>
                 </span>
@@ -85,11 +85,11 @@
 </div>
 <!-- /.col -->
 <div class="col-md-10">
-<div class="card">
-<div class="card-header p-2">
-    <ul class="nav nav-pills">
+<div class="card card-dark card-tabs">
+<div class="card-header p-0 pt-1">
+    <ul class="nav nav-tabs">
         <li class="nav-item" localize-content>
-            <a class="nav-link active" href="#details" data-toggle="tab">Details</a>
+            <a class="nav-link active" href="#details" data-toggle="pill"><i class="fas fa-eye"></i> <span>Details</span></a>
         </li>
 
 
@@ -98,14 +98,20 @@
 <div class="card-body">
 <div class="tab-content">
 <div class="active tab-pane" id="details">
-    <dl>
-
-        <dt>
-            <p localize-content>Description</p>
-        </dt>
-        <hr>
-        <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Description))</dd>
-    </dl>
+    <div class="card bg-light">
+        <div class="card-header bg-gray">
+            <h3 class="card-title">
+                <i class="fas fa-align-left"></i>
+                <strong localize-content>Description</strong>
+            </h3>
+        </div>
+                                                
+        <div class="card-body">
+            @Html.Raw(@WebUtility.HtmlDecode(Model.Description))
+        </div>
+                                                
+    </div>
+    
     <a class="btn btn-dark" asp-area="" asp-controller="Report" asp-action="DownloadTemplate" asp-route-id="@Model.Id" localize-content>
                             <i class="fas fa-download"></i> Download
                         </a>

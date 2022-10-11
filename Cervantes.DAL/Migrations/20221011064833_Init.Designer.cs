@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cervantes.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220926133124_Init")]
+    [Migration("20221011064833_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,6 +172,127 @@ namespace Cervantes.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.Jira", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Assignee")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Interested")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JiraComponent")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("JiraCreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("JiraIdentifier")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JiraKey")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JiraProject")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JiraStatus")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JiraType")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("JiraUpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Priority")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Reporter")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Resolution")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ResolutionDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SecurityLevel")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("Votes")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("VulnId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VulnId");
+
+                    b.ToTable("Jira");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.JiraComments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Author")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("GroupLevel")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("JiraId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("JiraIdComment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleLevel")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UpdateAuthor")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JiraId");
+
+                    b.ToTable("JiraComments");
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Log", b =>
@@ -705,6 +826,9 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Impact")
                         .HasColumnType("text");
 
+                    b.Property<bool>("JiraCreated")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -999,6 +1123,34 @@ namespace Cervantes.DAL.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.Jira", b =>
+                {
+                    b.HasOne("Cervantes.CORE.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("Cervantes.CORE.Vuln", "Vuln")
+                        .WithMany()
+                        .HasForeignKey("VulnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Vuln");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.JiraComments", b =>
+                {
+                    b.HasOne("Cervantes.CORE.Jira", "Jira")
+                        .WithMany()
+                        .HasForeignKey("JiraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Jira");
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Note", b =>

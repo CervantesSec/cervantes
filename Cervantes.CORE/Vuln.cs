@@ -115,4 +115,9 @@ public class Vuln
     /// Vuln Remediation Priority
     /// </summary>
     public RemediationPriority RemediationPriority { get; set; }
+    
+    /// <summary>
+    /// Vuln have a Jira Ticket
+    /// </summary>
+    public bool JiraCreated { get; set; }
 }

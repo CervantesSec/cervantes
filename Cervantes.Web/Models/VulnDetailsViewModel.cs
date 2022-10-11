@@ -19,4 +19,7 @@ public class VulnDetailsViewModel
     public Visibility Visibility { get; set; }
     
     public bool JiraEnabled { get; set; }
+    
+    public Jira Jira { get; set; }
+    public IEnumerable<JiraComments> JiraComments { get; set; }
 }

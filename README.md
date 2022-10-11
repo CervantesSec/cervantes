@@ -91,7 +91,19 @@ git clone https://github.com/CervantesSec/cervantes.git
     "SmtpPort": 1025,
     "SmtpUsername": "cervantes@cervantes.local",
     "SmtpPassword": "cervantes"
-    }
+    },
+    "JiraConfiguration": {
+    "Enabled": false,
+    "Auth": "Basic",
+    "Url": "",
+    "Project": "",
+    "User": "",
+    "Password": "",
+    "ConsumerKey": "",
+    "ConsumerSecret": "",
+    "AccessToken": "",
+    "TokenSecret": ""
+  }
 }
 ```
 

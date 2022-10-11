@@ -30,11 +30,14 @@ public class VulnController : Controller
     private readonly IHostingEnvironment _appEnvironment;
     private readonly ILogger<VulnController> _logger = null;
     private IJIraService jiraService = null;
+    private IJiraManager jiraManager = null;
+    private IJiraCommentManager jiraCommentManager = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
-        IVulnAttachmentManager vulnAttachmentManager, IHostingEnvironment _appEnvironment, IJIraService jiraService)
+        IVulnAttachmentManager vulnAttachmentManager, IHostingEnvironment _appEnvironment, IJIraService jiraService,
+        IJiraManager jiraManager, IJiraCommentManager jiraCommentManager)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -46,6 +49,8 @@ public class VulnController : Controller
         this._appEnvironment = _appEnvironment;
         _logger = logger;
         this.jiraService = jiraService;
+        this.jiraManager = jiraManager;
+        this.jiraCommentManager = jiraCommentManager;
     }
 
     // GET: VulnController
@@ -85,22 +90,65 @@ public class VulnController : Controller
     {
         try
         {
-            var model = new VulnDetailsViewModel
+            var jiraEnabled = jiraService.JiraEnabled();
+            if (jiraEnabled == true)
             {
-                Vuln = vulnManager.GetById(id),
-                Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
-                Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
-                Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
-                JiraEnabled = jiraService.JiraEnabled()
-            };
-            return View(model);
+                var vuln = vulnManager.GetById(id);
+                
+                if (vuln.JiraCreated == true)
+                {
+                    var jira = jiraManager.GetByVulnId(id);
+                    //jiraService.Issue(jira.JiraKey);
+                    
+                    var model = new VulnDetailsViewModel
+                    {
+                        Vuln = vuln,
+                        Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
+                        Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
+                        Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
+                        JiraEnabled = jiraService.JiraEnabled(),
+                        Jira = jira,
+                        JiraComments = jiraCommentManager.GetAll().Where(x => x.JiraId == jira.Id).ToList()
+                
+                    };
+                    return View(model);
+                }
+                else
+                {
+
+                    var model = new VulnDetailsViewModel
+                    {
+                        Vuln = vuln,
+                        Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
+                        Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
+                        Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
+                        JiraEnabled = jiraService.JiraEnabled(),
+
+                    };
+                    return View(model);
+                }
+                
+            }
+            else
+            {
+                var model = new VulnDetailsViewModel
+                {
+                    Vuln = vulnManager.GetById(id),
+                    Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
+                    Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
+                    Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
+                    JiraEnabled = jiraService.JiraEnabled(),
+                };
+                return View(model);
+            }
+            
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading vuln!";
+            TempData["errorDetails"] = "Error loading vuln!";
             _logger.LogError(e, "An error ocurred loading Vuln Details. Vuln: {0} User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index","Vuln");
         }
     }
 
@@ -672,9 +720,26 @@ public class VulnController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult CreateIssueJira(IFormCollection form)
     {
-        var vuln = form["vulnId"];
-        jiraService.CreateIssue(form["vulnId"]);
-        return RedirectToAction("Details", "Vuln", new {id = vuln});
+        try
+        {
+            var vulnId = Guid.Parse(form["vulnId"]);
+            jiraService.CreateIssue(vulnId, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var vuln = vulnManager.GetById(vulnId);
+            vuln.JiraCreated = true;
+            vulnManager.Context.SaveChanges();
+            return RedirectToAction("Details", "Vuln", new {id = vulnId});
+        }
+        catch (Exception e)
+        {
+            var vuln = vulnManager.GetById(Guid.Parse(form["vulnId"]));
+            vuln.JiraCreated = false;
+            vulnManager.Context.SaveChanges();
+            TempData["errorCreateJira"] = "Error editing vuln!";
+            _logger.LogError(e, "An error ocurred creating Jira Issue on Vuln {0} User {1}", form["vulnId"],
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
+        }
+        
 
     }
 }

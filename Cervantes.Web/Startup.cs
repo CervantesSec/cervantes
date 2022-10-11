@@ -92,6 +92,8 @@ public class Startup
         services.AddScoped<INmapParser, NmapParser>();
         services.AddSingleton<IJiraConfiguration>(Configuration.GetSection("JiraConfiguration").Get<JiraConfiguration>());
         services.AddScoped<IJIraService, JiraService>();
+        services.AddScoped<IJiraManager, JiraManager>();
+        services.AddScoped<IJiraCommentManager, JiraCommentManager>();
 
 
 
