@@ -444,10 +444,10 @@
                         <input asp-for="@Model.Vuln.Id" type="hidden" id="vulnId" name="vulnId"/>
                             
                         <div class="form-group">
-                            <label class="control-label" localize-content>Visibility</label>
-                            @Html.DropDownListFor(model => model.TargetId, @Model.TargetList, new {@class = "form-control"})
+                            <label asp-for="TargetId" class="control-label" localize-content>Target</label><br/>
+                            @Html.DropDownListFor(model => model.TargetId, @Model.TargetList, new {@class = "form-control targets", @multiple = "multiple", @style="width: 100%"})
                         </div>
-    
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" localize-content>Close</button>
@@ -971,8 +971,11 @@
 
 </section>
 
-
+@section Styles{
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet">
+}
 @section Scripts{
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
     <script>
 
     $(document).ready(function () {
@@ -990,7 +993,13 @@
 
          $(document).ready(function () {
   bsCustomFileInput.init();
+  
 });
+         
+         $(document).ready(function() {
+                          $('.targets').select2();
+                         
+                  });
 
 </script>
 }

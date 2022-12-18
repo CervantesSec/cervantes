@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using Cervantes.IFR.Parsers.Nmap;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -560,7 +563,7 @@ public class TargetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Import(Guid project,TargetImportViewModel model)
+    public IActionResult ImportNmap(Guid project,TargetImportViewModel model)
     {
         try
         {
@@ -629,6 +632,116 @@ public class TargetController : Controller
 
                 nmapParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier), attachment.FilePath);
                 TempData["fileImported"] = "file imported";
+                return RedirectToAction("Index", "Target", new {project = project});
+
+            }
+
+            return RedirectToAction("Index", "Target", new {project = project});
+        }
+        catch (Exception e)
+        {
+            TempData["errorImporting"] = "Error deleting service!";
+            _logger.LogError(e, "An error ocurred importing Targets: Project: {0} User: {1}", project,
+               User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Import", "Target", new {project = project});
+        }
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult ImportCSV(Guid project,TargetImportViewModel model)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(model.Project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces", new {area = ""});
+            }
+
+            var upload = Request.Form.Files["upload"];
+            if (upload != null)
+            {
+
+                var file = upload;
+
+                var Inspector = new ContentInspectorBuilder()
+                {
+                    Definitions = MimeDetective.Definitions.Default.FileTypes.Text.All()
+                }.Build();
+
+                var Results = Inspector.Inspect(file.OpenReadStream());
+
+                if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                {
+                    TempData["fileNotPermitted"] = "User is not in the project";
+                    TargetImportViewModel modelError = new TargetImportViewModel
+                    {
+                        Project = project
+                    };
+                    return View("Import", modelError);
+                }
+
+
+
+                var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Project/" + project + "/");
+                var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
+
+                if (Directory.Exists(uploads))
+                {
+                    using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(uploads);
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+
+                var attachment = new ProjectAttachment
+                {
+                    Name = "CSV Upload",
+                    ProjectId = model.Project,
+                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    FilePath = "/Attachments/Project/" + project + "/" + uniqueName
+                };
+
+                projectAttachmentManager.Add(attachment);
+                projectAttachmentManager.Context.SaveChanges();
+                var path = _appEnvironment.WebRootPath+ attachment.FilePath;
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    Delimiter = ";"
+                };
+                using (var reader = new StreamReader(path))
+                using (var csv = new CsvReader(reader, config))
+                {
+                    
+                    var records = csv.GetRecords<TargetImportCsv>();
+                    
+                    foreach (var tar in records)
+                    {
+                        Target target = new Target();
+                        target.Name = tar.Name;
+                        target.ProjectId = model.Project;
+                        target.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        target.Description = tar.Description;
+                        target.Type = tar.Type;
+                        targetManager.Add(target);
+                        targetManager.Context.SaveChanges();
+                    }
+
+                    
+                }
+                
+                TempData["fileImportedCSV"] = "file imported";
                 return RedirectToAction("Index", "Target", new {project = project});
 
             }

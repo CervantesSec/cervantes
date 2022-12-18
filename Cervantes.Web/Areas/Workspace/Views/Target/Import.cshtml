@@ -37,7 +37,10 @@
                     <li class="breadcrumb-item">
                         <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
                     </li>
-                    <li class="breadcrumb-item active" localize-content>Restore</li>
+                    <li class="breadcrumb-item" localize-content>Workspace</li>
+                    <li class="breadcrumb-item" localize-content>Target</li>
+                    <li class="breadcrumb-item active" localize-content>Import</li>
+                    
                 </ol>
             </div>
         </div>
@@ -49,15 +52,17 @@
 <section class="content">
     
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
 
-                    <h3><i class="fas fa-file-import"></i> Import Targets</h3>
+                    <h3><i class="fas fa-file-code"></i> Nmap</h3>
                     <p>Import your targets from nmap scan</p>
+                    <p>Select your Nmap XML file </p>
+
                 
                     <div class="text-center">
-                        <form asp-area="Workspace" asp-controller="Target" asp-action="Import" asp-route-project="@Model.Project" method="post" enctype="multipart/form-data">
+                        <form asp-area="Workspace" asp-controller="Target" asp-action="ImportNmap" asp-route-project="@Model.Project" method="post" enctype="multipart/form-data">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <input type="hidden" id="project" name="project" value="@Model.Project">
@@ -79,6 +84,41 @@
                 
             </div>
         </div>
+        
+        <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+        
+                            <h3><i class="fas fa-file-import"></i> CSV Import</h3>
+                            <p>Import your targets from nmap a csv</p>
+                            <p>Download the CSV template from 
+                                <a href="@Url.Content("/Attachments/Templates/TargetTemplate.csv")" target="_blank">
+                                     here <i class="fas fa-download"></i>
+                                </a>
+                                </p>
+                            <div class="text-center">
+                                <form asp-area="Workspace" asp-controller="Target" asp-action="ImportCSV" asp-route-project="@Model.Project" method="post" enctype="multipart/form-data">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <input type="hidden" id="project" name="project" value="@Model.Project">
+                                        <label for="upload" localize-content>Select CSV File</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="upload" name="upload" accept="application/vnd.ms-excel, text/csv">
+                                                <label class="custom-file-label" for="upload" localize-content>Choose File</label>
+                                            </div>
+        
+                                        </div>
+        
+                                    </div>
+        
+                                    <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Upload</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
         
     </div>
     

@@ -34,21 +34,21 @@
         <form asp-area="Workspace" asp-controller="Vuln" asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="card">
-                <div class="card-header p-2">
-                    <ul class="nav nav-pills">
+            <div class="card card-dark card-tabs">
+                <div class="card-header p-0 pt-1">
+                    <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#details" data-toggle="tab">
+                            <a class="nav-link active" href="#details" data-toggle="pill">
                                 <span localize-content>Details</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#poc" data-toggle="tab">
+                            <a class="nav-link" href="#poc" data-toggle="pill">
                                 <span localize-content>Exploitation</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#remediation" data-toggle="tab">
+                            <a class="nav-link" href="#remediation" data-toggle="pill">
                                 <span localize-content>Remediation</span>
                             </a>
                         </li>

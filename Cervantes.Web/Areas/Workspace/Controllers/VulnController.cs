@@ -998,6 +998,7 @@ public class VulnController : Controller
         }
     }
     
+    
     [HttpPost]
     public IActionResult AddTarget(Guid project,IFormCollection form)
     {
@@ -1012,25 +1013,32 @@ public class VulnController : Controller
             if (form != null)
             {
 
-               var result = vulnTargetManager.GetAll().Where(x => x.TargetId == Guid.Parse(form["TargetId"]) && x.VulnId == Guid.Parse(form["vulnId"])).FirstOrDefault();
-                if (result != null)
+                foreach (var target in form["TargetId"])
                 {
-                    TempData["targetExists"] = "exists";
-                    return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
+
+                    var result = vulnTargetManager.GetAll().Where(x =>
+                            x.TargetId == Guid.Parse(target) && x.VulnId == Guid.Parse(form["vulnId"]))
+                        .FirstOrDefault();
+                    if (result != null)
+                    {
+                        TempData["targetExists"] = "exists";
+                        return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
+                    }
+
+                    var tar = new VulnTargets
+                    {
+                        TargetId = Guid.Parse(target),
+                        VulnId = Guid.Parse(form["vulnId"]),
+
+                    };
+
+                    vulnTargetManager.Add(tar);
+                    vulnTargetManager.Context.SaveChanges();
+                    _logger.LogInformation("User: {0} Added new target: {1} on Vuln: {2}",
+                        User.FindFirstValue(ClaimTypes.Name), tar.Id, form["vulnId"]);
                 }
                 
-                var tar = new VulnTargets
-                {
-                    TargetId = Guid.Parse(form["TargetId"]),
-                    VulnId = Guid.Parse(form["vulnId"]),
-                    
-                };
-
-                vulnTargetManager.Add(tar);
-                vulnTargetManager.Context.SaveChanges();
                 TempData["addedTarget"] = "added";
-                _logger.LogInformation("User: {0} Added new target: {1} on Vuln: {2}",
-                    User.FindFirstValue(ClaimTypes.Name), tar.Id, form["vulnId"]);
                 return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
             else
