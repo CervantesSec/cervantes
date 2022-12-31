@@ -2,8 +2,9 @@
 
 [![GITHUB](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/CervantesSec)
 [![TWITTER](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/Cervantes_Sec)
+[![WEB](https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white)](https://www.cervantessec.org)
 [![DISCORD](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/BvzNjT3Qzc)
-[![DOCS](https://img.shields.io/badge/-DOCS-success?style=for-the-badge&logo=readthedocs&logoColor=white)](https://cervantessec.github.io/docs/)
+[![DOCS](https://img.shields.io/badge/-DOCS-success?style=for-the-badge&logo=readthedocs&logoColor=white)](https://docs.cervantessec.org/)
 
 Cervantes is an opensource collaborative platform for pentesters or red teams who want to save time to manage their projects, clients, vulnerabilities and reports in one place.
 
@@ -16,12 +17,24 @@ Cervantes is an opensource collaborative platform for pentesters or red teams wh
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
+## Try Cervantes 
+
+There is a live demo running on [http://demo.cervantessec.org](http://demo.cervantessec.org).
+
+The demo server has 3 users to show the different permission levels. The credentials for these users are:
+
+| Username              | Password      | Role          |
+|-----------------------|---------------|---------------|
+| admin@cervantes.local | Admin123.     | Administrator |
+| su@cervantes.local    | SuperUser123. | SuperUser     |
+| user@cervantes.local  | User123.      | User          |
+
 ## Features
 * OpenSource
 * Multiplatform
 * Multilanguage
 * Team Collaboration
-* BuiltIn dashbaords and analytics
+* BuiltIn dashboards and analytics
 * Manage your clients and Offensive Security projects
 * One click reports creation
 * And more
@@ -132,6 +145,11 @@ Here are some things you could do to become a contributor:
 - Report security issues
 
 Before you jump to make any changes make sure you have read the [contributing guidelines](CONTRIBUTING.md). This would save us all time. Thanks!
+
+
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=YS42VF2N9GANA)
+
 
 ## How to report bugs
 
