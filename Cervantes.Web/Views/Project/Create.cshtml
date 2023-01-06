@@ -88,6 +88,14 @@
                             <span asp-validation-for="ProjectType" class="text-danger"></span>
 
                         </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="Language" class="control-label" localize-content>Score Type</label>
+                            @Html.DropDownListFor(model => model.Score, Html.GetEnumSelectList<Score>(), new {@class = "form-control"})
+                            <span asp-validation-for="Score" class="text-danger"></span>
+                                                
+                        </div>
+                        
 
                         <div class="form-group">
                             <a class="btn btn-default" asp-action="Index" localize-content>Back</a>

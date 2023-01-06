@@ -88,4 +88,10 @@ public class ProjectViewModel
     /// </summary>
     [Required]
     public Language Language { get; set; }
+    
+    /// <summary>
+    /// Project Score
+    /// </summary>
+    [Required]
+    public Score Score { get; set; }
 }

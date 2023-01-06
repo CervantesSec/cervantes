@@ -280,7 +280,8 @@ public class ProjectController : Controller
                 Status = model.Status,
                 Template = model.Template,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                Language = model.Language
+                Language = model.Language,
+                Score = model.Score
             };
             projectManager.Add(project);
             projectManager.Context.SaveChanges();

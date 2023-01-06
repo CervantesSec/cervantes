@@ -619,6 +619,7 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var result = vulnManager.GetById(id);
+            result.Id = new Guid();
             result.Name = model.Name;
             result.Template = model.Template;
             result.cve = model.cve;

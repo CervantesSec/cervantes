@@ -383,7 +383,7 @@
     </ul>
 </li>
 
-@if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+@if (User.IsInRole("Admin"))
 {
  <li class="nav-header">ADMIN</li>
         <li class="nav-item">
@@ -479,6 +479,35 @@
 
             </ul>
         </li>
+}
+@if (User.IsInRole("SuperUser"))
+{
+    <li class="nav-header">ADMIN</li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" localize-content>
+            <i class="nav-icon fas fa-file-word"></i>
+            <p>
+                <span localize-content>Report Templates</span><i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-controller="Report" asp-action="Templates" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p localize-content>Templates</p>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a asp-controller="Report" asp-action="CreateTemplate" asp-route-culture="@culture" class="nav-link">
+                    <i class="fas fa-plus nav-icon"></i>
+                    <p localize-content>Create Template</p>
+            
+                </a>
+            </li>
+            
+        </ul>
+    </li>
 }
 </ul>
 </nav>

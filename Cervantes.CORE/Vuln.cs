@@ -120,4 +120,9 @@ public class Vuln
     /// Vuln have a Jira Ticket
     /// </summary>
     public bool JiraCreated { get; set; }
+    
+    public string OWASPRisk { get; set; }
+    public string OWASPScore { get; set; }
+    public string OWASPLikehood { get; set; }
+    public string OWASPVector { get; set; }
 }

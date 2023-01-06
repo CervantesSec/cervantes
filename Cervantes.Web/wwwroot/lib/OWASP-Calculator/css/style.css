@@ -1,0 +1,46 @@
+/* IMPORTS ----------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {box-sizing: border-box;}
+
+.classCritical { color: #FFFFFF; background-color: rgb(255, 102, 255, 0.5); font-weight: bold; border: 3px solid #FF66FF; border-radius: 5px;}
+.classHigh { color: #FFFFFF; background-color: rgba(255, 0, 0, 0.5); font-weight: bold; border: 3px solid #FF0000; border-radius: 5px;}
+.classMedium { color: #000000; background-color: rgba(255, 169, 0, 0.5); font-weight: bold; border: 3px solid #FFA900; border-radius: 5px;}
+.classLow { color: #000000; background-color: rgba(255, 255, 0, 0.5); font-weight: bold; border: 3px solid #FFFF00; border-radius: 5px;}
+.classNote { color: #000000; background-color: rgba(144, 238, 144, 0.5); font-weight: bold; border: 3px solid #90EE90; border-radius: 5px;}
+
+.risk{width: 400px; margin: 0 auto;}
+.riskChart {margin-bottom: 10px;}
+
+h1 {font-weight: bold;}
+section {padding: 10px;}
+.row {display: flex;}
+.row > section {flex: 1;}
+.nomargin {margin: 0;}
+
+/*
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Poppins', sans-serif;
+	padding: 0px;
+	margin: 0;
+	min-height: 100vh;
+	font-size: 14px;
+}
+*/
+
+main {
+	max-width: 1200px;
+  margin: auto;
+  width: 1200px;
+  text-align: center;
+}
+
+/* MEDIA QUERIES ----------------------- */
+@media screen and (max-width: 576px) {
+	.row {
+		flex-direction: column;
+	}
+}

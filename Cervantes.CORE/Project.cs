@@ -79,4 +79,9 @@ public class Project
     /// Project Language
     /// </summary>
     public Language Language { get; set; }
+    
+    /// <summary>
+    /// Project Scoreing type
+    /// </summary>
+    public Score Score { get; set; }
 }
