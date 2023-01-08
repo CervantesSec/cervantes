@@ -39,17 +39,17 @@
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
                             <a class="nav-link active" href="#details" data-toggle="pill">
-                                <span localize-content>Details</span>
+                              <i class="fas fa-eye"></i> <span localize-content>Details</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#poc" data-toggle="pill">
-                                <span localize-content>Exploitation</span>
+                              <i class="fas fa-bug"></i> <span localize-content>Exploitation</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#remediation" data-toggle="pill">
-                                <span localize-content>Remediation</span>
+                              <i class="fas fa-tools"></i> <span localize-content>Remediation</span>
                             </a>
                         </li>
                     </ul>
@@ -113,8 +113,13 @@
                           </div>
                         }
                         
-                        @*@if (Model.Project.Score == Score.OWASP)
+                        @if (Model.Project.Score == Score.OWASP)
                         {
+                          <input type="hidden" asp-for="OwaspVector" id="OwaspVector" class="form-control" rows="4"></input>
+                          <input type="hidden" asp-for="OwaspRisk" id="OwaspRisk" class="form-control" rows="4"></input>
+                          <input type="hidden" asp-for="OwaspLikehood" id="OwaspLikehood" class="form-control" rows="4"></input>
+                          <input type="hidden" asp-for="OwaspImpact" id="OwaspImpact" class="form-control" rows="4"></input>
+
                           <div class="form-group">
                           <label>OWASP Risk Calculator</label>
                           <section>
@@ -269,7 +274,7 @@
                               <div class="row">
                                 <div class="h6 nomargin col-4 d-flex align-items-center" title="How likely is an exploit to be detected?">Intrusion detection</div>
                                 <div class="col-8">
-                                  <select class="form-control" aria-label=".form-select-sm example" id="id" name="id" onchange="calculate()">
+                                  <select class="form-control" aria-label=".form-select-sm example" id="idt" name="idt" onchange="calculate()">
                                     <option value="1">Active detection in application (1)</option>
                                     <option value="3">Logged and reviewed (3)</option>
                                     <option value="8">Logged without review (8)</option>
@@ -348,16 +353,16 @@
                             <div>
                               <b>VECTOR: </b><a id="score" href="#" target="_blank">(SL:1/M:1/O:0/S:2/ED:1/EE:1/A:1/ID:2/LC:2/LI:1/LAV:1/LAC:1/FD:1/RD:1/NC:2/PV:3)</a>
                               <br>
-                              <a href="#exampleModalCenter" data-toggle="modal">How is Severity Risk caculated?</a>
+                              <a href="#scoreModalCenter" data-toggle="modal">How is Severity Risk caculated?</a>
                             </div>
                           </section>
 
                           <!-- MODAL -->
-                          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                          <div class="modal fade" id="scoreModalCenter" tabindex="-1" role="dialog" aria-labelledby="scoreModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLongTitle">How is Severity Risk caculated?</h5>
+                                  <h5 class="modal-title" id="scoreModalLongTitle">How is Severity Risk caculated?</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
@@ -442,7 +447,7 @@
                           </div>
 
                           </div>
-                        }*@
+                        }
                             
                             
                             

@@ -2,7 +2,7 @@
 @model Cervantes.Web.Areas.Workspace.Models.VulnViewModel
 
 @{
-    ViewData["Title"] = "Vulnerabilities";
+    ViewData["Title"] = "Vulnerabilities Templates";
 }
 @{
     if (TempData["deleted"] != null)
@@ -118,177 +118,178 @@
     <div class="card">
         <div class="card-body">
 
-
-            <!--Table-->
-            <table id="vulnResults" class="table table-bordered table-hover" width="100%">
-                <!--Table head-->
-                <thead class="thead-dark">
-                <tr>
-                    <th>
-                        <i class="fas fa-bug"></i> <span localize-content>Name</span>
-                    </th>
-                    <th>
-                        <i class="fas fa-virus"></i> <span localize-content>CVE</span>
-                    </th>
-                    <th>
-                        <i class="fas fa-radiation-alt"></i> <span localize-content>CVSS3 Score</span>
-                    </th>
-                    <th>
-                        <i class="fas fa-biohazard"></i> <span localize-content>Risk</span>
-                    </th>
-                    <th>
-                        <i class="fas fa-tasks"></i> <span localize-content>Status</span>
-                    </th>
-                    <th>
-                        <i class="fas fa-project-diagram"></i> <span localize-content>Category</span>
-                    </th>
-                    <th>
-                        <i class="fas fa-calendar"></i> <span localize-content>Created Date</span>
-                    </th>
-                    <th>
-                        <i class="fas fa-cog"></i> <span localize-content>Options</span>
-                    </th>
-                </tr>
-                </thead>
-                <!--Table head-->
-                <!--Table body-->
-                <tbody>
-
-                @foreach (var vuln in Model.Vulns)
-                {
+            @if (Model.Project.Score == Score.CVSS)
+            {
+                <!--Table-->
+                <table id="vulnResults" class="table table-bordered table-hover" width="100%">
+                    <!--Table head-->
+                    <thead class="thead-dark">
                     <tr>
-                        <td>@vuln.Name</td>
-                        <td>@vuln.cve</td>
-                        @if (@vuln.CVSS3 <= 2)
-                        {
-                            <td>
-                                <span class="badge badge-info">
-                                    <i class="fas fa-info-circle"></i> @vuln.CVSS3
-                                </span>
-                            </td>
-                        }
-                        else if (vuln.CVSS3 > 2 && vuln.CVSS3 <= 4)
-                        {
-                            <td>
-                                <span class="badge badge-success">
-                                    <i class="fas fa-exclamation"></i> @vuln.CVSS3
-                                </span>
-                            </td>
-                        }
-                        else if (vuln.CVSS3 > 4 && vuln.CVSS3 <= 6)
-                        {
-                            <td>
-                                <span class="badge badge-warning">
-                                    <i class="fas fa-exclamation"></i> @vuln.CVSS3
-                                </span>
-                            </td>
-                        }
-                        else if (vuln.CVSS3 > 6 && vuln.CVSS3 <= 8)
-                        {
-                            <td>
-                                <span class="badge badge-danger">
-                                    <i class="fas fa-exclamation-circle"></i> @vuln.CVSS3
-                                </span>
-                            </td>
-                        }
-                        else if (vuln.CVSS3 > 8 && vuln.CVSS3 < 11)
-                        {
-                            <td>
-                                <span class="badge badge-danger">
-                                    <i class="fas fa-exclamation-triangle"></i> @vuln.CVSS3
-                                </span>
-                            </td>
-                        }
-                        @switch (@vuln.Risk)
-                        {
-                            case VulnRisk.Info:
+                        <th>
+                            <i class="fas fa-bug"></i> <span localize-content>Name</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-virus"></i> <span localize-content>CVE</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-radiation-alt"></i> <span localize-content>CVSS3 Score</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-biohazard"></i> <span localize-content>Risk</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-tasks"></i> <span localize-content>Status</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-project-diagram"></i> <span localize-content>Category</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-calendar"></i> <span localize-content>Created Date</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <!--Table head-->
+                    <!--Table body-->
+                    <tbody>
+
+                    @foreach (var vuln in Model.Vulns)
+                    {
+                        <tr>
+                            <td>@vuln.Name</td>
+                            <td>@vuln.cve</td>
+                            @if (@vuln.CVSS3 <= 2)
+                            {
                                 <td>
                                     <span class="badge badge-info">
-                                        <i class="fas fa-info-circle"></i> @vuln.Risk
+                                        <i class="fas fa-info-circle"></i> @vuln.CVSS3
                                     </span>
                                 </td>
-                                break;
-                            case VulnRisk.Low:
+                            }
+                            else if (vuln.CVSS3 > 2 && vuln.CVSS3 <= 4)
+                            {
                                 <td>
                                     <span class="badge badge-success">
-                                        <i class="fas fa-exclamation"></i> @vuln.Risk
+                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3
                                     </span>
                                 </td>
-                                break;
-                            case VulnRisk.Medium:
+                            }
+                            else if (vuln.CVSS3 > 4 && vuln.CVSS3 <= 6)
+                            {
                                 <td>
                                     <span class="badge badge-warning">
-                                        <i class="fas fa-exclamation"></i> @vuln.Risk
+                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3
                                     </span>
                                 </td>
-                                break;
-                            case VulnRisk.High:
+                            }
+                            else if (vuln.CVSS3 > 6 && vuln.CVSS3 <= 8)
+                            {
                                 <td>
                                     <span class="badge badge-danger">
-                                        <i class="fas fa-exclamation-circle"></i> @vuln.Risk
+                                        <i class="fas fa-exclamation-circle"></i> @vuln.CVSS3
                                     </span>
                                 </td>
-                                break;
-                            case VulnRisk.Critical:
+                            }
+                            else if (vuln.CVSS3 > 8 && vuln.CVSS3 < 11)
+                            {
                                 <td>
                                     <span class="badge badge-danger">
-                                        <i class="fas fa-exclamation-triangle"></i> @vuln.Risk
+                                        <i class="fas fa-exclamation-triangle"></i> @vuln.CVSS3
                                     </span>
                                 </td>
-                                break;
-                            default:
-                                <td>
-                                    <span class="badge badge-light">@vuln.Risk</span>
-                                </td>
-                                break;
-                        }
-                        @switch (vuln.Status)
-                        {
-                            case VulnStatus.Open:
-                                <td>
-                                    <span class="badge badge-info">@vuln.Status</span>
-                                </td>
-                                break;
-                            case VulnStatus.Confirmed:
-                                <td>
-                                    <span class="badge badge-danger">@vuln.Status</span>
-                                </td>
-                                break;
-                            case VulnStatus.Accepted:
-                                <td>
-                                    <span class="badge badge-warning">@vuln.Status</span>
-                                </td>
-                                break;
-                            case VulnStatus.Resolved:
-                                <td>
-                                    <span class="badge badge-success">@vuln.Status</span>
-                                </td>
-                                break;
-                            case VulnStatus.OutOfScope:
-                                <td>
-                                    <span class="badge badge-indigo">@vuln.Status</span>
-                                </td>
-                                break;
-                            case VulnStatus.Invalid:
-                                <td>
-                                    <span class="badge badge-gray">@vuln.Status</span>
-                                </td>
-                                break;
-                            default:
-                                <td>
-                                    <span class="badge badge-light">@vuln.Status</span>
-                                </td>
-                                break;
-                        }
-                        <td>@vuln.VulnCategory.Name</td>
-                        <td>@vuln.CreatedDate.ToShortDateString()</td>
-                        <td>
+                            }
+                            @switch (@vuln.Risk)
+                            {
+                                case VulnRisk.Info:
+                                    <td>
+                                        <span class="badge badge-info">
+                                            <i class="fas fa-info-circle"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                case VulnRisk.Low:
+                                    <td>
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-exclamation"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                case VulnRisk.Medium:
+                                    <td>
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-exclamation"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                case VulnRisk.High:
+                                    <td>
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-exclamation-circle"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                case VulnRisk.Critical:
+                                    <td>
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-exclamation-triangle"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                default:
+                                    <td>
+                                        <span class="badge badge-light">@vuln.Risk</span>
+                                    </td>
+                                    break;
+                            }
+                            @switch (vuln.Status)
+                            {
+                                case VulnStatus.Open:
+                                    <td>
+                                        <span class="badge badge-info">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.Confirmed:
+                                    <td>
+                                        <span class="badge badge-danger">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.Accepted:
+                                    <td>
+                                        <span class="badge badge-warning">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.Resolved:
+                                    <td>
+                                        <span class="badge badge-success">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.OutOfScope:
+                                    <td>
+                                        <span class="badge badge-indigo">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.Invalid:
+                                    <td>
+                                        <span class="badge badge-gray">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                default:
+                                    <td>
+                                        <span class="badge badge-light">@vuln.Status</span>
+                                    </td>
+                                    break;
+                            }
+                            <td>@vuln.VulnCategory.Name</td>
+                            <td>@vuln.CreatedDate.ToShortDateString()</td>
+                            <td>
                                 <a asp-area="Workspace" asp-controller="Vuln" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" class="btn btn-tool">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a asp-area="Workspace" asp-controller="Vuln" asp-action="Template" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" class="btn btn-tool">
                                     <i class="fas fa-clone"></i>
-                                    </a>
+                                </a>
                                 <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vuln" asp-action="TemplateEdit" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" localize-content>
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -298,13 +299,256 @@
                             </td>
 
 
-                    </tr>
-                }
+                        </tr>
+                    }
 
-                </tbody>
-                <!--Table body-->
-            </table>
-            <!--Table-->
+                    </tbody>
+                    <!--Table body-->
+                </table>
+                <!--Table-->
+            }
+            @if (Model.Project.Score == Score.OWASP)
+            {
+                                <!--Table-->
+                <table id="vulnResults" class="table table-bordered table-hover" width="100%">
+                    <!--Table head-->
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            <i class="fas fa-bug"></i> <span localize-content>Name</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-virus"></i> <span localize-content>CVE</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-radiation-alt"></i> <span localize-content>OWASP Risk</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-radiation-alt"></i> <span localize-content>OWASP LikeHood</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-radiation-alt"></i> <span localize-content>OWASP Impact</span>
+                        </th>
+                        
+                        <th>
+                            <i class="fas fa-biohazard"></i> <span localize-content>Risk</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-tasks"></i> <span localize-content>Status</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-project-diagram"></i> <span localize-content>Category</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-calendar"></i> <span localize-content>Created Date</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-user"></i> <span localize-content>Created by</span>
+                        </th>
+                        <th>
+                            <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <!--Table head-->
+                    <!--Table body-->
+                    <tbody>
+
+                    @foreach (var vuln in Model.Vulns)
+                    {
+                        <tr>
+                            <td>@vuln.Name</td>
+                            <td>@vuln.cve</td>
+                            @if (@vuln.OWASPRisk == "NOTE")
+                            {
+                                <td>
+                                    <span class="badge badge-info">
+                                        <i class="fas fa-info-circle"></i> @vuln.OWASPRisk
+                                    </span>
+                                </td>
+                            }
+                            else if (@vuln.OWASPRisk == "LOW")
+                            {
+                                <td>
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-exclamation"></i> @vuln.OWASPRisk
+                                    </span>
+                                </td>
+                            }
+                            else if (@vuln.OWASPRisk == "MEDIUM")
+                            {
+                                <td>
+                                    <span class="badge badge-warning">
+                                        <i class="fas fa-exclamation"></i> @vuln.OWASPRisk
+                                    </span>
+                                </td>
+                            }
+                            else if (@vuln.OWASPRisk == "HIGH")
+                            {
+                                <td>
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-exclamation-circle"></i> @vuln.OWASPRisk
+                                    </span>
+                                </td>
+                            }
+                            else if (@vuln.OWASPRisk == "CRITICAL")
+                            {
+                                <td>
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-exclamation-triangle"></i> @vuln.OWASPRisk
+                                    </span>
+                                </td>
+                            }
+                            else if (@vuln.OWASPRisk == null)
+                            {
+                                <td>
+                                    No Data
+                                </td>
+                                                            
+                            }
+
+
+                            <td>
+                                @if (@vuln.OWASPLikehood == null)
+                                {
+                                    <span>No Data</span>
+                                }
+                                else
+                                {
+                                    @vuln.OWASPLikehood
+                                }
+                                
+                            </td>
+                            
+                            <td>
+                                @if (@vuln.OWASPImpact == null)
+                                {
+                                    <span>No Data</span>
+                                }
+                                else
+                                {
+                                    @vuln.OWASPImpact
+                                }
+                                
+                            </td>
+                            
+                            
+                            @switch (@vuln.Risk)
+                            {
+                                case VulnRisk.Info:
+                                    <td>
+                                        <span class="badge badge-info">
+                                            <i class="fas fa-info-circle"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                case VulnRisk.Low:
+                                    <td>
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-exclamation"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                case VulnRisk.Medium:
+                                    <td>
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-exclamation"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                case VulnRisk.High:
+                                    <td>
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-exclamation-circle"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                case VulnRisk.Critical:
+                                    <td>
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-exclamation-triangle"></i> @vuln.Risk
+                                        </span>
+                                    </td>
+                                    break;
+                                default:
+                                    <td>
+                                        <span class="badge badge-light">@vuln.Risk</span>
+                                    </td>
+                                    break;
+                            }
+                            
+                            
+                            
+                            @switch (vuln.Status)
+                            {
+                                case VulnStatus.Open:
+                                    <td>
+                                        <span class="badge badge-info">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.Confirmed:
+                                    <td>
+                                        <span class="badge badge-danger">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.Accepted:
+                                    <td>
+                                        <span class="badge badge-warning">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.Resolved:
+                                    <td>
+                                        <span class="badge badge-success">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.OutOfScope:
+                                    <td>
+                                        <span class="badge badge-indigo">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                case VulnStatus.Invalid:
+                                    <td>
+                                        <span class="badge badge-gray">@vuln.Status</span>
+                                    </td>
+                                    break;
+                                default:
+                                    <td>
+                                        <span class="badge badge-light">@vuln.Status</span>
+                                    </td>
+                                    break;
+                            }
+                            <td>@vuln.VulnCategory.Name</td>
+                            <td>@vuln.CreatedDate.ToShortDateString()</td>
+                            <td>@vuln.User.FullName</td>
+
+                            <td>
+                                <a asp-area="Workspace" asp-controller="Vuln" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" class="btn btn-tool">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                
+                                <a asp-area="Workspace" asp-controller="Vuln" asp-action="Template" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" asp-route-vector="@vuln.OWASPVector" class="btn btn-tool">
+                                    <i class="fas fa-clone"></i>
+                                </a>
+                                
+                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vuln" asp-action="TemplateEdit" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" asp-route-vector="@vuln.OWASPVector" localize-content>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                
+                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vuln" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" localize-content>
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                
+                            </td>
+
+
+                        </tr>
+                    }
+
+                    </tbody>
+                    <!--Table body-->
+                </table>
+                <!--Table-->
+            }
 
         </div>
     </div>

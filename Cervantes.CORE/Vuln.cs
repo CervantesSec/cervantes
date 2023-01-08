@@ -122,7 +122,7 @@ public class Vuln
     public bool JiraCreated { get; set; }
     
     public string OWASPRisk { get; set; }
-    public string OWASPScore { get; set; }
+    public string OWASPImpact { get; set; }
     public string OWASPLikehood { get; set; }
     public string OWASPVector { get; set; }
 }

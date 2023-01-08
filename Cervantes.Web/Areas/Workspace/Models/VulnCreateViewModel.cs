@@ -115,13 +115,11 @@ public class VulnCreateViewModel
     /// <summary>
     /// Vuln CVSS3 Score
     /// </summary>
-    [Required]
     public float CVSS3 { get; set; }
 
     /// <summary>
     /// Vuln CVSS Vector
     /// </summary>
-    [Required]
     public string CVSSVector { get; set; }
 
     /// <summary>
@@ -144,4 +142,9 @@ public class VulnCreateViewModel
 
     public IList<SelectListItem> TargetList { get; set; }
     public IList<SelectListItem> VulnCatList { get; set; }
+    
+    public string OwaspRisk { get; set; }
+    public string OwaspVector { get; set; }
+    public string OwaspLikehood { get; set; }
+    public string OwaspImpact { get; set; }
 }

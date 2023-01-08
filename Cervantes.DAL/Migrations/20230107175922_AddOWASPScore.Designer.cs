@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cervantes.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221222190323_AddOWASPScore")]
+    [Migration("20230107175922_AddOWASPScore")]
     partial class AddOWASPScore
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -835,13 +835,13 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("OWASPImpact")
+                        .HasColumnType("text");
+
                     b.Property<string>("OWASPLikehood")
                         .HasColumnType("text");
 
                     b.Property<string>("OWASPRisk")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OWASPScore")
                         .HasColumnType("text");
 
                     b.Property<string>("OWASPVector")

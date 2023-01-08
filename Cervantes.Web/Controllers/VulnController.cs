@@ -90,10 +90,12 @@ public class VulnController : Controller
     {
         try
         {
+            
             var jiraEnabled = jiraService.JiraEnabled();
             if (jiraEnabled == true)
             {
                 var vuln = vulnManager.GetById(id);
+                var project = projectManager.GetById(vuln.ProjectId);
                 
                 if (vuln.JiraCreated == true)
                 {
@@ -108,7 +110,8 @@ public class VulnController : Controller
                         Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
                         JiraEnabled = jiraService.JiraEnabled(),
                         Jira = jira,
-                        JiraComments = jiraCommentManager.GetAll().Where(x => x.JiraId == jira.Id).ToList()
+                        JiraComments = jiraCommentManager.GetAll().Where(x => x.JiraId == jira.Id).ToList(),
+                        Project = project
                 
                     };
                     return View(model);
@@ -123,6 +126,7 @@ public class VulnController : Controller
                         Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
                         Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
                         JiraEnabled = jiraService.JiraEnabled(),
+                        Project = project
 
                     };
                     return View(model);
@@ -131,13 +135,16 @@ public class VulnController : Controller
             }
             else
             {
+                var vuln = vulnManager.GetById(id);
+                var project = projectManager.GetById(vuln.ProjectId);
                 var model = new VulnDetailsViewModel
                 {
-                    Vuln = vulnManager.GetById(id),
+                    Vuln = vuln,
                     Notes = vulnNoteManager.GetAll().Where(x => x.VulnId == id),
                     Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
                     Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
                     JiraEnabled = jiraService.JiraEnabled(),
+                    Project = project
                 };
                 return View(model);
             }
@@ -153,7 +160,6 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Edit/5
-    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Edit(Guid id)
     {
         try
@@ -184,7 +190,6 @@ public class VulnController : Controller
             foreach (var item in result2)
                 vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
 
-
             var model = new VulnCreateViewModel
             {
                 Name = vulnResult.Name,
@@ -205,7 +210,12 @@ public class VulnController : Controller
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
                 TargetList = targets,
-                VulnCatList = vulnCat
+                VulnCatList = vulnCat,
+                OwaspVector = vulnResult.OWASPVector,
+                OwaspImpact = vulnResult.OWASPImpact,
+                OwaspLikehood = vulnResult.OWASPLikehood,
+                OwaspRisk = vulnResult.OWASPRisk,
+                Project = projectManager.GetById(vulnResult.ProjectId)
             };
 
             return View(model);
@@ -222,7 +232,6 @@ public class VulnController : Controller
     // POST: VulnController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Edit(Guid id, VulnCreateViewModel model)
     {
         try
@@ -231,20 +240,46 @@ public class VulnController : Controller
             sanitizer.AllowedSchemes.Add("data");
 
             var result = vulnManager.GetById(id);
-            result.Name = model.Name;
-            result.Template = model.Template;
-            result.cve = model.cve;
-            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-            result.VulnCategoryId = model.VulnCategoryId;
-            result.Risk = model.Risk;
-            result.Status = model.Status;
-            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
-            result.CVSS3 = model.CVSS3;
-            result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
-            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
-            result.RemediationComplexity = model.RemediationComplexity;
-            result.RemediationPriority = model.RemediationPriority;
+            switch (result.Project.Score)
+            {
+                case Score.CVSS:
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.CVSS3 = model.CVSS3;
+                    result.CVSSVector = model.CVSSVector;
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    break;
+                case Score.OWASP:
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    result.OWASPVector = model.OwaspVector;
+                    result.OWASPRisk = model.OwaspRisk;
+                    result.OWASPImpact = model.OwaspImpact;
+                    result.OWASPLikehood = model.OwaspLikehood;
+                    break;
+                
+            }
 
 
             vulnManager.Context.SaveChanges();
@@ -263,7 +298,6 @@ public class VulnController : Controller
     }
 
     // GET: VulnController/Delete/5
-    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Delete(Guid id)
     {
         try
@@ -282,7 +316,6 @@ public class VulnController : Controller
     // POST: VulnController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize(Roles = "Admin,SuperUser")]
     public ActionResult Delete(Guid id, IFormCollection collection)
     {
         try
@@ -638,11 +671,12 @@ public class VulnController : Controller
             foreach (var item in result2)
                 vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
 
+            var pro = projectManager.GetById(vulnResult.ProjectId);
 
             var model = new VulnCreateViewModel
             {
                 Name = vulnResult.Name,
-                Project = projectManager.GetById(project),
+                Project = pro,
                 ProjectId = project,
                 Template = true,
                 cve = vulnResult.cve,
@@ -659,7 +693,11 @@ public class VulnController : Controller
                 RemediationPriority = vulnResult.RemediationPriority,
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
-                VulnCatList = vulnCat
+                VulnCatList = vulnCat,
+                OwaspImpact = vulnResult.OWASPImpact,
+                OwaspLikehood = vulnResult.OWASPLikehood,
+                OwaspRisk = vulnResult.OWASPRisk,
+                OwaspVector = vulnResult.OWASPVector
             };
 
             return View(model);
@@ -684,21 +722,46 @@ public class VulnController : Controller
             sanitizer.AllowedSchemes.Add("data");
 
             var result = vulnManager.GetById(model.Id);
-            result.Name = model.Name;
-            result.Template = model.Template;
-            result.cve = model.cve;
-            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-            result.VulnCategoryId = model.VulnCategoryId;
-            result.Risk = model.Risk;
-            result.Status = model.Status;
-            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
-            result.CVSS3 = model.CVSS3;
-            result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
-            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
-            result.RemediationComplexity = model.RemediationComplexity;
-            result.RemediationPriority = model.RemediationPriority;
-            result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            switch (result.Project.Score)
+            {
+                case Score.CVSS:
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.CVSS3 = model.CVSS3;
+                    result.CVSSVector = model.CVSSVector;
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    break;
+                case Score.OWASP:
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    result.OWASPVector = model.OwaspVector;
+                    result.OWASPRisk = model.OwaspRisk;
+                    result.OWASPImpact = model.OwaspImpact;
+                    result.OWASPLikehood = model.OwaspLikehood;
+                    break;
+                
+            }
             
             vulnManager.Context.SaveChanges();
             TempData["edited"] = "edited";

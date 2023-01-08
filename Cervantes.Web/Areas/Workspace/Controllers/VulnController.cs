@@ -242,7 +242,9 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces", new {area = ""});
             }
             
+            var projectModel = projectManager.GetById(project);
             if (!ModelState.IsValid)
+                
             {
                 var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
                 {
@@ -268,56 +270,109 @@ public class VulnController : Controller
                 
                 model.TargetList = targets;
                 model.VulnCatList = vulnCat;
-                model.Project = projectManager.GetById(project);
+                model.Project = projectModel;
                 return View(model);
             }
-            
 
-                var vuln = new Vuln
+            switch (projectModel.Score)
+            {
+                case Score.CVSS:
                 {
-                    Name = model.Name,
-                    ProjectId = project,
-                    Template = model.Template,
-                    cve = model.cve,
-                    Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
-                    VulnCategoryId = model.VulnCategoryId,
-                    Risk = model.Risk,
-                    Status = model.Status,
-                    Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact)),
-                    CVSS3 = model.CVSS3,
-                    CVSSVector = model.CVSSVector,
-                    ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept)),
-                    Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation)),
-                    RemediationComplexity = model.RemediationComplexity,
-                    RemediationPriority = model.RemediationPriority,
-                    CreatedDate = DateTime.Now.ToUniversalTime().AddDays(1),
-                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
-                };
-                vulnManager.Add(vuln);
-                vulnManager.Context.SaveChanges();
-
-                if (model.SelectedTargets != null)
-                {
-                    foreach (var tar in model.SelectedTargets)
+                    var vuln = new Vuln
                     {
-                        VulnTargets vulnTargets = new VulnTargets
+                        Name = model.Name,
+                        ProjectId = project,
+                        Template = model.Template,
+                        cve = model.cve,
+                        Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
+                        VulnCategoryId = model.VulnCategoryId,
+                        Risk = model.Risk,
+                        Status = model.Status,
+                        Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact)),
+                        CVSS3 = model.CVSS3,
+                        CVSSVector = model.CVSSVector,
+                        ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept)),
+                        Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation)),
+                        RemediationComplexity = model.RemediationComplexity,
+                        RemediationPriority = model.RemediationPriority,
+                        CreatedDate = DateTime.Now.ToUniversalTime().AddDays(1),
+                        UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                    };
+                    vulnManager.Add(vuln);
+                    vulnManager.Context.SaveChanges();
+
+                    if (model.SelectedTargets != null)
+                    {
+                        foreach (var tar in model.SelectedTargets)
                         {
-                            VulnId = vuln.Id,
-                            TargetId = tar
-                        };
-                        vulnTargetManager.Add(vulnTargets);
+                            VulnTargets vulnTargets = new VulnTargets
+                            {
+                                VulnId = vuln.Id,
+                                TargetId = tar
+                            };
+                            vulnTargetManager.Add(vulnTargets);
+                        }
+
+                        vulnTargetManager.Context.SaveChanges();
                     }
 
-                    vulnTargetManager.Context.SaveChanges();
+                    TempData["added"] = "added";
+                    _logger.LogInformation("User: {0} Created a new Vuln on Project {1}",
+                        User.FindFirstValue(ClaimTypes.Name),
+                        project);
+                    return RedirectToAction(nameof(Index));
                 }
-                
-                TempData["added"] = "added";
-                _logger.LogInformation("User: {0} Created a new Vuln on Project {1}",
-                    User.FindFirstValue(ClaimTypes.Name),
-                    project);
-                return RedirectToAction(nameof(Index));
-            
+                case Score.OWASP:
+                {
+                    var vuln = new Vuln
+                    {
+                        Name = model.Name,
+                        ProjectId = project,
+                        Template = model.Template,
+                        cve = model.cve,
+                        Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
+                        VulnCategoryId = model.VulnCategoryId,
+                        Risk = model.Risk,
+                        Status = model.Status,
+                        Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact)),
+                        ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept)),
+                        Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation)),
+                        RemediationComplexity = model.RemediationComplexity,
+                        RemediationPriority = model.RemediationPriority,
+                        CreatedDate = DateTime.Now.ToUniversalTime().AddDays(1),
+                        UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        OWASPRisk = model.OwaspRisk,
+                        OWASPVector = model.OwaspVector,
+                        OWASPLikehood = model.OwaspLikehood,
+                        OWASPImpact = model.OwaspImpact
+                    };
+                    vulnManager.Add(vuln);
+                    vulnManager.Context.SaveChanges();
 
+                    if (model.SelectedTargets != null)
+                    {
+                        foreach (var tar in model.SelectedTargets)
+                        {
+                            VulnTargets vulnTargets = new VulnTargets
+                            {
+                                VulnId = vuln.Id,
+                                TargetId = tar
+                            };
+                            vulnTargetManager.Add(vulnTargets);
+                        }
+
+                        vulnTargetManager.Context.SaveChanges();
+                    }
+
+                    TempData["added"] = "added";
+                    _logger.LogInformation("User: {0} Created a new Vuln on Project {1}",
+                        User.FindFirstValue(ClaimTypes.Name),
+                        project);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            
+            return RedirectToAction(nameof(Index));
         }
         catch
         {
@@ -361,11 +416,11 @@ public class VulnController : Controller
             foreach (var item in result2)
                 vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
 
-
+            var projectResult = projectManager.GetById(project);
             var model = new VulnCreateViewModel
             {
                 Name = vulnResult.Name,
-                Project = projectManager.GetById(project),
+                Project = projectResult,
                 ProjectId = project,
                 Template = vulnResult.Template,
                 cve = vulnResult.cve,
@@ -382,12 +437,23 @@ public class VulnController : Controller
                 RemediationPriority = vulnResult.RemediationPriority,
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
+                OwaspImpact = vulnResult.OWASPImpact,
+                OwaspLikehood = vulnResult.OWASPLikehood,
+                OwaspVector = vulnResult.OWASPVector,
+                OwaspRisk = vulnResult.OWASPRisk,
                 TargetList = targets,
                 VulnCatList = vulnCat,
                 SelectedTargets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).Select(e => e.Id).ToList()
             };
 
-            return View(model);
+            switch (projectResult.Score)
+            {
+                case Score.OWASP:
+                    return View("Edit",model);
+                    break;
+            }
+            return View("Edit",model);
+            
         }
         catch (Exception e)
         {
@@ -415,23 +481,49 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var result = vulnManager.GetById(id);
-            result.Name = model.Name;
-            result.Template = model.Template;
-            result.cve = model.cve;
-            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-            result.VulnCategoryId = model.VulnCategoryId;
-            result.Risk = model.Risk;
-            result.Status = model.Status;
-            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
-            result.CVSS3 = model.CVSS3;
-            result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
-            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
-            result.RemediationComplexity = model.RemediationComplexity;
-            result.RemediationPriority = model.RemediationPriority;
-            result.CreatedDate = result.CreatedDate;
-
-
+            var pro = projectManager.GetById(project);
+            switch (pro.Score)
+            {
+                case Score.CVSS:
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.CVSS3 = model.CVSS3;
+                    result.CVSSVector = model.CVSSVector;
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    break;
+                case Score.OWASP:
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    result.OWASPVector = model.OwaspVector;
+                    result.OWASPRisk = model.OwaspRisk;
+                    result.OWASPImpact = model.OwaspImpact;
+                    result.OWASPLikehood = model.OwaspLikehood;
+                    break;
+                
+            }
+            
+            
             vulnManager.Context.SaveChanges();
             TempData["edited"] = "edited";
             _logger.LogInformation("User: {0} edited Vuln: {1} on Project {2}", User.FindFirstValue(ClaimTypes.Name),
@@ -588,7 +680,11 @@ public class VulnController : Controller
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
                 TargetList = targets,
-                VulnCatList = vulnCat
+                VulnCatList = vulnCat,
+                OwaspVector = vulnResult.OWASPVector,
+                OwaspImpact = vulnResult.OWASPImpact,
+                OwaspLikehood = vulnResult.OWASPLikehood,
+                OwaspRisk = vulnResult.OWASPRisk
             };
 
             return View(model);
@@ -619,24 +715,49 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var result = vulnManager.GetById(id);
-            result.Id = new Guid();
-            result.Name = model.Name;
-            result.Template = model.Template;
-            result.cve = model.cve;
-            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-            result.VulnCategoryId = model.VulnCategoryId;
-            result.Risk = model.Risk;
-            result.Status = model.Status;
-            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
-            result.CVSS3 = model.CVSS3;
-            result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
-            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
-            result.RemediationComplexity = model.RemediationComplexity;
-            result.RemediationPriority = model.RemediationPriority;
-            result.ProjectId = project;
-            result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            result.CreatedDate = DateTime.Now.ToUniversalTime().AddDays(1);
+             var pro = projectManager.GetById(project);
+            switch (pro.Score)
+            {
+                case Score.CVSS:
+                    result.Id = new Guid();
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.CVSS3 = model.CVSS3;
+                    result.CVSSVector = model.CVSSVector;
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    break;
+                case Score.OWASP:
+                    result.Id = new Guid();
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    result.OWASPVector = model.OwaspVector;
+                    result.OWASPRisk = model.OwaspRisk;
+                    result.OWASPImpact = model.OwaspImpact;
+                    result.OWASPLikehood = model.OwaspLikehood;
+                    break;
+                
+            }
 
             vulnManager.Add(result);
             vulnManager.Context.SaveChanges();
@@ -712,7 +833,11 @@ public class VulnController : Controller
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
                 TargetList = targets,
-                VulnCatList = vulnCat
+                VulnCatList = vulnCat,
+                OwaspVector = vulnResult.OWASPVector,
+                OwaspImpact = vulnResult.OWASPImpact,
+                OwaspLikehood = vulnResult.OWASPLikehood,
+                OwaspRisk = vulnResult.OWASPRisk
             };
 
             return View(model);
@@ -742,22 +867,47 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var result = vulnManager.GetById(id);
-            result.Name = model.Name;
-            result.Template = model.Template;
-            result.cve = model.cve;
-            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-            result.VulnCategoryId = model.VulnCategoryId;
-            result.Risk = model.Risk;
-            result.Status = model.Status;
-            result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
-            result.CVSS3 = model.CVSS3;
-            result.CVSSVector = model.CVSSVector;
-            result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
-            result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
-            result.RemediationComplexity = model.RemediationComplexity;
-            result.RemediationPriority = model.RemediationPriority;
-            result.ProjectId = project;
-            result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+              var pro = projectManager.GetById(project);
+            switch (pro.Score)
+            {
+                case Score.CVSS:
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.CVSS3 = model.CVSS3;
+                    result.CVSSVector = model.CVSSVector;
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    break;
+                case Score.OWASP:
+                    result.Name = model.Name;
+                    result.Template = model.Template;
+                    result.cve = model.cve;
+                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.VulnCategoryId = model.VulnCategoryId;
+                    result.Risk = model.Risk;
+                    result.Status = model.Status;
+                    result.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                    result.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
+                    result.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                    result.RemediationComplexity = model.RemediationComplexity;
+                    result.RemediationPriority = model.RemediationPriority;
+                    result.CreatedDate = result.CreatedDate;
+                    result.OWASPVector = model.OwaspVector;
+                    result.OWASPRisk = model.OwaspRisk;
+                    result.OWASPImpact = model.OwaspImpact;
+                    result.OWASPLikehood = model.OwaspLikehood;
+                    break;
+                
+            }
             
             vulnManager.Context.SaveChanges();
             TempData["edited"] = "edited";

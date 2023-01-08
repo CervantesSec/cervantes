@@ -136,47 +136,144 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
-                <span class="info-box-icon bg-maroon">
-                    <i class="fas fa-radiation-alt"></i>
-                </span>
-                <div class="info-box-content">
-                    <span class="info-box-text" localize-content>CVSS3 Score</span>
-                    <span class="info-box-number">
-                        @if (Model.Vuln.CVSS3 <= 2)
-                        {
-                            <span class="badge badge-info">
-                                <i class="fas fa-info-circle"></i> @Model.Vuln.CVSS3
+            @switch (@Model.Project.Score)
+            {
+                case Score.CVSS:
+                    <div class="info-box mb-3 bg-light">
+                        <span class="info-box-icon bg-maroon">
+                            <i class="fas fa-radiation-alt"></i>
+                        </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text" localize-content>CVSS3 Score</span>
+                            <span class="info-box-number">
+                                @if (Model.Vuln.CVSS3 <= 2)
+                                {
+                                    <span class="badge badge-info">
+                                        <i class="fas fa-info-circle"></i> @Model.Vuln.CVSS3
+                                    </span>
+                                }
+                                else if (Model.Vuln.CVSS3 > 2 && Model.Vuln.CVSS3 <= 4)
+                                {
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3
+                                    </span>
+                                }
+                                else if (Model.Vuln.CVSS3 > 4 && Model.Vuln.CVSS3 <= 6)
+                                {
+                                    <span class="badge badge-warning">
+                                        <i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3
+                                    </span>
+                                }
+                                else if (Model.Vuln.CVSS3 > 6 && Model.Vuln.CVSS3 <= 8)
+                                {
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-exclamation-circle"></i> @Model.Vuln.CVSS3
+                                    </span>
+                                }
+                                else if (Model.Vuln.CVSS3 > 8 && Model.Vuln.CVSS3 < 11)
+                                {
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-exclamation-triangle"></i> @Model.Vuln.CVSS3
+                                    </span>
+                                }
                             </span>
-                        }
-                        else if (Model.Vuln.CVSS3 > 2 && Model.Vuln.CVSS3 <= 4)
-                        {
-                            <span class="badge badge-success">
-                                <i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3
-                            </span>
-                        }
-                        else if (Model.Vuln.CVSS3 > 4 && Model.Vuln.CVSS3 <= 6)
-                        {
-                            <span class="badge badge-warning">
-                                <i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3
-                            </span>
-                        }
-                        else if (Model.Vuln.CVSS3 > 6 && Model.Vuln.CVSS3 <= 8)
-                        {
-                            <span class="badge badge-danger">
-                                <i class="fas fa-exclamation-circle"></i> @Model.Vuln.CVSS3
-                            </span>
-                        }
-                        else if (Model.Vuln.CVSS3 > 8 && Model.Vuln.CVSS3 < 11)
-                        {
-                            <span class="badge badge-danger">
-                                <i class="fas fa-exclamation-triangle"></i> @Model.Vuln.CVSS3
-                            </span>
-                        }
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    break;
+                    case Score.OWASP:
+                    <div class="info-box mb-3 bg-light">
+                    <span class="info-box-icon bg-maroon">
+                        <i class="fas fa-radiation-alt"></i>
                     </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text" localize-content>OWASP Risk</span>
+                        <span class="info-box-number">
+                            @if (@Model.Vuln.OWASPRisk == "NOTE")
+                            {
+                                <span class="badge badge-info">
+                                    <i class="fas fa-info-circle"></i> @Model.Vuln.OWASPRisk
+                                </span>
+                            }
+                            else if (@Model.Vuln.OWASPRisk == "LOW")
+                            {
+                                <span class="badge badge-success">
+                                    <i class="fas fa-exclamation"></i> @Model.Vuln.OWASPRisk
+                                </span>
+                            }
+                            else if (@Model.Vuln.OWASPRisk == "MEDIUM")
+                            {
+                                <span class="badge badge-warning">
+                                    <i class="fas fa-exclamation"></i> @Model.Vuln.OWASPRisk
+                                </span>
+                            }
+                            else if (@Model.Vuln.OWASPRisk == "HIGH")
+                            {
+                                <span class="badge badge-danger">
+                                    <i class="fas fa-exclamation-circle"></i> @Model.Vuln.OWASPRisk
+                                </span>
+                            }
+                            else if (@Model.Vuln.OWASPRisk == "CRITICAL")
+                            {
+                                <span class="badge badge-danger">
+                                    <i class="fas fa-exclamation-triangle"></i> @Model.Vuln.OWASPRisk
+                                </span>
+                            }
+                            else if (@Model.Vuln.OWASPRisk == null)
+                            {
+                                <span>
+                                    No Data
+                                </span>
+                            }
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
-            </div>
+                
+                <div class="info-box mb-3 bg-light">
+                    <span class="info-box-icon bg-purple">
+                        <i class="far fa-dot-circle"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text" localize-content>OWASP LikeHood</span>
+                        @if (@Model.Vuln.OWASPLikehood == null)
+                        {
+                            <span class="info-box-number">No Data</span>
+                        }
+                        else
+                        {
+                            <span class="info-box-number">@Model.Vuln.OWASPLikehood</span>
+                        }
+                        
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                
+                        <div class="info-box mb-3 bg-light">
+                            <span class="info-box-icon bg-orange">
+                                <i class="fas fa-exclamation"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" localize-content>OWASP Impact</span>
+                                @if (@Model.Vuln.OWASPImpact == null)
+                                {
+                                    <span class="info-box-number">No Data</span>
+                                                    
+                                }
+                                else
+                                {
+                                    <span class="info-box-number">@Model.Vuln.OWASPImpact</span>
+                                                                                                           
+                                }
+                        
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        break;
+                    
+            }
+            
+            
             <div class="info-box mb-3 bg-light">
                 <span class="info-box-icon bg-danger">
                     <i class="fas fa-biohazard"></i>
@@ -225,10 +322,20 @@
         <!-- /.card-body -->
     </div>
     <a class="btn btn-default" asp-controller="Vuln" asp-action="Index" localize-content>Back</a>
-    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+    @switch (@Model.Vuln.Project.Score)
     {
-        <a class="btn btn-outline-warning" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@Model.Vuln.Id" localize-content><i class="fas fa-edit"></i> Edit</a>
+        case Score.OWASP:
+            <a class="btn btn-outline-warning" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@Model.Vuln.Id" asp-route-vector="@Model.Vuln.OWASPVector" localize-content><i class="fas fa-edit"></i> Edit</a>
+            break;
+        case Score.CVSS:
+            <a class="btn btn-outline-warning" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@Model.Vuln.Id" localize-content><i class="fas fa-edit"></i> Edit</a>
+            break;
+        default:
+            <a class="btn btn-outline-warning" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@Model.Vuln.Id" localize-content><i class="fas fa-edit"></i> Edit</a>
+            break;
     }
+        
+    
     <!-- /.card -->
 </div>
 <!-- /.col -->

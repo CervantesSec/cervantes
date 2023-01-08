@@ -25,7 +25,7 @@ const threats = ["Skills required", "Motive", "Opportunity", "Population Size",
 "Financial damage", "Reputation damage", "Non-Compliance", "Privacy violation"
 ];
 
-const partials = ["sl", "m", "o", "s", "ed", "ee", "a", "id", "lc", "li", "lav", "lac", "fd", "rd", "nc", "pv"];
+const partials = ["sl", "m", "o", "s", "ed", "ee", "a", "idt", "lc", "li", "lav", "lac", "fd", "rd", "nc", "pv"];
 
 const riskChartOptions = {
   legend: {
@@ -103,7 +103,7 @@ function calculate(){
   + $("#ed").val() +
   + $("#ee").val() +
   + $("#a").val() +
-  + $("#id").val() + 0;
+  + $("#idt").val() + 0;
   dataset.push($("#sl").val());
   dataset.push($("#m").val());
   dataset.push($("#o").val());
@@ -111,7 +111,7 @@ function calculate(){
   dataset.push($("#ed").val());
   dataset.push($("#ee").val());
   dataset.push($("#a").val());
-  dataset.push($("#id").val());
+  dataset.push($("#idt").val());
 
   // Get values TECHNICAL IMPACT FACTORS and BUSINESS IMPACT FACTORS
   IS = + $("#lc").val() +
@@ -148,7 +148,7 @@ function calculate(){
   score = score + 'ED:' + $("#ed").val() + '/';
   score = score + 'EE:' + $("#ee").val() + '/';
   score = score + 'A:' + $("#a").val() + '/';
-  score = score + 'ID:' + $("#id").val() + '/';
+  score = score + 'ID:' + $("#idt").val() + '/';
   score = score + 'LC:' + $("#lc").val() + '/';
   score = score + 'LI:' + $("#li").val() + '/';
   score = score + 'LAV:' + $("#lav").val() + '/';
@@ -198,8 +198,13 @@ function calculate(){
       $(".RS").text(RS);
       $(".RS").addClass("classNote");
   }
-
+  document.getElementById("OwaspRisk").value = RS;
+  document.getElementById("OwaspVector").value = score;
+  document.getElementById("OwaspImpact").value = IS;
+  document.getElementById("OwaspLikehood").value = LS;
+  
   updateRiskChart(dataset, RS)
+  
 }
 
 function getRisk(score){

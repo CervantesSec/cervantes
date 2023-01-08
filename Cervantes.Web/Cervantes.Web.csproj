@@ -252,6 +252,8 @@
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\3b4675b5-8244-4bfd-9fac-5eadcab2d987_10.2.5.0_Cervantes_test.xml" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\3e14201f-fdd1-482a-82e7-3f408988b60d_10.2.5.0_Cervantes_test.xml" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\58ef5578-ae93-4023-b11e-31f4440fb179\619bc66a-25e9-44b9-8095-cf96763af571_10.2.5.0_Cervantes_test.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\OWASP-Calculator\img\favicon.ico" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\OWASP-Calculator\img\orac.gif" />
     </ItemGroup>
 
 </Project>

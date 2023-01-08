@@ -144,5 +144,10 @@ public class VulnCreateViewModel
 
     public IList<SelectListItem> TargetList { get; set; }
     public IList<SelectListItem> VulnCatList { get; set; }
+    
+    public string OwaspVector { get; set; }
+    public string OwaspRisk { get; set; }
+    public string OwaspLikehood { get; set; }
+    public string OwaspImpact { get; set; }
 
 }

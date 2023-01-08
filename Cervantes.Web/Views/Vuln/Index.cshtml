@@ -180,9 +180,25 @@
                                 <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id" class="btn btn-tool">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" localize-content>
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                @switch (@vuln.Project.Score)
+                                {
+                                    case Score.OWASP:
+                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" asp-route-vector="@vuln.OWASPVector" localize-content>
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        break;
+                                    case Score.CVSS:
+                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" localize-content>
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        break;
+                                    default:
+                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" localize-content>
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        break;
+                                }
+                                
                                 <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Delete" asp-route-id="@vuln.Id" localize-content>
                                     <i class="fas fa-trash"></i>
                                 </a>

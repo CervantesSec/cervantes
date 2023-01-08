@@ -833,13 +833,13 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("OWASPImpact")
+                        .HasColumnType("text");
+
                     b.Property<string>("OWASPLikehood")
                         .HasColumnType("text");
 
                     b.Property<string>("OWASPRisk")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OWASPScore")
                         .HasColumnType("text");
 
                     b.Property<string>("OWASPVector")
