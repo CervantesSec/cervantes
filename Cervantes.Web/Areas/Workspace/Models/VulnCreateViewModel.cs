@@ -147,4 +147,5 @@ public class VulnCreateViewModel
     public string OwaspVector { get; set; }
     public string OwaspLikehood { get; set; }
     public string OwaspImpact { get; set; }
+    public List<VulnCategory> VulnCategories { get; set; }
 }

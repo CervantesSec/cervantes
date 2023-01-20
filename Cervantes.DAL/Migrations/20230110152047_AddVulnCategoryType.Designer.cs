@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cervantes.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221011064833_Init")]
-    partial class Init
+    [Migration("20230110152047_AddVulnCategoryType")]
+    partial class AddVulnCategoryType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -410,6 +410,9 @@ namespace Cervantes.DAL.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("ProjectType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Score")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("StartDate")
@@ -832,6 +835,18 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("OWASPImpact")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OWASPLikehood")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OWASPRisk")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OWASPVector")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid");
 
@@ -914,6 +929,9 @@ namespace Cervantes.DAL.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

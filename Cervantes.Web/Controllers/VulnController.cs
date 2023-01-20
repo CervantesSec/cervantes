@@ -360,7 +360,8 @@ public class VulnController : Controller
             VulnCategory cat = new VulnCategory
             {
                 Name = model.Name,
-                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description))
+                Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
+                Type = model.Type
             };
             vulnCategoryManager.Add(cat);
             vulnCategoryManager.Context.SaveChanges();
@@ -386,7 +387,8 @@ public class VulnController : Controller
             {
                 Id = cat.Id,
                 Name = cat.Name,
-                Description = cat.Description
+                Description = cat.Description,
+                Type = cat.Type
             };
             return View(model);
         }
@@ -412,6 +414,7 @@ public class VulnController : Controller
             var result = vulnCategoryManager.GetById(id);
             result.Name = model.Name;
             result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+            result.Type = model.Type;
             vulnCategoryManager.Context.SaveChanges();
             _logger.LogInformation("User: {0} edited Vuln Category: {1}", User.FindFirstValue(ClaimTypes.Name), id);
             return RedirectToAction(nameof(Categories));

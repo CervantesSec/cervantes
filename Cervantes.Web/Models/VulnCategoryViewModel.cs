@@ -1,4 +1,5 @@
 using System;
+using Cervantes.CORE;
 
 namespace Cervantes.Web.Models;
 
@@ -18,4 +19,9 @@ public class VulnCategoryViewModel
     /// Vuln category Description
     /// </summary>
     public string Description { get; set; }
+    
+    /// <summary>
+    /// Vuln category Type
+    /// </summary>
+    public VulnCategoryType Type { get; set; }
 }

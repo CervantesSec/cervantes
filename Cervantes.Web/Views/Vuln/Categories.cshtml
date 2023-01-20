@@ -77,6 +77,7 @@
                 <tr>
                     <th localize-content><i class="fas fa-bug"></i> <span localize-content>Name</span></th>
                     <th localize-content><i class="fas fa-align-left"></i> <span localize-content>Description</span></th>
+                    <th localize-content><i class="fas fa-project-diagram"></i> <span localize-content>Type</span></th>
                     <th localize-content><i class="fas fa-cog"></i> <span localize-content>Options</span></th>
                 </tr>
                 </thead>
@@ -89,6 +90,7 @@
                     <tr>
                         <td>@cat.Name</td>
                         <td>@cat.Description</td>
+                        <td>@cat.Type</td>
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                         {
                             <td>

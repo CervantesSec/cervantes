@@ -86,7 +86,36 @@
 </div>
 <div class="form-group">
     <label class="control-label" localize-content>Category</label>
-    @Html.DropDownListFor(m => m.VulnCategoryId, Model.VulnCatList, "--Select--", new {@class = "form-control"})
+    <select class="form-control categories" data-val="true" data-val-required="The VulnCategoryId field is required." id="VulnCategoryId" name="VulnCategoryId">
+            <optgroup label="General">
+                @if (Model.VulnCategories.Where(x => x.Type == VulnCategoryType.General) != null)
+                {
+                    @foreach (var general in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.General))
+                    {
+                        <option value="@general.Id">@general.Name</option>
+                    }
+                }
+            </optgroup>
+            <optgroup label="OWASP WSTG">
+                @if (Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspWSTG) != null)
+                {
+                    @foreach (var owasp in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspWSTG))
+                    {
+                        <option value="@owasp.Id">@owasp.Name - @owasp.Description</option>
+                    }
+                }
+            </optgroup>
+            <optgroup label="OWASP MSTG">
+                @if (Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspMSTG) != null)
+                {
+                    @foreach (var owasp in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspMSTG))
+                    {
+                        <option value="@owasp.Id">@owasp.Name - @owasp.Description</option>
+                    }
+                }
+            </optgroup>
+                                        
+        </select>
     <span asp-validation-for="VulnCategory" class="text-danger"></span>
 </div>
 <div class="form-group">
@@ -549,6 +578,8 @@
     <script src="~/lib/OWASP-Calculator/js/script.js"></script>
     <script src="~/lib/OWASP-Calculator/js/sweetalert.min.js"></script>
     <script>
+    $('#VulnCategoryId').val('@Model.VulnCategoryId');
+
   $(document).ready(function() { 
           $('#descriptionTxt').summernote({
           height: 300,

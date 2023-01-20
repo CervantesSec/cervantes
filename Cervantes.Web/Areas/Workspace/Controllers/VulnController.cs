@@ -212,7 +212,8 @@ public class VulnController : Controller
             {
                 TargetList = targets,
                 VulnCatList = vulnCat,
-                Project = projectManager.GetById(project)
+                Project = projectManager.GetById(project),
+                VulnCategories = vulnCategoryManager.GetAll().ToList(),
             };
 
             return View(model);
@@ -405,16 +406,7 @@ public class VulnController : Controller
             foreach (var item in result)
                 targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
 
-            var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
-            {
-                VulnCategoryId = e.Id,
-                VulnCategoryName = e.Name
-            }).ToList();
-
-            var vulnCat = new List<SelectListItem>();
-
-            foreach (var item in result2)
-                vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
+            var vulnCategories = vulnCategoryManager.GetAll().ToList();
 
             var projectResult = projectManager.GetById(project);
             var model = new VulnCreateViewModel
@@ -442,7 +434,7 @@ public class VulnController : Controller
                 OwaspVector = vulnResult.OWASPVector,
                 OwaspRisk = vulnResult.OWASPRisk,
                 TargetList = targets,
-                VulnCatList = vulnCat,
+                VulnCategories = vulnCategories,
                 SelectedTargets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).Select(e => e.Id).ToList()
             };
 

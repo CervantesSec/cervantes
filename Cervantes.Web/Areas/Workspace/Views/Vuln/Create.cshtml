@@ -78,9 +78,40 @@
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" localize-content>Category</label>
-                                @Html.DropDownListFor(m => m.VulnCategoryId, Model.VulnCatList, new {@class = "form-control"})
-                                <span asp-validation-for="VulnCategoryId" class="text-danger"></span>
+                              <label class="control-label" localize-content>Category</label>
+
+                              <select class="form-control categories" data-val="true" data-val-required="The VulnCategoryId field is required." id="VulnCategoryId" name="VulnCategoryId">
+                                <optgroup label="General">
+                                  @if (Model.VulnCategories.Where(x => x.Type == VulnCategoryType.General) != null)
+                                  {
+                                    @foreach (var general in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.General))
+                                    {
+                                      <option value="@general.Id">@general.Name</option>
+                                    }
+                                  }
+                                </optgroup>
+                                <optgroup label="OWASP WSTG">
+                                  @if (Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspWSTG) != null)
+                                  {
+                                    @foreach (var owasp in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspWSTG))
+                                    {
+                                      <option value="@owasp.Id">@owasp.Name - @owasp.Description</option>
+                                    }
+                                  }
+                                </optgroup>
+                                <optgroup label="OWASP MSTG">
+                                  @if (Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspMSTG) != null)
+                                  {
+                                    @foreach (var owasp in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspMSTG))
+                                    {
+                                      <option value="@owasp.Id">@owasp.Name - @owasp.Description</option>
+                                    }
+                                  }
+                                </optgroup>
+                                
+                              </select>
+                              <span class="text-danger field-validation-valid" data-valmsg-for="VulnCategoryId" data-valmsg-replace="true"></span>
+                                
                             </div>
                             <div class="form-group">
                                 <label class="control-label" localize-content>Risk</label>
@@ -514,6 +545,7 @@
     <script>
     $(document).ready(function() {
         $('.targets').select2();
+        $('.categories').select2();
        
 });
     

@@ -46,6 +46,12 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label" localize-content>Type</label>
+                @Html.DropDownListFor(model => model.Type, Html.GetEnumSelectList<VulnCategoryType>(), new {@class = "form-control"})
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
                 <a class="btn btn-light" asp-action="Index" localize-content>Back</a>
                 <button type="submit" class="btn btn-dark" localize-content>Edit</button>
             </div>

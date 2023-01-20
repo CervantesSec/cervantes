@@ -26,4 +26,5 @@ public class VulnCategory
     /// Vuln category Description
     /// </summary>
     public string Description { get; set; }
+    public VulnCategoryType Type { get; set; }
 }

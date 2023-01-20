@@ -314,7 +314,8 @@ namespace Cervantes.DAL.Migrations
                     Template = table.Column<bool>(type: "boolean", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     ProjectType = table.Column<int>(type: "integer", nullable: false),
-                    Language = table.Column<int>(type: "integer", nullable: false)
+                    Language = table.Column<int>(type: "integer", nullable: false),
+                    Score = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -553,7 +554,11 @@ namespace Cervantes.DAL.Migrations
                     Remediation = table.Column<string>(type: "text", nullable: true),
                     RemediationComplexity = table.Column<int>(type: "integer", nullable: false),
                     RemediationPriority = table.Column<int>(type: "integer", nullable: false),
-                    JiraCreated = table.Column<bool>(type: "boolean", nullable: false)
+                    JiraCreated = table.Column<bool>(type: "boolean", nullable: false),
+                    OWASPRisk = table.Column<string>(type: "text", nullable: true),
+                    OWASPImpact = table.Column<string>(type: "text", nullable: true),
+                    OWASPLikehood = table.Column<string>(type: "text", nullable: true),
+                    OWASPVector = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
