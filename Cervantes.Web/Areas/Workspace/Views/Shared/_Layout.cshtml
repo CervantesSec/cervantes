@@ -203,50 +203,6 @@
     </ul>
 </li>
 
-@*<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-bug"></i>
-        <p><span localize-content>Vulnerabilities</span><i class="right fas fa-angle-left"></i></p>
-    </a>
-    <ul class="nav nav-treeview">
-        <li class="nav-item">
-            <a asp-area="" asp-controller="Vuln" asp-action="Index" asp-route-culture="@culture" class="nav-link">
-                <i class="fas fa-list nav-icon"></i>
-                <p localize-content>List</p>
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a asp-area="" asp-controller="Vuln" asp-action="Categories" asp-route-culture="@culture" class="nav-link">
-                <i class="fas fa-project-diagram nav-icon"></i>
-                <p localize-content>Categories</p>
-
-            </a>
-        </li>
-        
-        @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
-        {
-            <li class="nav-item">
-                <a asp-area="" asp-controller="Vuln" asp-action="CreateCategory" asp-route-culture="@culture" class="nav-link">
-                    <i class="fas fa-plus nav-icon"></i>
-                    <p localize-content>Create Category</p>
-
-                </a>
-            </li>
-        }
-        
-        <li class="nav-item">
-                    <a asp-area="" asp-controller="Vuln" asp-action="Templates" asp-route-culture="@culture" class="nav-link">
-                        <i class="fas fa-clone nav-icon"></i>
-                        <p localize-content>Templates</p>
-        
-                    </a>
-                </li>
-
-    </ul>
-</li>*@
-
-
 <li class="nav-header">WORKSPACE</li>
 <li class="nav-item">
     <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-culture="@culture" localize-content class="nav-link">
@@ -356,6 +312,15 @@
 
             </a>
         </li>
+        
+        <li class="nav-item">
+            <a asp-area="Workspace" asp-controller="Vuln" asp-action="Import" asp-route-culture="@culture" class="nav-link">
+                <i class="fas fa-upload nav-icon"></i>
+                <p localize-content>Import</p>
+        
+            </a>
+        </li>
+        
 
     </ul>
 </li>

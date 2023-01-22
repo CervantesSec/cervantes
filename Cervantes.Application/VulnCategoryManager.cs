@@ -17,4 +17,9 @@ public class VulnCategoryManager : GenericManager<VulnCategory>, IVulnCategoryMa
     public VulnCategoryManager(IApplicationDbContext context) : base(context)
     {
     }
+    
+    public VulnCategory GetByName(string name)
+    {
+        return Context.Set<VulnCategory>().FirstOrDefault(x => x.Name == name);
+    }
 }

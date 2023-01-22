@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 using Cervantes.IFR.Email;
 using Cervantes.IFR.Jira;
+using Cervantes.IFR.Parsers.CSV;
 using Cervantes.IFR.Parsers.Nmap;
 using NLog.Extensions.Logging;
 
@@ -94,6 +95,7 @@ public class Startup
         services.AddScoped<IJIraService, JiraService>();
         services.AddScoped<IJiraManager, JiraManager>();
         services.AddScoped<IJiraCommentManager, JiraCommentManager>();
+        services.AddScoped<ICsvParser, CsvParser>();
 
 
 

@@ -1,0 +1,112 @@
+@using Cervantes.CORE
+@model VulnImportViewModel
+
+@{
+    ViewData["Title"] = "Import Vulnerabilities";
+}
+
+@{
+    if (TempData["fileNotPermitted"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>This file type is not permitted!</strong>
+
+        </div>
+    }
+    
+    if (TempData["errorImporting"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>An error ocurred processing the file!</strong>
+
+        </div>
+    }
+}
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-bug"></i> <span localize-content>Vulnerabilities</span></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>Workspace</li>
+                    <li class="breadcrumb-item" localize-content>Vuln</li>
+                    <li class="breadcrumb-item active" localize-content>Import</li>
+                    
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    
+    <div class="row">
+        <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+        
+                            <h3><i class="fas fa-file-import"></i> Vuln Import</h3>
+                            <p>Import your vulnerabilities from your files</p>
+                            <p>Download the CSV template from 
+                                <a href="@Url.Content("/Attachments/Templates/VulnTemplate.csv")" target="_blank">
+                                     here <i class="fas fa-download"></i>
+                                </a>
+                                </p>
+                            
+                                <form asp-area="Workspace" asp-controller="Vuln" asp-action="Import" asp-route-project="@Model.Project" method="post" enctype="multipart/form-data">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <input type="hidden" id="project" name="project" value="@Model.Project">
+                                    <div class="form-group">
+                                        <label for="upload" localize-content>Select Type</label>
+                                        @Html.DropDownListFor(model => model.Type, Html.GetEnumSelectList<VulnImportType>(), new {@class = "form-control"})
+                                        <span asp-validation-for="Type" class="text-danger"></span>
+                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="upload" localize-content>Select your File</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="upload" name="upload" accept="application/vnd.ms-excel, text/csv">
+                                                <label class="custom-file-label" for="upload" localize-content>Choose File</label>
+                                            </div>
+        
+                                        </div>
+        
+                                    </div>
+        
+                                    <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Upload</button>
+                                </form>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+        
+    </div>
+    
+</section>
+<!-- /.content -->
+<!-- /.content-wrapper -->
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+        <script src="~/lib/theme/plugins/bs-customfile-input/bs-custom-file-input.min.js"></script>
+    <script>
+    $(document).ready(function () {
+          bsCustomFileInput.init();
+        });
+    </script>
+}
+

@@ -9,4 +9,5 @@ namespace Cervantes.Contracts;
 
 public interface IVulnCategoryManager : IGenericManager<VulnCategory>
 {
+    VulnCategory GetByName(string name);
 }

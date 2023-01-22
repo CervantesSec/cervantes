@@ -317,7 +317,7 @@ public class ClientController : Controller
             {
                 if (client.ImagePath != null)
                 {
-                    System.IO.File.Delete(_appEnvironment+client.ImagePath);
+                    System.IO.File.Delete(_appEnvironment.WebRootPath+client.ImagePath);
                 }
                 clientManager.Remove(client);
                 clientManager.Context.SaveChanges();

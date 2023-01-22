@@ -8,13 +8,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using Cervantes.IFR.Jira;
+using Cervantes.IFR.Parsers.CSV;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
+using MimeDetective;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -34,12 +39,15 @@ public class VulnController : Controller
     private IJIraService jiraService = null;
     private IJiraManager jiraManager = null;
     private IJiraCommentManager jiraCommentManager = null;
+    private IProjectAttachmentManager projectAttachmentManager = null;
+    private ICsvParser csvParser = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment,
-        IJIraService jiraService, IJiraManager jiraManager, IJiraCommentManager jiraCommentManager)
+        IJIraService jiraService, IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IProjectAttachmentManager projectAttachmentManager,
+        ICsvParser csvParser)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -54,6 +62,8 @@ public class VulnController : Controller
         this.jiraService = jiraService;
         this.jiraCommentManager = jiraCommentManager;
         this.jiraManager = jiraManager;
+        this.projectAttachmentManager = projectAttachmentManager;
+        this.csvParser = csvParser;
     }
 
     // GET: VulnController
@@ -1195,6 +1205,117 @@ public class VulnController : Controller
             _logger.LogError(ex, "An error ocurred adding a Note on Vuln: {1}. User: {2}", form["vulnId"],
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
+        }
+    }
+
+    public IActionResult Import(Guid project)
+    {
+        var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+        if (user == null)
+        {
+            TempData["userProject"] = "User is not in the project";
+            return RedirectToAction("Index", "Workspaces",new {area =""});
+        }
+        
+        VulnImportViewModel model = new VulnImportViewModel()
+        {
+            Project = project
+        };
+        return View(model);
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Import(Guid project,VulnImportViewModel model)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(model.Project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces", new {area = ""});
+            }
+
+            var upload = Request.Form.Files["upload"];
+            if (upload != null)
+            {
+
+                var file = upload;
+
+                var Inspector = new ContentInspectorBuilder()
+                {
+                    Definitions = MimeDetective.Definitions.Default.FileTypes.Text.All()
+                }.Build();
+
+                var Results = Inspector.Inspect(file.OpenReadStream());
+
+                if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                {
+                    TempData["fileNotPermitted"] = "User is not in the project";
+                    VulnImportViewModel modelError = new VulnImportViewModel()
+                    {
+                        Project = project
+                    };
+                    return View("Import", modelError);
+                }
+
+                var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Project/" + project + "/");
+                var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
+
+                if (Directory.Exists(uploads))
+                {
+                    using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(uploads);
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+
+                var attachment = new ProjectAttachment
+                {
+                    Name = "Vulnerabilities Upload "+model.Type.ToString(),
+                    ProjectId = model.Project,
+                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    FilePath = "/Attachments/Project/" + project + "/" + uniqueName
+                };
+
+                projectAttachmentManager.Add(attachment);
+                projectAttachmentManager.Context.SaveChanges();
+                var path = _appEnvironment.WebRootPath+ attachment.FilePath;
+
+                switch (model.Type)
+                {
+                    case VulnImportType.CSV:
+                        csvParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),
+                                path);
+                        TempData["fileImportedCSV"] = "file imported";
+                        return RedirectToAction("Index", "Vuln", new {project = project});
+
+                    
+                }
+                
+               
+
+            }
+
+            return RedirectToAction("Import", "Vuln", new {project = project});
+        }
+        catch (Exception e)
+        {
+            
+            TempData["errorImporting"] = "Error deleting service!";
+            _logger.LogError(e, "An error ocurred importing Vulns: Project: {0} User: {1}", project,
+               User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Import", "Vuln", new {project = project});
         }
     }
 }
