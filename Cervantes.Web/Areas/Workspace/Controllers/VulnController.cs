@@ -649,16 +649,7 @@ public class VulnController : Controller
             foreach (var item in result)
                 targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
 
-            var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
-            {
-                VulnCategoryId = e.Id,
-                VulnCategoryName = e.Name
-            }).ToList();
-
-            var vulnCat = new List<SelectListItem>();
-
-            foreach (var item in result2)
-                vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
+            var categories = vulnCategoryManager.GetAll().ToList();
 
 
             var model = new VulnCreateViewModel
@@ -682,7 +673,7 @@ public class VulnController : Controller
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
                 TargetList = targets,
-                VulnCatList = vulnCat,
+                VulnCategories = categories,
                 OwaspVector = vulnResult.OWASPVector,
                 OwaspImpact = vulnResult.OWASPImpact,
                 OwaspLikehood = vulnResult.OWASPLikehood,
@@ -802,16 +793,8 @@ public class VulnController : Controller
             foreach (var item in result)
                 targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
 
-            var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
-            {
-                VulnCategoryId = e.Id,
-                VulnCategoryName = e.Name
-            }).ToList();
-
-            var vulnCat = new List<SelectListItem>();
-
-            foreach (var item in result2)
-                vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
+            var categories = vulnCategoryManager.GetAll().ToList();
+            
 
 
             var model = new VulnCreateViewModel
@@ -835,7 +818,7 @@ public class VulnController : Controller
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
                 TargetList = targets,
-                VulnCatList = vulnCat,
+                VulnCategories = categories,
                 OwaspVector = vulnResult.OWASPVector,
                 OwaspImpact = vulnResult.OWASPImpact,
                 OwaspLikehood = vulnResult.OWASPLikehood,
