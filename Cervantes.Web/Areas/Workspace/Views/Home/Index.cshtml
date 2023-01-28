@@ -55,7 +55,7 @@
                     <span class="info-box-text" localize-content>Client</span>
                     <span class="info-box-number">
                         <a asp-controller="Client" asp-action="Details" asp-route-id="@Model.Project.Client.Id" localize-content>
-                            <span class="btn btn-outline-dark btn-sm">
+                            <span class="btn btn-dark btn-sm">
                                 <i class="fas fa-briefcase"></i> @Model.Project.Client.Name
                             </span>
                         </a>
@@ -63,7 +63,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-teal">
                     <i class="fas fa-calendar"></i>
                 </span>
@@ -74,7 +74,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-danger">
                     <i class="fas fa-calendar-check"></i>
                 </span>
@@ -85,7 +85,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-info">
                     <i class="fas fa-user"></i>
                 </span>
@@ -96,7 +96,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-indigo">
                     <i class="fas fa-project-diagram"></i>
                 </span>
@@ -132,7 +132,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-warning">
                     <i class="fas fa-tasks"></i>
                 </span>
@@ -288,7 +288,7 @@
 
                     @foreach (var task in Model.Tasks)
                     {
-                        <div class="info-box bg-light">
+                        <div class="info-box ">
                             <span class="info-box-icon bg-success elevation-1">
                                 <i class="fas fa-tasks"></i>
                             </span>
@@ -324,7 +324,7 @@
 
                     @foreach (var target in Model.Targets)
                     {
-                        <div class="info-box bg-light">
+                        <div class="info-box ">
                             <span class="info-box-icon bg-orange elevation-1">
                                 <i class="fas fa-bullseye"></i>
                             </span>
@@ -362,7 +362,7 @@
 
                     @foreach (var members in Model.Members)
                     {
-                        <div class="info-box bg-light">
+                        <div class="info-box ">
                             <span class="info-box-icon bg-info elevation-1">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -403,7 +403,7 @@
 
                     @foreach (var vuln in Model.Vulns)
                     {
-                        <div class="info-box bg-light">
+                        <div class="info-box ">
                             <span class="info-box-icon bg-danger elevation-1">
                                 <i class="fas fa-bug"></i>
                             </span>
@@ -480,7 +480,7 @@
 
                     @foreach (var note in Model.Notes)
                     {
-                        <div class="info-box bg-light">
+                        <div class="info-box ">
                             <span class="info-box-icon bg-warning elevation-1">
                                 <i class="fas fa-sticky-note"></i>
                             </span>

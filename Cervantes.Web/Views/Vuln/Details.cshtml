@@ -93,7 +93,7 @@
             </div>
 
             <h3 class="profile-username text-center">@Model.Vuln.Name</h3>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-dark">
                     <i class="fas fa-folder"></i>
                 </span>
@@ -104,7 +104,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-info">
                     <i class="fas fa-user"></i>
                 </span>
@@ -115,7 +115,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-warning">
                     <i class="fas fa-project-diagram"></i>
                 </span>
@@ -126,7 +126,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-gray">
                     <i class="fas fa-virus"></i>
                 </span>
@@ -139,7 +139,7 @@
             @switch (@Model.Project.Score)
             {
                 case Score.CVSS:
-                    <div class="info-box mb-3 bg-light">
+                    <div class="info-box mb-3 ">
                         <span class="info-box-icon bg-maroon">
                             <i class="fas fa-radiation-alt"></i>
                         </span>
@@ -182,7 +182,7 @@
                     </div>
                     break;
                     case Score.OWASP:
-                    <div class="info-box mb-3 bg-light">
+                    <div class="info-box mb-3 ">
                     <span class="info-box-icon bg-maroon">
                         <i class="fas fa-radiation-alt"></i>
                     </span>
@@ -230,7 +230,7 @@
                     <!-- /.info-box-content -->
                 </div>
                 
-                <div class="info-box mb-3 bg-light">
+                <div class="info-box mb-3 ">
                     <span class="info-box-icon bg-purple">
                         <i class="far fa-dot-circle"></i>
                     </span>
@@ -249,7 +249,7 @@
                     <!-- /.info-box-content -->
                 </div>
                 
-                        <div class="info-box mb-3 bg-light">
+                        <div class="info-box mb-3 ">
                             <span class="info-box-icon bg-orange">
                                 <i class="fas fa-exclamation"></i>
                             </span>
@@ -274,7 +274,7 @@
             }
             
             
-            <div class="info-box mb-3 bg-light">
+            <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-danger">
                     <i class="fas fa-biohazard"></i>
                 </span>
@@ -392,7 +392,7 @@
 
 <div class="active tab-pane" id="details">
 
-    <div class="card bg-light">
+    <div class="card ">
         <div class="card-header bg-gray">
             <h3 class="card-title">
                 <i class="fas fa-align-left"></i>
@@ -406,7 +406,7 @@
 
     </div>
 
-    <div class="card bg-light">
+    <div class="card ">
         <div class="card-header bg-gray">
             <h3 class="card-title">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -425,7 +425,7 @@
 
 <div class="tab-pane" id="exploitation">
 
-<div class="card bg-light">
+<div class="card ">
         <div class="card-header bg-gray">
             <h3 class="card-title">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -441,7 +441,7 @@
 </div>
 
 <div class="tab-pane" id="remediation">
-    <div class="card bg-light">
+    <div class="card ">
         <div class="card-header bg-gray">
             <h3 class="card-title">
                 <i class="fas fa-tools"></i>
@@ -457,7 +457,7 @@
     
     <div class="row">
         <div class="col-md-6">
-            <div class="card bg-light">
+            <div class="card ">
                 <div class="card-header bg-gray">
                     <h3 class="card-title">
                         <i class="fas fa-project-diagram"></i>
@@ -473,7 +473,7 @@
             
         </div>
         <div class="col-md-6">
-            <div class="card bg-light">
+            <div class="card ">
                 <div class="card-header bg-gray">
                     <h3 class="card-title">
                         <i class="fas fa-tasks"></i>
@@ -747,7 +747,7 @@
                         <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
 
                         
-                        <div class="card bg-light">
+                        <div class="card ">
                     <div class="card-header bg-gray">
                         <h3 class="card-title">
                             <i class="fas fa-toolbox"></i>
@@ -760,8 +760,8 @@
                             <div class="row">
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fab fa-jira"></i>
                                         </span>
                     
@@ -774,8 +774,8 @@
                                     <!-- /.info-box -->
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-user"></i>
                                         </span>
                     
@@ -790,8 +790,8 @@
                     
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-exclamation-circle"></i>
                                         </span>
                     
@@ -804,8 +804,8 @@
                                     <!-- /.info-box -->
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-tasks"></i>
                                         </span>
                     
@@ -819,8 +819,8 @@
                                 </div>
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-user-lock"></i>
                                         </span>
                     
@@ -834,8 +834,8 @@
                                 </div>
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-calendar"></i>
                                         </span>
                     
@@ -849,8 +849,8 @@
                                 </div>
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-calendar-day"></i>
                                         </span>
                     
@@ -864,8 +864,8 @@
                                 </div>
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-calendar-times"></i>
                                         </span>
                     
@@ -879,8 +879,8 @@
                                 </div>
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-check-circle"></i>
                                         </span>
                     
@@ -894,8 +894,8 @@
                                 </div>
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-calendar-check"></i>
                                         </span>
                     
@@ -909,8 +909,8 @@
                                 </div>
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-tags"></i>
                                         </span>
                     
@@ -924,8 +924,8 @@
                                 </div>
                     
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <div class="info-box mb-3 bg-light" localize-content>
-                                        <span class="info-box-icon bg-light">
+                                    <div class="info-box mb-3 " localize-content>
+                                        <span class="info-box-icon ">
                                             <i class="fas fa-wrench"></i>
                                         </span>
                     
@@ -951,7 +951,7 @@
 
             <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
                 
-                <div class="card bg-light">
+                <div class="card ">
                     <div class="card-header bg-gray">
                         <h3 class="card-title">
                             <i class="fas fa-comments"></i>
@@ -964,7 +964,7 @@
                         <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
                             <h2>Comments</h2>
                             <div class="accordion" id="comments">
-                                <div class="card bg-light">
+                                <div class="card ">
                                     <div class="card-header" id="commentshead1">
                                         <a href="#" class="btn btn-header-link" data-toggle="collapse" data-target="#comments1"
                                            aria-controls="comments1">

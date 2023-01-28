@@ -42,6 +42,12 @@
                 <i class="fas fa-plus"></i> <span localize-content>Create Note</span>
             </a>
             <div class="divider dropdown-divider"></div>
+            <span class="dropdown-item">
+                <i class="fas fa-adjust"></i> <span localize-content>Dark Mode</span>
+                <input type="checkbox" id="toggle-dark-mode" onclick="darkModeFunc()" />
+            </span>
+            
+            <div class="divider dropdown-divider"></div>
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-culture="@culture" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})" localize-content>
                 <button type="submit" class="dropdown-item" localize-content>
                     <i class="fas fa-sign-out-alt"></i> <span localize-content>Logout</span>

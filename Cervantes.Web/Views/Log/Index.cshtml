@@ -110,15 +110,15 @@
                     switch (log.Level)
                     {
                         case "Debug":
-                            <tr class="bg-light">
-                                <td class="bg-light">@log.Id</td>
-                                <td class="bg-light">@log.CreatedOn</td>
-                                <td class="bg-light">@log.Level</td>
-                                <td class="bg-light">@log.Message</td>
-                                <td class="bg-light">@log.StackTrace</td>
-                                <td class="bg-light">@log.Exception</td>
-                                <td class="bg-light">@log.Logger</td>
-                                <td class="bg-light">@log.Url</td>
+                            <tr>
+                                <td>@log.Id</td>
+                                <td>@log.CreatedOn</td>
+                                <td>@log.Level</td>
+                                <td>@log.Message</td>
+                                <td>@log.StackTrace</td>
+                                <td>@log.Exception</td>
+                                <td>@log.Logger</td>
+                                <td>@log.Url</td>
                             </tr>
                             break;
                         case "Info":
@@ -156,6 +156,18 @@
                                 <td class="bg-warning">@log.Exception</td>
                                 <td class="bg-warning">@log.Logger</td>
                                 <td class="bg-warning">@log.Url</td>
+                            </tr>
+                            break;
+                        default:
+                            <tr>
+                                <td>@log.Id</td>
+                                <td>@log.CreatedOn</td>
+                                <td>@log.Level</td>
+                                <td>@log.Message</td>
+                                <td>@log.StackTrace</td>
+                                <td>@log.Exception</td>
+                                <td>@log.Logger</td>
+                                <td>@log.Url</td>
                             </tr>
                             break;
                     }

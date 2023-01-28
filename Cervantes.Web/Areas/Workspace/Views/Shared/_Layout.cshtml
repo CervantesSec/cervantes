@@ -505,11 +505,53 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/lib/theme/js/adminlte.min.js"></script>
-<link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
-<script src="~/lib/DataTables/datatables.min.js"></script>
+<link href="~/lib/DataTables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="~/lib/DataTables/dataTables.bootstrap4.min.js"></script>
 <link href="~/lib/fontawesome/css/all.css" rel="stylesheet">
 <script src="~/lib/summernote/summernote-bs4.min.js"></script>
 <script src="~/lib/chartjs/chart.min.js"></script>
+ <script>
+              const toggleBtn = document.getElementById("toggle-dark-mode");
+              const theme = document.body;
+              let darkMode = localStorage.getItem("dark-mode");
+              
+              const enableDarkMode = () => {
+                theme.classList.add("dark-mode");
+                toggleBtn.checked = true;
+                localStorage.setItem("dark-mode", "enabled");
+              };
+              
+              const disableDarkMode = () => {
+                theme.classList.remove("dark-mode");
+                toggleBtn.checked = false;
+                localStorage.setItem("dark-mode", "disabled");
+              };
+              
+              if (darkMode === "enabled") {
+                enableDarkMode(); // set state of darkMode on page load
+              }
+              function darkModeFunc() {
+                  darkMode = localStorage.getItem("dark-mode");
+                  if (darkMode === null)
+                  {
+                      if (darkMode === "disabled") {
+                          enableDarkMode();
+                        } else {
+                          disableDarkMode();
+                        }
+                  }
+                  else{
+                      if (toggleBtn.checked == true){
+                         enableDarkMode()
+                       } 
+                      else {
+                         disableDarkMode()
+                      } 
+                  }
+                        
+              }
+
+              </script>
 @await RenderSectionAsync("Scripts", false)
 </body>
 </html>

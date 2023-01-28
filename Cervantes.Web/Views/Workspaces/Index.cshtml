@@ -78,8 +78,17 @@
                                         </h4>
                                         break;
                                 }
+                                
+                                @{
+                                    var progress = Math.Round((((DateTime.Today - @project.StartDate) / (@project.EndDate - @project.StartDate)) * 100));
+                                    
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: @progress%;" aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="100">@progress %</div>
+                                    </div>
+                                }
+                                
 
-                                <a class="btn btn-outline-dark" asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@project.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name" localize-content><i class="fas fa-building"></i> View</a>
+                                <a class="btn btn-dark" asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@project.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name" localize-content><i class="fas fa-building"></i> View</a>
 
                             </div>
                         </div>
