@@ -8,6 +8,12 @@
 
 Cervantes is an opensource collaborative platform for pentesters or red teams who want to save time to manage their projects, clients, vulnerabilities and reports in one place.
 
+## Supported
+
+Cervantes is an [OWASP Foundation](https://owasp.org/www-project-cervantes/) Project
+
+<img src="https://raw.githubusercontent.com/CervantesSec/.github/main/profile/owasp.png"  width="500" height="150">
+
 ## Technologies
 
 ![DOTNET](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
@@ -150,6 +156,9 @@ Before you jump to make any changes make sure you have read the [contributing gu
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=YS42VF2N9GANA)
 
+## Security
+
+Please report Security issues via our [disclosure policy](https://github.com/CervantesSec/cervantes/blob/main/SECURITY.md).
 
 ## How to report bugs
 
