@@ -124,6 +124,10 @@
                     <thead class="thead-dark">
                     <tr>
                         <th>
+                            <i class="fas fa-id-badge"></i> <span localize-content>Id</span>
+                        </th>
+                        
+                        <th>
                             <i class="fas fa-bug"></i> <span localize-content>Name</span>
                         </th>
                         <th>
@@ -159,6 +163,7 @@
                     @foreach (var vuln in Model.Vulns)
                     {
                         <tr>
+                        <td>@vuln.FindingId</td>
                             <td>@vuln.Name</td>
                             <td>@vuln.cve</td>
                             @if (@vuln.CVSS3 <= 2)
@@ -316,6 +321,10 @@
                     <thead class="thead-dark">
                     <tr>
                         <th>
+                            <i class="fas fa-id-badge"></i> <span localize-content>Id</span>
+                        </th>
+                        
+                        <th>
                             <i class="fas fa-bug"></i> <span localize-content>Name</span>
                         </th>
                         <th>
@@ -330,7 +339,7 @@
                         <th>
                             <i class="fas fa-radiation-alt"></i> <span localize-content>OWASP Impact</span>
                         </th>
-                        
+
                         <th>
                             <i class="fas fa-biohazard"></i> <span localize-content>Risk</span>
                         </th>
@@ -358,6 +367,7 @@
                     @foreach (var vuln in Model.Vulns)
                     {
                         <tr>
+                            <td>@vuln.FindingId</td>
                             <td>@vuln.Name</td>
                             <td>@vuln.cve</td>
                             @if (@vuln.OWASPRisk == "NOTE")
@@ -405,7 +415,7 @@
                                 <td>
                                     No Data
                                 </td>
-                                                            
+
                             }
                             else
                             {
@@ -424,9 +434,9 @@
                                 {
                                     @vuln.OWASPLikehood
                                 }
-                                
+
                             </td>
-                            
+
                             <td>
                                 @if (@vuln.OWASPImpact == null)
                                 {
@@ -436,10 +446,10 @@
                                 {
                                     @vuln.OWASPImpact
                                 }
-                                
+
                             </td>
-                            
-                            
+
+
                             @switch (@vuln.Risk)
                             {
                                 case VulnRisk.Info:
@@ -483,9 +493,9 @@
                                     </td>
                                     break;
                             }
-                            
-                            
-                            
+
+
+
                             @switch (vuln.Status)
                             {
                                 case VulnStatus.Open:

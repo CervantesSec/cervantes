@@ -1,0 +1,1468 @@
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="sesst" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-user"></i> Session Management</th>
+                    <th><i class="fas fa-vial"></i> Test Name</th>
+                    <th><i class="fas fa-bullseye"></i> Objectives</th>
+                    
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    
+                    <th><i class="fas fa-sticky-note"></i> Notes</th>
+                    
+                    <th>
+                        <i class="fas fa-eye"></i>
+                    </th>
+                    
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WSTG-SESS-01</td>
+                    <td>Testing for Session Management Schema</td>
+                                    
+                    <td><p>- Gather session tokens, for the same user and for different users where possible.</p>
+                                            <p>- Analyze and ensure that enough randomness exists to stop session forging attacks.</p>
+                                            <p>- Modify cookies that are not signed and contain information that can be manipulated.</p></td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess1Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-SESS-02</td>
+                    <td>Testing for Cookies Attributes</td>
+                                                    
+                    <td>- Ensure that the proper security configuration is set for cookies.</td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess2Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-SESS-03</td>
+                    <td>Testing for Session Fixation</td>
+                                                    
+                    <td><p>- Analyze the authentication mechanism and its flow.</p>
+                        <p>- Force cookies and assess the impact.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess3Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-SESS-04</td>
+                    <td>Testing for Exposed Session Variables</td>
+                                                    
+                    <td><p>- Ensure that proper encryption is implemented.</p>
+                        <p>- Review the caching configuration.</p>
+                        <p>- Assess the channel and methods' security.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess4Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-SESS-05</td>
+                    <td>Testing for Cross Site Request Forgery</td>
+                                                    
+                    <td>- Determine whether it is possible to initiate requests on a user's behalf that are not initiated by the user.</td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess5Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-SESS-06</td>
+                    <td>Testing for Logout Functionality</td>
+                                                    
+                    <td><p>- Assess the logout UI.</p>
+                        <p>- Analyze the session timeout and if the session is properly killed after logout.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess6Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-SESS-07</td>
+                    <td>Testing Session Timeout</td>
+                                                    
+                    <td>- Validate that a hard session timeout exists.</td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess7Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-SESS-08</td>
+                    <td>Testing for Session Puzzling</td>
+                                                    
+                    <td><p>- Identify all session variables.</p>
+                        <p>- Break the logical flow of session generation.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess8Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-SESS-09</td>
+                    <td>Testing for Session Hijacking</td>
+                                                    
+                    <td><p>- Identify vulnerable session cookies.</p>
+                        <p>- Hijack vulnerable cookies and assess the risk level.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess9Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+
+                
+                </tbody>
+            </table>
+        </div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess1Modal" tabindex="-1" role="dialog" aria-labelledby="sess1ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess1ModalLabel">WSTG-SESS-01 - Testing for Session Management Schema</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>One of the core components of any web-based application is the mechanism by which it controls and maintains the state for a user interacting with it. To avoid continuous authentication for each page of a website or service, web applications implement various mechanisms to store and validate credentials for a pre-determined timespan. These mechanisms are known as Session Management.</p>
+                
+                <p>In this test, the tester wants to check that cookies and other session tokens are created in a secure and unpredictable way. An attacker who is able to predict and forge a weak cookie can easily hijack the sessions of legitimate users.</p>
+                
+                <p>Cookies are used to implement session management and are described in detail in RFC 2965. In a nutshell, when a user accesses an application which needs to keep track of the actions and identity of that user across multiple requests, a cookie (or cookies) is generated by the server and sent to the client. The client will then send the cookie back to the server in all following connections until the cookie expires or is destroyed. The data stored in the cookie can provide to the server a large spectrum of information about who the user is, what actions he has performed so far, what his preferences are, etc. therefore providing a state to a stateless protocol like HTTP.</p>
+                
+                <p>A typical example is provided by an online shopping cart. Throughout the session of a user, the application must keep track of his identity, his profile, the products that he has chosen to buy, the quantity, the individual prices, the discounts, etc. Cookies are an efficient way to store and pass this information back and forth (other methods are URL parameters and hidden fields).</p>
+                
+                <p>Due to the importance of the data that they store, cookies are therefore vital in the overall security of the application. Being able to tamper with cookies may result in hijacking the sessions of legitimate users, gaining higher privileges in an active session, and in general influencing the operations of the application in an unauthorized way.</p>
+                
+                <p>In this test the tester has to check whether the cookies issued to clients can resist a wide range of attacks aimed to interfere with the sessions of legitimate users and with the application itself. The overall goal is to be able to forge a cookie that will be considered valid by the application and that will provide some kind of unauthorized access (session hijacking, privilege escalation, …).</p>
+                
+                <p>Usually the main steps of the attack pattern are the following:</p>
+                
+                <ul>
+                  <li><strong>cookie collection</strong>: collection of a sufficient number of cookie samples;</li>
+                  <li><strong>cookie reverse engineering</strong>: analysis of the cookie generation algorithm;</li>
+                  <li><strong>cookie manipulation</strong>: forging of a valid cookie in order to perform the attack. This last step might require a large number of attempts, depending on how the cookie is created (cookie brute-force attack).</li>
+                </ul>
+                
+                <p>Another pattern of attack consists of overflowing a cookie. Strictly speaking, this attack has a different nature, since here testers are not trying to recreate a perfectly valid cookie. Instead, the goal is to overflow a memory area, thereby interfering with the correct behavior of the application and possibly injecting (and remotely executing) malicious code.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Gather session tokens, for the same user and for different users where possible.</li>
+                  <li>Analyze and ensure that enough randomness exists to stop session forging attacks.</li>
+                  <li>Modify cookies that are not signed and contain information that can be manipulated.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="black-box-testing-and-examples">Black-Box Testing and Examples</h3>
+                
+                <p>All interaction between the client and application should be tested at least against the following criteria:</p>
+                
+                <ul>
+                  <li>Are all <code class="language-plaintext highlighter-rouge">Set-Cookie</code> directives tagged as <code class="language-plaintext highlighter-rouge">Secure</code>?</li>
+                  <li>Do any Cookie operations take place over unencrypted transport?</li>
+                  <li>Can the Cookie be forced over unencrypted transport?</li>
+                  <li>If so, how does the application maintain security?</li>
+                  <li>Are any Cookies persistent?</li>
+                  <li>What <code class="language-plaintext highlighter-rouge">Expires</code> times are used on persistent cookies, and are they reasonable?</li>
+                  <li>Are cookies that are expected to be transient configured as such?</li>
+                  <li>What HTTP/1.1 <code class="language-plaintext highlighter-rouge">Cache-Control</code> settings are used to protect Cookies?</li>
+                  <li>What HTTP/1.0 <code class="language-plaintext highlighter-rouge">Cache-Control</code> settings are used to protect Cookies?</li>
+                </ul>
+                
+                <h4 id="cookie-collection">Cookie Collection</h4>
+                
+                <p>The first step required to manipulate the cookie is to understand how the application creates and manages cookies. For this task, testers have to try to answer the following questions:</p>
+                
+                <ul>
+                  <li>
+                    <p>How many cookies are used by the application?</p>
+                
+                    <p>Surf the application. Note when cookies are created. Make a list of received cookies, the page that sets them (with the set-cookie directive), the domain for which they are valid, their value, and their characteristics.</p>
+                  </li>
+                  <li>
+                    <p>Which parts of the application generate or modify the cookie?</p>
+                
+                    <p>Surfing the application, find which cookies remain constant and which get modified. What events modify the cookie?</p>
+                  </li>
+                  <li>
+                    <p>Which parts of the application require this cookie in order to be accessed and utilized?</p>
+                
+                    <p>Find out which parts of the application need a cookie. Access a page, then try again without the cookie, or with a modified value of it. Try to map which cookies are used where.</p>
+                  </li>
+                </ul>
+                
+                <p>A spreadsheet mapping each cookie to the corresponding application parts and the related information can be a valuable output of this phase.</p>
+                
+                <h4 id="session-analysis">Session Analysis</h4>
+                
+                <p>The session tokens (Cookie, SessionID or Hidden Field) themselves should be examined to ensure their quality from a security perspective. They should be tested against criteria such as their randomness, uniqueness, resistance to statistical and cryptographic analysis and information leakage.</p>
+                
+                <ul>
+                  <li>Token Structure &amp; Information Leakage</li>
+                </ul>
+                
+                <p>The first stage is to examine the structure and content of a Session ID provided by the application. A common mistake is to include specific data in the Token instead of issuing a generic value and referencing real data server-side.</p>
+                
+                <p>If the Session ID is clear-text, the structure and pertinent data may be immediately obvious such as <code class="language-plaintext highlighter-rouge">192.168.100.1:owaspuser:password:15:58</code>.</p>
+                
+                <p>If part or the entire token appears to be encoded or hashed, it should be compared to various techniques to check for obvious obfuscation. For example the string <code class="language-plaintext highlighter-rouge">192.168.100.1:owaspuser:password:15:58</code> is represented in Hex, Base64, and as an MD5 hash:</p>
+                
+                <ul>
+                  <li>Hex: <code class="language-plaintext highlighter-rouge">3139322E3136382E3130302E313A6F77617370757365723A70617373776F72643A31353A3538</code></li>
+                  <li>Base64: <code class="language-plaintext highlighter-rouge">MTkyLjE2OC4xMDAuMTpvd2FzcHVzZXI6cGFzc3dvcmQ6MTU6NTg=</code></li>
+                  <li>MD5: <code class="language-plaintext highlighter-rouge">01c2fc4f0a817afd8366689bd29dd40a</code></li>
+                </ul>
+                
+                <p>Having identified the type of obfuscation, it may be possible to decode back to the original data. In most cases, however, this is unlikely. Even so, it may be useful to enumerate the encoding in place from the format of the message. Furthermore, if both the format and obfuscation technique can be deduced, automated brute-force attacks could be devised.</p>
+                
+                <p>Hybrid tokens may include information such as IP address or User ID together with an encoded portion, such as <code class="language-plaintext highlighter-rouge">owaspuser:192.168.100.1:a7656fafe94dae72b1e1487670148412</code>.</p>
+                
+                <p>Having analyzed a single session token, the representative sample should be examined. A simple analysis of the tokens should immediately reveal any obvious patterns. For example, a 32 bit token may include 16 bits of static data and 16 bits of variable data. This may indicate that the first 16 bits represent a fixed attribute of the user – e.g. the username or IP address. If the second 16 bit chunk is incrementing at a regular rate, it may indicate a sequential or even time-based element to the token generation. See examples.</p>
+                
+                <p>If static elements to the Tokens are identified, further samples should be gathered, varying one potential input element at a time. For example, log in attempts through a different user account or from a different IP address may yield a variance in the previously static portion of the session token.</p>
+                
+                <p>The following areas should be addressed during the single and multiple Session ID structure testing:</p>
+                
+                <ul>
+                  <li>What parts of the Session ID are static?</li>
+                  <li>What clear-text confidential information is stored in the Session ID? E.g. usernames/UID, IP addresses</li>
+                  <li>What easily decoded confidential information is stored?</li>
+                  <li>What information can be deduced from the structure of the Session ID?</li>
+                  <li>What portions of the Session ID are static for the same log in conditions?</li>
+                  <li>What obvious patterns are present in the Session ID as a whole, or individual portions?</li>
+                </ul>
+                
+                <h4 id="session-id-predictability-and-randomness">Session ID Predictability and Randomness</h4>
+                
+                <p>Analysis of the variable areas (if any) of the Session ID should be undertaken to establish the existence of any recognizable or predictable patterns. These analyses may be performed manually and with bespoke or OTS statistical or cryptanalytic tools to deduce any patterns in the Session ID content. Manual checks should include comparisons of Session IDs issued for the same login conditions – e.g., the same username, password, and IP address.</p>
+                
+                <p>Time is an important factor which must also be controlled. High numbers of simultaneous connections should be made in order to gather samples in the same time window and keep that variable constant. Even a quantization of 50ms or less may be too coarse and a sample taken in this way may reveal time-based components that would otherwise be missed.</p>
+                
+                <p>Variable elements should be analyzed over time to determine whether they are incremental in nature. Where they are incremental, patterns relating to absolute or elapsed time should be investigated. Many systems use time as a seed for their pseudo-random elements. Where the patterns are seemingly random, one-way hashes of time or other environmental variations should be considered as a possibility. Typically, the result of a cryptographic hash is a decimal or hexadecimal number so should be identifiable.</p>
+                
+                <p>In analyzing Session ID sequences, patterns or cycles, static elements and client dependencies should all be considered as possible contributing elements to the structure and function of the application.</p>
+                
+                <ul>
+                  <li>Are the Session IDs provably random in nature? Can the resulting values be reproduced?</li>
+                  <li>Do the same input conditions produce the same ID on a subsequent run?</li>
+                  <li>Are the Session IDs provably resistant to statistical or cryptanalysis?</li>
+                  <li>What elements of the Session IDs are time-linked?</li>
+                  <li>What portions of the Session IDs are predictable?</li>
+                  <li>Can the next ID be deduced, given full knowledge of the generation algorithm and previous IDs?</li>
+                </ul>
+                
+                <h4 id="cookie-reverse-engineering">Cookie Reverse Engineering</h4>
+                
+                <p>Now that the tester has enumerated the cookies and has a general idea of their use, it is time to have a deeper look at cookies that seem interesting. Which cookies is the tester interested in? A cookie, in order to provide a secure method of session management, must combine several characteristics, each of which is aimed at protecting the cookie from a different class of attacks.</p>
+                
+                <p>These characteristics are summarized below:</p>
+                
+                <ol>
+                  <li>Unpredictability: a cookie must contain some amount of hard-to-guess data. The harder it is to forge a valid cookie, the harder is to break into legitimate user’s session. If an attacker can guess the cookie used in an active session of a legitimate user, they will be able to fully impersonate that user (session hijacking). In order to make a cookie unpredictable, random values or cryptography can be used.</li>
+                  <li>Tamper resistance: a cookie must resist malicious attempts of modification. If the tester receives a cookie like <code class="language-plaintext highlighter-rouge">IsAdmin=No</code>, it is trivial to modify it to get administrative rights, unless the application performs a double check (for instance, appending to the cookie an encrypted hash of its value)</li>
+                  <li>Expiration: a critical cookie must be valid only for an appropriate period of time and must be deleted from the disk or memory afterwards to avoid the risk of being replayed. This does not apply to cookies that store non-critical data that needs to be remembered across sessions (e.g., site look-and-feel).</li>
+                  <li><code class="language-plaintext highlighter-rouge">Secure</code> flag: a cookie whose value is critical for the integrity of the session should have this flag enabled in order to allow its transmission only in an encrypted channel to deter eavesdropping.</li>
+                </ol>
+                
+                <p>The approach here is to collect a sufficient number of instances of a cookie and start looking for patterns in their value. The exact meaning of “sufficient” can vary from a handful of samples, if the cookie generation method is very easy to break, to several thousands, if the tester needs to proceed with some mathematical analysis (e.g., chi-squares, attractors. See later for more information).</p>
+                
+                <p>It is important to pay particular attention to the workflow of the application, as the state of a session can have a heavy impact on collected cookies. A cookie collected before being authenticated can be very different from a cookie obtained after the authentication.</p>
+                
+                <p>Another aspect to keep into consideration is time. Always record the exact time when a cookie has been obtained, when there is the possibility that time plays a role in the value of the cookie (the server could use a timestamp as part of the cookie value). The time recorded could be the local time or the server’s tiemstamp included in the HTTP response (or both).</p>
+                
+                <p>When analyzing the collected values, the tester should try to figure out all variables that could have influenced the cookie value and try to vary them one at the time. Passing to the server modified versions of the same cookie can be very helpful in understanding how the application reads and processes the cookie.</p>
+                
+                <p>Examples of checks to be performed at this stage include:</p>
+                
+                <ul>
+                  <li>What character set is used in the cookie? Has the cookie a numeric value? alphanumeric? hexadecimal? What happens if the tester inserts in a cookie characters that do not belong to the expected charset?</li>
+                  <li>Is the cookie composed of different sub-parts carrying different pieces of information? How are the different parts separated? With which delimiters? Some parts of the cookie could have a higher variance, others might be constant, others could assume only a limited set of values. Breaking down the cookie to its base components is the first and fundamental step.</li>
+                </ul>
+                
+                <p>An example of an easy-to-spot structured cookie is the following:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ID=5a0acfc7ffeb919:CR=1:TM=1120514521:LM=1120514521:S=j3am5KzC4v01ba3q
+                </code></pre></div></div>
+                
+                <p>This example shows 5 different fields, carrying different types of data:</p>
+                
+                <ul>
+                  <li>ID – hexadecimal</li>
+                  <li>CR – small integer</li>
+                  <li>TM and LM – large integer. (And curiously they hold the same value. Worth to see what happens modifying one of them)</li>
+                  <li>S – alphanumeric</li>
+                </ul>
+                
+                <p>Even when no delimiters are used, having enough samples can help understand the structure.</p>
+                
+                <h4 id="brute-force-attacks">Brute Force Attacks</h4>
+                
+                <p>Brute force attacks inevitably lead on from questions relating to predictability and randomness. The variance within the Session IDs must be considered together with application session duration and timeouts. If the variation within the Session IDs is relatively small, and Session ID validity is long, the likelihood of a successful brute-force attack is much higher.</p>
+                
+                <p>A long Session ID (or rather one with a great deal of variance) and a shorter validity period would make it far harder to succeed in a brute force attack.</p>
+                
+                <ul>
+                  <li>How long would a brute-force attack on all possible Session IDs take?</li>
+                  <li>Is the Session ID space large enough to prevent brute forcing? For example, is the length of the key sufficient when compared to the valid life-span?</li>
+                  <li>Do delays between connection attempts with different Session IDs mitigate the risk of this attack?</li>
+                </ul>
+                
+                <h3 id="gray-box-testing-and-example">Gray-Box Testing and Example</h3>
+                
+                <p>If the tester has access to the session management schema implementation, they can check for the following:</p>
+                
+                <ul>
+                  <li>
+                    <p>Random Session Token</p>
+                
+                    <p>The Session ID or Cookie issued to the client should not be easily predictable (don’t use linear algorithms based on predictable variables such as the client IP address). The use of cryptographic algorithms with key length of 256 bits is encouraged (like AES).</p>
+                  </li>
+                  <li>
+                    <p>Token length</p>
+                
+                    <p>Session ID will be at least 50 characters length.</p>
+                  </li>
+                  <li>
+                    <p>Session Time-out</p>
+                
+                    <p>Session token should have a defined time-out (it depends on the criticality of the application managed data)</p>
+                  </li>
+                  <li>
+                    <p>Cookie configuration:</p>
+                    <ul>
+                      <li>non-persistent: only RAM memory</li>
+                      <li>secure (set only on HTTPS channel): <code class="language-plaintext highlighter-rouge">Set-Cookie: cookie=data; path=/; domain=.aaa.it; secure</code></li>
+                      <li><a href="https://owasp.org/www-community/HttpOnly">HTTPOnly</a> (not readable by a script): <code class="language-plaintext highlighter-rouge">Set-Cookie: cookie=data; path=/; domain=.aaa.it; HttpOnly</code></li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <p>More information here: <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes">Testing for cookies attributes</a></p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org">OWASP Zed Attack Proxy Project (ZAP)</a> - features a session token analysis mechanism.</li>
+                  <li><a href="https://portswigger.net/burp/documentation/desktop/tools/sequencer">Burp Sequencer</a></li>
+                  <li><a href="https://github.com/yehgdotnet/JHijack">YEHG’s JHijack</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <h3 id="whitepapers">Whitepapers</h3>
+                
+                <ul>
+                  <li><a href="https://tools.ietf.org/html/rfc2965">RFC 2965 “HTTP State Management Mechanism”</a></li>
+                  <li><a href="https://www.ietf.org/rfc/rfc1750.txt">RFC 1750 “Randomness Recommendations for Security”</a></li>
+                  <li><a href="http://lcamtuf.coredump.cx/oldtcp/tcpseq.html">Michal Zalewski: “Strange Attractors and TCP/IP Sequence Number Analysis” (2001)</a></li>
+                  <li><a href="http://lcamtuf.coredump.cx/newtcp/">Michal Zalewski: “Strange Attractors and TCP/IP Sequence Number Analysis - One Year Later” (2002)</a></li>
+                  <li><a href="http://mathworld.wolfram.com/CorrelationCoefficient.html">Correlation Coefficient</a></li>
+                  <li><a href="https://fourmilab.ch/random/">ENT</a></li>
+                  <li><a href="https://seclists.org/lists/fulldisclosure/2005/Jun/0188.html">DMA[2005-0614a] - ‘Global Hauri ViRobot Server cookie overflow’</a></li>
+                  <li><a href="http://www.technicalinfo.net">Gunter Ollmann: “Web Based Session Management”</a></li>
+                  <li><a href="https://wiki.owasp.org/index.php/Category:OWASP_Code_Review_Project">OWASP Code Review Guide</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/01-Testing_for_Session_Management_Schema" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess2Modal" tabindex="-1" role="dialog" aria-labelledby="sess2ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess2ModalLabel">WSTG-SESS-02 - Testing for Cookies Attributes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Web Cookies (herein referred to as cookies) are often a key attack vector for malicious users (typically targeting other users) and the application should always take due diligence to protect cookies.</p>
+                
+                <p>HTTP is a stateless protocol, meaning that it doesn’t hold any reference to requests being sent by the same user. In order to fix this issue, sessions were created and appended to HTTP requests. Browsers, as discussed in <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/11-Client-side_Testing/12-Testing_Browser_Storage">testing browser storage</a>, contain a multitude of storage mechanisms. In that section of the guide, each is discussed thoroughly.</p>
+                
+                <p>The most used session storage mechanism in browsers is cookie storage. Cookies can be set by the server, by including a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie"><code class="language-plaintext highlighter-rouge">Set-Cookie</code></a> header in the HTTP response or via JavaScript. Cookies can be used for a multitude of reasons, such as:</p>
+                
+                <ul>
+                  <li>session management</li>
+                  <li>personalization</li>
+                  <li>tracking</li>
+                </ul>
+                
+                <p>In order to secure cookie data, the industry has developed means to help lock down these cookies and limit their attack surface. Over time cookies have become a preferred storage mechanism for web applications, as they allow great flexibility in use and protection.</p>
+                
+                <p>The means to protect the cookies are:</p>
+                
+                <ul>
+                  <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Creating_cookies">Cookie Attributes</a></li>
+                  <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Cookie_prefixes">Cookie Prefixes</a></li>
+                </ul>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Ensure that the proper security configuration is set for cookies.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>Below, a description of every attribute and prefix will be discussed. The tester should validate that they are being used properly by the application. Cookies can be reviewed by using an <a href="#intercepting-proxy">intercepting proxy</a>, or by reviewing the browser’s cookie jar.</p>
+                
+                <h3 id="cookie-attributes">Cookie Attributes</h3>
+                
+                <h4 id="secure-attribute">Secure Attribute</h4>
+                
+                <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Secure"><code class="language-plaintext highlighter-rouge">Secure</code></a> attribute tells the browser to only send the cookie if the request is being sent over a secure channel such as <code class="language-plaintext highlighter-rouge">HTTPS</code>. This will help protect the cookie from being passed in unencrypted requests. If the application can be accessed over both <code class="language-plaintext highlighter-rouge">HTTP</code> and <code class="language-plaintext highlighter-rouge">HTTPS</code>, an attacker could be able to redirect the user to send their cookie as part of non-protected requests.</p>
+                
+                <h4 id="httponly-attribute">HttpOnly Attribute</h4>
+                
+                <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#HttpOnly"><code class="language-plaintext highlighter-rouge">HttpOnly</code></a> attribute is used to help prevent attacks such as session leakage, since it does not allow the cookie to be accessed via a client-side script such as JavaScript.</p>
+                
+                <blockquote>
+                  <p>This doesn’t limit the whole attack surface of XSS attacks, as an attacker could still send request in place of the user, but limits immensely the reach of XSS attack vectors.</p>
+                </blockquote>
+                
+                <h4 id="domain-attribute">Domain Attribute</h4>
+                
+                <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Scope_of_cookies"><code class="language-plaintext highlighter-rouge">Domain</code></a> attribute is used to compare the cookie’s domain against the domain of the server for which the HTTP request is being made. If the domain matches or if it is a subdomain, then the <a href="#path-attribute"><code class="language-plaintext highlighter-rouge">path</code></a> attribute will be checked next.</p>
+                
+                <p>Note that only hosts that belong to the specified domain can set a cookie for that domain. Additionally, the <code class="language-plaintext highlighter-rouge">domain</code> attribute cannot be a top level domain (such as <code class="language-plaintext highlighter-rouge">.gov</code> or <code class="language-plaintext highlighter-rouge">.com</code>) to prevent servers from setting arbitrary cookies for another domain (such as setting a cookie for <code class="language-plaintext highlighter-rouge">owasp.org</code>). If the domain attribute is not set, then the hostname of the server that generated the cookie is used as the default value of the <code class="language-plaintext highlighter-rouge">domain</code>.</p>
+                
+                <p>For example, if a cookie is set by an application at <code class="language-plaintext highlighter-rouge">app.mydomain.com</code> with no domain attribute set, then the cookie would be resubmitted for all subsequent requests for <code class="language-plaintext highlighter-rouge">app.mydomain.com</code> and its subdomains (such as <code class="language-plaintext highlighter-rouge">hacker.app.mydomain.com</code>), but not to <code class="language-plaintext highlighter-rouge">otherapp.mydomain.com</code>. If a developer wanted to loosen this restriction, then he could set the <code class="language-plaintext highlighter-rouge">domain</code> attribute to <code class="language-plaintext highlighter-rouge">mydomain.com</code>. In this case the cookie would be sent to all requests for <code class="language-plaintext highlighter-rouge">app.mydomain.com</code> and <code class="language-plaintext highlighter-rouge">mydomain.com</code> subdomains, such as <code class="language-plaintext highlighter-rouge">hacker.app.mydomain.com</code>, and even <code class="language-plaintext highlighter-rouge">bank.mydomain.com</code>. If there was a vulnerable server on a subdomain (for example, <code class="language-plaintext highlighter-rouge">otherapp.mydomain.com</code>) and the <code class="language-plaintext highlighter-rouge">domain</code> attribute has been set too loosely (for example, <code class="language-plaintext highlighter-rouge">mydomain.com</code>), then the vulnerable server could be used to harvest cookies (such as session tokens) across the full scope of <code class="language-plaintext highlighter-rouge">mydomain.com</code>.</p>
+                
+                <h4 id="path-attribute">Path Attribute</h4>
+                
+                <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Scope_of_cookies"><code class="language-plaintext highlighter-rouge">Path</code></a> attribute plays a major role in setting the scope of the cookies in conjunction with the <a href="#domain-attribute"><code class="language-plaintext highlighter-rouge">domain</code></a>. In addition to the domain, the URL path that the cookie is valid for can be specified. If the domain and path match, then the cookie will be sent in the request. Just as with the domain attribute, if the path attribute is set too loosely, then it could leave the application vulnerable to attacks by other applications on the same server. For example, if the path attribute was set to the web server root <code class="language-plaintext highlighter-rouge">/</code>, then the application cookies will be sent to every application within the same domain (if multiple application reside under the same server). A couple of examples for multiple applications under the same server:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">path=/bank</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">path=/private</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">path=/docs</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">path=/docs/admin</code></li>
+                </ul>
+                
+                <h4 id="expires-attribute">Expires Attribute</h4>
+                
+                <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Permanent_cookies"><code class="language-plaintext highlighter-rouge">Expires</code></a> attribute is used to:</p>
+                
+                <ul>
+                  <li>set persistent cookies</li>
+                  <li>limit lifespan if a session lives for too long</li>
+                  <li>remove a cookie forcefully by setting it to a past date</li>
+                </ul>
+                
+                <p>Unlike <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Session_cookies">session cookies</a>, persistent cookies will be used by the browser until the cookie expires. Once the expiration date has exceeded the time set, the browser will delete the cookie.</p>
+                
+                <h4 id="samesite-attribute">SameSite Attribute</h4>
+                
+                <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#SameSite_cookies"><code class="language-plaintext highlighter-rouge">SameSite</code></a> attribute is used to assert that a cookie ought not to be sent along with cross-site requests. This feature allows the server to mitigate the risk of cross-orgin information leakage. In some cases, it is used too as a risk reduction (or defense in depth mechanism) strategy to prevent <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/05-Testing_for_Cross_Site_Request_Forgery">cross-site request forgery</a> attacks. This attribute can be configured in three different modes:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">Strict</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">Lax</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">None</code></li>
+                </ul>
+                
+                <h5 id="strict-value">Strict Value</h5>
+                
+                <p>The <code class="language-plaintext highlighter-rouge">Strict</code> value is the most restrictive usage of <code class="language-plaintext highlighter-rouge">SameSite</code>, allowing the browser to send the cookie only to first-party context without top-level navigation. In other words, the data associated with the cookie will only be sent on requests matching the current site shown on the browser URL bar. The cookie will not be sent on requests generated by third-party websites. This value is especially recommended for actions performed at the same domain. However, it can have some limitations with some session management systems negatively affecting the user navigation experience. Since the browser would not send the cookie on any requests generated from a third-party domain or email, the user would be required to sign in again even if they already have an authenticated session.</p>
+                
+                <h5 id="lax-value">Lax Value</h5>
+                
+                <p>The <code class="language-plaintext highlighter-rouge">Lax</code> value is less restrictive than <code class="language-plaintext highlighter-rouge">Strict</code>. The cookie will be sent if the URL equals the cookie’s domain (first-party) even if the link is coming from a third-party domain. This value is considered by most browsers the default behavior since it provides a better user experience than the <code class="language-plaintext highlighter-rouge">Strict</code> value. It doesn’t trigger for assets, such as images, where cookies might not be needed to access them.</p>
+                
+                <h5 id="none-value">None Value</h5>
+                
+                <p>The <code class="language-plaintext highlighter-rouge">None</code> value specifies that the browser will send the cookie on cross-site requests (the normal behavior before the implementation of <code class="language-plaintext highlighter-rouge">SamseSite</code>) only if the <code class="language-plaintext highlighter-rouge">Secure</code> attribute is also used, <em>e.g.</em> <code class="language-plaintext highlighter-rouge">SameSite=None; Secure</code>. It is a recommended value, instead of not specifying any <code class="language-plaintext highlighter-rouge">SameSite</code> value, as it forces the use of the <a href="#secure-attribute"><code class="language-plaintext highlighter-rouge">secure</code> attribute</a>.</p>
+                
+                <h3 id="cookie-prefixes">Cookie Prefixes</h3>
+                
+                <p>By design cookies do not have the capabilities to guarantee the integrity and confidentiality of the information stored in them. Those limitations make it impossible for a server to have confidence about how a given cookie’s attributes were set at creation. In order to give the servers such features in a backwards-compatible way, the industry has introduced the concept of <a href="https://tools.ietf.org/html/draft-ietf-httpbis-cookie-prefixes-00"><code class="language-plaintext highlighter-rouge">Cookie Name Prefixes</code></a> to facilitate passing such details embedded as part of the cookie name.</p>
+                
+                <h4 id="host-prefix">Host Prefix</h4>
+                
+                <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Cookie_prefixes"><code class="language-plaintext highlighter-rouge">__Host-</code></a> prefix expects cookies to fulfill the following conditions:</p>
+                
+                <ol>
+                  <li>The cookie must be set with the <a href="#secure-attribute"><code class="language-plaintext highlighter-rouge">Secure</code> attribute</a>.</li>
+                  <li>The cookie must be set from a URI considered secure by the user agent.</li>
+                  <li>Sent only to the host who set the cookie and MUST NOT include any <a href="#domain-attribute"><code class="language-plaintext highlighter-rouge">Domain</code> attribute</a>.</li>
+                  <li>The cookie must be set with the <a href="#path-attribute"><code class="language-plaintext highlighter-rouge">Path</code>attribute</a> with a value of <code class="language-plaintext highlighter-rouge">/</code> so it would be sent to every request to the host.</li>
+                </ol>
+                
+                <p>For this reason, the cookie <code class="language-plaintext highlighter-rouge">Set-Cookie: __Host-SID=12345; Secure; Path=/</code> would be accepted while any of the following ones would always be rejected:
+                <code class="language-plaintext highlighter-rouge">Set-Cookie: __Host-SID=12345</code>
+                <code class="language-plaintext highlighter-rouge">Set-Cookie: __Host-SID=12345; Secure</code>
+                <code class="language-plaintext highlighter-rouge">Set-Cookie: __Host-SID=12345; Domain=site.example</code>
+                <code class="language-plaintext highlighter-rouge">Set-Cookie: __Host-SID=12345; Domain=site.example; Path=/</code>
+                <code class="language-plaintext highlighter-rouge">Set-Cookie: __Host-SID=12345; Secure; Domain=site.example; Path=/</code></p>
+                
+                <h4 id="secure-prefix">Secure Prefix</h4>
+                
+                <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Cookie_prefixes"><code class="language-plaintext highlighter-rouge">__Secure-</code></a> prefix is less restrictive and can be introduced by adding the case-sensitive string <code class="language-plaintext highlighter-rouge">__Secure-</code> to the cookie name. Any cookie that matches the prefix <code class="language-plaintext highlighter-rouge">__Secure-</code> would be expected to fulfill the following conditions:</p>
+                
+                <ol>
+                  <li>The cookie must be set with the <code class="language-plaintext highlighter-rouge">Secure</code> attribute.</li>
+                  <li>The cookie must be set from a URI considered secure by the user agent.</li>
+                </ol>
+                
+                <h3 id="strong-practices">Strong Practices</h3>
+                
+                <p>Based on the application needs, and how the cookie should function, the attributes and prefixes must be applied. The more the cookie is locked down, the better.</p>
+                
+                <p>Putting all this together, we can define the most secure cookie attribute configuration as: <code class="language-plaintext highlighter-rouge">Set-Cookie: __Host-SID=&lt;session token&gt;; path=/; Secure; HttpOnly; SameSite=Strict</code>.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <h3 id="intercepting-proxy">Intercepting Proxy</h3>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org">OWASP Zed Attack Proxy Project</a></li>
+                  <li><a href="https://portswigger.net">Web Proxy Burp Suite</a></li>
+                </ul>
+                
+                <h3 id="browser-plug-in">Browser Plug-in</h3>
+                
+                <ul>
+                  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/tamper-data-for-ff-quantum/">Tamper Data for FF Quantum</a></li>
+                  <li><a href="https://github.com/codebutler/firesheep">“FireSheep” for FireFox</a></li>
+                  <li><a href="https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg?hl=en">“EditThisCookie” for Chrome</a></li>
+                  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/cookiebro/">“Cookiebro - Cookie Manager” for FireFox</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://tools.ietf.org/html/rfc2965">RFC 2965 - HTTP State Management Mechanism</a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc2616">RFC 2616 – Hypertext Transfer Protocol – HTTP 1.1</a></li>
+                  <li><a href="https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site-00">Same-Site Cookies - draft-ietf-httpbis-cookie-same-site-00</a></li>
+                  <li><a href="https://seckb.yehg.net/2012/02/important-expires-attribute-of-set.html">The important “expires” attribute of Set-Cookie</a></li>
+                  <li><a href="https://seckb.yehg.net/2012/06/httponly-session-id-in-url-and-page.html">HttpOnly Session ID in URL and Page Body</a></li>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess3Modal" tabindex="-1" role="dialog" aria-labelledby="sess3ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess3ModalLabel">WSTG-SESS-03 - Testing for Session Fixation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Session fixation is enabled by the insecure practice of preserving the same value of the session cookies before and after authentication. This typically happens when session cookies are used to store state information even before login, e.g., to add items to a shopping cart before authenticating for payment.</p>
+                
+                <p>In the generic exploit of session fixation vulnerabilities, an attacker can obtain a set of session cookies from the target website without first authenticating. The attacker can then force these cookies into the victim’s browser using different techniques. If the victim later authenticates at the target website and the cookies are not refreshed upon login, the victim will be identified by the session cookies chosen by the attacker. The attacker is then able to impersonate the victim with these known cookies.</p>
+                
+                <p>This issue can be fixed by refreshing the session cookies after the authentication process. Alternatively, the attack can be prevented by ensuring the integrity of session cookies. When considering network attackers, i.e., attackers who control the network used by the victim, use full <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">HSTS</a> or add the<code class="language-plaintext highlighter-rouge">__Host-</code> / <code class="language-plaintext highlighter-rouge">__Secure-</code> prefix to the cookie name.</p>
+                
+                <p>Full HSTS adoption occurs when a host activates HSTS for itself and all its sub-domains. This is described in a paper called <em>Testing for Integrity Flaws in Web Sessions</em> by Stefano Calzavara, Alvise Rabitti, Alessio Ragazzo, and Michele Bugliesi.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Analyze the authentication mechanism and its flow.</li>
+                  <li>Force cookies and assess the impact.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>In this section we give an explanation of the testing strategy that will be shown in the next section.</p>
+                
+                <p>The first step is to make a request to the site to be tested (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">www.example.com</code>). If the tester requests the following:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">GET&nbsp;/ HTTP/1.1
+                Host: www.example.com
+                </span></code></pre></div></div>
+                
+                <p>They will obtain the following response:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+                Date: Wed, 14 Aug 2008 08:45:11 GMT
+                Server: IBM_HTTP_Server
+                Set-Cookie: JSESSIONID=0000d8eyYq3L0z2fgq10m4v-rt4:-1; Path=/; secure
+                Cache-Control: no-cache="set-cookie,set-cookie2"
+                Expires: Thu, 01 Dec 1994 16:00:00 GMT
+                Keep-Alive: timeout=5, max=100
+                Connection: Keep-Alive
+                Content-Type: text/html;charset=Cp1254
+                Content-Language: en-US
+                </code></pre></div></div>
+                
+                <p>The application sets a new session identifier, <code class="language-plaintext highlighter-rouge">JSESSIONID=0000d8eyYq3L0z2fgq10m4v-rt4:-1</code>, for the client.</p>
+                
+                <p>Next, if the tester successfully authenticates to the application with the following POST to <code class="language-plaintext highlighter-rouge">https://www.example.com/authentication.php</code>:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/authentication.php</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">www.example.com</span>
+                <span class="s">[...]</span>
+                <span class="na">Referer</span><span class="p">:</span> <span class="s">http://www.example.com</span>
+                <span class="na">Cookie</span><span class="p">:</span> <span class="s">JSESSIONID=0000d8eyYq3L0z2fgq10m4v-rt4:-1</span>
+                <span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/x-www-form-urlencoded</span>
+                <span class="na">Content-length</span><span class="p">:</span> <span class="s">57</span>
+                
+                Name=Meucci&amp;wpPassword=secret!&amp;wpLoginattempt=Log+in
+                </code></pre></div></div>
+                
+                <p>The tester observes the following response from the server:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+                <span class="na">Date</span><span class="p">:</span> <span class="s">Thu, 14 Aug 2008 14:52:58 GMT</span>
+                <span class="na">Server</span><span class="p">:</span> <span class="s">Apache/2.2.2 (Fedora)</span>
+                <span class="na">X-Powered-By</span><span class="p">:</span> <span class="s">PHP/5.1.6</span>
+                <span class="na">Content-language</span><span class="p">:</span> <span class="s">en</span>
+                <span class="na">Cache-Control</span><span class="p">:</span> <span class="s">private, must-revalidate, max-age=0</span>
+                <span class="na">X-Content-Encoding</span><span class="p">:</span> <span class="s">gzip</span>
+                <span class="na">Content-length</span><span class="p">:</span> <span class="s">4090</span>
+                <span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+                <span class="na">Content-Type</span><span class="p">:</span> <span class="s">text/html; charset=UTF-8</span>
+                <span class="s">...</span>
+                <span class="s">HTML data</span>
+                <span class="s">...</span>
+                </code></pre></div></div>
+                
+                <p>As no new cookie has been issued upon a successful authentication, the tester knows that it is possible to perform session hijacking unless the integrity of the session cookie is ensured.</p>
+                
+                <p>The tester can send a valid session identifier to a user (possibly using a social engineering trick), wait for them to authenticate, and subsequently verify that privileges have been assigned to this cookie.</p>
+                
+                <h3 id="test-with-forced-cookies">Test with Forced Cookies</h3>
+                
+                <p>This testing strategy is targeted at network attackers, hence it only needs to be applied to sites without full HSTS adoption (sites with full HSTS adoption are secure, since all their cookies have integrity). We assume to have two testing accounts on the website under test, one to act as the victim and one to act as the attacker. We simulate a scenario where the attacker forces in the victim’s browser all the cookies which are not freshly issued after login and do not have integrity. After the victim’s login, the attacker presents the forced cookies to the website to access the victim’s account: if they are enough to act on the victim’s behalf, session fixation is possible.</p>
+                
+                <p>Here are the steps for executing this test:</p>
+                
+                <ol>
+                  <li>Reach the login page of the website.</li>
+                  <li>Save a snapshot of the cookie jar before logging in, excluding cookies which contain the <code class="language-plaintext highlighter-rouge">__Host-</code> or <code class="language-plaintext highlighter-rouge">__Secure-</code> prefix in their name.</li>
+                  <li>Login to the website as the victim and reach any page offering a secure function requiring authentication.</li>
+                  <li>Set the cookie jar to the snapshot taken at step 2.</li>
+                  <li>Trigger the secure function identified at step 3.</li>
+                  <li>Observe whether the operation at step 5 has been performed successfully. If so, the attack was successful.</li>
+                  <li>Clear the cookie jar, login as the attacker and reach the page at step 3.</li>
+                  <li>Write in the cookie jar, one by one, the cookies saved at step 2.</li>
+                  <li>Trigger again the secure function identified at step 3.</li>
+                  <li>Clear the cookie jar and login again as the victim.</li>
+                  <li>Observe whether the operation at step 9 has been performed successfully in the victim’s account. If so, the attack was successful; otherwise, the site is secure against session fixation.</li>
+                </ol>
+                
+                <p>We recommend using two different machines or browsers for the victim and the attacker. This allows you to decrease the number of false positives if the web application does fingerprinting to verify access enabled from a given cookie. A shorter but less precise variant of the testing strategy only requires one testing account. It follows the same steps, but it halts at step 6.</p>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>Implement a session token renewal after a user successfully authenticates.</p>
+                
+                <p>The application should always first invalidate the existing session ID before authenticating a user, and if the authentication is successful, provide another session ID.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org">OWASP ZAP</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://owasp.org/www-community/attacks/Session_fixation">Session Fixation</a></li>
+                  <li><a href="https://www.acrossecurity.com/papers/session_fixation.pdf">ACROS Security</a></li>
+                  <li><a href="http://shiflett.org/articles/session-fixation">Chris Shiflett</a></li>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/03-Testing_for_Session_Fixation" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess4Modal" tabindex="-1" role="dialog" aria-labelledby="sess4ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess4ModalLabel">WSTG-SESS-04 - Testing for Exposed Session Variables</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>The Session Tokens (Cookie, SessionID, Hidden Field), if exposed, will usually enable an attacker to impersonate a victim and access the application illegitimately. It is important that they are protected from eavesdropping at all times, particularly whilst in transit between the client browser and the application servers.</p>
+                
+                <p>The information here relates to how transport security applies to the transfer of sensitive Session ID data rather than data in general, and may be stricter than the caching and transport policies applied to the data served by the site.</p>
+                
+                <p>Using a personal proxy, it is possible to ascertain the following about each request and response:</p>
+                
+                <ul>
+                  <li>Protocol used (e.g., HTTP vs. HTTPS)</li>
+                  <li>HTTP Headers</li>
+                  <li>Message Body (e.g., POST or page content)</li>
+                </ul>
+                
+                <p>Each time Session ID data is passed between the client and the server, the protocol, cache, and privacy directives and body should be examined. Transport security here refers to Session IDs passed in GET or POST requests, message bodies, or other means over valid HTTP requests.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Ensure that proper encryption is implemented.</li>
+                  <li>Review the caching configuration.</li>
+                  <li>Assess the channel and methods’ security.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="testing-for-encryption--reuse-of-session-tokens-vulnerabilities">Testing for Encryption &amp; Reuse of Session Tokens Vulnerabilities</h3>
+                
+                <p>Protection from eavesdropping is often provided by SSL encryption, but may incorporate other tunneling or encryption. It should be noted that encryption or cryptographic hashing of the Session ID should be considered separately from transport encryption, as it is the Session ID itself being protected, not the data that may be represented by it.</p>
+                
+                <p>If the Session ID could be presented by an attacker to the application to gain access, then it must be protected in transit to mitigate that risk. It should therefore be ensured that encryption is both the default and enforced for any request or response where the Session ID is passed, regardless of the mechanism used (e.g., a hidden form field). Simple checks such as replacing <code class="language-plaintext highlighter-rouge">https://</code> with <code class="language-plaintext highlighter-rouge">http://</code> during interaction with the application should be performed, together with modification of form posts to determine if adequate segregation between the secure and non-secure sites is implemented.</p>
+                
+                <p>Note that if there is also an element to the site where the user is tracked with Session IDs but security is not present (e.g., noting which public documents a registered user downloads) it is essential that a different Session ID is used. The Session ID should therefore be monitored as the client switches from the secure to non-secure elements to ensure a different one is used.</p>
+                
+                <blockquote>
+                  <p>Every time the authentication is successful, the user should expect to receive:</p>
+                
+                  <ul>
+                    <li>A different session token</li>
+                    <li>A token sent via encrypted channel every time they make an HTTP Request</li>
+                  </ul>
+                </blockquote>
+                
+                <h3 id="testing-for-proxies--caching-vulnerabilities">Testing for Proxies &amp; Caching Vulnerabilities</h3>
+                
+                <p>Proxies must also be considered when reviewing application security. In many cases, clients will access the application through corporate, ISP, or other proxies or protocol aware gateways (e.g., Firewalls). The HTTP protocol provides directives to control the behavior of downstream proxies, and the correct implementation of these directives should also be assessed.</p>
+                
+                <p>In general, the Session ID should never be sent over unencrypted transport and should never be cached. The application should be examined to ensure that encrypted communications are both the default and enforced for any transfer of Session IDs. Furthermore, whenever the Session ID is passed, directives should be in place to prevent its caching by intermediate and even local caches.</p>
+                
+                <p>The application should also be configured to secure data in caches over both HTTP/1.0 and HTTP/1.1 – RFC 2616 discusses the appropriate controls with reference to HTTP. HTTP/1.1 provides a number of cache control mechanisms. <code class="language-plaintext highlighter-rouge">Cache-Control: no-cache</code> indicates that a proxy must not re-use any data. Whilst <code class="language-plaintext highlighter-rouge">Cache-Control: Private</code> appears to be a suitable directive, this still allows a non-shared proxy to cache data. In the case of web-cafes or other shared systems, this presents a clear risk. Even with single-user workstations the cached Session ID may be exposed through a compromise of the file-system or where network stores are used. HTTP/1.0 caches do not recognise the <code class="language-plaintext highlighter-rouge">Cache-Control: no-cache</code> directive.</p>
+                
+                <blockquote>
+                  <p>The <code class="language-plaintext highlighter-rouge">Expires: 0</code> and <code class="language-plaintext highlighter-rouge">Cache-Control: max-age=0</code> directives should be used to further ensure caches do not expose the data. Each request/response passing Session ID data should be examined to ensure appropriate cache directives are in use.</p>
+                </blockquote>
+                
+                <h3 id="testing-for-get--post-vulnerabilities">Testing for GET &amp; POST Vulnerabilities</h3>
+                
+                <p>In general, GET requests should not be used, as the Session ID may be exposed in Proxy or Firewall logs. They are also far more easily manipulated than other types of transport, although it should be noted that almost any mechanism can be manipulated by the client with the right tools. Furthermore, <a href="https://owasp.org/www-community/attacks/xss/">Cross-site Scripting (XSS)</a> attacks are most easily exploited by sending a specially constructed link to the victim. This is far less likely if data is sent from the client as POSTs.</p>
+                
+                <p>All server-side code receiving data from POST requests should be tested to ensure it does not accept the data if sent as a GET. For example, consider the following POST request (<code class="language-plaintext highlighter-rouge">http://owaspapp.com/login.asp</code>) generated by a log in page.</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/login.asp</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">owaspapp.com</span>
+                <span class="s">[...]</span>
+                <span class="na">Cookie</span><span class="p">:</span> <span class="s">ASPSESSIONIDABCDEFG=ASKLJDLKJRELKHJG</span>
+                <span class="na">Content-Length</span><span class="p">:</span> <span class="s">51</span>
+                
+                Login=Username&amp;password=Password&amp;SessionID=12345678
+                </code></pre></div></div>
+                
+                <p>If login.asp is badly implemented, it may be possible to log in using the following URL: <code class="language-plaintext highlighter-rouge">http://owaspapp.com/login.asp?Login=Username&amp;password=Password&amp;SessionID=12345678</code></p>
+                
+                <p>Potentially insecure server-side scripts may be identified by checking each POST in this way.</p>
+                
+                <h3 id="testing-for-transport-vulnerabilities">Testing for Transport Vulnerabilities</h3>
+                
+                <p>All interaction between the Client and Application should be tested at least against the following criteria.</p>
+                
+                <ul>
+                  <li>How are Session IDs transferred? e.g., GET, POST, Form Field (including hidden fields)</li>
+                  <li>Are Session IDs always sent over encrypted transport by default?</li>
+                  <li>Is it possible to manipulate the application to send Session IDs unencrypted? e.g., by changing HTTP to HTTPS?</li>
+                  <li>What cache-control directives are applied to requests/responses passing Session IDs?</li>
+                  <li>Are these directives always present? If not, where are the exceptions?</li>
+                  <li>Are GET requests incorporating the Session ID used?</li>
+                  <li>If POST is used, can it be interchanged with GET?</li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <h3 id="whitepapers">Whitepapers</h3>
+                
+                <ul>
+                  <li><a href="https://www.ietf.org/rfc/rfc2965.txt">RFCs 2109 &amp; 2965 – HTTP State Management Mechanism [D. Kristol, L. Montulli]</a></li>
+                  <li><a href="https://www.ietf.org/rfc/rfc2616.txt">RFC 2616 – Hypertext Transfer Protocol - HTTP/1.1</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/04-Testing_for_Exposed_Session_Variables" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess5Modal" tabindex="-1" role="dialog" aria-labelledby="sess5ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess5ModalLabel">WSTG-SESS-05 - Testing for Cross Site Request Forgery</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Cross-Site Request Forgery (<a href="https://owasp.org/www-community/attacks/csrf">CSRF</a>) is an attack that forces an end user to execute unintended actions on a web application in which they are currently authenticated. With a little social engineering help (like sending a link via email or chat), an attacker may force the users of a web application to execute actions of the attacker’s choosing. A successful CSRF exploit can compromise end user data and operation when it targets a normal user. If the targeted end user is the administrator account, a CSRF attack can compromise the entire web application.</p>
+                
+                <p>CSRF relies on:</p>
+                
+                <ol>
+                  <li>Web browser behavior regarding the handling of session-related information such as cookies and HTTP authentication information.</li>
+                  <li>An attacker’s knowledge of valid web application URLs, requests, or functionality.</li>
+                  <li>Application session management relying only on information known by the browser.</li>
+                  <li>Existence of HTML tags whose presence cause immediate access to an HTTP[S] resource; for example the image tag <code class="language-plaintext highlighter-rouge">img</code>.</li>
+                </ol>
+                
+                <p>Points 1, 2, and 3 are essential for the vulnerability to be present, while point 4 facilitates the actual exploitation, but is not strictly required.</p>
+                
+                <ol>
+                  <li>Browsers automatically send information used to identify a user session. Suppose <em>site</em> is a site hosting a web application, and the user <em>victim</em> has just authenticated to <em>site</em>. In response, <em>site</em> sends <em>victim</em> a cookie that identifies requests sent by <em>victim</em> as belonging to <em>victim’s</em> authenticated session. Once the browser receives the cookie set by <em>site</em>, it will automatically send it along with any further requests directed to <em>site</em>.</li>
+                  <li>If the application does not make use of session-related information in URLs, then the application URLs, their parameters, and legitimate values may be identified. This may be accomplished by code analysis or by accessing the application and taking note of forms and URLs embedded in the HTML or JavaScript.</li>
+                  <li>“Known by the browser” refers to information such as cookies or HTTP-based authentication information (such as Basic Authentication and not form-based authentication), that are stored by the browser and subsequently present at each request directed towards an application area requesting that authentication. The vulnerabilities discussed next apply to applications that rely entirely on this kind of information to identify a user session.</li>
+                </ol>
+                
+                <p>For simplicity’s sake, consider GET-accessible URLs (though the discussion applies as well to POST requests). If <em>victim</em> has already authenticated themselves, submitting another request causes the cookie to be automatically sent with it. The figure below illustrates the user accessing an application on <code class="language-plaintext highlighter-rouge">www.example.com</code>.</p>
+                
+                
+                <p>The GET request could be sent by the user in several different ways:</p>
+                
+                <ul>
+                  <li>Using the web application</li>
+                  <li>Typing the URL directly in the browser</li>
+                  <li>Following an external link that points to the URL</li>
+                </ul>
+                
+                <p>These invocations are indistinguishable by the application. In particular, the third may be quite dangerous. There are a number of techniques and vulnerabilities that can disguise the real properties of a link. The link can be embedded in an email message, appear in a malicious website to which the user is lured, or appear in content hosted by a third-party (such as another web site or HTML email) and point to a resource of the application. If the user clicks on the link, since they are already authenticated by the web application on <em>site</em>, the browser will issue a GET request to the web application, accompanied by authentication information (the session ID cookie). This results in a valid operation being performed on the web application that the user does not expect; for example, a funds transfer on a web banking application.</p>
+                
+                <p>By using a tag such as <code class="language-plaintext highlighter-rouge">img</code>, as specified in point 4 above, it is not even necessary that the user follows a particular link. Suppose the attacker sends the user an email inducing them to visit a URL referring to a page containing the following (oversimplified) HTML.</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+                    <span class="nt">&lt;body&gt;</span>
+                ...
+                <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"https://www.company.example/action"</span> <span class="na">width=</span><span class="s">"0"</span> <span class="na">height=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+                ...
+                    <span class="nt">&lt;/body&gt;</span>
+                <span class="nt">&lt;/html&gt;</span>
+                </code></pre></div></div>
+                
+                <p>When the browser displays this page, it will try to display the specified zero-dimension (thus, invisible) image from <code class="language-plaintext highlighter-rouge">https://www.company.example</code> as well. This results in a request being automatically sent to the web application hosted on <em>site</em>. It is not important that the image URL does not refer to a proper image, as its presence will trigger the request <code class="language-plaintext highlighter-rouge">action</code> specified in the <code class="language-plaintext highlighter-rouge">src</code> field anyway. This happens provided that image download is not disabled in the browser. Most browsers do not have image downloads disabled since that would cripple most web applications beyond usability.</p>
+                
+                <p>The problem here is a consequence of:</p>
+                
+                <ul>
+                  <li>HTML tags on the page resulting in automatic HTTP request execution (<code class="language-plaintext highlighter-rouge">img</code> being one of those).</li>
+                  <li>The browser having no way to tell that the resource referenced by <code class="language-plaintext highlighter-rouge">img</code> is not a legitimate image.</li>
+                  <li>Image loading that happens regardless of the location of the alleged image source, i.e., the form and the image itself need not be located on the same host or even the same domain.</li>
+                </ul>
+                
+                <p>The fact that HTML content unrelated to the web application may refer to components in the application, and the fact that the browser automatically composes a valid request towards the application, allows this kind of attack. There is no way to prohibit this behavior unless it is made impossible for the attacker to interact with application functionality.</p>
+                
+                <p>In integrated mail/browser environments, simply displaying an email message containing the image reference would result in the execution of the request to the web application with the associated browser cookie. Email messages may reference seemingly valid image URLs such as:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"https://[attacker]/picture.gif"</span> <span class="na">width=</span><span class="s">"0"</span> <span class="na">height=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+                </code></pre></div></div>
+                
+                <p>In this example, <code class="language-plaintext highlighter-rouge">[attacker]</code> is a site controlled by the attacker. By utilizing a redirect mechanism, the malicious site may use <code class="language-plaintext highlighter-rouge">http://[attacker]/picture.gif</code>&nbsp;to direct the victim to&nbsp;<code class="language-plaintext highlighter-rouge">http://[thirdparty]/action</code> and trigger the <code class="language-plaintext highlighter-rouge">action</code>.</p>
+                
+                <p>Cookies are not the only example involved in this kind of vulnerability. Web applications whose session information is entirely supplied by the browser are vulnerable too. This includes applications relying on HTTP authentication mechanisms alone, since the authentication information is known by the browser and is sent automatically upon each request. This does not include form-based authentication, which occurs just once and generates some form of session-related information, usually a cookie.</p>
+                
+                <p>Let’s suppose that the victim is logged on to a firewall web management console. To log in, a user has to authenticate themselves and session information is stored in a cookie.</p>
+                
+                <p>Let’s suppose the firewall web management console has a function that allows an authenticated user to delete a rule specified by its numerical ID, or all the rules in the configuration if the user specifies <code class="language-plaintext highlighter-rouge">*</code> (a dangerous feature in reality, but one that makes for a more interesting example). The delete page is shown next. Let’s suppose that the form – for the sake of simplicity – issues a GET request. To delete rule number one:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://[target]/fwmgt/delete?rule=1
+                </code></pre></div></div>
+                
+                <p>To delete all rules:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://[target]/fwmgt/delete?rule=*
+                </code></pre></div></div>
+                
+                <p>This example is intentionally naive, but shows in a simplified way the dangers of CSRF.</p>
+                
+                
+                <p>Using the form pictured in the figure above, entering the value <code class="language-plaintext highlighter-rouge">*</code> and clicking the Delete button will submit the following GET request:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://www.company.example/fwmgt/delete?rule=*
+                </code></pre></div></div>
+                
+                <p>This would delete all firewall rules.</p>
+                
+                
+                <p>The user might also have accomplished the same results by manually submitting the URL:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://[target]/fwmgt/delete?rule=*
+                </code></pre></div></div>
+                
+                <p>Or by following a link pointing, directly or via a redirection, to the above URL. Or, again, by accessing an HTML page with an embedded <code class="language-plaintext highlighter-rouge">img</code> tag pointing to the same URL.</p>
+                
+                <p>In all of these cases, if the user is currently logged in to the firewall management application, the request will succeed and will modify the configuration of the firewall. One can imagine attacks targeting sensitive applications and making automatic auction bids, money transfers, orders, changing the configuration of critical software components, etc.</p>
+                
+                <p>An interesting thing is that these vulnerabilities may be exercised behind a firewall; i.e. it is sufficient that the link being attacked be reachable by the victim and not directly by the attacker. In particular, it can be any intranet web server; for example, in the firewall management scenario mentioned before, which is unlikely to be exposed to the Internet.</p>
+                
+                <p>Self-vulnerable applications, i.e. applications that are used both as attack vector and target (such as web mail applications), make things worse. Since users are logged in when they read their email messages, a vulnerable application of this type can allow attackers to perform actions such as deleting messages or sending messages that appear to originate from the victim.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Determine whether it is possible to initiate requests on a user’s behalf that are not initiated by the user.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>Audit the application to ascertain if its session management is vulnerable. If session management relies only on client-side values (information available to the browser), then the application is vulnerable. “Client-side values” refers to cookies and HTTP authentication credentials (Basic Authentication and other forms of HTTP authentication; not form-based authentication, which is an application-level authentication).</p>
+                
+                <p>Resources accessible via HTTP GET requests are easily vulnerable, though POST requests can be automated via JavaScript and are vulnerable as well; therefore, the use of POST alone is not enough to correct the occurrence of CSRF vulnerabilities.</p>
+                
+                <p>In case of POST, the following sample can be used.</p>
+                
+                <ol>
+                  <li>Create an HTML page similar to that shown below</li>
+                  <li>Host the HTML on a malicious or third-party site</li>
+                  <li>Send the link for the page to the victim(s) and induce them to click it.</li>
+                </ol>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+                <span class="nt">&lt;body</span> <span class="na">onload=</span><span class="s">'document.CSRF.submit()'</span><span class="nt">&gt;</span>
+                
+                <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">'http://targetWebsite/Authenticate.jsp'</span> <span class="na">method=</span><span class="s">'POST'</span> <span class="na">name=</span><span class="s">'CSRF'</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">'hidden'</span> <span class="na">name=</span><span class="s">'name'</span> <span class="na">value=</span><span class="s">'Hacked'</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">'hidden'</span> <span class="na">name=</span><span class="s">'password'</span> <span class="na">value=</span><span class="s">'Hacked'</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;/form&gt;</span>
+                
+                <span class="nt">&lt;/body&gt;</span>
+                <span class="nt">&lt;/html&gt;</span>
+                </code></pre></div></div>
+                
+                <p>In case of web applications in which developers are utilizing JSON for browser to server communication, a problem may arise with the fact that there are no query parameters with the JSON format, which are a must with self-submitting forms. To bypass this case, we can use a self-submitting form with JSON payloads including hidden input to exploit CSRF. We’ll have to change the encoding type (<code class="language-plaintext highlighter-rouge">enctype</code>) to <code class="language-plaintext highlighter-rouge">text/plain</code> to ensure the payload is delivered as-is. The exploit code will look like the following:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+                 <span class="nt">&lt;body&gt;</span>
+                  <span class="nt">&lt;script&gt;</span><span class="nx">history</span><span class="p">.</span><span class="nx">pushState</span><span class="p">(</span><span class="dl">''</span><span class="p">,</span> <span class="dl">''</span><span class="p">,</span> <span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">)</span><span class="nt">&lt;/script&gt;</span>
+                   <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">'http://victimsite.com'</span> <span class="na">method=</span><span class="s">'POST'</span> <span class="na">enctype=</span><span class="s">'text/plain'</span><span class="nt">&gt;</span>
+                     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">'hidden'</span> <span class="na">name=</span><span class="s">'{"name":"hacked","password":"hacked","padding":"'</span><span class="na">value=</span><span class="s">'something"}'</span> <span class="nt">/&gt;</span>
+                     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">'submit'</span> <span class="na">value=</span><span class="s">'Submit request'</span> <span class="nt">/&gt;</span>
+                   <span class="nt">&lt;/form&gt;</span>
+                 <span class="nt">&lt;/body&gt;</span>
+                <span class="nt">&lt;/html&gt;</span>
+                </code></pre></div></div>
+                
+                <p>The POST request will be as follow:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">victimsite.com</span>
+                <span class="na">Content-Type</span><span class="p">:</span> <span class="s">text/plain</span>
+                
+                {"name":"hacked","password":"hacked","padding":"=something"}
+                </code></pre></div></div>
+                
+                <p>When this data is sent as a POST request, the server will happily accept the name and password fields and ignore the one with the name padding as it does not need it.</p>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <ul>
+                  <li>See the <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">OWASP CSRF Prevention Cheat Sheet</a> for prevention measures.</li>
+                </ul>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org/">OWASP ZAP</a></li>
+                  <li><a href="https://wiki.owasp.org/index.php/Category:OWASP_CSRFTester_Project">CSRF Tester</a></li>
+                  <li><a href="https://code.google.com/archive/p/pinata-csrf-tool/">Pinata-csrf-tool</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://web.archive.org/web/20160303230910/http://www.tux.org/~peterw/csrf.txt">Peter W: “Cross-Site Request Forgeries”</a></li>
+                  <li><a href="https://web.archive.org/web/20160304001446/http://www.securenet.de/papers/Session_Riding.pdf">Thomas Schreiber: “Session Riding”</a></li>
+                  <li><a href="https://web.archive.org/web/20000622042229/http://www.zope.org/Members/jim/ZopeSecurity/ClientSideTrojan">Oldest known post</a></li>
+                  <li><a href="https://www.cgisecurity.com/csrf-faq.html">Cross-site Request Forgery FAQ</a></li>
+                  <li><a href="http://yehg.net/lab/pr0js/view.php/A_Most-Neglected_Fact_About_CSRF.pdf">A Most-Neglected Fact About Cross Site Request Forgery (CSRF)</a></li>
+                  <li><a href="https://www.lanmaster53.com/2013/07/17/multi-post-csrf/">Multi-POST CSRF</a></li>
+                  <li><a href="https://www.youtube.com/watch?v=EOs5PZiiwug">SANS Pen Test Webcast: Complete Application pwnage via Multi POST XSRF</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/05-Testing_for_Cross_Site_Request_Forgery" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess6Modal" tabindex="-1" role="dialog" aria-labelledby="sess6ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess6ModalLabel">WSTG-SESS-06 - Testing for Logout Functionality</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Session termination is an important part of the session lifecycle. Reducing to a minimum the lifetime of the session tokens decreases the likelihood of a successful session hijacking attack. This can be seen as a control against preventing other attacks like Cross Site Scripting and Cross Site Request Forgery. Such attacks have been known to rely on a user having an authenticated session present. Not having a secure session termination only increases the attack surface for any of these attacks.</p>
+                
+                <p>A secure session termination requires at least the following components:</p>
+                
+                <ul>
+                  <li>Availability of user interface controls that allow the user to manually log out.</li>
+                  <li>Session termination after a given amount of time without activity (session timeout).</li>
+                  <li>Proper invalidation of server-side session state.</li>
+                </ul>
+                
+                <p>There are multiple issues which can prevent the effective termination of a session. For the ideal secure web application, a user should be able to terminate at any time through the user interface. Every page should contain a log out button on a place where it is directly visible. Unclear or ambiguous log out functions could cause the user not trusting such functionality.</p>
+                
+                <p>Another common mistake in session termination is that the client-side session token is set to a new value while the server-side state remains active and can be reused by setting the session cookie back to the previous value. Sometimes only a confirmation message is shown to the user without performing any further action. This should be avoided.</p>
+                
+                <p>Some web application frameworks rely solely on the session cookie to identify the logged-on user. The user’s ID is embedded in the (encrypted) cookie value. The application server does not do any tracking on the server-side of the session. When logging out, the session cookie is removed from the browser. However, since the application does not do any tracking, it does not know whether a session is logged out or not. So by reusing a session cookie it is possible to gain access to the authenticated session. A well-known example of this is the Forms Authentication functionality in ASP.NET.</p>
+                
+                <p>Users of web browsers often don’t mind that an application is still open and just close the browser or a tab. A web application should be aware of this behavior and terminate the session automatically on the server-side after a defined amount of time.</p>
+                
+                <p>The usage of a single sign-on (SSO) system instead of an application-specific authentication scheme often causes the coexistence of multiple sessions which have to be terminated separately. For instance, the termination of the application-specific session does not terminate the session in the SSO system. Navigating back to the SSO portal offers the user the possibility to log back in to the application where the log out was performed just before. On the other side a log out function in a SSO system does not necessarily cause session termination in connected applications.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Assess the logout UI.</li>
+                  <li>Analyze the session timeout and if the session is properly killed after logout.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="testing-for-log-out-user-interface">Testing for Log Out User Interface</h3>
+                
+                <p>Verify the appearance and visibility of the log out functionality in the user interface. For this purpose, view each page from the perspective of a user who has the intention to log out from the web application.</p>
+                
+                <blockquote>
+                  <p>There are some properties which indicate a good log out user interface:</p>
+                
+                  <ul>
+                    <li>A log out button is present on all pages of the web application.</li>
+                    <li>The log out button should be identified quickly by a user who wants to log out from the web application.</li>
+                    <li>After loading a page the log out button should be visible without scrolling.</li>
+                    <li>Ideally the log out button is placed in an area of the page that is fixed in the view port of the browser and not affected by scrolling of the content.</li>
+                  </ul>
+                </blockquote>
+                
+                <h3 id="testing-for-server-side-session-termination">Testing for Server-Side Session Termination</h3>
+                
+                <p>First, store the values of cookies that are used to identify a session. Invoke the log out function and observe the behavior of the application, especially regarding session cookies. Try to navigate to a page that is only visible in an authenticated session, e.g. by usage of the back button of the browser. If a cached version of the page is displayed, use the reload button to refresh the page from the server. If the log out function causes session cookies to be set to a new value, restore the old value of the session cookies and reload a page from the authenticated area of the application. If these test don’t show any vulnerabilities on a particular page, try at least some further pages of the application that are considered as security-critical, to ensure that session termination is recognized properly by these areas of the application.</p>
+                
+                <blockquote>
+                  <p>No data that should be visible only by authenticated users should be visible on the examined pages while performing the tests. Ideally the application redirects to a public area or a log in form while accessing authenticated areas after termination of the session. It should be not necessary for the security of the application, but setting session cookies to new values after log out is generally considered as good practice.</p>
+                </blockquote>
+                
+                <h3 id="testing-for-session-timeout">Testing for Session Timeout</h3>
+                
+                <p>Try to determine a session timeout by performing requests to a page in the authenticated area of the web application with increasing delays. If the log out behavior appears, the used delay matches approximately the session timeout value.</p>
+                
+                <blockquote>
+                  <p>The same results as for server-side session termination testing described before are excepted by a log out caused by an inactivity timeout.</p>
+                
+                  <p>The proper value for the session timeout depends on the purpose of the application and should be a balance of security and usability. In a banking applications it makes no sense to keep an inactive session more than 15 minutes. On the other side a short timeout in a wiki or forum could annoy users which are typing lengthy articles with unnecessary log in requests. There timeouts of an hour and more can be acceptable.</p>
+                </blockquote>
+                
+                <h3 id="testing-for-session-termination-in-single-sign-on-environments-single-sign-off">Testing for Session Termination in Single Sign-On Environments (Single Sign-Off)</h3>
+                
+                <p>Perform a log out in the tested application. Verify if there is a central portal or application directory which allows the user to log back in to the application without authentication. Test if the application requests the user to authenticate, if the URL of an entry point to the application is requested. While logged in in the tested application, perform a log out in the SSO system. Then try to access an authenticated area of the tested application.</p>
+                
+                <blockquote>
+                  <p>It is expected that the invocation of a log out function in a web application connected to a SSO system or in the SSO system itself causes global termination of all sessions. An authentication of the user should be required to gain access to the application after log out in the SSO system and connected application.</p>
+                </blockquote>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://portswigger.net/burp/documentation/desktop/tools/repeater">Burp Suite - Repeater</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <h3 id="whitepapers">Whitepapers</h3>
+                
+                <ul>
+                  <li><a href="https://www.vanstechelman.eu/content/cookie-replay-attacks-in-aspnet-when-using-forms-authentication">Cookie replay attacks in ASP.NET when using forms authentication</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/06-Testing_for_Logout_Functionality" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess7Modal" tabindex="-1" role="dialog" aria-labelledby="sess7ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess7ModalLabel">WSTG-SESS-07 - Testing Session Timeout</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>In this phase testers check that the application automatically logs out a user when that user has been idle for a certain amount of time, ensuring that it is not possible to “reuse” the same session and that no sensitive data remains stored in the browser cache.</p>
+                
+                <p>All applications should implement an idle or inactivity timeout for sessions. This timeout defines the amount of time a session will remain active in case there is no activity by the user, closing and invalidating the session upon the defined idle period since the last HTTP request received by the web application for a given session ID. The most appropriate timeout should be a balance between security (shorter timeout) and usability (longer timeout) and heavily depends on the sensitivity level of the data handled by the application. For example, a 60 minute log out time for a public forum can be acceptable, but such a long time would be too much in a home banking application (where a maximum timeout of 15 minutes is recommended). In any case, any application that does not enforce a timeout-based log out should be considered not secure, unless such behavior is required by a specific functional requirement.</p>
+                
+                <p>The idle timeout limits the chances that an attacker has to guess and use a valid session ID from another user, and under certain circumstances could protect public computers from session reuse. However, if the attacker is able to hijack a given session, the idle timeout does not limit the attacker’s actions, as he can generate activity on the session periodically to keep the session active for longer periods of time.</p>
+                
+                <p>Session timeout management and expiration must be enforced server-side. If some data under the control of the client is used to enforce the session timeout, for example using cookie values or other client parameters to track time references (e.g. number of minutes since log in time), an attacker could manipulate these to extend the session duration. So the application has to track the inactivity time server-side and, after the timeout is expired, automatically invalidate the current user’s session and delete every data stored on the client.</p>
+                
+                <p>Both actions must be implemented carefully, in order to avoid introducing weaknesses that could be exploited by an attacker to gain unauthorized access if the user forgot to log out from the application. More specifically, as for the log out function, it is important to ensure that all session tokens (e.g. cookies) are properly destroyed or made unusable, and that proper controls are enforced server-side to prevent the reuse of session tokens. If such actions are not properly carried out, an attacker could replay these session tokens in order to “resurrect” the session of a legitimate user and impersonate him/her (this attack is usually known as ‘cookie replay’). Of course, a mitigating factor is that the attacker needs to be able to access those tokens (which are stored on the victim’s PC), but, in a variety of cases, this may not be impossible or particularly difficult.</p>
+                
+                <p>The most common scenario for this kind of attack is a public computer that is used to access some private information (e.g., web mail, online bank account). If the user moves away from the computer without explicitly logging out and the session timeout is not implemented on the application, then an attacker could access to the same account by simply pressing the “back” button of the browser.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Validate that a hard session timeout exists.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="black-box-testing">Black-Box Testing</h3>
+                
+                <p>The same approach seen in the <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/06-Testing_for_Logout_Functionality">Testing for logout functionality</a> section can be applied when measuring the timeout log out.
+                The testing methodology is very similar. First, testers have to check whether a timeout exists, for instance, by logging in and waiting for the timeout log out to be triggered. As in the log out function, after the timeout has passed, all session tokens should be destroyed or be unusable.</p>
+                
+                <p>Then, if the timeout is configured, testers need to understand whether the timeout is enforced by the client or by the server (or both). If the session cookie is non-persistent (or, more in general, the session cookie does not store any data about the time), testers can assume that the timeout is enforced by the server. If the session cookie contains some time related data (e.g., log in time, or last access time, or expiration date for a persistent cookie), then it’s possible that the client is involved in the timeout enforcing. In this case, testers could try to modify the cookie (if it’s not cryptographically protected) and see what happens to the session. For instance, testers can set the cookie expiration date far in the future and see whether the session can be prolonged.</p>
+                
+                <p>As a general rule, everything should be checked server-side and it should not be possible, by re-setting the session cookies to previous values, to access the application again.</p>
+                
+                <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                
+                <p>The tester needs to check that:</p>
+                
+                <ul>
+                  <li>The log out function effectively destroys all session token, or at least renders them unusable,</li>
+                  <li>The server performs proper checks on the session state, disallowing an attacker to replay previously destroyed session identifiers</li>
+                  <li>A timeout is enforced and it is properly enforced by the server. If the server uses an expiration time that is read from a session token that is sent by the client (but this is not advisable), then the token must be cryptographically protected from tampering.</li>
+                </ul>
+                
+                <p>Note that the most important thing is for the application to invalidate the session on the server-side. Generally this means that the code must invoke the appropriate methods, e.g. <code class="language-plaintext highlighter-rouge">HttpSession.invalidate()</code> in Java and <code class="language-plaintext highlighter-rouge">Session.abandon()</code> in .NET. Clearing the cookies from the browser is advisable, but is not strictly necessary, since if the session is properly invalidated on the server, having the cookie in the browser will not help an attacker.</p>
+                
+                <h2 id="references">References</h2>
+                
+                <h3 id="owasp-resources">OWASP Resources</h3>
+                
+                <ul>
+                  <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html">Session Management Cheat Sheet</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/07-Testing_Session_Timeout" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess8Modal" tabindex="-1" role="dialog" aria-labelledby="sess8ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess8ModalLabel">WSTG-SESS-08 - Testing for Session Puzzling</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Session Variable Overloading (also known as Session Puzzling) is an application level vulnerability which can enable an attacker to perform a variety of malicious actions, including but not limited to:</p>
+                
+                <ul>
+                  <li>Bypass efficient authentication enforcement mechanisms, and impersonate legitimate users.</li>
+                  <li>Elevate the privileges of a malicious user account, in an environment that would otherwise be considered foolproof.</li>
+                  <li>Skip over qualifying phases in multi-phase processes, even if the process includes all the commonly recommended code level restrictions.</li>
+                  <li>Manipulate server-side values in indirect methods that cannot be predicted or detected.</li>
+                  <li>Execute traditional attacks in locations that were previously unreachable, or even considered secure.</li>
+                </ul>
+                
+                <p>This vulnerability occurs when an application uses the same session variable for more than one purpose. An attacker can potentially access pages in an order unanticipated by the developers so that the session variable is set in one context and then used in another.</p>
+                
+                <p>For example, an attacker could use session variable overloading to bypass authentication enforcement mechanisms of applications that enforce authentication by validating the existence of session variables that contain identity–related values, which are usually stored in the session after a successful authentication process. This means an attacker first accesses a location in the application that sets session context and then accesses privileged locations that examine this context.</p>
+                
+                <p>For example - an authentication bypass attack vector could be executed by accessing a publicly accessible entry point (e.g. a password recovery page) that populates the session with an identical session variable, based on fixed values or on user originating input.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Identify all session variables.</li>
+                  <li>Break the logical flow of session generation.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="black-box-testing">Black-Box Testing</h3>
+                
+                <p>This vulnerability can be detected and exploited by enumerating all of the session variables used by the application and in which context they are valid. In particular this is possible by accessing a sequence of entry points and then examining exit points. In case of black-box testing this procedure is difficult and requires some luck since every different sequence could lead to a different result.</p>
+                
+                <h4 id="examples">Examples</h4>
+                
+                <p>A very simple example could be the password reset functionality that, in the entry point, could request the user to provide some identifying information such as the username or the email address. This page might then populate the session with these identifying values, which are received directly from the client-side, or obtained from queries or calculations based on the received input. At this point there may be some pages in the application that show private data based on this session object. In this manner the attacker could bypass the authentication process.</p>
+                
+                <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                
+                <p>The most effective way to detect these vulnerabilities is via a source code review.</p>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>Session variables should only be used for a single consistent purpose.</p>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/puzzlemall/Session%20Puzzles%20-%20Indirect%20Application%20Attack%20Vectors%20-%20May%202011%20-%20Whitepaper.pdf">Session Puzzles</a></li>
+                  <li><a href="https://sectooladdict.blogspot.com/2011/09/session-puzzling-and-session-race.html">Session Puzzling and Session Race Conditions</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/08-Testing_for_Session_Puzzling" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sess9Modal" tabindex="-1" role="dialog" aria-labelledby="sess9ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sess9ModalLabel">WSTG-SESS-09 - Testing for Session Hijacking</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>An attacker who gets access to user session cookies can impersonate them by presenting such cookies. This attack is known as session hijacking. When considering network attackers, i.e., attackers who control the network used by the victim, session cookies can be unduly exposed to the attacker over HTTP. To prevent this, session cookies should be marked with the <code class="language-plaintext highlighter-rouge">Secure</code> attribute so that they are only communicated over HTTPS.</p>
+                
+                <p>Note that the <code class="language-plaintext highlighter-rouge">Secure</code> attribute should also be used when the web application is entirely deployed over HTTPS, otherwise the following cookie theft attack is possible. Assume that <code class="language-plaintext highlighter-rouge">example.com</code> is entirely deployed over HTTPS, but does not mark its session cookies as <code class="language-plaintext highlighter-rouge">Secure</code>. The following attack steps are possible:</p>
+                
+                <ol>
+                  <li>The victim sends a request to <code class="language-plaintext highlighter-rouge">http://another-site.com</code>.</li>
+                  <li>The attacker corrupts the corresponding response so that it triggers a request to <code class="language-plaintext highlighter-rouge">http://example.com</code>.</li>
+                  <li>The browser now tries to access <code class="language-plaintext highlighter-rouge">http://example.com</code>.</li>
+                  <li>Though the request fails, the session cookies are leaked in the clear over HTTP.</li>
+                </ol>
+                
+                <p>Alternatively, session hijacking can be prevented by banning use of HTTP using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">HSTS</a>. Note that there is a subtlety here related to cookie scoping. In particular, full HSTS adoption is required when session cookies are issued with the <code class="language-plaintext highlighter-rouge">Domain</code> attribute set.</p>
+                
+                <p>Full HSTS adoption is described in a paper called <em>Testing for Integrity Flaws in Web Sessions</em> by Stefano Calzavara, Alvise Rabitti, Alessio Ragazzo, and Michele Bugliesi. Full HSTS adoption occurs when a host activates HSTS for itself and all its sub-domains. Partial HSTS adoption is when a host activates HSTS just for itself.</p>
+                
+                <p>With the <code class="language-plaintext highlighter-rouge">Domain</code> attribute set, session cookies can be shared across sub-domains. Use of HTTP with sub-domains should be avoided to prevent the disclosure of unencrypted cookies sent over HTTP. To exemplify this security flaw, assume that the website <code class="language-plaintext highlighter-rouge">example.com</code> activates HSTS without the <code class="language-plaintext highlighter-rouge">includeSubDomains</code> option. The website issues session cookies with the <code class="language-plaintext highlighter-rouge">Domain</code> attribute set to <code class="language-plaintext highlighter-rouge">example.com</code>. The following attack is possible:</p>
+                
+                <ol>
+                  <li>The victim sends a request to <code class="language-plaintext highlighter-rouge">http://another-site.com</code>.</li>
+                  <li>The attacker corrupts the corresponding response so that it triggers a request to <code class="language-plaintext highlighter-rouge">http://fake.example.com</code>.</li>
+                  <li>The browser now tries to access <code class="language-plaintext highlighter-rouge">http://fake.example.com</code>, which is permitted by the HSTS configuration.</li>
+                  <li>Since the request is sent to a sub-domain of <code class="language-plaintext highlighter-rouge">example.com</code> with the <code class="language-plaintext highlighter-rouge">Domain</code> attribute set, it includes the session cookies, which are leaked in the clear over HTTP.</li>
+                </ol>
+                
+                <p>Full HSTS should be activated on the apex domain to prevent this attack.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Identify vulnerable session cookies.</li>
+                  <li>Hijack vulnerable cookies and assess the risk level.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>The testing strategy is targeted at network attackers, hence it only needs to be applied to sites without full HSTS adoption (sites with full HSTS adoption are secure, since their cookies are not communicated over HTTP). We assume to have two testing accounts on the website under test, one to act as the victim and one to act as the attacker. We simulate a scenario where the attacker steals all the cookies which are not protected against disclosure over HTTP, and presents them to the website to access the victim’s account. If these cookies are enough to act on the victim’s behalf, session hijacking is possible.</p>
+                
+                <p>Here are the steps for executing this test:</p>
+                
+                <ol>
+                  <li>Login to the website as the victim and reach any page offering a secure function requiring authentication.</li>
+                  <li>Delete from the cookie jar all the cookies which satisfy any of the following conditions.
+                    <ul>
+                      <li>in case there is no HSTS adoption: the <code class="language-plaintext highlighter-rouge">Secure</code> attribute is set.</li>
+                      <li>in case there is partial HSTS adoption: the <code class="language-plaintext highlighter-rouge">Secure</code> attribute is set or the <code class="language-plaintext highlighter-rouge">Domain</code> attribute is not set.</li>
+                    </ul>
+                  </li>
+                  <li>Save a snapshot of the cookie jar.</li>
+                  <li>Trigger the secure function identified at step 1.</li>
+                  <li>Observe whether the operation at step 4 has been performed successfully. If so, the attack was successful.</li>
+                  <li>Clear the cookie jar, login as the attacker and reach the page at step 1.</li>
+                  <li>Write in the cookie jar, one by one, the cookies saved at step 3.</li>
+                  <li>Trigger again the secure function identified at step 1.</li>
+                  <li>Clear the cookie jar and login again as the victim.</li>
+                  <li>Observe whether the operation at step 8 has been performed successfully in the victim’s account. If so, the attack was successful; otherwise, the site is secure against session hijacking.</li>
+                </ol>
+                
+                <p>We recommend using two different machines or browsers for the victim and the attacker. This allows you to decrease the number of false positives if the web application does fingerprinting to verify access enabled from a given cookie. A shorter but less precise variant of the testing strategy only requires one testing account. It follows the same pattern, but it halts at step 5 (note that this makes step 3 useless).</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org">OWASP ZAP</a></li>
+                  <li><a href="https://sourceforge.net/projects/jhijack/">JHijack - a numeric session hijacking tool</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/09-Testing_for_Session_Hijacking" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

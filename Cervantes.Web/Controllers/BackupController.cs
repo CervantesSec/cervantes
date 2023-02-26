@@ -124,7 +124,10 @@ public class BackupController : Controller
                     Template = x.Template,
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
-                    
+                    Score = x.Score,
+                    ExecutiveSummary = x.ExecutiveSummary,
+                    FindingsId = x.FindingsId
+
                 }).ToList(),
                 ProjectUsers = projectUserManager.GetAll().Select( x => new ProjectUser
                 {
@@ -268,6 +271,7 @@ public class BackupController : Controller
                 {
                     Id = x.Id,
                     Template = x.Template,
+                    FindingId = x.FindingId,
                     Name = x.Name,
                     CreatedDate = x.CreatedDate,
                     UserId = x.UserId,
@@ -283,7 +287,11 @@ public class BackupController : Controller
                     CVSSVector = x.CVSSVector,
                     Remediation = x.Remediation,
                     RemediationComplexity = x.RemediationComplexity,
-                    RemediationPriority = x.RemediationPriority
+                    RemediationPriority = x.RemediationPriority,
+                    OWASPLikehood = x.OWASPLikehood,
+                    OWASPImpact = x.OWASPImpact,
+                    OWASPRisk = x.OWASPRisk,
+                    OWASPVector = x.OWASPVector
                 }).ToList(),
                 VulnAttachments = vulnAttachmentManager.GetAll().Select(x => new VulnAttachment
                 {
@@ -478,7 +486,7 @@ public class BackupController : Controller
                     }
                     userManager.Add(user);
                     userManager.Context.SaveChanges();
-                    if (user.ClientId != null)
+                    if (user.ClientId != Guid.Empty)
                     {
                         _userManager.AddToRoleAsync(user, "Client").Wait();
                         continue;

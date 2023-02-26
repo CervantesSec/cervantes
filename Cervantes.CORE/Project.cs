@@ -84,4 +84,7 @@ public class Project
     /// Project Scoreing type
     /// </summary>
     public Score Score { get; set; }
+    
+    public string FindingsId { get; set; }
+    public string ExecutiveSummary { get; set; }
 }

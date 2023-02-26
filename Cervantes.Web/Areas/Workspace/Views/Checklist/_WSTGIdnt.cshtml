@@ -1,0 +1,623 @@
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="idntt" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-id-badge"></i> Identity Management Testing</th>
+                    <th><i class="fas fa-vial"></i> Test Name</th>
+                    <th><i class="fas fa-bullseye"></i> Objectives</th>
+                    
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    
+                    <th><i class="fas fa-sticky-note"></i> Notes</th>
+                    
+                    <th>
+                        <i class="fas fa-eye"></i>
+                    </th>
+                    
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WSTG-IDNT-01</td>
+                    <td>Test Role Definitions</td>
+                                    
+                    <td><p>- Identify and document roles used by the application.</p>
+                        <p>- Attempt to switch, change, or access another role.</p>
+                        <p>- Review the granularity of the roles and the needs behind the permissions given.</p></td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt1Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>WSTG-IDNT-02</td>
+                    <td>Test User Registration Process</td>
+                                                    
+                    <td><p>- Verify that the identity requirements for user registration are aligned with business and security requirements.</p>
+                        <p>- Validate the registration process.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt2Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-IDNT-03</td>
+                    <td>Test Account Provisioning Process</td>
+                                                    
+                    <td>- Verify which accounts may provision other accounts and of what type.</td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt3Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-IDNT-04</td>
+                    <td>Testing for Account Enumeration and Guessable User Account</td>
+                                                    
+                    <td><p>- Review processes that pertain to user identification (*e.g.* registration, login, etc.).</p>
+                        <p>- Enumerate users where possible through response analysis.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt4Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-IDNT-05</td>
+                    <td>Testing for Weak or unenforced username policy</td>
+                                                    
+                    <td><p>- Determine whether a consistent account name structure renders the application vulnerable to account enumeration.</p>
+                        <p>- Determine whether the application's error messages permit account enumeration.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt5Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
+<!-- Modal -->
+<div class="modal fade" id="idnt1Modal" tabindex="-1" role="dialog" aria-labelledby="idnt1ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="idnt1ModalLabel">WSTG-IDNT-01 - Test Role Definitions</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Applications have several types of functionalities and services, and those require access permissions based on the needs of the user. That user could be:</p>
+                
+                <ul>
+                  <li>an administrator, where they manage the application functionalities.</li>
+                  <li>an auditor, where they review the application transactions and provide a detailed report.</li>
+                  <li>a support engineer, where they help customers debug and fix issues on their accounts.</li>
+                  <li>a customer, where they interact with the application and benefit from its services.</li>
+                </ul>
+                
+                <p>In order to handle these uses and any other use case for that application, role definitions are setup (more commonly known as <a href="https://en.wikipedia.org/wiki/Role-based_access_control">RBAC</a>). Based on these roles, the user is capable of accomplishing the required task.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Identify and document roles used by the application.</li>
+                  <li>Attempt to switch, change, or access another role.</li>
+                  <li>Review the granularity of the roles and the needs behind the permissions given.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="roles-identification">Roles Identification</h3>
+                
+                <p>The tester should start by identifying the application roles being tested through any of the following methods:</p>
+                
+                <ul>
+                  <li>Application documentation.</li>
+                  <li>Guidance by the developers or administrators of the application.</li>
+                  <li>Application comments.</li>
+                  <li>Fuzz possible roles:
+                    <ul>
+                      <li>cookie variable (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">role=admin</code>, <code class="language-plaintext highlighter-rouge">isAdmin=True</code>)</li>
+                      <li>account variable (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">Role: manager</code>)</li>
+                      <li>hidden directories or files (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">/admin</code>, <code class="language-plaintext highlighter-rouge">/mod</code>, <code class="language-plaintext highlighter-rouge">/backups</code>)</li>
+                      <li>switching to well known users (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">admin</code>, <code class="language-plaintext highlighter-rouge">backups</code>, etc.)</li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <h3 id="switching-to-available-roles">Switching to Available Roles</h3>
+                
+                <p>After identifying possible attack vectors, the tester needs to test and validate that they can access the available roles.</p>
+                
+                <blockquote>
+                  <p>Some applications define the roles of the user on creation, through rigorous checks and policies, or by ensuring that the user’s role is properly protected through a signature created by the backend. Finding that roles exist doesn’t mean that they’re a vulnerability.</p>
+                </blockquote>
+                
+                <h3 id="review-roles-permissions">Review Roles Permissions</h3>
+                
+                <p>After gaining access to the roles on the system, the tester must understand the permissions provided to each role.</p>
+                
+                <p>A support engineer shouldn’t be able to conduct administrative functionalities, manage the backups, or conduct any transactions in the place of a user.</p>
+                
+                <p>An administrator shouldn’t have full powers on the system. Sensitive admin functionality should leverage a maker-checker principle, or use MFA to ensure that the administrator is conducting the transaction. A clear example on this was the <a href="https://blog.twitter.com/en_us/topics/company/2020/an-update-on-our-security-incident.html">Twitter incident in 2020</a>.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <p>The above mentioned tests can be conducted without the use of any tool, except the one being used to access the system.</p>
+                
+                <p>To make things easier and more documented, one can use:</p>
+                
+                <ul>
+                  <li><a href="https://github.com/Quitten/Autorize">Burp’s Autorize extension</a></li>
+                  <li><a href="https://www.zaproxy.org/docs/desktop/addons/access-control-testing/">ZAP’s Access Control Testing add-on</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://www.bookdepository.co.uk/Role-Engineering-for-Enterprise-Security-Management-Edward-Coyne/9781596932180">Role Engineering for Enterprise Security Management, E Coyne &amp; J Davis, 2007</a></li>
+                  <li><a href="https://csrc.nist.gov/projects/role-based-access-control#rbac-standard">Role engineering and RBAC standards</a></li>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/03-Identity_Management_Testing/01-Test_Role_Definitions" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="idnt2Modal" tabindex="-1" role="dialog" aria-labelledby="idnt2ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="idnt2ModalLabel">WSTG-IDNT-02 - Test User Registration Process</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Some websites offer a user registration process that automates (or semi-automates) the provisioning of system access to users. The identity requirements for access vary from positive identification to none at all, depending on the security requirements of the system. Many public applications completely automate the registration and provisioning process because the size of the user base makes it impossible to manage manually. However, many corporate applications will provision users manually, so this test case may not apply.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Verify that the identity requirements for user registration are aligned with business and security requirements.</li>
+                  <li>Validate the registration process.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>Verify that the identity requirements for user registration are aligned with business and security requirements:</p>
+                
+                <ol>
+                  <li>Can anyone register for access?</li>
+                  <li>Are registrations vetted by a human prior to provisioning, or are they automatically granted if the criteria are met?</li>
+                  <li>Can the same person or identity register multiple times?</li>
+                  <li>Can users register for different roles or permissions?</li>
+                  <li>What proof of identity is required for a registration to be successful?</li>
+                  <li>Are registered identities verified?</li>
+                </ol>
+                
+                <p>Validate the registration process:</p>
+                
+                <ol>
+                  <li>Can identity information be easily forged or faked?</li>
+                  <li>Can the exchange of identity information be manipulated during registration?</li>
+                </ol>
+                
+                <h3 id="example">Example</h3>
+                
+                <p>In the WordPress example below, the only identification requirement is an email address that is accessible to the registrant.</p>
+                
+                
+                <p>In contrast, in the Google example below the identification requirements include name, date of birth, country, mobile phone number, email address and CAPTCHA response. While only two of these can be verified (email address and mobile number), the identification requirements are stricter than WordPress.</p>
+                
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>Implement identification and verification requirements that correspond to the security requirements of the information the credentials protect.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <p>A HTTP proxy can be a useful tool to test this control.</p>
+                
+                <h2 id="references">References</h2>
+                
+                <p><a href="https://mashable.com/2011/06/09/user-registration-design/">User Registration Design</a></p>
+
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/03-Identity_Management_Testing/02-Test_User_Registration_Process" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="idnt3Modal" tabindex="-1" role="dialog" aria-labelledby="idnt3ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="idnt3ModalLabel">WSTG-IDNT-03 - Test Account Provisioning Process</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>The provisioning of accounts presents an opportunity for an attacker to create a valid account without application of the proper identification and authorization process.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Verify which accounts may provision other accounts and of what type.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>Determine which roles are able to provision users and what sort of accounts they can provision.</p>
+                
+                <ul>
+                  <li>Is there any verification, vetting and authorization of provisioning requests?</li>
+                  <li>Is there any verification, vetting and authorization of de-provisioning requests?</li>
+                  <li>Can an administrator provision other administrators or just users?</li>
+                  <li>Can an administrator or other user provision accounts with privileges greater than their own?</li>
+                  <li>Can an administrator or user de-provision themselves?</li>
+                  <li>How are the files or resources owned by the de-provisioned user managed? Are they deleted? Is access transferred?</li>
+                </ul>
+                
+                <h3 id="example">Example</h3>
+                
+                <p>In WordPress, only a user’s name and email address are required to provision the user</p>
+
+                
+                <p>De-provisioning of users requires the administrator to select the users to be de-provisioned, select Delete from the dropdown menu (circled) and then applying this action. The administrator is then presented with a dialog box asking what to do with the user’s posts (delete or transfer them).</p>
+
+                <h2 id="tools">Tools</h2>
+                
+                <p>While the most thorough and accurate approach to completing this test is to conduct it manually, HTTP proxy tools could be also useful.</p>
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/03-Identity_Management_Testing/03-Test_Account_Provisioning_Process" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="idnt4Modal" tabindex="-1" role="dialog" aria-labelledby="idnt4ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="idnt4ModalLabel">WSTG-IDNT-04 - Testing for Account Enumeration and Guessable User Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>The scope of this test is to verify if it is possible to collect a set of valid usernames by interacting with the authentication mechanism of the application. This test will be useful for brute force testing, in which the tester verifies if, given a valid username, it is possible to find the corresponding password.</p>
+                
+                <p>Often, web applications reveal when a username exists on system, either as a consequence of mis-configuration or as a design decision. For example, sometimes, when we submit wrong credentials, we receive a message that states that either the username is present on the system or the provided password is wrong. The information obtained can be used by an attacker to gain a list of users on system. This information can be used to attack the web application, for example, through a brute force or default username and password attack.</p>
+                
+                <p>The tester should interact with the authentication mechanism of the application to understand if sending particular requests causes the application to answer in different manners. This issue exists because the information released from web application or web server when the user provide a valid username is different than when they use an invalid one.</p>
+                
+                <p>In some cases, a message is received that reveals if the provided credentials are wrong because an invalid username or an invalid password was used. Sometimes, testers can enumerate the existing users by sending a username and an empty password.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Review processes that pertain to user identification (<em>e.g.</em> registration, login, etc.).</li>
+                  <li>Enumerate users where possible through response analysis.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>In black-box testing, the tester knows nothing about the specific application, username, application logic, error messages on log in page, or password recovery facilities. If the application is vulnerable, the tester receives a response message that reveals, directly or indirectly, some information useful for enumerating users.</p>
+                
+                <h3 id="http-response-message">HTTP Response Message</h3>
+                
+                <h4 id="testing-for-valid-credentials">Testing for Valid Credentials</h4>
+                
+                <p>Record the server answer when you submit a valid user ID and valid password.</p>
+                
+                <blockquote>
+                  <p>Using a web proxy, notice the information retrieved from this successful authentication (HTTP 200 Response, length of the response).</p>
+                </blockquote>
+                
+                <h4 id="testing-for-valid-user-with-wrong-password">Testing for Valid User with Wrong Password</h4>
+                
+                <p>Now, the tester should try to insert a valid user ID and a wrong password and record the error message generated by the application.</p>
+                
+                <blockquote>
+
+
+                    <p>Unlike any message that reveals the existence of the user like the following:</p>
+                
+                  <p><code class="language-plaintext highlighter-rouge">Login for User foo: invalid password</code></p>
+                
+                  <p>Using a web proxy, notice the information retrieved from this unsuccessful authentication attempt (HTTP 200 Response, length of the response).</p>
+                </blockquote>
+                
+                <h4 id="testing-for-a-nonexistent-username">Testing for a Nonexistent Username</h4>
+                
+                <p>Now, the tester should try to insert an invalid user ID and a wrong password and record the server answer (the tester should be confident that the username is not valid in the application). Record the error message and the server answer.</p>
+                
+                <blockquote>
+                  <p>If the tester enters a nonexistent user ID, they can receive a message similar to:</p>
+
+                    <p>or a message like the following one:</p>
+                
+                  <p><code class="language-plaintext highlighter-rouge">Login&nbsp;failed&nbsp;for&nbsp;User&nbsp;foo:&nbsp;invalid&nbsp;Account</code></p>
+                
+                  <p>Generally the application should respond with the same error message and length to the different incorrect requests. If the responses are not the same, the tester should investigate and find out the key that creates a difference between the two responses. For example:</p>
+                
+                  <ol>
+                    <li>Client request: Valid user/wrong password</li>
+                    <li>Server response: The password is not correct</li>
+                    <li>Client request: Wrong user/wrong password</li>
+                    <li>Server response: User not recognized</li>
+                  </ol>
+                
+                  <p>The above responses let the client understand that for the first request they have a valid username. So they can interact with the application requesting a set of possible user IDs and observing the answer.</p>
+                
+                  <p>Looking at the second server response, the tester understand in the same way that they don’t hold a valid username. So they can interact in the same manner and create a list of valid user ID looking at the server answers.</p>
+                </blockquote>
+                
+                <h3 id="other-ways-to-enumerate-users">Other Ways to Enumerate Users</h3>
+                
+                <p>Testers can enumerate users in several ways, such as:</p>
+                
+                <h4 id="analyzing-the-error-code-received-on-login-pages">Analyzing the Error Code Received on Login Pages</h4>
+                
+                <p>Some web application release a specific error code or message that we can analyze.</p>
+                
+                <h4 id="analyzing-urls-and-urls-re-directions">Analyzing URLs and URLs Re-directions</h4>
+                
+                <p>For example:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">http://www.foo.com/err.jsp?User=baduser&amp;Error=0</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">http://www.foo.com/err.jsp?User=gooduser&amp;Error=2</code></li>
+                </ul>
+                
+                <p>As is seen above, when a tester provides a user ID and password to the web application, they see a message indication that an error has occurred in the URL. In the first case they have provided a bad user ID and bad password. In the second, a good user ID and a bad password, so they can identify a valid user ID.</p>
+                
+                <h4 id="uri-probing">URI Probing</h4>
+                
+                <p>Sometimes a web server responds differently if it receives a request for an existing directory or not. For instance in some portals every user is associated with a directory. If testers try to access an existing directory they could receive a web server error.</p>
+                
+                <p>Some of the common errors received from web servers are:</p>
+                
+                <ul>
+                  <li>403 Forbidden error code</li>
+                  <li>404 Not found error code</li>
+                </ul>
+                
+                <p>Example:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">http://www.foo.com/account1</code> - we receive from web server: 403 Forbidden</li>
+                  <li><code class="language-plaintext highlighter-rouge">http://www.foo.com/account2</code>&nbsp;-&nbsp;we&nbsp;receive&nbsp;from&nbsp;web&nbsp;server:&nbsp;404&nbsp;file&nbsp;Not&nbsp;Found</li>
+                </ul>
+                
+                <p>In the first case the user exists, but the tester cannot view the web page, in second case instead the user “account2” does not exist. By collecting this information testers can enumerate the users.</p>
+                
+                <h4 id="analyzing-web-page-titles">Analyzing Web Page Titles</h4>
+                
+                <p>Testers can receive useful information on Title of web page, where they can obtain a specific error code or messages that reveal if the problems are with the username or password.</p>
+                
+                <p>For instance, if a user cannot authenticate to an application and receives a web page whose title is similar to:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">Invalid&nbsp;user</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">Invalid&nbsp;authentication</code></li>
+                </ul>
+                
+                <h4 id="analyzing-a-message-received-from-a-recovery-facility">Analyzing a Message Received from a Recovery Facility</h4>
+                
+                <p>When we use a recovery facility (i.e. a forgotten password function) a vulnerable application might return a message that reveals if a username exists or not.</p>
+                
+                <p>For example, messages similar to the following:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">Invalid username: email address is not valid or the specified user was not found.</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">Valid&nbsp;username:&nbsp;Your&nbsp;password&nbsp;has&nbsp;been&nbsp;successfully&nbsp;sent&nbsp;to&nbsp;the&nbsp;email&nbsp;address&nbsp;you&nbsp;registered&nbsp;with.</code></li>
+                </ul>
+                
+                <h4 id="friendly-404-error-message">Friendly 404 Error Message</h4>
+                
+                <p>When we request a user within the directory that does not exist, we don’t always receive 404 error code. Instead, we may receive “200 ok” with an image, in this case we can assume that when we receive the specific image the user does not exist. This logic can be applied to other web server response; the trick is a good analysis of web server and web application messages.</p>
+                
+                <h4 id="analyzing-response-times">Analyzing Response Times</h4>
+                
+                <p>As well as looking at the content of the responses, the time that the response take should also be considered. Particularly where the request causes an interaction with an external service (such as sending a forgotten password email), this can add several hundred milliseconds to the response, which can be used to determine whether the requested user is valid.</p>
+                
+                <h3 id="guessing-users">Guessing Users</h3>
+                
+                <p>In some cases the user IDs are created with specific policies of administrator or company. For example we can view a user with a user ID created in sequential order:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CN000100
+                CN000101
+                ...
+                </code></pre></div></div>
+                
+                <p>Sometimes the usernames are created with a REALM alias and then a sequential numbers:</p>
+                
+                <ul>
+                  <li>R1001 – user 001 for REALM1</li>
+                  <li>R2001 – user 001 for REALM2</li>
+                </ul>
+                
+                <p>In the above sample we can create simple shell scripts that compose user IDs and submit a request with tool like wget to automate a web query to discern valid user IDs. To create a script we can also use Perl and curl.</p>
+                
+                <p>Other possibilities are: - user IDs associated with credit card numbers, or in general numbers with a pattern. - user IDs associated with real names, e.g. if Freddie Mercury has a user ID of “fmercury”, then you might guess Roger Taylor to have the user ID of “rtaylor”.</p>
+                
+                <p>Again, we can guess a username from the information received from an LDAP query or from Google information gathering, for example, from a specific domain. Google can help to find domain users through specific queries or through a simple shell script or tool.</p>
+                
+                <blockquote>
+                  <p>By enumerating user accounts, you risk locking out accounts after a predefined number of failed probes (based on application policy). Also, sometimes, your IP address can be banned by dynamic rules on the application firewall or Intrusion Prevention System.</p>
+                </blockquote>
+                
+                <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                
+                <h4 id="testing-for-authentication-error-messages">Testing for Authentication Error Messages</h4>
+                
+                <p>Verify that the application answers in the same manner for every client request that produces a failed authentication. For this issue the black-box testing and gray-box testing have the same concept based on the analysis of messages or error codes received from web application.</p>
+                
+                <blockquote>
+                  <p>The application should answer in the same manner for every failed attempt of authentication.</p>
+                
+                  <p>For Example: <em>Credentials submitted are not valid</em></p>
+                </blockquote>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>Ensure the application returns consistent generic error messages in response to invalid account name, password or other user credentials entered during the log in process.</p>
+                
+                <p>Ensure default system accounts and test accounts are deleted prior to releasing the system into production (or exposing it to an untrusted network).</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org">OWASP Zed Attack Proxy (ZAP)</a></li>
+                  <li><a href="https://curl.haxx.se/">curl</a></li>
+                  <li><a href="https://www.perl.org">PERL</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://securiteam.com/exploits/5ep0f0uquo/">Marco Mella, Sun Java Access &amp; Identity Manager Users enumeration</a></li>
+                  <li><a href="https://www.gnucitizen.org/blog/username-enumeration-vulnerabilities/">Username Enumeration Vulnerabilities</a></li>
+                </ul>
+
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/03-Identity_Management_Testing/04-Testing_for_Account_Enumeration_and_Guessable_User_Account" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="idnt5Modal" tabindex="-1" role="dialog" aria-labelledby="idnt5ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="idnt5ModalLabel">WSTG-IDNT-05 - Testing for Weak or unenforced username policy</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>User account names are often highly structured (e.g. Joe Bloggs account name is jbloggs and Fred Nurks account name is fnurks) and valid account names can easily be guessed.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Determine whether a consistent account name structure renders the application vulnerable to account enumeration.</li>
+                  <li>Determine whether the application’s error messages permit account enumeration.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <ul>
+                  <li>Determine the structure of account names.</li>
+                  <li>Evaluate the application’s response to valid and invalid account names.</li>
+                  <li>Use different responses to valid and invalid account names to enumerate valid account names.</li>
+                  <li>Use account name dictionaries to enumerate valid account names.</li>
+                </ul>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>Ensure the application returns consistent generic error messages in response to invalid account name, password or other user credentials entered during the log in process.</p>
+
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/03-Identity_Management_Testing/05-Testing_for_Weak_or_Unenforced_Username_Policy" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

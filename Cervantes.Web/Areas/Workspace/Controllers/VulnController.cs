@@ -207,7 +207,7 @@ public class VulnController : Controller
             foreach (var item in result)
                 targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
 
-            var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
+            /*var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
             {
                 VulnCategoryId = e.Id,
                 VulnCategoryName = e.Name
@@ -216,12 +216,12 @@ public class VulnController : Controller
             var vulnCat = new List<SelectListItem>();
 
             foreach (var item in result2)
-                vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
+                vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});*/
 
             var model = new VulnCreateViewModel
             {
                 TargetList = targets,
-                VulnCatList = vulnCat,
+                //VulnCatList = vulnCat,
                 Project = projectManager.GetById(project),
                 VulnCategories = vulnCategoryManager.GetAll().ToList(),
             };
@@ -255,7 +255,6 @@ public class VulnController : Controller
             
             var projectModel = projectManager.GetById(project);
             if (!ModelState.IsValid)
-                
             {
                 var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
                 {
@@ -268,7 +267,7 @@ public class VulnController : Controller
                 foreach (var item in result)
                     targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
 
-                var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
+                /*var result2 = vulnCategoryManager.GetAll().Select(e => new VulnCreateViewModel
                 {
                     VulnCategoryId = e.Id,
                     VulnCategoryName = e.Name
@@ -277,14 +276,16 @@ public class VulnController : Controller
                 var vulnCat = new List<SelectListItem>();
 
                 foreach (var item in result2)
-                    vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});
+                    vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});*/
                 
                 model.TargetList = targets;
-                model.VulnCatList = vulnCat;
+                //model.VulnCatList = vulnCat;
                 model.Project = projectModel;
+                model.VulnCategories = vulnCategoryManager.GetAll().ToList();
                 return View(model);
             }
 
+            var vulnNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
             switch (projectModel.Score)
             {
                 case Score.CVSS:
@@ -307,7 +308,8 @@ public class VulnController : Controller
                         RemediationComplexity = model.RemediationComplexity,
                         RemediationPriority = model.RemediationPriority,
                         CreatedDate = DateTime.Now.ToUniversalTime().AddDays(1),
-                        UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                        UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        FindingId = projectModel.FindingsId+"-"+vulnNum,
                     };
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
@@ -355,7 +357,8 @@ public class VulnController : Controller
                         OWASPRisk = model.OwaspRisk,
                         OWASPVector = model.OwaspVector,
                         OWASPLikehood = model.OwaspLikehood,
-                        OWASPImpact = model.OwaspImpact
+                        OWASPImpact = model.OwaspImpact,
+                        FindingId = projectModel.FindingsId+"-"+vulnNum,
                     };
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
@@ -714,6 +717,7 @@ public class VulnController : Controller
                 case Score.CVSS:
                     result.Id = new Guid();
                     result.Name = model.Name;
+                    result.ProjectId = project;
                     result.Template = model.Template;
                     result.cve = model.cve;
                     result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
@@ -728,6 +732,8 @@ public class VulnController : Controller
                     result.RemediationComplexity = model.RemediationComplexity;
                     result.RemediationPriority = model.RemediationPriority;
                     result.CreatedDate = result.CreatedDate;
+                    var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
+                    result.FindingId = pro.FindingsId + "-" + vulNum;
                     break;
                 case Score.OWASP:
                     result.Id = new Guid();
@@ -748,6 +754,8 @@ public class VulnController : Controller
                     result.OWASPRisk = model.OwaspRisk;
                     result.OWASPImpact = model.OwaspImpact;
                     result.OWASPLikehood = model.OwaspLikehood;
+                    var vulNum2 = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
+                    result.FindingId = pro.FindingsId + "-" + vulNum2;
                     break;
                 
             }

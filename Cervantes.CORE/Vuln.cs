@@ -12,6 +12,8 @@ public class Vuln
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
+    
+    public string FindingId { get; set; }
 
     /// <summary>
     /// Is vuln template

@@ -1,0 +1,210 @@
+@using Cervantes.CORE
+@{
+    ViewData["Title"] = "OWASP WSTG Checklist";
+}
+
+<section class="content-header" xmlns="http://www.w3.org/1999/html">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-tasks"></i> OWASP WSTG Checklist</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspaces</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Checklist" asp-action="Index" localize-content>Checklist</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>OWASP WSTG</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+<div class="card card-dark card-tabs">
+    <div class="card-header p-0 pt-1">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#info" data-toggle="pill">
+                    <i class="fas fa-info-circle"></i> <span localize-content>Information Gathering</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#conf" data-toggle="pill">
+                    <i class="fas fa-cog"></i> <span localize-content>Configuration and Deploy Management</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#idnt" data-toggle="pill">
+                    <i class="fas fa-id-badge"></i> <span localize-content>Identity Management</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#athn" data-toggle="pill">
+                    <i class="fas fa-lock"></i> <span localize-content>Authentication</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#athz" data-toggle="pill">
+                    <i class="fas fa-user-lock"></i> <span localize-content>Authorization</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#sess" data-toggle="pill">
+                    <i class="fas fa-user"></i> <span localize-content>Session Management</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="#inpv" data-toggle="pill">
+                    <i class="fas fa-database"></i> <span localize-content>Data Validation</span>
+                </a>
+            </li>
+            
+
+            <li class="nav-item">
+                <a class="nav-link" href="#errh" data-toggle="pill">
+                    <i class="fas fa-exclamation-circle"></i> <span localize-content>Error Handling</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#cryp" data-toggle="pill">
+                    <i class="fas fa-key"></i> <span localize-content>Cryptography</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#busl" data-toggle="pill">
+                    <i class="fas fa-cogs"></i> <span localize-content>Business logic</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#clnt" data-toggle="pill">
+                    <i class="fas fa-user-cog"></i> <span localize-content>Client Side</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#apit" data-toggle="pill">
+                    <i class="fas fa-users-cog"></i> <span localize-content>API</span>
+                </a>
+            </li>
+
+
+        </ul>
+    </div>
+    <div class="card-body">
+    <div class="tab-content">
+    <div class="active tab-pane" id="info">
+    <partial name="_WSTGInfo" />
+    </div>
+    <div class="tab-pane" id="conf">
+       <partial name="_WSTGConf" />
+    
+    </div>
+    
+    <div class="tab-pane" id="idnt">
+        <partial name="_WSTGIdnt" />
+    
+    </div>
+    
+    <div class="tab-pane" id="athn">
+        <partial name="_WSTGAuth" />
+    </div>
+    <div class="tab-pane" id="athz">
+       <partial name="_WSTGAthz" />
+    
+    </div>
+    <div class="tab-pane" id="sess">
+       <partial name="_WSTGSess" />
+    
+    </div>
+    <div class="tab-pane" id="inpv">
+       <partial name="_WSTGInpv" />
+    </div>
+    <div class="tab-pane" id="errh">
+        <partial name="_WSTGErrh" />
+    </div>
+    <div class="tab-pane" id="cryp">
+        <partial name="_WSTGCrypt" />
+    </div>
+    <div class="tab-pane" id="busl">
+        <partial name="_WSTGBusl" />
+    
+    </div>
+    <div class="tab-pane" id="clnt">
+       <partial name="_WSTGClnt" />
+    
+    </div>
+    
+    <div class="tab-pane" id="apit">
+        <partial name="_WSTGApit" />
+    
+    </div>
+    
+    
+    </div>
+    
+    </div>
+</div>
+
+<div class="text-center">
+    <a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank">Based on OWASP WSTG v4.2 Stable</a>
+</div>
+
+</section>
+
+@section Scripts{
+    <script>
+
+    $(document).ready(function () {
+        $('#infot').DataTable({
+            "responsive": true
+        });
+        $('#conft').DataTable({
+                            "responsive": true
+                        });
+                $('#idntt').DataTable({
+                            "responsive": true
+                        });
+                $('#athnt').DataTable({
+                            "responsive": true
+                        });
+                $('#athzt').DataTable({
+                            "responsive": true
+                        });
+                $('#sesst').DataTable({
+                            "responsive": true
+                        });
+                $('#inpvt').DataTable({
+                            "responsive": true
+                        });
+                $('#errht').DataTable({
+                            "responsive": true
+                        });
+                $('#crypt').DataTable({
+                            "responsive": true
+                        });
+                $('#buslt').DataTable({
+                            "responsive": true
+                        });
+                $('#clntt').DataTable({
+                            "responsive": true
+                        });
+                $('#apitt').DataTable({
+                            "responsive": true
+                        });
+                $('.dataTables_length').addClass('bs-select');
+    });
+
+
+</script>
+}

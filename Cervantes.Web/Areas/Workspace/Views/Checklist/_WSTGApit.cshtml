@@ -1,0 +1,604 @@
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="apitt" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-users-cog"></i> API Testing</th>
+                    <th><i class="fas fa-vial"></i> Test Name</th>
+                    <th><i class="fas fa-bullseye"></i> Objectives</th>
+                    
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    
+                    <th><i class="fas fa-sticky-note"></i> Notes</th>
+                    
+                    <th>
+                        <i class="fas fa-eye"></i>
+                    </th>
+                    
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WSTG-APIT-01</td>
+                    <td>Testing GraphQL</td>
+                                    
+                    <td><p>- Assess that a secure and production-ready configuration is deployed.</p>
+                        <p>- Validate all input fields against generic attacks.</p>
+                        <p>- Ensure that proper access controls are applied.</p></td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#apit1Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
+<!-- Modal -->
+<div class="modal fade" id="apit1Modal" tabindex="-1" role="dialog" aria-labelledby="apit1ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="apit1ModalLabel">WSTG-APIT-01 - Testing GraphQL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>GraphQL has become very popular in modern APIs. It provides simplicity and nested objects, which facilitate faster development. While every technology has advantages, it can also expose the application to new attack surfaces. The purpose of this scenario is to provide some common misconfigurations and attack vectors on applications that utilize GraphQL. Some vectors are unique to GraphQL (e.g. <a href="#introspection-queries">Introspection Query</a>) and some are generic to APIs (e.g. <a href="#sql-injection">SQL injection</a>).</p>
+                
+                <p>Examples in this section will be based on a vulnerable GraphQL application <a href="https://github.com/righettod/poc-graphql">poc-graphql</a>, which is run in a docker container that maps <code class="language-plaintext highlighter-rouge">localhost:8080/GraphQL</code> as the vulnerable GraphQL node.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Assess that a secure and production-ready configuration is deployed.</li>
+                  <li>Validate all input fields against generic attacks.</li>
+                  <li>Ensure that proper access controls are applied.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>Testing GraphQL nodes is not very different than testing other API technologies. Consider the following steps:</p>
+                
+                <h3 id="introspection-queries">Introspection Queries</h3>
+                
+                <p>Introspection queries are the method by which GraphQL lets you ask what queries are supported, which data types are available, and many more details you will need when approaching a test of a GraphQL deployment.</p>
+                
+                <p>The <a href="https://graphql.org/learn/introspection/">GraphQL website describes Introspection</a>:</p>
+                
+                <blockquote>
+                  <p>“It’s often useful to ask a GraphQL schema for information about what queries it supports. GraphQL allows us to do so using the introspection system!”</p>
+                </blockquote>
+                
+                <p>There are a couple of ways to extract this information and visualize the output, as follows.</p>
+                
+                <h4 id="using-native-graphql-introspection">Using Native GraphQL Introspection</h4>
+                
+                <p>The most straightforward way is to send an HTTP request (using a personal proxy) with the following payload, taken from an article on <a href="https://medium.com/the.bilal.rizwan/graphql-common-vulnerabilities-how-to-exploit-them-464f9fdce696">Medium</a>:</p>
+                
+                <div class="language-graphql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">query</span><span class="w"> </span><span class="n">IntrospectionQuery</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">__schema</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">queryType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="n">name</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                    </span><span class="n">mutationType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="n">name</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                    </span><span class="n">subscriptionType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="n">name</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                    </span><span class="n">types</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="p">...</span><span class="n">FullType</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                    </span><span class="n">directives</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="n">name</span><span class="w">
+                      </span><span class="n">description</span><span class="w">
+                      </span><span class="n">locations</span><span class="w">
+                      </span><span class="n">args</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="p">...</span><span class="n">InputValue</span><span class="w">
+                      </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span><span class="k">fragment</span><span class="w"> </span><span class="n">FullType</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">__Type</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">kind</span><span class="w">
+                  </span><span class="n">name</span><span class="w">
+                  </span><span class="n">description</span><span class="w">
+                  </span><span class="n">fields</span><span class="p">(</span><span class="n">includeDeprecated</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                    </span><span class="n">description</span><span class="w">
+                    </span><span class="n">args</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="p">...</span><span class="n">InputValue</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                    </span><span class="n">type</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="p">...</span><span class="n">TypeRef</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                    </span><span class="n">isDeprecated</span><span class="w">
+                    </span><span class="n">deprecationReason</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                  </span><span class="n">inputFields</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="p">...</span><span class="n">InputValue</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                  </span><span class="n">interfaces</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="p">...</span><span class="n">TypeRef</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                  </span><span class="n">enumValues</span><span class="p">(</span><span class="n">includeDeprecated</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                    </span><span class="n">description</span><span class="w">
+                    </span><span class="n">isDeprecated</span><span class="w">
+                    </span><span class="n">deprecationReason</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                  </span><span class="n">possibleTypes</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="p">...</span><span class="n">TypeRef</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span><span class="k">fragment</span><span class="w"> </span><span class="n">InputValue</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">__InputValue</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">name</span><span class="w">
+                  </span><span class="n">description</span><span class="w">
+                  </span><span class="n">type</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="p">...</span><span class="n">TypeRef</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                  </span><span class="n">defaultValue</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span><span class="k">fragment</span><span class="w"> </span><span class="n">TypeRef</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">__Type</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">kind</span><span class="w">
+                  </span><span class="n">name</span><span class="w">
+                  </span><span class="n">ofType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">kind</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                    </span><span class="n">ofType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="n">kind</span><span class="w">
+                      </span><span class="n">name</span><span class="w">
+                      </span><span class="n">ofType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="n">kind</span><span class="w">
+                        </span><span class="n">name</span><span class="w">
+                        </span><span class="n">ofType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                          </span><span class="n">kind</span><span class="w">
+                          </span><span class="n">name</span><span class="w">
+                          </span><span class="n">ofType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="n">kind</span><span class="w">
+                            </span><span class="n">name</span><span class="w">
+                            </span><span class="n">ofType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                              </span><span class="n">kind</span><span class="w">
+                              </span><span class="n">name</span><span class="w">
+                              </span><span class="n">ofType</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="n">kind</span><span class="w">
+                                </span><span class="n">name</span><span class="w">
+                              </span><span class="p">}</span><span class="w">
+                            </span><span class="p">}</span><span class="w">
+                          </span><span class="p">}</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                      </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>The result will usually be very long (and hence has been shortened here), and it will contain the entire schema of the GraphQL deployment.</p>
+                
+                <p>Response:</p>
+                
+                <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+                  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"__schema"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="nl">"queryType"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Query"</span><span class="w">
+                      </span><span class="p">},</span><span class="w">
+                      </span><span class="nl">"mutationType"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mutation"</span><span class="w">
+                      </span><span class="p">},</span><span class="w">
+                      </span><span class="nl">"subscriptionType"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Subscription"</span><span class="w">
+                      </span><span class="p">},</span><span class="w">
+                      </span><span class="nl">"types"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                          </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ENUM"</span><span class="p">,</span><span class="w">
+                          </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"__TypeKind"</span><span class="p">,</span><span class="w">
+                          </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"An enum describing what kind of type a given __Type is"</span><span class="p">,</span><span class="w">
+                          </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                          </span><span class="nl">"inputFields"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                          </span><span class="nl">"interfaces"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                          </span><span class="nl">"enumValues"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                            </span><span class="p">{</span><span class="w">
+                              </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SCALAR"</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Indicates this type is a scalar."</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"isDeprecated"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"deprecationReason"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="p">{</span><span class="w">
+                              </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OBJECT"</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Indicates this type is an object. `fields` and `interfaces` are valid fields."</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"isDeprecated"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"deprecationReason"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="p">{</span><span class="w">
+                              </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INTERFACE"</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Indicates this type is an interface. `fields` and `possibleTypes` are valid fields."</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"isDeprecated"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"deprecationReason"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="p">{</span><span class="w">
+                              </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UNION"</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Indicates this type is a union. `possibleTypes` is a valid field."</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"isDeprecated"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                              </span><span class="nl">"deprecationReason"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                          </span><span class="p">],</span><span class="w">
+                          </span><span class="nl">"possibleTypes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                      </span><span class="p">]</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>A tool such as <a href="https://apis.guru/graphql-voyager/">GraphQL Voyager</a> can be used to get a better understanding of the GraphQL endpoint</p>
+           
+                
+                <p>This tool creates an Entity Relationship Diagram (ERD) representation of the GraphQL schema, allowing you to get a better look into the moving parts of the system you’re testing. Extracting information from the drawing allows you to see you can query the Dog table for example. It also shows which properties a Dog has:</p>
+                
+                <ul>
+                  <li>ID</li>
+                  <li>name</li>
+                  <li>veterinary (ID)</li>
+                </ul>
+                
+                <p>There is one downside to using this method: GraphQL Voyager does not display everything that can be done with GraphQL. For example, the mutations available are not listed in the drawing above. A better strategy would be to use both Voyager and one of the methods listed below.</p>
+                
+                <h4 id="using-graphiql">Using GraphiQL</h4>
+                
+                <p><a href="https://github.com/graphql/graphiql">GraphiQL</a> is a web-based IDE for GraphQL. It is part of the GraphQL project, and it is mainly used for debugging or development purposes. The best practice is to not allow users to access it on production deployments. If you are testing a staging environment, you might have access to it and can thus save some time when working with introspection queries (although you can, of course, use introspection in the GraphiQL interface).</p>
+                
+                <p>GraphiQL has a documentation section, which uses the data from the schema in order to create a document of the GraphQL instance that is being used. This document contains the data types, mutations, and basically every piece of information that can be extracted using introspection.</p>
+                
+                <h4 id="using-graphql-playground">Using GraphQL Playground</h4>
+                
+                <p><a href="https://github.com/graphql/graphql-playground">GraphQL Playground</a> is a GraphQL client. It can be used to test different queries, as well as divide GraphQL IDEs into different playgrounds, and group them by theme or by assigning a name to them. Much like GraphiQL, Playground can create documentation for you without the need for manually sending introspection queries and processing the response(s). It has another great advantage: It doesn’t need the GraphiQL interface to be available. You can direct the tool to the GraphQL node via a URL, or use it locally with a data file. GraphQL Playground can be used to test for vulnerabilities directly, so you don’t need to use a personal proxy to send HTTP requests. This means you can use this tool for simple interaction with and assessment of GraphQL. For other more advanced payloads, use a personal proxy.</p>
+                
+                <p>Note that in some cases, you will need to set the HTTP headers at the bottom, to include session ID or other mechanism of authentication. This still allows creating multiple “IDEs” with different permissions to verify if there are in fact authorization issues.</p>
+
+            <p>You can even download the schemas to use in Voyager.</p>
+                
+                <h4 id="introspection-conclusion">Introspection Conclusion</h4>
+                
+                <p>Introspection is a useful tool that allows users to gain more information about the GraphQL deployment. However, this will also allow malicious users to gain access to the same information. The best practice is to limit access to the introspection queries, since some tools or requests might fail if this feature is disabled altogether. As GraphQL usually bridges to the back end APIs of the system, it’s better to enforce strict access control.</p>
+                
+                <h3 id="authorization">Authorization</h3>
+                
+                <p>Introspection is the first place to look for authorization problems. As noted, access to introspection should be restricted as it allows for data extraction and data gathering. Once a tester has access to the schema and knowledge of the sensitive information there is to extract, they should then send queries that will not be blocked due to insufficient privileges. GraphQL does not enforce permissions by default, and so it is up to the application to perform authorization enforcement.</p>
+                
+                <p>In the earlier examples, the output of the introspection query shows there is a query called <code class="language-plaintext highlighter-rouge">auth</code>. This seems like a good place to extract sensitive information such as API tokens, passwords, etc.</p>
+
+                
+                <p>Testing the authorization implementation varies from deployment to deployment since each schema will have different sensitive information, and hence, different targets to focus on.</p>
+                
+                <p>In this vulnerable example, every user (even unauthenticated) can gain access to the auth tokens of every veterinarian listed in the database. These tokens can be used to perform additional actions the schema allows, such as associating or disassociating a dog from any specified veterinarian using mutations, even if there is no matching auth token for the veterinarian in the request.</p>
+                
+                <p>Here is an example in which the tester uses an extracted token they do not own to perform an action as the veterinarian “Benoit”:</p>
+                
+                <div class="language-graphql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">query</span><span class="w"> </span><span class="n">brokenAccessControl</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">myInfo</span><span class="p">(</span><span class="n">accessToken</span><span class="p">:</span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJwb2MiLCJzdWIiOiJKdWxpZW4iLCJpc3MiOiJBdXRoU3lzdGVtIiwiZXhwIjoxNjAzMjkxMDE2fQ.r3r0hRX_t7YLiZ2c2NronQ0eJp8fSs-sOUpLyK844ew"</span><span class="p">,</span><span class="w"> </span><span class="n">veterinaryId</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">){</span><span class="w">
+                    </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">dogs</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="n">name</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>And the response:</p>
+                
+                <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+                  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"myInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Benoit"</span><span class="p">,</span><span class="w">
+                      </span><span class="nl">"dogs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                          </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Babou"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                          </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Baboune"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                          </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Babylon"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                          </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                      </span><span class="p">]</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>All of the Dogs in the list belong to Benoit, and not to the auth token owner. It’s possible to perform this type of action when proper authorization enforcement is not implemented.</p>
+                
+                <h3 id="injection">Injection</h3>
+                
+                <p>GraphQL is the implementation of the API layer of an application, and as such, it usually forwards the requests to a back end API or the database directly. This allows you to utilize any underlying vulnerability such as SQL injection, command injection, cross-site scripting, etc. Using GraphQL just changes the entry point of the malicious payload.</p>
+                
+                <p>You can refer to other scenarios within the OWASP testing guide to get some ideas.</p>
+                
+                <p>GraphQL also has scalars, which are usually used for custom data types that do not have native data types, such as DateTime. These types of data do not have out-of-the-box validation, making them good candidates for testing.</p>
+                
+                <h4 id="sql-injection">SQL Injection</h4>
+                
+                <p>The example application is vulnerable by design in the query <code class="language-plaintext highlighter-rouge">dogs(namePrefix: String, limit: Int = 500): [Dog!]</code>  since the parameter <code class="language-plaintext highlighter-rouge">namePrefix</code> is concatenated in the SQL query. Concatenating user input is a common malpractice of applications that can expose them to SQL injection.</p>
+                
+                <p>The following query extracts information from the <code class="language-plaintext highlighter-rouge">CONFIG</code> table within the database:</p>
+                
+                <div class="language-graphql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">query</span><span class="w"> </span><span class="n">sqli</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">dogs</span><span class="p">(</span><span class="n">namePrefix</span><span class="p">:</span><span class="w"> </span><span class="s2">"ab%' UNION ALL SELECT 50 AS ID, C.CFGVALUE AS NAME, NULL AS VETERINARY_ID FROM CONFIG C LIMIT ? -- "</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">id</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>The response to this query is:</p>
+                
+                <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+                  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"dogs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                      </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Abi"</span><span class="w">
+                      </span><span class="p">},</span><span class="w">
+                      </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Abime"</span><span class="w">
+                      </span><span class="p">},</span><span class="w">
+                      </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w">
+                      </span><span class="p">},</span><span class="w">
+                      </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w">
+                        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"$Nf!S?(.}DtV2~:Txw6:?;D!M+Z34^"</span><span class="w">
+                      </span><span class="p">}</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>The query contains the secret that signs JWTs in the example application, which is very sensitive information.</p>
+                
+                <p>In order to know what to look for in any particular application, it will be helpful to collect information about how the application is built and how the database tables are organized. You can also use tools like <code class="language-plaintext highlighter-rouge">sqlmap</code> to look for injection paths and even automate the extraction of data from the database.</p>
+                
+                <h4 id="cross-site-scripting-xss">Cross-Site Scripting (XSS)</h4>
+                
+                <p>Cross-site scripting occurs when an attacker injects executable code that is subsequently run by the browser. Learn about tests for XSS in the <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/07-Input_Validation_Testing/README">Input Validation</a> chapter. You may test for reflected XSS using a payload from <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/07-Input_Validation_Testing/01-Testing_for_Reflected_Cross_Site_Scripting">Testing for Reflected Cross Site Scripting</a>.</p>
+                
+                <p>In this example, errors might reflect the input and could cause XSS to occur.</p>
+                
+                <p>Payload:</p>
+                
+                <div class="language-graphql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">query</span><span class="w"> </span><span class="n">xss</span><span class="w">  </span><span class="p">{</span><span class="w">
+                  </span><span class="n">myInfo</span><span class="p">(</span><span class="n">veterinaryId</span><span class="p">:</span><span class="s2">"&lt;script&gt;alert('1')&lt;/script&gt;"</span><span class="w"> </span><span class="p">,</span><span class="n">accessToken</span><span class="p">:</span><span class="s2">"&lt;script&gt;alert('1')&lt;/script&gt;"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">id</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>Response:</p>
+                
+                <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+                  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                  </span><span class="nl">"errors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Validation error of type WrongType: argument 'veterinaryId' with value 'StringValue{value='&lt;script&gt;alert('1')&lt;/script&gt;'}' is not a valid 'Int'  'myInfo'"</span><span class="p">,</span><span class="w">
+                      </span><span class="nl">"locations"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                          </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                          </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+                          </span><span class="nl">"sourceName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                      </span><span class="p">],</span><span class="w">
+                      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"argument 'veterinaryId' with value 'StringValue{value='&lt;script&gt;alert('1')&lt;/script&gt;'}' is not a valid 'Int'"</span><span class="p">,</span><span class="w">
+                      </span><span class="nl">"validationErrorType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WrongType"</span><span class="p">,</span><span class="w">
+                      </span><span class="nl">"queryPath"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="s2">"myInfo"</span><span class="w">
+                      </span><span class="p">],</span><span class="w">
+                      </span><span class="nl">"errorType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ValidationError"</span><span class="p">,</span><span class="w">
+                      </span><span class="nl">"extensions"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                      </span><span class="nl">"path"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                  </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <h3 id="denial-of-service-dos-queries">Denial of Service (DoS) Queries</h3>
+                
+                <p>GraphQL exposes a very simple interface to allow developers to use nested queries and nested objects. This ability can also be used in a malicious way, by calling a deep nested query similar to a recursive function and causing a denial of service by using up CPU, memory, or other compute resources.</p>
+                
+                <p>Looking back at <em>Figure 12.1-1</em>, you can see that it is possible to create a loop where a Dog object contains a Veterinary object. There could be an endless amount of nested objects.</p>
+                
+                <p>This allows for a deep query which has the potential to overload the application:</p>
+                
+                <div class="language-graphql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">query</span><span class="w"> </span><span class="n">dos</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">allDogs</span><span class="p">(</span><span class="n">onlyFree</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">1000000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">id</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                    </span><span class="n">veterinary</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="n">id</span><span class="w">
+                      </span><span class="n">name</span><span class="w">
+                      </span><span class="n">dogs</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="n">id</span><span class="w">
+                        </span><span class="n">name</span><span class="w">
+                        </span><span class="n">veterinary</span><span class="w"> </span><span class="p">{</span><span class="w">
+                          </span><span class="n">id</span><span class="w">
+                          </span><span class="n">name</span><span class="w">
+                          </span><span class="n">dogs</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="n">id</span><span class="w">
+                            </span><span class="n">name</span><span class="w">
+                            </span><span class="n">veterinary</span><span class="w"> </span><span class="p">{</span><span class="w">
+                              </span><span class="n">id</span><span class="w">
+                              </span><span class="n">name</span><span class="w">
+                              </span><span class="n">dogs</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="n">id</span><span class="w">
+                                </span><span class="n">name</span><span class="w">
+                                </span><span class="n">veterinary</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                  </span><span class="n">id</span><span class="w">
+                                  </span><span class="n">name</span><span class="w">
+                                  </span><span class="n">dogs</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                    </span><span class="n">id</span><span class="w">
+                                    </span><span class="n">name</span><span class="w">
+                                    </span><span class="n">veterinary</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                      </span><span class="n">id</span><span class="w">
+                                      </span><span class="n">name</span><span class="w">
+                                      </span><span class="n">dogs</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                        </span><span class="n">id</span><span class="w">
+                                        </span><span class="n">name</span><span class="w">
+                                      </span><span class="p">}</span><span class="w">
+                                    </span><span class="p">}</span><span class="w">
+                                  </span><span class="p">}</span><span class="w">
+                                </span><span class="p">}</span><span class="w">
+                              </span><span class="p">}</span><span class="w">
+                            </span><span class="p">}</span><span class="w">
+                          </span><span class="p">}</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                      </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>There are multiple security measures that can be implemented to prevent these types of queries, listed in the <a href="#remediation">Remediation</a> section. Abusive queries can cause issues like DoS for GraphQL deployments and should be included in testing.</p>
+                
+                <h3 id="batching-attacks">Batching Attacks</h3>
+                
+                <p>GraphQL supports batching of multiple queries into a single request. This allows users to request multiple objects or multiple instances of objects efficiently. However, an attacker can utilize this functionality in order to perform a batching attack. Sending more than a single query in one request looks like the following:</p>
+                
+                <div class="language-graphql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">[</span><span class="w">
+                  </span><span class="p">{</span><span class="w">
+                    </span><span class="n">query</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="err">0</span><span class="w"> </span><span class="err">&gt;</span><span class="p">,</span><span class="w">
+                    </span><span class="n">variables</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="err">0</span><span class="w"> </span><span class="err">&gt;</span><span class="p">,</span><span class="w">
+                  </span><span class="p">},</span><span class="w">
+                  </span><span class="p">{</span><span class="w">
+                    </span><span class="n">query</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="err">1</span><span class="w"> </span><span class="err">&gt;</span><span class="p">,</span><span class="w">
+                    </span><span class="n">variables</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="err">1</span><span class="w"> </span><span class="err">&gt;</span><span class="p">,</span><span class="w">
+                  </span><span class="p">},</span><span class="w">
+                  </span><span class="p">{</span><span class="w">
+                    </span><span class="n">query</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="err">&gt;</span><span class="w">
+                    </span><span class="n">variables</span><span class="p">:</span><span class="w"> </span><span class="err">&lt;</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="err">&gt;</span><span class="p">,</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="err">]</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>In the example application, a single request can be sent in order to extract all of the veterinary names using the guessable ID (it’s an increasing integer). An attacker can then utilize the names in order to get access tokens. Instead of doing so in many requests, which might be blocked by a network security measure like a web application firewall or a rate limiter like Nginx, these requests may be batched. This means there would only be a couple of requests, which may allow for efficient brute forcing without being detected. Here is an example query:</p>
+                
+                <div class="language-graphql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">query</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">Veterinary</span><span class="p">(</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                  </span><span class="n">second</span><span class="p">:</span><span class="n">Veterinary</span><span class="p">(</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                  </span><span class="n">third</span><span class="p">:</span><span class="n">Veterinary</span><span class="p">(</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="n">name</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>This will provide the attacker with the names of the veterinaries and, as shown before, the names can be used to batch multiple queries requesting the auth tokens of those veterinaries. For example:</p>
+                
+                <div class="language-graphql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">query</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="n">auth</span><span class="p">(</span><span class="n">veterinaryName</span><span class="p">:</span><span class="w"> </span><span class="s2">"Julien"</span><span class="p">)</span><span class="w">
+                  </span><span class="n">second</span><span class="p">:</span><span class="w"> </span><span class="n">auth</span><span class="p">(</span><span class="n">veterinaryName</span><span class="p">:</span><span class="s2">"Benoit"</span><span class="p">)</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+                </span></code></pre></div></div>
+                
+                <p>Batching attacks can be used to bypass many security measures enforced on websites. It can also be used to enumerate objects and attempt to brute force multi-factor authentication or other sensitive information.</p>
+                
+                <h3 id="detailed-error-message">Detailed Error Message</h3>
+                
+                <p>GraphQL can encounter unexpected errors during runtime. When such an error occurs, the server may send an error response that may reveal internal error details or application configurations or data. This allows a malicious user to acquire more information about the application. As part of testing, error messages should be checked by sending unexpected data, a process known as fuzzing. The responses should be searched for potentially sensitive information that may be revealed using this technique.</p>
+                
+                <h3 id="exposure-of-underlying-api">Exposure of Underlying API</h3>
+                
+                <p>GraphQL is a relatively new technology, and some applications are transitioning from old APIs to GraphQL. In many cases, GraphQL is deployed as a standard API which translates requests (sent using GraphQL syntax) to an underlying API, as well as the responses. If requests to the underlying API are not properly checked for authorization, it could lead to a possible escalation of privileges.</p>
+                
+                <p>For example, a request containing the parameter <code class="language-plaintext highlighter-rouge">id=1/delete</code> might be interpreted as <code class="language-plaintext highlighter-rouge">/api/users/1/delete</code>. This could extend to the manipulation of other resources belonging to <code class="language-plaintext highlighter-rouge">user=1</code>. It is also possible that the request is interpreted to have the authorization given to the GraphQL node, instead of the true requester.</p>
+                
+                <p>A tester should try and gain access to underlying API methods as it may be possible to escalate privileges.</p>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <ul>
+                  <li>Restrict access to introspection queries.</li>
+                  <li>Implement input validation.
+                    <ul>
+                      <li>GraphQL does not have a native way to validate input, however, there is an open source project called <a href="https://github.com/confuser/graphql-constraint-directive">“graphql-constraint-directive”</a> which allows for input validation as part of the schema definition.</li>
+                      <li>Input validation alone is helpful, but it is not a complete solution and additional measures should be taken to mitigate injection attacks.</li>
+                    </ul>
+                  </li>
+                  <li>Implement security measures to prevent abusive queries.
+                    <ul>
+                      <li>Timeouts: restrict the amount of time that a query is permitted to run.</li>
+                      <li>Maximum query depth: limit the depth of allowed queries, which may prevent queries that are too deep from abusing resources.</li>
+                      <li>Set maximum query complexity: limit the complexity of queries to mitigate the abuse of GraphQL resources.</li>
+                      <li>Use server-time-based throttling: limit the amount of server time a user can consume.</li>
+                      <li>Use query-complexity-based throttling: limit the total complexity of queries a user can consume.</li>
+                    </ul>
+                  </li>
+                  <li>Send generic error messages: use generic error messages that do not reveal details of the deployment.</li>
+                  <li>Mitigate batching attacks:
+                    <ul>
+                      <li>Add object request rate limiting in code.</li>
+                      <li>Prevent batching for sensitive objects.</li>
+                      <li>Limit the number of queries that can run at one time.</li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <p>For more on remediating GraphQL weaknesses, refer to the <a href="https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html">GraphQL Cheat Sheet</a>.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://github.com/prisma-labs/graphql-playground">GraphQL Playground</a></li>
+                  <li><a href="https://apis.guru/graphql-voyager/">GraphQL Voyager</a></li>
+                  <li><a href="https://github.com/sqlmapproject/sqlmap">sqlmap</a></li>
+                  <li><a href="https://portswigger.net/bappstore/296e9a0730384be4b2fffef7b4e19b1f">InQL (Burp Extension)</a></li>
+                  <li><a href="https://portswigger.net/bappstore/4841f0d78a554ca381c65b26d48207e6">GraphQL Raider (Burp Extension)</a></li>
+                  <li><a href="https://www.zaproxy.org/blog/2020-08-28-introducing-the-graphql-add-on-for-zap/">GraphQL (Add-on for OWASP ZAP)</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://github.com/righettod/poc-graphql">poc-graphql</a></li>
+                  <li><a href="https://graphql.org/learn/">GraphQL Official Site</a></li>
+                  <li><a href="https://www.howtographql.com/advanced/4-security/">Howtographql - Security</a></li>
+                  <li><a href="https://github.com/confuser/graphql-constraint-directive">GraphQL Constraint Directive</a></li>
+                  <li><a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/11-Client-side_Testing/README">Client-side Testing</a> (XSS and other vulnerabilities)</li>
+                  <li><a href="https://carvesystems.com/news/the-5-most-common-graphql-security-vulnerabilities/">5 Common GraphQL Security Vulnerabilities</a></li>
+                  <li><a href="https://medium.com/the.bilal.rizwan/graphql-common-vulnerabilities-how-to-exploit-them-464f9fdce696">GraphQL common vulnerabilities and how to exploit them</a></li>
+                  <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html">GraphQL CS</a></li>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/12-API_Testing/01-Testing_GraphQL" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

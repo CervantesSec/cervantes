@@ -281,7 +281,8 @@ public class ProjectController : Controller
                 Template = model.Template,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Language = model.Language,
-                Score = model.Score
+                Score = model.Score,
+                FindingsId = model.FindingsId
             };
             projectManager.Add(project);
             projectManager.Context.SaveChanges();
@@ -333,7 +334,8 @@ public class ProjectController : Controller
                 Status = project.Status,
                 Language = project.Language,
                 ProjectType = project.ProjectType,
-                ItemList = li
+                ItemList = li,
+                FindingsId = project.FindingsId
             };
             return View(model);
         }
@@ -373,6 +375,7 @@ public class ProjectController : Controller
             result.StartDate = model.StartDate.ToUniversalTime();
             result.EndDate = model.EndDate.ToUniversalTime();
             result.ProjectType = model.ProjectType;
+            result.FindingsId = model.FindingsId;
             projectManager.Context.SaveChanges();
 
             _logger.LogInformation("User: {0} Edited project. Id: {1}", User.FindFirstValue(ClaimTypes.Name), id);
@@ -497,7 +500,8 @@ public class ProjectController : Controller
                 ClientId = project.ClientId,
                 Status = project.Status,
                 ProjectType = project.ProjectType,
-                ItemList = li
+                ItemList = li,
+                FindingsId = project.FindingsId
             };
             return View(model);
         }
@@ -529,6 +533,7 @@ public class ProjectController : Controller
             result.StartDate = model.StartDate.ToUniversalTime();
             result.EndDate = model.EndDate.ToUniversalTime();
             result.ProjectType = model.ProjectType;
+            result.FindingsId = model.FindingsId;
             result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 

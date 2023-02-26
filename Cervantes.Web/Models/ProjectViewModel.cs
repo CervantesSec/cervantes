@@ -94,4 +94,7 @@ public class ProjectViewModel
     /// </summary>
     [Required]
     public Score Score { get; set; }
+
+    [Required]
+    public string FindingsId { get; set; }
 }

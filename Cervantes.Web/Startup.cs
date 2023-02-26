@@ -96,6 +96,7 @@ public class Startup
         services.AddScoped<IJiraManager, JiraManager>();
         services.AddScoped<IJiraCommentManager, JiraCommentManager>();
         services.AddScoped<ICsvParser, CsvParser>();
+        services.AddScoped<IWSTGManager, WSTGManager>();
 
 
 

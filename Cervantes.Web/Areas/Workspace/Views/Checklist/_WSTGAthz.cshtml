@@ -1,0 +1,931 @@
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="athzt" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-user-lock"></i> Authorization Testing</th>
+                    <th><i class="fas fa-vial"></i> Test Name</th>
+                    <th><i class="fas fa-bullseye"></i> Objectives</th>
+                    
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    
+                    <th><i class="fas fa-sticky-note"></i> Notes</th>
+                    
+                    <th>
+                        <i class="fas fa-eye"></i>
+                    </th>
+                    
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WSTG-ATHZ-01</td>
+                    <td>Testing Directory Traversal File Include</td>
+                                                    
+                    <td><p>- Identify injection points that pertain to path traversal.</p>
+                        <p>- Assess bypassing techniques and identify the extent of path traversal.</p></td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#athz1Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-ATHZ-02</td>
+                    <td>Testing for Bypassing Authorization Schema</td>
+                                                                    
+                    <td>- Assess if horizontal or vertical access is possible.</td>
+                                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#athz2Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-ATHZ-03</td>
+                    <td>Testing for Privilege Escalation</td>
+                                                                    
+                    <td><p>- Identify injection points related to privilege manipulation.</p>
+                        <p>- Fuzz or otherwise attempt to bypass security measures.</p></td>
+                                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#athz3Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>WSTG-ATHZ-04</td>
+                    <td>Testing for Insecure Direct Object References</td>
+                                                                    
+                    <td><p>- Identify points where object references may occur.</p>
+                        <p>- Assess the access control measures and if they're vulnerable to IDOR.</p></td>
+                                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#athz4Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+
+                </tbody>
+            </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="athz1Modal" tabindex="-1" role="dialog" aria-labelledby="athz1ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="athz1ModalLabel">WSTG-ATHZ-01 - Testing Directory Traversal File Include</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Many web applications use and manage files as part of their daily operation. Using input validation methods that have not been well designed or deployed, an aggressor could exploit the system in order to read or write files that are not intended to be accessible. In particular situations, it could be possible to execute arbitrary code or system commands.</p>
+                
+                <p>Traditionally, web servers and web applications implement authentication mechanisms to control access to files and resources. Web servers try to confine users’ files inside a “root directory” or “web document root”, which represents a physical directory on the file system. Users have to consider this directory as the base directory into the hierarchical structure of the web application.</p>
+                
+                <p>The definition of the privileges is made using&nbsp;Access Control Lists&nbsp;(ACL) which identify which users or groups are supposed to be able to access, modify, or execute a specific file on the server. These mechanisms are designed to prevent malicious users from accessing sensitive files (for example, the common&nbsp;<code class="language-plaintext highlighter-rouge">/etc/passwd</code>&nbsp;file on a UNIX-like platform) or to avoid the execution of system commands.</p>
+                
+                <p>Many web applications use server-side scripts to include different kinds of files. It is quite common to use this method to manage images, templates, load static texts, and so on. Unfortunately, these applications expose security vulnerabilities if input parameters (i.e., form parameters, cookie values) are not correctly validated.</p>
+                
+                <p>In web servers and web applications, this kind of problem arises in path traversal/file include attacks. By exploiting this kind of vulnerability, an attacker is able to read directories or files which they normally couldn’t read, access data outside the web document root, or include scripts and other kinds of files from external websites.</p>
+                
+                <p>For the purpose of the OWASP Testing Guide, only the security threats related to web applications will be considered and not threats to web servers (e.g., the infamous <code class="language-plaintext highlighter-rouge">%5c</code> escape code into Microsoft IIS web server). Further reading suggestions will be provided in the references section for interested readers.</p>
+                
+                <p>This kind of attack is also known as the&nbsp;dot-dot-slash&nbsp;attack (<code class="language-plaintext highlighter-rouge">../</code>),&nbsp;directory traversal,&nbsp;directory climbing, or&nbsp;backtracking.</p>
+                
+                <p>During an assessment, to discover path traversal and file include flaws, testers need to perform two different stages:</p>
+                
+                <ol>
+                  <li>Input Vectors Enumeration (a systematic evaluation of each input vector)</li>
+                  <li>Testing Techniques (a methodical evaluation of each attack technique used by an attacker to exploit the vulnerability)</li>
+                </ol>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Identify injection points that pertain to path traversal.</li>
+                  <li>Assess bypassing techniques and identify the extent of path traversal.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="black-box-testing">Black-Box Testing</h3>
+                
+                <h4 id="input-vectors-enumeration">Input Vectors Enumeration</h4>
+                
+                <p>In order to determine which part of the application is vulnerable to input validation bypassing, the tester needs to enumerate all parts of the application that accept content from the user. This also includes HTTP GET and POST queries and common options like file uploads and HTML forms.</p>
+                
+                <p>Here are some examples of the checks to be performed at this stage:</p>
+                
+                <ul>
+                  <li>Are there request parameters which could be used for file-related operations?</li>
+                  <li>Are there unusual file extensions?</li>
+                  <li>Are there interesting variable names?
+                    <ul>
+                      <li><code class="language-plaintext highlighter-rouge">http://example.com/getUserProfile.jsp?item=ikki.html</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">http://example.com/index.php?file=content</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">http://example.com/main.cgi?home=index.htm</code></li>
+                    </ul>
+                  </li>
+                  <li>Is it possible to identify cookies used by the web application for the dynamic generation of pages or templates?
+                    <ul>
+                      <li><code class="language-plaintext highlighter-rouge">Cookie: ID=d9ccd3f4f9f18cc1:TM=2166255468:LM=1162655568:S=3cFpqbJgMSSPKVMV:TEMPLATE=flower</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">Cookie: USER=1826cc8f:PSTYLE=GreenDotRed</code></li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <h4 id="testing-techniques">Testing Techniques</h4>
+                
+                <p>The next stage of testing is analyzing the input validation functions present in the web application. Using the previous example, the dynamic page called <code class="language-plaintext highlighter-rouge">getUserProfile.jsp</code> loads static information from a file and shows the content to users. An attacker could insert the malicious string <code class="language-plaintext highlighter-rouge">../../../../etc/passwd</code> to include the password hash file of a Linux/UNIX system. Obviously, this kind of attack is possible only if the validation checkpoint fails; according to the file system privileges, the web application itself must be able to read the file.</p>
+                
+                <p>To successfully test for this flaw, the tester needs to have knowledge of the system being tested and the location of the files being requested. There is no point requesting <code class="language-plaintext highlighter-rouge">/etc/passwd</code> from an IIS web server.</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/getUserProfile.jsp?item=../../../../etc/passwd
+                </code></pre></div></div>
+                
+                <p>For the cookies example:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cookie: USER=1826cc8f:PSTYLE=../../../../etc/passwd
+                </code></pre></div></div>
+                
+                <p>It’s also possible to include files and scripts located on external website:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/index.php?file=http://www.owasp.org/malicioustxt
+                </code></pre></div></div>
+                
+                <p>If protocols are accepted as arguments, as in the above example, it’s also possible to probe the local filesystem this way:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/index.php?file=file:///etc/passwd
+                </code></pre></div></div>
+                
+                <p>If protocols are accepted as arguments, as in the above examples, it’s also possible to probe the local services and nearby services:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/index.php?file=http://localhost:8080
+                http://example.com/index.php?file=http://192.168.0.2:9080
+                </code></pre></div></div>
+                
+                <p>The following example will demonstrate how it is possible to show the source code of a CGI component, without using any path traversal characters.</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/main.cgi?home=main.cgi
+                </code></pre></div></div>
+                
+                <p>The component called <code class="language-plaintext highlighter-rouge">main.cgi</code> is located in the same directory as the normal HTML static files used by the application. In some cases the tester needs to encode the requests using special characters (like the <code class="language-plaintext highlighter-rouge">.</code> dot, <code class="language-plaintext highlighter-rouge">%00</code> null, etc.) in order to bypass file extension controls or to prevent script execution.</p>
+                
+                <p><strong>Tip:</strong> It’s a common mistake by developers to not expect every form of encoding and therefore only do validation for basic encoded content. If at first the test string isn’t successful, try another encoding scheme.</p>
+                
+                <p>Each operating system uses different characters as path separator:</p>
+                
+                <ul>
+                  <li>Unix-like OS:
+                    <ul>
+                      <li>root directory: <code class="language-plaintext highlighter-rouge">/</code></li>
+                      <li>directory separator: <code class="language-plaintext highlighter-rouge">/</code></li>
+                    </ul>
+                  </li>
+                  <li>Windows OS:
+                    <ul>
+                      <li>root directory: <code class="language-plaintext highlighter-rouge">&lt;drive letter&gt;:</code></li>
+                      <li>directory separator: <code class="language-plaintext highlighter-rouge">\</code> or <code class="language-plaintext highlighter-rouge">/</code></li>
+                    </ul>
+                  </li>
+                  <li>Classic macOS:
+                    <ul>
+                      <li>root directory: <code class="language-plaintext highlighter-rouge">&lt;drive letter&gt;:</code></li>
+                      <li>directory separator: <code class="language-plaintext highlighter-rouge">:</code></li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <p>We should take in to account the following character encoding mechanisms:</p>
+                
+                <ul>
+                  <li>URL encoding and double URL encoding
+                    <ul>
+                      <li><code class="language-plaintext highlighter-rouge">%2e%2e%2f</code> represents <code class="language-plaintext highlighter-rouge">../</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">%2e%2e/</code> represents <code class="language-plaintext highlighter-rouge">../</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">..%2f</code> represents <code class="language-plaintext highlighter-rouge">../</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">%2e%2e%5c</code> represents <code class="language-plaintext highlighter-rouge">..\</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">%2e%2e\</code> represents <code class="language-plaintext highlighter-rouge">..\</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">..%5c</code> represents <code class="language-plaintext highlighter-rouge">..\</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">%252e%252e%255c</code> represents <code class="language-plaintext highlighter-rouge">..\</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">..%255c</code> represents <code class="language-plaintext highlighter-rouge">..\</code> and so on.</li>
+                    </ul>
+                  </li>
+                  <li>Unicode/UTF-8 Encoding (it only works in systems that are able to accept overlong UTF-8 sequences)
+                    <ul>
+                      <li><code class="language-plaintext highlighter-rouge">..%c0%af</code> represents <code class="language-plaintext highlighter-rouge">../</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">..%c1%9c</code> represents <code class="language-plaintext highlighter-rouge">..\</code></li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <p>There are other OS and application framework specific considerations as well. For instance, Windows is flexible in its parsing of file paths.</p>
+                
+                <ul>
+                  <li>Windows shell: Appending any of the following to paths used in a shell command results in no difference in function:
+                    <ul>
+                      <li>Angle brackets <code class="language-plaintext highlighter-rouge">&lt;</code> and <code class="language-plaintext highlighter-rouge">&gt;</code> at the end of the path</li>
+                      <li>Double quotes (closed properly) at the end of the path</li>
+                      <li>Extraneous current directory markers such as <code class="language-plaintext highlighter-rouge">./</code> or <code class="language-plaintext highlighter-rouge">.\\</code></li>
+                      <li>Extraneous parent directory markers with arbitrary items that may or may not exist:
+                        <ul>
+                          <li><code class="language-plaintext highlighter-rouge">file.txt</code></li>
+                          <li><code class="language-plaintext highlighter-rouge">file.txt...</code></li>
+                          <li><code class="language-plaintext highlighter-rouge">file.txt&lt;spaces&gt;</code></li>
+                          <li><code class="language-plaintext highlighter-rouge">file.txt""""</code></li>
+                          <li><code class="language-plaintext highlighter-rouge">file.txt&lt;&lt;&lt;&gt;&gt;&gt;&lt;</code></li>
+                          <li><code class="language-plaintext highlighter-rouge">./././file.txt</code></li>
+                          <li><code class="language-plaintext highlighter-rouge">nonexistant/../file.txt</code></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>Windows API: The following items are discarded when used in any shell command or API call where a string is taken as a filename:
+                    <ul>
+                      <li>periods</li>
+                      <li>spaces</li>
+                    </ul>
+                  </li>
+                  <li>Windows UNC Filepaths: Used to reference files on SMB shares. Sometimes, an application can be made to refer to files on a remote UNC filepath. If so, the Windows SMB server may send stored credentials to the attacker, which can be captured and cracked. These may also be used with a self-referential IP address or domain name to evade filters, or used to access files on SMB shares inaccessible to the attacker, but accessible from the web server.
+                    <ul>
+                      <li><code class="language-plaintext highlighter-rouge">\\server_or_ip\path\to\file.abc</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">\\?\server_or_ip\path\to\file.abc</code></li>
+                    </ul>
+                  </li>
+                  <li>Windows NT Device Namespace: Used to refer to the Windows device namespace. Certain references will allow access to file systems using a different path.
+                    <ul>
+                      <li>May be equivalent to a drive letter such as <code class="language-plaintext highlighter-rouge">c:\</code>, or even a drive volume without an assigned letter: <code class="language-plaintext highlighter-rouge">\\.\GLOBALROOT\Device\HarddiskVolume1\</code></li>
+                      <li>Refers to the first disc drive on the machine: <code class="language-plaintext highlighter-rouge">\\.\CdRom0\</code></li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                
+                <p>When the analysis is performed with a gray-box testing approach, testers have to follow the same methodology as in black-box testing. However, since they can review the source code, it is possible to search the input vectors more easily and accurately. During a source code review, they can use simple tools (such as the <em>grep</em> command) to search for one or more common patterns within the application code: inclusion functions/methods, filesystem operations, and so on.</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">PHP: include(), include_once(), require(), require_once(), fopen(), readfile(), ...</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">JSP/Servlet: java.io.File(), java.io.FileReader(), ...</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">ASP: include file, include virtual, ...</code></li>
+                </ul>
+                
+                <p>Using online code search engines (e.g., <a href="https://searchcode.com/">Searchcode</a>), it may also be possible to find path traversal flaws in Open Source software published on the Internet.</p>
+                
+                <p>For PHP, testers can use the following regex:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(include|require)(_once)?\s*['"(]?\s*\$_(GET|POST|COOKIE)
+                </code></pre></div></div>
+                
+                <p>Using the gray-box testing method, it is possible to discover vulnerabilities that are usually harder to discover, or even impossible to find during a standard black-box assessment.</p>
+                
+                <p>Some web applications generate dynamic pages using values and parameters stored in a database. It may be possible to insert specially crafted path traversal strings when the application adds data to the database. This kind of security problem is difficult to discover due to the fact the parameters inside the inclusion functions seem internal and <strong>safe</strong> but are not in reality.</p>
+                
+                <p>Additionally, by reviewing the source code it is possible to analyze the functions that are supposed to handle invalid input: some developers try to change invalid input to make it valid, avoiding warnings and errors. These functions are usually prone to security flaws.</p>
+                
+                <p>Consider a web application with these instructions:</p>
+                
+                <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">filename</span> <span class="o">=</span> <span class="nc">Request</span><span class="mf">.</span><span class="nf">QueryString</span><span class="p">(</span><span class="s2">"file"</span><span class="p">);</span>
+                <span class="nf">Replace</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"/"</span><span class="p">,</span><span class="s2">"</span><span class="se">\"</span><span class="s2">);
+                Replace(filename, "</span><span class="mf">..</span><span class="err">\</span><span class="s2">","");
+                </span></code></pre></div></div>
+                
+                <p>Testing for the flaw is achieved by:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file=....//....//boot.ini
+                file=....\\....\\boot.ini
+                file= ..\..\boot.ini
+                </code></pre></div></div>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://github.com/wireghoul/dotdotpwn">DotDotPwn - The Directory Traversal Fuzzer</a></li>
+                  <li><a href="https://github.com/xmendez/wfuzz/blob/master/wordlist/Injections/Traversal.txt">Path Traversal Fuzz Strings (from WFuzz Tool)</a></li>
+                  <li><a href="https://www.zaproxy.org/">OWASP ZAP</a></li>
+                  <li><a href="https://portswigger.net">Burp Suite</a></li>
+                  <li>Enconding/Decoding tools</li>
+                  <li><a href="https://www.gnu.org/software/grep/">String searcher “grep”</a></li>
+                  <li><a href="https://wiki.owasp.org/index.php/Category:OWASP_DirBuster_Project">DirBuster</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <h3 id="whitepapers">Whitepapers</h3>
+                
+                <ul>
+                  <li><a href="https://seclists.org/vulnwatch/2004/q4/33">phpBB Attachment Mod Directory Traversal HTTP POST Injection</a></li>
+                  <li><a href="https://www.slideshare.net/BaronZor/windows-file-pseudonyms">Windows File Pseudonyms: Pwnage and Poetry</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/05-Authorization_Testing/01-Testing_Directory_Traversal_File_Include" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="athz2Modal" tabindex="-1" role="dialog" aria-labelledby="athz2ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="athz2ModalLabel">WSTG-ATHZ-02 - Testing for Bypassing Authorization Schema</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>This kind of test focuses on verifying how the authorization schema has been implemented for each role or privilege to get access to reserved functions and resources.</p>
+                
+                <p>For every specific role the tester holds during the assessment and for every function and request that the application executes during the post-authentication phase, it is necessary to verify:</p>
+                
+                <ul>
+                  <li>Is it possible to access that resource even if the user is not authenticated?</li>
+                  <li>Is it possible to access that resource after the log-out?</li>
+                  <li>Is it possible to access functions and resources that should be accessible to a user that holds a different role or privilege?</li>
+                </ul>
+                
+                <p>Try to access the application as an administrative user and track all the administrative functions.</p>
+                
+                <ul>
+                  <li>Is it possible to access administrative functions if the tester is logged in as a  non-admin user?</li>
+                  <li>Is it possible to use these administrative functions as a user with a different role and for whom that action should be denied?</li>
+                </ul>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Assess if horizontal or vertical access is possible.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <ul>
+                  <li>Access resources and conduct operations horizontally.</li>
+                  <li>Access resources and conduct operations vertically.</li>
+                </ul>
+                
+                <h3 id="testing-for-horizontal-bypassing-authorization-schema">Testing for Horizontal Bypassing Authorization Schema</h3>
+                
+                <p>For every function, specific role, or request that the application executes, it is necessary to verify:</p>
+                
+                <ul>
+                  <li>Is it possible to access resources that should be accessible to a user that holds a different identity with the same role or privilege?</li>
+                  <li>Is it possible to operate functions on resources that should be accessible to a user that holds a different identity?</li>
+                </ul>
+                
+                <p>For each role:</p>
+                
+                <ol>
+                  <li>Register or generate two users with identical privileges.</li>
+                  <li>Establish and keep two different sessions active (one for each user).</li>
+                  <li>For every request, change the relevant parameters and the session identifier from token one to token two and diagnose the responses for each token.</li>
+                  <li>An application will be considered vulnerable if the responses are the same, contain same private data or indicate successful operation on other users’ resource or data.</li>
+                </ol>
+                
+                <p>For example, suppose that the <code class="language-plaintext highlighter-rouge">viewSettings</code> function is part of every account menu of the application with the same role, and it is possible to access it by requesting the following URL: <code class="language-plaintext highlighter-rouge">https://www.example.com/account/viewSettings</code>. Then, the following HTTP request is generated when calling the <code class="language-plaintext highlighter-rouge">viewSettings</code> function:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/account/viewSettings</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">www.example.com</span>
+                <span class="s">[other HTTP headers]</span>
+                <span class="na">Cookie</span><span class="p">:</span> <span class="s">SessionID=USER_SESSION</span>
+                
+                username=example_user
+                </code></pre></div></div>
+                
+                <p>Valid and legitimate response:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP1.1 200 OK
+                [other HTTP headers]
+                
+                {
+                  "username": "example_user",
+                  "email": "example@email.com",
+                  "address": "Example Address"
+                }
+                </code></pre></div></div>
+                
+                <p>The attacker may try and execute that request with the same <code class="language-plaintext highlighter-rouge">username</code> parameter:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST /account/viewCCpincode HTTP/1.1
+                Host: www.example.com
+                [other HTTP headers]
+                Cookie: SessionID=ATTACKER_SESSION
+                
+                username=example_user
+                </code></pre></div></div>
+                
+                <p>If the attacker’s response contain the data of the <code class="language-plaintext highlighter-rouge">example_user</code>, then the application is vulnerable for lateral movement attacks, where a user can read or write other user’s data.</p>
+                
+                <h3 id="testing-for-vertical-bypassing-authorization-schema">Testing for Vertical Bypassing Authorization Schema</h3>
+                
+                <p>A vertical authorization bypass is specific to the case that an attacker obtains a role higher than their own. Testing for this bypass focuses on verifying how the vertical authorization schema has been implemented for each role. For every function, page, specific role, or request that the application executes, it is necessary to verify if it is possible to:</p>
+                
+                <ul>
+                  <li>Access resources that should be accessible only to a higher role user.</li>
+                  <li>Operate functions on resources that should be operative only by a user that holds a higher or specific role identity.</li>
+                </ul>
+                
+                <p>For each role:</p>
+                
+                <ol>
+                  <li>Register a user.</li>
+                  <li>Establish and maintain two different sessions based on the two different roles.</li>
+                  <li>For every request, change the session identifier from the original to another role’s session identifier and evaluate the responses for each.</li>
+                  <li>An application will be considered vulnerable if the weaker privileged session contains the same data, or indicate successful operations on higher privileged functions.</li>
+                </ol>
+                
+                <h4 id="banking-site-roles-scenario">Banking Site Roles Scenario</h4>
+                
+                <p>The following table illustrates the system roles on a banking site. Each role binds with specific permissions for the event menu functionality:</p>
+                
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ROLE</th>
+                      <th>PERMISSION</th>
+                      <th>ADDITIONAL PERMISSION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Administrator</td>
+                      <td>Full Control</td>
+                      <td>Delete</td>
+                    </tr>
+                    <tr>
+                      <td>Manager</td>
+                      <td>Modify, Add, Read</td>
+                      <td>Add</td>
+                    </tr>
+                    <tr>
+                      <td>Staff</td>
+                      <td>Read, Modify</td>
+                      <td>Modify</td>
+                    </tr>
+                    <tr>
+                      <td>Customer</td>
+                      <td>Read Only</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                </table>
+                
+                <p>The application will be considered vulnerable if the:</p>
+                
+                <ol>
+                  <li>Customer could operate administrator, manager or staff functions;</li>
+                  <li>Staff user could operate manager or administrator functions;</li>
+                  <li>Manager could operate administrator functions.</li>
+                </ol>
+                
+                <p>Suppose that the <code class="language-plaintext highlighter-rouge">deleteEvent</code> function is part of the administrator account menu of the application, and it is possible to access it by requesting the following URL: <code class="language-plaintext highlighter-rouge">https://www.example.com/account/deleteEvent</code>. Then, the following HTTP request is generated when calling the <code class="language-plaintext highlighter-rouge">deleteEvent</code> function:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/account/deleteEvent</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">www.example.com</span>
+                <span class="s">[other HTTP headers]</span>
+                <span class="na">Cookie</span><span class="p">:</span> <span class="s">SessionID=ADMINISTRATOR_USER_SESSION</span>
+                
+                EventID=1000001
+                </code></pre></div></div>
+                
+                <p>The valid response:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+                <span class="s">[other HTTP headers]</span>
+                
+                {"message": "Event was deleted"}
+                </code></pre></div></div>
+                
+                <p>The attacker may try and execute the same request:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/account/deleteEvent</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">www.example.com</span>
+                <span class="s">[other HTTP headers]</span>
+                <span class="na">Cookie</span><span class="p">:</span> <span class="s">SessionID=CUSTOMER_USER_SESSION</span>
+                
+                EventID=1000002
+                </code></pre></div></div>
+                
+                <p>If the response of the attacker’s request contains the same data <code class="language-plaintext highlighter-rouge">{"message": "Event was deleted"}</code> the application is vulnerable.</p>
+                
+                <h4 id="administrator-page-access">Administrator Page Access</h4>
+                
+                <p>Suppose that the administrator menu is part of the administrator account.</p>
+                
+                <p>The application will be considered vulnerable if any role other than administrator could access the administrator menu. Sometimes, developers perform authorization validation at the GUI level only, and leave the functions without authorization validation, thus potentially resulting in a vulnerability.</p>
+                
+                <h3 id="testing-for-access-to-administrative-functions">Testing for Access to Administrative Functions</h3>
+                
+                <p>For example, suppose that the <code class="language-plaintext highlighter-rouge">addUser</code> function is part of the administrative menu of the application, and it is possible to access it by requesting the following URL <code class="language-plaintext highlighter-rouge">https://www.example.com/admin/addUser</code>.</p>
+                
+                <p>Then, the following HTTP request is generated when calling the <code class="language-plaintext highlighter-rouge">addUser</code> function:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/admin/addUser</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">www.example.com</span>
+                <span class="s">[...]</span>
+                
+                userID=fakeuser&amp;role=3&amp;group=grp001
+                </code></pre></div></div>
+                
+                <p>Further questions or considerations would go in the following direction:</p>
+                
+                <ul>
+                  <li>What happens if a non-administrative user tries to execute that request?</li>
+                  <li>Will the user be created?</li>
+                  <li>If so, can the new user use their privileges?</li>
+                </ul>
+                
+                <h3 id="testing-for-access-to-resources-assigned-to-a-different-role">Testing for Access to Resources Assigned to a Different Role</h3>
+                
+                <p>Various applications setup resource controls based on user roles. Let’s take an example resumes or CVs (curriculum vitae) uploaded on a careers form to an S3 bucket.</p>
+                
+                <p>As a normal user, try accessing the location of those files. If you are able to retrieve them, modify them, or delete them, then the application is vulnerable.</p>
+                
+                <h3 id="testing-for-special-request-header-handling">Testing for Special Request Header Handling</h3>
+                
+                <p>Some applications support non-standard headers such as <code class="language-plaintext highlighter-rouge">X-Original-URL</code> or <code class="language-plaintext highlighter-rouge">X-Rewrite-URL</code> in order to allow overriding the target URL in requests with the one specified in the header value.</p>
+                
+                <p>This behavior can be leveraged in a situation in which the application is behind a component that applies access control restriction based on the request URL.</p>
+                
+                <p>The kind of access control restriction based on the request URL can be, for example, blocking access from Internet to an administration console exposed on <code class="language-plaintext highlighter-rouge">/console</code> or <code class="language-plaintext highlighter-rouge">/admin</code>.</p>
+                
+                <p>To detect the support for the header <code class="language-plaintext highlighter-rouge">X-Original-URL</code> or <code class="language-plaintext highlighter-rouge">X-Rewrite-URL</code>, the following steps can be applied.</p>
+                
+                <h4 id="1-send-a-normal-request-without-any-x-original-url-or-x-rewrite-url-header">1. Send a Normal Request without Any X-Original-Url or X-Rewrite-Url Header</h4>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">GET</span> <span class="nn">/</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">www.example.com</span>
+                <span class="s">[...]</span>
+                </code></pre></div></div>
+                
+                <h4 id="2-send-a-request-with-an-x-original-url-header-pointing-to-a-non-existing-resource">2. Send a Request with an X-Original-Url Header Pointing to a Non-Existing Resource</h4>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET / HTTP/1.1
+                Host: www.example.com
+                X-Original-URL: /donotexist1
+                [...]
+                </code></pre></div></div>
+                
+                <h4 id="3-send-a-request-with-an-x-rewrite-url-header-pointing-to-a-non-existing-resource">3. Send a Request with an X-Rewrite-Url Header Pointing to a Non-Existing Resource</h4>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET / HTTP/1.1
+                Host: www.example.com
+                X-Rewrite-URL: /donotexist2
+                [...]
+                </code></pre></div></div>
+                
+                <p>If the response for either request contains markers that the resource was not found, this indicates that the application supports the special request headers. These markers may include the HTTP response status code 404, or a “resource not found” message in the response body.</p>
+                
+                <p>Once the support for the header <code class="language-plaintext highlighter-rouge">X-Original-URL</code> or <code class="language-plaintext highlighter-rouge">X-Rewrite-URL</code> was validated then the tentative of bypass against the access control restriction can be leveraged by sending the expected request to the application but specifying a URL “allowed” by the front-end component as the main request URL and specifying the real target URL in the <code class="language-plaintext highlighter-rouge">X-Original-URL</code> or <code class="language-plaintext highlighter-rouge">X-Rewrite-URL</code> header depending on the one supported. If both are supported then try one after the other to verify for which header the bypass is effective.</p>
+                
+                <h4 id="4-other-headers-to-consider">4. Other Headers to Consider</h4>
+                
+                <p>Often admin panels or administrative related bits of functionality are only accessible to clients on local networks, therefore it may be possible to abuse various proxy or forwarding related HTTP headers to gain access. Some headers and values to test with are:</p>
+                
+                <ul>
+                  <li>Headers:
+                    <ul>
+                      <li><code class="language-plaintext highlighter-rouge">X-Forwarded-For</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">X-Forward-For</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">X-Remote-IP</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">X-Originating-IP</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">X-Remote-Addr</code></li>
+                      <li><code class="language-plaintext highlighter-rouge">X-Client-IP</code></li>
+                    </ul>
+                  </li>
+                  <li>Values
+                    <ul>
+                      <li><code class="language-plaintext highlighter-rouge">127.0.0.1</code> (or anything in the <code class="language-plaintext highlighter-rouge">127.0.0.0/8</code> or <code class="language-plaintext highlighter-rouge">::1/128</code> address spaces)</li>
+                      <li><code class="language-plaintext highlighter-rouge">localhost</code></li>
+                      <li>Any <a href="https://tools.ietf.org/html/rfc1918">RFC1918</a> address:
+                        <ul>
+                          <li><code class="language-plaintext highlighter-rouge">10.0.0.0/8</code></li>
+                          <li><code class="language-plaintext highlighter-rouge">172.16.0.0/12</code></li>
+                          <li><code class="language-plaintext highlighter-rouge">192.168.0.0/16</code></li>
+                        </ul>
+                      </li>
+                      <li>Link local addresses: <code class="language-plaintext highlighter-rouge">169.254.0.0/16</code></li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <p>Note: Including a port element along with the address or hostname may also help bypass edge protections such as web application firewalls, etc.
+                For example: <code class="language-plaintext highlighter-rouge">127.0.0.4:80</code>, <code class="language-plaintext highlighter-rouge">127.0.0.4:443</code>, <code class="language-plaintext highlighter-rouge">127.0.0.4:43982</code></p>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>Employ the least privilege principles on the users, roles, and resources to ensure that no unauthorized access occurs.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org/">OWASP&nbsp;Zed Attack Proxy (ZAP)</a>
+                    <ul>
+                      <li><a href="https://www.zaproxy.org/docs/desktop/addons/access-control-testing/">ZAP add-on: Access Control Testing</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="https://portswigger.net/burp">Port Swigger Burp Suite</a>
+                    <ul>
+                      <li><a href="https://github.com/SecurityInnovation/AuthMatrix/">Burp extension: AuthMatrix</a></li>
+                      <li><a href="https://github.com/Quitten/Autorize">Burp extension: Autorize</a></li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <p><a href="https://github.com/OWASP/ASVS/tree/master/4.0">OWASP Application Security Verification Standard 4.0.1</a>, v4.0.1-1, v4.0.1-4, v4.0.1-9, v4.0.1-16</p>
+
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/05-Authorization_Testing/02-Testing_for_Bypassing_Authorization_Schema" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="athz3Modal" tabindex="-1" role="dialog" aria-labelledby="athz3ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="athz3ModalLabel">WSTG-ATHZ-03 - Testing for Privilege Escalation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>This section describes the issue of escalating privileges from one stage to another. During this phase, the tester should verify that it is not possible for a user to modify their privileges or roles inside the application in ways that could allow privilege escalation attacks.</p>
+                
+                <p>Privilege escalation occurs when a user gets access to more resources or functionality than they are normally allowed, and such elevation or changes should have been prevented by the application. This is usually caused by a flaw in the application. The result is that the application performs actions with more privileges than those intended by the developer or system administrator.</p>
+                
+                <p>The degree of escalation depends on what privileges the attacker is authorized to possess, and what privileges can be obtained in a successful exploit. For example, a programming error that allows a user to gain extra privilege after successful authentication limits the degree of escalation, because the user is already authorized to hold some privilege. Likewise, a remote attacker gaining superuser privilege without any authentication presents a greater degree of escalation.</p>
+                
+                <p>Usually, people refer to <em>vertical escalation</em> when it is possible to access resources granted to more privileged accounts (e.g., acquiring administrative privileges for the application), and to <em>horizontal escalation</em> when it is possible to access resources granted to a similarly configured account (e.g., in an online banking application, accessing information related to a different user).</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Identify injection points related to privilege manipulation.</li>
+                  <li>Fuzz or otherwise attempt to bypass security measures.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="testing-for-roleprivilege-manipulation">Testing for Role/Privilege Manipulation</h3>
+                
+                <p>In every portion of the application where a user can create information in the database (e.g., making a payment, adding a contact, or sending a message), can receive information (statement of account, order details, etc.), or delete information (drop users, messages, etc.), it is necessary to record that functionality. The tester should try to access such functions as another user in order to verify if it is possible to access a function that should not be permitted by the user’s role/privilege (but might be permitted as another user).</p>
+                
+                <h4 id="manipulation-of-user-group">Manipulation of User Group</h4>
+                
+                <p>For example:
+                The following HTTP POST allows the user that belongs to <code class="language-plaintext highlighter-rouge">grp001</code> to access order #0001:</p>
+                
+                <div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/user/viewOrder.jsp</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+                <span class="na">Host</span><span class="p">:</span> <span class="s">www.example.com</span>
+                <span class="s">...</span>
+                
+                groupID=grp001&amp;orderID=0001
+                </code></pre></div></div>
+                
+                <p>Verify if a user that does not belong to <code class="language-plaintext highlighter-rouge">grp001</code> can modify the value of the parameters <code class="language-plaintext highlighter-rouge">groupID</code> and <code class="language-plaintext highlighter-rouge">orderID</code> to gain access to that privileged data.</p>
+                
+                <h4 id="manipulation-of-user-profile">Manipulation of User Profile</h4>
+                
+                <p>For example:
+                The following server’s answer shows a hidden field in the HTML returned to the user after a successful authentication.</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1&nbsp;200&nbsp;OK
+                Server:&nbsp;Netscape-Enterprise/6.0
+                Date:&nbsp;Wed,&nbsp;1&nbsp;Apr&nbsp;2006&nbsp;13:51:20&nbsp;GMT
+                Set-Cookie:&nbsp;USER=aW78ryrGrTWs4MnOd32Fs51yDqp;&nbsp;path=/;&nbsp;domain=www.example.com
+                Set-Cookie:&nbsp;SESSION=k+KmKeHXTgDi1J5fT7Zz;&nbsp;path=/;&nbsp;domain=&nbsp;www.example.com
+                Cache-Control:&nbsp;no-cache
+                Pragma:&nbsp;No-cache
+                Content-length:&nbsp;247
+                Content-Type:&nbsp;text/html
+                Expires:&nbsp;Thu,&nbsp;01&nbsp;Jan&nbsp;1970&nbsp;00:00:00&nbsp;GMT
+                Connection:&nbsp;close
+                
+                <span class="nt">&lt;form</span>  <span class="na">name=</span><span class="s">"autoriz"</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action = </span><span class="s">"visual.jsp"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">name=</span><span class="s">"profile"</span> <span class="na">value=</span><span class="s">"SysAdmin"</span><span class="nt">&gt;</span>\
+                
+                <span class="nt">&lt;body</span> <span class="na">onload=</span><span class="s">"document.forms.autoriz.submit()"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;/tr&gt;</span>
+                </code></pre></div></div>
+                
+                <p>What if the tester modifies the value of the variable <code class="language-plaintext highlighter-rouge">profile</code> to <code class="language-plaintext highlighter-rouge">SysAdmin</code>? Is it possible to become <strong>administrator</strong>?</p>
+                
+                <h4 id="manipulation-of-condition-value">Manipulation of Condition Value</h4>
+                
+                <p>For example:
+                In an environment where the server sends an error message contained as a value in a specific parameter in a set of answer codes, as the following:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0`1`3`3``0`UC`1`Status`OK`SEC`5`1`0`ResultSet`0`PVValid`-1`0`0` Notifications`0`0`3`Command  Manager`0`0`0` StateToolsBar`0`0`0`
+                StateExecToolBar`0`0`0`FlagsToolBar`0
+                </code></pre></div></div>
+                
+                <p>The server gives an implicit trust to the user. It believes that the user will answer with the above message closing the session.</p>
+                
+                <p>In this condition, verify that it is not possible to escalate privileges by modifying the parameter values. In this particular example, by modifying the <code class="language-plaintext highlighter-rouge">PVValid</code> value from <code class="language-plaintext highlighter-rouge">-1</code> to <code class="language-plaintext highlighter-rouge">0</code> (no error conditions), it may be possible to authenticate as administrator to the server.</p>
+                
+                <h4 id="manipulation-of-ip-address">Manipulation of IP Address</h4>
+                
+                <p>Some websites limit access or count the number of failed login attempts based on IP address.</p>
+                
+                <p>For example:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>X-Forwarded-For:&nbsp;8.1.1.1
+                </code></pre></div></div>
+                
+                <p>In this case, if the website uses the value of <code class="language-plaintext highlighter-rouge">X-forwarded-For</code> as client IP address, tester may change the IP value of the <code class="language-plaintext highlighter-rouge">X-forwarded-For</code> HTTP header to workaround the IP source identification.</p>
+                
+                <h3 id="url-traversal">URL Traversal</h3>
+                
+                <p>Try to traverse the website and check if some of pages that may miss the authorization check.</p>
+                
+                <p>For example:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/../.././userInfo.html
+                </code></pre></div></div>
+                
+                <h3 id="whitebox">WhiteBox</h3>
+                
+                <p>If the URL authorization check is only done by partial URL match, then it’s likely testers or hackers may workaround the authorization by URL encoding techniques.</p>
+                
+                <p>For example:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>startswith(),&nbsp;endswith(),&nbsp;contains(),&nbsp;indexOf()
+                </code></pre></div></div>
+                
+                <h3 id="weak-sessionid">Weak SessionID</h3>
+                
+                <p>Weak Session ID has algorithm may be vulnerable to brute Force attack. For example, one website is using <code class="language-plaintext highlighter-rouge">MD5(Password + UserID)</code> as sessionID. Then, testers may guess or generate the sessionID for other users.</p>
+                
+                <h2 id="references">References</h2>
+                
+                <h3 id="whitepapers">Whitepapers</h3>
+                
+                <ul>
+                  <li><a href="https://en.wikipedia.org/wiki/Privilege_escalation">Wikipedia - Privilege Escalation</a></li>
+                </ul>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org">OWASP&nbsp;Zed Attack Proxy (ZAP)</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/05-Authorization_Testing/03-Testing_for_Privilege_Escalation" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="athz4Modal" tabindex="-1" role="dialog" aria-labelledby="athz4ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="athz4ModalLabel">WSTG-ATHZ-04 - Testing for Insecure Direct Object References</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Insecure Direct Object References (IDOR) occur when an application provides direct access to objects based on user-supplied input. As a result of this vulnerability attackers can bypass authorization and access resources in the system directly, for example database records or files.
+                Insecure Direct Object References allow attackers to bypass authorization and access resources directly by modifying the value of a parameter used to directly point to an object. Such resources can be database entries belonging to other users, files in the system, and more. This is caused by the fact that the application takes user supplied input and uses it to retrieve an object without performing sufficient authorization checks.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Identify points where object references may occur.</li>
+                  <li>Assess the access control measures and if they’re vulnerable to IDOR.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>To test for this vulnerability the tester first needs to map out all locations in the application where user input is used to reference objects directly. For example, locations where user input is used to access a database row, a file, application pages and more. Next the tester should modify the value of the parameter used to reference objects and assess whether it is possible to retrieve objects belonging to other users or otherwise bypass authorization.</p>
+                
+                <p>The best way to test for direct object references would be by having at least two (often more) users to cover different owned objects and functions. For example two users each having access to different objects (such as purchase information, private messages, etc.), and (if relevant) users with different privileges (for example administrator users) to see whether there are direct references to application functionality. By having multiple users the tester saves valuable testing time in guessing different object names as he can attempt to access objects that belong to the other user.</p>
+                
+                <p>Below are several typical scenarios for this vulnerability and the methods to test for each:</p>
+                
+                <h3 id="the-value-of-a-parameter-is-used-directly-to-retrieve-a-database-record">The Value of a Parameter Is Used Directly to Retrieve a Database Record</h3>
+                
+                <p>Sample request:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://foo.bar/somepage?invoice=12345
+                </code></pre></div></div>
+                
+                <p>In this case, the value of the <em>invoice</em> parameter is used as an index in an invoices table in the database. The application takes the value of this parameter and uses it in a query to the database. The application then returns the invoice information to the user.</p>
+                
+                <p>Since the value of <em>invoice</em> goes directly into the query, by modifying the value of the parameter it is possible to retrieve any invoice object, regardless of the user to whom the invoice belongs. To test for this case the tester should obtain the identifier of an invoice belonging to a different test user (ensuring he is not supposed to view this information per application business logic), and then check whether it is possible to access objects without authorization.</p>
+                
+                <h3 id="the-value-of-a-parameter-is-used-directly-to-perform-an-operation-in-the-system">The Value of a Parameter Is Used Directly to Perform an Operation in the System</h3>
+                
+                <p>Sample request:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://foo.bar/changepassword?user=someuser
+                </code></pre></div></div>
+                
+                <p>In this case, the value of the <code class="language-plaintext highlighter-rouge">user</code> parameter is used to tell the application for which user it should change the password. In many cases this step will be a part of a wizard, or a multi-step operation. In the first step the application will get a request stating for which user’s password is to be changed, and in the next step the user will provide a new password (without asking for the current one).</p>
+                
+                <p>The <code class="language-plaintext highlighter-rouge">user</code> parameter is used to directly reference the object of the user for whom the password change operation will be performed. To test for this case the tester should attempt to provide a different test username than the one currently logged in, and check whether it is possible to modify the password of another user.</p>
+                
+                <h3 id="the-value-of-a-parameter-is-used-directly-to-retrieve-a-file-system-resource">The Value of a Parameter Is Used Directly to Retrieve a File System Resource</h3>
+                
+                <p>Sample request:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://foo.bar/showImage?img=img00011
+                </code></pre></div></div>
+                
+                <p>In this case, the value of the <code class="language-plaintext highlighter-rouge">file</code> parameter is used to tell the application what file the user intends to retrieve. By providing the name or identifier of a different file (for example file=image00012.jpg) the attacker will be able to retrieve objects belonging to other users.</p>
+                
+                <p>To test for this case, the tester should obtain a reference the user is not supposed to be able to access and attempt to access it by using it as the value of <code class="language-plaintext highlighter-rouge">file</code> parameter. Note: This vulnerability is often exploited in conjunction with a directory/path traversal vulnerability (see <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/05-Authorization_Testing/01-Testing_Directory_Traversal_File_Include">Testing for Path Traversal</a>)</p>
+                
+                <h3 id="the-value-of-a-parameter-is-used-directly-to-access-application-functionality">The Value of a Parameter Is Used Directly to Access Application Functionality</h3>
+                
+                <p>Sample request:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://foo.bar/accessPage?menuitem=12
+                </code></pre></div></div>
+                
+                <p>In this case, the value of the <code class="language-plaintext highlighter-rouge">menuitem</code> parameter is used to tell the application which menu item (and therefore which application functionality) the user is attempting to access. Assume the user is supposed to be restricted and therefore has links available only to access to menu items 1, 2 and 3. By modifying the value of <code class="language-plaintext highlighter-rouge">menuitem</code> parameter it is possible to bypass authorization and access additional application functionality. To test for this case the tester identifies a location where application functionality is determined by reference to a menu item, maps the values of menu items the given test user can access, and then attempts other menu items.</p>
+                
+                <p>In the above examples the modification of a single parameter is sufficient. However, sometimes the object reference may be split between more than one parameter, and testing should be adjusted accordingly.</p>
+                
+                <h2 id="references">References</h2>
+                
+                <p><a href="https://owasp.org/www-project-top-ten/2017/Release_Notes">Top 10 2013-A4-Insecure Direct Object References</a></p>
+            </div>
+            <div class="modal-footer">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/05-Authorization_Testing/04-Testing_for_Insecure_Direct_Object_References" class="btn btn-success" target="_blank">View on owasp.org</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

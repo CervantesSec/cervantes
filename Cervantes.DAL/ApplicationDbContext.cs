@@ -120,6 +120,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     public DbSet<Log> Logs { get; set; }
     
+    public DbSet<WSTG> WSTG { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder){
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Log>()

@@ -1,0 +1,1850 @@
+ <div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="conft" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-cog"></i> Configuration and Deploy Management Testing</th>
+                    <th><i class="fas fa-vial"></i> Test Name</th>
+                    <th><i class="fas fa-bullseye"></i> Objectives</th>
+                    
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    
+                    <th><i class="fas fa-sticky-note"></i> Notes</th>
+                    
+                    <th>
+                        <i class="fas fa-eye"></i>
+                    </th>
+                    
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WSTG-CONF-01</td>
+                    <td>Test Network Infrastructure Configuration</td>
+                                    
+                    <td><p>- Review the applications' configurations set across the network and validate that they are not vulnerable.</p>
+                        <p>- Validate that used frameworks and systems are secure and not susceptible to known vulnerabilities due to unmaintained software or default settings and credentials.</p></td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf1Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-02</td>
+                    <td>Test Application Platform Configuration</td>
+                                    
+                    <td><p>- Ensure that defaults and known files have been removed.</p>
+                         <p>- Validate that no debugging code or extensions are left in the production environments.</p>
+                         <p>- Review the logging mechanisms set in place for the application.</p>
+                         </td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf2Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-03</td>
+                    <td>Test File Extensions Handling for Sensitive Information</td>
+                                    
+                    <td><p>- Dirbust sensitive file extensions, or extensions that might contain raw data (*e.g.* scripts, raw data, credentials, etc.).</p>
+                        <p>- Validate that no system framework bypasses exist on the rules set.</p></td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf3Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-04</td>
+                    <td>Review Old Backup and Unreferenced Files for Sensitive Information</td>
+                                    
+                    <td>- Find and analyse unreferenced files that might contain sensitive information.</td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf4Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-05</td>
+                    <td>Enumerate Infrastructure and Application Admin Interfaces</td>
+                                    
+                    <td>- Identify hidden administrator interfaces and functionality.</td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf5Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-06</td>
+                    <td>Test HTTP Methods</td>
+                                    
+                    <td><p>- Enumerate supported HTTP methods.</p>
+                        <p>- Test for access control bypass.</p>
+                        <p>- Test XST vulnerabilities.</p>
+                        <p>- Test HTTP method overriding techniques.</p></td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf6Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-07</td>
+                    <td>Test HTTP Strict Transport Security</td>
+                                    
+                    <td>- Review the HSTS header and its validity.</td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf7Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-08</td>
+                    <td>Test RIA cross domain policy</td>
+                                    
+                    <td>- Review and validate the policy files.</td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf8Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-09</td>
+                    <td>Test File Permission</td>
+                                    
+                    <td>- Review and identify any rogue file permissions.</td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf9Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-10</td>
+                    <td>Test for Subdomain Takeover</td>
+                                    
+                    <td><p>- Enumerate all possible domains (previous and current).</p>
+                        <p>- Identify forgotten or misconfigured domains.</p></td>
+                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf10Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WSTG-CONF-11</td>
+                    <td>Test Cloud Storage</td>
+                                                    
+                    <td>- Assess that the access control configuration for the storage services is properly in place.</td>
+                                                    
+                    <td>
+                        <select class="form-control">
+                            <option value="0">Not Started</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Issues</option>
+                            <option value="3">N/A</option>
+                        </select>
+                    </td>
+                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf11Modal">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
+<!-- Modal -->
+ <div class="modal fade" id="conf1Modal" tabindex="-1" role="dialog" aria-labelledby="conf1ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf1ModalLabel">WSTG-CONF-01 - Test Network Infrastructure Configuration</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                 <h2 id="summary">Summary</h2>
+                 
+                 <p>The intrinsic complexity of interconnected and heterogeneous web server infrastructure, which can include hundreds of web applications, makes configuration management and review a fundamental step in testing and deploying every single application. It takes only a single vulnerability to undermine the security of the entire infrastructure, and even small and seemingly unimportant problems may evolve into severe risks for another application on the same server. In order to address these problems, it is of utmost importance to perform an in-depth review of configuration and known security issues, after having mapped the entire architecture.</p>
+                 
+                 <p>Proper configuration management of the web server infrastructure is very important in order to preserve the security of the application itself. If elements such as the web server software, the back-end database servers, or the authentication servers are not properly reviewed and secured, they might introduce undesired risks or introduce new vulnerabilities that might compromise the application itself.</p>
+                 
+                 <p>For example, a web server vulnerability that would allow a remote attacker to disclose the source code of the application itself (a vulnerability that has arisen a number of times in both web servers or application servers) could compromise the application, as anonymous users could use the information disclosed in the source code to leverage attacks against the application or its users.</p>
+                 
+                 <p>The following steps need to be taken to test the configuration management infrastructure:</p>
+                 
+                 <ul>
+                   <li>The different elements that make up the infrastructure need to be determined in order to understand how they interact with a web application and how they affect its security.</li>
+                   <li>All the elements of the infrastructure need to be reviewed in order to make sure that they don’t contain any known vulnerabilities.</li>
+                   <li>A review needs to be made of the administrative tools used to maintain all the different elements.</li>
+                   <li>The authentication systems, need to reviewed in order to assure that they serve the needs of the application and that they cannot be manipulated by external users to leverage access.</li>
+                   <li>A list of defined ports which are required for the application should be maintained and kept under change control.</li>
+                 </ul>
+                 
+                 <p>After having mapped the different elements that make up the infrastructure (see <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/01-Information_Gathering/10-Map_Application_Architecture">Map Network and Application Architecture</a>) it is possible to review the configuration of each element founded and test for any known vulnerabilities.</p>
+                 
+                 <h2 id="test-objectives">Test Objectives</h2>
+                 
+                 <ul>
+                   <li>Review the applications’ configurations set across the network and validate that they are not vulnerable.</li>
+                   <li>Validate that used frameworks and systems are secure and not susceptible to known vulnerabilities due to unmaintained software or default settings and credentials.</li>
+                 </ul>
+                 
+                 <h2 id="how-to-test">How to Test</h2>
+                 
+                 <h3 id="known-server-vulnerabilities">Known Server Vulnerabilities</h3>
+                 
+                 <p>Vulnerabilities found in the different areas of the application architecture, be it in the web server or in the back end database, can severely compromise the application itself. For example, consider a server vulnerability that allows a remote, unauthenticated user to upload files to the web server or even to replace files. This vulnerability could compromise the application, since a rogue user may be able to replace the application itself or introduce code that would affect the back end servers, as its application code would be run just like any other application.</p>
+                 
+                 <p>Reviewing server vulnerabilities can be hard to do if the test needs to be done through a blind penetration test. In these cases, vulnerabilities need to be tested from a remote site, typically using an automated tool. However, testing for some vulnerabilities can have unpredictable results on the web server, and testing for others (like those directly involved in denial of service attacks) might not be possible due to the service downtime involved if the test was successful.</p>
+                 
+                 <p>Some automated tools will flag vulnerabilities based on the web server version retrieved. This leads to both false positives and false negatives. On one hand, if the web server version has been removed or obscured by the local site administrator the scan tool will not flag the server as vulnerable even if it is. On the other hand, if the vendor providing the software does not update the web server version when vulnerabilities are fixed, the scan tool will flag vulnerabilities that do not exist. The latter case is actually very common as some operating system vendors back port patches of security vulnerabilities to the software they provide in the operating system, but do not do a full upload to the latest software version. This happens in most GNU/Linux distributions such as Debian, Red Hat or SuSE. In most cases, vulnerability scanning of an application architecture will only find vulnerabilities associated with the “exposed” elements of the architecture (such as the web server) and will usually be unable to find vulnerabilities associated to elements which are not directly exposed, such as the authentication back ends, the back end database, or reverse proxies in use.</p>
+                 
+                 <p>Finally, not all software vendors disclose vulnerabilities in a public way, and therefore these weaknesses do not become registered within publicly known vulnerability databases [2]. This information is only disclosed to customers or published through fixes that do not have accompanying advisories. This reduces the usefulness of vulnerability scanning tools. Typically, vulnerability coverage of these tools will be very good for common products (such as the Apache web server, Microsoft’s Internet Information Server, or IBM’s Lotus Domino) but will be lacking for lesser known products.</p>
+                 
+                 <p>This is why reviewing vulnerabilities is best done when the tester is provided with internal information of the software used, including versions and releases used and patches applied to the software. With this information, the tester can retrieve the information from the vendor itself and analyze what vulnerabilities might be present in the architecture and how they can affect the application itself. When possible, these vulnerabilities can be tested to determine their real effects and to detect if there might be any external elements (such as intrusion detection or prevention systems) that might reduce or negate the possibility of successful exploitation. Testers might even determine, through a configuration review, that the vulnerability is not even present, since it affects a software component that is not in use.</p>
+                 
+                 <p>It is also worthwhile to note that vendors will sometimes silently fix vulnerabilities and make the fixes available with new software releases. Different vendors will have different release cycles that determine the support they might provide for older releases. A tester with detailed information of the software versions used by the architecture can analyse the risk associated to the use of old software releases that might be unsupported in the short term or are already unsupported. This is critical, since if a vulnerability were to surface in an old software version that is no longer supported, the systems personnel might not be directly aware of it. No patches will be ever made available for it and advisories might not list that version as vulnerable as it is no longer supported. Even in the event that they are aware that the vulnerability is present and the system is vulnerable, they will need to do a full upgrade to a new software release, which might introduce significant downtime in the application architecture or might force the application to be re-coded due to incompatibilities with the latest software version.</p>
+                 
+                 <h3 id="administrative-tools">Administrative Tools</h3>
+                 
+                 <p>Any web server infrastructure requires the existence of administrative tools to maintain and update the information used by the application. This information includes static content (web pages, graphic files), application source code, user authentication databases, etc. Administrative tools will differ depending on the site, technology, or software used. For example, some web servers will be managed using administrative interfaces which are, themselves, web servers (such as the iPlanet web server) or will be administrated by plain text configuration files (in the Apache case [3]) or use operating-system GUI tools (when using Microsoft’s IIS server or ASP.Net).</p>
+                 
+                 <p>In most cases the server configuration will be handled using different file maintenance tools used by the web server, which are managed through FTP servers, WebDAV, network file systems (NFS, CIFS) or other mechanisms. Obviously, the operating system of the elements that make up the application architecture will also be managed using other tools. Applications may also have administrative interfaces embedded in them that are used to manage the application data itself (users, content, etc.).</p>
+                 
+                 <p>After having mapped the administrative interfaces used to manage the different parts of the architecture it is important to review them since if an attacker gains access to any of them he can then compromise or damage the application architecture. To do this it is important to:</p>
+                 
+                 <ul>
+                   <li>Determine the mechanisms that control access to these interfaces and their associated susceptibilities. This information may be available online.</li>
+                   <li>Change the default username and password.</li>
+                 </ul>
+                 
+                 <p>Some companies choose not to manage all aspects of their web server applications, but may have other parties managing the content delivered by the web application. This external company might either provide only parts of the content (news updates or promotions) or might manage the web server completely (including content and code). It is common to find administrative interfaces available from the Internet in these situations, since using the Internet is cheaper than providing a dedicated line that will connect the external company to the application infrastructure through a management-only interface. In this situation, it is very important to test if the administrative interfaces can be vulnerable to attacks.</p>
+                 
+                 <h2 id="references">References</h2>
+                 
+                 <ul>
+                   <li>[1] WebSEAL, also known as Tivoli Authentication Manager, is a reverse proxy from IBM which is part of the Tivoli framework.</li>
+                   <li>[2] Such as Symantec’s Bugtraq, ISS’ X-Force, or NIST’s National Vulnerability Database (NVD).</li>
+                   <li>[3] There are some GUI-based administration tools for Apache (like NetLoony) but they are not in widespread use yet.</li>
+                 </ul>
+
+
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/01-Test_Network_Infrastructure_Configuration" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf2Modal" tabindex="-1" role="dialog" aria-labelledby="conf2ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf2ModalLabel">WSTG-CONF-02 - Test Application Platform Configuration</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                 <h2 id="summary">Summary</h2>
+                 
+                 <p>Proper configuration of the single elements that make up an application architecture is important in order to prevent mistakes that might compromise the security of the whole architecture.</p>
+                 
+                 <p>Configuration review and testing is a critical task in creating and maintaining an architecture. This is because many different systems will be usually provided with generic configurations that might not be suited to the task they will perform on the specific site they’re installed on.</p>
+                 
+                 <p>While the typical web and application server installation will contain a lot of functionality (like application examples, documentation, test pages) what is not essential should be removed before deployment to avoid post-install exploitation.</p>
+                 
+                 <h2 id="test-objectives">Test Objectives</h2>
+                 
+                 <ul>
+                   <li>Ensure that defaults and known files have been removed.</li>
+                   <li>Validate that no debugging code or extensions are left in the production environments.</li>
+                   <li>Review the logging mechanisms set in place for the application.</li>
+                 </ul>
+                 
+                 <h2 id="how-to-test">How to Test</h2>
+                 
+                 <h3 id="black-box-testing">Black-Box Testing</h3>
+                 
+                 <h4 id="sample-and-known-files-and-directories">Sample and Known Files and Directories</h4>
+                 
+                 <p>Many web servers and application servers provide, in a default installation, sample applications and files for the benefit of the developer and in order to test that the server is working properly right after installation. However, many default web server applications have been later known to be vulnerable. This was the case, for example, for CVE-1999-0449 (Denial of Service in IIS when the Exair sample site had been installed), CAN-2002-1744 (Directory traversal vulnerability in CodeBrws.asp in Microsoft IIS 5.0), CAN-2002-1630 (Use of sendmail.jsp in Oracle 9iAS), or CAN-2003-1172 (Directory traversal in the view-source sample in Apache’s Cocoon).</p>
+                 
+                 <p>CGI scanners include a detailed list of known files and directory samples that are provided by different web or application servers and might be a fast way to determine if these files are present. However, the only way to be really sure is to do a full review of the contents of the web server or application server and determine of whether they are related to the application itself or not.</p>
+                 
+                 <h4 id="comment-review">Comment Review</h4>
+                 
+                 <p>It is very common for programmers to add comments when developing large web-based applications. However, comments included inline in HTML code might reveal internal information that should not be available to an attacker. Sometimes, even source code is commented out since a functionality is no longer required, but this comment is leaked out to the HTML pages returned to the users unintentionally.</p>
+                 
+                 <p>Comment review should be done in order to determine if any information is being leaked through comments. This review can only be thoroughly done through an analysis of the web server static and dynamic content and through file searches. It can be useful to browse the site either in an automatic or guided fashion and store all the content retrieved. This retrieved content can then be searched in order to analyse any HTML comments available in the code.</p>
+                 
+                 <h4 id="system-configuration">System Configuration</h4>
+                 
+                 <p>Various tools, documents, or checklists can be used to give IT and security professionals a detailed assessment of target systems’ conformance to various configuration baselines or benchmarks. Such tools include (but are not limited to):</p>
+                 
+                 <ul>
+                   <li><a href="https://www.cisecurity.org/blog/introducing-cis-cat-lite/">CIS-CAT Lite</a></li>
+                   <li><a href="https://github.com/microsoft/AttackSurfaceAnalyzer">Microsoft’s Attack Surface Analyzer</a></li>
+                   <li><a href="https://nvd.nist.gov/ncp/repository">NIST’s National Checklist Program</a></li>
+                 </ul>
+                 
+                 <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                 
+                 <h4 id="configuration-review">Configuration Review</h4>
+                 
+                 <p>The web server or application server configuration takes an important role in protecting the contents of the site and it must be carefully reviewed in order to spot common configuration mistakes. Obviously, the recommended configuration varies depending on the site policy, and the functionality that should be provided by the server software. In most cases, however, configuration guidelines (either provided by the software vendor or external parties) should be followed to determine if the server has been properly secured.</p>
+                 
+                 <p>It is impossible to generically say how a server should be configured, however, some common guidelines should be taken into account:</p>
+                 
+                 <ul>
+                   <li>Only enable server modules (ISAPI extensions in the case of IIS) that are needed for the application. This reduces the attack surface since the server is reduced in size and complexity as software modules are disabled. It also prevents vulnerabilities that might appear in the vendor software from affecting the site if they are only present in modules that have been already disabled.</li>
+                   <li>Handle server errors (40x or 50x) with custom-made pages instead of with the default web server pages. Specifically make sure that any application errors will not be returned to the end user and that no code is leaked through these errors since it will help an attacker. It is actually very common to forget this point since developers do need this information in pre-production environments.</li>
+                   <li>Make sure that the server software runs with minimized privileges in the operating system. This prevents an error in the server software from directly compromising the whole system, although an attacker could elevate privileges once running code as the web server.</li>
+                   <li>Make sure the server software properly logs both legitimate access and errors.</li>
+                   <li>Make sure that the server is configured to properly handle overloads and prevent Denial of Service attacks. Ensure that the server has been performance-tuned properly.</li>
+                   <li>Never grant non-administrative identities (with the exception of <code class="language-plaintext highlighter-rouge">NT SERVICE\WMSvc</code>) access to applicationHost.config, redirection.config, and administration.config (either Read or Write access). This includes <code class="language-plaintext highlighter-rouge">Network Service</code>, <code class="language-plaintext highlighter-rouge">IIS_IUSRS</code>, <code class="language-plaintext highlighter-rouge">IUSR</code>, or any custom identity used by IIS application pools. IIS worker processes are not meant to access any of these files directly.</li>
+                   <li>Never share out applicationHost.config, redirection.config, and administration.config on the network. When using Shared Configuration, prefer to export applicationHost.config to another location (see the section titled “Setting Permissions for Shared Configuration).</li>
+                   <li>Keep in mind that all users can read .NET Framework <code class="language-plaintext highlighter-rouge">machine.config</code> and root <code class="language-plaintext highlighter-rouge">web.config</code> files by default. Do not store sensitive information in these files if it should be for administrator eyes only.</li>
+                   <li>Encrypt sensitive information that should be read by the IIS worker processes only and not by other users on the machine.</li>
+                   <li>Do not grant Write access to the identity that the Web server uses to access the shared <code class="language-plaintext highlighter-rouge">applicationHost.config</code>. This identity should have only Read access.</li>
+                   <li>Use a separate identity to publish applicationHost.config to the share. Do not use this identity for configuring access to the shared configuration on the Web servers.</li>
+                   <li>Use a strong password when exporting the encryption keys for use with shared -configuration.</li>
+                   <li>Maintain restricted access to the share containing the shared configuration and encryption keys. If this share is compromised, an attacker will be able to read and write any IIS configuration for your Web servers, redirect traffic from your Web site to malicious sources, and in some cases gain control of all web servers by loading arbitrary code into IIS worker processes.</li>
+                   <li>Consider protecting this share with firewall rules and IPsec policies to allow only the member web servers to connect.</li>
+                 </ul>
+                 
+                 <h4 id="logging">Logging</h4>
+                 
+                 <p>Logging is an important asset of the security of an application architecture, since it can be used to detect flaws in applications (users constantly trying to retrieve a file that does not really exist) as well as sustained attacks from rogue users. Logs are typically properly generated by web and other server software. It is not common to find applications that properly log their actions to a log and, when they do, the main intention of the application logs is to produce debugging output that could be used by the programmer to analyze a particular error.</p>
+                 
+                 <p>In both cases (server and application logs) several issues should be tested and analyzed based on the log contents:</p>
+                 
+                 <ol>
+                   <li>Do the logs contain sensitive information?</li>
+                   <li>Are the logs stored in a dedicated server?</li>
+                   <li>Can log usage generate a Denial of Service condition?</li>
+                   <li>How are they rotated? Are logs kept for the sufficient time?</li>
+                   <li>How are logs reviewed? Can administrators use these reviews to detect targeted attacks?</li>
+                   <li>How are log backups preserved?</li>
+                   <li>Is the data being logged data validated (min/max length, chars etc) prior to being logged?</li>
+                 </ol>
+                 
+                 <h5 id="sensitive-information-in-logs">Sensitive Information in Logs</h5>
+                 
+                 <p>Some applications might, for example, use GET requests to forward form data which will be seen in the server logs. This means that server logs might contain sensitive information (such as usernames as passwords, or bank account details). This sensitive information can be misused by an attacker if they obtained the logs, for example, through administrative interfaces or known web server vulnerabilities or misconfiguration (like the well-known <code class="language-plaintext highlighter-rouge">server-status</code> misconfiguration in Apache-based HTTP servers).</p>
+                 
+                 <p>Event logs will often contain data that is useful to an attacker (information leakage) or can be used directly in exploits:</p>
+                 
+                 <ul>
+                   <li>Debug information</li>
+                   <li>Stack traces</li>
+                   <li>Usernames</li>
+                   <li>System component names</li>
+                   <li>Internal IP addresses</li>
+                   <li>Less sensitive personal data (e.g. email addresses, postal addresses and telephone numbers associated with named individuals)</li>
+                   <li>Business data</li>
+                 </ul>
+                 
+                 <p>Also, in some jurisdictions, storing some sensitive information in log files, such as personal data, might oblige the enterprise to apply the data protection laws that they would apply to their back-end databases to log files too. And failure to do so, even unknowingly, might carry penalties under the data protection laws that apply.</p>
+                 
+                 <p>A wider list of sensitive information is:</p>
+                 
+                 <ul>
+                   <li>Application source code</li>
+                   <li>Session identification values</li>
+                   <li>Access tokens</li>
+                   <li>Sensitive personal data and some forms of personally identifiable information (PII)</li>
+                   <li>Authentication passwords</li>
+                   <li>Database connection strings</li>
+                   <li>Encryption keys</li>
+                   <li>Bank account or payment card holder data</li>
+                   <li>Data of a higher security classification than the logging system is allowed to store</li>
+                   <li>Commercially-sensitive information</li>
+                   <li>Information it is illegal to collect in the relevant jurisdiction</li>
+                   <li>Information a user has opted out of collection, or not consented to e.g. use of do not track, or where consent to collect has expired</li>
+                 </ul>
+                 
+                 <h4 id="log-location">Log Location</h4>
+                 
+                 <p>Typically servers will generate local logs of their actions and errors, consuming the disk of the system the server is running on. However, if the server is compromised its logs can be wiped out by the intruder to clean up all the traces of its attack and methods. If this were to happen the system administrator would have no knowledge of how the attack occurred or where the attack source was located. Actually, most attacker tool kits include a ‘‘log zapper ‘’ that is capable of cleaning up any logs that hold given information (like the IP address of the attacker) and are routinely used in attacker’s system-level root kits.</p>
+                 
+                 <p>Consequently, it is wiser to keep logs in a separate location and not in the web server itself. This also makes it easier to aggregate logs from different sources that refer to the same application (such as those of a web server farm) and it also makes it easier to do log analysis (which can be CPU intensive) without affecting the server itself.</p>
+                 
+                 <h4 id="log-storage">Log Storage</h4>
+                 
+                 <p>Logs can introduce a Denial of Service condition if they are not properly stored. Any attacker with sufficient resources could be able to produce a sufficient number of requests that would fill up the allocated space to log files, if they are not specifically prevented from doing so. However, if the server is not properly configured, the log files will be stored in the same disk partition as the one used for the operating system software or the application itself. This means that if the disk were to be filled up the operating system or the application might fail because it is unable to write on disk.</p>
+                 
+                 <p>Typically in UNIX systems logs will be located in /var (although some server installations might reside in /opt or /usr/local) and it is important to make sure that the directories in which logs are stored are in a separate partition. In some cases, and in order to prevent the system logs from being affected, the log directory of the server software itself (such as /var/log/apache in the Apache web server) should be stored in a dedicated partition.</p>
+                 
+                 <p>This is not to say that logs should be allowed to grow to fill up the file system they reside in. Growth of server logs should be monitored in order to detect this condition since it may be indicative of an attack.</p>
+                 
+                 <p>Testing this condition is as easy, and as dangerous in production environments, as firing off a sufficient and sustained number of requests to see if these requests are logged and if there is a possibility to fill up the log partition through these requests. In some environments where QUERY_STRING parameters are also logged regardless of whether they are produced through GET or POST requests, big queries can be simulated that will fill up the logs faster since, typically, a single request will cause only a small amount of data to be logged, such as date and time, source IP address, URI request, and server result.</p>
+                 
+                 <h4 id="log-rotation">Log Rotation</h4>
+                 
+                 <p>Most servers (but few custom applications) will rotate logs in order to prevent them from filling up the file system they reside on. The assumption when rotating logs is that the information in them is only necessary for a limited amount of time.</p>
+                 
+                 <p>This feature should be tested in order to ensure that:</p>
+                 
+                 <ul>
+                   <li>Logs are kept for the time defined in the security policy, not more and not less.</li>
+                   <li>Logs are compressed once rotated (this is a convenience, since it will mean that more logs will be stored for the same available disk space).</li>
+                   <li>File system permission of rotated log files are the same (or stricter) that those of the log files itself. For example, web servers will need to write to the logs they use but they don’t actually need to write to rotated logs, which means that the permissions of the files can be changed upon rotation to prevent the web server process from modifying these.</li>
+                 </ul>
+                 
+                 <p>Some servers might rotate logs when they reach a given size. If this happens, it must be ensured that an attacker cannot force logs to rotate in order to hide his tracks.</p>
+                 
+                 <h4 id="log-access-control">Log Access Control</h4>
+                 
+                 <p>Event log information should never be visible to end users. Even web administrators should not be able to see such logs since it breaks separation of duty controls. Ensure that any access control schema that is used to protect access to raw logs and any applications providing capabilities to view or search the logs is not linked with access control schemas for other application user roles. Neither should any log data be viewable by unauthenticated users.</p>
+                 
+                 <h4 id="log-review">Log Review</h4>
+                 
+                 <p>Review of logs can be used for more than extraction of usage statistics of files in the web servers (which is typically what most log-based application will focus on), but also to determine if attacks take place at the web server.</p>
+                 
+                 <p>In order to analyze web server attacks the error log files of the server need to be analyzed. Review should concentrate on:</p>
+                 
+                 <ul>
+                   <li>40x (not found) error messages. A large amount of these from the same source might be indicative of a CGI scanner tool being used against the web server</li>
+                   <li>50x (server error) messages. These can be an indication of an attacker abusing parts of the application which fail unexpectedly. For example, the first phases of a SQL injection attack will produce these error message when the SQL query is not properly constructed and its execution fails on the back end database.</li>
+                 </ul>
+                 
+                 <p>Log statistics or analysis should not be generated, nor stored, in the same server that produces the logs. Otherwise, an attacker might, through a web server vulnerability or improper configuration, gain access to them and retrieve similar information as would be disclosed by log files themselves.</p>
+                 
+                 <h2 id="references">References</h2>
+                 
+                 <ul>
+                   <li>Apache
+                     <ul>
+                       <li>Apache Security, by Ivan Ristic, O’reilly, March 2005.</li>
+                       <li><a href="https://awe.com/mark/talks/apachecon2003us.html">Apache Security Secrets: Revealed (Again), Mark Cox, November 2003</a></li>
+                       <li><a href="https://awe.com/mark/talks/apachecon2002us.html">Apache Security Secrets: Revealed, ApacheCon 2002, Las Vegas, Mark J Cox, October 2002</a></li>
+                       <li><a href="https://httpd.apache.org/docs/current/misc/perf-tuning.html">Performance Tuning</a></li>
+                     </ul>
+                   </li>
+                   <li>Lotus Domino
+                     <ul>
+                       <li>Lotus Security Handbook, William Tworek et al., April 2004, available in the IBM Redbooks collection</li>
+                       <li>Lotus Domino Security, an X-force white-paper, Internet Security Systems, December 2002</li>
+                       <li>Hackproofing Lotus Domino Web Server, David Litchfield, October 2001</li>
+                     </ul>
+                   </li>
+                   <li>Microsoft IIS
+                     <ul>
+                       <li><a href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj635855(v=ws.11)">Security Best Practices for IIS 8</a></li>
+                       <li><a href="https://www.cisecurity.org/benchmark/microsoft_iis/">CIS Microsoft IIS Benchmarks</a></li>
+                       <li>Securing Your Web Server (Patterns and Practices), Microsoft Corporation, January 2004</li>
+                       <li>IIS Security and Programming Countermeasures, by Jason Coombs</li>
+                       <li>From Blueprint to Fortress: A Guide to Securing IIS 5.0, by John Davis, Microsoft Corporation, June 2001</li>
+                       <li>Secure Internet Information Services 5 Checklist, by Michael Howard, Microsoft Corporation, June 2000</li>
+                     </ul>
+                   </li>
+                   <li>Red Hat’s (formerly Netscape’s) iPlanet
+                     <ul>
+                       <li>Guide to the Secure Configuration and Administration of iPlanet Web Server, Enterprise Edition 4.1, by James M Hayes, The Network Applications Team of the Systems and Network Attack Center (SNAC), NSA, January 2001</li>
+                     </ul>
+                   </li>
+                   <li>WebSphere
+                     <ul>
+                       <li>IBM WebSphere V5.0 Security, WebSphere Handbook Series, by Peter Kovari et al., IBM, December 2002.</li>
+                       <li>IBM WebSphere V4.0 Advanced Edition Security, by Peter Kovari et al., IBM, March 2002.</li>
+                     </ul>
+                   </li>
+                   <li>General
+                     <ul>
+                       <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html">Logging Cheat Sheet</a>, OWASP</li>
+                       <li><a href="https://csrc.nist.gov/publications/detail/sp/800-92/final">SP 800-92</a> Guide to Computer Security Log Management, NIST</li>
+                       <li><a href="https://www.pcisecuritystandards.org/document_library">PCI DSS v3.2.1</a> Requirement 10 and PA-DSS v3.2 Requirement 4, PCI Security Standards Council</li>
+                     </ul>
+                   </li>
+                   <li>Generic:
+                     <ul>
+                       <li>
+                         <p><a href="https://resources.sei.cmu.edu/asset_files/SecurityImprovementModule/2000_006_001_13637.pdf">CERT Security Improvement Modules: Securing Public Web Servers</a></p>
+                       </li>
+                       <li>
+                         <p><a href="https://support.microsoft.com/en-us/help/325864/how-to-install-and-use-the-iis-lockdown-wizard">How To: Use IISLockdown.exe</a></p>
+                       </li>
+                     </ul>
+                   </li>
+                 </ul>
+
+
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/02-Test_Application_Platform_Configuration" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf3Modal" tabindex="-1" role="dialog" aria-labelledby="conf3ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf3ModalLabel">WSTG-CONF-03 - Test File Extensions Handling for Sensitive Information</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>File extensions are commonly used in web servers to easily determine which technologies, languages and plugins must be used to fulfill the web request. While this behavior is consistent with RFCs and Web Standards, using standard file extensions provides the penetration tester useful information about the underlying technologies used in a web appliance and greatly simplifies the task of determining the attack scenario to be used on particular technologies. In addition, mis-configuration of web servers could easily reveal confidential information about access credentials.</p>
+                
+                <p>Extension checking is often used to validate files to be uploaded, which can lead to unexpected results because the content is not what is expected, or because of unexpected OS filename handling.</p>
+                
+                <p>Determining how web servers handle requests corresponding to files having different extensions may help in understanding web server behavior depending on the kind of files that are accessed. For example, it can help to understand which file extensions are returned as text or plain versus those that cause server-side execution. The latter are indicative of technologies, languages or plugins that are used by web servers or application servers, and may provide additional insight on how the web application is engineered. For example, a “.pl” extension is usually associated with server-side Perl support. However, the file extension alone may be deceptive and not fully conclusive. For example, Perl server-side resources might be renamed to conceal the fact that they are indeed Perl related. See the next section on “web server components” for more on identifying server-side technologies and components.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Dirbust sensitive file extensions, or extensions that might contain raw data (<em>e.g.</em> scripts, raw data, credentials, etc.).</li>
+                  <li>Validate that no system framework bypasses exist on the rules set.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="forced-browsing">Forced Browsing</h3>
+                
+                <p>Submit requests with different file extensions and verify how they are handled. The verification should be on a per web directory basis. Verify directories that allow script execution. Web server directories can be identified by scanning tools which look for the presence of well-known directories. In addition, mirroring the web site structure allows the tester to reconstruct the tree of web directories served by the application.</p>
+                
+                <p>If the web application architecture is load-balanced, it is important to assess all of the web servers. This may or may not be easy, depending on the configuration of the balancing infrastructure. In an infrastructure with redundant components there may be slight variations in the configuration of individual web or application servers. This may happen if the web architecture employs heterogeneous technologies (think of a set of IIS and Apache web servers in a load-balancing configuration, which may introduce slight asymmetric behavior between them, and possibly different vulnerabilities).</p>
+                
+                <h4 id="example">Example</h4>
+                
+                <p>The tester has identified the existence of a file named <code class="language-plaintext highlighter-rouge">connection.inc</code>. Trying to access it directly gives back its contents, which are:</p>
+                
+                <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?</span>
+                    <span class="nb">mysql_connect</span><span class="p">(</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="s2">"root"</span><span class="p">,</span> <span class="s2">"password"</span><span class="p">)</span>
+                        <span class="k">or</span> <span class="k">die</span><span class="p">(</span><span class="s2">"Could not connect"</span><span class="p">);</span>
+                <span class="cp">?&gt;</span>
+                </code></pre></div></div>
+                
+                <p>The tester determines the existence of a MySQL DBMS back end, and the (weak) credentials used by the web application to access it.</p>
+                
+                <p>The following file extensions should never be returned by a web server, since they are related to files which may contain sensitive information or to files for which there is no reason to be served.</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">.asa</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">.inc</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">.config</code></li>
+                </ul>
+                
+                <p>The following file extensions are related to files which, when accessed, are either displayed or downloaded by the browser. Therefore, files with these extensions must be checked to verify that they are indeed supposed to be served (and are not leftovers), and that they do not contain sensitive information.</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">.zip</code>, <code class="language-plaintext highlighter-rouge">.tar</code>, <code class="language-plaintext highlighter-rouge">.gz</code>, <code class="language-plaintext highlighter-rouge">.tgz</code>, <code class="language-plaintext highlighter-rouge">.rar</code>, etc.: (Compressed) archive files</li>
+                  <li><code class="language-plaintext highlighter-rouge">.java</code>: No reason to provide access to Java source files</li>
+                  <li><code class="language-plaintext highlighter-rouge">.txt</code>: Text files</li>
+                  <li><code class="language-plaintext highlighter-rouge">.pdf</code>: PDF documents</li>
+                  <li><code class="language-plaintext highlighter-rouge">.docx</code>, <code class="language-plaintext highlighter-rouge">.rtf</code>, <code class="language-plaintext highlighter-rouge">.xlsx</code>, <code class="language-plaintext highlighter-rouge">.pptx</code>, etc.: Office documents</li>
+                  <li><code class="language-plaintext highlighter-rouge">.bak</code>, <code class="language-plaintext highlighter-rouge">.old</code> and other extensions indicative of backup files (for example: <code class="language-plaintext highlighter-rouge">~</code> for Emacs backup files)</li>
+                </ul>
+                
+                <p>The list given above details only a few examples, since file extensions are too many to be comprehensively treated here. Refer to <a href="https://filext.com/">FILExt</a> for a more thorough database of extensions.</p>
+                
+                <p>To identify files having a given extensions a mix of techniques can be employed. These techniques can include Vulnerability Scanners, spidering and mirroring tools, manually inspecting the application (this overcomes limitations in automatic spidering), querying search engines (see <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/01-Information_Gathering/01-Conduct_Search_Engine_Discovery_Reconnaissance_for_Information_Leakage">Testing: Spidering and googling</a>). See also <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information">Testing for Old, Backup and Unreferenced Files</a> which deals with the security issues related to “forgotten” files.</p>
+                
+                <h3 id="file-upload">File Upload</h3>
+                
+                <p>Windows 8.3 legacy file handling can sometimes be used to defeat file upload filters.</p>
+                
+                <p>Usage Examples:</p>
+                
+                <ol>
+                  <li><code class="language-plaintext highlighter-rouge">file.phtml</code> gets processed as PHP code.</li>
+                  <li><code class="language-plaintext highlighter-rouge">FILE~1.PHT</code> is served, but not processed by the PHP ISAPI handler.</li>
+                  <li><code class="language-plaintext highlighter-rouge">shell.phPWND</code> can be uploaded.</li>
+                  <li><code class="language-plaintext highlighter-rouge">SHELL~1.PHP</code> will be expanded and returned by the OS shell, then processed by the PHP ISAPI handler.</li>
+                </ol>
+                
+                <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                
+                <p>Performing white-box testing against file extensions handling amounts to checking the configurations of web servers or application servers taking part in the web application architecture, and verifying how they are instructed to serve different file extensions.</p>
+                
+                <p>If the web application relies on a load-balanced, heterogeneous infrastructure, determine whether this may introduce different behavior.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <p>Vulnerability scanners, such as Nessus and Nikto check for the existence of well-known web directories. They may allow the tester to download the web site structure, which is helpful when trying to determine the configuration of web directories and how individual file extensions are served. Other tools that can be used for this purpose include:</p>
+                
+                <ul>
+                  <li><a href="https://www.gnu.org/software/wget">wget</a></li>
+                  <li><a href="https://curl.haxx.se">curl</a></li>
+                  <li>google for “web mirroring tools”.</li>
+                </ul>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/03-Test_File_Extensions_Handling_for_Sensitive_Information" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf4Modal" tabindex="-1" role="dialog" aria-labelledby="conf4ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf4ModalLabel">WSTG-CONF-04 - Review Old Backup and Unreferenced Files for Sensitive Information</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>While most of the files within a web server are directly handled by the server itself, it isn’t uncommon to find unreferenced or forgotten files that can be used to obtain important information about the infrastructure or the credentials.</p>
+                
+                <p>Most common scenarios include the presence of renamed old versions of modified files, inclusion files that are loaded into the language of choice and can be downloaded as source, or even automatic or manual backups in form of compressed archives. Backup files can also be generated automatically by the underlying file system the application is hosted on, a feature usually referred to as “snapshots”.</p>
+                
+                <p>All these files may grant the tester access to inner workings, back doors, administrative interfaces, or even credentials to connect to the administrative interface or the database server.</p>
+                
+                <p>An important source of vulnerability lies in files which have nothing to do with the application, but are created as a consequence of editing application files, or after creating on-the-fly backup copies, or by leaving in the web tree old files or unreferenced files.Performing in-place editing or other administrative actions on production web servers may inadvertently leave backup copies, either generated automatically by the editor while editing files, or by the administrator who is zipping a set of files to create a backup.</p>
+                
+                <p>It is easy to forget such files and this may pose a serious security threat to the application. That happens because backup copies may be generated with file extensions differing from those of the original files. A <code class="language-plaintext highlighter-rouge">.tar</code>, <code class="language-plaintext highlighter-rouge">.zip</code> or <code class="language-plaintext highlighter-rouge">.gz</code> archive that we generate (and forget…) has obviously a different extension, and the same happens with automatic copies created by many editors (for example, emacs generates a backup copy named <code class="language-plaintext highlighter-rouge">file~</code> when editing <code class="language-plaintext highlighter-rouge">file</code>). Making a copy by hand may produce the same effect (think of copying <code class="language-plaintext highlighter-rouge">file</code> to <code class="language-plaintext highlighter-rouge">file.old</code>). The underlying file system the application is on could be making <code class="language-plaintext highlighter-rouge">snapshots</code> of your application at different points in time without your knowledge, which may also be accessible via the web, posing a similar but different <code class="language-plaintext highlighter-rouge">backup file</code> style threat to your application.</p>
+                
+                <p>As a result, these activities generate files that are not needed by the application and may be handled differently than the original file by the web server. For example, if we make a copy of <code class="language-plaintext highlighter-rouge">login.asp</code> named <code class="language-plaintext highlighter-rouge">login.asp.old</code>, we are allowing users to download the source code of <code class="language-plaintext highlighter-rouge">login.asp</code>. This is because <code class="language-plaintext highlighter-rouge">login.asp.old</code> will be typically served as text or plain, rather than being executed because of its extension. In other words, accessing <code class="language-plaintext highlighter-rouge">login.asp</code> causes the execution of the server-side code of <code class="language-plaintext highlighter-rouge">login.asp</code>, while accessing <code class="language-plaintext highlighter-rouge">login.asp.old</code> causes the content of <code class="language-plaintext highlighter-rouge">login.asp.old</code> (which is, again, server-side code) to be plainly returned to the user and displayed in the browser. This may pose security risks, since sensitive information may be revealed.</p>
+                
+                <p>Generally, exposing server-side code is a bad idea. Not only are you unnecessarily exposing business logic, but you may be unknowingly revealing application-related information which may help an attacker (path names, data structures, etc.). Not to mention the fact that there are too many scripts with embedded username and password in clear text (which is a careless and very dangerous practice).</p>
+                
+                <p>Other causes of unreferenced files are due to design or configuration choices when they allow diverse kind of application-related files such as data files, configuration files, log files, to be stored in file system directories that can be accessed by the web server. These files have normally no reason to be in a file system space that could be accessed via web, since they should be accessed only at the application level, by the application itself (and not by the casual user browsing around).</p>
+                
+                <h3 id="threats">Threats</h3>
+                
+                <p>Old, backup and unreferenced files present various threats to the security of a web application:</p>
+                
+                <ul>
+                  <li>Unreferenced files may disclose sensitive information that can facilitate a focused attack against the application; for example include files containing database credentials, configuration files containing references to other hidden content, absolute file paths, etc.</li>
+                  <li>Unreferenced pages may contain powerful functionality that can be used to attack the application; for example an administration page that is not linked from published content but can be accessed by any user who knows where to find it.</li>
+                  <li>Old and backup files may contain vulnerabilities that have been fixed in more recent versions; for example <code class="language-plaintext highlighter-rouge">viewdoc.old.jsp</code> may contain a directory traversal vulnerability that has been fixed in <code class="language-plaintext highlighter-rouge">viewdoc.jsp</code> but can still be exploited by anyone who finds the old version.</li>
+                  <li>Backup files may disclose the source code for pages designed to execute on the server; for example requesting <code class="language-plaintext highlighter-rouge">viewdoc.bak</code> may return the source code for <code class="language-plaintext highlighter-rouge">viewdoc.jsp</code>, which can be reviewed for vulnerabilities that may be difficult to find by making blind requests to the executable page. While this threat obviously applies to scripted languages, such as Perl, PHP, ASP, shell scripts, JSP, etc., it is not limited to them, as shown in the example provided in the next bullet.</li>
+                  <li>Backup archives may contain copies of all files within (or even outside) the webroot. This allows an attacker to quickly enumerate the entire application, including unreferenced pages, source code, include files, etc. For example, if you forget a file named <code class="language-plaintext highlighter-rouge">myservlets.jar.old</code> file containing (a backup copy of) your servlet implementation classes, you are exposing a lot of sensitive information which is susceptible to decompilation and reverse engineering.</li>
+                  <li>In some cases copying or editing a file does not modify the file extension, but modifies the filename. This happens for example in Windows environments, where file copying operations generate filenames prefixed with “Copy of “ or localized versions of this string. Since the file extension is left unchanged, this is not a case where an executable file is returned as plain text by the web server, and therefore not a case of source code disclosure. However, these files too are dangerous because there is a chance that they include obsolete and incorrect logic that, when invoked, could trigger application errors, which might yield valuable information to an attacker, if diagnostic message display is enabled.</li>
+                  <li>Log files may contain sensitive information about the activities of application users, for example sensitive data passed in URL parameters, session IDs, URLs visited (which may disclose additional unreferenced content), etc. Other log files (e.g. ftp logs) may contain sensitive information about the maintenance of the application by system administrators.</li>
+                  <li>File system snapshots may contain copies of the code that contain vulnerabilities that have been fixed in more recent versions. For example <code class="language-plaintext highlighter-rouge">/.snapshot/monthly.1/view.php</code> may contain a directory traversal vulnerability that has been fixed in <code class="language-plaintext highlighter-rouge">/view.php</code> but can still be exploited by anyone who finds the old version.</li>
+                </ul>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Find and analyse unreferenced files that might contain sensitive information.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="black-box-testing">Black-Box Testing</h3>
+                
+                <p>Testing for unreferenced files uses both automated and manual techniques, and typically involves a combination of the following:</p>
+                
+                <h4 id="inference-from-the-naming-scheme-used-for-published-content">Inference from the Naming Scheme Used for Published Content</h4>
+                
+                <p>Enumerate all of the application’s pages and functionality. This can be done manually using a browser, or using an application spidering tool. Most applications use a recognizable naming scheme, and organize resources into pages and directories using words that describe their function. From the naming scheme used for published content, it is often possible to infer the name and location of unreferenced pages. For example, if a page <code class="language-plaintext highlighter-rouge">viewuser.asp</code> is found, then look also for <code class="language-plaintext highlighter-rouge">edituser.asp</code>, <code class="language-plaintext highlighter-rouge">adduser.asp</code> and <code class="language-plaintext highlighter-rouge">deleteuser.asp</code>. If a directory <code class="language-plaintext highlighter-rouge">/app/user</code> is found, then look also for <code class="language-plaintext highlighter-rouge">/app/admin</code> and <code class="language-plaintext highlighter-rouge">/app/manager</code>.</p>
+                
+                <h4 id="other-clues-in-published-content">Other Clues in Published Content</h4>
+                
+                <p>Many web applications leave clues in published content that can lead to the discovery of hidden pages and functionality. These clues often appear in the source code of HTML and JavaScript files. The source code for all published content should be manually reviewed to identify clues about other pages and functionality. For example:</p>
+                
+                <p>Programmers’ comments and commented-out sections of source code may refer to hidden content:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- &lt;A HREF="uploadfile.jsp"&gt;Upload a document to the server&lt;/A&gt; --&gt;</span>
+                <span class="c">&lt;!-- Link removed while bugs in uploadfile.jsp are fixed          --&gt;</span>
+                </code></pre></div></div>
+                
+                <p>JavaScript may contain page links that are only rendered within the user’s GUI under certain circumstances:</p>
+                
+                <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">adminUser</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">adminUser</span><span class="p">)</span> <span class="nx">menu</span><span class="p">.</span><span class="nx">add</span> <span class="p">(</span><span class="k">new</span> <span class="nx">menuItem</span> <span class="p">(</span><span class="dl">"</span><span class="s2">Maintain users</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">/admin/useradmin.jsp</span><span class="dl">"</span><span class="p">));</span>
+                </code></pre></div></div>
+                
+                <p>HTML pages may contain FORMs that have been hidden by disabling the SUBMIT element:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"forgotPassword.jsp"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">name=</span><span class="s">"userID"</span> <span class="na">value=</span><span class="s">"123"</span><span class="nt">&gt;</span>
+                    <span class="c">&lt;!-- &lt;input type="submit" value="Forgot Password"&gt; --&gt;</span>
+                <span class="nt">&lt;/form&gt;</span>
+                </code></pre></div></div>
+                
+                <p>Another source of clues about unreferenced directories is the <code class="language-plaintext highlighter-rouge">/robots.txt</code> file used to provide instructions to web robots:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User-agent: *
+                Disallow: /Admin
+                Disallow: /uploads
+                Disallow: /backup
+                Disallow: /~jbloggs
+                Disallow: /include
+                </code></pre></div></div>
+                
+                <h4 id="blind-guessing">Blind Guessing</h4>
+                
+                <p>In its simplest form, this involves running a list of common filenames through a request engine in an attempt to guess files and directories that exist on the server. The following netcat wrapper script will read a wordlist from stdin and perform a basic guessing attack:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+                
+                <span class="nv">server</span><span class="o">=</span>example.org
+                <span class="nv">port</span><span class="o">=</span>80
+                
+                <span class="k">while </span><span class="nb">read </span>url
+                <span class="k">do
+                </span><span class="nb">echo</span> <span class="nt">-ne</span> <span class="s2">"</span><span class="nv">$url</span><span class="se">\t</span><span class="s2">"</span>
+                <span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"GET /</span><span class="nv">$url</span><span class="s2"> HTTP/1.0</span><span class="se">\n</span><span class="s2">Host: </span><span class="nv">$server</span><span class="se">\n</span><span class="s2">"</span> | netcat <span class="nv">$server</span> <span class="nv">$port</span> | <span class="nb">head</span> <span class="nt">-1</span>
+                <span class="k">done</span> | <span class="nb">tee </span>outputfile
+                </code></pre></div></div>
+                
+                <p>Depending upon the server, GET may be replaced with HEAD for faster results. The output file specified can be grepped for “interesting” response codes. The response code 200 (OK) usually indicates that a valid resource has been found (provided the server does not deliver a custom “not found” page using the 200 code). But also look out for 301 (Moved), 302 (Found), 401 (Unauthorized), 403 (Forbidden) and 500 (Internal error), which may also indicate resources or directories that are worthy of further investigation.</p>
+                
+                <p>The basic guessing attack should be run against the webroot, and also against all directories that have been identified through other enumeration techniques. More advanced/effective guessing attacks can be performed as follows:</p>
+                
+                <ul>
+                  <li>Identify the file extensions in use within known areas of the application (e.g. jsp, aspx, html), and use a basic wordlist appended with each of these extensions (or use a longer list of common extensions if resources permit).</li>
+                  <li>For each file identified through other enumeration techniques, create a custom wordlist derived from that filename. Get a list of common file extensions (including ~, bak, txt, src, dev, old, inc, orig, copy, tmp, swp, etc.) and use each extension before, after, and instead of, the extension of the actual filename.</li>
+                </ul>
+                
+                <p>Note: Windows file copying operations generate filenames prefixed with “Copy of “ or localized versions of this string, hence they do not change file extensions. While “Copy of “ files typically do not disclose source code when accessed, they might yield valuable information in case they cause errors when invoked.</p>
+                
+                <h4 id="information-obtained-through-server-vulnerabilities-and-misconfiguration">Information Obtained Through Server Vulnerabilities and Misconfiguration</h4>
+                
+                <p>The most obvious way in which a misconfigured server may disclose unreferenced pages is through directory listing. Request all enumerated directories to identify any which provide a directory listing.</p>
+                
+                <p>Numerous vulnerabilities have been found in individual web servers which allow an attacker to enumerate unreferenced content, for example:</p>
+                
+                <ul>
+                  <li>Apache ?M=D directory listing vulnerability.</li>
+                  <li>Various IIS script source disclosure vulnerabilities.</li>
+                  <li>IIS WebDAV directory listing vulnerabilities.</li>
+                </ul>
+                
+                <h4 id="use-of-publicly-available-information">Use of Publicly Available Information</h4>
+                
+                <p>Pages and functionality in Internet-facing web applications that are not referenced from within the application itself may be referenced from other public domain sources. There are various sources of these references:</p>
+                
+                <ul>
+                  <li>Pages that used to be referenced may still appear in the archives of Internet search engines. For example, <code class="language-plaintext highlighter-rouge">1998results.asp</code> may no longer be linked from a company’s website, but may remain on the server and in search engine databases. This old script may contain vulnerabilities that could be used to compromise the entire site. The <code class="language-plaintext highlighter-rouge">site:</code> Google search operator may be used to run a query only against the domain of choice, such as in: <code class="language-plaintext highlighter-rouge">site:www.example.com</code>. Using search engines in this way has lead to a broad array of techniques which you may find useful and that are described in the <code class="language-plaintext highlighter-rouge">Google Hacking</code> section of this Guide. Check it to hone your testing skills via Google. Backup files are not likely to be referenced by any other files and therefore may have not been indexed by Google, but if they lie in browsable directories the search engine might know about them.</li>
+                  <li>In addition, Google and Yahoo keep cached versions of pages found by their robots. Even if <code class="language-plaintext highlighter-rouge">1998results.asp</code> has been removed from the target server, a version of its output may still be stored by these search engines. The cached version may contain references to, or clues about, additional hidden content that still remains on the server.</li>
+                  <li>Content that is not referenced from within a target application may be linked to by third-party websites. For example, an application which processes online payments on behalf of third-party traders may contain a variety of bespoke functionality which can (normally) only be found by following links within the web sites of its customers.</li>
+                </ul>
+                
+                <h4 id="filename-filter-bypass">Filename Filter Bypass</h4>
+                
+                <p>Because deny list filters are based on regular expressions, one can sometimes take advantage of obscure OS filename expansion features in which work in ways the developer didn’t expect. The tester can sometimes exploit differences in ways that filenames are parsed by the application, web server, and underlying OS and it’s filename conventions.</p>
+                
+                <p>Example: Windows 8.3 filename expansion <code class="language-plaintext highlighter-rouge">c:\\program files</code> becomes <code class="language-plaintext highlighter-rouge">C:\\PROGRA\~1</code></p>
+                
+                <ul>
+                  <li>Remove incompatible characters</li>
+                  <li>Convert spaces to underscores</li>
+                  <li>Take the first six characters of the basename</li>
+                  <li>Add <code class="language-plaintext highlighter-rouge">~&lt;digit&gt;</code> which is used to distinguish files with names using the same six initial characters</li>
+                  <li>This convention changes after the first 3 cname ollisions</li>
+                  <li>Truncate  file extension to three characters</li>
+                  <li>Make all the characters uppercase</li>
+                </ul>
+                
+                <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                
+                <p>Performing gray box testing against old and backup files requires examining the files contained in the directories belonging to the set of web directories served by the web server(s) of the web application infrastructure. Theoretically the examination should be performed by hand to be thorough. However, since in most cases copies of files or backup files tend to be created by using the same naming conventions, the search can be easily scripted. For example, editors leave behind backup copies by naming them with a recognizable extension or ending and humans tend to leave behind files with a <code class="language-plaintext highlighter-rouge">.old</code> or similar predictable extensions. A good strategy is that of periodically scheduling a background job checking for files with extensions likely to identify them as copy or backup files, and performing manual checks as well on a longer time basis.</p>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>To guarantee an effective protection strategy, testing should be compounded by a security policy which clearly forbids dangerous practices, such as:</p>
+                
+                <ul>
+                  <li>Editing files in-place on the web server or application server file systems. This is a particularly bad habit, since it is likely to generate backup or temporary files by the editors. It is amazing to see how often this is done, even in large organizations. If you absolutely need to edit files on a production system, do ensure that you don’t leave behind anything which is not explicitly intended, and consider that you are doing it at your own risk.</li>
+                  <li>Carefully check any other activity performed on file systems exposed by the web server, such as spot administration activities. For example, if you occasionally need to take a snapshot of a couple of directories (which you should not do on a production system), you may be tempted to zip them first. Be careful not to leave behind those archive files.</li>
+                  <li>Appropriate configuration management policies should help prevent obsolete and un-referenced files.</li>
+                  <li>Applications should be designed not to create (or rely on) files stored under the web directory trees served by the web server. Data files, log files, configuration files, etc. should be stored in directories not accessible by the web server, to counter the possibility of information disclosure (not to mention data modification if web directory permissions allow writing).</li>
+                  <li>File system snapshots should not be accessible via the web if the document root is on a file system using this technology. Configure your web server to deny access to such directories, for example under Apache a location directive such this should be used:</li>
+                </ul>
+                
+                <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Location</span> <span class="err">~</span> <span class="err">".snapshot"</span><span class="nt">&gt;</span>
+                    Order deny,allow
+                    Deny from all
+                <span class="nt">&lt;/Location&gt;</span>
+                </code></pre></div></div>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <p>Vulnerability assessment tools tend to include checks to spot web directories having standard names (such as “admin”, “test”, “backup”, etc.), and to report any web directory which allows indexing. If you can’t get any directory listing, you should try to check for likely backup extensions. Check for example</p>
+                
+                <ul>
+                  <li><a href="https://www.tenable.com/products/nessus">Nessus</a></li>
+                  <li><a href="https://cirt.net/Nikto2">Nikto2</a></li>
+                </ul>
+                
+                <p>Web spider tools</p>
+                
+                <ul>
+                  <li><a href="https://www.gnu.org/software/wget/">wget</a></li>
+                  <li><a href="http://www.interlog.com/~tcharron/wgetwin.html">Wget for Windows</a></li>
+                  <li><a href="https://web.archive.org/web/20090926061558/http://preview.samspade.org/ssw/download.html">Sam Spade</a></li>
+                  <li><a href="https://www.spikeproxy.com/">Spike proxy includes a web site crawler function</a></li>
+                  <li><a href="http://home.snafu.de/tilman/xenulink.html">Xenu</a></li>
+                  <li><a href="https://curl.haxx.se">curl</a></li>
+                </ul>
+                
+                <p>Some of them are also included in standard Linux distributions. Web development tools usually include facilities to identify broken links and unreferenced files.</p>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf5Modal" tabindex="-1" role="dialog" aria-labelledby="conf5ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf5ModalLabel">WSTG-CONF-05 - Enumerate Infrastructure and Application Admin Interfaces</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Administrator interfaces may be present in the application or on the application server to allow certain users to undertake privileged activities on the site. Tests should be undertaken to reveal if and how this privileged functionality can be accessed by an unauthorized or standard user.</p>
+                
+                <p>An application may require an administrator interface to enable a privileged user to access functionality that may make changes to how the site functions. Such changes may include:</p>
+                
+                <ul>
+                  <li>user account provisioning</li>
+                  <li>site design and layout</li>
+                  <li>data manipulation</li>
+                  <li>configuration changes</li>
+                </ul>
+                
+                <p>In many instances, such interfaces do not have sufficient controls to protect them from unauthorized access. Testing is aimed at discovering these administrator interfaces and accessing functionality intended for the privileged users.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Identify hidden administrator interfaces and functionality.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="black-box-testing">Black-Box Testing</h3>
+                
+                <p>The following section describes vectors that may be used to test for the presence of administrative interfaces. These techniques may also be used to test for related issues including privilege escalation, and are described elsewhere in this guide(for example <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/05-Authorization_Testing/02-Testing_for_Bypassing_Authorization_Schema">Testing for bypassing authorization schema</a> and <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/05-Authorization_Testing/04-Testing_for_Insecure_Direct_Object_References">Testing for Insecure Direct Object References</a> in greater detail.</p>
+                
+                <ul>
+                  <li>Directory and file enumeration. An administrative interface may be present but not visibly available to the tester. Attempting to guess the path of the administrative interface may be as simple as requesting: <em>/admin or /administrator etc..</em> or in some scenarios can be revealed within seconds using <a href="https://www.exploit-db.com/google-hacking-database">Google dorks</a>.</li>
+                  <li>There are many tools available to perform brute forcing of server contents, see the tools section below for more information. A tester may have to also identify the filename of the administration page. Forcibly browsing to the identified page may provide access to the interface.</li>
+                  <li>Comments and links in source code. Many sites use common code that is loaded for all site users. By examining all source sent to the client, links to administrator functionality may be discovered and should be investigated.</li>
+                  <li>Reviewing server and application documentation. If the application server or application is deployed in its default configuration it may be possible to access the administration interface using information described in configuration or help documentation. Default password lists should be consulted if an administrative interface is found and credentials are required.</li>
+                  <li>Publicly available information. Many applications such as WordPress have default administrative interfaces .</li>
+                  <li>Alternative server port. Administration interfaces may be seen on a different port on the host than the main application. For example, Apache Tomcat’s Administration interface can often be seen on port 8080.</li>
+                  <li>Parameter tampering. A GET or POST parameter or a cookie variable may be required to enable the administrator functionality. Clues to this include the presence of hidden fields such as:</li>
+                </ul>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">name=</span><span class="s">"admin"</span> <span class="na">value=</span><span class="s">"no"</span><span class="nt">&gt;</span>
+                </code></pre></div></div>
+                
+                <p>or in a cookie:</p>
+                
+                <p><code class="language-plaintext highlighter-rouge">Cookie:&nbsp;session_cookie;&nbsp;useradmin=0</code></p>
+                
+                <p>Once an administrative interface has been discovered, a combination of the above techniques may be used to attempt to bypass authentication. If this fails, the tester may wish to attempt a brute force attack. In such an instance the tester should be aware of the potential for administrative account lockout if such functionality is present.</p>
+                
+                <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                
+                <p>A more detailed examination of the server and application components should be undertaken to ensure hardening (i.e. administrator pages are not accessible to everyone through the use of IP filtering or other controls), and where applicable, verification that all components do not use default credentials or configurations.
+                Source code should be reviewed to ensure that the authorization and authentication model ensures clear separation of duties between normal users and site administrators. User interface functions shared between normal and administrator users should be reviewed to ensure clear separation between the drawing of such components and information leakage from such shared functionality.</p>
+                
+                <p>Each web framework may have its own admin default pages or path. For example</p>
+                
+                <p>WebSphere:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/admin
+                /admin-authz.xml
+                /admin.conf
+                /admin.passwd
+                /admin/*
+                /admin/logon.jsp
+                /admin/secure/logon.jsp
+                </code></pre></div></div>
+                
+                <p>PHP:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/phpinfo
+                /phpmyadmin/
+                /phpMyAdmin/
+                /mysqladmin/
+                /MySQLadmin
+                /MySQLAdmin
+                /login.php
+                /logon.php
+                /xmlrpc.php
+                /dbadmin
+                </code></pre></div></div>
+                
+                <p>FrontPage:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/admin.dll
+                /admin.exe
+                /administrators.pwd
+                /author.dll
+                /author.exe
+                /author.log
+                /authors.pwd
+                /cgi-bin
+                </code></pre></div></div>
+                
+                <p>WebLogic:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/AdminCaptureRootCA
+                /AdminClients
+                /AdminConnections
+                /AdminEvents
+                /AdminJDBC
+                /AdminLicense
+                /AdminMain
+                /AdminProps
+                /AdminRealm
+                /AdminThreads
+                </code></pre></div></div>
+                
+                <p>WordPress:</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wp-admin/
+                wp-admin/about.php
+                wp-admin/admin-ajax.php
+                wp-admin/admin-db.php
+                wp-admin/admin-footer.php
+                wp-admin/admin-functions.php
+                wp-admin/admin-header.php
+                </code></pre></div></div>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://www.zaproxy.org/docs/desktop/addons/forced-browse/">OWASP ZAP - Forced Browse</a> is a currently maintained use of OWASP’s previous DirBuster project.</li>
+                  <li><a href="https://github.com/vanhauser-thc/thc-hydra">THC-HYDRA</a> is a tool that allows brute-forcing of many interfaces, including form-based HTTP authentication.</li>
+                  <li>A brute forcer is much better when it uses a good dictionary, for example the <a href="https://www.netsparker.com/blog/web-security/svn-digger-better-lists-for-forced-browsing/">netsparker</a> dictionary.</li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://cirt.net/passwords">Cirt: Default Password list</a></li>
+                  <li><a href="https://github.com/fuzzdb-project/fuzzdb/blob/master/discovery/predictable-filepaths/login-file-locations/Logins.txt">FuzzDB can be used to do brute force browsing admin login path</a></li>
+                  <li><a href="https://github.com/fuzzdb-project/fuzzdb/blob/master/attack/business-logic/CommonDebugParamNames.txt">Common admin or debugging parameters</a></li>
+                </ul>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/05-Enumerate_Infrastructure_and_Application_Admin_Interfaces" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf6Modal" tabindex="-1" role="dialog" aria-labelledby="conf6ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf6ModalLabel">WSTG-CONF-06 - Test HTTP Methods</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>HTTP offers a number of methods that can be used to perform actions on the web server (the HTTP 1.1 standard refers to them as <code class="language-plaintext highlighter-rouge">methods</code> but they are also commonly described as <code class="language-plaintext highlighter-rouge">verbs</code>). While GET and POST are by far the most common methods that are used to access information provided by a web server, HTTP allows several other (and somewhat less known) methods. Some of these can be used for nefarious purposes if the web server is misconfigured.</p>
+                
+                <p><a href="https://tools.ietf.org/html/rfc7231">RFC 7231 –  Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content</a> defines the following valid HTTP request methods, or verbs:</p>
+                
+                <ul>
+                  <li><a href="https://tools.ietf.org/html/rfc7231#section-4.3.1"><code class="language-plaintext highlighter-rouge">GET</code></a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc7231#section-4.3.2"><code class="language-plaintext highlighter-rouge">HEAD</code></a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc7231#section-4.3.3"><code class="language-plaintext highlighter-rouge">POST</code></a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc7231#section-4.3.4"><code class="language-plaintext highlighter-rouge">PUT</code></a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc7231#section-4.3.5"><code class="language-plaintext highlighter-rouge">DELETE</code></a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc7231#section-4.3.6"><code class="language-plaintext highlighter-rouge">CONNECT</code></a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc7231#section-4.3.7"><code class="language-plaintext highlighter-rouge">OPTIONS</code></a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc7231#section-4.3.8"><code class="language-plaintext highlighter-rouge">TRACE</code></a></li>
+                </ul>
+                
+                <p>However, most web applications only need to respond to GET and POST requests, receiving user data in the URL query string or appended to the request respectively. The standard <code class="language-plaintext highlighter-rouge">&lt;a href=""&gt;&lt;/a&gt;</code> style links as well as forms defined without a method trigger a GET request; form data submitted via <code class="language-plaintext highlighter-rouge">&lt;form method='POST'&gt;&lt;/form&gt;</code> trigger POST requests. JavaScript and AJAX calls may send methods other than GET and POST but should usually not need to do that. Since the other methods are so rarely used, many developers do not know, or fail to take into consideration, how the web server or application framework’s implementation of these methods impact the security features of the application.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Enumerate supported HTTP methods.</li>
+                  <li>Test for access control bypass.</li>
+                  <li>Test XST vulnerabilities.</li>
+                  <li>Test HTTP method overriding techniques.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="discover-the-supported-methods">Discover the Supported Methods</h3>
+                
+                <p>To perform this test, the tester needs some way to figure out which HTTP methods are supported by the web server that is being examined. While the <code class="language-plaintext highlighter-rouge">OPTIONS</code> HTTP method provides a direct way to do that, verify the server’s response by issuing requests using different methods. This can be achieved by manual testing or something like the <a href="https://nmap.org/nsedoc/scripts/http-methods.html"><code class="language-plaintext highlighter-rouge">http-methods</code></a> Nmap script.</p>
+                
+                <p>To use the <code class="language-plaintext highlighter-rouge">http-methods</code> Nmap script to test the endpoint <code class="language-plaintext highlighter-rouge">/index.php</code> on the server <code class="language-plaintext highlighter-rouge">localhost</code> using HTTPS, issue the command:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap <span class="nt">-p</span> 443 <span class="nt">--script</span> http-methods <span class="nt">--script-args</span> http-methods.url-path<span class="o">=</span><span class="s1">'/index.php'</span> localhost
+                </code></pre></div></div>
+                
+                <p>When testing an application that has to accept other methods, e.g. a RESTful Web Service, test it thoroughly to make sure that all endpoints accept only the methods that they require.</p>
+                
+                <h4 id="testing-the-put-method">Testing the PUT Method</h4>
+                
+                <ol>
+                  <li>Capture the base request of the target with a web proxy.</li>
+                  <li>
+                    <p>Change the request method to <code class="language-plaintext highlighter-rouge">PUT</code> and add <code class="language-plaintext highlighter-rouge">test.html</code> file and send the request to the application server.</p>
+                
+                    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PUT /test.html HTTP/1.1
+                Host: testing-website
+                
+                <span class="nt">&lt;html&gt;</span>
+                HTTP PUT Method is Enabled
+                <span class="nt">&lt;/html&gt;</span>
+                </code></pre></div>    </div>
+                  </li>
+                  <li>If the server response with 2XX success codes or 3XX redirections and then confirm by <code class="language-plaintext highlighter-rouge">GET</code> request for <code class="language-plaintext highlighter-rouge">test.html</code> file. The application is vulnerable.</li>
+                </ol>
+                
+                <p>If the HTTP <code class="language-plaintext highlighter-rouge">PUT</code> method is not allowed on base URL or request, try other paths in the system.</p>
+                
+                <blockquote>
+                  <p>NOTE: If you are successful in uploading a web shell you should overwrite it or ensure that the security team of the target are aware and remove the component promptly after your proof-of-concept.</p>
+                </blockquote>
+                
+                <p>Leveraging the <code class="language-plaintext highlighter-rouge">PUT</code> method an attacker may be able to place arbitrary and potentially malicious content, into the system which may lead to remote code execution, defacing the site or denial of service.</p>
+                
+                <h3 id="testing-for-access-control-bypass">Testing for Access Control Bypass</h3>
+                
+                <p>Find a page to visit that has a security constraint such that a GET request would normally force a 302 redirect to a log in page or force a log in directly. Issue requests using various methods such as HEAD, POST, PUT etc. as well as arbitrarily made up methods such as BILBAO, FOOBAR, CATS, etc. If the web application responds with a <code class="language-plaintext highlighter-rouge">HTTP/1.1 200 OK</code> that is not a log in page, it may be possible to bypass authentication or authorization. The following example uses <a href="https://nmap.org/ncat/">Nmap’s <code class="language-plaintext highlighter-rouge">ncat</code></a>.</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ncat www.example.com 80
+                HEAD /admin HTTP/1.1
+                Host: www.example.com
+                
+                HTTP/1.1 200 OK
+                Date: Mon, 18 Aug 2008 22:44:11 GMT
+                Server: Apache
+                Set-Cookie: <span class="nv">PHPSESSID</span><span class="o">=</span>pKi...<span class="p">;</span> <span class="nv">path</span><span class="o">=</span>/<span class="p">;</span> HttpOnly
+                Expires: Thu, 19 Nov 1981 08:52:00 GMT
+                Cache-Control: no-store, no-cache, must-revalidate, post-check<span class="o">=</span>0, pre-check<span class="o">=</span>0
+                Pragma: no-cache
+                Set-Cookie: <span class="nv">adminOnlyCookie1</span><span class="o">=</span>...<span class="p">;</span> <span class="nv">expires</span><span class="o">=</span>Tue, 18-Aug-2009 22:44:31 GMT<span class="p">;</span> <span class="nv">domain</span><span class="o">=</span>www.example.com
+                Set-Cookie: <span class="nv">adminOnlyCookie2</span><span class="o">=</span>...<span class="p">;</span> <span class="nv">expires</span><span class="o">=</span>Mon, 18-Aug-2008 22:54:31 GMT<span class="p">;</span> <span class="nv">domain</span><span class="o">=</span>www.example.com
+                Set-Cookie: <span class="nv">adminOnlyCookie3</span><span class="o">=</span>...<span class="p">;</span> <span class="nv">expires</span><span class="o">=</span>Sun, 19-Aug-2007 22:44:30 GMT<span class="p">;</span> <span class="nv">domain</span><span class="o">=</span>www.example.com
+                Content-Language: EN
+                Connection: close
+                Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>ISO-8859-1
+                </code></pre></div></div>
+                
+                <p>If the system appears vulnerable, issue CSRF-like attacks such as the following to exploit the issue more fully:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">HEAD /admin/createUser.php?member=myAdmin</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">PUT /admin/changePw.php?member=myAdmin&amp;passwd=foo123&amp;confirm=foo123</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">CATS /admin/groupEdit.php?group=Admins&amp;member=myAdmin&amp;action=add</code></li>
+                </ul>
+                
+                <p>Using the above three commands, modified to suit the application under test and testing requirements, a new user would be created, a password assigned, and the user made an administrator, all using blind request submission.</p>
+                
+                <h3 id="testing-for-cross-site-tracing-potential">Testing for Cross-Site Tracing Potential</h3>
+                
+                <p>Note: in order to understand the logic and the goals of a cross-site tracing (XST) attack, one must be familiar with <a href="https://owasp.org/www-community/attacks/xss/">cross-site scripting attacks</a>.</p>
+                
+                <p>The <code class="language-plaintext highlighter-rouge">TRACE</code> method, intended for testing and debugging, instructs the web server to reflect the received message back to the client. This method, while apparently harmless, can be successfully leveraged in some scenarios to steal legitimate users’ credentials. This attack technique was discovered by Jeremiah Grossman in 2003, in an attempt to bypass the <a href="https://owasp.org/www-community/HttpOnly">HttpOnly</a> attribute that aims to protect cookies from being accessed by JavaScript.  However, the TRACE method can be used to bypass this protection and access the cookie even when this attribute is set.</p>
+                
+                <p>Test for cross-site tracing potential by issuing a request such as the following:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ncat www.victim.com 80
+                TRACE / HTTP/1.1
+                Host: www.victim.com
+                Random: Header
+                
+                HTTP/1.1 200 OK
+                Random: Header
+                ...
+                </code></pre></div></div>
+                
+                <p>The web server returned a 200 and reflected the random header that was set in place. To further exploit this issue:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ncat www.victim.com 80
+                TRACE / HTTP/1.1
+                Host: www.victim.com
+                Attack: &lt;script&gt;prompt<span class="o">()</span>&lt;/script&gt;
+                </code></pre></div></div>
+                
+                <p>The above example works if the response is being reflected in the HTML context.</p>
+                
+                <p>In older browsers, attacks were pulled using <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">XHR</a> technology, which leaked the headers when the server reflects them (<em>e.g.</em> Cookies, Authorization tokens, etc.) and bypassed security measures such as the <a href="/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes#httponly-attribute">HttpOnly</a> attribute. This attack can be pulled in recent browsers only if the application integrates with technologies similar to Flash.</p>
+                
+                <h3 id="testing-for-http-method-overriding">Testing for HTTP Method Overriding</h3>
+                
+                <p>Some web frameworks provide a way to override the actual HTTP method in the request by emulating the missing HTTP verbs passing some custom header in the requests. The main purpose of this is to circumvent some middleware (e.g. proxy, firewall) limitation where methods allowed usually do not encompass verbs such as <code class="language-plaintext highlighter-rouge">PUT</code> or <code class="language-plaintext highlighter-rouge">DELETE</code>. The following alternative headers could be used to do such verb tunneling:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">X-HTTP-Method</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">X-HTTP-Method-Override</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">X-Method-Override</code></li>
+                </ul>
+                
+                <p>In order to test this, in the scenarios where restricted verbs such as PUT or DELETE return a “405 Method not allowed”, replay the same request with the addition of the alternative headers for HTTP method overriding, and observe how the system responds. The application should respond with a different status code (<em>e.g.</em> 200) in cases where method overriding is supported.</p>
+                
+                <p>The web server in the following example does not allow the <code class="language-plaintext highlighter-rouge">DELETE</code> method and blocks it:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ncat www.example.com 80
+                DELETE /resource.html HTTP/1.1
+                Host: www.example.com
+                
+                HTTP/1.1 405 Method Not Allowed
+                Date: Sat, 04 Apr 2020 18:26:53 GMT
+                Server: Apache
+                Allow: GET,HEAD,POST,OPTIONS
+                Content-Length: 320
+                Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>iso-8859-1
+                Vary: Accept-Encoding
+                </code></pre></div></div>
+                
+                <p>After adding the <code class="language-plaintext highlighter-rouge">X-HTTP-Header</code>, the server responds to the request with a 200:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ncat www.example.com 80
+                DELETE /resource.html HTTP/1.1
+                Host: www.example.com
+                X-HTTP-Method: DELETE
+                
+                HTTP/1.1 200 OK
+                Date: Sat, 04 Apr 2020 19:26:01 GMT
+                Server: Apache
+                </code></pre></div></div>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <ul>
+                  <li>Ensure that only the required headers are allowed, and that the allowed headers are properly configured.</li>
+                  <li>Ensure that no workarounds are implemented to bypass security measures implemented by user-agents, frameworks, or web servers.</li>
+                </ul>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://nmap.org/ncat/">Ncat</a></li>
+                  <li><a href="https://curl.haxx.se/">cURL</a></li>
+                  <li><a href="https://nmap.org/nsedoc/scripts/http-methods.html">nmap http-methods NSE script</a></li>
+                  <li><a href="http://w3af.org/plugins/audit/htaccess_methods">w3af plugin htaccess_methods</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://tools.ietf.org/html/rfc2109">RFC 2109</a> and <a href="https://tools.ietf.org/html/rfc2965">RFC 2965</a>: “HTTP State Management Mechanism”</li>
+                  <li><a href="https://web.archive.org/web/20160616172703/http://www.kernelpanik.org/docs/kernelpanik/bme.eng.pdf">HTACCESS: BILBAO Method Exposed</a></li>
+                  <li><a href="https://www.securityfocus.com/archive/107/308433">Amit Klein: “XS(T) attack variants which can, in some cases, eliminate the need for TRACE”</a></li>
+                  <li><a href="https://vulncat.fortify.com/en/detail?id=desc.dynamic.xtended_preview.often_misused_http_method_override">Fortify - Misused HTTP Method Override</a></li>
+                  <li><a href="https://capec.mitre.org/data/definitions/107.html">CAPEC-107: Cross Site Tracing</a></li>
+                </ul>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/06-Test_HTTP_Methods" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf7Modal" tabindex="-1" role="dialog" aria-labelledby="conf7ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf7ModalLabel">WSTG-CONF-07 - Test HTTP Strict Transport Security</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>The HTTP Strict Transport Security (HSTS) feature lets a web application inform the browser through the use of a special response header that it should never establish a connection to the specified domain servers using un-encrypted HTTP. Instead, it should automatically establish all connection requests to access the site through HTTPS. It also prevents users from overriding certificate errors.</p>
+                
+                <p>Considering the importance of this security measure it is prudent to verify that the web site is using this HTTP header in order to ensure that all the data travels encrypted between the web browser and the server.</p>
+                
+                <p>The HTTP strict transport security header uses two directives:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">max-age</code>: to indicate the number of seconds that the browser should automatically convert all HTTP requests to HTTPS.</li>
+                  <li><code class="language-plaintext highlighter-rouge">includeSubDomains</code>: to indicate that all related sub-domains must use HTTPS.</li>
+                  <li><code class="language-plaintext highlighter-rouge">preload</code> Unofficial: to indicate that the domain(s) are on the preload list(s) and that browsers should never connect without HTTPS.
+                    <ul>
+                      <li>This is supported by all major browsers but is not official part of the specification. (See <a href="https://hstspreload.org/">hstspreload.org</a> for more information.)</li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <p>Here’s an example of the HSTS header implementation:</p>
+                
+                <p><code class="language-plaintext highlighter-rouge">Strict-Transport-Security: max-age=31536000; includeSubDomains</code></p>
+                
+                <p>The use of this header by web applications must be checked to find if the following security issues could be produced:</p>
+                
+                <ul>
+                  <li>Attackers sniffing the network traffic and accessing the information transferred through an un-encrypted channel.</li>
+                  <li>Attackers exploiting a manipulator in the middle attack because of the problem of accepting certificates that are not trusted.</li>
+                  <li>Users who mistakenly entered an address in the browser putting HTTP instead of HTTPS, or users who click on a link in a web application which mistakenly indicated use of the HTTP protocol.</li>
+                </ul>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Review the HSTS header and its validity.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>The presence of the HSTS header can be confirmed by examining the server’s response through an intercepting proxy or by using curl as follows:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-s</span> <span class="nt">-D-</span> https://owasp.org | <span class="nb">grep</span> <span class="nt">-i</span> strict
+                Strict-Transport-Security: max-age<span class="o">=</span>31536000
+                </code></pre></div></div>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">OWASP HTTP Strict Transport Security</a></li>
+                  <li><a href="https://www.youtube.com/watch?v=zEV3HOuM_Vw">OWASP Appsec Tutorial Series - Episode 4: Strict Transport Security</a></li>
+                  <li><a href="https://tools.ietf.org/html/rfc6797">HSTS Specification</a></li>
+                </ul>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/07-Test_HTTP_Strict_Transport_Security" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf8Modal" tabindex="-1" role="dialog" aria-labelledby="conf8ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf8ModalLabel">WSTG-CONF-08 - Test RIA cross domain policy</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Rich Internet Applications (RIA) have adopted Adobe’s crossdomain.xml policy files to allow for controlled cross domain access to data and service consumption using technologies such as Oracle Java, Silverlight, and Adobe Flash. Therefore, a domain can grant remote access to its services from a different domain. However, often the policy files that describe the access restrictions are poorly configured. Poor configuration of the policy files enables Cross-site Request Forgery attacks, and may allow third parties to access sensitive data meant for the user.</p>
+                
+                <h3 id="what-are-cross-domain-policy-files">What are cross-domain policy files?</h3>
+                
+                <p>A cross-domain policy file specifies the permissions that a web client such as Java, Adobe Flash, Adobe Reader, etc. use to access data across different domains. For Silverlight, Microsoft adopted a subset of the Adobe’s crossdomain.xml, and additionally created it’s own cross-domain policy file: clientaccesspolicy.xml.</p>
+                
+                <p>Whenever a web client detects that a resource has to be requested from other domain, it will first look for a policy file in the target domain to determine if performing cross-domain requests, including headers, and socket-based connections are allowed.</p>
+                
+                <p>Master policy files are located at the domain’s root. A client may be instructed to load a different policy file but it will always check the master policy file first to ensure that the master policy file permits the requested policy file.</p>
+                
+                <h4 id="crossdomainxml-vs-clientaccesspolicyxml">Crossdomain.xml vs. Clientaccesspolicy.xml</h4>
+                
+                <p>Most RIA applications support crossdomain.xml. However in the case of Silverlight, it will only work if the crossdomain.xml specifies that access is allowed from any domain. For more granular control with Silverlight, clientaccesspolicy.xml must be used.</p>
+                
+                <p>Policy files grant several types of permissions:</p>
+                
+                <ul>
+                  <li>Accepted policy files (Master policy files can disable or restrict specific policy files)</li>
+                  <li>Sockets permissions</li>
+                  <li>Header permissions</li>
+                  <li>HTTP/HTTPS access permissions</li>
+                  <li>Allowing access based on cryptographic credentials</li>
+                </ul>
+                
+                <p>An example of an overly permissive policy file:</p>
+                
+                <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+                <span class="cp">&lt;!DOCTYPE cross-domain-policy SYSTEM
+                "http://www.adobe.com/xml/dtds/cross-domain-policy.dtd"&gt;</span>
+                <span class="nt">&lt;cross-domain-policy&gt;</span>
+                    <span class="nt">&lt;site-control</span> <span class="na">permitted-cross-domain-policies=</span><span class="s">"all"</span><span class="nt">/&gt;</span>
+                    <span class="nt">&lt;allow-access-from</span> <span class="na">domain=</span><span class="s">"*"</span> <span class="na">secure=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+                    <span class="nt">&lt;allow-http-request-headers-from</span> <span class="na">domain=</span><span class="s">"*"</span> <span class="na">headers=</span><span class="s">"*"</span> <span class="na">secure=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/cross-domain-policy&gt;</span>
+                </code></pre></div></div>
+                
+                <h3 id="how-can-cross-domain-policy-files-can-be-abused">How can cross domain policy files can be abused?</h3>
+                
+                <ul>
+                  <li>Overly permissive cross-domain policies.</li>
+                  <li>Generating server responses that may be treated as cross-domain policy files.</li>
+                  <li>Using file upload functionality to upload files that may be treated as cross-domain policy files.</li>
+                </ul>
+                
+                <h3 id="impact-of-abusing-cross-domain-access">Impact of Abusing Cross-Domain Access</h3>
+                
+                <ul>
+                  <li>Defeat CSRF protections.</li>
+                  <li>Read data restricted or otherwise protected by cross-origin policies.</li>
+                </ul>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Review and validate the policy files.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="testing-for-ria-policy-files-weakness">Testing for RIA Policy Files Weakness</h3>
+                
+                <p>To test for RIA policy file weakness the tester should try to retrieve the policy files crossdomain.xml and clientaccesspolicy.xml from the application’s root, and from every folder found.</p>
+                
+                <p>For example, if the application’s URL is <code class="language-plaintext highlighter-rouge">http://www.owasp.org</code>, the tester should try to download the files <code class="language-plaintext highlighter-rouge">http://www.owasp.org/crossdomain.xml</code> and <code class="language-plaintext highlighter-rouge">http://www.owasp.org/clientaccesspolicy.xml</code>.</p>
+                
+                <p>After retrieving all the policy files, the permissions allowed should be be checked under the least privilege principle. Requests should only come from the domains, ports, or protocols that are necessary. Overly permissive policies should be avoided. Policies with <code class="language-plaintext highlighter-rouge">*</code> in them should be closely examined.</p>
+                
+                <h4 id="example">Example</h4>
+                
+                <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;cross-domain-policy&gt;</span>
+                    <span class="nt">&lt;allow-access-from</span> <span class="na">domain=</span><span class="s">"*"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;/cross-domain-policy&gt;</span>
+                </code></pre></div></div>
+                
+                <h5 id="result-expected">Result Expected</h5>
+                
+                <ul>
+                  <li>A list of policy files found.</li>
+                  <li>A list of weak settings in the policies.</li>
+                </ul>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li>Nikto</li>
+                  <li>OWASP Zed Attack Proxy Project</li>
+                  <li>W3af</li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li>Adobe: <a href="http://www.adobe.com/devnet/articles/crossdomain_policy_file_spec.html">“Cross-domain policy file specification”</a></li>
+                  <li>Adobe: <a href="http://www.adobe.com/devnet/flashplayer/articles/cross_domain_policy.html">“Cross-domain policy file usage recommendations for Flash Player”</a></li>
+                  <li>Oracle: <a href="http://www.oracle.com/technetwork/java/javase/plugin2-142482.html#CROSSDOMAINXML">“Cross-Domain XML Support”</a></li>
+                  <li>MSDN: <a href="http://msdn.microsoft.com/en-us/library/cc197955(v=vs.95).aspx">“Making a Service Available Across Domain Boundaries”</a></li>
+                  <li>MSDN: <a href="http://msdn.microsoft.com/en-us/library/cc645032(v=vs.95).aspx">“Network Security Access Restrictions in Silverlight”</a></li>
+                  <li>Stefan Esser: <a href="http://www.hardened-php.net/library/poking_new_holes_with_flash_crossdomain_policy_files.html">“Poking new holes with Flash Crossdomain Policy Files”</a></li>
+                  <li>Jeremiah Grossman: <a href="https://jeremiahgrossman.blogspot.com/2008/05/crossdomainxml-invites-cross-site.html">“Crossdomain.xml Invites Cross-site Mayhem”</a></li>
+                  <li>Google Doctype: <a href="https://code.google.com/p/doctype-mirror/wiki/ArticleFlashSecurity">“Introduction to Flash security”</a></li>
+                  <li>UCSD: <a href="http://cseweb.ucsd.edu/~hovav/dist/crossdomain.pdf">Analyzing the Crossdomain Policies of Flash Applications</a></li>
+                </ul>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/08-Test_RIA_Cross_Domain_Policy" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf9Modal" tabindex="-1" role="dialog" aria-labelledby="conf9ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf9ModalLabel">WSTG-CONF-09 - Test File Permission</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>When a resource is given a permissions setting that provides access to a wider range of actors than required, it could lead to the exposure of sensitive information, or the modification of that resource by unintended parties. This is especially dangerous when the resource is related to program configuration, execution, or sensitive user data.</p>
+                
+                <p>A clear example is an execution file that is executable by unauthorized users. For another example, account information or a token value to access an API - increasingly seen in modern web services or microservices - may be stored in a configuration file whose permissions are set to world-readable from the installation by default. Such sensitive data can be exposed by internal malicious actors of the host or by a remote attacker who compromised the service with other vulnerabilities but obtained only a normal user privilege.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Review and identify any rogue file permissions.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>In Linux, use <code class="language-plaintext highlighter-rouge">ls</code> command to check the file permissions. Alternatively, <code class="language-plaintext highlighter-rouge">namei</code> can also be used to recursively list file permissions.</p>
+                
+                <p><code class="language-plaintext highlighter-rouge">$ namei -l /PathToCheck/</code></p>
+                
+                <p>The files and directories that require file permission testing include but are not limited to:</p>
+                
+                <ul>
+                  <li>Web files/directory</li>
+                  <li>Configuration files/directory</li>
+                  <li>Sensitive files (encrypted data, password, key)/directory</li>
+                  <li>Log files (security logs, operation logs, admin logs)/directory</li>
+                  <li>Executables (scripts, EXE, JAR, class, PHP, ASP)/directory</li>
+                  <li>Database files/directory</li>
+                  <li>Temp files /directory</li>
+                  <li>Upload files/directory</li>
+                </ul>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>Set the permissions of the files and directories properly so that unauthorized users cannot access critical resources unnecessarily.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://technet.microsoft.com/en-us/sysinternals/accessenum">Windows AccessEnum</a></li>
+                  <li><a href="https://technet.microsoft.com/en-us/sysinternals/accesschk">Windows AccessChk</a></li>
+                  <li><a href="https://linux.die.net/man/1/namei">Linux namei</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://cwe.mitre.org/data/definitions/732.html">CWE-732: Incorrect Permission Assignment for Critical Resource</a></li>
+                </ul>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/09-Test_File_Permission" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf10Modal" tabindex="-1" role="dialog" aria-labelledby="conf10ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf10ModalLabel">WSTG-CONF-10 - Test for Subdomain Takeover</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>A successful exploitation of this kind of vulnerability allows an adversary to claim and take control of the victim’s subdomain. This attack relies on the following:</p>
+                
+                <ol>
+                  <li>The victim’s external DNS server subdomain record is configured to point to a non-existing or non-active resource/external service/endpoint. The proliferation of XaaS (Anything as a Service) products and public cloud services offer a lot of potential targets to consider.</li>
+                  <li>The service provider hosting the resource/external service/endpoint does not handle subdomain ownership verification properly.</li>
+                </ol>
+                
+                <p>If the subdomain takeover is successful a wide variety of attacks are possible (serving malicious content, phising, stealing user session cookies, credentials, etc.). This vulnerability could be exploited for a wide variety of DNS resource records including: <code class="language-plaintext highlighter-rouge">A</code>, <code class="language-plaintext highlighter-rouge">CNAME</code>, <code class="language-plaintext highlighter-rouge">MX</code>, <code class="language-plaintext highlighter-rouge">NS</code>, <code class="language-plaintext highlighter-rouge">TXT</code> etc. In terms of the attack severity an <code class="language-plaintext highlighter-rouge">NS</code> subdomain takeover (although less likely) has the highest impact because a successful attack could result in full control over the whole DNS zone and  the victim’s domain.</p>
+                
+                <h3 id="github">GitHub</h3>
+                
+                <ol>
+                  <li>The victim (victim.com) uses GitHub for development and configured a DNS record (<code class="language-plaintext highlighter-rouge">coderepo.victim.com</code>) to access it.</li>
+                  <li>The victim decides to migrate their code repository from GitHub to a commercial platform and does not remove <code class="language-plaintext highlighter-rouge">coderepo.victim.com</code> from their DNS server.</li>
+                  <li>An adversary finds out that <code class="language-plaintext highlighter-rouge">coderepo.victim.com</code> is hosted on GitHub and uses GitHub Pages to claim <code class="language-plaintext highlighter-rouge">coderepo.victim.com</code> using their GitHub account.</li>
+                </ol>
+                
+                <h3 id="expired-domain">Expired Domain</h3>
+                
+                <ol>
+                  <li>The victim (victim.com) owns another domain (victimotherdomain.com) and uses a CNAME record (www) to reference the other domain (<code class="language-plaintext highlighter-rouge">www.victim.com</code> –&gt; <code class="language-plaintext highlighter-rouge">victimotherdomain.com</code>)</li>
+                  <li>At some point, victimotherdomain.com expires and is available for registration by anyone. Since the CNAME record is not deleted from the victim.com DNS zone, anyone who registers <code class="language-plaintext highlighter-rouge">victimotherdomain.com</code> has full control over <code class="language-plaintext highlighter-rouge">www.victim.com</code> until the DNS record is present.</li>
+                </ol>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Enumerate all possible domains (previous and current).</li>
+                  <li>Identify forgotten or misconfigured domains.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <h3 id="black-box-testing">Black-Box Testing</h3>
+                
+                <p>The first step is to enumerate the victim DNS servers and resource records. There are multiple ways to accomplish this task, for example DNS enumeration using a list of common subdomains dictionary, DNS brute force or using web search engines and other OSINT data sources.</p>
+                
+                <p>Using the dig command the tester looks for the following DNS server response messages that warrant further investigation:</p>
+                
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">NXDOMAIN</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">SERVFAIL</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">REFUSED</code></li>
+                  <li><code class="language-plaintext highlighter-rouge">no servers could be reached.</code></li>
+                </ul>
+                
+                <h4 id="testing-dns-a-cname-record-subdomain-takeover">Testing DNS A, CNAME Record Subdomain Takeover</h4>
+                
+                <p>Perform a basic DNS enumeration on the victim’s domain (<code class="language-plaintext highlighter-rouge">victim.com</code>) using <code class="language-plaintext highlighter-rouge">dnsrecon</code>:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>./dnsrecon.py <span class="nt">-d</span> victim.com
+                <span class="o">[</span><span class="k">*</span><span class="o">]</span> Performing General Enumeration of Domain: victim.com
+                ...
+                <span class="o">[</span>-] DNSSEC is not configured <span class="k">for </span>victim.com
+                <span class="o">[</span><span class="k">*</span><span class="o">]</span>      A subdomain.victim.com 192.30.252.153
+                <span class="o">[</span><span class="k">*</span><span class="o">]</span>      CNAME subdomain1.victim.com fictioussubdomain.victim.com
+                ...
+                </code></pre></div></div>
+                
+                <p>Identify which DNS resource records are dead and point to inactive/not-used services. Using the dig command for the <code class="language-plaintext highlighter-rouge">CNAME</code> record:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>dig CNAME fictioussubdomain.victim.com
+                <span class="p">;</span> &lt;&lt;<span class="o">&gt;&gt;</span> DiG 9.10.3-P4-Ubuntu &lt;&lt;<span class="o">&gt;&gt;</span> ns victim.com
+                <span class="p">;;</span> global options: +cmd
+                <span class="p">;;</span> Got answer:
+                <span class="p">;;</span> -&gt;&gt;HEADER<span class="o">&lt;&lt;-</span> <span class="no">opcode</span><span class="sh">: QUERY, status: NXDOMAIN, id: 42950
+                ;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+                </span></code></pre></div></div>
+                
+                <p>The following DNS responses warrant further investigation: <code class="language-plaintext highlighter-rouge">NXDOMAIN</code>.</p>
+                
+                <p>To test the <code class="language-plaintext highlighter-rouge">A</code> record the tester performs a whois database lookup and identifies GitHub as the service provider:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>whois 192.30.252.153 | <span class="nb">grep</span> <span class="s2">"OrgName"</span>
+                OrgName: GitHub, Inc.
+                </code></pre></div></div>
+                
+                <p>The tester visits <code class="language-plaintext highlighter-rouge">subdomain.victim.com</code> or issues a HTTP GET request which returns a “404 - File not found” response which is a clear indication of the vulnerability.</p>
+                
+                
+                <p>The tester claims the domain using GitHub Pages:</p>
+                
+                
+                <h4 id="testing-ns-record-subdomain-takeover">Testing NS Record Subdomain Takeover</h4>
+                
+                <p>Identify all nameservers for the domain in scope:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>dig ns victim.com +short
+                ns1.victim.com
+                nameserver.expireddomain.com
+                </code></pre></div></div>
+                
+                <p>In this fictious example the tester checks if the domain <code class="language-plaintext highlighter-rouge">expireddomain.com</code> is active with a domain registrar search. If the domain is available for purchase the subdomain is vulnerable.</p>
+                
+                <p>The following DNS responses warrant further investigation: <code class="language-plaintext highlighter-rouge">SERVFAIL</code> or <code class="language-plaintext highlighter-rouge">REFUSED</code>.</p>
+                
+                <h3 id="gray-box-testing">Gray-Box Testing</h3>
+                
+                <p>The tester has the DNS zone file available which means DNS enumeration is not necessary. The testing methodology is the same.</p>
+                
+                <h2 id="remediation">Remediation</h2>
+                
+                <p>To mitigate the risk of subdomain takeover the vulnerable DNS resource record(s) should be removed from the DNS zone. Continous monitoring and periodic checks are recommended as best practice.</p>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://linux.die.net/man/1/dig">dig - man page</a></li>
+                  <li><a href="https://github.com/lanmaster53/recon-ng">recon-ng - Web Reconnaissance framework</a></li>
+                  <li><a href="https://github.com/laramies/theHarvester">theHarvester - OSINT intelligence gathering tool</a></li>
+                  <li><a href="https://github.com/aboul3la/Sublist3r">Sublist3r - OSINT subdomain enumeration tool</a></li>
+                  <li><a href="https://github.com/darkoperator/dnsrecon">dnsrecon - DNS Enumeration Script</a></li>
+                  <li><a href="https://github.com/OWASP/Amass">OWASP Amass DNS enumeration</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://www.hackerone.com/blog/Guide-Subdomain-Takeovers">HackerOne - A Guide To Subdomain Takeovers</a></li>
+                  <li><a href="https://0xpatrik.com/subdomain-takeover-basics/">Subdomain Takeover: Basics</a></li>
+                  <li><a href="https://0xpatrik.com/subdomain-takeover-ns/">Subdomain Takeover: Going beyond CNAME</a></li>
+                  <li><a href="https://2017.appsec.eu/presos/Developer/DNS%20hijacking%20using%20cloud%20providers%20%E2%80%93%20no%20verification%20needed%20-%20Frans%20Rosen%20-%20OWASP_AppSec-Eu_2017.pdf">OWASP AppSec Europe 2017 - Frans Rosén: DNS hijacking using cloud providers – no verification needed</a></li>
+                </ul>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/10-Test_for_Subdomain_Takeover" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Modal -->
+ <div class="modal fade" id="conf11Modal" tabindex="-1" role="dialog" aria-labelledby="conf11ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="conf11ModalLabel">WSTG-CONF-11 - Test Cloud Storage</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <h2 id="summary">Summary</h2>
+                
+                <p>Cloud storage services facilitate web application and services to store and access objects in the storage service. Improper access control configuration, however, may result in sensitive information exposure, data being tampered, or unauthorized access.</p>
+                
+                <p>A known example is where an Amazon S3 bucket is misconfigured, although the other cloud storage services may also be exposed to similar risks. By default, all S3 buckets are private and can be accessed only by users that are explicitly granted access. Users can grant public access to both the bucket itself and to individual objects stored within that bucket. This may lead to an unauthorized user being able to upload new files, modify or read stored files.</p>
+                
+                <h2 id="test-objectives">Test Objectives</h2>
+                
+                <ul>
+                  <li>Assess that the access control configuration for the storage services is properly in place.</li>
+                </ul>
+                
+                <h2 id="how-to-test">How to Test</h2>
+                
+                <p>First identify the URL to access the data in the storage service, and then consider the following tests:</p>
+                
+                <ul>
+                  <li>read the unauthorized data</li>
+                  <li>upload a new arbitrary file</li>
+                </ul>
+                
+                <p>You may use curl for the tests with the following commands and see if unauthorized actions can be performed successfully.</p>
+                
+                <p>To test the ability to read an object:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> GET https://&lt;cloud-storage-service&gt;/&lt;object&gt;
+                </code></pre></div></div>
+                
+                <p>To test the ability to upload a file:</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> PUT <span class="nt">-d</span> <span class="s1">'test'</span> <span class="s1">'https://&lt;cloud-storage-service&gt;/test.txt'</span>
+                </code></pre></div></div>
+                
+                <h3 id="testing-for-amazon-s3-bucket-misconfiguration">Testing for Amazon S3 Bucket Misconfiguration</h3>
+                
+                <p>The Amazon S3 bucket URLs follow one of two formats, either virtual host style or path-style.</p>
+                
+                <ul>
+                  <li>Virtual Hosted Style Access</li>
+                </ul>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://bucket-name.s3.Region.amazonaws.com/key-name
+                </code></pre></div></div>
+                
+                <p>In the following example, <code class="language-plaintext highlighter-rouge">my-bucket</code> is the bucket name, <code class="language-plaintext highlighter-rouge">us-west-2</code> is the region, and <code class="language-plaintext highlighter-rouge">puppy.png</code> is the key-name:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://my-bucket.s3.us-west-2.amazonaws.com/puppy.png
+                </code></pre></div></div>
+                
+                <ul>
+                  <li>Path-Style Access</li>
+                </ul>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://s3.Region.amazonaws.com/bucket-name/key-name
+                </code></pre></div></div>
+                
+                <p>As above, in the following example, <code class="language-plaintext highlighter-rouge">my-bucket</code> is the bucket name, <code class="language-plaintext highlighter-rouge">us-west-2</code> is the region, and <code class="language-plaintext highlighter-rouge">puppy.png</code> is the key-name:</p>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://s3.us-west-2.amazonaws.com/my-bucket/puppy.jpg
+                </code></pre></div></div>
+                
+                <p>For some regions, the legacy global endpoint that does not specify a region-specific endpoint can be used. Its format is also either virtual hosted style or path-style.</p>
+                
+                <ul>
+                  <li>Virtual Hosted Style Access</li>
+                </ul>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://bucket-name.s3.amazonaws.com
+                </code></pre></div></div>
+                
+                <ul>
+                  <li>Path-Style Access</li>
+                </ul>
+                
+                <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://s3.amazonaws.com/bucket-name
+                </code></pre></div></div>
+                
+                <h4 id="identify-bucket-url">Identify Bucket URL</h4>
+                
+                <p>For black-box testing, S3 URLs can be found in the HTTP messages. The following example shows a bucket URL is sent in the <code class="language-plaintext highlighter-rouge">img</code> tag in a HTTP response.</p>
+                
+                <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+                <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"https://my-bucket.s3.us-west-2.amazonaws.com/puppy.png"</span><span class="nt">&gt;</span>
+                ...
+                </code></pre></div></div>
+                
+                <p>For gray-box testing, you can obtain bucket URLs from Amazon’s web interface, documents, source code, or any other available sources.</p>
+                
+                <h4 id="testing-with-aws-cli">Testing with AWS-CLI</h4>
+                
+                <p>In addition to testing with curl, you can also test with the AWS Command-line tool. In this case <code class="language-plaintext highlighter-rouge">s3://</code> protocol is used.</p>
+                
+                <h5 id="list">List</h5>
+                
+                <p>The following command lists all the objects of the bucket when it is configured public.</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws s3 <span class="nb">ls </span>s3://&lt;bucket-name&gt;
+                </code></pre></div></div>
+                
+                <h5 id="upload">Upload</h5>
+                
+                <p>The following is the command to upload a file</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws s3 <span class="nb">cp </span>arbitrary-file s3://bucket-name/path-to-save
+                </code></pre></div></div>
+                
+                <p>This example shows the result when the upload has been successful.</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>aws s3 <span class="nb">cp </span>test.txt s3://bucket-name/test.txt
+                upload: ./test.txt to s3://bucket-name/test.txt
+                </code></pre></div></div>
+                
+                <p>This example shows the result when the upload has failed.</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>aws s3 <span class="nb">cp </span>test.txt s3://bucket-name/test.txt
+                upload failed: ./test2.txt to s3://bucket-name/test2.txt An error occurred <span class="o">(</span>AccessDenied<span class="o">)</span> when calling the PutObject operation: Access Denied
+                </code></pre></div></div>
+                
+                <h5 id="remove">Remove</h5>
+                
+                <p>The following is the command to remove an object</p>
+                
+                <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws s3 <span class="nb">rm </span>s3://bucket-name/object-to-remove
+                </code></pre></div></div>
+                
+                <h2 id="tools">Tools</h2>
+                
+                <ul>
+                  <li><a href="https://aws.amazon.com/cli/">AWS CLI</a></li>
+                </ul>
+                
+                <h2 id="references">References</h2>
+                
+                <ul>
+                  <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">Working with Amazon S3 Buckets</a></li>
+                  <li><a href="http://flaws2.cloud">flAWS 2</a></li>
+                </ul>
+                
+             </div>
+             <div class="modal-footer">
+                 <a href="https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/11-Test_Cloud_Storage" class="btn btn-success" target="_blank">View on owasp.org</a>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
