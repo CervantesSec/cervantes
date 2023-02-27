@@ -1,3 +1,4 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
 <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="sesst" width="100%">
                 <thead class="thead-dark">
@@ -27,14 +28,9 @@
                                             <p>- Modify cookies that are not signed and contain information that can be manipulated.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Sess.Sess01Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess1Modal">
                             <i class="fas fa-eye"></i>
@@ -49,14 +45,9 @@
                     <td>- Ensure that the proper security configuration is set for cookies.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess02Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Sess.Sess02Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess2Modal">
                             <i class="fas fa-eye"></i>
@@ -72,14 +63,9 @@
                         <p>- Force cookies and assess the impact.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess03Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Sess.Sess03Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess3Modal">
                             <i class="fas fa-eye"></i>
@@ -96,14 +82,9 @@
                         <p>- Assess the channel and methods' security.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess04Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Sess.Sess04Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess4Modal">
                             <i class="fas fa-eye"></i>
@@ -118,14 +99,9 @@
                     <td>- Determine whether it is possible to initiate requests on a user's behalf that are not initiated by the user.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess05Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Sess.Sess05Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess5Modal">
                             <i class="fas fa-eye"></i>
@@ -141,14 +117,9 @@
                         <p>- Analyze the session timeout and if the session is properly killed after logout.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess06Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Sess.Sess06Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess6Modal">
                             <i class="fas fa-eye"></i>
@@ -163,14 +134,9 @@
                     <td>- Validate that a hard session timeout exists.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess07Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Sess.Sess07Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess7Modal">
                             <i class="fas fa-eye"></i>
@@ -186,14 +152,9 @@
                         <p>- Break the logical flow of session generation.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess08Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Sess.Sess08Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess8Modal">
                             <i class="fas fa-eye"></i>
@@ -209,14 +170,9 @@
                         <p>- Hijack vulnerable cookies and assess the risk level.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Sess.Sess09Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Sess.Sess09Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#sess9Modal">
                             <i class="fas fa-eye"></i>

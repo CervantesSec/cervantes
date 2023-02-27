@@ -1,3 +1,4 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
 <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="athzt" width="100%">
                 <thead class="thead-dark">
@@ -26,14 +27,9 @@
                         <p>- Assess bypassing techniques and identify the extent of path traversal.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Athz.Athz01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Athz.Athz01Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#athz1Modal">
                             <i class="fas fa-eye"></i>
@@ -48,14 +44,9 @@
                     <td>- Assess if horizontal or vertical access is possible.</td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Athz.Athz02Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Athz.Athz02Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#athz2Modal">
                             <i class="fas fa-eye"></i>
@@ -71,14 +62,9 @@
                         <p>- Fuzz or otherwise attempt to bypass security measures.</p></td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Athz.Athz03Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Athz.Athz03Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#athz3Modal">
                             <i class="fas fa-eye"></i>
@@ -94,14 +80,9 @@
                         <p>- Assess the access control measures and if they're vulnerable to IDOR.</p></td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Athz.Athz04Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Athz.Athz04Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#athz4Modal">
                             <i class="fas fa-eye"></i>

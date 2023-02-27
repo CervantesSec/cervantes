@@ -1,3 +1,4 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
 <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="inpvt" width="100%">
                 <thead class="thead-dark">
@@ -26,14 +27,9 @@
                         <p>- Assess the input they accept and the encoding that gets applied on return (if any).</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Inpv.Inpv01Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv1Modal">
                             <i class="fas fa-eye"></i>
@@ -49,14 +45,9 @@
                         <p>- Assess the input they accept and the encoding that gets applied on return (if any).</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv02Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Inpv.Inpv02Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv2Modal">
                             <i class="fas fa-eye"></i>
@@ -70,14 +61,9 @@
                     <td>Testing for HTTP Verb Tampering</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Inpv.Inpv03Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv03Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv3Modal">
                             <i class="fas fa-eye"></i>
@@ -92,14 +78,9 @@
                         <p>- Assess injection points and try bypassing input filters using HPP.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv04Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv04Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv4Modal">
                             <i class="fas fa-eye"></i>
@@ -114,14 +95,9 @@
                         <p>- Assess the severity of the injection and the level of access that can be achieved through it.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv05Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv05Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv5Modal">
                             <i class="fas fa-eye"></i>
@@ -136,14 +112,9 @@
                         <p>- Assess the severity of the injection.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv06Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Inpv.Inpv06Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv6Modal">
                             <i class="fas fa-eye"></i>
@@ -158,14 +129,9 @@
                         <p>- Assess the types of exploits that can be attained and their severities.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv07Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv07Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv7Modal">
                             <i class="fas fa-eye"></i>
@@ -180,14 +146,9 @@
                         <p>- Assess the severity of the injection.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv08Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv08Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv8Modal">
                             <i class="fas fa-eye"></i>
@@ -201,14 +162,9 @@
                     <td>- Identify XPATH injection points.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv09Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Inpv.Inpv09Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv9Modal">
                             <i class="fas fa-eye"></i>
@@ -224,14 +180,9 @@
                         <p>- Assess the injection impacts.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv10Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv10Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv10Modal">
                             <i class="fas fa-eye"></i>
@@ -246,14 +197,9 @@
                         <p>- Assess the injection severity.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv11Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv11Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv11Modal">
                             <i class="fas fa-eye"></i>
@@ -267,14 +213,9 @@
                     <td>- Identify and assess the command injection points.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv12Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv12Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv12Modal">
                             <i class="fas fa-eye"></i>
@@ -288,14 +229,9 @@
                     <td>- Assess whether injecting format string conversion specifiers into user-controlled fields causes undesired behaviour from the application.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Inpv.Inpv13Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Inpv.Inpv13Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv13Modal">
                             <i class="fas fa-eye"></i>
@@ -311,14 +247,9 @@
                         <p>- Set listeners or activate the recall step if possible.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv14Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv14Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv14Modal">
                             <i class="fas fa-eye"></i>
@@ -333,14 +264,9 @@
                         <p>- Assess if the chain of communication is vulnerable to smuggling, identifying what possible attacks are achievable.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv15Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Inpv.Inpv15Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv15Modal">
                             <i class="fas fa-eye"></i>
@@ -355,14 +281,9 @@
                         <p>- Monitor HTTP traffic without changes of end user Browser proxy or client-side application.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv16Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Inpv.Inpv16Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv16Modal">
                             <i class="fas fa-eye"></i>
@@ -377,14 +298,9 @@
                         <p>- Bypass security controls that rely on the header.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv17Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Inpv.Inpv17Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv17Modal">
                             <i class="fas fa-eye"></i>
@@ -400,14 +316,9 @@
                         <p>- Build the exploit.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv18Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv18Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv18Modal">
                             <i class="fas fa-eye"></i>
@@ -423,14 +334,9 @@
                         <p>- Assess the severity of the vulnerability.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Inpv.Inpv19Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Inpv.Inpv19Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#inpv19Modal">
                             <i class="fas fa-eye"></i>

@@ -1,3 +1,5 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
+
 <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="athnt" width="100%">
                 <thead class="thead-dark">
@@ -27,14 +29,9 @@
                         <p>- Review the granularity of the roles and the needs behind the permissions given.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Auth.Athn01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Auth.Athn01Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth1Modal">
                             <i class="fas fa-eye"></i>
@@ -49,14 +46,9 @@
                         <p>- Review and assess new user accounts and if they are created with any defaults or identifiable patterns.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Auth.Athn02Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Auth.Athn02Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth2Modal">
                             <i class="fas fa-eye"></i>
@@ -70,14 +62,9 @@
                     <td>- Evaluate the account lockout mechanism's ability to mitigate brute force password guessing.- Evaluate the unlock mechanism's resistance to unauthorized account unlocking.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Auth.Athn03Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Auth.Athn03Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth3Modal">
                             <i class="fas fa-eye"></i>
@@ -91,14 +78,9 @@
                     <td>- Ensure that authentication is applied across all services that require it.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Auth.Athn04Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Auth.Athn04Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth4Modal">
                             <i class="fas fa-eye"></i>
@@ -112,14 +94,9 @@
                     <td>- Validate that the generated session is managed securely and do not put the user's credentials in danger.</td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Auth.Athn05Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Auth.Athn05Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth5Modal">
                             <i class="fas fa-eye"></i>
@@ -134,14 +111,9 @@
                         <p>- Review if access can occur without authorization.</p></td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Auth.Athn06Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Auth.Athn06Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth6Modal">
                             <i class="fas fa-eye"></i>
@@ -155,14 +127,9 @@
                     <td>- Determine the resistance of the application against brute force password guessing using available password dictionaries by evaluating the length, complexity, reuse, and aging requirements of passwords.</td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Auth.Athn07Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Auth.Athn07Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth7Modal">
                             <i class="fas fa-eye"></i>
@@ -177,14 +144,9 @@
                         <p>- Assess possible user answers and brute force capabilities.</p></td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Auth.Athn08Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Auth.Athn08Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth8Modal">
                             <i class="fas fa-eye"></i>
@@ -199,14 +161,9 @@
                         <p>- Determine the resistance of the passwords reset functionality against guessing or bypassing.</p></td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Auth.Athn09Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})>
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Auth.Athn09Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth9Modal">
                             <i class="fas fa-eye"></i>
@@ -221,14 +178,9 @@
                         <p>- Assess the security measures used and if any bypasses exists on the alternative channels.</p></td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Auth.Athn10Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Auth.Athn10Note" class="form-control" rows="4"></textarea>  </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#auth10Modal">
                             <i class="fas fa-eye"></i>

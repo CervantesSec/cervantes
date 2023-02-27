@@ -1,3 +1,4 @@
+ @model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
  <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="conft" width="100%">
                 <thead class="thead-dark">
@@ -26,14 +27,9 @@
                         <p>- Validate that used frameworks and systems are secure and not susceptible to known vulnerabilities due to unmaintained software or default settings and credentials.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Conf.Conf01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>    <textarea  asp-for="Conf.Conf01Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf1Modal">
                             <i class="fas fa-eye"></i>
@@ -50,14 +46,9 @@
                          </td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Conf.Conf02Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Conf.Conf02Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf2Modal">
                             <i class="fas fa-eye"></i>
@@ -72,14 +63,9 @@
                         <p>- Validate that no system framework bypasses exist on the rules set.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Conf.Conf03Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>  <textarea  asp-for="Conf.Conf03Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf3Modal">
                             <i class="fas fa-eye"></i>
@@ -93,14 +79,9 @@
                     <td>- Find and analyse unreferenced files that might contain sensitive information.</td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Conf.Conf04Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Conf.Conf04Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf4Modal">
                             <i class="fas fa-eye"></i>
@@ -114,14 +95,9 @@
                     <td>- Identify hidden administrator interfaces and functionality.</td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Conf.Conf05Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Conf.Conf05Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf5Modal">
                             <i class="fas fa-eye"></i>
@@ -138,14 +114,9 @@
                         <p>- Test HTTP method overriding techniques.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Conf.Conf06Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea  asp-for="Conf.Conf06Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf6Modal">
                             <i class="fas fa-eye"></i>
@@ -159,14 +130,9 @@
                     <td>- Review the HSTS header and its validity.</td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Conf.Conf07Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea  asp-for="Conf.Conf07Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf7Modal">
                             <i class="fas fa-eye"></i>
@@ -180,14 +146,9 @@
                     <td>- Review and validate the policy files.</td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Conf.Conf08Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Conf.Conf08Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf8Modal">
                             <i class="fas fa-eye"></i>
@@ -201,14 +162,9 @@
                     <td>- Review and identify any rogue file permissions.</td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Conf.Conf09Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Conf.Conf09Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf9Modal">
                             <i class="fas fa-eye"></i>
@@ -223,14 +179,9 @@
                         <p>- Identify forgotten or misconfigured domains.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Conf.Conf10Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Conf.Conf10Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf10Modal">
                             <i class="fas fa-eye"></i>
@@ -244,14 +195,9 @@
                     <td>- Assess that the access control configuration for the storage services is properly in place.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Conf.Conf11Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Conf.Conf11Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#conf11Modal">
                             <i class="fas fa-eye"></i>

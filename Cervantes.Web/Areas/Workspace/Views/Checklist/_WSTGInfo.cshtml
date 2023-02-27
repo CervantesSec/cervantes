@@ -1,3 +1,4 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
 
 <div class="table-responsive-md">
     <table class="table table-bordered table-hover" id="infot" width="100%">
@@ -16,19 +17,14 @@
         </thead>
         <tbody>
         <tr>
+        
             <td>WSTG-INFO-01</td>
             <td>Conduct Search Engine Discovery Reconnaissance for Information Leakage</td>
             <td>- Identify what sensitive design and configuration information of the application, system, or organization is exposed directly (on the organization's website) or indirectly (via third-party services).</td>
-            <td>
-                        
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+            <td>          
+                @Html.DropDownListFor(model => model.Info.Info01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td>    <textarea  asp-for="Info.Info01Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info1Modal">
                     <i class="fas fa-eye"></i>
@@ -41,14 +37,9 @@
             <td>- Determine the version and type of a running web server to enable further discovery of any known vulnerabilities.</td>
             <td>
                                         
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+              @Html.DropDownListFor(model => model.Info.Info02Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td>    <textarea  asp-for="Info.Info02Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info2Modal">
                     <i class="fas fa-eye"></i>
@@ -63,14 +54,9 @@
                 <p>- Extract and map other information that could lead to better understanding of the systems at hand."</p>
             </td>
             <td>
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+               @Html.DropDownListFor(model => model.Info.Info03Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td>    <textarea  asp-for="Info.Info03Note" class="form-control" rows="4"></textarea>  </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info3Modal">
                     <i class="fas fa-eye"></i>
@@ -83,14 +69,9 @@
             <td>- Enumerate the applications within scope that exist on a web server.
             </td>
             <td>
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+                @Html.DropDownListFor(model => model.Info.Info04Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td><textarea  asp-for="Info.Info04Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info4Modal">
                     <i class="fas fa-eye"></i>
@@ -105,14 +86,9 @@
                 <p>- Identify if source map files or other front-end debug files exist.</p>
             </td>
             <td>
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+               @Html.DropDownListFor(model => model.Info.Info05Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td> <textarea  asp-for="Info.Info05Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info5Modal">
                     <i class="fas fa-eye"></i>
@@ -126,14 +102,9 @@
             <td>- Identify possible entry and injection points through request and response analysis.
             </td>
             <td>
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+                @Html.DropDownListFor(model => model.Info.Info06Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td>    <textarea  asp-for="Info.Info06Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info6Modal">
                     <i class="fas fa-eye"></i>
@@ -147,14 +118,9 @@
             <td>- Map the target application and understand the principal workflows.
             </td>
             <td>
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+               @Html.DropDownListFor(model => model.Info.Info07Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td>    <textarea  asp-for="Info.Info07Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info7Modal">
                     <i class="fas fa-eye"></i>
@@ -169,14 +135,9 @@
             <td>- Fingerprint the components being used by the web applications.
             </td>
             <td>
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+                @Html.DropDownListFor(model => model.Info.Info08Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td>    <textarea  asp-for="Info.Info08Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info8Modal">
                     <i class="fas fa-eye"></i>
@@ -191,14 +152,9 @@
             <td>Fingerprint Web Application
             </td>
             <td>
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+                @Html.DropDownListFor(model => model.Info.Info09Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td>    <textarea  asp-for="Info.Info09Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info9Modal">
                     <i class="fas fa-eye"></i>
@@ -213,14 +169,9 @@
             <td>- Generate a map of the application at hand based on the research conducted.
             </td>
             <td>
-                <select class="form-control">
-                    <option value="0">Not Started</option>
-                    <option value="1">Pass</option>
-                    <option value="2">Issues</option>
-                    <option value="3">N/A</option>
-                </select>
+                @Html.DropDownListFor(model => model.Info.Info10Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
             </td>
-            <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+            <td>    <textarea  asp-for="Info.Info10Note" class="form-control" rows="4"></textarea> </td>
             <td>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#info10Modal">
                     <i class="fas fa-eye"></i>

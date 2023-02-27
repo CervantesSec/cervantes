@@ -101,11 +101,8 @@
                             <td>@check.CreatedDate.ToShortDateString()</td>
                             <td>@check.User.FullName</td>
                             <td>
-                                <a asp-area="Workspace" asp-controller="Target" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" class="btn btn-tool">
+                                <a asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" class="btn btn-tool">
                                     <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Target" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" localize-content>
-                                    <i class="fas fa-edit"></i>
                                 </a>
                                 <a class="btn btn-tool" asp-area="Workspace" asp-controller="Target" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" localize-content>
                                     <i class="fas fa-trash"></i>
@@ -125,7 +122,7 @@
         </div>
     </div>
     <a asp-area="Workspace" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
-        <a asp-area="Workspace" asp-controller="Target" asp-action="Create" class="btn btn-dark"><i class="fas fa-tasks"></i> Create</a>
+        <a asp-area="Workspace" asp-controller="Checklist" asp-action="Create" class="btn btn-dark"><i class="fas fa-tasks"></i> Create</a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->

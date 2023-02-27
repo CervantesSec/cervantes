@@ -1,3 +1,5 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
+
 <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="idntt" width="100%">
                 <thead class="thead-dark">
@@ -27,14 +29,9 @@
                         <p>- Review the granularity of the roles and the needs behind the permissions given.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Idnt.Idnt1Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>    <textarea  asp-for="Idnt.Idnt1Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt1Modal">
                             <i class="fas fa-eye"></i>
@@ -50,14 +47,9 @@
                         <p>- Validate the registration process.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Idnt.Idnt2Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Idnt.Idnt2Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt2Modal">
                             <i class="fas fa-eye"></i>
@@ -72,14 +64,9 @@
                     <td>- Verify which accounts may provision other accounts and of what type.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Idnt.Idnt3Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Idnt.Idnt3Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt3Modal">
                             <i class="fas fa-eye"></i>
@@ -95,14 +82,9 @@
                         <p>- Enumerate users where possible through response analysis.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Idnt.Idnt4Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Idnt.Idnt4Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt4Modal">
                             <i class="fas fa-eye"></i>
@@ -118,14 +100,9 @@
                         <p>- Determine whether the application's error messages permit account enumeration.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Idnt.Idnt5Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea  asp-for="Idnt.Idnt5Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#idnt5Modal">
                             <i class="fas fa-eye"></i>
