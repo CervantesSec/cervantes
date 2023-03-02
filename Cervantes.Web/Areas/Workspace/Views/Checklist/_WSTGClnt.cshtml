@@ -1,3 +1,5 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
+
 <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="clntt" width="100%">
                 <thead class="thead-dark">
@@ -26,14 +28,10 @@
                         <p>- Build payloads that pertain to every sink type.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Clnt.Clnt01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
+
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>    <textarea asp-for="Clnt.Clnt01Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt1Modal">
                             <i class="fas fa-eye"></i>
@@ -47,14 +45,9 @@
                     <td>- Identify sinks and possible JavaScript injection points.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt02Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>  <textarea asp-for="Clnt.Clnt02Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt2Modal">
                             <i class="fas fa-eye"></i>
@@ -68,14 +61,9 @@
                     <td>- Identify HTML injection points and assess the severity of the injected content.</td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt03Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Clnt.Clnt03Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt3Modal">
                             <i class="fas fa-eye"></i>
@@ -90,14 +78,9 @@
                         <p>- Assess the locations that the system could redirect to.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt04Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Clnt.Clnt04Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt4Modal">
                             <i class="fas fa-eye"></i>
@@ -112,14 +95,9 @@
                         <p>- Assess the impact of the injection.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt05Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Clnt.Clnt05Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt5Modal">
                             <i class="fas fa-eye"></i>
@@ -134,14 +112,9 @@
                         <p>- Assess the impact of the resource manipulation.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt06Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Clnt.Clnt06Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt6Modal">
                             <i class="fas fa-eye"></i>
@@ -156,14 +129,9 @@
                         <p>- Ensure that the CORS configuration is secure or harmless.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt07Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>  <textarea asp-for="Clnt.Clnt07Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt7Modal">
                             <i class="fas fa-eye"></i>
@@ -178,14 +146,9 @@
                         <p>- Assess sinks inputs and unsafe method usages.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt08Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>  <textarea asp-for="Clnt.Clnt08Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt8Modal">
                             <i class="fas fa-eye"></i>
@@ -200,14 +163,9 @@
                         <p>- Assess how strict the security measures are and if they are bypassable.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt09Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>  <textarea asp-for="Clnt.Clnt09Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt9Modal">
                             <i class="fas fa-eye"></i>
@@ -222,14 +180,9 @@
                         <p>- Assess its implementation by using the same tests on normal HTTP channels.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt10Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td>  <textarea asp-for="Clnt.Clnt10Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt10Modal">
                             <i class="fas fa-eye"></i>
@@ -244,14 +197,9 @@
                         <p>- Validate that it's using safe methods and validating its input.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt11Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Clnt.Clnt11Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt11Modal">
                             <i class="fas fa-eye"></i>
@@ -266,14 +214,9 @@
                         <p>- The code handling of the storage objects should be examined for possibilities of injection attacks, such as utilizing unvalidated input or vulnerable libraries.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt12Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Clnt.Clnt12Note" class="form-control" rows="4"></textarea> </td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt12Modal">
                             <i class="fas fa-eye"></i>
@@ -288,14 +231,9 @@
                         <p>- Assess the leakage of sensitive data through various techniques.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Clnt.Clnt13Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Clnt.Clnt13Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#clnt13Modal">
                             <i class="fas fa-eye"></i>

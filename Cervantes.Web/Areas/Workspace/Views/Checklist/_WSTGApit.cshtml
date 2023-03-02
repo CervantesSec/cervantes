@@ -1,3 +1,4 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
 <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="apitt" width="100%">
                 <thead class="thead-dark">
@@ -27,14 +28,9 @@
                         <p>- Ensure that proper access controls are applied.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Apit.Apit01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td><textarea asp-for="Apit.Apit01Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#apit1Modal">
                             <i class="fas fa-eye"></i>

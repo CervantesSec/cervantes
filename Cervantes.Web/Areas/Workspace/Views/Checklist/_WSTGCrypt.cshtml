@@ -1,3 +1,5 @@
+@model Cervantes.Web.Areas.Workspace.Models.Wstg.WSTGViewModel
+
 <div class="table-responsive-md">
             <table class="table table-bordered table-hover" id="crypt" width="100%">
                 <thead class="thead-dark">
@@ -27,14 +29,9 @@
                         <p>- Ensure that the TLS security is not bypassable and is properly implemented across the application.</p></td>
                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Cryp.Cryp01Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Cryp.Cryp01Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#cryp1Modal">
                             <i class="fas fa-eye"></i>
@@ -50,14 +47,9 @@
                         <p>- Attempt to break the padding of the encrypted messages and analyze the returned error messages for further analysis.</p></td>
                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Cryp.Cryp02Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Cryp.Cryp02Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#cryp2Modal">
                             <i class="fas fa-eye"></i>
@@ -73,14 +65,9 @@
                         <p>- Assess the privacy and security of the channels used.</p></td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                       @Html.DropDownListFor(model => model.Cryp.Cryp03Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Cryp.Cryp03Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#cryp3Modal">
                             <i class="fas fa-eye"></i>
@@ -95,14 +82,9 @@
                     <td>- Provide a guideline for the identification weak encryption or hashing uses and implementations.</td>
                                                                     
                     <td>
-                        <select class="form-control">
-                            <option value="0">Not Started</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Issues</option>
-                            <option value="3">N/A</option>
-                        </select>
+                        @Html.DropDownListFor(model => model.Cryp.Cryp04Status, Html.GetEnumSelectList<Cervantes.CORE.WSTGStatus>(), new {@class = "form-control"})
                     </td>
-                    <td>    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> </td>
+                    <td> <textarea asp-for="Cryp.Cryp04Note" class="form-control" rows="4"></textarea></td>
                     <td>
                         <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#cryp4Modal">
                             <i class="fas fa-eye"></i>

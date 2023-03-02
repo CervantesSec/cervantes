@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-tasks"></i> OWASP WSTG Checklist</h1>
+                <h1 localize-content><i class="fas fa-list-ol"></i> OWASP WSTG Checklist</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -103,11 +103,12 @@
 
             </ul>
         </div>
-        <form asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" method="post" asp-route-project="@Model.Project.Id" enctype="multipart/form-data">
+        <form asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" method="post" asp-route-project="@Model.Project.Id" asp-route-id="@Model.TargetId" enctype="multipart/form-data">
         <div class="card-body">
             <div class="tab-content">
                 
                 <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" asp-for="TargetId">
 
                 <div class="active tab-pane" id="info">
                     <partial name="_WSTGInfo" model="Model"/>
@@ -159,7 +160,7 @@
         </div>
         <div class="form-group">
                         <a class="btn btn-default" asp-area="Workspace" asp-controller="Checklist" asp-action="Index" localize-content>Back</a>
-                        <button type="submit" class="btn btn-dark" localize-content>Create</button>
+                        <button type="submit" class="btn btn-dark" localize-content><i class="fas fa-save"></i> <span>Save</span></button>
         
                     </div>
         </form>

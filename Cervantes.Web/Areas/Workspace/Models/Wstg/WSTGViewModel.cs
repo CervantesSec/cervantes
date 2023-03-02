@@ -22,4 +22,9 @@ public class WSTGViewModel
     public WSTGAthz Athz { get; set; }
     public WSTGSess Sess { get; set; }
     public WSTGInpv Inpv { get; set; }
+    public WSTGApit Apit { get; set; }
+    public WSTGErrh Errh { get; set; }
+    public WSTGCryp Cryp { get; set; }
+    public WSTGBusl Busl { get; set; }
+    public WSTGClnt Clnt { get; set; }
 }
