@@ -1,0 +1,182 @@
+@model Cervantes.Web.Areas.Workspace.Models.MASTG.MASTGViewModel
+
+@using Cervantes.CORE
+@{
+    ViewData["Title"] = "OWASP MASTG Checklist";
+}
+
+<section class="content-header" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-list-ol"></i> OWASP MASTG Checklist</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspaces</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Checklist" asp-action="Index" localize-content>Checklist</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>OWASP MASTG</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="card card-dark card-tabs">
+        <div class="card-header p-0 pt-1">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#arch" data-toggle="pill">
+                        <i class="fas fa-sitemap"></i> <span localize-content>Architecture, Design and Threat Modeling </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#storage" data-toggle="pill">
+                        <i class="fas fa-hdd"></i> <span localize-content>Data Storage and Privacy</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#crypto" data-toggle="pill">
+                        <i class="fas fa-key"></i> <span localize-content>Cryptography</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#auth" data-toggle="pill">
+                        <i class="fas fa-user"></i> <span localize-content>Authentication and Session Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#network" data-toggle="pill">
+                        <i class="fas fa-wifi"></i> <span localize-content>Network</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#platform" data-toggle="pill">
+                        <i class="fas fa-network-wired"></i> <span localize-content>Platform Interaction</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#code" data-toggle="pill">
+                        <i class="fas fa-code"></i> <span localize-content>Code Quality and Build Setting</span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#resilience" data-toggle="pill">
+                        <i class="fas fa-shield-alt"></i> <span localize-content>Resilience</span>
+                    </a>
+                </li>
+
+                
+            </ul>
+        </div>
+        <form asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" method="post" asp-route-project="@Model.Project.Id" asp-route-id="@Model.TargetId" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="tab-content">
+                
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input type="hidden" asp-for="TargetId">
+
+                    <div class="active tab-pane" id="arch">
+                        <partial name="_MASTGArch" model="Model"/>
+                    </div>
+                    <div class="tab-pane" id="storage">
+                        <partial name="_MASTGStorage" model="Model"/>
+
+                    </div>
+
+                    <div class="tab-pane" id="crypto">
+                        <partial name="_MASTGCrypto" model="Model"/>
+
+                    </div>
+
+                    <div class="tab-pane" id="auth">
+                        <partial name="_MASTGAuth" model="Model"/>
+                    </div>
+                    <div class="tab-pane" id="network">
+                        <partial name="_MASTGNetwork" model="Model"/>
+
+                    </div>
+                    <div class="tab-pane" id="platform">
+                        <partial name="_MASTGPlatform" model="Model"/>
+
+                    </div>
+                    <div class="tab-pane" id="code">
+                        <partial name="_MASTGCode" model="Model"/>
+                    </div>
+                    <div class="tab-pane" id="resilience">
+                        <partial name="_MASTGResilience" model="Model"/>
+                    </div>
+
+
+                </div>
+        
+            </div>
+            <div class="form-group">
+                <a class="btn btn-default" asp-area="Workspace" asp-controller="Checklist" asp-action="Index" localize-content>Back</a>
+                <button type="submit" class="btn btn-dark" localize-content><i class="fas fa-save"></i> <span>Save</span></button>
+        
+            </div>
+        </form>
+        
+        <blockquote class="quote-secondary">
+            <p>L1 - Standard Security</p>
+            <p>L2 - Defense-in-Depth</p>
+            <p>R - Resilience Against Reverse Engineering and Tampering</p>
+        </blockquote>
+        
+    </div>
+
+    <div class="text-center">
+        <a href="https://mas.owasp.org/" target="_blank">Based on OWASP MASTG v1.5.0 & OWASP MASVS 1.4.2</a>
+    </div>
+
+</section>
+
+@section Scripts{
+    <script>
+
+    $(document).ready(function () {
+        $('#archt').DataTable({
+            "responsive": true
+        });
+        $('#storaget').DataTable({
+                            "responsive": true
+                        });
+                $('#cryptot').DataTable({
+                            "responsive": true
+                        });
+                $('#autht').DataTable({
+                            "responsive": true
+                        });
+                $('#networkt').DataTable({
+                            "responsive": true
+                        });
+                $('#platformt').DataTable({
+                            "responsive": true
+                        });
+                $('#codet').DataTable({
+                            "responsive": true
+                        });
+                $('#resiliencet').DataTable({
+                            "responsive": true
+                        });
+               
+                $('.dataTables_length').addClass('bs-select');
+    });
+
+
+</script>
+}

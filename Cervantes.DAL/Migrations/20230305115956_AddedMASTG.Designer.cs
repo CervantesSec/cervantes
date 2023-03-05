@@ -3,6 +3,7 @@ using System;
 using Cervantes.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cervantes.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230305115956_AddedMASTG")]
+    partial class AddedMASTG
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -670,72 +672,6 @@ namespace Cervantes.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("NetworkStatus17")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("PlatformNote01")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote02")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote03")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote04")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote05")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote06")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote07")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote08")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote09")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote10")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlatformNote11")
-                        .HasColumnType("text");
-
-                    b.Property<int>("PlatformStatus01")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus02")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus03")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus04")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus05")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus06")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus07")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus08")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus09")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus10")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlatformStatus11")
                         .HasColumnType("integer");
 
                     b.Property<Guid>("ProjectId")

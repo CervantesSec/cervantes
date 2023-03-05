@@ -1,0 +1,111 @@
+@model Cervantes.Web.Areas.Workspace.Models.MASTG.MASTGViewModel
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="cryptot" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-id-badge"></i>MASVS-ID</th>
+                    <th><i class="fas fa-search"></i> Details</th>
+                    <th><i class="fas fa-bug"></i> L1</th>
+                    
+                    <th><i class="fas fa-dungeon"></i> L2</th>
+                    <th><i class="fas fa-shield-alt"></i> R</th>
+                    <th><i class="fas fa-mobile"></i> Common</th>
+                    <th><i class="fab fa-android"></i> Android</th>
+                    <th><i class="fab fa-apple"></i> iOS</th>
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    <th><i class="fas fa-sticky-note"></i> Note</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>MSTG-CRYPTO-01</td>
+                    <td>The app does not rely on symmetric cryptography with hardcoded keys as a sole method of encryption.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Crypto.CryptoStatus01, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Crypto.CryptoNote01" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CRYPTO-02</td>
+                    <td>The app uses proven implementations of cryptographic primitives.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Crypto.CryptoStatus02, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Crypto.CryptoNote02" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CRYPTO-03</td>
+                    <td>The app uses cryptographic primitives that are appropriate for the particular use-case, configured with parameters that adhere to industry best practices.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Crypto.CryptoStatus03, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Crypto.CryptoNote03" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CRYPTO-04</td>
+                    <td>The app does not use cryptographic protocols or algorithms that are widely considered deprecated for security purposes.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Crypto.CryptoStatus04, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Crypto.CryptoNote04" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CRYPTO-05</td>
+                    <td>The app doesn't re-use the same cryptographic key for multiple purposes.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Crypto.CryptoStatus05, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Crypto.CryptoNote05" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CRYPTO-06</td>
+                    <td>All random values are generated using a sufficiently secure random number generator.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Crypto.CryptoStatus06, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Crypto.CryptoNote06" class="form-control" rows="4"></textarea></td>
+                </tr>
+                
+                
+                
+                </tbody>
+            </table>
+        </div>
+

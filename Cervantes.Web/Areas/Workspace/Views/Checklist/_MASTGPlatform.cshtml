@@ -1,0 +1,180 @@
+@model Cervantes.Web.Areas.Workspace.Models.MASTG.MASTGViewModel
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="platformt" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-id-badge"></i>MASVS-ID</th>
+                    <th><i class="fas fa-search"></i> Details</th>
+                    <th><i class="fas fa-bug"></i> L1</th>
+                    
+                    <th><i class="fas fa-dungeon"></i> L2</th>
+                    <th><i class="fas fa-shield-alt"></i> R</th>
+                    <th><i class="fas fa-mobile"></i> Common</th>
+                    <th><i class="fab fa-android"></i> Android</th>
+                    <th><i class="fab fa-apple"></i> iOS</th>
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    <th><i class="fas fa-sticky-note"></i> Note</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>MSTG-PLATFORM-01</td>
+                    <td>The app only requests the minimum set of permissions necessary.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus01, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote01" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-02</td>
+                    <td>All inputs from external sources and the user are validated and if necessary sanitized. This includes data received via the UI, IPC mechanisms such as intents, custom URLs, and network sources.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus02, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote02" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-03</td>
+                    <td>The app does not export sensitive functionality via custom URL schemes, unless these mechanisms are properly protected.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus03, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote03" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-04</td>
+                    <td>The app does not export sensitive functionality through IPC facilities, unless these mechanisms are properly protected.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus04, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote04" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-05</td>
+                    <td>JavaScript is disabled in WebViews unless explicitly required.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus05, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote05" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-06</td>
+                    <td>WebViews are configured to allow only the minimum set of protocol handlers required (ideally, only https is supported). Potentially dangerous handlers, such as file, tel and app-id, are disabled.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus06, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote06" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-07</td>
+                    <td>If native methods of the app are exposed to a WebView, verify that the WebView only renders JavaScript contained within the app package.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus07, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote07" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-08</td>
+                    <td>Object deserialization, if any, is implemented using safe serialization APIs.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus08, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote08" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-09</td>
+                    <td>The app protects itself against screen overlay attacks. (Android only)</td>
+                    <td></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus09, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote09" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-10</td>
+                    <td>A WebView's cache, storage, and loaded resources (JavaScript, etc.) should be cleared before the WebView is destroyed.</td>
+                    <td></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus10, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote10" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-PLATFORM-11</td>
+                    <td>Verify that the app prevents usage of custom third-party keyboards whenever sensitive data is entered (iOS only).</td>
+                    <td></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Platform.PlatformStatus11, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Platform.PlatformNote11" class="form-control" rows="4"></textarea></td>
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
+

@@ -1,0 +1,209 @@
+@model Cervantes.Web.Areas.Workspace.Models.MASTG.MASTGViewModel
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="resiliencet" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-id-badge"></i>MASVS-ID</th>
+                    <th><i class="fas fa-search"></i> Details</th>
+                    <th><i class="fas fa-bug"></i> L1</th>
+                    
+                    <th><i class="fas fa-dungeon"></i> L2</th>
+                    <th><i class="fas fa-shield-alt"></i> R</th>
+                    <th><i class="fas fa-mobile"></i> Common</th>
+                    <th><i class="fab fa-android"></i> Android</th>
+                    <th><i class="fab fa-apple"></i> iOS</th>
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    <th><i class="fas fa-sticky-note"></i> Note</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>MSTG-RESILIENCE-01</td>
+                    <td>The app detects, and responds to, the presence of a rooted or jailbroken device either by alerting the user or terminating the app.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus01, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote01" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-02</td>
+                    <td>The app prevents debugging and/or detects, and responds to, a debugger being attached. All available debugging protocols must be covered.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus02, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote02" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-03</td>
+                    <td>The app detects, and responds to, tampering with executable files and critical data within its own sandbox.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus03, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote03" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-04</td>
+                    <td>The app detects, and responds to, the presence of widely used reverse engineering tools and frameworks on the device.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus04, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote04" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-05</td>
+                    <td>The app detects, and responds to, being run in an emulator.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus05, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote05" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-06</td>
+                    <td>The app detects, and responds to, tampering the code and data in its own memory space.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus06, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote06" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-07</td>
+                    <td>The app implements multiple mechanisms in each defense category (8.1 to 8.6). Note that resiliency scales with the amount, diversity of the originality of the mechanisms used.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus07, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote07" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-08</td>
+                    <td>The detection mechanisms trigger responses of different types, including delayed and stealthy responses.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus08, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote08" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-09</td>
+                    <td>Obfuscation is applied to programmatic defenses, which in turn impede de-obfuscation via dynamic analysis.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus09, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote09" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-10</td>
+                    <td>The app implements a 'device binding' functionality using a device fingerprint derived from multiple properties unique to the device.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus10, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote10" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-11</td>
+                    <td>All executable files and libraries belonging to the app are either encrypted on the file level and/or important code and data segments inside the executables are encrypted or packed. Trivial static analysis does not reveal important code or data.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus11, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote11" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-12</td>
+                    <td>If the goal of obfuscation is to protect sensitive computations, an obfuscation scheme is used that is both appropriate for the particular task and robust against manual and automated de-obfuscation methods, considering currently published research. The effectiveness of the obfuscation scheme must be verified through manual testing. Note that hardware-based isolation features are preferred over obfuscation whenever possible.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus12, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote12" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-RESILIENCE-13</td>
+                    <td>As a defense in depth, next to having solid hardening of the communicating parties, application level payload encryption can be applied to further impede eavesdropping.</td>
+                    <td></td>
+                    <td></td>
+                    <td class="bg-warning"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Resilience.ResilienceStatus13, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Resilience.ResilienceNote13" class="form-control" rows="4"></textarea></td>
+                </tr>
+                
+                
+                </tbody>
+            </table>
+        </div>
+
+

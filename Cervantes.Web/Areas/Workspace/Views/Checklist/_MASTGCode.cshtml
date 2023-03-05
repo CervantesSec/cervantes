@@ -1,0 +1,152 @@
+@model Cervantes.Web.Areas.Workspace.Models.MASTG.MASTGViewModel
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="codet" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-id-badge"></i>MASVS-ID</th>
+                    <th><i class="fas fa-search"></i> Details</th>
+                    <th><i class="fas fa-bug"></i> L1</th>
+                    
+                    <th><i class="fas fa-dungeon"></i> L2</th>
+                    <th><i class="fas fa-shield-alt"></i> R</th>
+                    <th><i class="fas fa-mobile"></i> Common</th>
+                    <th><i class="fab fa-android"></i> Android</th>
+                    <th><i class="fab fa-apple"></i> iOS</th>
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    <th><i class="fas fa-sticky-note"></i> Note</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>MSTG-CODE-01</td>
+                    <td>The app is signed and provisioned with a valid certificate, of which the private key is properly protected.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus01, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote01" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CODE-02</td>
+                    <td>The app has been built in release mode, with settings appropriate for a release build (e.g. non-debuggable).</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus02, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote02" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CODE-03</td>
+                    <td>Debugging symbols have been removed from native binaries.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus03, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote03" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CODE-04</td>
+                    <td>Debugging code and developer assistance code (e.g. test code, backdoors, hidden settings) have been removed. The app does not log verbose errors or debugging messages.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus04, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote04" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CODE-05</td>
+                    <td>All third party components used by the mobile app, such as libraries and frameworks, are identified, and checked for known vulnerabilities.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus05, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote05" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CODE-06</td>
+                    <td>The app catches and handles possible exceptions.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus06, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote06" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CODE-07</td>
+                    <td>Error handling logic in security controls denies access by default.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus07, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote07" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CODE-08</td>
+                    <td>In unmanaged code, memory is allocated, freed and used securely.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus08, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote08" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-CODE-09</td>
+                    <td>Free security features offered by the toolchain, such as byte-code minification, stack protection, PIE support and automatic reference counting, are activated.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Code.CodeStatus09, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Code.CodeNote09" class="form-control" rows="4"></textarea></td>
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
+

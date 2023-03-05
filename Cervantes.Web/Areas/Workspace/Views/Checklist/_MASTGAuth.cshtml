@@ -1,0 +1,195 @@
+@model Cervantes.Web.Areas.Workspace.Models.MASTG.MASTGViewModel
+<div class="table-responsive-md">
+            <table class="table table-bordered table-hover" id="autht" width="100%">
+                <thead class="thead-dark">
+                <tr>
+                    <th><i class="fas fa-id-badge"></i>MASVS-ID</th>
+                    <th><i class="fas fa-search"></i> Details</th>
+                    <th><i class="fas fa-bug"></i> L1</th>
+                    
+                    <th><i class="fas fa-dungeon"></i> L2</th>
+                    <th><i class="fas fa-shield-alt"></i> R</th>
+                    <th><i class="fas fa-mobile"></i> Common</th>
+                    <th><i class="fab fa-android"></i> Android</th>
+                    <th><i class="fab fa-apple"></i> iOS</th>
+                    <th><i class="fas fa-project-diagram"></i> Status</th>
+                    <th><i class="fas fa-sticky-note"></i> Note</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>MSTG-AUTH-01</td>
+                    <td>If the app provides users access to a remote service, some form of authentication, such as username/password authentication, is performed at the remote endpoint.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus01, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote01" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-02</td>
+                    <td>If stateful session management is used, the remote endpoint uses randomly generated session identifiers to authenticate client requests without sending the user's credentials.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus02, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote02" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-03</td>
+                    <td>If stateless token-based authentication is used, the server provides a token that has been signed using a secure algorithm.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus03, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote03" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-04</td>
+                    <td>The remote endpoint terminates the existing session when the user logs out.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus04, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote04" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-05</td>
+                    <td>A password policy exists and is enforced at the remote endpoint.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus05, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote05" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-06</td>
+                    <td>The remote endpoint implements a mechanism to protect against the submission of credentials an excessive number of times.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus06, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote06" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-07</td>
+                    <td>Sessions are invalidated at the remote endpoint after a predefined period of inactivity and access tokens expire.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus07, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote07" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-08</td>
+                    <td>Biometric authentication, if any, is not event-bound (i.e. using an API that simply returns "true" or "false"). Instead, it is based on unlocking the keychain/keystore.</td>
+                    <td></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus08, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote08" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-09</td>
+                    <td>A second factor of authentication exists at the remote endpoint and the 2FA requirement is consistently enforced.</td>
+                    <td></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus09, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote09" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-10</td>
+                    <td>Sensitive transactions require step-up authentication.</td>
+                    <td></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus10, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote10" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-11</td>
+                    <td>The app informs the user of all sensitive activities with their account. Users are able to view a list of devices, view contextual information (IP address, location, etc.), and to block specific devices.</td>
+                    <td></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus11, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote11" class="form-control" rows="4"></textarea></td>
+                </tr>
+                <tr>
+                    <td>MSTG-AUTH-12</td>
+                    <td>Authorization models should be defined and enforced at the remote endpoint.</td>
+                    <td class="bg-info"></td>
+                    <td class="bg-success"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Auth.AuthStatus12, Html.GetEnumSelectList<Cervantes.CORE.MASTGStatus>(), new {@class = "form-control"})
+                    </td>
+                    <td><textarea asp-for="Auth.AuthNote12" class="form-control" rows="4"></textarea></td>
+                </tr>
+                
+                
+                </tbody>
+            </table>
+        </div>
+
+

@@ -10,16 +10,16 @@
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Target deleted successfully!</strong>
+            <strong localize-content>Checklist deleted successfully!</strong>
 
         </div>
     }
 
-    if (TempData["addedTarget"] != null)
+    if (TempData["addedCheck"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Target created successfully!</strong>
+            <strong localize-content>Checklist created successfully!</strong>
 
         </div>
     }
@@ -27,11 +27,11 @@
     if (TempData["edited"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Target edited successfully!</strong>
+            <strong localize-content>Checklist saved successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-    
+
 }
 
 <!-- Content Header (Page header) -->
@@ -93,25 +93,45 @@
                 <!--Table head-->
                 <!--Table body-->
                 <tbody>
-                    @foreach (var check in Model.WSTG)
-                    {
-                        <tr>
-                            <td>@check.Target.Name</td>
-                            <td>OWASP WSTG</td>
-                            <td>@check.CreatedDate.ToShortDateString()</td>
-                            <td>@check.User.FullName</td>
-                            <td>
-                                <a asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" class="btn btn-tool">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-tool" asp-area="Workspace" asp-controller="Target" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" localize-content>
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                            
-                        </tr>
-                    }
-                
+                @foreach (var check in Model.WSTG)
+                {
+                    <tr>
+                        <td>@check.Target.Name</td>
+                        <td>OWASP WSTG</td>
+                        <td>@check.CreatedDate.ToShortDateString()</td>
+                        <td>@check.User.FullName</td>
+                        <td>
+                            <a asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" class="btn btn-tool">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a class="btn btn-tool" asp-area="Workspace" asp-controller="Checklist" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@check.Id" asp-route-type="OWASPWSTG" localize-content>
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+                @foreach (var check in Model.MASTG)
+                {
+                    <tr>
+                        <td>@check.Target.Name</td>
+                        <td>OWASP MASTG</td>
+                        <td>@check.CreatedDate.ToShortDateString()</td>
+                        <td>@check.User.FullName</td>
+                        <td>
+                            @*<a asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" class="btn btn-tool">
+                                <i class="fas fa-eye"></i>
+                            </a>*@
+                            <a class="btn btn-tool" asp-area="Workspace" asp-controller="Checklist" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@check.Id" asp-route-type="OWASPMASVS" localize-content>
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+
+
+
 
                 </tbody>
                 <!--Table body-->
@@ -122,7 +142,7 @@
         </div>
     </div>
     <a asp-area="Workspace" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
-        <a asp-area="Workspace" asp-controller="Checklist" asp-action="Create" class="btn btn-dark"><i class="fas fa-tasks"></i> Create</a>
+    <a asp-area="Workspace" asp-controller="Checklist" asp-action="Create" class="btn btn-dark"><i class="fas fa-tasks"></i> Create</a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->

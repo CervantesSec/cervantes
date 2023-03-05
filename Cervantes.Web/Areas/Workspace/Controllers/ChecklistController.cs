@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.Web.Areas.Workspace.Models;
+using Cervantes.Web.Areas.Workspace.Models.MASTG;
 using Cervantes.Web.Areas.Workspace.Models.Wstg;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,15 +25,18 @@ public class ChecklistController : Controller
     private IProjectUserManager projectUserManager = null;
     private ITargetManager targetManager = null;
     private IWSTGManager wstgManager = null;
+    private IMASTGManager mastgManager = null;
     
     public ChecklistController(IProjectManager projectManager, 
-        IProjectUserManager projectUserManager, ITargetManager targetManager, ILogger<ChecklistController> logger, IWSTGManager wstgManager)
+        IProjectUserManager projectUserManager, ITargetManager targetManager, ILogger<ChecklistController> logger, IWSTGManager wstgManager,
+        IMASTGManager mastgManager)
     {
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
         this.targetManager = targetManager;
         _logger = logger;
         this.wstgManager = wstgManager;
+        this.mastgManager = mastgManager;
     }
     // GET
     public IActionResult Index(Guid project)
@@ -47,6 +51,7 @@ public class ChecklistController : Controller
         ChecklistViewModel model = new ChecklistViewModel
         {
             WSTG = wstgManager.GetAll().Where(x => x.ProjectId == project).ToList(),
+            MASTG = mastgManager.GetAll().Where(x => x.ProjectId == project).ToList(),
             Project = projectManager.GetById(project)
 
         };
@@ -223,16 +228,16 @@ public class ChecklistController : Controller
             };
             WSTGIdnt idnt = new WSTGIdnt
             {
-                Idnt1Note = wstg.Info01Note,
-                Idnt2Note = wstg.Info02Note,
-                Idnt3Note = wstg.Info03Note,
-                Idnt4Note = wstg.Info04Note,
-                Idnt5Note = wstg.Info05Note,
-                Idnt1Status = wstg.Info01Status,
-                Idnt2Status = wstg.Info02Status,
-                Idnt3Status = wstg.Info03Status,
-                Idnt4Status = wstg.Info04Status,
-                Idnt5Status = wstg.Info05Status
+                Idnt1Note = wstg.Idnt1Note,
+                Idnt2Note = wstg.Idnt2Note,
+                Idnt3Note = wstg.Idnt3Note,
+                Idnt4Note = wstg.Idnt4Note,
+                Idnt5Note = wstg.Idnt5Note,
+                Idnt1Status = wstg.Idnt1Status,
+                Idnt2Status = wstg.Idnt2Status,
+                Idnt3Status = wstg.Idnt3Status,
+                Idnt4Status = wstg.Idnt4Status,
+                Idnt5Status = wstg.Idnt5Status
             };
             WSTGInpv inpv = new WSTGInpv
             {
@@ -322,7 +327,7 @@ public class ChecklistController : Controller
             TempData["error"] = "Error loading wstg!";
             _logger.LogError(e, "An error ocurred loading Checklist Workspace WSTG form.Project: {0} User: {1} Checklist: {2}", project,
                 User.FindFirstValue(ClaimTypes.Name), id);
-            return View();
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -547,7 +552,10 @@ public class ChecklistController : Controller
             result.Sess09Status = model.Sess.Sess09Status;
 
             wstgManager.Context.SaveChanges();
+            TempData["edited"] = "Checklist edited successfully!";
 
+            _logger.LogInformation("User: {0} edited Checklist: {1} on Project: {2}", User.FindFirstValue(ClaimTypes.Name), result.Id,
+                project);
             return RedirectToAction("Index");
         }
         catch (Exception e)
@@ -555,22 +563,24 @@ public class ChecklistController : Controller
             TempData["error"] = "Error loading wstg!";
             _logger.LogError(e, "An error ocurred loading Checlist Workspace WSTG form. Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction(nameof(Index));
         }
         
     }
 
     public IActionResult Create(Guid project)
     {
-        var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
-        if (user == null)
-        {
-            TempData["userProject"] = "User is not in the project";
-            return RedirectToAction("Index", "Workspaces",new {area =""});
-        }
-
         try
         {
+            
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+
+        
             var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
             {
                 TargetId = e.Id,
@@ -595,7 +605,7 @@ public class ChecklistController : Controller
             TempData["error"] = "Error loading create form!";
             _logger.LogError(e, "An error ocurred loading Checklist Workspace create form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction(nameof(Index));
         }
     }
     
@@ -636,9 +646,22 @@ public class ChecklistController : Controller
                     _logger.LogInformation("User: {0} added a new checklist on Project: {1}", User.FindFirstValue(ClaimTypes.Name),
                         project);
                     return RedirectToAction(nameof(Index));
-                    break;
                 case ChecklistType.OWASPMASVS:
-                    break;
+                    MASTG mstg = new MASTG
+                    {
+                        TargetId = model.TargetId,
+                        UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        ProjectId = project,
+                        CreatedDate = DateTime.Now.ToUniversalTime()
+
+                    };
+                    mastgManager.Add(mstg);
+                    mastgManager.Context.SaveChanges();
+                    TempData["addedCheck"] = "Checklist added successfully!";
+
+                    _logger.LogInformation("User: {0} added a new checklist on Project: {1}", User.FindFirstValue(ClaimTypes.Name),
+                        project);
+                    return RedirectToAction(nameof(Index));
             }
 
             return RedirectToAction(nameof(Index));
@@ -648,7 +671,133 @@ public class ChecklistController : Controller
             TempData["error"] = "Error loading create form!";
             _logger.LogError(e, "An error ocurred loading Checklist Workspace create form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    public IActionResult Delete(Guid project, Guid id, ChecklistType type)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+
+            switch (type)
+            {
+                case ChecklistType.OWASPWSTG:
+                    var result = wstgManager.GetById(id);
+                    if (result != null)
+                    {
+                        var model = new ChecklistDeleteViewModel
+                        {
+                            Project = projectManager.GetById(project),
+                            Type = ChecklistType.OWASPWSTG,
+                            Wstg = result
+                        };
+                        return View(model);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    
+                case ChecklistType.OWASPMASVS:
+                    var result2 = mastgManager.GetById(id);
+                    if (result2 != null)
+                    {
+                        var model = new ChecklistDeleteViewModel
+                        {
+                            Project = projectManager.GetById(project),
+                            Type = ChecklistType.OWASPMASVS,
+                            Mastg = result2
+                        };
+                        return View(model);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+            }
+
+            return RedirectToAction(nameof(Index));
+            
+        }
+        catch (Exception e)
+        {
+            TempData["error"] = "Error loading create form!";
+            _logger.LogError(e, "An error ocurred loading Checklist Workspace delete form.Project: {0} User: {1}", project,
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Delete(Guid project, ChecklistDeleteViewModel model)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+
+            switch (model.Type)
+            {
+                case ChecklistType.OWASPWSTG:
+                    var result = wstgManager.GetById(model.Wstg.Id);
+                    wstgManager.Remove(result);
+                    wstgManager.Context.SaveChanges();
+                    TempData["deleted"] = "Checklist deleted!";
+                    _logger.LogInformation("A Checklist has been deleted.Project: {0} User: {1} Checklist: {2}", project,
+                        User.FindFirstValue(ClaimTypes.Name), result.Id);
+                    
+                    return RedirectToAction(nameof(Index));
+                case ChecklistType.OWASPMASVS:
+                    return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+            
+        }
+        catch (Exception e)
+        {
+            TempData["error"] = "Error loading create form!";
+            _logger.LogError(e, "An error ocurred loading Checklist Workspace delete form.Project: {0} User: {1}", project,
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    public IActionResult Mastg(Guid project)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces", new {area = ""});
+            }
+
+            MASTGViewModel model = new MASTGViewModel
+            {
+                Project = projectManager.GetById(project),
+            };
+            return View(model);
+        }
+        catch (Exception e)
+        {
+            TempData["error"] = "Error loading create form!";
+            _logger.LogError(e, "An error ocurred loading Checklist Workspace MASTG form.Project: {0} User: {1}", project,
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction(nameof(Index));
         }
     }
 }

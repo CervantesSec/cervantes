@@ -6,6 +6,6 @@ public enum ChecklistType
 {
     [Display(Name="OWASP WSTG")]
     OWASPWSTG = 0,
-    [Display(Name="OWASP MASVS")]
+    [Display(Name="OWASP MASTG")]
     OWASPMASVS = 1
 }
