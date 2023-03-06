@@ -119,9 +119,9 @@
                         <td>@check.CreatedDate.ToShortDateString()</td>
                         <td>@check.User.FullName</td>
                         <td>
-                            @*<a asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" class="btn btn-tool">
+                            <a asp-area="Workspace" asp-controller="Checklist" asp-action="Mastg" asp-route-project="@Model.Project.Id" asp-route-id="@check.TargetId" class="btn btn-tool">
                                 <i class="fas fa-eye"></i>
-                            </a>*@
+                            </a>
                             <a class="btn btn-tool" asp-area="Workspace" asp-controller="Checklist" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@check.Id" asp-route-type="OWASPMASVS" localize-content>
                                 <i class="fas fa-trash"></i>
                             </a>

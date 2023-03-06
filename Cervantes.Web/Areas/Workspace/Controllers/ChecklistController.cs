@@ -775,7 +775,7 @@ public class ChecklistController : Controller
         }
     }
 
-    public IActionResult Mastg(Guid project)
+    public IActionResult Mastg(Guid project, Guid id)
     {
         try
         {
@@ -785,10 +785,220 @@ public class ChecklistController : Controller
                 TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces", new {area = ""});
             }
+            var mastg = mastgManager.GetTargetId(project, id);
+
+            MASTGArch arch = new MASTGArch
+            {
+                ArchNote01 = mastg.ArchNote01,
+                ArchNote02 = mastg.ArchNote02,
+                ArchNote03 = mastg.ArchNote03,
+                ArchNote04 = mastg.ArchNote04,
+                ArchNote05 = mastg.ArchNote05,
+                ArchNote06 = mastg.ArchNote06,
+                ArchNote07 = mastg.ArchNote07,
+                ArchNote08 = mastg.ArchNote08,
+                ArchNote09 = mastg.ArchNote09,
+                ArchNote10 = mastg.ArchNote10,
+                ArchNote11 = mastg.ArchNote11,
+                ArchNote12 = mastg.ArchNote12,
+                ArchStatus01 = mastg.ArchStatus01,
+                ArchStatus02 = mastg.ArchStatus02,
+                ArchStatus03 = mastg.ArchStatus03,
+                ArchStatus04 = mastg.ArchStatus04,
+                ArchStatus05 = mastg.ArchStatus05,
+                ArchStatus06 = mastg.ArchStatus06,
+                ArchStatus07 = mastg.ArchStatus07,
+                ArchStatus08 = mastg.ArchStatus08,
+                ArchStatus09 = mastg.ArchStatus09,
+                ArchStatus10 = mastg.ArchStatus10,
+                ArchStatus11 = mastg.ArchStatus11,
+                ArchStatus12 = mastg.ArchStatus12
+            };
+
+            MASTGAuth auth = new MASTGAuth
+            {
+                AuthNote01 = mastg.AuthNote01,
+                AuthNote02 = mastg.AuthNote02,
+                AuthNote03 = mastg.AuthNote03,
+                AuthNote04 = mastg.AuthNote04,
+                AuthNote05 = mastg.AuthNote05,
+                AuthNote06 = mastg.AuthNote06,
+                AuthNote07 = mastg.AuthNote07,
+                AuthNote08 = mastg.AuthNote08,
+                AuthNote09 = mastg.AuthNote09,
+                AuthNote10 = mastg.AuthNote10,
+                AuthNote11 = mastg.AuthNote11,
+                AuthNote12 = mastg.AuthNote12,
+                AuthStatus01 = mastg.AuthStatus01,
+                AuthStatus02 = mastg.AuthStatus02,
+                AuthStatus03 = mastg.AuthStatus03,
+                AuthStatus04 = mastg.AuthStatus04,
+                AuthStatus05 = mastg.AuthStatus05,
+                AuthStatus06 = mastg.AuthStatus06,
+                AuthStatus07 = mastg.AuthStatus07,
+                AuthStatus08 = mastg.AuthStatus08,
+                AuthStatus09 = mastg.AuthStatus09,
+                AuthStatus10 = mastg.AuthStatus10,
+                AuthStatus11 = mastg.AuthStatus11,
+                AuthStatus12 = mastg.AuthStatus12
+            };
+
+            MASTGCode code = new MASTGCode
+            {
+                CodeNote01 = mastg.CodeNote01,
+                CodeNote02 = mastg.CodeNote02,
+                CodeNote03 = mastg.CodeNote03,
+                CodeNote04 = mastg.CodeNote04,
+                CodeNote05 = mastg.CodeNote05,
+                CodeNote06 = mastg.CodeNote06,
+                CodeNote07 = mastg.CodeNote07,
+                CodeNote08 = mastg.CodeNote08,
+                CodeNote09 = mastg.CodeNote09,
+                CodeStatus01 = mastg.CodeStatus01,
+                CodeStatus02 = mastg.CodeStatus02,
+                CodeStatus03 = mastg.CodeStatus03,
+                CodeStatus04 = mastg.CodeStatus04,
+                CodeStatus05 = mastg.CodeStatus05,
+                CodeStatus06 = mastg.CodeStatus06,
+                CodeStatus07 = mastg.CodeStatus07,
+                CodeStatus08 = mastg.CodeStatus08,
+                CodeStatus09 = mastg.CodeStatus09
+            };
+
+            MASTGCrypto crypto = new MASTGCrypto
+            {
+                CryptoNote01 = mastg.CryptoNote01,
+                CryptoNote02 = mastg.CryptoNote02,
+                CryptoNote03 = mastg.CryptoNote03,
+                CryptoNote04 = mastg.CryptoNote04,
+                CryptoNote05 = mastg.CryptoNote05,
+                CryptoNote06 = mastg.CryptoNote06,
+                CryptoStatus01 = mastg.CryptoStatus01,
+                CryptoStatus02 = mastg.CryptoStatus02,
+                CryptoStatus03 = mastg.CryptoStatus03,
+                CryptoStatus04 = mastg.CryptoStatus04,
+                CryptoStatus05 = mastg.CryptoStatus05,
+                CryptoStatus06 = mastg.CryptoStatus06
+            };
+
+            MASTGNetwork network = new MASTGNetwork
+            {
+                NetworkNote01 = mastg.NetworkNote01,
+                NetworkNote02 = mastg.NetworkNote02,
+                NetworkNote03 = mastg.NetworkNote03,
+                NetworkNote04 = mastg.NetworkNote04,
+                NetworkNote05 = mastg.NetworkNote05,
+                NetworkNote06 = mastg.NetworkNote06,
+                NetworkStatus01 = mastg.NetworkStatus01,
+                NetworkStatus02 = mastg.NetworkStatus02,
+                NetworkStatus03 = mastg.NetworkStatus03,
+                NetworkStatus04 = mastg.NetworkStatus04,
+                NetworkStatus05 = mastg.NetworkStatus05,
+                NetworkStatus06 = mastg.NetworkStatus06,
+            };
+            MASTGPlatform platform = new MASTGPlatform
+            {
+                PlatformNote01 = mastg.PlatformNote01,
+                PlatformNote02 = mastg.PlatformNote02,
+                PlatformNote03 = mastg.PlatformNote03,
+                PlatformNote04 = mastg.PlatformNote04,
+                PlatformNote05 = mastg.PlatformNote05,
+                PlatformNote06 = mastg.PlatformNote06,
+                PlatformNote07 = mastg.PlatformNote07,
+                PlatformNote08 = mastg.PlatformNote08,
+                PlatformNote09 = mastg.PlatformNote09,
+                PlatformNote10 = mastg.PlatformNote10,
+                PlatformNote11 = mastg.PlatformNote11,
+                PlatformStatus01 = mastg.PlatformStatus01,
+                PlatformStatus02 = mastg.PlatformStatus02,
+                PlatformStatus03 = mastg.PlatformStatus03,
+                PlatformStatus04 = mastg.PlatformStatus04,
+                PlatformStatus05 = mastg.PlatformStatus05,
+                PlatformStatus06 = mastg.PlatformStatus06,
+                PlatformStatus07 = mastg.PlatformStatus07,
+                PlatformStatus08 = mastg.PlatformStatus08,
+                PlatformStatus09 = mastg.PlatformStatus09,
+                PlatformStatus10 = mastg.PlatformStatus10,
+                PlatformStatus11 = mastg.PlatformStatus11
+            };
+
+            MASTGResilience resilience = new MASTGResilience
+            {
+                ResilienceNote01 = mastg.ResilienceNote01,
+                ResilienceNote02 = mastg.ResilienceNote02,
+                ResilienceNote03 = mastg.ResilienceNote03,
+                ResilienceNote04 = mastg.ResilienceNote04,
+                ResilienceNote05 = mastg.ResilienceNote05,
+                ResilienceNote06 = mastg.ResilienceNote06,
+                ResilienceNote07 = mastg.ResilienceNote07,
+                ResilienceNote08 = mastg.ResilienceNote08,
+                ResilienceNote09 = mastg.ResilienceNote09,
+                ResilienceNote10 = mastg.ResilienceNote10,
+                ResilienceNote11 = mastg.ResilienceNote11,
+                ResilienceNote12 = mastg.ResilienceNote12,
+                ResilienceNote13 = mastg.ResilienceNote13,
+                ResilienceStatus01 = mastg.ResilienceStatus01,
+                ResilienceStatus02 = mastg.ResilienceStatus02,
+                ResilienceStatus03 = mastg.ResilienceStatus03,
+                ResilienceStatus04 = mastg.ResilienceStatus04,
+                ResilienceStatus05 = mastg.ResilienceStatus05,
+                ResilienceStatus06 = mastg.ResilienceStatus06,
+                ResilienceStatus07 = mastg.ResilienceStatus07,
+                ResilienceStatus08 = mastg.ResilienceStatus08,
+                ResilienceStatus09 = mastg.ResilienceStatus09,
+                ResilienceStatus10 = mastg.ResilienceStatus10,
+                ResilienceStatus11 = mastg.ResilienceStatus11,
+                ResilienceStatus12 = mastg.ResilienceStatus12,
+                ResilienceStatus13 = mastg.ResilienceStatus13
+            };
+
+            MASTGStorage storage = new MASTGStorage
+            {
+                StorageNote01 = mastg.StorageNote01,
+                StorageNote02 = mastg.StorageNote02,
+                StorageNote03 = mastg.StorageNote03,
+                StorageNote04 = mastg.StorageNote04,
+                StorageNote05 = mastg.StorageNote05,
+                StorageNote06 = mastg.StorageNote06,
+                StorageNote07 = mastg.StorageNote07,
+                StorageNote08 = mastg.StorageNote08,
+                StorageNote09 = mastg.StorageNote09,
+                StorageNote10 = mastg.StorageNote10,
+                StorageNote11 = mastg.StorageNote11,
+                StorageNote12 = mastg.StorageNote12,
+                StorageNote13 = mastg.StorageNote13,
+                StorageNote14 = mastg.StorageNote14,
+                StorageNote15 = mastg.StorageNote15,
+                StorageStatus01 = mastg.StorageStatus01,
+                StorageStatus02 = mastg.StorageStatus02,
+                StorageStatus03 = mastg.StorageStatus03,
+                StorageStatus04 = mastg.StorageStatus04,
+                StorageStatus05 = mastg.StorageStatus05,
+                StorageStatus06 = mastg.StorageStatus06,
+                StorageStatus07 = mastg.StorageStatus07,
+                StorageStatus08 = mastg.StorageStatus08,
+                StorageStatus09 = mastg.StorageStatus09,
+                StorageStatus10 = mastg.StorageStatus10,
+                StorageStatus11 = mastg.StorageStatus11,
+                StorageStatus12 = mastg.StorageStatus12,
+                StorageStatus13 = mastg.StorageStatus13,
+                StorageStatus14 = mastg.StorageStatus14,
+                StorageStatus15 = mastg.StorageStatus15
+            };
+
 
             MASTGViewModel model = new MASTGViewModel
             {
                 Project = projectManager.GetById(project),
+                Arch = arch,
+                Auth = auth,
+                Code = code,
+                Crypto = crypto,
+                Network = network,
+                Platform = platform,
+                Resilience = resilience,
+                Storage = storage,
+                TargetId = id
             };
             return View(model);
         }
@@ -799,5 +1009,213 @@ public class ChecklistController : Controller
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction(nameof(Index));
         }
+    }
+    
+     [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Mastg(Guid project, MASTGViewModel model)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+
+            var result = mastgManager.GetTargetId(project, model.TargetId);
+            
+            result.ArchNote01 = model.Arch.ArchNote01;
+            result.ArchNote02= model.Arch.ArchNote02;
+            result.ArchNote03= model.Arch.ArchNote03;
+            result.ArchNote04= model.Arch.ArchNote04;
+            result.ArchNote05= model.Arch.ArchNote05;
+            result.ArchNote06= model.Arch.ArchNote06;
+            result.ArchNote07= model.Arch.ArchNote07;
+            result.ArchNote08= model.Arch.ArchNote08;
+            result.ArchNote09= model.Arch.ArchNote09;
+            result.ArchNote10= model.Arch.ArchNote10;
+            result.ArchNote11= model.Arch.ArchNote11;
+            result.ArchNote12= model.Arch.ArchNote12;
+            result.ArchStatus01 = model.Arch.ArchStatus01;
+            result.ArchStatus02= model.Arch.ArchStatus02;
+            result.ArchStatus03= model.Arch.ArchStatus03;
+            result.ArchStatus04= model.Arch.ArchStatus04;
+            result.ArchStatus05= model.Arch.ArchStatus05;
+            result.ArchStatus06= model.Arch.ArchStatus06;
+            result.ArchStatus07= model.Arch.ArchStatus07;
+            result.ArchStatus08= model.Arch.ArchStatus08;
+            result.ArchStatus09= model.Arch.ArchStatus09;
+            result.ArchStatus10= model.Arch.ArchStatus10;
+            result.ArchStatus11= model.Arch.ArchStatus11;
+            result.ArchStatus12= model.Arch.ArchStatus12;
+            
+            result.StorageNote01 = model.Storage.StorageNote01;
+            result.StorageNote02= model.Storage.StorageNote02;
+            result.StorageNote03= model.Storage.StorageNote03;
+            result.StorageNote04= model.Storage.StorageNote04;
+            result.StorageNote05= model.Storage.StorageNote05;
+            result.StorageNote06= model.Storage.StorageNote06;
+            result.StorageNote07= model.Storage.StorageNote07;
+            result.StorageNote08= model.Storage.StorageNote08;
+            result.StorageNote09= model.Storage.StorageNote09;
+            result.StorageNote10= model.Storage.StorageNote10;
+            result.StorageNote11= model.Storage.StorageNote11;
+            result.StorageNote12= model.Storage.StorageNote12;
+            result.StorageNote13= model.Storage.StorageNote13;
+            result.StorageNote14= model.Storage.StorageNote14;
+            result.StorageNote15= model.Storage.StorageNote15;
+            result.StorageStatus01 = model.Storage.StorageStatus01;
+            result.StorageStatus02= model.Storage.StorageStatus02;
+            result.StorageStatus03= model.Storage.StorageStatus03;
+            result.StorageStatus04= model.Storage.StorageStatus04;
+            result.StorageStatus05= model.Storage.StorageStatus05;
+            result.StorageStatus06= model.Storage.StorageStatus06;
+            result.StorageStatus07= model.Storage.StorageStatus07;
+            result.StorageStatus08= model.Storage.StorageStatus08;
+            result.StorageStatus09= model.Storage.StorageStatus09;
+            result.StorageStatus10= model.Storage.StorageStatus10;
+            result.StorageStatus11= model.Storage.StorageStatus11;
+            result.StorageStatus12= model.Storage.StorageStatus12;
+            result.StorageStatus13= model.Storage.StorageStatus13;
+            result.StorageStatus14= model.Storage.StorageStatus14;
+            result.StorageStatus15= model.Storage.StorageStatus15;
+            
+            result.CryptoNote01 = model.Crypto.CryptoNote01;
+            result.CryptoNote02= model.Crypto.CryptoNote02;
+            result.CryptoNote03= model.Crypto.CryptoNote03;
+            result.CryptoNote04= model.Crypto.CryptoNote04;
+            result.CryptoNote05= model.Crypto.CryptoNote05;
+            result.CryptoNote06= model.Crypto.CryptoNote06;
+            result.CryptoStatus01 = model.Crypto.CryptoStatus01;
+            result.CryptoStatus02= model.Crypto.CryptoStatus02;
+            result.CryptoStatus03= model.Crypto.CryptoStatus03;
+            result.CryptoStatus04= model.Crypto.CryptoStatus04;
+            result.CryptoStatus05= model.Crypto.CryptoStatus05;
+            result.CryptoStatus06= model.Crypto.CryptoStatus06;
+            
+            result.AuthNote01 = model.Auth.AuthNote01;
+            result.AuthNote02= model.Auth.AuthNote02;
+            result.AuthNote03= model.Auth.AuthNote03;
+            result.AuthNote04= model.Auth.AuthNote04;
+            result.AuthNote05= model.Auth.AuthNote05;
+            result.AuthNote06= model.Auth.AuthNote06;
+            result.AuthNote07= model.Auth.AuthNote07;
+            result.AuthNote08= model.Auth.AuthNote08;
+            result.AuthNote09= model.Auth.AuthNote09;
+            result.AuthNote10= model.Auth.AuthNote10;
+            result.AuthNote11= model.Auth.AuthNote11;
+            result.AuthNote12= model.Auth.AuthNote12;
+            result.AuthStatus01 = model.Auth.AuthStatus01;
+            result.AuthStatus02= model.Auth.AuthStatus02;
+            result.AuthStatus03= model.Auth.AuthStatus03;
+            result.AuthStatus04= model.Auth.AuthStatus04;
+            result.AuthStatus05= model.Auth.AuthStatus05;
+            result.AuthStatus06= model.Auth.AuthStatus06;
+            result.AuthStatus07= model.Auth.AuthStatus07;
+            result.AuthStatus08= model.Auth.AuthStatus08;
+            result.AuthStatus09= model.Auth.AuthStatus09;
+            result.AuthStatus10= model.Auth.AuthStatus10;
+            result.AuthStatus11= model.Auth.AuthStatus11;
+            result.AuthStatus12= model.Auth.AuthStatus12;
+            
+            result.NetworkNote01 = model.Network.NetworkNote01;
+            result.NetworkNote02= model.Network.NetworkNote02;
+            result.NetworkNote03= model.Network.NetworkNote03;
+            result.NetworkNote04= model.Network.NetworkNote04;
+            result.NetworkNote05= model.Network.NetworkNote05;
+            result.NetworkNote06= model.Network.NetworkNote06;
+            result.NetworkStatus01 = model.Network.NetworkStatus01;
+            result.NetworkStatus02= model.Network.NetworkStatus02;
+            result.NetworkStatus03= model.Network.NetworkStatus03;
+            result.NetworkStatus04= model.Network.NetworkStatus04;
+            result.NetworkStatus05= model.Network.NetworkStatus05;
+            result.NetworkStatus06= model.Network.NetworkStatus06;
+            
+            result.CodeNote01 = model.Code.CodeNote01;
+            result.CodeNote02= model.Code.CodeNote02;
+            result.CodeNote03= model.Code.CodeNote03;
+            result.CodeNote04= model.Code.CodeNote04;
+            result.CodeNote05= model.Code.CodeNote05;
+            result.CodeNote06= model.Code.CodeNote06;
+            result.CodeNote07= model.Code.CodeNote07;
+            result.CodeNote08= model.Code.CodeNote08;
+            result.CodeNote09= model.Code.CodeNote09;
+            result.CodeStatus01 = model.Code.CodeStatus01;
+            result.CodeStatus02= model.Code.CodeStatus02;
+            result.CodeStatus03= model.Code.CodeStatus03;
+            result.CodeStatus04= model.Code.CodeStatus04;
+            result.CodeStatus05= model.Code.CodeStatus05;
+            result.CodeStatus06= model.Code.CodeStatus06;
+            result.CodeStatus07= model.Code.CodeStatus07;
+            result.CodeStatus08= model.Code.CodeStatus08;
+            result.CodeStatus09= model.Code.CodeStatus09;
+            
+            result.ResilienceNote01 = model.Resilience.ResilienceNote01;
+            result.ResilienceNote02= model.Resilience.ResilienceNote02;
+            result.ResilienceNote03= model.Resilience.ResilienceNote03;
+            result.ResilienceNote04= model.Resilience.ResilienceNote04;
+            result.ResilienceNote05= model.Resilience.ResilienceNote05;
+            result.ResilienceNote06= model.Resilience.ResilienceNote06;
+            result.ResilienceNote07= model.Resilience.ResilienceNote07;
+            result.ResilienceNote08= model.Resilience.ResilienceNote08;
+            result.ResilienceNote09= model.Resilience.ResilienceNote09;
+            result.ResilienceNote10= model.Resilience.ResilienceNote10;
+            result.ResilienceNote11= model.Resilience.ResilienceNote11;
+            result.ResilienceNote12= model.Resilience.ResilienceNote12;
+            result.ResilienceNote13= model.Resilience.ResilienceNote13;
+            result.ResilienceStatus01 = model.Resilience.ResilienceStatus01;
+            result.ResilienceStatus02= model.Resilience.ResilienceStatus02;
+            result.ResilienceStatus03= model.Resilience.ResilienceStatus03;
+            result.ResilienceStatus04= model.Resilience.ResilienceStatus04;
+            result.ResilienceStatus05= model.Resilience.ResilienceStatus05;
+            result.ResilienceStatus06= model.Resilience.ResilienceStatus06;
+            result.ResilienceStatus07= model.Resilience.ResilienceStatus07;
+            result.ResilienceStatus08= model.Resilience.ResilienceStatus08;
+            result.ResilienceStatus09= model.Resilience.ResilienceStatus09;
+            result.ResilienceStatus10= model.Resilience.ResilienceStatus10;
+            result.ResilienceStatus11= model.Resilience.ResilienceStatus11;
+            result.ResilienceStatus12= model.Resilience.ResilienceStatus12;
+            result.ResilienceStatus13= model.Resilience.ResilienceStatus13;
+            
+            result.PlatformNote01 = model.Platform.PlatformNote01;
+            result.PlatformNote02= model.Platform.PlatformNote02;
+            result.PlatformNote03= model.Platform.PlatformNote03;
+            result.PlatformNote04= model.Platform.PlatformNote04;
+            result.PlatformNote05= model.Platform.PlatformNote05;
+            result.PlatformNote06= model.Platform.PlatformNote06;
+            result.PlatformNote07= model.Platform.PlatformNote07;
+            result.PlatformNote08= model.Platform.PlatformNote08;
+            result.PlatformNote09= model.Platform.PlatformNote09;
+            result.PlatformNote10= model.Platform.PlatformNote10;
+            result.PlatformNote11= model.Platform.PlatformNote11;
+            result.PlatformStatus01 = model.Platform.PlatformStatus01;
+            result.PlatformStatus02= model.Platform.PlatformStatus02;
+            result.PlatformStatus03= model.Platform.PlatformStatus03;
+            result.PlatformStatus04= model.Platform.PlatformStatus04;
+            result.PlatformStatus05= model.Platform.PlatformStatus05;
+            result.PlatformStatus06= model.Platform.PlatformStatus06;
+            result.PlatformStatus07= model.Platform.PlatformStatus07;
+            result.PlatformStatus08= model.Platform.PlatformStatus08;
+            result.PlatformStatus09= model.Platform.PlatformStatus09;
+            result.PlatformStatus10= model.Platform.PlatformStatus10;
+            result.PlatformStatus11= model.Platform.PlatformStatus11;
+            
+            mastgManager.Context.SaveChanges();
+            TempData["edited"] = "Checklist edited successfully!";
+
+            _logger.LogInformation("User: {0} edited Checklist: {1} on Project: {2}", User.FindFirstValue(ClaimTypes.Name), result.Id,
+                project);
+            return RedirectToAction("Index");
+        }
+        catch (Exception e)
+        {
+            TempData["error"] = "Error loading wstg!";
+            _logger.LogError(e, "An error ocurred loading Checlist Workspace WSTG form. Project: {0} User: {1}", project,
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction(nameof(Index));
+        }
+        
     }
 }
