@@ -104,65 +104,67 @@
             </ul>
         </div>
         <form asp-area="Workspace" asp-controller="Checklist" asp-action="Wstg" method="post" asp-route-project="@Model.Project.Id" asp-route-id="@Model.TargetId" enctype="multipart/form-data">
-        <div class="card-body">
-            <div class="tab-content">
+            <div class="card-body">
+                <div class="tab-content">
                 
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <input type="hidden" asp-for="TargetId">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input type="hidden" asp-for="TargetId">
 
-                <div class="active tab-pane" id="info">
-                    <partial name="_WSTGInfo" model="Model"/>
-                </div>
-                <div class="tab-pane" id="conf">
-                    <partial name="_WSTGConf" model="Model"/>
-
-                </div>
-
-                <div class="tab-pane" id="idnt">
-                    <partial name="_WSTGIdnt" model="Model"/>
-
-                </div>
-
-                <div class="tab-pane" id="athn">
-                    <partial name="_WSTGAuth" model="Model"/>
-                </div>
-                <div class="tab-pane" id="athz">
-                    <partial name="_WSTGAthz" model="Model"/>
-
-                </div>
-                <div class="tab-pane" id="sess">
-                    <partial name="_WSTGSess" model="Model"/>
-
-                </div>
-                <div class="tab-pane" id="inpv">
-                    <partial name="_WSTGInpv" model="Model"/>
-                </div>
-                <div class="tab-pane" id="errh">
-                    <partial name="_WSTGErrh" model="Model"/>
-                </div>
-                <div class="tab-pane" id="cryp">
-                    <partial name="_WSTGCrypt" model="Model"/>
-                </div>
-                <div class="tab-pane" id="busl">
-                    <partial name="_WSTGBusl" model="Model"/>
-
-                </div>
-                <div class="tab-pane" id="clnt">
-                    <partial name="_WSTGClnt" model="Model"/>
-                </div>
-
-                <div class="tab-pane" id="apit">
-                    <partial name="_WSTGApit" model="Model"/>
-                </div>
-
-            </div>
-        
-        </div>
-        <div class="form-group">
-                        <a class="btn btn-default" asp-area="Workspace" asp-controller="Checklist" asp-action="Index" localize-content>Back</a>
-                        <button type="submit" class="btn btn-dark" localize-content><i class="fas fa-save"></i> <span>Save</span></button>
-        
+                    <div class="active tab-pane" id="info">
+                        <partial name="_WSTGInfo" model="Model"/>
                     </div>
+                    <div class="tab-pane" id="conf">
+                        <partial name="_WSTGConf" model="Model"/>
+
+                    </div>
+
+                    <div class="tab-pane" id="idnt">
+                        <partial name="_WSTGIdnt" model="Model"/>
+
+                    </div>
+
+                    <div class="tab-pane" id="athn">
+                        <partial name="_WSTGAuth" model="Model"/>
+                    </div>
+                    <div class="tab-pane" id="athz">
+                        <partial name="_WSTGAthz" model="Model"/>
+
+                    </div>
+                    <div class="tab-pane" id="sess">
+                        <partial name="_WSTGSess" model="Model"/>
+
+                    </div>
+                    <div class="tab-pane" id="inpv">
+                        <partial name="_WSTGInpv" model="Model"/>
+                    </div>
+                    <div class="tab-pane" id="errh">
+                        <partial name="_WSTGErrh" model="Model"/>
+                    </div>
+                    <div class="tab-pane" id="cryp">
+                        <partial name="_WSTGCrypt" model="Model"/>
+                    </div>
+                    <div class="tab-pane" id="busl">
+                        <partial name="_WSTGBusl" model="Model"/>
+
+                    </div>
+                    <div class="tab-pane" id="clnt">
+                        <partial name="_WSTGClnt" model="Model"/>
+                    </div>
+
+                    <div class="tab-pane" id="apit">
+                        <partial name="_WSTGApit" model="Model"/>
+                    </div>
+
+                </div>
+        
+            </div>
+            <div class="form-group">
+                <a class="btn btn-default" asp-area="Workspace" asp-controller="Checklist" asp-action="Index" localize-content>Back</a>
+                <button type="submit" class="btn btn-dark" localize-content><i class="fas fa-save"></i> <span>Save</span></button>
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#generateReport" localize-content>
+                            <i class="fas fa-plus"></i> Generate Report
+                        </button>
+            </div>
         </form>
         
     </div>
@@ -172,6 +174,31 @@
     </div>
 
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="generateReport" tabindex="-1" role="dialog" aria-labelledby="generateReportLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="generateReportModalLabel">Generate Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-area="Workspace" asp-controller="Checklist" asp-action="GenerateReportWSTG" method="post" enctype="multipart/form-data">
+                <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
+                <input asp-for="TargetId" type="hidden" id="target" name="target"/>
+                <div class="modal-body">
+                    <p>Are you sure you want to Generate a WSTG Report?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" localize-content>Generate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
     <script>

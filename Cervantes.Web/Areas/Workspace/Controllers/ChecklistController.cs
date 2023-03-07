@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using Cervantes.Contracts;
@@ -7,12 +8,18 @@ using Cervantes.CORE;
 using Cervantes.Web.Areas.Workspace.Models;
 using Cervantes.Web.Areas.Workspace.Models.MASTG;
 using Cervantes.Web.Areas.Workspace.Models.Wstg;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using HtmlToOpenXml;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
 
@@ -26,10 +33,12 @@ public class ChecklistController : Controller
     private ITargetManager targetManager = null;
     private IWSTGManager wstgManager = null;
     private IMASTGManager mastgManager = null;
+    private IOrganizationManager organizationManager = null;
+    private readonly IHostingEnvironment _appEnvironment;
     
     public ChecklistController(IProjectManager projectManager, 
         IProjectUserManager projectUserManager, ITargetManager targetManager, ILogger<ChecklistController> logger, IWSTGManager wstgManager,
-        IMASTGManager mastgManager)
+        IMASTGManager mastgManager,IHostingEnvironment _appEnvironment, IOrganizationManager organizationManager)
     {
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
@@ -37,6 +46,8 @@ public class ChecklistController : Controller
         _logger = logger;
         this.wstgManager = wstgManager;
         this.mastgManager = mastgManager;
+        this._appEnvironment = _appEnvironment;
+        this.organizationManager = organizationManager;
     }
     // GET
     public IActionResult Index(Guid project)
@@ -1218,4 +1229,100 @@ public class ChecklistController : Controller
         }
         
     }
+
+    public IActionResult GenerateReportWSTG(IFormCollection form)
+    {
+        var pro = projectManager.GetById(Guid.Parse(form["project"]));
+
+        var target = targetManager.GetById(Guid.Parse(form["target"]));
+
+        var org = organizationManager.GetAll().First();
+        
+        var templatePath = _appEnvironment.WebRootPath + "/Attachments/Templates/templateWSTG.dotx";
+        string resultPath = _appEnvironment.WebRootPath + "/Attachments/Templates/"+Guid.NewGuid().ToString()+".docx" ;
+
+        
+        using (WordprocessingDocument document = WordprocessingDocument.CreateFromTemplate(templatePath, true))
+        {
+            MainDocumentPart mainPart = document.MainDocumentPart;
+            HtmlConverter converter = new HtmlConverter(mainPart);
+
+            var header = document.MainDocumentPart.Document.MainDocumentPart.HeaderParts;
+            var footer = document.MainDocumentPart.Document.MainDocumentPart.FooterParts;
+            var body = document.MainDocumentPart.Document.Body;
+            var paragraphs = body.Elements<Paragraph>();
+            var texts = paragraphs.SelectMany(p => p.Elements<Run>()).SelectMany(r => r.Elements<Text>());
+            
+            var tables = mainPart.Document.Descendants<Table>().ToList();
+            
+            var w = from c in tables
+                where c.InnerText.Contains("ClientName") ||
+                      c.InnerText.Contains("OrganizationVersion") || c.InnerText.Contains("DocumentDescription")
+                select c;
+            
+            Table orgTable = w.First();
+
+            /*TableRow rowOrgTable = orgTable.Elements<TableRow>().ElementAt(1);
+            List<TableRow> rowsOrg = new List<TableRow>();
+            
+                var row = (TableRow)rowOrgTable.Descendants<Text>();*/
+            var row = orgTable.Descendants<Text>();
+                
+                foreach (Text textDoc in row)
+                {
+                    switch (textDoc.Text)
+                    {
+                        case "ClientName":
+                            textDoc.Text = pro.Client.Name;
+                            break;
+                        case "ClientContactEmail":
+                            textDoc.Text = pro.Client.ContactEmail;
+                            break;
+                        case "ClientContactPhone":
+                            textDoc.Text = pro.Client.ContactPhone;
+                            break;
+                        case "OrganizationName":
+                            textDoc.Text = org.Name;
+                            break;
+                        case "OrganizationContactEmail":
+                            textDoc.Text = org.ContactEmail;
+                            break;
+                        case "OrganizationContactPhone":
+                            textDoc.Text = org.ContactPhone;
+                            break;
+                    }
+                }
+                
+                var q = from c in tables
+                    where c.InnerText.Contains("TargetUrl") ||
+                          c.InnerText.Contains("DateTime") || c.InnerText.Contains("TargetDescription")
+                    select c;
+            
+                Table targetTable = q.First();
+                var rowTarget = targetTable.Descendants<Text>();
+                foreach (Text textDoc in rowTarget)
+                {
+                    switch (textDoc.Text)
+                    {
+                        case "TargetUrl":
+                            textDoc.Text = target.Name;
+                            break;
+                        case "DateTime":
+                            textDoc.Text = DateTime.Now.ToUniversalTime().ToShortDateString();
+                            break;
+                    }
+                }
+                
+                var result = document.SaveAs(resultPath);
+                result.Close();
+                
+        }
+
+        var fileBytes = System.IO.File.ReadAllBytes(resultPath);
+        System.IO.File.Delete(resultPath);
+
+        return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.template", "OWASPWSTG_Report_"+target.Name+".docx");
+        
+    }
+    
 }
