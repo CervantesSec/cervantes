@@ -771,6 +771,11 @@ public class ChecklistController : Controller
                     
                     return RedirectToAction(nameof(Index));
                 case ChecklistType.OWASPMASVS:
+                    var result2 = mastgManager.GetById(model.Mastg.Id);
+                    mastgManager.Remove(result2);
+                    mastgManager.Context.SaveChanges();
+                    _logger.LogInformation("A Checklist has been deleted.Project: {0} User: {1} Checklist: {2}", project,
+                        User.FindFirstValue(ClaimTypes.Name), result2.Id);
                     return RedirectToAction(nameof(Index));
             }
 
@@ -1232,42 +1237,40 @@ public class ChecklistController : Controller
 
     public IActionResult GenerateReportWSTG(IFormCollection form)
     {
-        var pro = projectManager.GetById(Guid.Parse(form["project"]));
-
-        var target = targetManager.GetById(Guid.Parse(form["target"]));
-
-        var org = organizationManager.GetAll().First();
-        
-        var templatePath = _appEnvironment.WebRootPath + "/Attachments/Templates/templateWSTG.dotx";
-        string resultPath = _appEnvironment.WebRootPath + "/Attachments/Templates/"+Guid.NewGuid().ToString()+".docx" ;
-
-        
-        using (WordprocessingDocument document = WordprocessingDocument.CreateFromTemplate(templatePath, true))
+        try
         {
-            MainDocumentPart mainPart = document.MainDocumentPart;
-            HtmlConverter converter = new HtmlConverter(mainPart);
+            var pro = projectManager.GetById(Guid.Parse(form["project"]));
 
-            var header = document.MainDocumentPart.Document.MainDocumentPart.HeaderParts;
-            var footer = document.MainDocumentPart.Document.MainDocumentPart.FooterParts;
-            var body = document.MainDocumentPart.Document.Body;
-            var paragraphs = body.Elements<Paragraph>();
-            var texts = paragraphs.SelectMany(p => p.Elements<Run>()).SelectMany(r => r.Elements<Text>());
-            
-            var tables = mainPart.Document.Descendants<Table>().ToList();
-            
-            var w = from c in tables
-                where c.InnerText.Contains("ClientName") ||
-                      c.InnerText.Contains("OrganizationVersion") || c.InnerText.Contains("DocumentDescription")
-                select c;
-            
-            Table orgTable = w.First();
+            var target = targetManager.GetById(Guid.Parse(form["target"]));
 
-            /*TableRow rowOrgTable = orgTable.Elements<TableRow>().ElementAt(1);
-            List<TableRow> rowsOrg = new List<TableRow>();
-            
-                var row = (TableRow)rowOrgTable.Descendants<Text>();*/
-            var row = orgTable.Descendants<Text>();
+            var org = organizationManager.GetAll().First();
+
+            var wstg = wstgManager.GetTargetId(Guid.Parse(form["project"]), Guid.Parse(form["target"]));
+
+            var templatePath = _appEnvironment.WebRootPath + "/Attachments/Templates/templateWSTG.dotx";
+            string resultPath = _appEnvironment.WebRootPath + "/Attachments/Templates/" + Guid.NewGuid().ToString() +
+                                ".docx";
+
+
+            using (WordprocessingDocument document = WordprocessingDocument.CreateFromTemplate(templatePath, true))
+            {
+                MainDocumentPart mainPart = document.MainDocumentPart;
+                HtmlConverter converter = new HtmlConverter(mainPart);
+
+                var body = document.MainDocumentPart.Document.Body;
+                var paragraphs = body.Elements<Paragraph>();
+
+                var tables = mainPart.Document.Descendants<Table>().ToList();
+
+                var w = from c in tables
+                    where c.InnerText.Contains("ClientName") ||
+                          c.InnerText.Contains("OrganizationVersion") || c.InnerText.Contains("DocumentDescription")
+                    select c;
+
+                Table orgTable = w.First();
                 
+                var row = orgTable.Descendants<Text>();
+
                 foreach (Text textDoc in row)
                 {
                     switch (textDoc.Text)
@@ -1292,12 +1295,704 @@ public class ChecklistController : Controller
                             break;
                     }
                 }
-                
+
                 var q = from c in tables
                     where c.InnerText.Contains("TargetUrl") ||
                           c.InnerText.Contains("DateTime") || c.InnerText.Contains("TargetDescription")
                     select c;
-            
+
+                Table targetTable = q.First();
+                var rowTarget = targetTable.Descendants<Text>();
+                foreach (Text textDoc in rowTarget)
+                {
+                    switch (textDoc.Text)
+                    {
+                        case "TargetUrl":
+                            textDoc.Text = target.Name;
+                            break;
+                        case "DateTime":
+                            textDoc.Text = DateTime.Now.ToUniversalTime().ToShortDateString();
+                            break;
+                    }
+                }
+
+                var r = from c in tables
+                    where c.InnerText.Contains("Info01Note") ||
+                          c.InnerText.Contains("Info01Status") || c.InnerText.Contains("Conf01Note") ||
+                          c.InnerText.Contains("Conf01Status")
+                          || c.InnerText.Contains("Idnt1Status") || c.InnerText.Contains("Idnt1Note")
+                    select c;
+
+                Table resultTable = r.First();
+                var rowResult = resultTable.Descendants<Text>();
+                foreach (Text textDoc in rowResult)
+                {
+                    switch (textDoc.Text)
+                    {
+                        case "Info01Note":
+                            textDoc.Text = wstg.Info01Note;
+                            break;
+                        case "Info01Status":
+                            textDoc.Text = wstg.Info01Status.ToString();
+                            break;
+                        case "Info02Note":
+                            textDoc.Text = wstg.Info02Note;
+                            break;
+                        case "Info02Status":
+                            textDoc.Text = wstg.Info02Status.ToString();
+                            break;
+                        case "Info03Note":
+                            textDoc.Text = wstg.Info03Note;
+                            break;
+                        case "Info03Status":
+                            textDoc.Text = wstg.Info03Status.ToString();
+                            break;
+                        case "Info04Note":
+                            textDoc.Text = wstg.Info04Note;
+                            break;
+                        case "Info04Status":
+                            textDoc.Text = wstg.Info04Status.ToString();
+                            break;
+                        case "Info05Note":
+                            textDoc.Text = wstg.Info05Note;
+                            break;
+                        case "Info05Status":
+                            textDoc.Text = wstg.Info05Status.ToString();
+                            break;
+                        case "Info06Note":
+                            textDoc.Text = wstg.Info06Note;
+                            break;
+                        case "Info06Status":
+                            textDoc.Text = wstg.Info06Status.ToString();
+                            break;
+                        case "Info07Note":
+                            textDoc.Text = wstg.Info07Note;
+                            break;
+                        case "Info07Status":
+                            textDoc.Text = wstg.Info07Status.ToString();
+                            break;
+                        case "Info08Note":
+                            textDoc.Text = wstg.Info08Note;
+                            break;
+                        case "Info08Status":
+                            textDoc.Text = wstg.Info08Status.ToString();
+                            break;
+                        case "Info09Note":
+                            textDoc.Text = wstg.Info09Note;
+                            break;
+                        case "Info09Status":
+                            textDoc.Text = wstg.Info09Status.ToString();
+                            break;
+                        case "Info10Note":
+                            textDoc.Text = wstg.Info10Note;
+                            break;
+                        case "Info10Status":
+                            textDoc.Text = wstg.Info10Status.ToString();
+                            break;
+                        case "Conf01Note":
+                            textDoc.Text = wstg.Conf01Note;
+                            break;
+                        case "Conf01Status":
+                            textDoc.Text = wstg.Conf01Status.ToString();
+                            break;
+                        case "Conf02Note":
+                            textDoc.Text = wstg.Conf02Note;
+                            break;
+                        case "Conf02Status":
+                            textDoc.Text = wstg.Conf02Status.ToString();
+                            break;
+                        case "Conf03Note":
+                            textDoc.Text = wstg.Conf03Note;
+                            break;
+                        case "Conf03Status":
+                            textDoc.Text = wstg.Conf03Status.ToString();
+                            break;
+                        case "Conf04Note":
+                            textDoc.Text = wstg.Conf04Note;
+                            break;
+                        case "Conf04Status":
+                            textDoc.Text = wstg.Conf04Status.ToString();
+                            break;
+                        case "Conf05Note":
+                            textDoc.Text = wstg.Conf05Note;
+                            break;
+                        case "Conf05Status":
+                            textDoc.Text = wstg.Conf05Status.ToString();
+                            break;
+                        case "Conf06Note":
+                            textDoc.Text = wstg.Conf06Note;
+                            break;
+                        case "Conf06Status":
+                            textDoc.Text = wstg.Conf06Status.ToString();
+                            break;
+                        case "Conf07Note":
+                            textDoc.Text = wstg.Conf07Note;
+                            break;
+                        case "Conf07Status":
+                            textDoc.Text = wstg.Conf07Status.ToString();
+                            break;
+                        case "Conf08Note":
+                            textDoc.Text = wstg.Conf08Note;
+                            break;
+                        case "Conf08Status":
+                            textDoc.Text = wstg.Conf08Status.ToString();
+                            break;
+                        case "Conf09Note":
+                            textDoc.Text = wstg.Conf09Note;
+                            break;
+                        case "Conf09Status":
+                            textDoc.Text = wstg.Conf09Status.ToString();
+                            break;
+                        case "Conf10Note":
+                            textDoc.Text = wstg.Conf10Note;
+                            break;
+                        case "Conf10Status":
+                            textDoc.Text = wstg.Conf10Status.ToString();
+                            break;
+                        case "Conf11Note":
+                            textDoc.Text = wstg.Conf11Note;
+                            break;
+                        case "Conf11Status":
+                            textDoc.Text = wstg.Conf11Status.ToString();
+                            break;
+                        case "Idnt1Note":
+                            textDoc.Text = wstg.Idnt1Note;
+                            break;
+                        case "Idnt1Status":
+                            textDoc.Text = wstg.Idnt1Status.ToString();
+                            break;
+                        case "Idnt2Note":
+                            textDoc.Text = wstg.Idnt2Note;
+                            break;
+                        case "Idnt2Status":
+                            textDoc.Text = wstg.Idnt2Status.ToString();
+                            break;
+                        case "Idnt3Note":
+                            textDoc.Text = wstg.Idnt3Note;
+                            break;
+                        case "Idnt3Status":
+                            textDoc.Text = wstg.Idnt3Status.ToString();
+                            break;
+                        case "Idnt4Note":
+                            textDoc.Text = wstg.Idnt4Note;
+                            break;
+                        case "Idnt4Status":
+                            textDoc.Text = wstg.Idnt4Status.ToString();
+                            break;
+                        case "Idnt5Note":
+                            textDoc.Text = wstg.Idnt5Note;
+                            break;
+                        case "Idnt5Status":
+                            textDoc.Text = wstg.Idnt5Status.ToString();
+                            break;
+                        case "Athn01Note":
+                            textDoc.Text = wstg.Athn01Note;
+                            break;
+                        case "Athn01Status":
+                            textDoc.Text = wstg.Athn01Status.ToString();
+                            break;
+                        case "Athn02Note":
+                            textDoc.Text = wstg.Athn02Note;
+                            break;
+                        case "Athn02Status":
+                            textDoc.Text = wstg.Athn02Status.ToString();
+                            break;
+                        case "Athn03Note":
+                            textDoc.Text = wstg.Athn03Note;
+                            break;
+                        case "Athn03Status":
+                            textDoc.Text = wstg.Athn03Status.ToString();
+                            break;
+                        case "Athn04Note":
+                            textDoc.Text = wstg.Athn04Note;
+                            break;
+                        case "Athn04Status":
+                            textDoc.Text = wstg.Athn04Status.ToString();
+                            break;
+                        case "Athn05Note":
+                            textDoc.Text = wstg.Athn05Note;
+                            break;
+                        case "Athn05Status":
+                            textDoc.Text = wstg.Athn05Status.ToString();
+                            break;
+                        case "Athn06Note":
+                            textDoc.Text = wstg.Athn06Note;
+                            break;
+                        case "Athn06Status":
+                            textDoc.Text = wstg.Athn06Status.ToString();
+                            break;
+                        case "Athn07Note":
+                            textDoc.Text = wstg.Athn07Note;
+                            break;
+                        case "Athn07Status":
+                            textDoc.Text = wstg.Athn07Status.ToString();
+                            break;
+                        case "Athn08Note":
+                            textDoc.Text = wstg.Athn08Note;
+                            break;
+                        case "Athn08Status":
+                            textDoc.Text = wstg.Athn08Status.ToString();
+                            break;
+                        case "Athn09Note":
+                            textDoc.Text = wstg.Athn09Note;
+                            break;
+                        case "Athn09Status":
+                            textDoc.Text = wstg.Athn09Status.ToString();
+                            break;
+                        case "Athn10Note":
+                            textDoc.Text = wstg.Athn10Note;
+                            break;
+                        case "Athn10Status":
+                            textDoc.Text = wstg.Athn10Status.ToString();
+                            break;
+                        case "Athz01Note":
+                            textDoc.Text = wstg.Athz01Note;
+                            break;
+                        case "Athz01Status":
+                            textDoc.Text = wstg.Athz01Status.ToString();
+                            break;
+                        case "Athz02Note":
+                            textDoc.Text = wstg.Athz02Note;
+                            break;
+                        case "Athz02Status":
+                            textDoc.Text = wstg.Athz02Status.ToString();
+                            break;
+                        case "Athz03Note":
+                            textDoc.Text = wstg.Athz03Note;
+                            break;
+                        case "Athz03Status":
+                            textDoc.Text = wstg.Athz03Status.ToString();
+                            break;
+                        case "Athz04Note":
+                            textDoc.Text = wstg.Athz04Note;
+                            break;
+                        case "Athz04Status":
+                            textDoc.Text = wstg.Athz04Status.ToString();
+                            break;
+                        case "Sess01Note":
+                            textDoc.Text = wstg.Sess01Note;
+                            break;
+                        case "Sess01Status":
+                            textDoc.Text = wstg.Sess01Status.ToString();
+                            break;
+                        case "Sess02Note":
+                            textDoc.Text = wstg.Sess02Note;
+                            break;
+                        case "Sess02Status":
+                            textDoc.Text = wstg.Sess02Status.ToString();
+                            break;
+                        case "Sess03Note":
+                            textDoc.Text = wstg.Sess03Note;
+                            break;
+                        case "Sess03Status":
+                            textDoc.Text = wstg.Sess03Status.ToString();
+                            break;
+                        case "Sess04Note":
+                            textDoc.Text = wstg.Sess04Note;
+                            break;
+                        case "Sess04Status":
+                            textDoc.Text = wstg.Sess04Status.ToString();
+                            break;
+                        case "Sess05Note":
+                            textDoc.Text = wstg.Sess05Note;
+                            break;
+                        case "Sess05Status":
+                            textDoc.Text = wstg.Sess05Status.ToString();
+                            break;
+                        case "Sess06Note":
+                            textDoc.Text = wstg.Sess06Note;
+                            break;
+                        case "Sess06Status":
+                            textDoc.Text = wstg.Sess06Status.ToString();
+                            break;
+                        case "Sess07Note":
+                            textDoc.Text = wstg.Sess07Note;
+                            break;
+                        case "Sess07Status":
+                            textDoc.Text = wstg.Sess07Status.ToString();
+                            break;
+                        case "Sess08Note":
+                            textDoc.Text = wstg.Sess08Note;
+                            break;
+                        case "Sess08Status":
+                            textDoc.Text = wstg.Sess08Status.ToString();
+                            break;
+                        case "Sess09Note":
+                            textDoc.Text = wstg.Sess09Note;
+                            break;
+                        case "Sess09Status":
+                            textDoc.Text = wstg.Sess09Status.ToString();
+                            break;
+                        case "Inpv01Note":
+                            textDoc.Text = wstg.Inpv01Note;
+                            break;
+                        case "Inpv01Status":
+                            textDoc.Text = wstg.Inpv01Status.ToString();
+                            break;
+                        case "Inpv02Note":
+                            textDoc.Text = wstg.Inpv02Note;
+                            break;
+                        case "Inpv02Status":
+                            textDoc.Text = wstg.Inpv02Status.ToString();
+                            break;
+                        case "Inpv03Note":
+                            textDoc.Text = wstg.Inpv03Note;
+                            break;
+                        case "Inpv03Status":
+                            textDoc.Text = wstg.Inpv03Status.ToString();
+                            break;
+                        case "Inpv04Note":
+                            textDoc.Text = wstg.Inpv04Note;
+                            break;
+                        case "Inpv04Status":
+                            textDoc.Text = wstg.Inpv04Status.ToString();
+                            break;
+                        case "Inpv05Note":
+                            textDoc.Text = wstg.Inpv05Note;
+                            break;
+                        case "Inpv05Status":
+                            textDoc.Text = wstg.Inpv05Status.ToString();
+                            break;
+                        case "Inpv06Note":
+                            textDoc.Text = wstg.Inpv06Note;
+                            break;
+                        case "Inpv06Status":
+                            textDoc.Text = wstg.Inpv06Status.ToString();
+                            break;
+                        case "Inpv07Note":
+                            textDoc.Text = wstg.Inpv07Note;
+                            break;
+                        case "Inpv07Status":
+                            textDoc.Text = wstg.Inpv07Status.ToString();
+                            break;
+                        case "Inpv08Note":
+                            textDoc.Text = wstg.Inpv08Note;
+                            break;
+                        case "Inpv08Status":
+                            textDoc.Text = wstg.Inpv08Status.ToString();
+                            break;
+                        case "Inpv09Note":
+                            textDoc.Text = wstg.Inpv09Note;
+                            break;
+                        case "Inpv09Status":
+                            textDoc.Text = wstg.Inpv09Status.ToString();
+                            break;
+                        case "Inpv10Note":
+                            textDoc.Text = wstg.Inpv10Note;
+                            break;
+                        case "Inpv10Status":
+                            textDoc.Text = wstg.Inpv10Status.ToString();
+                            break;
+                        case "Inpv11Note":
+                            textDoc.Text = wstg.Inpv11Note;
+                            break;
+                        case "Inpv11Status":
+                            textDoc.Text = wstg.Inpv11Status.ToString();
+                            break;
+                        case "Inpv12Note":
+                            textDoc.Text = wstg.Inpv12Note;
+                            break;
+                        case "Inpv12Status":
+                            textDoc.Text = wstg.Inpv12Status.ToString();
+                            break;
+                        case "Inpv13Note":
+                            textDoc.Text = wstg.Inpv13Note;
+                            break;
+                        case "Inpv13Status":
+                            textDoc.Text = wstg.Inpv13Status.ToString();
+                            break;
+                        case "Inpv14Note":
+                            textDoc.Text = wstg.Inpv14Note;
+                            break;
+                        case "Inpv14Status":
+                            textDoc.Text = wstg.Inpv14Status.ToString();
+                            break;
+                        case "Inpv15Note":
+                            textDoc.Text = wstg.Inpv15Note;
+                            break;
+                        case "Inpv15Status":
+                            textDoc.Text = wstg.Inpv15Status.ToString();
+                            break;
+                        case "Inpv16Note":
+                            textDoc.Text = wstg.Inpv16Note;
+                            break;
+                        case "Inpv16Status":
+                            textDoc.Text = wstg.Inpv16Status.ToString();
+                            break;
+                        case "Inpv17Note":
+                            textDoc.Text = wstg.Inpv17Note;
+                            break;
+                        case "Inpv17Status":
+                            textDoc.Text = wstg.Inpv17Status.ToString();
+                            break;
+                        case "Inpv18Note":
+                            textDoc.Text = wstg.Inpv18Note;
+                            break;
+                        case "Inpv18Status":
+                            textDoc.Text = wstg.Inpv18Status.ToString();
+                            break;
+                        case "Inpv19Note":
+                            textDoc.Text = wstg.Inpv19Note;
+                            break;
+                        case "Inpv19Status":
+                            textDoc.Text = wstg.Inpv19Status.ToString();
+                            break;
+                        case "Errh01Note":
+                            textDoc.Text = wstg.Errh01Note;
+                            break;
+                        case "Errh01Status":
+                            textDoc.Text = wstg.Errh01Status.ToString();
+                            break;
+                        case "Cryp01Note":
+                            textDoc.Text = wstg.Cryp01Note;
+                            break;
+                        case "Cryp01Status":
+                            textDoc.Text = wstg.Cryp01Status.ToString();
+                            break;
+                        case "Cryp02Note":
+                            textDoc.Text = wstg.Cryp02Note;
+                            break;
+                        case "Cryp02Status":
+                            textDoc.Text = wstg.Cryp02Status.ToString();
+                            break;
+                        case "Cryp03Note":
+                            textDoc.Text = wstg.Cryp03Note;
+                            break;
+                        case "Cryp03Status":
+                            textDoc.Text = wstg.Cryp03Status.ToString();
+                            break;
+                        case "Cryp04Note":
+                            textDoc.Text = wstg.Cryp04Note;
+                            break;
+                        case "Cryp04Status":
+                            textDoc.Text = wstg.Cryp04Status.ToString();
+                            break;
+                        case "Busl01Note":
+                            textDoc.Text = wstg.Busl01Note;
+                            break;
+                        case "Busl01Status":
+                            textDoc.Text = wstg.Busl01Status.ToString();
+                            break;
+                        case "Busl02Note":
+                            textDoc.Text = wstg.Busl02Note;
+                            break;
+                        case "Busl02Status":
+                            textDoc.Text = wstg.Busl02Status.ToString();
+                            break;
+                        case "Busl03Note":
+                            textDoc.Text = wstg.Busl03Note;
+                            break;
+                        case "Busl03Status":
+                            textDoc.Text = wstg.Busl03Status.ToString();
+                            break;
+                        case "Busl04Note":
+                            textDoc.Text = wstg.Busl04Note;
+                            break;
+                        case "Busl04Status":
+                            textDoc.Text = wstg.Busl04Status.ToString();
+                            break;
+                        case "Busl05Note":
+                            textDoc.Text = wstg.Busl05Note;
+                            break;
+                        case "Busl05Status":
+                            textDoc.Text = wstg.Busl05Status.ToString();
+                            break;
+                        case "Busl06Note":
+                            textDoc.Text = wstg.Busl06Note;
+                            break;
+                        case "Busl06Status":
+                            textDoc.Text = wstg.Busl06Status.ToString();
+                            break;
+                        case "Busl07Note":
+                            textDoc.Text = wstg.Busl07Note;
+                            break;
+                        case "Busl07Status":
+                            textDoc.Text = wstg.Busl07Status.ToString();
+                            break;
+                        case "Busl08Note":
+                            textDoc.Text = wstg.Busl08Note;
+                            break;
+                        case "Busl08Status":
+                            textDoc.Text = wstg.Busl08Status.ToString();
+                            break;
+                        case "Busl09Note":
+                            textDoc.Text = wstg.Busl09Note;
+                            break;
+                        case "Busl09Status":
+                            textDoc.Text = wstg.Busl09Status.ToString();
+                            break;
+                        case "Clnt01Note":
+                            textDoc.Text = wstg.Clnt01Note;
+                            break;
+                        case "Clnt01Status":
+                            textDoc.Text = wstg.Clnt01Status.ToString();
+                            break;
+                        case "Clnt02Note":
+                            textDoc.Text = wstg.Clnt02Note;
+                            break;
+                        case "Clnt02Status":
+                            textDoc.Text = wstg.Clnt02Status.ToString();
+                            break;
+                        case "Clnt03Note":
+                            textDoc.Text = wstg.Clnt03Note;
+                            break;
+                        case "Clnt03Status":
+                            textDoc.Text = wstg.Clnt03Status.ToString();
+                            break;
+                        case "Clnt04Note":
+                            textDoc.Text = wstg.Clnt04Note;
+                            break;
+                        case "Clnt04Status":
+                            textDoc.Text = wstg.Clnt04Status.ToString();
+                            break;
+                        case "Clnt05Note":
+                            textDoc.Text = wstg.Clnt05Note;
+                            break;
+                        case "Clnt05Status":
+                            textDoc.Text = wstg.Clnt05Status.ToString();
+                            break;
+                        case "Clnt06Note":
+                            textDoc.Text = wstg.Clnt06Note;
+                            break;
+                        case "Clnt06Status":
+                            textDoc.Text = wstg.Clnt06Status.ToString();
+                            break;
+                        case "Clnt07Note":
+                            textDoc.Text = wstg.Clnt07Note;
+                            break;
+                        case "Clnt07Status":
+                            textDoc.Text = wstg.Clnt07Status.ToString();
+                            break;
+                        case "Clnt08Note":
+                            textDoc.Text = wstg.Clnt08Note;
+                            break;
+                        case "Clnt08Status":
+                            textDoc.Text = wstg.Clnt08Status.ToString();
+                            break;
+                        case "Clnt09Note":
+                            textDoc.Text = wstg.Clnt09Note;
+                            break;
+                        case "Clnt09Status":
+                            textDoc.Text = wstg.Clnt09Status.ToString();
+                            break;
+                        case "Clnt10Note":
+                            textDoc.Text = wstg.Clnt10Note;
+                            break;
+                        case "Clnt10Status":
+                            textDoc.Text = wstg.Clnt10Status.ToString();
+                            break;
+                        case "Clnt11Note":
+                            textDoc.Text = wstg.Clnt11Note;
+                            break;
+                        case "Clnt11Status":
+                            textDoc.Text = wstg.Clnt11Status.ToString();
+                            break;
+                        case "Clnt12Note":
+                            textDoc.Text = wstg.Clnt12Note;
+                            break;
+                        case "Clnt12Status":
+                            textDoc.Text = wstg.Clnt12Status.ToString();
+                            break;
+                        case "Clnt13Note":
+                            textDoc.Text = wstg.Clnt13Note;
+                            break;
+                        case "Clnt13Status":
+                            textDoc.Text = wstg.Clnt13Status.ToString();
+                            break;
+                        case "Apit01Note":
+                            textDoc.Text = wstg.Clnt10Note;
+                            break;
+                        case "Apit01Status":
+                            textDoc.Text = wstg.Clnt10Status.ToString();
+                            break;
+                    }
+                }
+
+                var result = document.SaveAs(resultPath);
+                result.Close();
+
+            }
+
+            var fileBytes = System.IO.File.ReadAllBytes(resultPath);
+            System.IO.File.Delete(resultPath);
+
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+                "OWASPWSTG_Report_" + target.Name + ".docx");
+        }
+        catch (Exception e)
+        {
+            TempData["errorReport"] = "Error generating report!";
+            _logger.LogError(e, "An error ocurred generating Checlist Workspace WSTG report. User: {1}", 
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction(nameof(Index));
+        }
+    }
+    public IActionResult GenerateReportMASTG(IFormCollection form)
+    {
+        try
+        {
+            var pro = projectManager.GetById(Guid.Parse(form["project"]));
+
+            var target = targetManager.GetById(Guid.Parse(form["target"]));
+
+            var org = organizationManager.GetAll().First();
+
+            var mastg = mastgManager.GetTargetId(Guid.Parse(form["project"]), Guid.Parse(form["target"]));
+
+            var templatePath = _appEnvironment.WebRootPath + "/Attachments/Templates/templateMASTG.dotx";
+            string resultPath = _appEnvironment.WebRootPath + "/Attachments/Templates/" + Guid.NewGuid().ToString() +
+                                ".docx";
+
+
+            using (WordprocessingDocument document = WordprocessingDocument.CreateFromTemplate(templatePath, true))
+            {
+                MainDocumentPart mainPart = document.MainDocumentPart;
+                HtmlConverter converter = new HtmlConverter(mainPart);
+
+                var body = document.MainDocumentPart.Document.Body;
+                var paragraphs = body.Elements<Paragraph>();
+
+                var tables = mainPart.Document.Descendants<Table>().ToList();
+
+                var w = from c in tables
+                    where c.InnerText.Contains("ClientName") ||
+                          c.InnerText.Contains("OrganizationVersion") || c.InnerText.Contains("DocumentDescription")
+                    select c;
+
+                Table orgTable = w.First();
+                
+                var row = orgTable.Descendants<Text>();
+
+                foreach (Text textDoc in row)
+                {
+                    switch (textDoc.Text)
+                    {
+                        case "ClientName":
+                            textDoc.Text = pro.Client.Name;
+                            break;
+                        case "ClientContactEmail":
+                            textDoc.Text = pro.Client.ContactEmail;
+                            break;
+                        case "ClientContactPhone":
+                            textDoc.Text = pro.Client.ContactPhone;
+                            break;
+                        case "OrganizationName":
+                            textDoc.Text = org.Name;
+                            break;
+                        case "OrganizationContactEmail":
+                            textDoc.Text = org.ContactEmail;
+                            break;
+                        case "OrganizationContactPhone":
+                            textDoc.Text = org.ContactPhone;
+                            break;
+                    }
+                }
+
+                var q = from c in tables
+                    where c.InnerText.Contains("TargetUrl") ||
+                          c.InnerText.Contains("DateTime") || c.InnerText.Contains("TargetDescription")
+                    select c;
+
                 Table targetTable = q.First();
                 var rowTarget = targetTable.Descendants<Text>();
                 foreach (Text textDoc in rowTarget)
@@ -1313,16 +2008,542 @@ public class ChecklistController : Controller
                     }
                 }
                 
+                var r = from c in tables
+                    where c.InnerText.Contains("ArchNote01") ||
+                          c.InnerText.Contains("ArchStatus01") || c.InnerText.Contains("CodeNote01")
+                          || c.InnerText.Contains("CodeStatus01") || c.InnerText.Contains("ResilienceNote01")
+                    select c;
+                
+                Table resultsTable = r.First();
+                var rowResults = resultsTable.Descendants<Text>();
+                foreach (Text textDoc in rowResults)
+                {
+                    switch (textDoc.Text)
+                    {
+                        case "ArchNote01":
+                            textDoc.Text = mastg.ArchNote01;
+                            break;
+                        case "ArchStatus01":
+                            textDoc.Text = mastg.ArchStatus01.ToString();
+                            break;
+                        case "ArchNote02":
+                            textDoc.Text = mastg.ArchNote02;
+                            break;
+                        case "ArchStatus02":
+                            textDoc.Text = mastg.ArchStatus02.ToString();
+                            break;
+                        case "ArchNote03":
+                            textDoc.Text = mastg.ArchNote03;
+                            break;
+                        case "ArchStatus03":
+                            textDoc.Text = mastg.ArchStatus03.ToString();
+                            break;
+                        case "ArchNote04":
+                            textDoc.Text = mastg.ArchNote04;
+                            break;
+                        case "ArchStatus04":
+                            textDoc.Text = mastg.ArchStatus04.ToString();
+                            break;
+                        case "ArchNote05":
+                            textDoc.Text = mastg.ArchNote05;
+                            break;
+                        case "ArchStatus05":
+                            textDoc.Text = mastg.ArchStatus05.ToString();
+                            break;
+                        case "ArchNote06":
+                            textDoc.Text = mastg.ArchNote06;
+                            break;
+                        case "ArchStatus06":
+                            textDoc.Text = mastg.ArchStatus06.ToString();
+                            break;
+                        case "ArchNote07":
+                            textDoc.Text = mastg.ArchNote07;
+                            break;
+                        case "ArchStatus07":
+                            textDoc.Text = mastg.ArchStatus07.ToString();
+                            break;
+                        case "ArchNote08":
+                            textDoc.Text = mastg.ArchNote08;
+                            break;
+                        case "ArchStatus08":
+                            textDoc.Text = mastg.ArchStatus08.ToString();
+                            break;
+                        case "ArchNote09":
+                            textDoc.Text = mastg.ArchNote09;
+                            break;
+                        case "ArchStatus09":
+                            textDoc.Text = mastg.ArchStatus09.ToString();
+                            break;
+                        case "ArchNote10":
+                            textDoc.Text = mastg.ArchNote10;
+                            break;
+                        case "ArchStatus10":
+                            textDoc.Text = mastg.ArchStatus10.ToString();
+                            break;
+                        case "ArchNote11":
+                            textDoc.Text = mastg.ArchNote11;
+                            break;
+                        case "ArchStatus11":
+                            textDoc.Text = mastg.ArchStatus11.ToString();
+                            break;
+                        case "ArchNote12":
+                            textDoc.Text = mastg.ArchNote12;
+                            break;
+                        case "ArchStatus12":
+                            textDoc.Text = mastg.ArchStatus12.ToString();
+                            break;
+                        case "StorageNote01":
+                            textDoc.Text = mastg.StorageNote01;
+                            break;
+                        case "StorageStatus01":
+                            textDoc.Text = mastg.StorageStatus01.ToString();
+                            break;
+                        case "StorageNote02":
+                            textDoc.Text = mastg.StorageNote02;
+                            break;
+                        case "StorageStatus02":
+                            textDoc.Text = mastg.StorageStatus02.ToString();
+                            break;
+                        case "StorageNote03":
+                            textDoc.Text = mastg.StorageNote03;
+                            break;
+                        case "StorageStatus03":
+                            textDoc.Text = mastg.StorageStatus03.ToString();
+                            break;
+                        case "StorageNote04":
+                            textDoc.Text = mastg.StorageNote04;
+                            break;
+                        case "StorageStatus04":
+                            textDoc.Text = mastg.StorageStatus04.ToString();
+                            break;
+                        case "StorageNote05":
+                            textDoc.Text = mastg.StorageNote05;
+                            break;
+                        case "StorageStatus05":
+                            textDoc.Text = mastg.StorageStatus05.ToString();
+                            break;
+                        case "StorageNote06":
+                            textDoc.Text = mastg.StorageNote06;
+                            break;
+                        case "StorageStatus06":
+                            textDoc.Text = mastg.StorageStatus06.ToString();
+                            break;
+                        case "StorageNote07":
+                            textDoc.Text = mastg.StorageNote07;
+                            break;
+                        case "StorageStatus07":
+                            textDoc.Text = mastg.StorageStatus07.ToString();
+                            break;
+                        case "StorageNote08":
+                            textDoc.Text = mastg.StorageNote08;
+                            break;
+                        case "StorageStatus08":
+                            textDoc.Text = mastg.StorageStatus08.ToString();
+                            break;
+                        case "StorageNote09":
+                            textDoc.Text = mastg.StorageNote09;
+                            break;
+                        case "StorageStatus09":
+                            textDoc.Text = mastg.StorageStatus09.ToString();
+                            break;
+                        case "StorageNote10":
+                            textDoc.Text = mastg.StorageNote10;
+                            break;
+                        case "StorageStatus10":
+                            textDoc.Text = mastg.StorageStatus10.ToString();
+                            break;
+                        case "StorageNote11":
+                            textDoc.Text = mastg.StorageNote11;
+                            break;
+                        case "StorageStatus11":
+                            textDoc.Text = mastg.StorageStatus11.ToString();
+                            break;
+                        case "StorageNote12":
+                            textDoc.Text = mastg.StorageNote12;
+                            break;
+                        case "StorageStatus12":
+                            textDoc.Text = mastg.StorageStatus12.ToString();
+                            break;
+                        case "StorageNote13":
+                            textDoc.Text = mastg.StorageNote13;
+                            break;
+                        case "StorageStatus13":
+                            textDoc.Text = mastg.StorageStatus13.ToString();
+                            break;
+                        case "StorageNote14":
+                            textDoc.Text = mastg.StorageNote14;
+                            break;
+                        case "StorageStatus14":
+                            textDoc.Text = mastg.StorageStatus14.ToString();
+                            break;
+                        case "StorageNote15":
+                            textDoc.Text = mastg.StorageNote15;
+                            break;
+                        case "StorageStatus15":
+                            textDoc.Text = mastg.StorageStatus15.ToString();
+                            break;
+                        case "CryptoNote01":
+                            textDoc.Text = mastg.CryptoNote01;
+                            break;
+                        case "CryptoStatus01":
+                            textDoc.Text = mastg.CryptoStatus01.ToString();
+                            break;
+                        case "CryptoNote02":
+                            textDoc.Text = mastg.CryptoNote02;
+                            break;
+                        case "CryptoStatus02":
+                            textDoc.Text = mastg.CryptoStatus02.ToString();
+                            break;
+                        case "CryptoNote03":
+                            textDoc.Text = mastg.CryptoNote03;
+                            break;
+                        case "CryptoStatus03":
+                            textDoc.Text = mastg.CryptoStatus03.ToString();
+                            break;
+                        case "CryptoNote04":
+                            textDoc.Text = mastg.CryptoNote04;
+                            break;
+                        case "CryptoStatus04":
+                            textDoc.Text = mastg.CryptoStatus04.ToString();
+                            break;
+                        case "CryptoNote05":
+                            textDoc.Text = mastg.CryptoNote05;
+                            break;
+                        case "CryptoStatus05":
+                            textDoc.Text = mastg.CryptoStatus05.ToString();
+                            break;
+                        case "CryptoNote06":
+                            textDoc.Text = mastg.CryptoNote06;
+                            break;
+                        case "CryptoStatus06":
+                            textDoc.Text = mastg.CryptoStatus06.ToString();
+                            break;
+                        case "AuthNote01":
+                            textDoc.Text = mastg.AuthNote01;
+                            break;
+                        case "AuthStatus01":
+                            textDoc.Text = mastg.AuthStatus01.ToString();
+                            break;
+                        case "AuthNote02":
+                            textDoc.Text = mastg.AuthNote02;
+                            break;
+                        case "AuthStatus02":
+                            textDoc.Text = mastg.AuthStatus02.ToString();
+                            break;
+                        case "AuthNote03":
+                            textDoc.Text = mastg.AuthNote03;
+                            break;
+                        case "AuthStatus03":
+                            textDoc.Text = mastg.AuthStatus03.ToString();
+                            break;
+                        case "AuthNote04":
+                            textDoc.Text = mastg.AuthNote04;
+                            break;
+                        case "AuthStatus04":
+                            textDoc.Text = mastg.AuthStatus04.ToString();
+                            break;
+                        case "AuthNote05":
+                            textDoc.Text = mastg.AuthNote05;
+                            break;
+                        case "AuthStatus05":
+                            textDoc.Text = mastg.AuthStatus05.ToString();
+                            break;
+                        case "AuthNote06":
+                            textDoc.Text = mastg.AuthNote06;
+                            break;
+                        case "AuthStatus06":
+                            textDoc.Text = mastg.AuthStatus06.ToString();
+                            break;
+                        case "AuthNote07":
+                            textDoc.Text = mastg.AuthNote07;
+                            break;
+                        case "AuthStatus07":
+                            textDoc.Text = mastg.AuthStatus07.ToString();
+                            break;
+                        case "AuthNote08":
+                            textDoc.Text = mastg.AuthNote08;
+                            break;
+                        case "AuthStatus08":
+                            textDoc.Text = mastg.AuthStatus08.ToString();
+                            break;
+                        case "AuthNote09":
+                            textDoc.Text = mastg.AuthNote09;
+                            break;
+                        case "AuthStatus09":
+                            textDoc.Text = mastg.AuthStatus09.ToString();
+                            break;
+                        case "AuthNote10":
+                            textDoc.Text = mastg.AuthNote10;
+                            break;
+                        case "AuthStatus10":
+                            textDoc.Text = mastg.AuthStatus10.ToString();
+                            break;
+                        case "AuthNote11":
+                            textDoc.Text = mastg.AuthNote11;
+                            break;
+                        case "AuthStatus11":
+                            textDoc.Text = mastg.AuthStatus11.ToString();
+                            break;
+                        case "AuthNote12":
+                            textDoc.Text = mastg.AuthNote12;
+                            break;
+                        case "AuthStatus12":
+                            textDoc.Text = mastg.AuthStatus12.ToString();
+                            break;
+                        case "NetworkNote01":
+                            textDoc.Text = mastg.NetworkNote01;
+                            break;
+                        case "NetworkStatus01":
+                            textDoc.Text = mastg.NetworkStatus01.ToString();
+                            break;
+                        case "NetworkNote02":
+                            textDoc.Text = mastg.NetworkNote02;
+                            break;
+                        case "NetworkStatus02":
+                            textDoc.Text = mastg.NetworkStatus02.ToString();
+                            break;
+                        case "NetworkNote03":
+                            textDoc.Text = mastg.NetworkNote03;
+                            break;
+                        case "NetworkStatus03":
+                            textDoc.Text = mastg.NetworkStatus03.ToString();
+                            break;
+                        case "NetworkNote04":
+                            textDoc.Text = mastg.NetworkNote04;
+                            break;
+                        case "NetworkStatus04":
+                            textDoc.Text = mastg.NetworkStatus04.ToString();
+                            break;
+                        case "NetworkNote05":
+                            textDoc.Text = mastg.NetworkNote05;
+                            break;
+                        case "NetworkStatus05":
+                            textDoc.Text = mastg.NetworkStatus05.ToString();
+                            break;
+                        case "NetworkNote06":
+                            textDoc.Text = mastg.NetworkNote06;
+                            break;
+                        case "NetworkStatus06":
+                            textDoc.Text = mastg.NetworkStatus06.ToString();
+                            break;
+                        case "PlatformNote01":
+                            textDoc.Text = mastg.PlatformNote01;
+                            break;
+                        case "PlatformStatus01":
+                            textDoc.Text = mastg.PlatformStatus01.ToString();
+                            break;
+                        case "PlatformNote02":
+                            textDoc.Text = mastg.PlatformNote02;
+                            break;
+                        case "PlatformStatus02":
+                            textDoc.Text = mastg.PlatformStatus02.ToString();
+                            break;
+                        case "PlatformNote03":
+                            textDoc.Text = mastg.PlatformNote03;
+                            break;
+                        case "PlatformStatus03":
+                            textDoc.Text = mastg.PlatformStatus03.ToString();
+                            break;
+                        case "PlatformNote04":
+                            textDoc.Text = mastg.PlatformNote04;
+                            break;
+                        case "PlatformStatus04":
+                            textDoc.Text = mastg.PlatformStatus04.ToString();
+                            break;
+                        case "PlatformNote05":
+                            textDoc.Text = mastg.PlatformNote05;
+                            break;
+                        case "PlatformStatus05":
+                            textDoc.Text = mastg.PlatformStatus05.ToString();
+                            break;
+                        case "PlatformNote06":
+                            textDoc.Text = mastg.PlatformNote06;
+                            break;
+                        case "PlatformStatus06":
+                            textDoc.Text = mastg.PlatformStatus06.ToString();
+                            break;
+                        case "PlatformNote07":
+                            textDoc.Text = mastg.PlatformNote07;
+                            break;
+                        case "PlatformStatus07":
+                            textDoc.Text = mastg.PlatformStatus07.ToString();
+                            break;
+                        case "PlatformNote08":
+                            textDoc.Text = mastg.PlatformNote08;
+                            break;
+                        case "PlatformStatus08":
+                            textDoc.Text = mastg.PlatformStatus08.ToString();
+                            break;
+                        case "PlatformNote09":
+                            textDoc.Text = mastg.PlatformNote09;
+                            break;
+                        case "PlatformStatus09":
+                            textDoc.Text = mastg.PlatformStatus09.ToString();
+                            break;
+                        case "PlatformNote10":
+                            textDoc.Text = mastg.PlatformNote10;
+                            break;
+                        case "PlatformStatus10":
+                            textDoc.Text = mastg.PlatformStatus10.ToString();
+                            break;
+                        case "PlatformNote11":
+                            textDoc.Text = mastg.PlatformNote11;
+                            break;
+                        case "PlatformStatus11":
+                            textDoc.Text = mastg.PlatformStatus11.ToString();
+                            break;
+                        case "CodeNote01":
+                            textDoc.Text = mastg.CodeNote01;
+                            break;
+                        case "CodeStatus01":
+                            textDoc.Text = mastg.CodeStatus01.ToString();
+                            break;
+                        case "CodeNote02":
+                            textDoc.Text = mastg.CodeNote02;
+                            break;
+                        case "CodeStatus02":
+                            textDoc.Text = mastg.CodeStatus02.ToString();
+                            break;
+                        case "CodeNote03":
+                            textDoc.Text = mastg.CodeNote03;
+                            break;
+                        case "CodeStatus03":
+                            textDoc.Text = mastg.CodeStatus03.ToString();
+                            break;
+                        case "CodeNote04":
+                            textDoc.Text = mastg.CodeNote04;
+                            break;
+                        case "CodeStatus04":
+                            textDoc.Text = mastg.CodeStatus04.ToString();
+                            break;
+                        case "CodeNote05":
+                            textDoc.Text = mastg.CodeNote05;
+                            break;
+                        case "CodeStatus05":
+                            textDoc.Text = mastg.CodeStatus05.ToString();
+                            break;
+                        case "CodeNote06":
+                            textDoc.Text = mastg.CodeNote06;
+                            break;
+                        case "CodeStatus06":
+                            textDoc.Text = mastg.CodeStatus06.ToString();
+                            break;
+                        case "CodeNote07":
+                            textDoc.Text = mastg.CodeNote07;
+                            break;
+                        case "CodeStatus07":
+                            textDoc.Text = mastg.CodeStatus07.ToString();
+                            break;
+                        case "CodeNote08":
+                            textDoc.Text = mastg.CodeNote08;
+                            break;
+                        case "CodeStatus08":
+                            textDoc.Text = mastg.CodeStatus08.ToString();
+                            break;
+                        case "CodeNote09":
+                            textDoc.Text = mastg.CodeNote09;
+                            break;
+                        case "CodeStatus09":
+                            textDoc.Text = mastg.CodeStatus09.ToString();
+                            break;
+                        case "ResilienceNote01":
+                            textDoc.Text = mastg.ResilienceNote01;
+                            break;
+                        case "ResilienceStatus01":
+                            textDoc.Text = mastg.ResilienceStatus01.ToString();
+                            break;
+                        case "ResilienceNote02":
+                            textDoc.Text = mastg.ResilienceNote02;
+                            break;
+                        case "ResilienceStatus02":
+                            textDoc.Text = mastg.ResilienceStatus02.ToString();
+                            break;
+                        case "ResilienceNote03":
+                            textDoc.Text = mastg.ResilienceNote03;
+                            break;
+                        case "ResilienceStatus03":
+                            textDoc.Text = mastg.ResilienceStatus03.ToString();
+                            break;
+                        case "ResilienceNote04":
+                            textDoc.Text = mastg.ResilienceNote04;
+                            break;
+                        case "ResilienceStatus04":
+                            textDoc.Text = mastg.ResilienceStatus04.ToString();
+                            break;
+                        case "ResilienceNote05":
+                            textDoc.Text = mastg.ResilienceNote05;
+                            break;
+                        case "ResilienceStatus05":
+                            textDoc.Text = mastg.ResilienceStatus05.ToString();
+                            break;
+                        case "ResilienceNote06":
+                            textDoc.Text = mastg.ResilienceNote06;
+                            break;
+                        case "ResilienceStatus06":
+                            textDoc.Text = mastg.ResilienceStatus06.ToString();
+                            break;
+                        case "ResilienceNote07":
+                            textDoc.Text = mastg.ResilienceNote07;
+                            break;
+                        case "ResilienceStatus07":
+                            textDoc.Text = mastg.ResilienceStatus07.ToString();
+                            break;
+                        case "ResilienceNote08":
+                            textDoc.Text = mastg.ResilienceNote08;
+                            break;
+                        case "ResilienceStatus08":
+                            textDoc.Text = mastg.ResilienceStatus08.ToString();
+                            break;
+                        case "ResilienceNote09":
+                            textDoc.Text = mastg.ResilienceNote09;
+                            break;
+                        case "ResilienceStatus09":
+                            textDoc.Text = mastg.ResilienceStatus09.ToString();
+                            break;
+                        case "ResilienceNote10":
+                            textDoc.Text = mastg.ResilienceNote10;
+                            break;
+                        case "ResilienceStatus10":
+                            textDoc.Text = mastg.ResilienceStatus10.ToString();
+                            break;
+                        case "ResilienceNote11":
+                            textDoc.Text = mastg.ResilienceNote11;
+                            break;
+                        case "ResilienceStatus11":
+                            textDoc.Text = mastg.ResilienceStatus11.ToString();
+                            break;
+                        case "ResilienceNote12":
+                            textDoc.Text = mastg.ResilienceNote12;
+                            break;
+                        case "ResilienceStatus12":
+                            textDoc.Text = mastg.ResilienceStatus12.ToString();
+                            break;
+                        case "ResilienceNote13":
+                            textDoc.Text = mastg.ResilienceNote13;
+                            break;
+                        case "ResilienceStatus13":
+                            textDoc.Text = mastg.ResilienceStatus13.ToString();
+                            break;
+                    }
+                }
+                
+                
                 var result = document.SaveAs(resultPath);
                 result.Close();
                 
+            }
+            var fileBytes = System.IO.File.ReadAllBytes(resultPath);
+            System.IO.File.Delete(resultPath);
+
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+                "OWASPMASTG_Report_" + target.Name + ".docx");
         }
-
-        var fileBytes = System.IO.File.ReadAllBytes(resultPath);
-        System.IO.File.Delete(resultPath);
-
-        return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.template", "OWASPWSTG_Report_"+target.Name+".docx");
-        
+        catch (Exception e)
+        {
+            TempData["errorReport"] = "Error generating report!";
+            _logger.LogError(e, "An error ocurred generating Checlist Workspace WSTG report. User: {1}",
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction(nameof(Index));
+        }
     }
-    
 }

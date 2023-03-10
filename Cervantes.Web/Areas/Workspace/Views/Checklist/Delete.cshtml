@@ -73,6 +73,7 @@
     
                     <form asp-area="Workspace" asp-controller="Checklist" asp-action="Delete" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Wstg.Id"/>
+                        <input type="hidden" asp-for="Mastg.Id"/>
                         <input type="hidden" asp-for="Type"/>
                         <a class="btn btn-light" asp-action="Index" localize-content>Back</a>
                         <button type="submit" class="btn btn-outline-danger" localize-content>Delete</button>
