@@ -789,7 +789,13 @@ public class VulnController : Controller
         try
         {
             var vulnId = Guid.Parse(form["vulnId"]);
-            jiraService.CreateIssue(vulnId, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var issue = jiraService.CreateIssue(vulnId, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (issue == false)
+            {
+                TempData["errorCreateJira"] = "Error editing vuln!";
+                _logger.LogError( "An error ocurred creating Jira Issue on Vuln {0} User {1}", form["vulnId"],User.FindFirstValue(ClaimTypes.Name));
+                return RedirectToAction("Details", "Vuln", new {id = vulnId});
+            }
             var vuln = vulnManager.GetById(vulnId);
             vuln.JiraCreated = true;
             vulnManager.Context.SaveChanges();

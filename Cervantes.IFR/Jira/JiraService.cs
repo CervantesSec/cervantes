@@ -31,13 +31,13 @@ public class JiraService: IJIraService
         _logger = logger;
     }
 
-    public void CreateIssue(Guid vuln, string user)
+    public bool CreateIssue(Guid vuln, string user)
     {
         try
         {
             if (_jiraConfiguration.Enabled == false)
             {
-                return;
+                return false;
             }
 
             var vulnerability = vulnManager.GetById(vuln);
@@ -50,7 +50,24 @@ public class JiraService: IJIraService
                     _jiraConfiguration.Password);
                 var issue = jira.CreateIssue(_jiraConfiguration.Project);
                 issue.Type = "Error";
-                issue.Priority = "High";
+                switch (vulnerability.Risk)
+                {
+                    case VulnRisk.Critical:
+                        issue.Priority = "Highest";
+                        break;
+                    case VulnRisk.High:
+                        issue.Priority = "High";
+                        break;
+                    case VulnRisk.Medium:
+                        issue.Priority = "Medium";
+                        break;
+                    case VulnRisk.Low:
+                        issue.Priority = "Low";
+                        break;
+                    case VulnRisk.Info:
+                        issue.Priority = "Lowest";
+                        break;
+                }
                 issue.Summary = vulnerability.Name;
                 
                 //remove img tag on htmlDesc
@@ -260,14 +277,17 @@ public class JiraService: IJIraService
                 jiraManager.Add(jiraTicket);
                 jiraManager.Context.SaveChanges();
 
+                return true;
+
 
             }
+            return false;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred in Jira Service Creating Jira Issue Vuln: {0}",
                 vuln);
-            return;
+            return false;
         }
         
     }
