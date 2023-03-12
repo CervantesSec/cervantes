@@ -782,15 +782,30 @@
     <div class="tab-pane" id="jira">
     @if (Model.Vuln.JiraCreated == false)
     {
-        <form asp-area="" asp-controller="Vuln" asp-action="CreateIssueJira" method="post" enctype="multipart/form-data">
+        <form asp-area="" asp-controller="Jira" asp-action="CreateIssue" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="from" name="from" value="workspace"/>
+            <input type="hidden" id="project" name="project" value="@Model.Project.Id"/>
             <input asp-for="@Model.Vuln.Id" type="hidden" id="vulnId" name="vulnId" value="@Model.Vuln.Id"/>
-            <button type="submit">Create</button>
+            <button type="submit" class="btn btn-dark"><i class="fab fa-jira"></i> Create</button>
         </form>
     }
     else
     {
         @if (Model.Jira != null)
         {
+            <div class="text-right">
+                <div class="btn-group">
+                    <form asp-area="" asp-controller="Jira" asp-action="UpdateIssue" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="from" name="from" value="workspace"/>
+                        <input type="hidden" id="project" name="project" value="@Model.Project.Id"/>
+                        <input asp-for="@Model.Vuln.Id" type="hidden" id="vulnId" name="vulnId" value="@Model.Vuln.Id"/>
+                        <button type="submit" class="btn btn-secondary"><i class="fas fa-undo-alt"></i> Update</button>
+                    </form>
+                    
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#deleteJiraModal"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+                
+            </div>
             <div class="row">
                         <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
 
@@ -1029,7 +1044,7 @@
                                                 {
                                                     <div class="post">
                                                         <div class="user-block">
-                                                            <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
+                                                            <img class="img-circle img-bordered-sm" src="~/img/user.png" alt="user image">
                                                             <span class="username">
                                                                 <a href="#">@comment.Author</a>
                                                             </span>
@@ -1049,10 +1064,14 @@
                                 </div>
 
                                 <h4>Add Comment to Issue</h4>
-                                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                                <form asp-area="" asp-controller="Jira" asp-action="AddComment" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" asp-for="Vuln.Id" id="vulnId" name="vulnId" value="@Model.Vuln.Id"/>
+                                    <input type="hidden" id="from" name="from" value="workspace"/>
+                                    <input type="hidden" id="project" name="project" value="@Model.Project.Id"/>
                                     <div class="form-group">
                                         <textarea id="commentDescription" name="commentDescription" class="form-control" rows="4"></textarea>
                                     </div>
+                                    <button type="submit" class="btn btn-dark"><i class="fas fa-plus"></i> Add</button>
                                 </form>
 
                             </div>
@@ -1083,6 +1102,38 @@
 
 </section>
 
+<!-- Modal -->
+<div class="modal fade" id="deleteJiraModal" tabindex="-1" role="dialog" aria-labelledby="deleteJiraModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteJiraModalLabel">Delete Jira Issue</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                Are you sure you want to delete the Jira Issue?
+                
+
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form asp-area="" asp-controller="Jira" asp-action="DeleteIssue" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="from" name="from" value="workspace"/>
+                    <input type="hidden" id="project" name="project" value="@Model.Project.Id"/>
+                    <input type="hidden" asp-for="Vuln.Id" id="vulnId" name="vulnId" value="@Model.Vuln.Id"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
 @section Styles{
     <link href="~/lib/select2/css/select2.min.css" rel="stylesheet">
 }
@@ -1112,6 +1163,12 @@
                           $('.targets').select2();
                          
                   });
+          $(document).ready(function() {
+                              $('#commentDescription').summernote({
+                              height: 300,
+                              });
+                              });
+          
 
 </script>
 }

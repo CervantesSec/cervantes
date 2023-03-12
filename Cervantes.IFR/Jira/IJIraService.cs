@@ -7,6 +7,8 @@ public interface IJIraService
 {
     public bool CreateIssue(Guid vuln, string user);
     public bool JiraEnabled();
+    public bool DeleteIssue(string key);
 
-    public void Issue(string key);
+    public void UpdateIssue(string key);
+    public bool AddComment(string key, string comment);
 }

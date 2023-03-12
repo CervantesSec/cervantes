@@ -533,6 +533,12 @@ public class VulnController : Controller
             TempData["edited"] = "edited";
             _logger.LogInformation("User: {0} edited Vuln: {1} on Project {2}", User.FindFirstValue(ClaimTypes.Name),
                 id, project);
+            if (result.JiraCreated == true)
+            {
+                var jira = jiraManager.GetByVulnId(result.Id);
+                jiraService.UpdateIssue(jira.JiraKey); 
+            }
+            
 
             return RedirectToAction("Index");
         }

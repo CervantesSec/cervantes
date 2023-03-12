@@ -102,7 +102,7 @@ git clone https://github.com/CervantesSec/cervantes.git
     }
   },
   "AllowedHosts": "*",
-   "EmailConfiguration": {
+  "EmailConfiguration": {
     "Enabled": false,
     "Name": "Cervantes",
     "From": "cervantes@cervantes.local",
@@ -110,8 +110,8 @@ git clone https://github.com/CervantesSec/cervantes.git
     "SmtpPort": 1025,
     "SmtpUsername": "cervantes@cervantes.local",
     "SmtpPassword": "cervantes"
-    },
-    "JiraConfiguration": {
+  },
+  "JiraConfiguration": {
     "Enabled": false,
     "Auth": "Basic",
     "Url": "",
@@ -120,8 +120,9 @@ git clone https://github.com/CervantesSec/cervantes.git
     "Password": "",
     "ConsumerKey": "",
     "ConsumerSecret": "",
-    "AccessToken": "",
-    "TokenSecret": ""
+    "OAuthAccessToken": "",
+    "OAuthTokenSecret": ""
+    
   }
 }
 ```
