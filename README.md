@@ -35,11 +35,15 @@ The demo server has 3 users to show the different permission levels. The credent
 | su@cervantes.local    | SuperUser123. | SuperUser     |
 | user@cervantes.local  | User123.      | User          |
 
+This demo has limited functionalities, file upload & report generation, logs... If you want to test the full functionalities use the dockerized version.
+
 ## Features
 * OpenSource
 * Multiplatform
 * Multilanguage
 * Team Collaboration
+* Checklists
+* OWASP Compliance Reports
 * BuiltIn dashboards and analytics
 * Manage your clients and Offensive Security projects
 * One click reports creation
@@ -61,7 +65,7 @@ git clone https://github.com/CervantesSec/docker.git
 2. After that you need to start your docker containers:
 
 ```sh
-docker-compose -p cervantes up -d
+docker-compose -p cervantes -f docker-compose.yml up -d
 ```
 
 3. After this, open your browser at http://localhost
