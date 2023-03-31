@@ -323,6 +323,11 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\cyberchef\modules\Yara.js" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\cyberchef\modules\Yara.js.LICENSE.txt" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\cyberchef\ZipWorker.js.LICENSE.txt" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\3b771dcc-213f-4683-a586-a14b6e6ae3d0\76af3a95-7dfb-4b35-8ad3-0eaac96ec959_rth_vryh.docx" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Areas\Workspace\Views\Project\Details.cshtml" />
     </ItemGroup>
 
 </Project>

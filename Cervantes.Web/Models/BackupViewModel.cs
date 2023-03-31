@@ -31,5 +31,9 @@ public class BackupViewModel
     public IEnumerable<VulnAttachment> VulnAttachments { get; set; }
     public IEnumerable<VulnNote> VulnNotes { get; set; }
     public IEnumerable<VulnTargets> VulnTargets { get; set; }
+    public IEnumerable<MASTG> Mastgs { get; set; }
+    public IEnumerable<WSTG> Wstgs { get; set; }
+    public IEnumerable<Jira> Jira { get; set; }
+    public IEnumerable<JiraComments> JiraComments { get; set; }
 
 }

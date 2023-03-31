@@ -1,0 +1,78 @@
+@model ExecutiveSummaryViewModel
+
+
+@{
+    ViewData["Title"] = "Executive Summary";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content><i class="fas fa-file-alt"></i> Executive Summary</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspace</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>@Model.Project.Name</a>
+                    </li>
+                    <li class="breadcrumb-item" localize-content>
+                        <a asp-area="Workspace" asp-controller="Project" asp-action="Details" localize-content>Project</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Executive Sumamry</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <form asp-area="Workspace" asp-controller="Project" asp-action="ExecutiveSummary" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="ExecutiveSummary" class="control-label" localize-content>Description</label>
+                            <textarea id="description" asp-for="ExecutiveSummary" class="form-control" rows="8"></textarea>
+                            <span asp-validation-for="ExecutiveSummary" class="text-danger"></span>
+                            <button type="submit" class="btn btn-dark" localize-content>Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+
+@section Scripts{
+    <script>
+
+  $(document).ready(function() {
+      $('#description').summernote({
+      height: 600,
+      });
+      });
+    
+
+   
+         $(document).ready(function () {
+  bsCustomFileInput.init();
+});
+
+</script>
+}

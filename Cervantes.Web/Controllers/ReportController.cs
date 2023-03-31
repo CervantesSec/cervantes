@@ -226,7 +226,7 @@ public class ReportController : Controller
 
             foreach (var footerPart in document.MainDocumentPart.FooterParts)
             {
-                //Gets the text in headers
+                //Gets the text in footers
                 foreach (var text in footerPart.RootElement.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>())
                 {
                     switch (text.Text)
@@ -333,6 +333,15 @@ public class ReportController : Controller
                         break;
                     case "VulnInfoCount":
                         text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Info).Count().ToString();
+                        break;
+                    case "ExecutiveSummaryDesc":
+                        var parentExecutiveDesc = text.Parent;
+                        var executiveDescription = converter.Parse(pro.ExecutiveSummary);
+                        for (int i = executiveDescription.Count() - 1 ; i >= 0; i--)
+                        {
+                            parentExecutiveDesc.InsertAfterSelf(executiveDescription.ElementAt(i));
+                        }
+                        text.Text = String.Empty;
                         break;
                 }
             }

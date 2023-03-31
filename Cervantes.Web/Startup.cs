@@ -165,5 +165,8 @@ public class Startup
             endpoints.MapRazorPages();
         });
         
+        app.UseCookiePolicy();
+        
+        
     }
 }

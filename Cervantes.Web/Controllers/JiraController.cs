@@ -73,6 +73,8 @@ public class JiraController : Controller
             {
                 return RedirectToAction("Details", "Vuln", new {area="Workspace", project=form["project"],id = vulnId});
             }
+            TempData["createJira"] = "Error editing vuln!";
+            _logger.LogInformation( "Jira Created Issue on Vuln {0} User {1}", form["vulnId"],User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Vuln", new {id = vulnId});
         }
         catch (Exception e)
@@ -194,6 +196,7 @@ public class JiraController : Controller
             {
                 return RedirectToAction("Details", "Vuln", new {area="Workspace", project=form["project"],id = form["vulnId"]});
             }
+            
             return RedirectToAction("Details", "Vuln", new {id = vulnId});
         }
         catch (Exception e)

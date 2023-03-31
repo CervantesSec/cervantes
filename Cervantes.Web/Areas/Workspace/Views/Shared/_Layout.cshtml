@@ -212,6 +212,29 @@
 </li>
 <li class="nav-item">
     <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-folder"></i>
+        <p><span localize-content>Project</span><i class="right fas fa-angle-left"></i></p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a asp-area="Workspace" asp-controller="Project" asp-action="Details" asp-route-culture="@culture" class="nav-link">
+                <i class="fas fa-folder nav-icon"></i>
+                <p localize-content>Details</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a asp-area="Workspace" asp-controller="Project" asp-action="ExecutiveSummary" asp-route-culture="@culture" class="nav-link">
+                <i class="fas fa-file-alt nav-icon"></i>
+                <p localize-content>Executive Summary</p>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link">
         <i class="nav-icon fas fa-list-ol"></i>
         <p><span localize-content>Checklist</span><i class="right fas fa-angle-left"></i></p>
     </a>

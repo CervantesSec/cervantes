@@ -540,14 +540,16 @@ public class VulnController : Controller
             }
             
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Vuln", new {area="Workspace", project,id = id});
+
         }
         catch (Exception e)
         {
             TempData["error"] = "Error editing vuln!";
             _logger.LogError(e, "An error ocurred editing a Vuln Workspace on. Task: {0} Project: {1} User: {2}", id,
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Details", "Vuln", new {area="Workspace", project,id = id});
+
         }
     }
 

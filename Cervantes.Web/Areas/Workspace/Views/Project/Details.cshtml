@@ -1,0 +1,1181 @@
+﻿@using System.Net
+@using Cervantes.CORE
+@model Cervantes.Web.Models.ProjectDetailsViewModel
+
+@{
+    ViewData["Title"] = "Project Details";
+}
+
+@{
+    if (TempData["existsMember"] != null)
+    {
+        <div class="alert alert-info alert-dismissible">
+            <strong localize-content>This user is already added to project!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["addedMember"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>User added to project successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedMember"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>User deleted from project successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["addedTarget"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Target added to project successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedTarget"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Target deleted from project successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["addedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Note added to project successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Note deleted from project successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["addedAttachment"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Attachment added to project successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedAttachment"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Attachment deleted from project successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["errorAttachment"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced adding an Attachment!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced @TempData["error"].ToString() Project!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["reportDeleted"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Report deleted successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["reportCreated"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Report created successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 localize-content>
+                    <i class="fas fa-folder"></i> @Model.Project.Name
+                </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Project" asp-action="Index" localize-content>Project</a>
+                    </li>
+                    <li class="breadcrumb-item active" localize-content>Details</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    <hr/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-3">
+
+    <!-- Profile Image -->
+    <div class="card card-dark card-outline">
+        <div class="card-body box-profile">
+            <div class="text-center">
+                <img class="img-fluid img-circle"
+                     src="@Url.Content(Model.Project.Client.ImagePath)"
+                     alt="LogoClient" style="height: 200px">
+            </div>
+
+            <h3 class="profile-username text-center">@Model.Project.Name</h3>
+
+            <div class="info-box mb-3 ">
+                <span class="info-box-icon bg-dark">
+                    <i class="fas fa-briefcase"></i>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text" localize-content>Client</span>
+                    <span class="info-box-number">
+                        <a asp-controller="Client" asp-action="Details" asp-route-id="@Model.Project.Client.Id" localize-content>
+                            <span class="btn btn-dark btn-sm">
+                                <i class="fas fa-briefcase"></i> @Model.Project.Client.Name
+                            </span>
+                        </a>
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            
+             <div class="info-box mb-3 ">
+                            <span class="info-box-icon bg-primary">
+                                <i class="fas fa-language"></i>
+                            </span>
+            
+                            <div class="info-box-content">
+                                <span class="info-box-text" localize-content>Language</span>
+                                <span class="info-box-number">
+                                    @Model.Project.Language
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+            <div class="info-box mb-3 ">
+                <span class="info-box-icon bg-teal">
+                    <i class="fas fa-calendar"></i>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text" localize-content>Start Date</span>
+                    <span class="info-box-number">@Model.Project.StartDate.ToShortDateString()</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <div class="info-box mb-3 ">
+                <span class="info-box-icon bg-danger">
+                    <i class="fas fa-calendar-check"></i>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text" localize-content>End Date</span>
+                    <span class="info-box-number">@Model.Project.EndDate.ToShortDateString()</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <div class="info-box mb-3 ">
+                <span class="info-box-icon bg-info">
+                    <i class="fas fa-user"></i>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text" localize-content>Created by</span>
+                    <span class="info-box-number">@Model.Project.User.FullName</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <div class="info-box mb-3 ">
+                <span class="info-box-icon bg-indigo">
+                    <i class="fas fa-project-diagram"></i>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-indigo" localize-content>Project Type</span>
+                    <span class="info-box-number">
+                        @switch (Model.Project.ProjectType)
+                        {
+                            case ProjectType.BlackBox:
+                                <dd>
+                                    <span class="badge badge-dark">@Html.DisplayFor(model => model.Project.ProjectType)</span>
+                                </dd>
+                                break;
+                            case ProjectType.GrayBox:
+                                <dd>
+                                    <span class="badge badge-secondary">@Html.DisplayFor(model => model.Project.ProjectType)</span>
+                                </dd>
+                                break;
+                            case ProjectType.WhiteBox:
+                                <dd>
+                                    <span class="badge badge-light">@Html.DisplayFor(model => model.Project.ProjectType)</span>
+                                </dd>
+                                break;
+                            default:
+                                <dd>
+                                    <span class="badge badge-light">@Html.DisplayFor(model => model.Project.ProjectType)</span>
+                                </dd>
+                                break;
+                        }
+
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <div class="info-box mb-3 ">
+                <span class="info-box-icon bg-warning">
+                    <i class="fas fa-tasks"></i>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text" localize-content>Status</span>
+                    <span class="info-box-number">
+                        @switch (Model.Project.Status)
+                        {
+                            case ProjectStatus.Active:
+                                <dd>
+                                    <span class="badge badge-success">@Html.DisplayFor(model => model.Project.Status)</span>
+                                </dd>
+                                break;
+                            case ProjectStatus.Archived:
+                                <dd>
+                                    <span class="badge badge-secondary">@Html.DisplayFor(model => model.Project.Status)</span>
+                                </dd>
+                                break;
+                            case ProjectStatus.Waiting:
+                                <dd>
+                                    <span class="badge badge-info">@Html.DisplayFor(model => model.Project.Status)</span>
+                                </dd>
+                                break;
+                            default:
+                                <dd>
+                                    <span class="badge badge-light">@Html.DisplayFor(model => model.Project.Status)</span>
+                                </dd>
+                                break;
+                        }
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+
+
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+    <a class="btn btn-default" asp-controller="Project" asp-action="Index" localize-content>Back</a>
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+    {
+        <a class="btn btn-outline-warning" asp-area="" asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Project.Id" localize-content><i class="fas fa-edit"></i> Edit</a>
+    }
+</div>
+<!-- /.col -->
+<div class="col-md-9">
+<div class="card card-dark card-tabs">
+<div class="card-header p-0 pt-1">
+    <ul class="nav nav-tabs">
+        <li class="nav-item" localize-content>
+             <a class="nav-link active" href="#details" data-toggle="pill">
+            <i class="fas fa-eye"></i> <span localize-content>Details</span>
+                </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#members" data-toggle="pill">
+                <i class="fas fa-users"></i> <span localize-content>Members</span> <span class="badge badge-danger">@Model.ProjectUsers.Count()</span>
+            </a>
+        </li>
+        <li class="nav-item" localize-content>
+            <a class="nav-link" href="#targets" data-toggle="pill">
+                <i class="fas fa-bullseye"></i> <span localize-content>Targets</span> <span class="badge badge-danger">@Model.Targets.Count()</span>
+            </a>
+        </li>
+        <li class="nav-item" localize-content>
+            <a class="nav-link" href="#tasks" data-toggle="pill">
+                <i class="fas fa-tasks"></i> <span localize-content>Tasks</span> <span class="badge badge-danger">@Model.Tasks.Count()</span>
+            </a>
+        </li>
+        <li class="nav-item" localize-content>
+            <a class="nav-link" href="#vulns" data-toggle="pill">
+                <i class="fas fa-bug"></i> <span localize-content>Vulnerabilities</span> <span class="badge badge-danger">@Model.Vulns.Count()</span>
+            </a>
+        </li>
+        <li class="nav-item" localize-content>
+            <a class="nav-link" href="#notes" data-toggle="pill">
+                <i class="fas fa-sticky-note"></i> <span localize-content>Notes</span> <span class="badge badge-danger">@Model.ProjectNotes.Count()</span>
+            </a>
+        </li>
+        <li class="nav-item" localize-content>
+            <a class="nav-link" href="#attachments" data-toggle="pill">
+                <i class="fas fa-file"></i> <span localize-content>Attachments</span> <span class="badge badge-danger">@Model.ProjectAttachments.Count()</span>
+            </a>
+        </li>
+        <li class="nav-item" localize-content>
+            <a class="nav-link" href="#reports" data-toggle="pill">
+                <i class="fas fa-file-pdf"></i> <span localize-content>Reports</span> <span class="badge badge-danger">@Model.Reports.Count()</span>
+            </a>
+        </li>
+
+    </ul>
+</div><!-- /.card-header -->
+<div class="card-body">
+<div class="tab-content">
+<div class="active tab-pane" id="details">
+    <dl>
+
+        <dt>
+            <p localize-content>Description</p>
+        </dt>
+        <hr>
+        <dd>@Html.Raw(@WebUtility.HtmlDecode(Model.Project.Description))</dd>
+    </dl>
+</div>
+
+<!-- /.tab-pane -->
+<div class="tab-pane" id="members">
+
+    <table id="membersResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-image"></i> <span localize-content>Avatar</span>
+            </th>
+            <th>
+                <i class="fas fa-user"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-at"></i> <span localize-content>Email</span>
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+            {
+                <th>
+                    <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                </th>
+            }
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+
+        @foreach (var members in Model.ProjectUsers)
+        {
+            <tr>
+                @if (@members.User.Avatar != null)
+                {
+                    <td>
+                        <img alt="Avatar" class="table-avatar" src="@Url.Content(members.User.Avatar)" style="height: 1.25rem; width: 1.25rem;" />
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <i class="fas fa-user table-avatar" style="font-size: 1.25rem;"></i>
+                    </td>
+                }
+
+                <td>@members.User.FullName</td>
+                <td>@members.User.Email</td>
+                @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                {
+                    <td>
+                        <form asp-action="DeleteMember" method="post" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-tool" asp-controller="Project" asp-action="DeleteMember" asp-route-project="@members.ProjectId" asp-route-user="@members.UserId" localize-content>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                }
+
+            </tr>
+        }
+
+        </tbody>
+        <!--Table body-->
+    </table>
+
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+    {
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addMemberModal" localize-content>
+            Add Member
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="addMemberModal" tabindex="-1" role="dialog" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addMemberModalLabel" localize-content>Add Member to Project</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form asp-area="Workspace" asp-action="AddMember" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
+                            <div class="form-group">
+                                <label asp-for="ProjectUsers" class="control-label" localize-content>User</label>
+                                @Html.DropDownListFor(m => m.Users, Model.Users, new {@class = "form-control", id = "users", name = "users"})
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" localize-content>Close</button>
+                            <button type="submit" class="btn btn-dark" localize-content>Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+    <!--Table-->
+</div>
+<!-- /.tab-pane -->
+
+<!-- /.tab-pane -->
+<div class="tab-pane" id="targets">
+
+    <table id="targetsResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-bullseye"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-project-diagram"></i> <span localize-content>Type</span>
+            </th>
+            <th>
+                <i class="fas fa-align-left"></i> <span localize-content>Description</span>
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+            {
+                <th>
+                    <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                </th>
+            }
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+
+        @foreach (var targets in Model.Targets)
+        {
+            <tr>
+                <td>@targets.Name</td>
+
+                @switch (Model.TargetType)
+                {
+                    case TargetType.IP:
+                        <td>
+                            <span class="badge badge-success">@targets.Type</span>
+                        </td>
+                        break;
+                    case TargetType.Hostname:
+                        <td>
+                            <span class="badge badge-secondary">@targets.Type</span>
+                        </td>
+                        break;
+                    case TargetType.CIDR:
+                        <td>
+                            <span class="badge badge-light">@targets.Type</span>
+                        </td>
+                        break;
+                    case TargetType.URL:
+                        <td>
+                            <span class="badge badge-info">@targets.Type</span>
+                        </td>
+                        break;
+                    case TargetType.Binary:
+                        <td>
+                            <span class="badge badge-dark">@targets.Type</span>
+                        </td>
+                        break;
+                    default:
+                        <td>
+                            <span class="badge badge-light">@targets.Type</span>
+                        </td>
+                        break;
+                }
+                <td>@Html.Raw(@WebUtility.HtmlDecode(@targets.Description))</td>
+                @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                {
+                    <td>
+                        <form asp-action="DeleteTarget" method="post" enctype="multipart/form-data">
+                            <button class="btn btn-tool" asp-area="Workspace" asp-controller="Project" asp-action="DeleteTarget" asp-route-target="@targets.Id" asp-route-project="@targets.ProjectId" localize-content>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                }
+
+            </tr>
+        }
+
+        </tbody>
+        <!--Table body-->
+    </table>
+
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+    {
+        
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addTargetModal" localize-content>
+            <i class="fas fa-plus"></i> Add Target
+        </button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="addTargetModal" tabindex="-1" role="dialog" aria-labelledby="addTargetModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addTargetModalLabel" localize-content>Add Target to Project</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form asp-area="Workspace" asp-action="AddTarget" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+
+                            <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
+
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Name / IP / CIDR / URL</label>
+                                <input type="text" class="form-control" id="name" name="name"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Description</label>
+                                <textarea class="form-control" name="description" rows="10" cols="50"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" localize-content>Target Type</label>
+                                @Html.DropDownListFor(model => model.TargetType, Html.GetEnumSelectList<TargetType>(), new {@class = "form-control"})
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" localize-content>Close</button>
+                            <button type="submit" class="btn btn-success" localize-content>Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+
+
+
+</div>
+<!-- /.tab-pane -->
+
+<!-- /.tab-pane -->
+<div class="tab-pane" id="tasks">
+
+    <table id="tasksResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-tasks"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-align-left"></i> <span localize-content>Description</span>
+            </th>
+            <th>
+                <i class="fas fa-calendar"></i> <span localize-content>Start Date</span>
+            </th>
+            <th>
+                <i class="fas fa-calendar-check"></i> <span localize-content>End Date</span>
+            </th>
+            <th>
+                <i class="fas fa-user"></i> <span localize-content>Asigned To</span>
+            </th>
+            <th>
+                <i class="fas fa-bullseye"></i> <span localize-content>Target</span>
+            </th>
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+
+        @foreach (var tasks in Model.Tasks)
+        {
+            <tr>
+                <td>@tasks.Name</td>
+                <td>@Html.Raw(@WebUtility.HtmlDecode(@tasks.Description))</td>
+                <td>@tasks.StartDate.ToShortDateString()</td>
+                <td>@tasks.EndDate.ToShortDateString()</td>
+                <td>@tasks.AsignedUser.FullName</td>
+            </tr>
+        }
+
+        </tbody>
+        <!--Table body-->
+    </table>
+
+</div>
+<!-- /.tab-pane -->
+
+<!-- /.tab-pane -->
+<div class="tab-pane" id="vulns">
+
+    <table id="vulnResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-bug"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-biohazard"></i> <span localize-content>Risk</span>
+            </th>
+            <th>
+                <i class="fas fa-radiation-alt"></i> <span localize-content>CVSS3 Score</span>
+            </th>
+            <th>
+                <i class="fas fa-tasks"></i> <span localize-content>Status</span>
+            </th>
+            <th>
+                <i class="fas fa-project-diagram"></i> <span localize-content>Category</span>
+            </th>
+            <th>
+                <i class="fas fa-bullseye"></i> <span localize-content>Target</span>
+            </th>
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+
+        @foreach (var vulns in Model.Vulns)
+        {
+            <tr>
+                <td>@vulns.Name</td>
+                @switch (vulns.Risk)
+                {
+                    case VulnRisk.Info:
+                        <td>
+                            <span class="badge badge-info">
+                                <i class="fas fa-info-circle"></i> @vulns.Risk
+                            </span>
+                        </td>
+                        break;
+                    case VulnRisk.Low:
+                        <td>
+                            <span class="badge badge-success">
+                                <i class="fas fa-exclamation"></i> @vulns.Risk
+                            </span>
+                        </td>
+                        break;
+                    case VulnRisk.Medium:
+                        <td>
+                            <span class="badge badge-warning">
+                                <i class="fas fa-exclamation"></i> @vulns.Risk
+                            </span>
+                        </td>
+                        break;
+                    case VulnRisk.High:
+                        <td>
+                            <span class="badge badge-danger">
+                                <i class="fas fa-exclamation-circle"></i> @vulns.Risk
+                            </span>
+                        </td>
+                        break;
+                    case VulnRisk.Critical:
+                        <td>
+                            <span class="badge badge-danger">
+                                <i class="fas fa-exclamation-triangle"></i> @vulns.Risk
+                            </span>
+                        </td>
+                        break;
+                    default:
+                        <td>
+                            <span class="badge badge-light">@vulns.Risk</span>
+                        </td>
+                        break;
+                }
+
+                @if (vulns.CVSS3 < 2)
+                {
+                    <td>
+                        <span class="badge badge-info">
+                            <i class="fas fa-info-circle"></i> @vulns.CVSS3
+                        </span>
+                    </td>
+                }
+                else if (vulns.CVSS3 > 2 && vulns.CVSS3 < 4)
+                {
+                    <td>
+                        <span class="badge badge-success">
+                            <i class="fas fa-exclamation"></i> @vulns.CVSS3
+                        </span>
+                    </td>
+                }
+                else if (vulns.CVSS3 > 4 && vulns.CVSS3 < 6)
+                {
+                    <td>
+                        <span class="badge badge-warning">
+                            <i class="fas fa-exclamation"></i> @vulns.CVSS3
+                        </span>
+                    </td>
+                }
+                else if (vulns.CVSS3 > 6 && vulns.CVSS3 < 8)
+                {
+                    <td>
+                        <span class="badge badge-danger">
+                            <i class="fas fa-exclamation-circle"></i> @vulns.CVSS3
+                        </span>
+                    </td>
+                }
+                else if (vulns.CVSS3 > 8 && vulns.CVSS3 < 11)
+                {
+                    <td>
+                        <span class="badge badge-danger">
+                            <i class="fas fa-exclamation-triangle"></i> @vulns.CVSS3
+                        </span>
+                    </td>
+                }
+
+
+                <td>@vulns.Status</td>
+                <td>@vulns.VulnCategory.Name</td>
+
+            </tr>
+        }
+
+
+
+
+
+        </tbody>
+        <!--Table body-->
+    </table>
+
+
+</div>
+<!-- /.tab-pane -->
+
+<!-- /.tab-pane -->
+<div class="tab-pane" id="notes">
+
+    <table id="noteResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-sticky-note"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-align-left"></i> <span localize-content>Description</span>
+            </th>
+            <th>
+                <i class="fas fa-user"></i> <span localize-content>Created by</span>
+            </th>
+            <th>
+                <i class="fas fa-eye"></i> <span localize-content>Visibility</span>
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+            {
+                <th>
+                    <i class="fas fa-cog"></i> <span localize-content>Options</span>
+                </th>
+            }
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+
+        @foreach (var note in Model.ProjectNotes)
+        {
+            <tr>
+                <td>@note.Name</td>
+                <td>@Html.Raw(@WebUtility.HtmlDecode(note.Description))</td>
+                <td>@note.User.FullName</td>
+                <td>@note.Visibility</td>
+                @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                {
+                    <td>
+                        <form asp-area="Workspace" asp-action="DeleteNote" method="post" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-tool" asp-controller="Project" asp-action="DeleteNote" asp-route-project="@note.ProjectId" asp-route-id="@note.Id" localize-content>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                }
+
+            </tr>
+        }
+
+        </tbody>
+        <!--Table body-->
+    </table>
+
+
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+    {
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addNoteModal">
+            Add Note
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addNoteModalLabel">Add Note to Project</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form asp-area="Workspace" asp-action="AddNote" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+
+                            <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
+
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input type="text" class="form-control" id="noteName" name="noteName"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Note Description</label>
+                                <textarea class="form-control" id="noteDescription" name="noteDescription"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Visibility</label>
+                                @Html.DropDownListFor(model => model.Visibility, Html.GetEnumSelectList<Visibility>(), new {@class = "form-control"})
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Add" class="btn btn-success"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<!-- /.tab-pane -->
+
+<!-- /.tab-pane -->
+<div class="tab-pane" id="attachments">
+    <table id="attachmentsResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-file"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-download"></i> <span localize-content>File</span>
+            </th>
+            <th>
+                <i class="fas fa-user"></i> <span localize-content>Uploaded by</span>
+            </th>
+            <th>
+                <i class="fas fa-cog"></i> <span localize-content>Options</span>
+            </th>
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+
+        @foreach (var attachment in Model.ProjectAttachments)
+        {
+            <tr>
+                <td>@attachment.Name</td>
+                <td>
+
+                    <a href="@Url.Content(@attachment.FilePath)" target="_blank">
+                        <i class="fas fa-download"></i> @attachment.Name
+                    </a>
+                </td>
+                <td>@attachment.User.FullName</td>
+                @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                {
+                    <td>
+                        <form asp-area="Workspace" asp-action="DeleteAttachment" method="post" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-tool" asp-controller="Project" asp-action="DeleteAttachment" asp-route-project="@attachment.ProjectId" asp-route-id="@attachment.Id" localize-content>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+
+                    </td>
+                }
+
+            </tr>
+        }
+
+        </tbody>
+        <!--Table body-->
+    </table>
+
+
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+    {
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addAttachmentModal" localize-content>
+            Add Attachment
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="addAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="addAttachmentModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAttachmentModalLabel" localize-content>Add Attachment to Project</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form asp-area="Workspace" asp-action="AddAttachment" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="modal-body">
+
+                            <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
+
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input type="text" class="form-control" id="attachmentName" name="attachmentName"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="upload" localize-content>Select File</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="upload" name="upload">
+                                        <label class="custom-file-label" for="upload" localize-content>Choose File</label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" localize-content>Close</button>
+                            <button type="submit" class="btn btn-success" localize-content>Add</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- /.tab-pane -->
+
+
+<!-- /.tab-pane -->
+<div class="tab-pane" id="reports">
+    <table id="reportResults" class="table table-bordered table-hover projects" width="100%">
+        <!--Table head-->
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <i class="fas fa-file-pdf"></i> <span localize-content>Name</span>
+            </th>
+            <th>
+                <i class="fas fa-code-branch"></i> <span localize-content>Version</span>
+            </th>
+            <th>
+                <i class="fas fa-align-left"></i> <span localize-content>Description</span>
+            </th>
+            <th>
+                <i class="fas fa-language"></i> <span localize-content>Language</span>
+            </th>
+            <th>
+                <i class="fas fa-calendar"></i> <span localize-content>Creation Date</span>
+            </th>
+            <th>
+                <i class="fas fa-user"></i> <span localize-content>Created by</span>
+            </th>
+            <th>
+                <i class="fas fa-cog"></i> <span localize-content>Options</span>
+            </th>
+
+        </tr>
+        </thead>
+        <!--Table head-->
+        <!--Table body-->
+        <tbody>
+
+        @foreach (var report in Model.Reports)
+        {
+            <tr>
+                <td>@report.Name</td>
+                <td>@report.Version</td>
+                <td>@report.Description</td>
+                <td>@report.Language</td>
+                <td>@report.CreatedDate.ToShortDateString()</td>
+                <td>@report.User.FullName</td>
+                <td>
+                    <a class="btn btn-tool" asp-area="Workspace" asp-controller="Report" asp-action="Download" asp-route-id="@report.Id" localize-content>
+                        <i class="fas fa-download"></i>
+                    </a>
+                    <form asp-area="" asp-action="Delete" asp-controller="Report" method="post" enctype="multipart/form-data">
+                        <button type="submit" class="btn btn-tool" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id" localize-content>
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        </form>
+
+                </td>
+
+            </tr>
+        }
+
+        </tbody>
+        <!--Table body-->
+    </table>
+
+
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+    {
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#reportModal" localize-content>
+            Generate Report
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel" localize-content>Generate Report</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form asp-area="" asp-controller="Report" asp-action="GenerateDoc" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+
+                                <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
+                                <input type="hidden" id="workspace" name="workspace" value="workspace"/>
+                                <div class="form-group">
+                                    <label class="control-label" localize-content>Name</label>
+                                    <input type="text" class="form-control" id="reportName" name="reportName"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" localize-content>Version</label>
+                                    <input type="text" class="form-control" id="version" name="version"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" localize-content>Description</label>
+                                    <textarea class="form-control" name="description" id="description" rows="10" cols="50"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" localize-content>Template</label>
+                                    @Html.DropDownListFor(m => m.ReportTemplates, Model.ReportTemplates, new {@class = "form-control", @id = "reportTemplate", @name = "reportTemplate"})
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" localize-content>Close</button>
+                                <button type="submit" class="btn btn-success" localize-content>Generate</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- /.tab-pane -->
+
+</div>
+<!-- /.tab-content -->
+</div><!-- /.card-body -->
+</div>
+<!-- /.card -->
+</div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</div><!-- /.container-fluid -->
+
+
+</section>
+
+
+@section Scripts{
+    <script>
+
+    $(document).ready(function () {
+        $('#membersResults').DataTable({
+            "responsive": true
+        });
+        $('#targetsResults').DataTable({
+            "responsive": true
+        });
+        $('#tasksResults').DataTable({
+            "responsive": true
+        });
+        $('#vulnResults').DataTable({
+            "responsive": true
+        });
+        $('#noteResults').DataTable({
+            "responsive": true
+        });
+        $('#attachmentsResults').DataTable({
+            "responsive": true
+        });
+        $('#reportResults').DataTable({
+            "responsive": true
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+   
+
+         $(document).ready(function () {
+  bsCustomFileInput.init();
+});
+
+</script>
+}
