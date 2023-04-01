@@ -4,7 +4,44 @@
     ViewData["Title"] = "Backup";
 }
 
-<!-- Content Header (Page header) -->
+@{
+    if (TempData["backupData"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content><span localize-content>Data backup made successfully !</span></strong>
+
+        </div>
+    }
+    if (TempData["backupAttData"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content><span localize-content>Attachments backup made successfully !</span></strong>
+
+        </div>
+    }
+    
+    if (TempData["errorBackupData"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content><span localize-content>A problem ocurred backing up data !</span></strong>
+
+        </div>
+    }
+    if (TempData["errorBackupAttData"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content><span localize-content>A problem ocurred backing up attachments !</span></strong>
+
+        </div>
+    }
+    
+}
+
+    <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -32,12 +69,12 @@
             <div class="card">
                 <div class="card-body">
 
-                    <h3><i class="fas fa-database"></i> Data</h3>
-                    <p>Backup all the data (Projects, Vulnerabilities, Clients,...)</p>
+                    <h3><i class="fas fa-database"></i> <span localize-content>Data</span></h3>
+                    <p localize-content>Backup all the data (Projects, Vulnerabilities, Clients,...)</p>
                 
                     <div class="text-center">
-                        <form asp-area="" asp-controller="Backup" asp-action="BackupData" method="post">
-                            <button type="submit" class="btn btn-dark"><i class="fas fa-download"></i> Save</button>
+                        <form asp-area="" asp-controller="Backup" asp-action="BackupData" method="post" onclick="setTimeout(function () { window.location.reload(); }, 1000)">
+                            <button type="submit" class="btn btn-dark"><i class="fas fa-download"></i> <span localize-content>Save</span></button>
                         </form>
                     </div>
                 </div>
@@ -48,11 +85,11 @@
         <div class="col-md-6 justify-content-center">
             <div class="card">
                 <div class="card-body">
-                    <h3><i class="fas fa-file"></i> Attachments</h3>
-                    <p>Backup all the attachments (Images, Reports,...)</p>
+                    <h3><i class="fas fa-file"></i> <span localize-content>Attachments</span></h3>
+                    <p localize-content>Backup all the attachments (Images, Reports,...)</p>
                     <div class="text-center">
-                                        <form asp-area="" asp-controller="Backup" asp-action="BackupAttachments" method="post">
-                                            <button type="submit" class="btn btn-dark"><i class="fas fa-download"></i> Save</button>
+                                        <form asp-area="" asp-controller="Backup" asp-action="BackupAttachments" method="post" onclick="setTimeout(function () { window.location.reload(); }, 1000)">
+                                            <button type="submit" class="btn btn-dark"><i class="fas fa-download"></i> <span localize-content>Save</span></button>
                                         </form>
                                     </div>
 

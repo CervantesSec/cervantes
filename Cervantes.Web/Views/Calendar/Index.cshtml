@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-calendar"></i> Calendar</h1>
+              <h1 localize-content><i class="fas fa-calendar"></i> <span localize-content>Calendar</span></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -32,17 +32,17 @@
             <div class="sticky-top mb-3">
               <div class="card">
                 <div class="card-header bg-dark">
-                  <h4 class="card-title"><i class="fas fa-info-circle"></i> Legend</h4>
+                  <h4 class="card-title"><i class="fas fa-info-circle"></i> <span localize-content>Legend</span></h4>
                 </div>
                 <div class="card-body">
                   <!-- the events -->
                   <div id="external-events">
-                    <div class="external-event bg-dark">Projects</div>
-                    <div class="external-event bg-secondary">Task: Backlog</div>
-                    <div class="external-event bg-primary">Task: ToDo</div>
-                    <div class="external-event bg-info">Task: InProgress</div>
-                    <div class="external-event bg-danger">Task: Blocked</div>
-                    <div class="external-event bg-success">Task: Done</div>
+                    <div class="external-event bg-dark" localize-content>Projects</div>
+                    <div class="external-event bg-secondary" localize-content>Task: Backlog</div>
+                    <div class="external-event bg-primary" localize-content>Task: ToDo</div>
+                    <div class="external-event bg-info" localize-content>Task: InProgress</div>
+                    <div class="external-event bg-danger" localize-content>Task: Blocked</div>
+                    <div class="external-event bg-success" localize-content>Task: Done</div>
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -75,7 +75,8 @@
 
 }
 @section Scripts{
-    <script src="~/lib/calendar/main.js"></script>
+  <script src="~/lib/calendar/main.js"></script>
+  <script src="~/lib/calendar/locales-all.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
               var calendarEl = document.getElementById('calendar');
@@ -90,7 +91,7 @@
                         @foreach (var project in Model.Projects)
                         {
                           @:{
-                            @:title : 'Project: @project.Name' ,
+                            @:title : '@project.Name' ,
                             @:start : '@project.StartDate.Year-@project.StartDate.ToString("MM")-@project.StartDate.ToString("dd")',
                             @:end : '@project.EndDate.Year-@project.EndDate.ToString("MM")-@project.EndDate.ToString("dd")',
                             @:backgroundColor: '#343a40', //red

@@ -6,6 +6,62 @@
 }
 @{
 
+    if (TempData["createdTemplate"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Report template created successfully !</strong>
+        </div>
+    }
+    
+    if (TempData["errorCreatedTemplate"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>An error ocurred creating report template !</strong>
+        </div>
+    }
+    
+    if (TempData["createTemplateFile"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>The file uploaded is not permitted !</strong>
+        </div>
+    }
+    
+    if (TempData["editedTemplate"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Report template edited successfully !</strong>
+        </div>
+    }
+    
+    if (TempData["errorEditedTemplate"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>An error ocurred editing report template !</strong>
+        </div>
+    }
+    
+    if (TempData["deletedTemplate"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Report template deleted successfully !</strong>
+        </div>
+    }
+    
+    if (TempData["errorDeletedTemplate"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>An error ocurred deleting report template !</strong>
+        </div>
+    }
+    
 
 }
 
@@ -14,7 +70,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-file-word"></i> Report Templates</h1>
+                <h1 localize-content><i class="fas fa-file-word"></i> <span localize-content>Report Templates</span></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -103,8 +159,8 @@
         </div>
         
     </div>
-    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
-    <a asp-area="" asp-controller="Report" asp-action="CreateTemplate" class="btn btn-dark"><i class="fas fa-file-word"></i> Create</a>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> <span localize-content>Back</span></a>
+    <a asp-area="" asp-controller="Report" asp-action="CreateTemplate" class="btn btn-dark"><i class="fas fa-file-word"></i> <span localize-content>Create</span></a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->

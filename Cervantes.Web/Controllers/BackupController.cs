@@ -776,14 +776,18 @@ public class BackupController : Controller
             
             var fileBytes = Encoding.ASCII.GetBytes(jsonString);
             var mimeType = "application/json";
+            TempData["backupData"] = "Error backup data!";
+            _logger.LogInformation("Data backup made successfully. User: {0}",
+                User.FindFirstValue(ClaimTypes.Name));
             return new FileContentResult(fileBytes, mimeType)
             {
                 FileDownloadName = fileName
             };
+            return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error backup data!";
+            TempData["errorBackupData"] = "Error backup data!";
 
             _logger.LogError(ex, "An error ocurred making backup data. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
@@ -808,12 +812,15 @@ public class BackupController : Controller
                FileDownloadName = "Attachments.zip"
            };
 
+           TempData["backupAttData"] = "Error backup attachments!";
+           _logger.LogInformation("Attachments backup made successfully. User: {0}",
+               User.FindFirstValue(ClaimTypes.Name));
            return result;
 
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error backup attachments!";
+            TempData["errorBackupAttData"] = "Error backup attachments!";
 
             _logger.LogError(ex, "An error ocurred making attachments backup Index. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));

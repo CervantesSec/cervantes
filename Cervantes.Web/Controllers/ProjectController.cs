@@ -495,13 +495,15 @@ public class ProjectController : Controller
                 Description = project.Description,
                 StartDate = project.StartDate,
                 EndDate = project.EndDate,
-                Template = project.Template,
+                Template = false,
                 Client = project.Client,
                 ClientId = project.ClientId,
                 Status = project.Status,
                 ProjectType = project.ProjectType,
                 ItemList = li,
-                FindingsId = project.FindingsId
+                FindingsId = project.FindingsId,
+                Score = project.Score,
+                Language = project.Language
             };
             return View(model);
         }
@@ -525,16 +527,19 @@ public class ProjectController : Controller
             sanitizer.AllowedSchemes.Add("data");
 
             var result = projectManager.GetById(id);
+            result.Id = Guid.NewGuid();
+            result.Template = false;
             result.Name = model.Name;
             result.Status = model.Status;
-            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-            result.Template = model.Template;
+            result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)); ;
             result.ClientId = model.ClientId;
             result.StartDate = model.StartDate.ToUniversalTime();
             result.EndDate = model.EndDate.ToUniversalTime();
             result.ProjectType = model.ProjectType;
             result.FindingsId = model.FindingsId;
             result.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            result.Score = model.Score;
+            result.Language = model.Language;
 
 
             projectManager.Add(result);

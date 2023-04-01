@@ -1200,4 +1200,205 @@ Si no completas la configuración de tu aplicación de autenticación, puedes pe
     <data name="Edit Note" xml:space="preserve">
       <value>Editar Nota</value>
     </data>
+    <data name="Data" xml:space="preserve">
+      <value>Datos</value>
+    </data>
+    <data name="Backup all the data (Projects, Vulnerabilities, Clients,...)" xml:space="preserve">
+      <value>Backup de todos los datos (Proyectos, Vulnerabilidades, Clientes, ...)</value>
+    </data>
+    <data name="Backup all the attachments (Images, Reports,...)" xml:space="preserve">
+      <value>Backup de todos los adjuntos (Imágenes, Reportes ...)</value>
+    </data>
+    <data name="Data backup made successfully !" xml:space="preserve">
+      <value>Backup de datos hechos con éxito !</value>
+    </data>
+    <data name="Attachments backup made successfully !" xml:space="preserve">
+      <value>Backup de adjuntos hecho con éxito!</value>
+    </data>
+    <data name="A problem ocurred backing up data !" xml:space="preserve">
+      <value>Se ha producido un error haciendo el backup de los datos !</value>
+    </data>
+    <data name="A problem ocurred backing up attachments !" xml:space="preserve">
+      <value>Se ha producido un error haciendo un backup de los adjuntos!</value>
+    </data>
+    <data name="Restore" xml:space="preserve">
+      <value>Restaurar</value>
+    </data>
+    <data name="Restore all the data (Projects, Vulnerabilities, Clients,...)" xml:space="preserve">
+      <value>Restaura todos los datos (Proyectos, Vulnerabilidades, Clientes,...)</value>
+    </data>
+    <data name="Select Json File" xml:space="preserve">
+      <value>Seleccionar el archivo JSON</value>
+    </data>
+    <data name="Restore all the attachments (Images, Reports,...)" xml:space="preserve">
+      <value>Restaura todos los adjuntos (Imágenes, reportes, ...)</value>
+    </data>
+    <data name="Select Zip File" xml:space="preserve">
+      <value>Seleccionar el archivo ZIP</value>
+    </data>
+    <data name="Backup Data restored successfully! Please logout and login again!" xml:space="preserve">
+      <value>Datos restaurados correctamente ! Por favor cierre sesión e inicie de nuevo !</value>
+    </data>
+    <data name="An error ocurred restoring the data backup!" xml:space="preserve">
+      <value>Se ha producido un error restaurando los datos !</value>
+    </data>
+    <data name="Attachments restored successfully!" xml:space="preserve">
+      <value>Adjuntos restaurados correctamente !</value>
+    </data>
+    <data name="An error ocurred restoring the attachments!" xml:space="preserve">
+      <value>Se ha producido un error restaurando loas adjuntos !</value>
+    </data>
+    <data name="Logs exported successfully!" xml:space="preserve">
+      <value>Logs exportados correctamente !</value>
+    </data>
+    <data name="An error ocurred exporting the logs!" xml:space="preserve">
+      <value>Se ha producido un error exportando los logs !</value>
+    </data>
+    <data name="Logs deleted sucessfully!" xml:space="preserve">
+      <value>Logs borrados correctamente !</value>
+    </data>
+    <data name="An error ocurred deleting logs!" xml:space="preserve">
+      <value>Se ha producido un error borrando los logs !</value>
+    </data>
+    <data name="Are you sure you want to delete the logs?" xml:space="preserve">
+      <value>Esta seguro de que quiere borrar los logs?</value>
+    </data>
+    <data name="An error ocurred updating organization information!" xml:space="preserve">
+      <value>Se ha producido un error actualizando la información de la organización !</value>
+    </data>
+    <data name="Organization information updated successfully!" xml:space="preserve">
+      <value>Organización actualizada correctamente !</value>
+    </data>
+    <data name="The logo has been deleted successfully!" xml:space="preserve">
+      <value>El logo se borró correctamente !</value>
+    </data>
+    <data name="An error ocurred deleting oragnization logo!" xml:space="preserve">
+      <value>Se ha producido un error borrando el logo!</value>
+    </data>
+    <data name="Report Templates" xml:space="preserve">
+      <value>Plantillas de Reportes</value>
+    </data>
+    <data name="Create Template" xml:space="preserve">
+      <value>Crear Plantilla</value>
+    </data>
+    <data name="Create Report Template" xml:space="preserve">
+      <value>Crear plantilla de Reporte</value>
+    </data>
+    <data name="File must be a .dotx format" xml:space="preserve">
+      <value>El archivo debe ser en formato .dotx</value>
+    </data>
+    <data name="Select Template" xml:space="preserve">
+      <value>Seleccionar Plantilla</value>
+    </data>
+    <data name="Choose dotx File" xml:space="preserve">
+      <value>Seleccionar archivo dotx</value>
+    </data>
+    <data name="Report template created successfully !" xml:space="preserve">
+      <value>Plantilla de reporte creada correctamente !</value>
+    </data>
+    <data name="An error ocurred creating report template !" xml:space="preserve">
+      <value>Se ha producido un error creando la plantilla de reporte!</value>
+    </data>
+    <data name="The file uploaded is not permitted !" xml:space="preserve">
+      <value>El archivo cargado no esta permitido !</value>
+    </data>
+    <data name="Report template edited successfully !" xml:space="preserve">
+      <value>Plantilla de reporte editada correctamente!</value>
+    </data>
+    <data name="An error ocurred editing report template !" xml:space="preserve">
+      <value>Se ha producido un error editando la plantilla de reporte!</value>
+    </data>
+    <data name="Delete Report Template" xml:space="preserve">
+      <value>Eliminar plantilla de reporte</value>
+    </data>
+    <data name="Report template deleted successfully !" xml:space="preserve">
+      <value>Plantilla de reporte borrada correctamente!</value>
+    </data>
+    <data name="An error ocurred deleting report template !" xml:space="preserve">
+      <value>Se ha producido un error borrando la plantilla de reporte!</value>
+    </data>
+    <data name="User deleted successfully!" xml:space="preserve">
+      <value>Usuario eliminado correctamente!</value>
+    </data>
+    <data name="An error ocurred deleting a user!" xml:space="preserve">
+      <value>Se ha producido un error eliminando el usuario!</value>
+    </data>
+    <data name="User created successfully!" xml:space="preserve">
+      <value>Usuario creado correctamente!</value>
+    </data>
+    <data name="User edited successfully!" xml:space="preserve">
+      <value>Usuario editado correctamente!</value>
+    </data>
+    <data name="An error ocurred editing a user!" xml:space="preserve">
+      <value>Se ha producido un error editando el usuario!</value>
+    </data>
+    <data name="Error loading Users!" xml:space="preserve">
+      <value>Error al cargar el usuario!</value>
+    </data>
+    <data name="This file type is not permitted!" xml:space="preserve">
+      <value>Este tipo de archivo no esta permitido!</value>
+    </data>
+    <data name="An error ocurred deleting avatar!" xml:space="preserve">
+      <value>Se ha producido un error eliminando el avatar!</value>
+    </data>
+    <data name="User avatar deleted successfully!" xml:space="preserve">
+      <value>Avatar eliminado correctamente!</value>
+    </data>
+    <data name="The password does not meet the requirements!" xml:space="preserve">
+      <value>La password no cumple con los requisitos!</value>
+    </data>
+    <data name="An error ocurred creating a user!" xml:space="preserve">
+      <value>Se ha producido un error creando el usuario!</value>
+    </data>
+    <data name="Projects Percentages" xml:space="preserve">
+      <value>Porcentaje Proyectos</value>
+    </data>
+    <data name="Active Projects" xml:space="preserve">
+      <value>Proyectos Activos</value>
+    </data>
+    <data name="Recent Clients" xml:space="preserve">
+      <value>Clientes Recientes</value>
+    </data>
+    <data name="Recent Documents" xml:space="preserve">
+      <value>Documentos Recientes</value>
+    </data>
+    <data name="Vulnerabilities Status" xml:space="preserve">
+      <value>Estado Vulnerabilidades</value>
+    </data>
+    <data name="Calendar" xml:space="preserve">
+      <value>Calendario</value>
+    </data>
+    <data name="Legend" xml:space="preserve">
+      <value>Leyenda</value>
+    </data>
+    <data name="Task: Backlog" xml:space="preserve">
+      <value>Tarea: Backlog</value>
+    </data>
+    <data name="Task: ToDo" xml:space="preserve">
+      <value>Tarea: PorHacer</value>
+    </data>
+    <data name="Task: InProgress" xml:space="preserve">
+      <value>Tarea: EnProgreso</value>
+    </data>
+    <data name="Task: Blocked" xml:space="preserve">
+      <value>Tarea: Bloqueado</value>
+    </data>
+    <data name="Task: Done" xml:space="preserve">
+      <value>Tarea: Hecho</value>
+    </data>
+    <data name="Add Note to Project" xml:space="preserve">
+      <value>Añadir Nota al Proyecto</value>
+    </data>
+    <data name="Findings Id (Only Name)" xml:space="preserve">
+      <value>Id Findings (Solo Nombre)</value>
+    </data>
+    <data name="Score Type" xml:space="preserve">
+      <value>Tipo de Puntuación</value>
+    </data>
+    <data name="Project" xml:space="preserve">
+      <value>Proyecto</value>
+    </data>
+    <data name="Executive Summary" xml:space="preserve">
+      <value>Resumen Ejecutivo</value>
+    </data>
 </root>

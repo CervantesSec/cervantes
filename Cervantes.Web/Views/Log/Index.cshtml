@@ -4,7 +4,7 @@
     ViewData["Title"] = "Application Logs";
 }
 @{
-    if (TempData["exported"] != null)
+    if (TempData["logsExported"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -13,7 +13,7 @@
         </div>
     }
 
-    if (TempData["errorExported"] != null)
+    if (TempData["errorLogsExported"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -22,7 +22,7 @@
         </div>
     }
 
-    if (TempData["logDeleted"] != null)
+    if (TempData["logsDeleted"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <strong localize-content>Logs deleted sucessfully!</strong>
@@ -30,7 +30,7 @@
         </div>
     }
     
-    if (TempData["errorLogDeleted"] != null)
+    if (TempData["errorLogsDeleted"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
             <strong localize-content>An error ocurred deleting logs!</strong>
@@ -180,7 +180,7 @@
                 <!--Table body-->
             </table>
             <!--Table-->
-            <a asp-area="" asp-controller="Log" asp-action="Export" localize-content class="btn btn-primary btn-sm">
+            <a asp-area="" asp-controller="Log" asp-action="Export" localize-content class="btn btn-primary btn-sm" onclick="setTimeout(function () { window.location.reload(); }, 1000)">
                 <i class="nav-icon fas fa-download"></i>
                 <p localize-content>Export</p>
             </a>
@@ -192,18 +192,18 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+                    <h5 class="modal-title" id="deleteModalLabel" localize-content>Delete</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    Are you sure you want to delete the logs?
+                    <p localize-content>Are you sure you want to delete the logs?</p>
                   </div>
                     <div class="modal-footer">
                         <form asp-area="" asp-controller="Log" asp-action="Delete" method="post" enctype="multipart/form-data">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal"><span localize-content>Close</span></button>
-                            <button type="submit" class="btn btn-danger"><span localize-content>Yes</span></button>
+                            <button type="submit" class="btn btn-danger"><span localize-content>Delete</span></button>
                         </form>
                     </div>
                 </div>

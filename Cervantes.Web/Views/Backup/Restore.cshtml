@@ -55,7 +55,7 @@
                     <li class="breadcrumb-item">
                         <a asp-controller="Home" asp-action="Index" localize-content>Home</a>
                     </li>
-                    <li class="breadcrumb-item active" localize-content>Restore</li>
+                    <li class="breadcrumb-item active"><span localize-content>Restore</span></li>
                 </ol>
             </div>
         </div>
@@ -71,8 +71,8 @@
             <div class="card">
                 <div class="card-body">
 
-                    <h3><i class="fas fa-database"></i> Data</h3>
-                    <p>Restore all the data (Projects, Vulnerabilities, Clients,...)</p>
+                    <h3><i class="fas fa-database"></i> <span localize-content>Data</span></h3>
+                    <p localize-content>Restore all the data (Projects, Vulnerabilities, Clients,...)</p>
                 
                     <div class="text-center">
                         <form asp-area="" asp-controller="Backup" asp-action="RestoreData" method="post" enctype="multipart/form-data">
@@ -88,7 +88,7 @@
                                
                             </div>
                             
-                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Restore</button>
+                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> <span localize-content>Restore</span></button>
                         </form>
                     </div>
                 </div>
@@ -99,10 +99,10 @@
         <div class="col-md-6 justify-content-center">
             <div class="card">
                 <div class="card-body">
-                    <h3><i class="fas fa-file"></i> Attachments</h3>
-                    <p>Restore all the attachments (Images, Reports,...)</p>
+                    <h3><i class="fas fa-file"></i> <span localize-content>Attachments</span></h3>
+                    <p localize-content>Restore all the attachments (Images, Reports,...)</p>
                     <div class="text-center">
-                        <form asp-area="" asp-controller="Backup" asp-action="RestoreAttachments" method="post" enctype="multipart/form-data">
+                        <form asp-area="" asp-controller="Backup" asp-action="RestoreAttachments" method="post" enctype="multipart/form-data" >
                             <div class="form-group">
                                 <label for="upload" localize-content>Select Zip File</label>
                                 <div class="input-group">
@@ -115,7 +115,7 @@
                                 
                             </div>
                             
-                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Restore</button>
+                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> <span localize-content>Restore</span></button>
                         </form>
                     </div>
                     

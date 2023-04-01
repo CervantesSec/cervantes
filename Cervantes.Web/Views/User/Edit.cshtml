@@ -14,6 +14,23 @@
 
         </div>
     }
+    
+    if (TempData["errorDeleteAvatar"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>An error ocurred deleting avatar!</strong>
+
+        </div>
+    }
+    
+    if (TempData["avatar_deleted"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>User avatar deleted successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
 }
 
 <!-- Content Header (Page header) -->
@@ -61,7 +78,7 @@
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="PhoneNumber" class="control-label" localize-content>PhoneNumber</label>
+                            <label asp-for="PhoneNumber" class="control-label" localize-content>Phone Number</label>
                             <input asp-for="PhoneNumber" class="form-control" data-inputmask="'mask': '(+099) 999 99 99 99 [9999]'" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
@@ -110,12 +127,12 @@
                         </div>
                         
                         <div class="form-group">
-                            <label asp-for="LockoutEnabled" class="control-label" localize-content>Locked Out</label>
+                            <label asp-for="LockoutEnabled" class="control-label" localize-content>Locked out</label>
                             <input asp-for="LockoutEnabled" class="form-control"/>
                         </div>
                         
                         <div class="form-group">
-                            <label asp-for="TwoFactorEnabled" class="control-label" localize-content>TwoFactor Enabled</label>
+                            <label asp-for="TwoFactorEnabled" class="control-label" localize-content>2FA Enabled</label>
                             <input asp-for="TwoFactorEnabled" class="form-control"/>
                         </div>
                         

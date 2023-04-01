@@ -145,17 +145,17 @@
                         {
                             case ProjectStatus.Active:
                                 <td>
-                                    <span class="badge badge-success">@project.Status</span>
+                                    <span class="badge badge-success" localize-content>@project.Status</span>
                                 </td>
                                 break;
                             case ProjectStatus.Archived:
                                 <td>
-                                    <span class="badge badge-info">@project.Status</span>
+                                    <span class="badge badge-info" localize-content>@project.Status</span>
                                 </td>
                                 break;
                             case ProjectStatus.Waiting:
                                 <td>
-                                    <span class="badge badge-warning">@project.Status</span>
+                                    <span class="badge badge-warning" localize-content>@project.Status</span>
                                 </td>
                                 break;
                         }
@@ -195,8 +195,8 @@
 
         </div>
     </div>
-<a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
-    <a asp-area="" asp-controller="Project" asp-action="Create" class="btn btn-dark"><i class="fas fa-folder"></i> Create</a>
+<a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> <span localize-content>Back</span></a>
+    <a asp-area="" asp-controller="Project" asp-action="Create" class="btn btn-dark"><i class="fas fa-folder"></i> <span localize-content>Create</span></a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->

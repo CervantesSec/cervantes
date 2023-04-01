@@ -118,15 +118,16 @@ public class OrganizationController : Controller
 
 
             organizationManager.Context.SaveChanges();
-            TempData["edited"] = "edited";
+            TempData["updatedOrganization"] = "edited";
             _logger.LogInformation("User: {0} Edited Organization", User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
+            TempData["edited"] = "errorOrganization";
             _logger.LogError(ex, "An error ocurred saving editing Organization form. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -147,12 +148,13 @@ public class OrganizationController : Controller
             org.ImagePath = null;
             organizationManager.Context.SaveChanges();
 
-            TempData["avatar_deleted"] = "avatar deleted";
+            TempData["logoDeleted"] = "avatar deleted";
             _logger.LogInformation("User: {0} Organization Logo Deleted", User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index", "Organization", new {id = id});
         }
         catch (Exception ex)
         {
+            TempData["errorLogoDeleted"] = "avatar deleted";
             _logger.LogError(ex, "An error ocurred deleting Organization Logo. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index", "Organization", new {id = id});

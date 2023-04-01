@@ -712,7 +712,7 @@ public class ReportController : Controller
             
             if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
             {
-                TempData["fileNotPermitted"] = "User is not in the project";
+                TempData["createTemplateFile"] = "User is not in the project";
                 return View("CreateTemplate");
             }
             
@@ -735,14 +735,16 @@ public class ReportController : Controller
 
             reportTemplateManager.Add(template);
             reportTemplateManager.Context.SaveChanges();
-            TempData["created"] = "created";
+            
+            TempData["createdTemplate"] = "created";
             _logger.LogInformation("User: {0} Created a new report template: {1}", User.FindFirstValue(ClaimTypes.Name),
                 template.Name);
+            
             return RedirectToAction("Templates");
         }
         catch(Exception ex)
         {
-            TempData["error"] = "Error creating report template!";
+            TempData["errorCreatedTemplate"] = "Error creating report template!";
             _logger.LogError(ex, "An error ocurred adding a new report template. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("CreateTemplate");
@@ -777,7 +779,7 @@ public class ReportController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading edit form";
+            TempData["errorEditedTemplate"] = "Error loading edit form";
             _logger.LogError(ex, "An error ocurred loadin edit form report template. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Templates");
@@ -801,7 +803,7 @@ public class ReportController : Controller
                 result.Language = model.Language;
 
                 reportTemplateManager.Context.SaveChanges();
-                TempData["edited"] = "edited";
+                TempData["editedTemplate"] = "edited";
                 _logger.LogInformation("User: {0} edited report template: {1}", User.FindFirstValue(ClaimTypes.Name), result.Name);
                 return RedirectToAction("Templates");
             }
@@ -810,7 +812,7 @@ public class ReportController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading edit form";
+            TempData["errorEditedTemplate"] = "Error loading edit form";
             _logger.LogError(ex, "An error ocurred loadin edit form report template. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Templates");
@@ -854,13 +856,13 @@ public class ReportController : Controller
                 reportTemplateManager.Context.SaveChanges();
             }
 
-            TempData["deleted"] = "deleted";
+            TempData["deletedTemplate"] = "deleted";
             _logger.LogInformation("User: {0} deleted report template: {1}", User.FindFirstValue(ClaimTypes.Name), id);
             return RedirectToAction("Templates");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting report template!";
+            TempData["errorDeletedTemplate"] = "Error deleting report template!";
 
             _logger.LogError(ex, "An error ocurred deleting report template Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));

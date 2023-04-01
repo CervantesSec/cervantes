@@ -75,7 +75,7 @@ public class LogController : Controller
             var fileName = "logs-export-" + DateTime.Now.ToString() + ".json";
             var mimeType = "text/plain";
             var fileBytes = Encoding.ASCII.GetBytes(jsonString);
-            TempData["exported"] = "edited";
+            TempData["logsExported"] = "edited";
             return new FileContentResult(fileBytes, mimeType)
             {
                 FileDownloadName = fileName
@@ -83,7 +83,7 @@ public class LogController : Controller
         }
         catch (Exception e)
         {
-            TempData["errorExported"] = "edited";
+            TempData["errorLogsExported"] = "edited";
             _logger.LogError(e, "An error ocurred exporting logs. by User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index");
@@ -104,14 +104,14 @@ public class LogController : Controller
             }
 
             logManager.Context.SaveChanges();
-            TempData["logDeleted"] = "edited";
+            TempData["logsDeleted"] = "edited";
             return RedirectToAction("Index");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting logs. by User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            TempData["errorLogDeleted"] = "edited";
+            TempData["errorLogsDeleted"] = "edited";
             return RedirectToAction("Index");
         }
     }

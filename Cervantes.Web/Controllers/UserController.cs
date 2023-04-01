@@ -88,7 +88,7 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading users!";
+            TempData["errorLoading"] = "Error loading users!";
 
             _logger.LogError(ex, "An error ocurred loading User Index. by User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
@@ -129,7 +129,7 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading user!";
+            TempData["errorLoading"] = "Error loading user!";
             _logger.LogError(e, "An error ocurred loading User Id: {0}. by User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             Redirect("Error");
@@ -177,7 +177,7 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading user!";
+            TempData["errorLoading"] = "Error loading user!";
             _logger.LogError(ex, "An error ocurred loading user cration form. by User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return View("Index");
@@ -324,7 +324,7 @@ public class UserController : Controller
                 user.PasswordHash = hasher.HashPassword(user, model.Password);
                 usrManager.Context.SaveChanges();
                 _userManager.AddToRoleAsync(user, model.Option).Wait();
-                TempData["created"] = "created";
+                TempData["userCreated"] = "created";
                 _logger.LogInformation("User: {0} Created a new User: {1}",
                     User.FindFirstValue(ClaimTypes.Name),
                     user.UserName);
@@ -376,7 +376,7 @@ public class UserController : Controller
                 _userManager.AddToRoleAsync(user, model.Option).Wait();
 
 
-                TempData["created"] = "created";
+                TempData["userCreated"] = "created";
                 _logger.LogInformation("User: {0} Created a new User: {1}",
                     User.FindFirstValue(ClaimTypes.Name), user.UserName);
                 
@@ -406,7 +406,7 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error creating user!";
+            TempData["errorUserCreated"] = "Error creating user!";
             _logger.LogError(ex, "An error ocurred adding a new user. by User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
@@ -461,10 +461,10 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading user!";
+            TempData["errorLoading"] = "Error loading user!";
             _logger.LogError(e, "An error ocurred adding a new user. by User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            Redirect("Error");
+            RedirectToAction("Index");
         }
 
         return View();
@@ -531,13 +531,13 @@ public class UserController : Controller
             _userManager.AddToRoleAsync(result, model.Option).Wait();
 
 
-            TempData["edited"] = "edited";
+            TempData["userEdited"] = "edited";
             _logger.LogInformation("User: {0} Edited User: {1}", User.FindFirstValue(ClaimTypes.Name), result.UserName);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error editing user!";
+            TempData["errorUserEdited"] = "Error editing user!";
             _logger.LogError(ex, "An error ocurred Editing user: {0}. by User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
@@ -570,10 +570,10 @@ public class UserController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading user!";
+            TempData["errorLoading"] = "Error loading user!";
             _logger.LogError(e, "An error ocurred loading user deletion form,by User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            Redirect("Error");
+            RedirectToAction("Index");
         }
 
         return View();
@@ -603,13 +603,13 @@ public class UserController : Controller
             }
             
 
-            TempData["deleted"] = "deleted";
+            TempData["userDeleted"] = "deleted";
             _logger.LogInformation("User: {0} Deleted User: {1}", User.FindFirstValue(ClaimTypes.Name), user.UserName);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting user!";
+            TempData["errorDeletedUser"] = "Error deleting user!";
             _logger.LogError(ex, "An error ocurred deleting user: {0}. by User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
@@ -636,7 +636,7 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting avatar user!";
+            TempData["errorDeleteAvatar"] = "Error deleting avatar user!";
             _logger.LogError(ex, "An error ocurred deleting user avatar: {0}. by User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Edit", "User", new {id = id});
