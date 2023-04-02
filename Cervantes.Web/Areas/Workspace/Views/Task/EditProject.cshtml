@@ -21,13 +21,13 @@
                         <a asp-area="" asp-controller="Workspaces" asp-action="Index" localize-content>Workspace</a>
                     </li>
                     <li class="breadcrumb-item" localize-content>
-                        <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>@Model.Project.Name</a>
+                        <a asp-area="Workspace" asp-controller="Home" asp-action="Index" asp-route-project="@Model.ProjectId" localize-content>@Model.Project.Name</a>
                     </li>
                     <li class="breadcrumb-item" localize-content>
-                        <a asp-area="Workspace" asp-controller="Task" asp-action="Project" asp-route-project="@Model.Project.Id" localize-content>Tasks</a>
+                        <a asp-area="Workspace" asp-controller="Task" asp-action="Project" asp-route-project="@Model.ProjectId" localize-content>Tasks</a>
                     </li>
                     <li class="breadcrumb-item" localize-content>
-                        <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@Model.Id" localize-content>@Model.Name</a>
+                        <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-project="@Model.ProjectId" asp-route-id="@Model.Id" localize-content>@Model.Name</a>
                     </li>
                     <li class="breadcrumb-item active" localize-content>Edit</li>
                 </ol>
@@ -43,7 +43,7 @@
         <div class="card-body">
             <div class="row justify-content-center">
                 <div class="col-md-12">
-                    <form asp-area="Workspace" asp-controller="Task" asp-action="EditProject" method="post" asp-route-project="@Model.Project.Id" enctype="multipart/form-data">
+                    <form asp-area="Workspace" asp-controller="Task" asp-action="EditProject" method="post" asp-route-project="@Model.ProjectId" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="form-group">
@@ -70,20 +70,20 @@
                         </div>
                         
                         <div class="form-group">
-                            <label asp-for="AsignedUserId" class="control-label">Asigned To</label>
+                            <label asp-for="AsignedUserId" class="control-label" localize-content>Asigned To</label>
                             @Html.DropDownListFor(m => m.AsignedUserId, Model.UsersList, "--Select--", new {@class = "form-control"})
                         </div>
                         <div class="form-group">
-                            <label asp-for="TargetId" class="control-label">Target</label>
+                            <label asp-for="TargetId" class="control-label" localize-content>Target</label>
                             @Html.DropDownListFor(m => m.TargetId, Model.TargetList, "--Select--", new {@class = "form-control"})
                         </div>
                         <div class="form-group">
-                            <label asp-for="Status" class="control-label">Task Status</label>
+                            <label asp-for="Status" class="control-label" localize-content>Task Status</label>
                             @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList<Cervantes.CORE.TaskStatus>(), new {@class = "form-control"})
                         </div>
 
                         <div class="form-group">
-                            <a class="btn btn-default" asp-area="Workspace" asp-controller="Task" asp-action="Index" asp-route-project="@Model.Project.Id">Back</a>
+                            <a class="btn btn-default" asp-area="Workspace" asp-controller="Task" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>Back</a>
                             <input type="submit" value="Create" class="btn btn-dark"/>
                         </div>
                     </form>

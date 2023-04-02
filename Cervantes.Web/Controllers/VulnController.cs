@@ -152,7 +152,7 @@ public class VulnController : Controller
         }
         catch (Exception e)
         {
-            TempData["errorDetails"] = "Error loading vuln!";
+            TempData["errorVulnDetails"] = "Error loading vuln!";
             _logger.LogError(e, "An error ocurred loading Vuln Details. Vuln: {0} User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index","Vuln");
@@ -222,7 +222,7 @@ public class VulnController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading vuln!";
+            TempData["errorVulnDetails"] = "Error loading vuln!";
             _logger.LogError(e, "An error ocurred loading Vuln edit form. Vuln {0} User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
@@ -283,7 +283,7 @@ public class VulnController : Controller
 
 
             vulnManager.Context.SaveChanges();
-            TempData["edited"] = "edited";
+            TempData["editedVuln"] = "edited";
             _logger.LogInformation("User: {0} edited Vuln: {1}", User.FindFirstValue(ClaimTypes.Name), id);
             if (result.JiraCreated == true)
             {
@@ -295,7 +295,7 @@ public class VulnController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error editing vuln!";
+            TempData["errorEditVuln"] = "Error editing vuln!";
             _logger.LogError(e, "An error ocurred editing a Vuln . Vuln: {0} User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
@@ -312,6 +312,7 @@ public class VulnController : Controller
         }
         catch (Exception e)
         {
+            TempData["errorVulnDetails"] = "Error loading vuln!";
             _logger.LogError(e, "An error ocurred loading Vuln delete form. Vuln: {0} User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return View("Index");
@@ -332,13 +333,13 @@ public class VulnController : Controller
                 vulnManager.Context.SaveChanges();
             }
 
-            TempData["deleted"] = "deleted";
+            TempData["deletedVuln"] = "deleted";
             _logger.LogInformation("User: {0} deleted Vuln: {1}", User.FindFirstValue(ClaimTypes.Name), id);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error Creating vuln category!";
+            TempData["errorDeletingVuln"] = "Error Creating vuln category!";
             _logger.LogError(e, "An error ocurred creating a Vuln category on. User: {0}", 
                 User.FindFirstValue(ClaimTypes.Name));
             return View("Categories");
@@ -370,14 +371,15 @@ public class VulnController : Controller
             };
             vulnCategoryManager.Add(cat);
             vulnCategoryManager.Context.SaveChanges();
+            TempData["createdVulnCategory"] = "deleted";
             return RedirectToAction("Categories");
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error deleting vulns!";
+            TempData["errorCreatingVulnCat"] = "Error deleting vulns!";
             _logger.LogError(e, "An error ocurred creating a Vuln category on. User: {0}", 
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("CreateCategory");
         }
     }
 
@@ -399,9 +401,10 @@ public class VulnController : Controller
         }
         catch (Exception ex)
         {
+            TempData["errorVulnDetails"] = "Error deleting vulns!";
             _logger.LogError(ex, "An error ocurred loading Admin Delete Vuln Category. User: {0}, Vuln category: {1}",
                 User.FindFirstValue(ClaimTypes.Name), id);
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -422,13 +425,15 @@ public class VulnController : Controller
             result.Type = model.Type;
             vulnCategoryManager.Context.SaveChanges();
             _logger.LogInformation("User: {0} edited Vuln Category: {1}", User.FindFirstValue(ClaimTypes.Name), id);
+            TempData["editedVulnCat"] = "Error deleting vulns!";
             return RedirectToAction(nameof(Categories));
         }
         catch (Exception ex)
         {
+            TempData["errorEditedVulnCat"] = "Error deleting vulns!";
             _logger.LogError(ex, "An error ocurred loading Admin Delete Vuln Category. User: {0}, Vuln category: {1}",
                 User.FindFirstValue(ClaimTypes.Name), id);
-            return View();
+            return RedirectToAction("EditCategory", new {id = id});
         }
     }
 
@@ -443,6 +448,7 @@ public class VulnController : Controller
         }
         catch (Exception ex)
         {
+            TempData["errorVulnDetails"] = "Error deleting vulns!";
             _logger.LogError(ex, "An error ocurred loading Admin Delete Vuln Category. User: {0}, Vuln category: {1}",
                 User.FindFirstValue(ClaimTypes.Name), id);
             return View();
@@ -472,9 +478,10 @@ public class VulnController : Controller
         }
         catch (Exception ex)
         {
+            TempData["errorDeletingVulnCat"] = "Error deleting vulns!";
             _logger.LogError(ex, "An error ocurred loading Admin Delete Vuln Category. User: {0}, Vuln category: {1}",
                 User.FindFirstValue(ClaimTypes.Name), id);
-            return View();
+            return RedirectToAction("Delete", new{id = id});
         }
     }
 
@@ -496,7 +503,7 @@ public class VulnController : Controller
 
                 vulnNoteManager.Add(note);
                 vulnNoteManager.Context.SaveChanges();
-                TempData["addedNote"] = "added";
+                TempData["addedVulnNote"] = "added";
                 _logger.LogInformation("User: {0} Added new note: {1} on Vuln: {2}",
                     User.FindFirstValue(ClaimTypes.Name), note.Name, form["vulnId"]);
                 return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
@@ -508,7 +515,7 @@ public class VulnController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error adding note vuln!";
+            TempData["errorAddNoteVuln"] = "Error adding note vuln!";
             _logger.LogError(ex, "An error ocurred adding a Note on Vuln: {1}. User: {2}", form["vulnId"],
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
@@ -527,7 +534,7 @@ public class VulnController : Controller
 
                 vulnNoteManager.Remove(result);
                 vulnNoteManager.Context.SaveChanges();
-                TempData["deletedNote"] = "deleted";
+                TempData["deletedVulnNote"] = "deleted";
                 _logger.LogInformation("User: {0} Deleted note: {1} on Vuln: {2}", User.FindFirstValue(ClaimTypes.Name),
                     result.Name, vuln);
                 return RedirectToAction("Details", "Vuln", new {id = result.VulnId});
@@ -539,7 +546,7 @@ public class VulnController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting vuln note!";
+            TempData["errorDeleteVulnNote"] = "Error deleting vuln note!";
             _logger.LogError(ex, "An error ocurred deleting a Note on Project: {1}. User: {2}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Vuln", new {id = vuln});
@@ -586,14 +593,14 @@ public class VulnController : Controller
 
                 vulnAttachmentManager.Add(attachment);
                 vulnAttachmentManager.Context.SaveChanges();
-                TempData["addedAttachment"] = "added";
+                TempData["addedVulnAttachment"] = "added";
                 _logger.LogInformation("User: {0} Added an attachment: {1} on Vuln: {2}",
                     User.FindFirstValue(ClaimTypes.Name), attachment.Name, form["vulnId"]);
                 return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
             }
             else
             {
-                TempData["errorAttachment"] = "added";
+                TempData["errorVulnAttachment"] = "added";
                 _logger.LogError("An error ocurred adding an Attachment on Vuln: {1}. User: {2}",
                     form["vulnId"], User.FindFirstValue(ClaimTypes.Name));
                 return RedirectToAction("Details", "Vuln", new {id = form["vulnId"]});
@@ -622,7 +629,7 @@ public class VulnController : Controller
 
                 vulnAttachmentManager.Remove(result);
                 vulnAttachmentManager.Context.SaveChanges();
-                TempData["deletedAttachment"] = "deleted";
+                TempData["deletedVulnAttachment"] = "deleted";
                 _logger.LogInformation("User: {0} Deleted an attachment: {1} on Vuln: {2}",
                     User.FindFirstValue(ClaimTypes.Name), result.Name, vuln);
                 return RedirectToAction("Details", "Vuln", new {id = vuln});
@@ -636,7 +643,7 @@ public class VulnController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting attachment from vuln!";
+            TempData["errorDeleteVulnAtt"] = "Error deleting attachment from vuln!";
             _logger.LogError(ex, "An error ocurred deleting an Attachment on Vuln: {1}. User: {2}", vuln,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Vuln", new {id = vuln});
@@ -712,10 +719,10 @@ public class VulnController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading vuln!";
+            TempData["errorVulnDetails"] = "Error loading vuln!";
             _logger.LogError(e, "An error ocurred loading Vuln Workspace edit PROJECT form.Project: {0} User: {1}",
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Templates");
         }
     }
         
@@ -772,7 +779,7 @@ public class VulnController : Controller
             }
             
             vulnManager.Context.SaveChanges();
-            TempData["edited"] = "edited";
+            TempData["editedVulnTemplate"] = "edited";
             _logger.LogInformation("User: {0} edited Vuln Template: {1}", User.FindFirstValue(ClaimTypes.Name), id
                 );
 
@@ -780,7 +787,7 @@ public class VulnController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error editing vuln!";
+            TempData["errorEditVulnTemplate"] = "Error editing vuln!";
             _logger.LogError(e, "An error ocurred editing a Vuln Workspace on. Task: {0} Project: {1} User: {2}", id,
               User.FindFirstValue(ClaimTypes.Name));
             return View("Templates");

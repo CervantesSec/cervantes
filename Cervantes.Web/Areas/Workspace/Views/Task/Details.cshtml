@@ -318,7 +318,7 @@
                         <input asp-for="@Model.Task.Id" type="hidden" id="vulnId" name="taskId"/>
                             
                         <div class="form-group">
-                            <label class="control-label" localize-content>Visibility</label>
+                            <label class="control-label" localize-content>Target</label>
                             @Html.DropDownListFor(model => model.TargetId, @Model.TargetList, new {@class = "form-control"})
                         </div>
     

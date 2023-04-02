@@ -555,7 +555,7 @@
         
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addTargetModal" localize-content>
-            <i class="fas fa-plus"></i> Add Target
+            <i class="fas fa-plus"></i> <span localize-content>Add Target</span>
         </button>
         
         <!-- Modal -->
@@ -852,7 +852,7 @@
     @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
     {
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addNoteModal">
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addNoteModal" localize-content>
             Add Note
         </button>
 
@@ -861,7 +861,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addNoteModalLabel">Add Note to Project</h5>
+                        <h5 class="modal-title" id="addNoteModalLabel" localize-content>Add Note to Project</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -872,24 +872,24 @@
                             <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
 
                             <div class="form-group">
-                                <label class="control-label">Name</label>
+                                <label class="control-label" localize-content>Name</label>
                                 <input type="text" class="form-control" id="noteName" name="noteName"/>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label">Note Description</label>
+                                <label class="control-label" localize-content>Description</label>
                                 <textarea class="form-control" id="noteDescription" name="noteDescription"></textarea>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label">Visibility</label>
+                                <label class="control-label" localize-content>Visibility</label>
                                 @Html.DropDownListFor(model => model.Visibility, Html.GetEnumSelectList<Visibility>(), new {@class = "form-control"})
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <input type="submit" value="Add" class="btn btn-success"/>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" localize-content>Close</button>
+                            <button type="submit" class="btn btn-success" localize-content>Add</button>
                         </div>
                     </form>
                 </div>

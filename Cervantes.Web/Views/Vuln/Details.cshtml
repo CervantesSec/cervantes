@@ -7,42 +7,66 @@
 }
 
 @{
-    if (TempData["addedNote"] != null)
+    if (TempData["addedVulnNote"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Note added to task successfully!</strong>
+            <strong localize-content>Note added to vuln successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
 
-    if (TempData["deletedNote"] != null)
+    if (TempData["deletedVulnNote"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Note deleted from task successfully!</strong>
+            <strong localize-content>Note deleted from vuln successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
 
-    if (TempData["addedAttachment"] != null)
+    if (TempData["addedVulnAttachment"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Attachment added to task successfully!</strong>
+            <strong localize-content>Attachment added to vuln successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
 
-    if (TempData["deletedAttachment"] != null)
+    if (TempData["deletedVulnAttachment"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Attachment deleted from task successfully!</strong>
+            <strong localize-content>Attachment deleted from vuln successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
 
-    if (TempData["errorAttachment"] != null)
+    if (TempData["errorVulnAttachment"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
             <strong localize-content>An error was produced adding an Attachment!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorAddNoteVuln"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred adding the note!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeleteVulnAtt"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting the attachment!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeleteVulnNote"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting the note!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }

@@ -483,6 +483,13 @@ public class TaskController : Controller
     {
         try
         {
+            var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null)
+            {
+                TempData["userProject"] = "User is not in the project";
+                return RedirectToAction("Index", "Workspaces",new {area =""});
+            }
+            
             var result = taskManager.GetById(id);
 
 
@@ -497,15 +504,15 @@ public class TaskController : Controller
             foreach (var item in targets)
                 li.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
 
-            var users = projectUserManager.GetAll().Where(x => x.ProjectId == project);
+            var users = projectUserManager.GetAll().Where(x => x.ProjectId == project).ToList();
             var li2 = new List<SelectListItem>();
             foreach (var item in users)
                 li2.Add(new SelectListItem {Text = item.User.FullName, Value = item.User.Id.ToString()});
 
-
+            var pro = projectManager.GetById(project);
             var model = new TaskCreateViewModel
             {
-                Project = projectManager.GetById(project),
+                Project = pro,
                 Id = id,
                 Name = result.Name,
                 Description = result.Description,
@@ -513,9 +520,9 @@ public class TaskController : Controller
                 StartDate = result.StartDate.ToUniversalTime(),
                 EndDate = result.EndDate.ToUniversalTime(),
                 Status = result.Status,
-                TargetList = li,
+                TargetList = li.ToList(),
                 ProjectId = project,
-                UsersList = li2
+                UsersList = li2.ToList()
             };
 
             return View(model);

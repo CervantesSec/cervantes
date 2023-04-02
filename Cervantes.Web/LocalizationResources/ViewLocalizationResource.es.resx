@@ -1569,4 +1569,118 @@ Si no completas la configuración de tu aplicación de autenticación, puedes pe
     <data name="Edit Vulnerability Category" xml:space="preserve">
       <value>Editar categoría de Vulnerabilidad</value>
     </data>
+    <data name="Vuln category created successfully!" xml:space="preserve">
+      <value>Categoría de vulnerabilidad creada correctamente!</value>
+    </data>
+    <data name="Vuln category edited successfully!" xml:space="preserve">
+      <value>Categoría de vulnerabilidad editada correctamente!</value>
+    </data>
+    <data name="Note added to vuln successfully!" xml:space="preserve">
+      <value>Nota añadida a la vulnerabilidad correctamente!</value>
+    </data>
+    <data name="Note deleted from vuln successfully!" xml:space="preserve">
+      <value>Nota eliminada de la vulnerabilidad correctamente!</value>
+    </data>
+    <data name="Attachment added to vuln successfully!" xml:space="preserve">
+      <value>Adjunto añadido a la vulnerabilidad correctamente!</value>
+    </data>
+    <data name="Attachment deleted from vuln successfully!" xml:space="preserve">
+      <value>Adjunto eliminado de la vulnerabilidad correctamente!</value>
+    </data>
+    <data name="An error ocurred adding the note!" xml:space="preserve">
+      <value>Se ha producido un error añadiendo la nota!</value>
+    </data>
+    <data name="An error ocurred deleting the attachment!" xml:space="preserve">
+      <value>Se ha producido un error eliminando el adjunto!</value>
+    </data>
+    <data name="An error ocurred deleting the note!" xml:space="preserve">
+      <value>Se ha producido un error eliminando la nota!</value>
+    </data>
+    <data name="An error ocurred creating Jira issue!" xml:space="preserve">
+      <value>Se ha producido un error creando el ticket en Jira!</value>
+    </data>
+    <data name="Jira ticket created successfully!" xml:space="preserve">
+      <value>Ticket Jira creado correctamente!</value>
+    </data>
+    <data name="An error ocurred loading Vuln Details!" xml:space="preserve">
+      <value>Se ha producido un error cargando los detalles de la vuln!</value>
+    </data>
+    <data name="An error ocurred editing Vuln Template!" xml:space="preserve">
+      <value>Se ha producido un error editando la plantilla de vuln!</value>
+    </data>
+    <data name="Vuln template edited successfully!" xml:space="preserve">
+      <value>Plantilla de vuln editada correctamente!</value>
+    </data>
+    <data name="An error ocurred editing Vuln !" xml:space="preserve">
+      <value>Se ha producido un error editando la vuln!</value>
+    </data>
+    <data name="An error ocurred deleting Vuln !" xml:space="preserve">
+      <value>Se ha producido un error eliminando la vuln!</value>
+    </data>
+    <data name="Vuln edited successfully !" xml:space="preserve">
+      <value>Vuln editada correctamente!</value>
+    </data>
+    <data name="Vuln deleted successfully !" xml:space="preserve">
+      <value>Vuln eliminada correctamente!</value>
+    </data>
+    <data name="An error ocurred creating vuln category!" xml:space="preserve">
+      <value>Se ha producido un error creando la categoría de vuln!</value>
+    </data>
+    <data name="An error ocurred editing vuln category!" xml:space="preserve">
+      <value>Se ha producido un error editando la categoría de vuln!</value>
+    </data>
+    <data name="An error ocurred deleting vuln category!" xml:space="preserve">
+      <value>Se ha producido un error eliminando la categoría de vuln!</value>
+    </data>
+    <data name="Import" xml:space="preserve">
+      <value>Importar</value>
+    </data>
+    <data name="Project Tasks" xml:space="preserve">
+      <value>Tareas del Proyecto</value>
+    </data>
+    <data name="Create Project Task" xml:space="preserve">
+      <value>Crear Tarea de Proyecto</value>
+    </data>
+    <data name="Data Vault" xml:space="preserve">
+      <value>Caja Fuerte</value>
+    </data>
+    <data name="Checklist Type" xml:space="preserve">
+      <value>Tipo de Checklist</value>
+    </data>
+    <data name="Import your targets from nmap scan" xml:space="preserve">
+      <value>Importa tus objectivos desde Nmap</value>
+    </data>
+    <data name="Select your Nmap XML file" xml:space="preserve">
+      <value>Selecciona tu archivo XML de Nmap</value>
+    </data>
+    <data name="Select Nmap Xml File" xml:space="preserve">
+      <value>Selecciona el archivo Nmap XML</value>
+    </data>
+    <data name="CSV Import" xml:space="preserve">
+      <value>Importar CSV</value>
+    </data>
+    <data name="Import your targets from a CSV file" xml:space="preserve">
+      <value>Importa tus objetivos desde un archivo CSV</value>
+    </data>
+    <data name="here" xml:space="preserve">
+      <value>aquí</value>
+    </data>
+    <data name="Download the CSV template from" xml:space="preserve">
+      <value>Descarga la plantilla del archivo CSV desde</value>
+    </data>
+    <data name="Add Target to Vuln" xml:space="preserve">
+      <value>Añadir objetivo a la vulnerabilidad</value>
+    </data>
+    <data name="CVSS3 Calculator" xml:space="preserve">
+      <value>Calculadora CVSS3</value>
+    </data>
+    <data name="OWASP Risk Calculator" xml:space="preserve">
+      <value>Calculadora de Riesgo OWASP</value>
+    </data>
+    <data name="Value" xml:space="preserve">
+      <value>Valor</value>
+    </data>
+    <data name="Show" xml:space="preserve">
+      <value>Mostrar</value>
+    </data>
 </root>

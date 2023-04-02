@@ -57,8 +57,8 @@
                 <div class="card-body">
 
                     <h3><i class="fas fa-file-code"></i> Nmap</h3>
-                    <p>Import your targets from nmap scan</p>
-                    <p>Select your Nmap XML file </p>
+                    <p localize-content>Import your targets from nmap scan</p>
+                    <p localize-content>Select your Nmap XML file</p>
 
                 
                     <div class="text-center">
@@ -77,7 +77,7 @@
 
                             </div>
 
-                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Upload</button>
+                            <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> <span localize-content>Upload</span></button>
                         </form>
                     </div>
                 </div>
@@ -89,13 +89,9 @@
                     <div class="card">
                         <div class="card-body">
         
-                            <h3><i class="fas fa-file-import"></i> CSV Import</h3>
-                            <p>Import your targets from nmap a csv</p>
-                            <p>Download the CSV template from 
-                                <a href="@Url.Content("/Attachments/Templates/TargetTemplate.csv")" target="_blank">
-                                     here <i class="fas fa-download"></i>
-                                </a>
-                                </p>
+                            <h3><i class="fas fa-file-import"></i> <span localize-content>CSV Import</span></h3>
+                            <p localize-content>Import your targets from a CSV file</p>
+                            <p><span localize-content>Download the CSV template from</span> <a href="@Url.Content("/Attachments/Templates/TargetTemplate.csv")" target="_blank"><span localize-content>here</span> <i class="fas fa-download"></i></a></p>
                             <div class="text-center">
                                 <form asp-area="Workspace" asp-controller="Target" asp-action="ImportCSV" asp-route-project="@Model.Project" method="post" enctype="multipart/form-data">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -112,7 +108,7 @@
         
                                     </div>
         
-                                    <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Upload</button>
+                                    <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> <span localize-content>Upload</span></button>
                                 </form>
                             </div>
                         </div>

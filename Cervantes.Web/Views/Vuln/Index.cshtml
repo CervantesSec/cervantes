@@ -6,10 +6,41 @@
 }
 
 @{
-    if (TempData["errorDetails"] != null)
+    if (TempData["errorVulnDetails"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
             <strong localize-content>An error ocurred loading Vuln Details!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    if (TempData["errorEditVuln"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred editing Vuln !</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeletingVuln"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting Vuln !</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["editedVuln"] != null)
+    {
+        <div class="alert alert-succcess alert-dismissible">
+            <strong localize-content>Vuln edited successfully !</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["deletedVuln"] != null)
+    {
+        <div class="alert alert-succcess alert-dismissible">
+            <strong localize-content>Vuln deleted successfully !</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }

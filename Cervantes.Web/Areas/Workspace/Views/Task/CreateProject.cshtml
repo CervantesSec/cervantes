@@ -70,10 +70,10 @@
                             <label asp-for="AsignedUserId" class="control-label">Asigned To</label>
                             @Html.DropDownListFor(m => m.AsignedUserId, Model.UsersList, "--Select--", new {@class = "form-control"})
                         </div>
-                        <div class="form-group">
+                        @*<div class="form-group">
                             <label asp-for="TargetId" class="control-label" localize-content>Target</label>
                             @Html.DropDownListFor(m => m.SelectedTargets, Model.TargetList, new {@class = "form-control targets", @multiple="multiple"})
-                        </div>
+                        </div>*@
                         
                         <div class="form-group">
                             <label asp-for="Status" class="control-label">Task Status</label>
@@ -81,8 +81,8 @@
                         </div>
 
                         <div class="form-group">
-                            <a class="btn btn-default" asp-area="Workspace" asp-controller="Task" asp-action="Index" asp-route-project="@Model.Project.Id">Back</a>
-                            <input type="submit" value="Create" class="btn btn-dark"/>
+                            <a class="btn btn-default" asp-area="Workspace" asp-controller="Task" asp-action="Index" asp-route-project="@Model.Project.Id" localize-content>Back</a>
+                            <button type="submit" value="Create" class="btn btn-dark" localize-content>Create</button>
                         </div>
                     </form>
                 </div>

@@ -138,7 +138,7 @@
                         @if (Model.Project.Score == Score.CVSS)
                         {
                           <div class="form-group">
-                            <label>CVSS3 Calculator</label>
+                            <label localize-content>CVSS3 Calculator</label>
                             <div id="cvssboard"></div>
                             <span asp-validation-for="CVSS3" class="text-danger"></span>
                           </div>
@@ -152,7 +152,7 @@
                           <input type="hidden" asp-for="OwaspImpact" id="OwaspImpact" class="form-control" rows="4"></input>
 
                           <div class="form-group">
-                          <label>OWASP Risk Calculator</label>
+                          <label localize-content>OWASP Risk Calculator</label>
                           <section>
                             <canvas class="riskChart" id="riskChart" height="75"></canvas>
                             <div class="risk RS">
