@@ -5,6 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    if (TempData["fileNotPermitted"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>This file type is not permitted!</strong>
+
+        </div>
+    }
+    
+    if (TempData["errorEditedClient"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>An error ocurred editing a client!</strong>
+
+        </div>
+    }
+}
+
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">

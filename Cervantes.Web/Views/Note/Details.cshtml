@@ -5,7 +5,16 @@
     ViewData["Title"] = "Note Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@{
+    if (TempData["editedNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Note edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+}
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -68,7 +77,7 @@
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             <li class="nav-item">
-                                <i class="fas fa-eye"></i> <a class="nav-link active" href="#details" data-toggle="tab" localize-content>Description</a>
+                                 <a class="nav-link active" href="#details" data-toggle="tab"><i class="fas fa-eye"></i> <span localize-content>Description</span></a>
                             </li>
                         </ul>
                     </div><!-- /.card-header -->

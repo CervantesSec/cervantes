@@ -45,7 +45,7 @@
                 </div>
                 <div class="col px-4">
                     <div>
-                        <h3>No results</h3>
+                        <h3 localize-content>No results</h3>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">User</div>
+                            <div class="float-right" localize-content>User</div>
                             <h3>
                                 <a asp-area="" asp-controller="User" asp-action="Details" asp-route-id="@user.Id">@user.FullName</a>
                             </h3>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Client</div>
+                            <div class="float-right" localize-content>Client</div>
                             <h3>
                                 <a asp-area="" asp-controller="Client" asp-action="Details" asp-route-id="@client.Id">@client.Name</a>
                             </h3>
@@ -110,7 +110,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Project</div>
+                            <div class="float-right" localize-content>Project</div>
                             <h3>
                                 <a asp-area="" asp-controller="Project" asp-action="Details" asp-route-id="@project.Id">@project.Name</a>
                             </h3>
@@ -133,7 +133,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Document</div>
+                            <div class="float-right" localize-content>Document</div>
                             <h3>
                                 <a asp-area="" asp-controller="Document" asp-action="Details" asp-route-id="@doc.Id">@doc.Name</a>
                             </h3>
@@ -155,7 +155,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Report</div>
+                            <div class="float-right" localize-content>Report</div>
                             <h3>
                                 <a asp-area="" asp-controller="Project" asp-action="Details" asp-route-id="@rep.ProjectId">@rep.Name</a>
                             </h3>
@@ -178,7 +178,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Target</div>
+                            <div class="float-right" localize-content>Target</div>
                             <h3>
                                 <a asp-area="Workspace" asp-controller="Target" asp-action="Details" asp-route-id="@target.Id" asp-route-project="@target.ProjectId">@target.Name</a>
                             </h3>
@@ -201,7 +201,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Target Service</div>
+                            <div class="float-right" localize-content>Target Service</div>
                             <h3>
                                 <a asp-area="Workspace" asp-controller="Target" asp-action="Service" asp-route-id="@service.Id" asp-route-project="@service.Target.ProjectId">@service.Name</a>
                             </h3>
@@ -223,7 +223,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Task</div>
+                            <div class="float-right" localize-content>Task</div>
                             <h3>
                                 <a asp-area="Workspace" asp-controller="Task" asp-action="Details" asp-route-id="@task.Id" asp-route-project="@task.ProjectId">@task.Name</a>
                             </h3>
@@ -246,7 +246,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Vault</div>
+                            <div class="float-right" localize-content>Vault</div>
                             <h3>
                                 <a asp-area="Workspace" asp-controller="Vault" asp-action="Details" asp-route-id="@vault.Id" asp-route-project="@vault.ProjectId">@vault.Name</a>
                             </h3>
@@ -269,7 +269,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Vuln</div>
+                            <div class="float-right" localize-content>Vuln</div>
                             <h3>
                                 <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id">@vuln.Name</a>
                             </h3>
@@ -292,7 +292,7 @@
                     </div>
                     <div class="col px-4">
                         <div>
-                            <div class="float-right">Vuln Category</div>
+                            <div class="float-right" localize-content>Vuln Category</div>
                             <h3>
                                 <a asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@cat.Id">@cat.Name</a>
                             </h3>

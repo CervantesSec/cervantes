@@ -21,19 +21,13 @@
 
         </div>
     }
-
-    if (TempData["edited"] != null)
+    
+    
+    if (TempData["errorLoadingProjectTemplates"] != null)
     {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Client edited successfully!</strong>
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred loading project template!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-    }
-
-    if (TempData["vacio"] != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            @Html.Encode(TempData["empty"])
         </div>
     }
 }

@@ -5,7 +5,7 @@
     ViewData["Title"] = "Projects";
 }
 @{
-    if (TempData["deleted"] != null)
+    if (TempData["projectDeleted"] != null)
     {
         <div class="alert alert-dismissible alert-success fade show" role="alert">
             <strong localize-content>Project deleted successfully!</strong>
@@ -14,7 +14,7 @@
         </div>
     }
 
-    if (TempData["created"] != null)
+    if (TempData["projectCreated"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -23,22 +23,23 @@
         </div>
     }
 
-    if (TempData["edited"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Project edited successfully!</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-    }
+    
 
-    if (TempData["error"] != null)
+    if (TempData["errorLoadingProject"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>Error @TempData["error"].ToString() Project!</strong>
+            <strong localize-content>An error ocurred loading project!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
 
+    if (TempData["errorDeletingProject"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting the project!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
 
 
 }

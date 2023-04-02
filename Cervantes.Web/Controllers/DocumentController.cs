@@ -58,11 +58,9 @@ public class DocumentController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading documents!";
-
             _logger.LogError(ex, "An error ocurred loading Document Index. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return Redirect("Error");
         }
     }
 
@@ -86,7 +84,7 @@ public class DocumentController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading document!";
+            TempData["errorLoadingDocument"] = "Error loading document!";
 
             _logger.LogError(e, "An error ocurred loading Document Details. User: {0}. Document: {1}",
                 User.FindFirstValue(ClaimTypes.Name), id);
@@ -146,7 +144,7 @@ public class DocumentController : Controller
                 };
                 documentManager.AddAsync(doc);
                 documentManager.Context.SaveChanges();
-                TempData["created"] = "created";
+                TempData["createdDocument"] = "created";
                 _logger.LogInformation("User: {0} Created a new Document: {1}", User.FindFirstValue(ClaimTypes.Name),
                     doc.Name);
                 return RedirectToAction("Details", "Document", new {id = doc.Id});
@@ -170,11 +168,11 @@ public class DocumentController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error creating document!";
+            TempData["errorCreatingDocument"] = "Error creating document!";
 
             _logger.LogError(ex, "An error ocurred adding a new Document. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return View("Index");
+            return View("Create");
         }
     }
 
@@ -195,11 +193,11 @@ public class DocumentController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading document!";
+            TempData["errorLoadingDocument"] = "Error loading document!";
 
             _logger.LogError(ex, "An error ocurred loading edit form on Document Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -219,17 +217,17 @@ public class DocumentController : Controller
             result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
 
             documentManager.Context.SaveChanges();
-            TempData["edited"] = "edited";
+            TempData["editedDocument"] = "edited";
             _logger.LogInformation("User: {0} edited Document: {1}", User.FindFirstValue(ClaimTypes.Name), result.Name);
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Document", new {id = id});
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error editing document!";
+            TempData["errorEditingDocument"] = "Error editing document!";
 
             _logger.LogError(ex, "An error ocurred editing Document Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Edit", "Document", new {id = id});
         }
     }
 
@@ -253,11 +251,11 @@ public class DocumentController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading document!";
+            TempData["errorLoadingDocument"] = "Error loading document!";
 
             _logger.LogError(e, "An error ocurred loading delet form on Document Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            Redirect("Error");
+            return RedirectToAction("Index");
         }
 
         return View();
@@ -278,13 +276,13 @@ public class DocumentController : Controller
                 documentManager.Context.SaveChanges();
             }
 
-            TempData["deleted"] = "deleted";
+            TempData["deletedDocument"] = "deleted";
             _logger.LogInformation("User: {0} deleted document: {1}", User.FindFirstValue(ClaimTypes.Name), doc.Name);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting document!";
+            TempData["errorDeletingDocument"] = "Error deleting document!";
             _logger.LogError(ex, "An error ocurred deleteing Document Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return View();

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Clients";
 }
 @{
-    if (TempData["deleted"] != null)
+    if (TempData["deletedClient"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -13,7 +13,7 @@
         </div>
     }
 
-    if (TempData["created"] != null)
+    if (TempData["createdClient"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -22,18 +22,27 @@
         </div>
     }
 
-    if (TempData["edited"] != null)
+    if (TempData["editedClient"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <strong localize-content>Client edited successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-
-    if (TempData["edited"] != null)
+    
+    
+    if (TempData["errorLoadingClient"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>@TempData["edited"].ToString()</strong>
+            <strong localize-content>An error ocurred loading a client!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeletingClient"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting a client!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -144,8 +153,8 @@
         </div>
         
     </div>
-    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
-    <a asp-area="" asp-controller="Client" asp-action="Create" class="btn btn-dark"><i class="fas fa-briefcase"></i> Create</a>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> <span localize-content>Back</span></a>
+    <a asp-area="" asp-controller="Client" asp-action="Create" class="btn btn-dark"><i class="fas fa-briefcase"></i> <span localize-content>Create</span></a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->

@@ -5,7 +5,18 @@
     ViewData["Title"] = "Delete Note";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    
+    
+    if (TempData["errorDeletingNote"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting note!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
 
+}
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">

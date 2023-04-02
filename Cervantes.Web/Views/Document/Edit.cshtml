@@ -4,13 +4,29 @@
     ViewData["Title"] = "Create Document";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    if (TempData["fileNotPermitted"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>This file type is not permitted!</strong>
 
+        </div>
+    }
+    if (TempData["errorEditingDocument"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred editing a document!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-file"></i> Edit Document</h1>
+                <h1 localize-content><i class="fas fa-file"></i> <span localize-content>Edit Document</span></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -38,7 +54,7 @@
                     <form asp-area="" asp-controller="Document" asp-action="Edit" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="Name" class="control-label"> localize-contentName</label>
+                            <label asp-for="Name" class="control-label" localize-content>Name</label>
                             <input asp-for="Name" class="form-control"/>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>

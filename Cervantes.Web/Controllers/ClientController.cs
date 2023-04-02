@@ -74,7 +74,7 @@ public class ClientController : Controller
 
             _logger.LogError(ex, "An error ocurred loading Client Index. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return Redirect("Error");
         }
     }
 
@@ -100,11 +100,11 @@ public class ClientController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading client!";
+            TempData["errorLoadingClient"] = "Error loading client!";
 
             _logger.LogError(e, "An error ocurred loading Client Details. Client: {0} User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            Redirect("Error");
+            RedirectToAction("Index");
         }
 
         return RedirectToAction("Index");
@@ -172,14 +172,14 @@ public class ClientController : Controller
             };
             clientManager.AddAsync(client);
             clientManager.Context.SaveChanges();
-            TempData["created"] = "created";
+            TempData["createdClient"] = "created";
             _logger.LogInformation("User: {0} Created a new client: {1}", User.FindFirstValue(ClaimTypes.Name),
                 client.Name);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error creating client!";
+            TempData["errorCreateClient"] = "Error creating client!";
 
             _logger.LogError(ex, "An error ocurred adding a new Client. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
@@ -213,7 +213,7 @@ public class ClientController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading client!";
+            TempData["errorLoadingClient"] = "Error loading client!";
 
             _logger.LogError(ex, "An error ocurred loading edit form on Client Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
@@ -246,13 +246,13 @@ public class ClientController : Controller
             result.Url = model.Url;
 
             clientManager.Context.SaveChanges();
-            TempData["edited"] = "edited";
+            TempData["editedClient"] = "edited";
             _logger.LogInformation("User: {0} edited client: {1}", User.FindFirstValue(ClaimTypes.Name), result.Name);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error editing client!";
+            TempData["errorEditedClient"] = "Error editing client!";
 
             _logger.LogError(ex, "An error ocurred editing Client Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
@@ -289,11 +289,11 @@ public class ClientController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading client!";
+            TempData["errorLoadingClient"] = "Error loading client!";
 
             _logger.LogError(e, "An error ocurred loading delet form on Client Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            Redirect("Error");
+            return RedirectToAction("Index");
         }
 
         return View();
@@ -323,13 +323,13 @@ public class ClientController : Controller
                 clientManager.Context.SaveChanges();
             }
 
-            TempData["deleted"] = "deleted";
+            TempData["deletedClient"] = "deleted";
             _logger.LogInformation("User: {0} deleted client: {1}", User.FindFirstValue(ClaimTypes.Name), client.Name);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting client!";
+            TempData["errorDeletingClient"] = "Error deleting client!";
 
             _logger.LogError(ex, "An error ocurred deleteing Client Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));

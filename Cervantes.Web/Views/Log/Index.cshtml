@@ -201,7 +201,7 @@
                     <p localize-content>Are you sure you want to delete the logs?</p>
                   </div>
                     <div class="modal-footer">
-                        <form asp-area="" asp-controller="Log" asp-action="Delete" method="post" enctype="multipart/form-data">
+                        <form asp-area="" asp-controller="Log" asp-action="Delete" method="post" enctype="multipart/form-data" onclick="setTimeout(function () { window.location.reload(); }, 1000)">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal"><span localize-content>Close</span></button>
                             <button type="submit" class="btn btn-danger"><span localize-content>Delete</span></button>
                         </form>

@@ -53,7 +53,7 @@ public class NoteController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error obtaining notes!";
+            TempData["errorNote"] = "Error obtaining notes!";
             _logger.LogError(ex, "An error ocurred loading Note Index. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
@@ -91,16 +91,16 @@ public class NoteController : Controller
             };
             noteManager.AddAsync(note);
             noteManager.Context.SaveChanges();
-            TempData["created"] = "created";
+            TempData["createdNote"] = "created";
             _logger.LogInformation("User: {0} Created a new Note: {1}", User.FindFirstValue(ClaimTypes.Name),
                 note.Name);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading note create form";
+            TempData["errorCreateNote"] = "Error loading note create form";
             _logger.LogError(ex, "An error ocurred adding a new Note. User: {0}", User.FindFirstValue(ClaimTypes.Name));
-            return View("Index");
+            return View("Create");
         }
     }
 
@@ -120,7 +120,7 @@ public class NoteController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading edit form!";
+            TempData["errorNote"] = "Error loading edit form!";
             _logger.LogError(ex, "An error ocurred loading edit form on Note Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
@@ -150,13 +150,13 @@ public class NoteController : Controller
             sanitizer.AllowedSchemes.Add("data");
 
             var result = noteManager.GetById(id);
-            if (result.UserId == User.FindFirstValue(ClaimTypes.Name))
+            if (result.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 result.Name = model.Name;
                 result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
 
                 noteManager.Context.SaveChanges();
-                TempData["edited"] = "edited";
+                TempData["editedNote"] = "edited";
                 _logger.LogInformation("User: {0} edited Note: {1}", User.FindFirstValue(ClaimTypes.Name), result.Name);
                 return RedirectToAction("Details", new {id = result.Id});
             }
@@ -165,10 +165,10 @@ public class NoteController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error editing note!";
+            TempData["errorEditingNote"] = "Error editing note!";
             _logger.LogError(ex, "An error ocurred editing Note Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Edit", new {id = id});
         }
     }
 
@@ -193,10 +193,10 @@ public class NoteController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading note!";
+            TempData["errorNote"] = "Error loading note!";
             _logger.LogError(e, "An error ocurred loading delet form on Note Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            Redirect("Error");
+            return RedirectToAction("Index");
         }
 
         return View();
@@ -216,7 +216,7 @@ public class NoteController : Controller
                     noteManager.Remove(note);
                     noteManager.Context.SaveChanges();
 
-                    TempData["deleted"] = "deleted";
+                    TempData["deletedNote"] = "deleted";
                     _logger.LogInformation("User: {0} deleted Note: {1}", User.FindFirstValue(ClaimTypes.Name),
                         note.Name);
                     return RedirectToAction("Index");
@@ -226,10 +226,10 @@ public class NoteController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error deleting note!";
+            TempData["errorDeletingNote"] = "Error deleting note!";
             _logger.LogError(ex, "An error ocurred deleteing Note Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Delete", new {id = id});
         }
     }
 
@@ -250,7 +250,7 @@ public class NoteController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading note!";
+            TempData["errorNote"] = "Error loading note!";
             _logger.LogError(e, "An error ocurred obtaining Note Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return View("Index");

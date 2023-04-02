@@ -5,7 +5,7 @@
     ViewData["Title"] = "Clients";
 }
 @{
-    if (TempData["deleted"] != null)
+    if (TempData["deletedDocument"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -14,30 +14,23 @@
         </div>
     }
 
-    if (TempData["created"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Document created successfully!</strong>
-
-        </div>
-    }
-
-    if (TempData["edited"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Document edited successfully!</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-    }
-
-    if (TempData["error"] != null)
+    if (TempData["errorLoadingDocument"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>@TempData["error"].ToString()</strong>
+            <strong localize-content>An error ocurred loading a document!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
+
+    if (TempData["errorDeletingDocument"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting a document!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    
 
 }
 
@@ -46,7 +39,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fa fa-file"></i> Documents</h1>
+                <h1 localize-content><i class="fa fa-file"></i> <span localize-content>Documents</span></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -138,8 +131,8 @@
 
         </div>
     </div>
-    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
-        <a asp-area="" asp-controller="Document" asp-action="Create" class="btn btn-dark"><i class="fas fa-file"></i> Create</a>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> <span localize-content>Back</span></a>
+        <a asp-area="" asp-controller="Document" asp-action="Create" class="btn btn-dark"><i class="fas fa-file"></i> <span localize-content>Create</span></a>
 </section>
 <!-- /.content -->
 <!-- /.content-wrapper -->

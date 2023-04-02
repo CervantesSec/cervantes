@@ -358,9 +358,9 @@
         <comment>Pages/Shared/_LoginPartial.cshtml</comment>
   </data>
     <data name="Manage your account" xml:space="preserve">
-    <value>Maneja tu cuenta</value>
-        <comment>Areas/Identity/Pages/Account/Manage/_Layout.cshtml</comment>
-  </data>
+      <value>Gestiona tu cuenta</value>
+      <comment>Areas/Identity/Pages/Account/Manage/_Layout.cshtml</comment>
+    </data>
     <data name="Manage your external logins" xml:space="preserve">
     <value>Administrar sus conexiones externas</value>
         <comment>Areas/Identity/Pages/Account/Manage/ExternalLogins.cshtml</comment>
@@ -378,7 +378,7 @@
     <value>Contraseña no es correcta.</value>
         <comment>Custom back end message</comment>
   </data>
-    <data name="Personal data" xml:space="preserve">
+    <data name="Personal Data" xml:space="preserve">
     <value>Información personal</value>
         <comment>Areas/Identity/Pages/Account/Manage/PersonalData.cshtml</comment>
   </data>
@@ -1318,7 +1318,7 @@ Si no completas la configuración de tu aplicación de autenticación, puedes pe
       <value>Se ha producido un error borrando la plantilla de reporte!</value>
     </data>
     <data name="User deleted successfully!" xml:space="preserve">
-      <value>Usuario eliminado correctamente!</value>
+      <value>Usuario eliminado del proyecto correctamente!</value>
     </data>
     <data name="An error ocurred deleting a user!" xml:space="preserve">
       <value>Se ha producido un error eliminando el usuario!</value>
@@ -1400,5 +1400,173 @@ Si no completas la configuración de tu aplicación de autenticación, puedes pe
     </data>
     <data name="Executive Summary" xml:space="preserve">
       <value>Resumen Ejecutivo</value>
+    </data>
+    <data name="This user is already added to project!" xml:space="preserve">
+      <value>Este usuario ya esta añadido al proyecto!</value>
+    </data>
+    <data name="User added to project successfully!" xml:space="preserve">
+      <value>Usuario añadido al proyecto correctamente!</value>
+    </data>
+    <data name="User deleted from project successfully!" xml:space="preserve">
+      <value>Usuario eliminado del proyecto!</value>
+    </data>
+    <data name="Target added to project successfully!" xml:space="preserve">
+      <value>Objetivo añadido al proyecto correctamente!</value>
+    </data>
+    <data name="Target deleted from project successfully!" xml:space="preserve">
+      <value>Objetivo eliminado del proyecto!</value>
+    </data>
+    <data name="Note added to project successfully!" xml:space="preserve">
+      <value>Nota añadida al proyecto correctamente!</value>
+    </data>
+    <data name="Note deleted from project successfully!" xml:space="preserve">
+      <value>Nota eliminada del proyecto correctamente!</value>
+    </data>
+    <data name="Attachment added to project successfully!" xml:space="preserve">
+      <value>Adjunto añadido al proyecto correctamente!</value>
+    </data>
+    <data name="Attachment deleted from project successfully!" xml:space="preserve">
+      <value>Adjunto eliminado del proyecto correctamente!</value>
+    </data>
+    <data name="An error was produced adding an Attachment!" xml:space="preserve">
+      <value>Se ha producido un error añadiendo un adjunto!</value>
+    </data>
+    <data name="Report deleted successfully!" xml:space="preserve">
+      <value>Reporte eliminado correctamente!</value>
+    </data>
+    <data name="Report created successfully!" xml:space="preserve">
+      <value>Reporte creado correctamente!</value>
+    </data>
+    <data name="Project deleted successfully!" xml:space="preserve">
+      <value>Proyecto eliminado correctamente!</value>
+    </data>
+    <data name="Project created successfully!" xml:space="preserve">
+      <value>Proyecto creado correctamente!</value>
+    </data>
+    <data name="Project edited successfully!" xml:space="preserve">
+      <value>Proyecto editado correctamente!</value>
+    </data>
+    <data name="An error ocurred loading project!" xml:space="preserve">
+      <value>Se ha producido un error cargando el proyecto!</value>
+    </data>
+    <data name="An error ocurred creating project!" xml:space="preserve">
+      <value>Se ha producido un error al crear el proyecto!</value>
+    </data>
+    <data name="An error ocurred editing project!" xml:space="preserve">
+      <value>Se ha producido un error al editar el proyecto!</value>
+    </data>
+    <data name="An error ocurred deleting the project!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar el proyecto!</value>
+    </data>
+    <data name="An error ocurred loading project templates!" xml:space="preserve">
+      <value>Se ha producido un error al cargar las plantillas de proyecto!</value>
+    </data>
+    <data name="An error was produced adding a memeber!" xml:space="preserve">
+      <value>Se ha producido un error añadiendo al miembro!</value>
+    </data>
+    <data name="An error was produced deleting a memeber!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar el miembro!</value>
+    </data>
+    <data name="An error was produced adding a new target!" xml:space="preserve">
+      <value>Se ha producido un error al añadir un nuevo objetivo!</value>
+    </data>
+    <data name="An error was produced deleting a target!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar un objetivo!</value>
+    </data>
+    <data name="An error was produced adding a new note!" xml:space="preserve">
+      <value>Se ha producido un error al añadir una nueva nota!</value>
+    </data>
+    <data name="An error was produced deleting a note!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar una nota!</value>
+    </data>
+    <data name="An error was produced deleting an Attachment!" xml:space="preserve">
+      <value>Se ha producido un error al borrar un adjunto!</value>
+    </data>
+    <data name="Report downloaded successfully!" xml:space="preserve">
+      <value>Reporte descargado correctamente!</value>
+    </data>
+    <data name="An error ocurred loading a client!" xml:space="preserve">
+      <value>Se ha producido un error al cargar el cliente!</value>
+    </data>
+    <data name="An error ocurred creating a client!" xml:space="preserve">
+      <value>Se ha producido un error creando el cliente!</value>
+    </data>
+    <data name="An error ocurred deleting a client!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar el cliente!</value>
+    </data>
+    <data name="An error ocurred editing a client!" xml:space="preserve">
+      <value>Se ha producido un error al editar el cliente!</value>
+    </data>
+    <data name="Edit Document" xml:space="preserve">
+      <value>Editar Documento</value>
+    </data>
+    <data name="Create Document" xml:space="preserve">
+      <value>Crear Documento</value>
+    </data>
+    <data name="Document" xml:space="preserve">
+      <value>Documento</value>
+    </data>
+    <data name="Document created successfully!" xml:space="preserve">
+      <value>Documento creado correctamente!</value>
+    </data>
+    <data name="Document edited successfully!" xml:space="preserve">
+      <value>Documento editado correctamente!</value>
+    </data>
+    <data name="Document deleted successfully!" xml:space="preserve">
+      <value>Documento eliminado corectamente!</value>
+    </data>
+    <data name="An error ocurred loading a document!" xml:space="preserve">
+      <value>Se ha producido un error al cargar el documento!</value>
+    </data>
+    <data name="An error ocurred deleting a document!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar un documento!</value>
+    </data>
+    <data name="An error ocurred creating a document!" xml:space="preserve">
+      <value>Se ha producido un error al crear el documento!</value>
+    </data>
+    <data name="An error ocurred editing a document!" xml:space="preserve">
+      <value>Se ha producido un error al editar un documento!</value>
+    </data>
+    <data name="Create Category" xml:space="preserve">
+      <value>Crear Categoría</value>
+    </data>
+    <data name="Dark Mode" xml:space="preserve">
+      <value>Modo Oscuro</value>
+    </data>
+    <data name="Deleting this data will permanently remove your account, and this cannot be recovered." xml:space="preserve">
+      <value>Eliminar estos datos borrará permanentemente tu cuenta, esta acción no puede recuperarse</value>
+    </data>
+    <data name="Your account contains personal data that you have given us. This page allows you to download or delete that data." xml:space="preserve">
+      <value>Tu cuenta contiene informaciín personal. Esta página te permite descargar o borrar estos datos</value>
+    </data>
+    <data name="No results" xml:space="preserve">
+      <value>Sin resultados</value>
+    </data>
+    <data name="Note edited successfully!" xml:space="preserve">
+      <value>Nota editada correctamente!</value>
+    </data>
+    <data name="An error ocurred deleting note!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar la nota!</value>
+    </data>
+    <data name="An error ocurred editing note!" xml:space="preserve">
+      <value>Se ha producido un error al editar la nota!</value>
+    </data>
+    <data name="Note deleted successfully!" xml:space="preserve">
+      <value>Nota eliminada correctamente!</value>
+    </data>
+    <data name="Note created successfully!" xml:space="preserve">
+      <value>Nota creada correctamente!</value>
+    </data>
+    <data name="An error ocurred loading a note!" xml:space="preserve">
+      <value>Se ha producido un error al cargar la nota!</value>
+    </data>
+    <data name="An error ocurred creating note!" xml:space="preserve">
+      <value>Se ha producido un error al crear la nota!</value>
+    </data>
+    <data name="Create Vulnerability Category" xml:space="preserve">
+      <value>Crear categoría de Vulnerabilidad</value>
+    </data>
+    <data name="Edit Vulnerability Category" xml:space="preserve">
+      <value>Editar categoría de Vulnerabilidad</value>
     </data>
 </root>

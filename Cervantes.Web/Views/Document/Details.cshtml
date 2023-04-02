@@ -5,6 +5,25 @@
     ViewData["Title"] = "Document Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    if (TempData["createdDocument"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Document created successfully!</strong>
+
+        </div>
+    }
+    
+    if (TempData["editedDocument"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Document edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
+
 
 <!-- Content Header (Page header) -->
 <section class="content-header">

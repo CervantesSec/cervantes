@@ -14,6 +14,13 @@
 
         </div>
     }
+    if (TempData["errorCreatingDocument"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred creating a document!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
 }
 
 <!-- Content Header (Page header) -->
@@ -21,7 +28,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 localize-content><i class="fas fa-file"></i> Create Document</h1>
+                <h1 localize-content><i class="fas fa-file"></i> <span localize-content>Create Document</span></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">

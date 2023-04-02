@@ -96,7 +96,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading project";
+            TempData["errorLoadingProject"] = "loading project";
             _logger.LogError(ex, "An error ocurred adding loading Projects. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
@@ -209,7 +209,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading project";
+            TempData["errorLoadingProject"] = "loading project";
             _logger.LogError(ex, "An error ocurred loading Project: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index");
@@ -244,7 +244,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading form";
+            TempData["errorLoadingProject"] = "loading form";
             _logger.LogError(ex, "An error ocurred loading Project Create Form. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index");
@@ -286,17 +286,17 @@ public class ProjectController : Controller
             };
             projectManager.Add(project);
             projectManager.Context.SaveChanges();
-            TempData["created"] = "created";
+            TempData["projectCreated"] = "created";
             _logger.LogInformation("User: {0} Created a new Project: {1}", User.FindFirstValue(ClaimTypes.Name),
                 project.Name);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "creating project";
+            TempData["errorCreatingProject"] = "creating project";
             _logger.LogError(ex, "An error ocurred adding a new Project. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Create");
         }
     }
 
@@ -341,7 +341,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading project";
+            TempData["errorLoadingProject"] = "loading project";
             _logger.LogError(ex, "An error ocurred loading Edit Form. User: {0}", User.FindFirstValue(ClaimTypes.Name));
             RedirectToAction("Index");
         }
@@ -378,12 +378,13 @@ public class ProjectController : Controller
             result.FindingsId = model.FindingsId;
             projectManager.Context.SaveChanges();
 
+            TempData["projectEdited"] = "editing project";
             _logger.LogInformation("User: {0} Edited project. Id: {1}", User.FindFirstValue(ClaimTypes.Name), id);
             return RedirectToAction("Details", "Project", new {id = id});
         }
         catch (Exception ex)
         {
-            TempData["error"] = "editing project";
+            TempData["errorEditingProject"] = "editing project";
             _logger.LogError(ex, "An error ocurred editing project Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = id});
@@ -402,7 +403,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading project";
+            TempData["errorLoadingProject"] = "loading project";
             _logger.LogError(ex, "An error loading delete form. Project Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction(nameof(Index));
@@ -424,15 +425,16 @@ public class ProjectController : Controller
                 projectManager.Context.SaveChanges();
             }
 
+            TempData["projectDeleted"] = "deleting ";
             _logger.LogInformation("User: {0} deleted Project Id: {1}", User.FindFirstValue(ClaimTypes.Name), id);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting ";
+            TempData["errorDeletingProject"] = "deleting ";
             _logger.LogError(ex, "An error ocurred deleting Project Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -460,10 +462,10 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading templates ";
+            TempData["errorLoadingProjectTemplates"] = "loading templates ";
             _logger.LogError(ex, "An error ocurred loading Project Templates. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -509,10 +511,10 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading template ";
+            TempData["errorLoadingProjectTemplates"] = "loading template ";
             _logger.LogError(ex, "An error ocurred loading template Project Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Templates");
         }
     }
 
@@ -544,13 +546,13 @@ public class ProjectController : Controller
 
             projectManager.Add(result);
             projectManager.Context.SaveChanges();
-
+            TempData["projectCreated"] = "creating ";
             _logger.LogInformation("User: {0} created project. Id: {1}", User.FindFirstValue(ClaimTypes.Name), id);
             return RedirectToAction("Details", "Project", new {id = id});
         }
         catch (Exception ex)
         {
-            TempData["error"] = "creating ";
+            TempData["errorLoadingProjectTemplates"] = "creating ";
             _logger.LogError(ex, "An error ocurred creating project Id: {0}. User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = id});
@@ -631,7 +633,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "adding member to ";
+            TempData["errorMember"] = "adding member to ";
             _logger.LogError(ex, "An error ocurred adding a new Memeber on Project: {0}. User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -664,7 +666,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting memeber from ";
+            TempData["errorDeletedMember"] = "deleting memeber from ";
             _logger.LogError(ex, "An error ocurred deleteing a Memeber on Project: {0}. User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -703,7 +705,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "adding target to ";
+            TempData["errorAddedTarget"] = "adding target to ";
             _logger.LogError(ex, "An error ocurred adding a new Target on Project: {0}. User: {1}",
                 form["project"], User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = form["project"]});
@@ -733,7 +735,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting target from ";
+            TempData["errorDeletingTarget"] = "deleting target from ";
             _logger.LogError(ex, "An error ocurred deleting a Target: {0} on Project: {1}. User: {2}", project, target,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -772,7 +774,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "adding note to ";
+            TempData["errorAddedNote"] = "adding note to ";
             _logger.LogError(ex, "An error ocurred adding a Note on Project: {1}. User: {2}",
                 form["project"], User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = form["project"]});
@@ -804,7 +806,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting note from ";
+            TempData["errorDeletingNote"] = "deleting note from ";
             _logger.LogError(ex, "An error ocurred deleting a Note on Project: {1}. User: {2}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -868,7 +870,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "adding attachment to ";
+            TempData["errorAttachment"] = "adding attachment to ";
             _logger.LogError(ex, "An error ocurred adding an Attachment on Project: {1}. User: {2}",
                 form["project"], User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = form["project"]});
@@ -905,7 +907,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting attachment from ";
+            TempData["errorDeletingAttachment"] = "deleting attachment from ";
             _logger.LogError(ex, "An error ocurred deleting an Attachment on Project: {1}. User: {2}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -921,6 +923,7 @@ public class ProjectController : Controller
 
         var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
+        TempData["downloadedReport"] = "deleting attachment from ";
         return File(fileBytes, attachment.Name);
     }
     
@@ -951,7 +954,7 @@ public class ProjectController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading project";
+            TempData["errorLoadingProject"] = "loading project";
             _logger.LogError(ex, "An error ocurred adding loading Projects. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
             return View();
