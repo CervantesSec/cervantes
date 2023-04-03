@@ -7,10 +7,18 @@
 }
 
 @{
-    if (TempData["existsMember"] != null)
+ if (TempData["existsMember"] != null)
     {
         <div class="alert alert-info alert-dismissible">
             <strong localize-content>This user is already added to project!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["downloadedReport"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Report downloaded successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -86,11 +94,75 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-
-    if (TempData["error"] != null)
+    
+    if (TempData["errorDeletingAttachment"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>An error was produced @TempData["error"].ToString() Project!</strong>
+            <strong localize-content>An error was produced deleting an Attachment!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorMember"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced adding a memeber!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeletedMember"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced deleting a memeber!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorAddedTarget"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced adding a new target!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeletingTarget"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced deleting a target!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorAddedNote"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced adding a new note!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeletingNote"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced deleting a note!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["errorLoadingProject"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred loading project!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorEditingProject"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred editing project!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -108,6 +180,31 @@
         <div class="alert alert-success alert-dismissible">
             <strong localize-content>Report created successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["projectEdited"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Project edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorLoadingProjectTemplates"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred loading project template!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["projectCreated"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Project created successfully!</strong>
+
         </div>
     }
 }
@@ -1053,7 +1150,7 @@
                 <td>@report.CreatedDate.ToShortDateString()</td>
                 <td>@report.User.FullName</td>
                 <td>
-                    <a class="btn btn-tool" asp-area="Workspace" asp-controller="Report" asp-action="Download" asp-route-id="@report.Id" localize-content>
+                    <a class="btn btn-tool" asp-area="Workspace" asp-controller="Report" asp-action="Download" asp-route-id="@report.Id" onclick="setTimeout(function () { window.location.reload(); }, 1000)" localize-content>
                         <i class="fas fa-download"></i>
                     </a>
                     <form asp-area="" asp-action="Delete" asp-controller="Report" method="post" enctype="multipart/form-data">

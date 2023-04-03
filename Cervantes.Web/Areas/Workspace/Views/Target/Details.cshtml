@@ -10,7 +10,7 @@
     if (TempData["addedNote"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Note added to task successfully!</strong>
+            <strong localize-content>Note added to target successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -18,7 +18,31 @@
     if (TempData["deletedNote"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Note deleted from task successfully!</strong>
+            <strong localize-content>Note deleted from target successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["deletedService"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Service deleted from target successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["editedService"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Service edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["addedService"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Service added successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -26,7 +50,7 @@
     if (TempData["addedAttachment"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Attachment added to task successfully!</strong>
+            <strong localize-content>Attachment added to target successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -34,18 +58,36 @@
     if (TempData["deletedAttachment"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Attachment deleted from task successfully!</strong>
+            <strong localize-content>Attachment deleted from target successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
 
-    if (TempData["errorAttachment"] != null)
+    if (TempData["errorService"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>An error was produced adding an Attachment!</strong>
+            <strong localize-content>An error was produced loading Service!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
+    
+    if (TempData["errorTarget"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced loading Target!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorAddService"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced adding Service!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    
 }
 
 <section class="content-header">

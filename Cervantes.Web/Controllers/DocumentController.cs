@@ -60,7 +60,7 @@ public class DocumentController : Controller
         {
             _logger.LogError(ex, "An error ocurred loading Document Index. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return Redirect("Error");
+            return RedirectToAction("Error","Home");
         }
     }
 

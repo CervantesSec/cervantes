@@ -6,7 +6,7 @@
     ViewData["Title"] = "Targets";
 }
 @{
-    if (TempData["deleted"] != null)
+    if (TempData["deletedTarget"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -24,26 +24,19 @@
         </div>
     }
 
-    if (TempData["edited"] != null)
+    if (TempData["editedTarget"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <strong localize-content>Target edited successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-
-    if (TempData["error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>@TempData["error"].ToString()</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-    }
+    
 
     if (TempData["editedService"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Target edited successfully!</strong>
+            <strong localize-content>Service edited successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -51,7 +44,7 @@
     if (TempData["addedService"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Target edited successfully!</strong>
+            <strong localize-content>Service added successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -59,7 +52,7 @@
     if (TempData["deletedService"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Target edited successfully!</strong>
+            <strong localize-content>Service deleted successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -67,15 +60,46 @@
     if (TempData["fileImported"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Nmap file imported successfully!</strong>
+            <strong localize-content>File imported successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["errorDeletedService"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced deleteing a Service!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
     
-    if (TempData["fileImportedcsv"] != null)
+    if (TempData["errorEditingService"] != null)
     {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>CSV file imported successfully!</strong>
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced editing a Service!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorService"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced loading Service!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    if (TempData["errorTarget"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced loading Target!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeleteTarget"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error was produced deleting Target!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }

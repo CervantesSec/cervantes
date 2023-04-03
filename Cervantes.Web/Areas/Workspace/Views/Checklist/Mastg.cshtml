@@ -4,7 +4,23 @@
 @{
     ViewData["Title"] = "OWASP MASTG Checklist";
 }
-
+@{
+    if (TempData["editedMASTG"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>MASTG Checklist saved successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorSaveMastg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>An error ocurred saving MASTG Checklist!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
 <section class="content-header" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
     <div class="container-fluid">
         <div class="row mb-2">

@@ -5,25 +5,8 @@
     ViewData["Title"] = "Vulnerabilities Templates";
 }
 @{
-    if (TempData["deleted"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Vuln deleted successfully!</strong>
 
-        </div>
-    }
-
-    if (TempData["created"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Vuln created successfully!</strong>
-
-        </div>
-    }
-
-    if (TempData["edited"] != null)
+    if (TempData["editedVuln"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <strong localize-content>Vuln edited successfully!</strong>
@@ -31,10 +14,10 @@
         </div>
     }
 
-    if (TempData["error"] != null)
+    if (TempData["errorVuln"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>@TempData["error"].ToString()</strong>
+            <strong localize-content>An error ocurred loading the Vuln!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -82,7 +65,7 @@
     if (TempData["deletedAttachment"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Vuln attachment edited successfully!</strong>
+            <strong localize-content>Vuln attachment deleted successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -164,7 +147,7 @@
                             {
                                 <td>
                                     <span class="badge badge-info">
-                                        <i class="fas fa-info-circle"></i> @vuln.CVSS3
+                                        <i class="fas fa-info-circle"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -172,7 +155,7 @@
                             {
                                 <td>
                                     <span class="badge badge-success">
-                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3
+                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -180,7 +163,7 @@
                             {
                                 <td>
                                     <span class="badge badge-warning">
-                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3
+                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -188,7 +171,7 @@
                             {
                                 <td>
                                     <span class="badge badge-danger">
-                                        <i class="fas fa-exclamation-circle"></i> @vuln.CVSS3
+                                        <i class="fas fa-exclamation-circle"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -196,10 +179,19 @@
                             {
                                 <td>
                                     <span class="badge badge-danger">
-                                        <i class="fas fa-exclamation-triangle"></i> @vuln.CVSS3
+                                        <i class="fas fa-exclamation-triangle"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
+                            else
+                            {
+                                <td>
+                                    <span class="badge badge-danger">
+                                            @vuln.CVSS3.ToString()
+                                    </span>
+                                </td>
+                            }
+                            
                             @switch (@vuln.Risk)
                             {
                                 case VulnRisk.Info:

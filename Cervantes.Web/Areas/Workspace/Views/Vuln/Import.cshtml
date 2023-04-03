@@ -23,6 +23,15 @@
 
         </div>
     }
+    
+    if (TempData["fileImported"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>File imported successfully!</strong>
+
+        </div>
+    }
 }
 
 
@@ -57,11 +66,11 @@
                     <div class="card">
                         <div class="card-body">
         
-                            <h3><i class="fas fa-file-import"></i> Vuln Import</h3>
-                            <p>Import your vulnerabilities from your files</p>
-                            <p>Download the CSV template from 
+                            <h3><i class="fas fa-file-import"></i> <span localize-content>Vuln Import</span></h3>
+                            <p localize-content>Import your vulnerabilities from your files</p>
+                            <p><span localize-content>Download the CSV template from</span>
                                 <a href="@Url.Content("/Attachments/Templates/VulnTemplate.csv")" target="_blank">
-                                     here <i class="fas fa-download"></i>
+                                    <span localize-content>here</span> <i class="fas fa-download"></i>
                                 </a>
                                 </p>
                             
@@ -86,7 +95,7 @@
         
                                     </div>
         
-                                    <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> Upload</button>
+                                    <button type="submit" class="btn btn-dark"><i class="fas fa-upload"></i> <span localize-content>Upload</span></button>
                                 </form>
                             
                         </div>

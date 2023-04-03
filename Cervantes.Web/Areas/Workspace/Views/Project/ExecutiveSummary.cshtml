@@ -5,6 +5,24 @@
     ViewData["Title"] = "Executive Summary";
 }
 
+@{
+    if (TempData["executiveSaved"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Executive Summary saved successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorExecutiveSave"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred saving Executive Summary!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
+
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">

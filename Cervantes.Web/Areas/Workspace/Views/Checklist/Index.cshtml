@@ -6,11 +6,20 @@
     ViewData["Title"] = "Checklist";
 }
 @{
-    if (TempData["deleted"] != null)
+    if (TempData["deletedWSTG"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Checklist deleted successfully!</strong>
+            <strong localize-content>WSTG Checklist deleted successfully!</strong>
+
+        </div>
+    }
+    
+    if (TempData["deletedMASTG"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>MASTG Checklist deleted successfully!</strong>
 
         </div>
     }
@@ -24,14 +33,63 @@
         </div>
     }
 
-    if (TempData["edited"] != null)
+    
+    
+    if (TempData["errorLaodingWSTG"] != null)
     {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Checklist saved successfully!</strong>
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred loading WSTG!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorLaodingMASTG"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred loading MASTG!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorCreateChecklist"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred loading Checklist form!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorChecklist"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred loading Checklist!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorCheckDelete"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting Checklist!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
 
+    if (TempData["errorReportWSTG"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting Checklist!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorReportMASTG"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting Checklist!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
 }
 
 <!-- Content Header (Page header) -->

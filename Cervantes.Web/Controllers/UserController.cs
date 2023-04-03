@@ -132,7 +132,7 @@ public class UserController : Controller
             TempData["errorLoading"] = "Error loading user!";
             _logger.LogError(e, "An error ocurred loading User Id: {0}. by User: {1}", id,
                 User.FindFirstValue(ClaimTypes.Name));
-            Redirect("Error");
+            return RedirectToAction("Error","Home");
         }
 
         return View();

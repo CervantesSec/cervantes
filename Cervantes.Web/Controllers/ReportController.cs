@@ -529,7 +529,7 @@ public class ReportController : Controller
             List<Table> vTables = new List<Table>();
 
             //foreach vuln create a table from table template
-            foreach (var vuln in model.Vulns)
+            foreach (var vuln in model.Vulns.OrderByDescending(x => x.FindingId))
             {
                 Table table = new Table(vulnTable.CloneNode(true));
                 var vulnTableText = table.Descendants<Text>();
@@ -539,7 +539,7 @@ public class ReportController : Controller
                     switch (textDoc.Text)
                     {
                         case "VulnName":
-                            textDoc.Text = vuln.Name;
+                            textDoc.Text = vuln.FindingId + " " +vuln.Name;
                             break;
                         case "VulnCVE":
                             textDoc.Text = vuln.cve;

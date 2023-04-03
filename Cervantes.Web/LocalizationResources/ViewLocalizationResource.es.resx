@@ -1683,4 +1683,232 @@ Si no completas la configuración de tu aplicación de autenticación, puedes pe
     <data name="Show" xml:space="preserve">
       <value>Mostrar</value>
     </data>
+    <data name="An error ocurred editing Vault!" xml:space="preserve">
+      <value>Se ha producido un error al editar la caja fuerte!</value>
+    </data>
+    <data name="An error ocurred creating Vault!" xml:space="preserve">
+      <value>Se ha producido un error al crear la caja fuerte!</value>
+    </data>
+    <data name="Vault deleted successfully!" xml:space="preserve">
+      <value>Caja fuerte eliminada correctamente!</value>
+    </data>
+    <data name="Vault created successfully!" xml:space="preserve">
+      <value>Caja fuerte creada correctamente!</value>
+    </data>
+    <data name="Vault edited successfully!" xml:space="preserve">
+      <value>Caja fuerte editada correctamente!</value>
+    </data>
+    <data name="An error ocurred loading Vault!" xml:space="preserve">
+      <value>Se ha producido un error al cargar la caja fuerte!</value>
+    </data>
+    <data name="An error ocurred deleting Vault!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar la caja fuerte!</value>
+    </data>
+    <data name="WSTG Checklist saved successfully!" xml:space="preserve">
+      <value>WSTG Checklist guardada correctamente!</value>
+    </data>
+    <data name="An error ocurred saving WSTG Checklist!" xml:space="preserve">
+      <value>Se ha producido un error al guardar el Checklist WSTG!</value>
+    </data>
+    <data name="An error ocurred saving MASTG Checklist!" xml:space="preserve">
+      <value>Se ha producido un error al guardar el checlist MASTG!</value>
+    </data>
+    <data name="MASTG Checklist saved successfully!" xml:space="preserve">
+      <value>Checklist MASTG guardado correctamente!</value>
+    </data>
+    <data name="WSTG Checklist deleted successfully!" xml:space="preserve">
+      <value>Checklist WSTG eliminada correctamente!</value>
+    </data>
+    <data name="MASTG Checklist deleted successfully!" xml:space="preserve">
+      <value>Checklist MASTG eliminada correctamente!</value>
+    </data>
+    <data name="Checklist created successfully!" xml:space="preserve">
+      <value>Checklist creado correctamente!</value>
+    </data>
+    <data name="An error ocurred loading WSTG!" xml:space="preserve">
+      <value>Se ha producido un error al cargar WSTG!</value>
+    </data>
+    <data name="An error ocurred loading MASTG!" xml:space="preserve">
+      <value>Se ha producido un error al cargar MASTG!</value>
+    </data>
+    <data name="An error ocurred loading Checklist form!" xml:space="preserve">
+      <value>Se ha producido un error al cargar el formulario!</value>
+    </data>
+    <data name="An error ocurred loading Checklist!" xml:space="preserve">
+      <value>Se ha producido un error al cargar el checklist!</value>
+    </data>
+    <data name="An error ocurred deleting Checklist!" xml:space="preserve">
+      <value>Se ha producido un error al borrar el checklist!</value>
+    </data>
+    <data name="Target deleted successfully!" xml:space="preserve">
+      <value>Objetivo eliminado correctamente!</value>
+    </data>
+    <data name="Target created successfully!" xml:space="preserve">
+      <value>Objetivo creado correctamente!</value>
+    </data>
+    <data name="Target edited successfully!" xml:space="preserve">
+      <value>Objetivo editado correctamente!</value>
+    </data>
+    <data name="Service edited successfully!" xml:space="preserve">
+      <value>Servicio editado correctamente!</value>
+    </data>
+    <data name="Service added successfully!" xml:space="preserve">
+      <value>Servicio añadido correctamente!</value>
+    </data>
+    <data name="Service deleted successfully!" xml:space="preserve">
+      <value>Servicio eliminado correctamente!</value>
+    </data>
+    <data name="File imported successfully!" xml:space="preserve">
+      <value>Archivo importado correctamente!</value>
+    </data>
+    <data name="An error was produced deleteing a Service!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar el servicio!</value>
+    </data>
+    <data name="An error was produced editing a Service!" xml:space="preserve">
+      <value>Se ha producido un error al editar un servicio!</value>
+    </data>
+    <data name="An error was produced loading Service!" xml:space="preserve">
+      <value>Se ha producido un error al cargar el servicio!</value>
+    </data>
+    <data name="An error was produced loading Target!" xml:space="preserve">
+      <value>Se ha producido un error al cargar el objetivo!</value>
+    </data>
+    <data name="An error was produced deleting Target!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar el objetivo!</value>
+    </data>
+    <data name="An error ocurred processing the file!" xml:space="preserve">
+      <value>Se ha producido un error al procesar el archivo!</value>
+    </data>
+    <data name="An error was produced editing Target!" xml:space="preserve">
+      <value>Se ha producido un error al editar el objetivo!</value>
+    </data>
+    <data name="An error was produced adding Target!" xml:space="preserve">
+      <value>Se ha producido un error al añadir el objetivo!</value>
+    </data>
+    <data name="Note added to target successfully!" xml:space="preserve">
+      <value>Nota añadida al objetivo correctamente!</value>
+    </data>
+    <data name="Note deleted from target successfully!" xml:space="preserve">
+      <value>Nota eliminada del objetivo corerctamente!</value>
+    </data>
+    <data name="Service deleted from target successfully!" xml:space="preserve">
+      <value>Servicio eliminado del objetivo correctamente!</value>
+    </data>
+    <data name="Attachment added to target successfully!" xml:space="preserve">
+      <value>Adjunto añadido al objetivo correctamente!</value>
+    </data>
+    <data name="Attachment deleted from target successfully!" xml:space="preserve">
+      <value>Adjunto eliminado del objetivo correctamente!</value>
+    </data>
+    <data name="An error was produced adding Service!" xml:space="preserve">
+      <value>Se ha producido un error al añadir el servicio!</value>
+    </data>
+    <data name="An error ocurred editing Task!" xml:space="preserve">
+      <value>Se ha producido un error al editar la Tarea!</value>
+    </data>
+    <data name="An error ocurred adding Task!" xml:space="preserve">
+      <value>Se ha producido un error al añadir la Tarea!</value>
+    </data>
+    <data name="Task created successfully!" xml:space="preserve">
+      <value>Tarea añadida correctamente!</value>
+    </data>
+    <data name="Task deleted successfully!" xml:space="preserve">
+      <value>Tarea eliminada correctamente!</value>
+    </data>
+    <data name="An error ocurred deleting Task!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar la tarea!</value>
+    </data>
+    <data name="Task edited successfully!" xml:space="preserve">
+      <value>Tarea editada correctamente!</value>
+    </data>
+    <data name="An error ocurred loading Task!" xml:space="preserve">
+      <value>Se ha producido un error al cargar la Tarea!</value>
+    </data>
+    <data name="Task note edited successfully!" xml:space="preserve">
+      <value>Nota de la tarea editada correctamente!</value>
+    </data>
+    <data name="Task note added successfully!" xml:space="preserve">
+      <value>Nota añadida correctamente en la tarea!</value>
+    </data>
+    <data name="Task note deleted successfully!" xml:space="preserve">
+      <value>Nota de la tarea eliminada correctamente!</value>
+    </data>
+    <data name="Task attachment edited successfully!" xml:space="preserve">
+      <value>Adjunto de la tarea editado correctamente!</value>
+    </data>
+    <data name="Task attachment added successfully!" xml:space="preserve">
+      <value>Adjunto en la tarea añadido correctamente!</value>
+    </data>
+    <data name="Task attachment deleted successfully!" xml:space="preserve">
+      <value>Adjunto de la tarea eliminado correctamente!</value>
+    </data>
+    <data name="Vuln Import" xml:space="preserve">
+      <value>Importar Vulnerabilidades</value>
+    </data>
+    <data name="Import your vulnerabilities from your files" xml:space="preserve">
+      <value>Importa vulnerabilidades desde tus archivos</value>
+    </data>
+    <data name="Select Type" xml:space="preserve">
+      <value>Seleccionar Tipo</value>
+    </data>
+    <data name="Select your File" xml:space="preserve">
+      <value>Selecciona tu archivo</value>
+    </data>
+    <data name="An error ocurred adding vuln!" xml:space="preserve">
+      <value>Se ha producido un error al añadir la vuln!</value>
+    </data>
+    <data name="Vuln edited successfully!" xml:space="preserve">
+      <value>Vuln editada correctamente!</value>
+    </data>
+    <data name="An error ocurred loading the Vuln!" xml:space="preserve">
+      <value>Se ha producido un error al cargar la vuln!</value>
+    </data>
+    <data name="Vuln note edited successfully!" xml:space="preserve">
+      <value>Nota de vuln editada correctamente!</value>
+    </data>
+    <data name="Vuln note added successfully!" xml:space="preserve">
+      <value>Nota de vuln añadida corerctamente!</value>
+    </data>
+    <data name="Vuln attachment edited successfully!" xml:space="preserve">
+      <value>Adjunto de vuln editado correctamente!</value>
+    </data>
+    <data name="Vuln attachment added successfully!" xml:space="preserve">
+      <value>Adjunto añadido correctamente!</value>
+    </data>
+    <data name="Vuln attachment deleted successfully!" xml:space="preserve">
+      <value>Adjunto eliminado correctamente!</value>
+    </data>
+    <data name="Vuln deleted successfully!" xml:space="preserve">
+      <value>Vuln eliminada correctamente!</value>
+    </data>
+    <data name="Vuln created successfully!" xml:space="preserve">
+      <value>Vuln añadida correctamente!</value>
+    </data>
+    <data name="An error ocurred editing vuln!" xml:space="preserve">
+      <value>Se ha producido un error al editar la vuln!</value>
+    </data>
+    <data name="An error ocurred creating vuln!" xml:space="preserve">
+      <value>Se ha producido un error al crear la vuln!</value>
+    </data>
+    <data name="An error ocurred deleting vuln!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar la vuln!</value>
+    </data>
+    <data name="An error ocurred deleting an Attachment!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar el adjunto!</value>
+    </data>
+    <data name="An error ocurred adding an Attachment!" xml:space="preserve">
+      <value>Se ha producido un error al añadir el adjunto!</value>
+    </data>
+    <data name="An error ocurred deleting target!" xml:space="preserve">
+      <value>Se ha producido un error al eliminar el objetivo!</value>
+    </data>
+    <data name="Target already added to this vuln!" xml:space="preserve">
+      <value>Este objetivo esta ya añadido a la vulnerabilidad!</value>
+    </data>
+    <data name="An error ocurred adding target!" xml:space="preserve">
+      <value>Se ha producido un error al añadir el objetivo!</value>
+    </data>
+    <data name="Executive Summary saved successfully!" xml:space="preserve">
+      <value>Resumen Ejecutivo guardado correctamente!</value>
+    </data>
 </root>

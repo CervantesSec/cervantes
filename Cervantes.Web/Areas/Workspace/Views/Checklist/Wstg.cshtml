@@ -5,6 +5,24 @@
     ViewData["Title"] = "OWASP WSTG Checklist";
 }
 
+@{
+    if (TempData["editedWSTG"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>WSTG Checklist saved successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorSaveWSTG"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>An error ocurred saving WSTG Checklist!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+}
+
 <section class="content-header" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
     <div class="container-fluid">
         <div class="row mb-2">

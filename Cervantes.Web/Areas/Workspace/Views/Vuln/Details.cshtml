@@ -7,42 +7,66 @@
 }
 
 @{
-    if (TempData["addedNote"] != null)
+    if (TempData["addedVulnNote"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Note added to task successfully!</strong>
+            <strong localize-content>Added note successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
-
-    if (TempData["deletedNote"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Note deleted from task successfully!</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-    }
-
-    if (TempData["addedAttachment"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Attachment added to task successfully!</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-    }
-
-    if (TempData["deletedAttachment"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Attachment deleted from task successfully!</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-    }
-
-    if (TempData["errorAttachment"] != null)
+    
+    if (TempData["errorAddNote"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>An error was produced adding an Attachment!</strong>
+            <strong localize-content>An error ocurred adding note!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedVulnNote"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Note deleted successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeleteVulnNote"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting note!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["addedVulnAttachment"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Attachment added successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["deletedVulnAttachment"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Attachment deleted successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeleteVulnAttachment"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting an Attachment!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["errorVulnAttachment"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred adding an Attachment!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -58,6 +82,54 @@
     {
         <div class="alert alert-success alert-dismissible">
             <strong localize-content>Jira ticket created successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["editedVuln"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Vuln edited successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["deletedVulnTarget"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Target deleted successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorDeleteVulnTarget"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting target!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["targetExists"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible">
+            <strong localize-content>Target already added to this vuln!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["addedVulnTarget"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <strong localize-content>Target added successfully!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+    
+    if (TempData["errorAddVulnTarget"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred adding target!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -150,31 +222,31 @@
                             @if (Model.Vuln.CVSS3 <= 2)
                             {
                                 <span class="badge badge-info">
-                                    <i class="fas fa-info-circle"></i> @Model.Vuln.CVSS3
+                                    <i class="fas fa-info-circle"></i> @Model.Vuln.CVSS3.ToString()
                                 </span>
                             }
                             else if (Model.Vuln.CVSS3 > 2 && Model.Vuln.CVSS3 <= 4)
                             {
                                 <span class="badge badge-success">
-                                    <i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3
+                                    <i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3.ToString()
                                 </span>
                             }
                             else if (Model.Vuln.CVSS3 > 4 && Model.Vuln.CVSS3 <= 6)
                             {
                                 <span class="badge badge-warning">
-                                    <i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3
+                                    <i class="fas fa-exclamation"></i> @Model.Vuln.CVSS3.ToString()
                                 </span>
                             }
                             else if (Model.Vuln.CVSS3 > 6 && Model.Vuln.CVSS3 <= 8)
                             {
                                 <span class="badge badge-danger">
-                                    <i class="fas fa-exclamation-circle"></i> @Model.Vuln.CVSS3
+                                    <i class="fas fa-exclamation-circle"></i> @Model.Vuln.CVSS3.ToString()
                                 </span>
                             }
                             else if (Model.Vuln.CVSS3 > 8 && Model.Vuln.CVSS3 < 11)
                             {
                                 <span class="badge badge-danger">
-                                    <i class="fas fa-exclamation-triangle"></i> @Model.Vuln.CVSS3
+                                    <i class="fas fa-exclamation-triangle"></i> @Model.Vuln.CVSS3.ToString()
                                 </span>
                             }
                         </span>

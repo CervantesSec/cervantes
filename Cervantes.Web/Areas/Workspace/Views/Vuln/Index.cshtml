@@ -5,7 +5,7 @@
     ViewData["Title"] = "Vulnerabilities";
 }
 @{
-    if (TempData["deleted"] != null)
+    if (TempData["deletedVuln"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -14,7 +14,7 @@
         </div>
     }
 
-    if (TempData["created"] != null)
+    if (TempData["addedVuln"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -23,18 +23,12 @@
         </div>
     }
 
-    if (TempData["edited"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Vuln edited successfully!</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-    }
+    
 
-    if (TempData["error"] != null)
+    if (TempData["errorVuln"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>@TempData["error"].ToString()</strong>
+            <strong localize-content>An error ocurred loading the Vuln!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -170,7 +164,7 @@
                             {
                                 <td>
                                     <span class="badge badge-info">
-                                        <i class="fas fa-info-circle"></i> @vuln.CVSS3
+                                        <i class="fas fa-info-circle"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -178,7 +172,7 @@
                             {
                                 <td>
                                     <span class="badge badge-success">
-                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3
+                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -186,7 +180,7 @@
                             {
                                 <td>
                                     <span class="badge badge-warning">
-                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3
+                                        <i class="fas fa-exclamation"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -194,7 +188,7 @@
                             {
                                 <td>
                                     <span class="badge badge-danger">
-                                        <i class="fas fa-exclamation-circle"></i> @vuln.CVSS3
+                                        <i class="fas fa-exclamation-circle"></i> @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -202,7 +196,15 @@
                             {
                                 <td>
                                     <span class="badge badge-danger">
-                                        <i class="fas fa-exclamation-triangle"></i> @vuln.CVSS3
+                                        <i class="fas fa-exclamation-triangle"></i> @vuln.CVSS3.ToString()
+                                    </span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <span class="badge badge-danger">
+                                        @vuln.CVSS3.ToString()
                                     </span>
                                 </td>
                             }
@@ -562,8 +564,8 @@
 
         </div>
     </div>
-    <a asp-area="Workspace" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
-            <a asp-area="Workspace" asp-controller="Vuln" asp-action="Create" class="btn btn-dark"><i class="fas fa-bug"></i> Create</a>
+    <a asp-area="Workspace" asp-controller="Home" asp-action="Index" class="btn btn-light"><i class="fas fa-arrow-left"></i> <span localize-content>Back</span></a>
+            <a asp-area="Workspace" asp-controller="Vuln" asp-action="Create" class="btn btn-dark"><i class="fas fa-bug"></i> <span localize-content>Create</span></a>
 </section>
 
 @section Scripts{

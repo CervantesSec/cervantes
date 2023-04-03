@@ -7,16 +7,9 @@
 }
 
 @{
-    if (TempData["deleted"] != null)
-    {
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong localize-content>Task deleted successfully!</strong>
 
-        </div>
-    }
 
-    if (TempData["created"] != null)
+    if (TempData["addedTask"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -24,8 +17,25 @@
 
         </div>
     }
+    
+    if (TempData["deletedTask"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>Task deleted successfully!</strong>
 
-    if (TempData["edited"] != null)
+        </div>
+    }
+    
+    if (TempData["errorDeleteTask"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <strong localize-content>An error ocurred deleting Task!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
+    }
+
+    if (TempData["editedTask"] != null)
     {
         <div class="alert alert-success alert-dismissible">
             <strong localize-content>Task edited successfully!</strong>
@@ -33,10 +43,10 @@
         </div>
     }
 
-    if (TempData["error"] != null)
+    if (TempData["errorTask"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
-            <strong localize-content>@TempData["error"].ToString()</strong>
+            <strong localize-content>An error ocurred loading Task!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -60,7 +70,7 @@
     if (TempData["deletedNote"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Task note edited successfully!</strong>
+            <strong localize-content>Task note deleted successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }
@@ -84,7 +94,7 @@
     if (TempData["deletedAttachment"] != null)
     {
         <div class="alert alert-success alert-dismissible">
-            <strong localize-content>Task attachment edited successfully!</strong>
+            <strong localize-content>Task attachment deleted successfully!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
     }

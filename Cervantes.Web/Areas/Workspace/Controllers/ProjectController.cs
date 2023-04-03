@@ -87,10 +87,10 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading project";
+            TempData["errorExecutive"] = "loading project";
             _logger.LogError(ex, "An error ocurred loading Project Executive Summary: {0}. User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Index");
+            return RedirectToAction("Error", "Home");
         }
         
     }
@@ -115,15 +115,18 @@ public class ProjectController: Controller
             pro.ExecutiveSummary = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ExecutiveSummary));
 
             projectManager.Context.SaveChanges();
-
-            return RedirectToAction("ExecutiveSummary", "Project", new {project = project});
+            TempData["executiveSaved"] = "saved";
+            _logger.LogInformation("User: {0} Edited a new Executive Summary on Project {1}",
+                User.FindFirstValue(ClaimTypes.Name),
+                project);
+            return RedirectToAction("ExecutiveSummary");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading project";
+            TempData["errorExecutiveSave"] = "loading project";
             _logger.LogError(ex, "An error ocurred loading Project Executive Summary: {0}. User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Index");
+            return RedirectToAction("ExecutiveSummary");
         }
         
     }
@@ -194,7 +197,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "loading project";
+            TempData["errorLoadingProject"] = "loading project";
             _logger.LogError(ex, "An error ocurred loading Project: {0}. User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index");
@@ -274,7 +277,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "adding member to ";
+            TempData["errorMember"] = "adding member to ";
             _logger.LogError(ex, "An error ocurred adding a new Memeber on Project: {0}. User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -307,7 +310,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting memeber from ";
+            TempData["errorDeletedMember"] = "deleting memeber from ";
             _logger.LogError(ex, "An error ocurred deleteing a Memeber on Project: {0}. User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -346,7 +349,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "adding target to ";
+            TempData["errorAddedTarget"] = "adding target to ";
             _logger.LogError(ex, "An error ocurred adding a new Target on Project: {0}. User: {1}",
                 form["project"], User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = form["project"]});
@@ -376,7 +379,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting target from ";
+            TempData["errorDeletingTarget"] = "deleting target from ";
             _logger.LogError(ex, "An error ocurred deleting a Target: {0} on Project: {1}. User: {2}", project, target,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -415,7 +418,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "adding note to ";
+            TempData["errorAddedNote"] = "adding note to ";
             _logger.LogError(ex, "An error ocurred adding a Note on Project: {1}. User: {2}",
                 form["project"], User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = form["project"]});
@@ -447,7 +450,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting note from ";
+            TempData["errorDeletingNote"] = "deleting note from ";
             _logger.LogError(ex, "An error ocurred deleting a Note on Project: {1}. User: {2}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -511,7 +514,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "adding attachment to ";
+            TempData["errorAttachment"] = "adding attachment to ";
             _logger.LogError(ex, "An error ocurred adding an Attachment on Project: {1}. User: {2}",
                 form["project"], User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = form["project"]});
@@ -548,7 +551,7 @@ public class ProjectController: Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "deleting attachment from ";
+            TempData["errorDeletingAttachment"] = "deleting attachment from ";
             _logger.LogError(ex, "An error ocurred deleting an Attachment on Project: {1}. User: {2}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Details", "Project", new {id = project});
@@ -563,7 +566,7 @@ public class ProjectController: Controller
         var filePath = Path.Combine(_appEnvironment.WebRootPath, attachment.FilePath);
 
         var fileBytes = System.IO.File.ReadAllBytes(filePath);
-
+        TempData["downloadedReport"] = "deleting attachment from ";
         return File(fileBytes, attachment.Name);
     }
 }

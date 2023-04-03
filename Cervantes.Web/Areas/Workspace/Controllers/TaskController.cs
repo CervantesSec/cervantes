@@ -72,11 +72,9 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading tasks!";
-
             _logger.LogError(e, "An error ocurred loading Task Workspace Index. Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return Redirect("/Home/Error");
         }
     }
 
@@ -99,11 +97,9 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading tasks!";
-
             _logger.LogError(e, "An error ocurred loading Task Workspace Project Index. Project: {0} User: {1}",
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return Redirect("/Home/Error");
         }
     }
 
@@ -144,11 +140,11 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading task details!";
+            TempData["errorTask"] = "Error loading task details!";
 
             _logger.LogError(e, "An error ocurred loading Task Workspace Details.Task: {0} Project: {1} User: {2}", id,
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -184,7 +180,7 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading task form!";
+            TempData["errorTask"] = "Error loading task form!";
 
             _logger.LogError(e, "An error ocurred loading Task Workspace create form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
@@ -238,18 +234,18 @@ public class TaskController : Controller
                 taskTargetManager.Context.SaveChanges();
             }
             
-            TempData["added"] = "added";
+            TempData["addedTask"] = "added";
             _logger.LogInformation("User: {0} Created a new Task on Project {1}", User.FindFirstValue(ClaimTypes.Name),
                 project);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error creating task!";
+            TempData["errorAddTask"] = "Error creating task!";
 
             _logger.LogError(e, "An error ocurred adding a new Task Workspace.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Create");
         }
     }
 
@@ -292,11 +288,11 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading task form!";
+            TempData["errorTask"] = "Error loading task form!";
 
             _logger.LogError(e, "An error ocurred loading Task Workspace create project form.Project: {0} User: {1}",
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -340,7 +336,7 @@ public class TaskController : Controller
                 taskTargetManager.Context.SaveChanges();
             }
             
-            TempData["added"] = "added";
+            TempData["addedTask"] = "added";
             _logger.LogInformation("User: {0} Created a new Task Project on Project {1}",
                 User.FindFirstValue(ClaimTypes.Name), project);
 
@@ -377,11 +373,11 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error creating task!";
+            TempData["errorAddTask"] = "Error creating task!";
 
             _logger.LogError(e, "An error ocurred adding a new Task Project Workspace on.Project: {0} User: {1}",
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("CreateProject");
         }
     }
 
@@ -430,11 +426,11 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading task!";
+            TempData["errorTask"] = "Error loading task!";
 
             _logger.LogError(e, "An error ocurred loading Task Workspace edit form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -462,7 +458,7 @@ public class TaskController : Controller
             result.StartDate = model.StartDate.ToUniversalTime();
 
             taskManager.Context.SaveChanges();
-            TempData["edited"] = "edited";
+            TempData["editedTask"] = "edited";
             _logger.LogInformation("User: {0} edited Task: {1} on Project {2}", User.FindFirstValue(ClaimTypes.Name),
                 id, project);
 
@@ -470,11 +466,11 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error editing task!";
+            TempData["errorEditTask"] = "Error editing task!";
 
             _logger.LogError(e, "An error ocurred editing a Task Workspace on. Task: {0} Project: {1} User: {2}", id,
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Edit", new {id = id});
         }
     }
     
@@ -529,11 +525,11 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading task details!";
+            TempData["errorEditTaskPro"] = "Error loading task details!";
 
             _logger.LogError(e, "An error ocurred loading Task Workspace edit PROJECT form.Project: {0} User: {1}",
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Project");
         }
     }
 
@@ -565,12 +561,12 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error editing task!";
+            TempData["errorEditTask"] = "Error editing task!";
 
             _logger.LogError(e,
                 "An error ocurred editing a Task project Workspace on. Task: {0} Project: {1} User: {2}", id, project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("EditProject", new {id= id});
         }
     }
 
@@ -590,11 +586,11 @@ public class TaskController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading task details!";
+            TempData["errorTask"] = "Error loading task details!";
 
             _logger.LogError(e, "An error ocurred loading Task Workspace delete form. Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View("Index");
+            return RedirectToAction("Index");
         }
     }
 
@@ -618,18 +614,18 @@ public class TaskController : Controller
                 taskManager.Context.SaveChanges();
             }
 
-            TempData["deleted"] = "deleted";
+            TempData["deletedTask"] = "deleted";
             _logger.LogInformation("User: {0} deleted Task: {1} on Project {2}", User.FindFirstValue(ClaimTypes.Name),
                 id, project);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error deleting task details!";
+            TempData["errorDeleteTask"] = "Error deleting task details!";
 
             _logger.LogError(e, "An error ocurred deleting a Task  Workspace on. Task: {0} Project: {1} User: {2}", id,
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 

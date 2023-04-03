@@ -335,7 +335,7 @@ public class ChecklistController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading wstg!";
+            TempData["errorLaodingWSTG"] = "Error loading wstg!";
             _logger.LogError(e, "An error ocurred loading Checklist Workspace WSTG form.Project: {0} User: {1} Checklist: {2}", project,
                 User.FindFirstValue(ClaimTypes.Name), id);
             return RedirectToAction(nameof(Index));
@@ -563,18 +563,18 @@ public class ChecklistController : Controller
             result.Sess09Status = model.Sess.Sess09Status;
 
             wstgManager.Context.SaveChanges();
-            TempData["edited"] = "Checklist edited successfully!";
+            TempData["editedWSTG"] = "Checklist edited successfully!";
 
             _logger.LogInformation("User: {0} edited Checklist: {1} on Project: {2}", User.FindFirstValue(ClaimTypes.Name), result.Id,
                 project);
-            return RedirectToAction("Index");
+            return RedirectToAction("Wstg", new {id = model.TargetId});
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading wstg!";
+            TempData["errorSaveWSTG"] = "Error loading wstg!";
             _logger.LogError(e, "An error ocurred loading Checlist Workspace WSTG form. Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Wstg", new {id = model.TargetId});
         }
         
     }
@@ -613,7 +613,7 @@ public class ChecklistController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading create form!";
+            TempData["errorCreateChecklist"] = "Error loading create form!";
             _logger.LogError(e, "An error ocurred loading Checklist Workspace create form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction(nameof(Index));
@@ -739,7 +739,7 @@ public class ChecklistController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading create form!";
+            TempData["errorChecklist"] = "Error loading create form!";
             _logger.LogError(e, "An error ocurred loading Checklist Workspace delete form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction(nameof(Index));
@@ -765,7 +765,7 @@ public class ChecklistController : Controller
                     var result = wstgManager.GetById(model.Wstg.Id);
                     wstgManager.Remove(result);
                     wstgManager.Context.SaveChanges();
-                    TempData["deleted"] = "Checklist deleted!";
+                    TempData["deletedWSTG"] = "Checklist deleted!";
                     _logger.LogInformation("A Checklist has been deleted.Project: {0} User: {1} Checklist: {2}", project,
                         User.FindFirstValue(ClaimTypes.Name), result.Id);
                     
@@ -774,6 +774,7 @@ public class ChecklistController : Controller
                     var result2 = mastgManager.GetById(model.Mastg.Id);
                     mastgManager.Remove(result2);
                     mastgManager.Context.SaveChanges();
+                    TempData["deletedMASTG"] = "Checklist deleted!";
                     _logger.LogInformation("A Checklist has been deleted.Project: {0} User: {1} Checklist: {2}", project,
                         User.FindFirstValue(ClaimTypes.Name), result2.Id);
                     return RedirectToAction(nameof(Index));
@@ -784,7 +785,7 @@ public class ChecklistController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading create form!";
+            TempData["errorCheckDelete"] = "Error loading create form!";
             _logger.LogError(e, "An error ocurred loading Checklist Workspace delete form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction(nameof(Index));
@@ -1020,7 +1021,7 @@ public class ChecklistController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading create form!";
+            TempData["errorLaodingMASTG"] = "Error loading create form!";
             _logger.LogError(e, "An error ocurred loading Checklist Workspace MASTG form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction(nameof(Index));
@@ -1219,18 +1220,18 @@ public class ChecklistController : Controller
             result.PlatformStatus11= model.Platform.PlatformStatus11;
             
             mastgManager.Context.SaveChanges();
-            TempData["edited"] = "Checklist edited successfully!";
+            TempData["editedMASTG"] = "Checklist edited successfully!";
 
             _logger.LogInformation("User: {0} edited Checklist: {1} on Project: {2}", User.FindFirstValue(ClaimTypes.Name), result.Id,
                 project);
-            return RedirectToAction("Index");
+            return RedirectToAction("Mastg", new {id = model.TargetId});
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading wstg!";
+            TempData["errorSaveMastg"] = "Error loading wstg!";
             _logger.LogError(e, "An error ocurred loading Checlist Workspace WSTG form. Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Mastg", new {id = model.TargetId});
         }
         
     }
@@ -1921,7 +1922,7 @@ public class ChecklistController : Controller
         }
         catch (Exception e)
         {
-            TempData["errorReport"] = "Error generating report!";
+            TempData["errorReportWSTG"] = "Error generating report!";
             _logger.LogError(e, "An error ocurred generating Checlist Workspace WSTG report. User: {1}", 
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction(nameof(Index));
@@ -2540,7 +2541,7 @@ public class ChecklistController : Controller
         }
         catch (Exception e)
         {
-            TempData["errorReport"] = "Error generating report!";
+            TempData["errorReportMASTG"] = "Error generating report!";
             _logger.LogError(e, "An error ocurred generating Checlist Workspace WSTG report. User: {1}",
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction(nameof(Index));

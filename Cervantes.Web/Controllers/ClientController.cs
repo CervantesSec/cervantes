@@ -74,7 +74,7 @@ public class ClientController : Controller
 
             _logger.LogError(ex, "An error ocurred loading Client Index. User: {0}",
                 User.FindFirstValue(ClaimTypes.Name));
-            return Redirect("Error");
+            return RedirectToAction("Error","Home");
         }
     }
 

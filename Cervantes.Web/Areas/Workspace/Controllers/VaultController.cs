@@ -52,7 +52,7 @@ public class VaultController : Controller
             TempData["error"] = "Error loading vault index!";
             _logger.LogError(ex, "An error ocurred loading Vault. Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Error","Home");
         }
     }
 
@@ -75,7 +75,7 @@ public class VaultController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading create form!";
+            TempData["errorCreateVault"] = "Error loading create form!";
             _logger.LogError(ex, "An error ocurred loading Vault create form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return View("Index");
@@ -122,7 +122,7 @@ public class VaultController : Controller
 
             vaultManager.Add(vault);
             vaultManager.Context.SaveChanges();
-            TempData["addedTarget"] = "Vault added successfully!";
+            TempData["addedVault"] = "Vault added successfully!";
 
             _logger.LogInformation("User: {0} added a new target on Project: {1}", User.FindFirstValue(ClaimTypes.Name),
                 project);
@@ -130,10 +130,10 @@ public class VaultController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading create form!";
+            TempData["errorCreatingVault"] = "Error loading create form!";
             _logger.LogError(ex, "An error ocurred loading Vault creating vault.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View("Index");
+            return RedirectToAction("Create");
         }
     }
 
@@ -165,10 +165,9 @@ public class VaultController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading create form!";
             _logger.LogError(ex, "An error ocurred loading Vault editing form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View("Index");
+            return RedirectToAction("Error","Home");
         }
     }
     
@@ -194,17 +193,17 @@ public class VaultController : Controller
             vault.Value = model.Value;
 
             vaultManager.Context.SaveChanges();
-            TempData["edited"] = "edited";
+            TempData["editedVault"] = "edited";
             _logger.LogInformation("User: {0} edited Vault: {1} on Project {2}", User.FindFirstValue(ClaimTypes.Name),
                 id, project);
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading create form!";
+            TempData["errorEditingVault"] = "Error loading create form!";
             _logger.LogError(ex, "An error ocurred loading Vault editing form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new {id = id});
         }
     }
 
@@ -225,7 +224,7 @@ public class VaultController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading delete form!";
+            TempData["errorCreateVault"] = "Error loading delete form!";
             _logger.LogError(ex, "An error ocurred loading Vault editing form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return View("Index");
@@ -241,6 +240,7 @@ public class VaultController : Controller
             var user = projectUserManager.VerifyUser(project, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null)
             {
+                TempData["userProject"] = "User is not in the project";
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
 
@@ -249,16 +249,25 @@ public class VaultController : Controller
             {
                 vaultManager.Remove(result);
                 vaultManager.Context.SaveChanges();
+                TempData["deletedVault"] = "Error loading delete form!";
+                _logger.LogInformation("Vault deleted.Project: {0} User: {1}", project,
+                    User.FindFirstValue(ClaimTypes.Name));
+                return RedirectToAction("Index", new {project = project});
+            }
+            else
+            {
+                TempData["errorDeleteVault"] = "Error loading delete form!";
+                return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Index");
+            
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading delete form!";
+            TempData["errorDeleteVault"] = "Error loading delete form!";
             _logger.LogError(ex, "An error ocurred loading Vault editing form.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View("Index");
+            return RedirectToAction("Index");
         }
     }
 
@@ -292,10 +301,10 @@ public class VaultController : Controller
         }
         catch (Exception ex)
         {
-            TempData["error"] = "Error loading delete form!";
+            TempData["errorCreateVault"] = "Error loading delete form!";
             _logger.LogError(ex, "An error ocurred loading Vault details.Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View("Index");
+            return RedirectToAction("Delete", new {id = id});
         }
     }
 }

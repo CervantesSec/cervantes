@@ -76,11 +76,10 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading targets!";
 
             _logger.LogError(e, "An error ocurred loading Target Workspace Index. Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View("Error");
+            return RedirectToAction("Error","Home");
         }
     }
 
@@ -109,7 +108,7 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading target!";
+            TempData["errorTarget"] = "Error loading target!";
 
             _logger.LogError(e, "An error ocurred loading Target Workspace Details. Project: {0} Target: {1} User: {2}",
                 project, id, User.FindFirstValue(ClaimTypes.Name));
@@ -182,11 +181,11 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error creating target!";
+            TempData["errorAddTarget"] = "Error creating target!";
 
             _logger.LogError(e, "An error ocurred adding a new Target Workspace on Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Create");
         }
     }
 
@@ -211,12 +210,12 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading target!";
+            TempData["errorTarget"] = "Error loading target!";
 
             _logger.LogError(e,
                 "An error ocurred loading Target Workspace Edit form. Project: {0} Target: {1} User: {2}", project, id,
                 User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -249,18 +248,18 @@ public class TargetController : Controller
             result.ProjectId = project;
 
             targetManager.Context.SaveChanges();
-            TempData["edited"] = "edited";
+            TempData["editedTarget"] = "edited";
             _logger.LogInformation("User: {0} edited target: {1} on Project: {2}", User.FindFirstValue(ClaimTypes.Name),
                 model.Name, project);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error editing target!";
+            TempData["errorEditTarget"] = "Error editing target!";
 
             _logger.LogError(e, "An error ocurred editing Target Workspace Details. Project: {0} Target: {1} User: {2}",
                 project, model.Name, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Edit", new {project = project, id= model.Id});
         }
     }
 
@@ -285,7 +284,7 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading target!";
+            TempData["errorTarget"] = "Error loading target!";
 
             _logger.LogError(e,
                 "An error ocurred loading Target Workspace Delete form. Project: {0} Target: {1} User: {2}", project,
@@ -320,18 +319,18 @@ public class TargetController : Controller
                 targetManager.Context.SaveChanges();
             }
 
-            TempData["deleted"] = "deleted";
+            TempData["deletedTarget"] = "deleted";
             _logger.LogInformation("User: {0} deleted target: {1} on Project: {2}",
                 User.FindFirstValue(ClaimTypes.Name), id, project);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error deleting target!";
+            TempData["errorDeleteTarget"] = "Error deleting target!";
 
             _logger.LogError(e, "An error ocurred deleting Target Workspace. Project: {0} Target: {1} User: {2}",
                 project, id, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -363,7 +362,7 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading service!";
+            TempData["errorService"] = "Error loading service!";
 
             _logger.LogError(e,
                 "An error ocurred loading Target Workspace Service details. Project: {0} Target: {1} User: {2}",
@@ -402,7 +401,7 @@ public class TargetController : Controller
 
                 targetServicesManager.Add(service);
                 targetServicesManager.Context.SaveChanges();
-                TempData["error"] = "Error adding service!";
+                TempData["addedService"] = "Error adding service!";
                 _logger.LogInformation("User: {0} added a new Target Service on Target {1} on Project {2}",
                     User.FindFirstValue(ClaimTypes.Name), target, project);
                 return RedirectToAction("Details", "Target", new {project = project, id = target});
@@ -412,7 +411,7 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error adding service!";
+            TempData["errorAddService"] = "Error adding service!";
 
             _logger.LogError(e, "An error ocurred adding Target. Project: {0} Target: {1} User: {2}", project, target,
                 User.FindFirstValue(ClaimTypes.Name));
@@ -441,12 +440,12 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading service!";
+            TempData["errorService"] = "Error loading service!";
 
             _logger.LogError(e,
                 "An error ocurred loading Target Workspace Service edit form. Project: {0} Target: {1} User: {2}",
                 project, id, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -480,7 +479,7 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error editing service!";
+            TempData["errorEditingService"] = "Error editing service!";
             _logger.LogError(e, "An error ocurred editing Target Workspace Service. Project: {0} User: {1}", project,
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Index", "Target");
@@ -502,12 +501,12 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error loading service!";
+            TempData["errorService"] = "Error loading service!";
 
             _logger.LogError(e,
                 "An error ocurred loading Target Workspace Service delete form. Project: {0} Target: {1} User: {2}",
                 project, id, User.FindFirstValue(ClaimTypes.Name));
-            return View();
+            return RedirectToAction("Index");
         }
     }
 
@@ -538,10 +537,10 @@ public class TargetController : Controller
         }
         catch (Exception e)
         {
-            TempData["error"] = "Error deleting service!";
+            TempData["errorDeletedService"] = "Error deleting service!";
             _logger.LogError(e, "An error ocurred deleting Target Workspace Service: {0} Project: {1} User: {2}", id,
                 project, User.FindFirstValue(ClaimTypes.Name));
-            return View("Index");
+            return RedirectToAction("Index");
         }
     }
 
@@ -741,7 +740,7 @@ public class TargetController : Controller
                     
                 }
                 
-                TempData["fileImportedCSV"] = "file imported";
+                TempData["fileImported"] = "file imported";
                 return RedirectToAction("Index", "Target", new {project = project});
 
             }

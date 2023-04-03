@@ -3,7 +3,17 @@
 @{
     ViewData["Title"] = "Delete Vulnerability";
 }
+@{
+    if (TempData["errorDeleteVuln"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>An error ocurred deleting vuln!</strong>
 
+        </div>
+    }
+  
+}
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">

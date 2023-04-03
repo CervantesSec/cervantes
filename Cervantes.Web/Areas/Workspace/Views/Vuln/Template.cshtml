@@ -4,7 +4,17 @@
 @{
     ViewData["Title"] = "Create Vuln";
 }
+@{
+    if (TempData["errorAddVuln"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong localize-content>An error ocurred adding vuln!</strong>
 
+        </div>
+    }
+  
+}
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
