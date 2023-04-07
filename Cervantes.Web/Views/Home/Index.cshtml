@@ -276,7 +276,15 @@
                                     <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vulns.Id">@vulns.Name</a>
                                 </span>
                                 <span class="info-box-number">
-                                    Project: @vulns.Project.Name
+                                    Project: @{
+                                                 if (@vulns.Project != null)
+                                                 {
+                                                     @vulns.Project.Name
+                                                 } else
+                                                 {
+                                                     <span>No Project </span>
+                                                 }
+                                             }
                                 </span>
                             </div>
                             <!-- /.info-box-content -->

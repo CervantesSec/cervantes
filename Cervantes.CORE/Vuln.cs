@@ -50,7 +50,7 @@ public class Vuln
     /// <summary>
     /// Id Project
     /// </summary>
-    public Guid ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
     
     /// <summary>
     /// VulnCategory Associated
@@ -61,7 +61,7 @@ public class Vuln
     /// <summary>
     /// Id Project
     /// </summary>
-    public Guid VulnCategoryId { get; set; }
+    public Guid? VulnCategoryId { get; set; }
 
     /// <summary>
     /// Vuln Risk

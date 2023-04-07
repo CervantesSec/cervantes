@@ -139,7 +139,18 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text" localize-content>Project</span>
-                    <span class="info-box-number">@Model.Vuln.Project.Name</span>
+                    
+                        @{
+                            if (@Model.Vuln.Project != null)
+                            {
+                                <span class="info-box-number">@Model.Vuln.Project.Name</span>
+                            }
+                            else
+                            {
+                                <span class="info-box-number">No Project</span>
+                            }
+                        }
+                    
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -175,9 +186,7 @@
                 </div>
                 <!-- /.info-box-content -->
             </div>
-            @switch (@Model.Project.Score)
-            {
-                case Score.CVSS:
+   
                     <div class="info-box mb-3 ">
                         <span class="info-box-icon bg-maroon">
                             <i class="fas fa-radiation-alt"></i>
@@ -219,8 +228,7 @@
                         </div>
                         <!-- /.info-box-content -->
                     </div>
-                    break;
-                    case Score.OWASP:
+
                     <div class="info-box mb-3 ">
                     <span class="info-box-icon bg-maroon">
                         <i class="fas fa-radiation-alt"></i>
@@ -308,10 +316,7 @@
                             </div>
                             <!-- /.info-box-content -->
                         </div>
-                        break;
-                    
-            }
-            
+
             
             <div class="info-box mb-3 ">
                 <span class="info-box-icon bg-danger">
@@ -360,20 +365,10 @@
         </div>
         <!-- /.card-body -->
     </div>
-    <a class="btn btn-default" asp-controller="Vuln" asp-action="Index" localize-content>Back</a>
-    @switch (@Model.Vuln.Project.Score)
-    {
-        case Score.OWASP:
+<a class="btn btn-default" asp-controller="Vuln" asp-action="Index" localize-content>Back</a>
             <a class="btn btn-outline-warning" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@Model.Vuln.Id" asp-route-vector="@Model.Vuln.OWASPVector" localize-content><i class="fas fa-edit"></i> Edit</a>
-            break;
-        case Score.CVSS:
-            <a class="btn btn-outline-warning" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@Model.Vuln.Id" localize-content><i class="fas fa-edit"></i> Edit</a>
-            break;
-        default:
-            <a class="btn btn-outline-warning" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@Model.Vuln.Id" localize-content><i class="fas fa-edit"></i> Edit</a>
-            break;
-    }
-        
+
+
     
     <!-- /.card -->
 </div>
@@ -635,7 +630,6 @@
                 <form asp-action="AddNote" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
 
-                        <input asp-for="@Model.Project.Id" type="hidden" id="project" name="project"/>
                         <input asp-for="@Model.Vuln.Id" type="hidden" id="vulnId" name="vulnId"/>
 
                         <div class="form-group">
@@ -737,7 +731,6 @@
                     <form asp-action="AddAttachment" method="post" enctype="multipart/form-data">
                         <div class="modal-body">
 
-                            <input asp-for="Project.Id" type="hidden" id="project" name="project"/>
                             <input asp-for="@Model.Vuln.Id" type="hidden" id="vulnId" name="vulnId"/>
 
                             <div class="form-group">

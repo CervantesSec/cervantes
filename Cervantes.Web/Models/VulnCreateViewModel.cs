@@ -8,7 +8,6 @@ namespace Cervantes.Web.Models;
 
 public class VulnCreateViewModel
 {
-
     /// <summary>
     /// Id Vuln
     /// </summary>
@@ -48,7 +47,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Project
     /// </summary>
-    public Guid ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     /// <summary>
     /// Target Associated
@@ -58,11 +57,12 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Target
     /// </summary>
-    [Required]
     public Guid TargetId { get; set; }
     
+    public List<Guid> SelectedTargets { get; set; }
+
     public string TargetName { get; set; }
-    
+
     /// <summary>
     /// VulnCategory Associated
     /// </summary>
@@ -71,8 +71,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Project
     /// </summary>
-    
-    public Guid VulnCategoryId { get; set; }
+    public Guid? VulnCategoryId { get; set; }
 
     public string VulnCategoryName { get; set; }
 
@@ -115,13 +114,11 @@ public class VulnCreateViewModel
     /// <summary>
     /// Vuln CVSS3 Score
     /// </summary>
-    [Required]
     public float CVSS3 { get; set; }
 
     /// <summary>
     /// Vuln CVSS Vector
     /// </summary>
-    [Required]
     public string CVSSVector { get; set; }
 
     /// <summary>
@@ -145,9 +142,10 @@ public class VulnCreateViewModel
     public IList<SelectListItem> TargetList { get; set; }
     public IList<SelectListItem> VulnCatList { get; set; }
     
-    public string OwaspVector { get; set; }
     public string OwaspRisk { get; set; }
+    public string OwaspVector { get; set; }
     public string OwaspLikehood { get; set; }
     public string OwaspImpact { get; set; }
-
+    public List<VulnCategory> VulnCategories { get; set; }
+    public List<Project> Projects { get; set; }
 }

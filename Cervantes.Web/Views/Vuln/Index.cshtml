@@ -117,9 +117,19 @@
                     <tr>
                         <td>@vuln.Name</td>
                         <td>
-                            <a class="btn btn-outline-dark" asp-area="" asp-controller="Project" asp-action="Details" asp-route-id="@vuln.ProjectId" localize-content>
-                                <i class="fas fa-folder"></i> @vuln.Project.Name
-                            </a>
+                            @{
+                            if (@vuln.Project != null)
+                              {
+                                  <a class="btn btn-outline-dark" asp-area="" asp-controller="Project" asp-action="Details" asp-route-id="@vuln.ProjectId" localize-content>
+                                      <i class="fas fa-folder"></i> @vuln.Project.Name
+                                  </a>
+                            } else
+                            {
+                               <span>No Project </span>
+                             }
+                            }
+                            
+                            
                         </td>
                         <td>@vuln.cve</td>
                         @switch (vuln.Risk)
@@ -211,24 +221,10 @@
                                 <a asp-area="" asp-controller="Vuln" asp-action="Details" asp-route-id="@vuln.Id" class="btn btn-tool">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                @switch (@vuln.Project.Score)
-                                {
-                                    case Score.OWASP:
-                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" asp-route-vector="@vuln.OWASPVector" localize-content>
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        break;
-                                    case Score.CVSS:
-                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" localize-content>
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        break;
-                                    default:
-                                        <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" localize-content>
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        break;
-                                }
+
+                                <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Edit" asp-route-id="@vuln.Id" asp-route-vector="@vuln.OWASPVector" localize-content>
+                                                                    <i class="fas fa-edit"></i>
+                                                                </a>
                                 
                                 <a class="btn btn-tool" asp-area="" asp-controller="Vuln" asp-action="Delete" asp-route-id="@vuln.Id" localize-content>
                                     <i class="fas fa-trash"></i>

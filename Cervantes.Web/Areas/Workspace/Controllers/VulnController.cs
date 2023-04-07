@@ -431,7 +431,7 @@ public class VulnController : Controller
                 Template = vulnResult.Template,
                 cve = vulnResult.cve,
                 Description = vulnResult.Description,
-                VulnCategoryId = vulnResult.VulnCategoryId,
+                VulnCategoryId = vulnResult.VulnCategoryId.Value,
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
@@ -672,7 +672,7 @@ public class VulnController : Controller
                 Template = false,
                 cve = vulnResult.cve,
                 Description = vulnResult.Description,
-                VulnCategoryId = vulnResult.VulnCategoryId,
+                VulnCategoryId = vulnResult.VulnCategoryId.Value,
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
@@ -822,7 +822,7 @@ public class VulnController : Controller
                 Template = true,
                 cve = vulnResult.cve,
                 Description = vulnResult.Description,
-                VulnCategoryId = vulnResult.VulnCategoryId,
+                VulnCategoryId = vulnResult.VulnCategoryId.Value,
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
@@ -1297,6 +1297,11 @@ public class VulnController : Controller
                     case VulnImportType.CSV:
                         csvParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),
                                 path);
+                        TempData["fileImported"] = "file imported";
+                        return RedirectToAction("Import", "Vuln", new {project = project});
+                    case VulnImportType.Pwndoc:
+                        csvParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),
+                            path);
                         TempData["fileImported"] = "file imported";
                         return RedirectToAction("Import", "Vuln", new {project = project});
 

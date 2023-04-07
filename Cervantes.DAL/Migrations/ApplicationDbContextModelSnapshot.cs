@@ -1453,7 +1453,7 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("OWASPVector")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ProjectId")
+                    b.Property<Guid?>("ProjectId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ProofOfConcept")
@@ -1480,7 +1480,7 @@ namespace Cervantes.DAL.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("VulnCategoryId")
+                    b.Property<Guid?>("VulnCategoryId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("cve")
@@ -2647,9 +2647,7 @@ namespace Cervantes.DAL.Migrations
                 {
                     b.HasOne("Cervantes.CORE.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("Cervantes.CORE.ApplicationUser", "User")
                         .WithMany()
@@ -2657,9 +2655,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasOne("Cervantes.CORE.VulnCategory", "VulnCategory")
                         .WithMany()
-                        .HasForeignKey("VulnCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VulnCategoryId");
 
                     b.Navigation("Project");
 

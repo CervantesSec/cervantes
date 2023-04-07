@@ -102,7 +102,14 @@
                 {
                     @foreach (var general in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.General))
                     {
-                        <option value="@general.Id">@general.Name</option>
+                        if (@general.Id == @Model.VulnCategoryId)
+                        {
+                            <option value="@general.Id" selected>@general.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@general.Id">@general.Name</option>
+                        }
                     }
                 }
             </optgroup>
@@ -111,7 +118,14 @@
                 {
                     @foreach (var owasp in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspWSTG))
                     {
-                        <option value="@owasp.Id">@owasp.Name - @owasp.Description</option>
+                        if (@owasp.Id == @Model.VulnCategoryId)
+                        {
+                            <option value="@owasp.Id" selected>@owasp.Name - @owasp.Description</option>
+                        }
+                        else
+                        {
+                            <option value="@owasp.Id">@owasp.Name - @owasp.Description</option>
+                        }
                     }
                 }
             </optgroup>
@@ -120,7 +134,14 @@
                 {
                     @foreach (var owasp in Model.VulnCategories.Where(x => x.Type == VulnCategoryType.OwaspMSTG))
                     {
-                        <option value="@owasp.Id">@owasp.Name - @owasp.Description</option>
+                        if (@owasp.Id == @Model.VulnCategoryId)
+                        {
+                            <option value="@owasp.Id" selected>@owasp.Name - @owasp.Description</option>
+                        }
+                        else
+                        {
+                            <option value="@owasp.Id">@owasp.Name - @owasp.Description</option>
+                        }
                     }
                 }
             </optgroup>
