@@ -277,7 +277,16 @@
                 </td>
                 break;
         }
-        <td>@vuln.VulnCategory.Name</td>
+        <td>@{
+                if (@vuln.VulnCategory != null)
+                {
+                    @vuln.VulnCategory.Name
+                }
+                else
+                {
+                    <span localize-content>No Category</span>
+                }
+            }</td>
         <td>@vuln.CreatedDate.ToShortDateString()</td>
 
         <td>

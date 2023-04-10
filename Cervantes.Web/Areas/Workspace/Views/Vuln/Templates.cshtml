@@ -273,7 +273,16 @@
                                     </td>
                                     break;
                             }
-                            <td>@vuln.VulnCategory.Name</td>
+                            <td>@{
+                                    if (@vuln.VulnCategory != null)
+                                    {
+                                        @vuln.VulnCategory.Name
+                                    }
+                                    else
+                                    {
+                                        <span localize-content>No Category</span>
+                                    }
+                                }</td>
                             <td>@vuln.CreatedDate.ToShortDateString()</td>
                             <td>
                                 <a asp-area="Workspace" asp-controller="Vuln" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@vuln.Id" class="btn btn-tool">

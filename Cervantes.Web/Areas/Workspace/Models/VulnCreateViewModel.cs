@@ -71,8 +71,7 @@ public class VulnCreateViewModel
     /// <summary>
     /// Id Project
     /// </summary>
-    [Required]
-    public Guid VulnCategoryId { get; set; }
+    public Guid? VulnCategoryId { get; set; }
 
     public string VulnCategoryName { get; set; }
 

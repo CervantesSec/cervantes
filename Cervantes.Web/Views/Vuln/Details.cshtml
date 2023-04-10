@@ -172,7 +172,18 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text" localize-content>Category</span>
-                    <span class="info-box-number">@Model.Vuln.VulnCategory.Name</span>
+                    <span class="info-box-number">
+                        @{
+                            if (@Model.Vuln.VulnCategory != null)
+                            {
+                                @Model.Vuln.VulnCategory.Name
+                            }
+                            else
+                            {
+                                <span localize-content>No Category</span>
+                            }
+                        }
+                    </span>
                 </div>
                 <!-- /.info-box-content -->
             </div>

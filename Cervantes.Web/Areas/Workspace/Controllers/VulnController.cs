@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Web;
 using Cervantes.IFR.Jira;
 using Cervantes.IFR.Parsers.CSV;
+using Cervantes.IFR.Parsers.Pwndoc;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Ganss.XSS;
@@ -41,13 +42,14 @@ public class VulnController : Controller
     private IJiraCommentManager jiraCommentManager = null;
     private IProjectAttachmentManager projectAttachmentManager = null;
     private ICsvParser csvParser = null;
+    private IPwndocParser pwndocParser = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment,
         IJIraService jiraService, IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IProjectAttachmentManager projectAttachmentManager,
-        ICsvParser csvParser)
+        ICsvParser csvParser, IPwndocParser pwndocParser)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -64,6 +66,7 @@ public class VulnController : Controller
         this.jiraManager = jiraManager;
         this.projectAttachmentManager = projectAttachmentManager;
         this.csvParser = csvParser;
+        this.pwndocParser = pwndocParser;
     }
 
     // GET: VulnController
@@ -431,7 +434,7 @@ public class VulnController : Controller
                 Template = vulnResult.Template,
                 cve = vulnResult.cve,
                 Description = vulnResult.Description,
-                VulnCategoryId = vulnResult.VulnCategoryId.Value,
+                VulnCategoryId = vulnResult.VulnCategoryId,
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
@@ -672,7 +675,7 @@ public class VulnController : Controller
                 Template = false,
                 cve = vulnResult.cve,
                 Description = vulnResult.Description,
-                VulnCategoryId = vulnResult.VulnCategoryId.Value,
+                VulnCategoryId = vulnResult.VulnCategoryId,
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
@@ -1250,7 +1253,7 @@ public class VulnController : Controller
 
                 var Results = Inspector.Inspect(file.OpenReadStream());
 
-                if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                /*if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
                 {
                     TempData["fileNotPermitted"] = "User is not in the project";
                     VulnImportViewModel modelError = new VulnImportViewModel()
@@ -1258,7 +1261,7 @@ public class VulnController : Controller
                         Project = project
                     };
                     return View("Import", modelError);
-                }
+                }*/
 
                 var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Project/" + project + "/");
                 var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
@@ -1300,7 +1303,7 @@ public class VulnController : Controller
                         TempData["fileImported"] = "file imported";
                         return RedirectToAction("Import", "Vuln", new {project = project});
                     case VulnImportType.Pwndoc:
-                        csvParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        pwndocParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),
                             path);
                         TempData["fileImported"] = "file imported";
                         return RedirectToAction("Import", "Vuln", new {project = project});

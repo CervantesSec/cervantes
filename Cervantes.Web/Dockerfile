@@ -24,9 +24,12 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Cervantes.Web.dll"]
 
-#RUN apt-get update -y
-#RUN apt install -y wkhtmltopdf
-#RUN rm /app/wwwroot/Rotativa/Linux/wkhtmltoimage
-#RUN rm /app/wwwroot/Rotativa/Linux/wkhtmltopdf
-#RUN cp /usr/bin/wkhtmltoimage /app/wwwroot/Rotativa/Linux/wkhtmltoimage
-#RUN cp /usr/bin/wkhtmltopdf /app/wwwroot/Rotativa/Linux/wkhtmltopdf
+# update packages
+RUN apt-get update -y && apt-get upgrade -y && apt-get autoremove -y
+# create new user with lower privileges
+RUN useradd -ms /bin/bash cervantes
+# change permissions of particular directories
+RUN chown -R cervantes /app/wwwroot
+
+# switch to the newly created user
+USER cervantes

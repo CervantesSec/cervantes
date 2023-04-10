@@ -1911,4 +1911,7 @@ Si no completas la configuración de tu aplicación de autenticación, puedes pe
     <data name="Executive Summary saved successfully!" xml:space="preserve">
       <value>Resumen Ejecutivo guardado correctamente!</value>
     </data>
+    <data name="No Category" xml:space="preserve">
+      <value>Sin Categoría</value>
+    </data>
 </root>

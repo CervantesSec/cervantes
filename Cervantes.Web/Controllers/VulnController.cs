@@ -9,13 +9,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Web;
 using Cervantes.IFR.Jira;
+using Cervantes.IFR.Parsers.CSV;
+using Cervantes.IFR.Parsers.Pwndoc;
 using Cervantes.Web.Models;
 using DocumentFormat.OpenXml.Math;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MimeDetective;
 
 namespace Cervantes.Web.Controllers;
 [Authorize(Roles = "Admin,SuperUser,User")]
@@ -33,12 +37,16 @@ public class VulnController : Controller
     private IJIraService jiraService = null;
     private IJiraManager jiraManager = null;
     private IJiraCommentManager jiraCommentManager = null;
+    private IProjectAttachmentManager projectAttachmentManager = null;
+    private ICsvParser csvParser = null;
+    private IPwndocParser pwndocParser = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IHostingEnvironment _appEnvironment, IJIraService jiraService,
-        IJiraManager jiraManager, IJiraCommentManager jiraCommentManager)
+        IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IProjectAttachmentManager projectAttachmentManager,
+        ICsvParser csvParser, IPwndocParser pwndocParser)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -52,6 +60,9 @@ public class VulnController : Controller
         this.jiraService = jiraService;
         this.jiraManager = jiraManager;
         this.jiraCommentManager = jiraCommentManager;
+        this.projectAttachmentManager = projectAttachmentManager;
+        this.csvParser = csvParser;
+        this.pwndocParser = pwndocParser;
     }
 
     // GET: VulnController
@@ -183,7 +194,7 @@ public class VulnController : Controller
                 Template = vulnResult.Template,
                 cve = vulnResult.cve,
                 Description = vulnResult.Description,
-                VulnCategoryId = vulnResult.VulnCategoryId.Value,
+                VulnCategoryId = vulnResult.VulnCategoryId,
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
@@ -652,7 +663,7 @@ public class VulnController : Controller
                 Template = true,
                 cve = vulnResult.cve,
                 Description = vulnResult.Description,
-                VulnCategoryId = vulnResult.VulnCategoryId.Value,
+                VulnCategoryId = vulnResult.VulnCategoryId,
                 Risk = vulnResult.Risk,
                 Status = vulnResult.Status,
                 Impact = vulnResult.Impact,
@@ -854,6 +865,91 @@ public class VulnController : Controller
             _logger.LogError(e, "An error ocurred loading Task Workspace create form.User: {0}", 
                 User.FindFirstValue(ClaimTypes.Name));
             return RedirectToAction("Create");
+        }
+    }
+    
+    public IActionResult Import(Guid project)
+    {
+        return View();
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Import(VulnImportViewModel model)
+    {
+        try
+        {
+            
+            var upload = Request.Form.Files["upload"];
+            if (upload != null)
+            {
+
+                var file = upload;
+
+                var Inspector = new ContentInspectorBuilder()
+                {
+                    Definitions = MimeDetective.Definitions.Default.FileTypes.Text.All()
+                }.Build();
+
+                var Results = Inspector.Inspect(file.OpenReadStream());
+
+                /*if (Results.ByFileExtension().Length == 0 && Results.ByMimeType().Length == 0)
+                {
+                    TempData["fileNotPermitted"] = "User is not in the project";
+                    return RedirectToAction("Import");
+                }*/
+
+                var uploads = Path.Combine(_appEnvironment.WebRootPath, "Attachments/Imports");
+                var uniqueName = Guid.NewGuid().ToString() + "_" + file.FileName;
+
+                if (Directory.Exists(uploads))
+                {
+                    using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(uploads);
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, uniqueName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+                
+                var path = Path.Combine(uploads, uniqueName);
+
+                switch (model.Type)
+                {
+                    case VulnImportType.CSV:
+                        csvParser.Parse(null, User.FindFirstValue(ClaimTypes.NameIdentifier),
+                                path);
+                        TempData["fileImported"] = "file imported";
+                        return RedirectToAction("Import", "Vuln");
+                    case VulnImportType.Pwndoc:
+                        pwndocParser.Parse(null, User.FindFirstValue(ClaimTypes.NameIdentifier),
+                            "/Users/mesq/Desktop/cervantes/Cervantes.Web/wwwroot/Attachments/Imports/1c6bdba9-3f5f-4aee-b539-38b78c907d3a_vulnerabilities.yml");
+                        TempData["fileImported"] = "file imported";
+                        return RedirectToAction("Import", "Vuln");
+
+                    
+                }
+                
+               
+
+            }
+
+            return RedirectToAction("Import", "Vuln");
+        }
+        catch (Exception e)
+        {
+            
+            TempData["errorImporting"] = "Error deleting service!";
+            _logger.LogError(e, "An error ocurred importing Vulns User: {0}", 
+               User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Import", "Vuln");
         }
     }
 }
