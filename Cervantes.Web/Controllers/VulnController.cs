@@ -929,8 +929,7 @@ public class VulnController : Controller
                         TempData["fileImported"] = "file imported";
                         return RedirectToAction("Import", "Vuln");
                     case VulnImportType.Pwndoc:
-                        pwndocParser.Parse(null, User.FindFirstValue(ClaimTypes.NameIdentifier),
-                            "/Users/mesq/Desktop/cervantes/Cervantes.Web/wwwroot/Attachments/Imports/1c6bdba9-3f5f-4aee-b539-38b78c907d3a_vulnerabilities.yml");
+                        pwndocParser.Parse(null, User.FindFirstValue(ClaimTypes.NameIdentifier),path);
                         TempData["fileImported"] = "file imported";
                         return RedirectToAction("Import", "Vuln");
 
