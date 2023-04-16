@@ -17,4 +17,9 @@ public class TargetManager : GenericManager<Target>, ITargetManager
     public TargetManager(IApplicationDbContext context) : base(context)
     {
     }
+    
+    public Target GetByName(string name)
+    {
+        return Context.Set<Target>().FirstOrDefault(x => x.Name == name);
+    }
 }

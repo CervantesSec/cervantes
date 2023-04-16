@@ -9,4 +9,5 @@ namespace Cervantes.Contracts;
 
 public interface ITargetManager : IGenericManager<Target>
 {
+    Target GetByName(string name);
 }

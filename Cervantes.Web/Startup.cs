@@ -19,7 +19,9 @@ using System.Globalization;
 using Cervantes.IFR.Email;
 using Cervantes.IFR.Jira;
 using Cervantes.IFR.Parsers;
+using Cervantes.IFR.Parsers.Burp;
 using Cervantes.IFR.Parsers.CSV;
+using Cervantes.IFR.Parsers.Nessus;
 using Cervantes.IFR.Parsers.Nmap;
 using Cervantes.IFR.Parsers.Pwndoc;
 using NLog.Extensions.Logging;
@@ -101,7 +103,8 @@ public class Startup
         services.AddScoped<IPwndocParser, PwndocParser>();
         services.AddScoped<IWSTGManager, WSTGManager>();
         services.AddScoped<IMASTGManager, MASTGManager>();
-
+        services.AddScoped<IBurpParser, BurpParser>();
+        services.AddScoped<INessusParser, NessusParser>();
 
 
         var cultures = new[]

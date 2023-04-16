@@ -37,7 +37,7 @@ public class Target
     /// <summary>
     /// Id Project
     /// </summary>
-    public Guid ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     /// <summary>
     /// Target Name

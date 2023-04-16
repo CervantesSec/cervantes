@@ -324,6 +324,13 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\cyberchef\modules\Yara.js.LICENSE.txt" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\cyberchef\ZipWorker.js.LICENSE.txt" />
         <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\3b771dcc-213f-4683-a586-a14b6e6ae3d0\76af3a95-7dfb-4b35-8ad3-0eaac96ec959_rth_vryh.docx" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\8a204019-b226-4792-9663-48189c1372fc\11415486-02bf-4d08-9d26-8a721bfc2a52_burpvulns_v2_1_02.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\8a204019-b226-4792-9663-48189c1372fc\11c24a78-9e67-4af7-b2dd-60b69a58527b_burpvulns_v2_1_02.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\8a204019-b226-4792-9663-48189c1372fc\1b316f25-6433-499c-80fb-0178ffba0f4e_burpvulns_v2_1_02.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\8a204019-b226-4792-9663-48189c1372fc\3b8a7a00-86f6-476b-804c-f89e168fef70_burpvulns_v2_1_02.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\8a204019-b226-4792-9663-48189c1372fc\729e434f-053f-42d7-9ade-326ec7bd4ea4_burpvulns_v2_1_02.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\8a204019-b226-4792-9663-48189c1372fc\8ca34c90-f13c-46a4-9425-042add78f746_burpvulns_v2_1_02.xml" />
+        <_ContentIncludedByDefault Remove="wwwroot\Attachments\Project\8a204019-b226-4792-9663-48189c1372fc\f4ab9a1b-790f-4bb6-be4b-9a0ebc3c24bc_burpvulns_v2_1_02.xml" />
     </ItemGroup>
 
     <ItemGroup>

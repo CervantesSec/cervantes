@@ -14,7 +14,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using Cervantes.IFR.Jira;
+using Cervantes.IFR.Parsers.Burp;
 using Cervantes.IFR.Parsers.CSV;
+using Cervantes.IFR.Parsers.Nessus;
 using Cervantes.IFR.Parsers.Pwndoc;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -43,13 +45,15 @@ public class VulnController : Controller
     private IProjectAttachmentManager projectAttachmentManager = null;
     private ICsvParser csvParser = null;
     private IPwndocParser pwndocParser = null;
+    private IBurpParser burpParser = null;
+    private INessusParser nessusParser = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment,
         IJIraService jiraService, IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IProjectAttachmentManager projectAttachmentManager,
-        ICsvParser csvParser, IPwndocParser pwndocParser)
+        ICsvParser csvParser, IPwndocParser pwndocParser,IBurpParser burpParser, INessusParser nessusParser )
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -67,6 +71,8 @@ public class VulnController : Controller
         this.projectAttachmentManager = projectAttachmentManager;
         this.csvParser = csvParser;
         this.pwndocParser = pwndocParser;
+        this.burpParser = burpParser;
+        this.nessusParser = nessusParser;
     }
 
     // GET: VulnController
@@ -1304,6 +1310,16 @@ public class VulnController : Controller
                         return RedirectToAction("Import", "Vuln", new {project = project});
                     case VulnImportType.Pwndoc:
                         pwndocParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),
+                            path);
+                        TempData["fileImported"] = "file imported";
+                        return RedirectToAction("Import", "Vuln", new {project = project});
+                    case VulnImportType.Burp:
+                        burpParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),
+                            path);
+                        TempData["fileImported"] = "file imported";
+                        return RedirectToAction("Import", "Vuln", new {project = project});
+                    case VulnImportType.Nessus:
+                        nessusParser.Parse(project, User.FindFirstValue(ClaimTypes.NameIdentifier),
                             path);
                         TempData["fileImported"] = "file imported";
                         return RedirectToAction("Import", "Vuln", new {project = project});
