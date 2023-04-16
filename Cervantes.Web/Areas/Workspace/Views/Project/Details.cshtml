@@ -773,8 +773,9 @@
                 <i class="fas fa-project-diagram"></i> <span localize-content>Category</span>
             </th>
             <th>
-                <i class="fas fa-bullseye"></i> <span localize-content>Target</span>
+            <i class="fas fa-cog"></i> <span localize-content>Options</span>
             </th>
+
         </tr>
         </thead>
         <!--Table head-->
@@ -872,7 +873,30 @@
 
 
                 <td>@vulns.Status</td>
-                <td>@vulns.VulnCategory.Name</td>
+                <td>@{
+                        if (@vulns.VulnCategory != null)
+                        {
+                            @vulns.VulnCategory.Name
+                        }
+                        else
+                        {
+                            <span>No category</span>
+                        }
+                    }
+                </td>
+                
+                <td>
+                    <a asp-area="Workspace" asp-controller="Vuln" asp-action="Details" asp-route-project="@Model.Project.Id" asp-route-id="@vulns.Id" class="btn btn-tool">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vuln" asp-action="Edit" asp-route-project="@Model.Project.Id" asp-route-id="@vulns.Id" localize-content>
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a class="btn btn-tool" asp-area="Workspace" asp-controller="Vuln" asp-action="Delete" asp-route-project="@Model.Project.Id" asp-route-id="@vulns.Id" localize-content>
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+                
 
             </tr>
         }

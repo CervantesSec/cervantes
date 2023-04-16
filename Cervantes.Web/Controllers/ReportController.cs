@@ -124,516 +124,597 @@ public class ReportController : Controller
     
     public IActionResult GenerateDoc(IFormCollection form)
     {
-        var pro = projectManager.GetById(Guid.Parse(form["project"]));
-
-        var vul = vulnManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"]) && x.Template == false).Select(y => y.Id)
-            .ToList();
-        var template = reportTemplateManager.GetById(Guid.Parse(form["ReportTemplates"]));
-
-
-        
-        var uniqueName = Guid.NewGuid().ToString() + "_" + form["reportName"]+"_v"+ form["version"] + ".docx";
-        var templatePath = _appEnvironment.WebRootPath + template.FilePath;
-        string resultPath = _appEnvironment.WebRootPath + "/Attachments/Reports/" + form["project"] + "/"+ uniqueName ;
-
-        
-        Report rep = new Report
+        try
         {
-            Id = Guid.NewGuid(),
-            Name = form["reportName"],
-            ProjectId = Guid.Parse(form["project"]),
-            UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-            CreatedDate = DateTime.Now.ToUniversalTime(),
-            Description = form["description"],
-            Version = form["version"],
-            FilePath = "/Attachments/Reports/" + form["project"] + "/" + uniqueName,
-            Language = pro.Language
-        };
+            var pro = projectManager.GetById(Guid.Parse(form["project"]));
 
-        reportManager.Add(rep);
-        reportManager.Context.SaveChanges();
-        
-        ReportViewModel model = new ReportViewModel
-        {
-            Organization = organizationManager.GetAll().First(),
-            Project = pro,
-            Vulns = vulnManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"]) && x.Template == false).ToList(),
-            Targets = targetManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
-            Users = projectUserManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
-            Reports = reportManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
-            VulnTargets = vulnTargetManager.GetAll().Where(x => vul.Contains(x.VulnId)).ToList()
-        };
-
-        
-        
-        if (!Directory.Exists(_appEnvironment.WebRootPath+ "/Attachments/Reports/" + form["project"]+"/"))
-        {
-            Directory.CreateDirectory(_appEnvironment.WebRootPath+ "/Attachments/Reports/" + form["project"]+"/");
-        }
+            var vul = vulnManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"]) && x.Template == false)
+                .Select(y => y.Id)
+                .ToList();
+            var template = reportTemplateManager.GetById(Guid.Parse(form["ReportTemplates"]));
 
 
-        using (WordprocessingDocument document = WordprocessingDocument.CreateFromTemplate(templatePath,true))
-        {
-            MainDocumentPart mainPart = document.MainDocumentPart;
-            HtmlConverter converter = new HtmlConverter(mainPart);
 
-            var header = document.MainDocumentPart.Document.MainDocumentPart.HeaderParts;
-            var footer = document.MainDocumentPart.Document.MainDocumentPart.FooterParts;
-            var body = document.MainDocumentPart.Document.Body;
-            var paragraphs = body.Elements<Paragraph>();
-            var texts = paragraphs.SelectMany(p => p.Elements<Run>()).SelectMany(r => r.Elements<Text>());
+            var uniqueName = Guid.NewGuid().ToString() + "_" + form["reportName"] + "_v" + form["version"] + ".docx";
+            var templatePath = _appEnvironment.WebRootPath + template.FilePath;
+            string resultPath = _appEnvironment.WebRootPath + "/Attachments/Reports/" + form["project"] + "/" +
+                                uniqueName;
 
-            foreach (var headerPart in document.MainDocumentPart.HeaderParts)
+
+            Report rep = new Report
             {
-                //Gets the text in headers
-                foreach (var text in headerPart.RootElement.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>())
+                Id = Guid.NewGuid(),
+                Name = form["reportName"],
+                ProjectId = Guid.Parse(form["project"]),
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                CreatedDate = DateTime.Now.ToUniversalTime(),
+                Description = form["description"],
+                Version = form["version"],
+                FilePath = "/Attachments/Reports/" + form["project"] + "/" + uniqueName,
+                Language = pro.Language
+            };
+
+            reportManager.Add(rep);
+            reportManager.Context.SaveChanges();
+
+            ReportViewModel model = new ReportViewModel
+            {
+                Organization = organizationManager.GetAll().First(),
+                Project = pro,
+                Vulns = vulnManager.GetAll()
+                    .Where(x => x.ProjectId == Guid.Parse(form["project"]) && x.Template == false).ToList(),
+                Targets = targetManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
+                Users = projectUserManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
+                Reports = reportManager.GetAll().Where(x => x.ProjectId == Guid.Parse(form["project"])).ToList(),
+                VulnTargets = vulnTargetManager.GetAll().Where(x => vul.Contains(x.VulnId)).ToList()
+            };
+
+
+
+            if (!Directory.Exists(_appEnvironment.WebRootPath + "/Attachments/Reports/" + form["project"] + "/"))
+            {
+                Directory.CreateDirectory(_appEnvironment.WebRootPath + "/Attachments/Reports/" + form["project"] +
+                                          "/");
+            }
+
+
+            using (WordprocessingDocument document = WordprocessingDocument.CreateFromTemplate(templatePath, true))
+            {
+                MainDocumentPart mainPart = document.MainDocumentPart;
+                HtmlConverter converter = new HtmlConverter(mainPart);
+
+                var header = document.MainDocumentPart.Document.MainDocumentPart.HeaderParts;
+                var footer = document.MainDocumentPart.Document.MainDocumentPart.FooterParts;
+                var body = document.MainDocumentPart.Document.Body;
+                var paragraphs = body.Elements<Paragraph>();
+                var texts = paragraphs.SelectMany(p => p.Elements<Run>()).SelectMany(r => r.Elements<Text>());
+
+                foreach (var headerPart in document.MainDocumentPart.HeaderParts)
+                {
+                    //Gets the text in headers
+                    foreach (var text in headerPart.RootElement
+                                 .Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>())
+                    {
+                        switch (text.Text)
+                        {
+                            case @"ProjectName":
+                                text.Text = @model.Project.Name;
+                                break;
+                            case @"OrganizationName":
+                                text.Text = @model.Organization.Name;
+                                break;
+                            case "OrganizationContactEmail":
+                                text.Text = @model.Organization.ContactEmail;
+                                break;
+                            case "OrganizationContactPhone":
+                                text.Text = @model.Organization.ContactPhone.ToString();
+                                break;
+                            case "ClientName":
+                                text.Text = @model.Project.Client.Name;
+                                break;
+                            case "ClientContactEmail":
+                                text.Text = @model.Project.Client.ContactEmail;
+                                break;
+                            case "ClientContactPhone":
+                                text.Text = @model.Project.Client.ContactPhone;
+                                break;
+                            case "StartDate":
+                                text.Text = @model.Project.StartDate.ToShortDateString();
+                                break;
+                            case "EndDate":
+                                text.Text = @model.Project.EndDate.ToShortDateString();
+                                break;
+                            case "DateTimeYear":
+                                text.Text = DateTime.Now.Year.ToString();
+                                break;
+                        }
+                    }
+                }
+
+                foreach (var footerPart in document.MainDocumentPart.FooterParts)
+                {
+                    //Gets the text in footers
+                    foreach (var text in footerPart.RootElement
+                                 .Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>())
+                    {
+                        switch (text.Text)
+                        {
+                            case @"ProjectName":
+                                text.Text = @model.Project.Name;
+                                break;
+                            case @"OrganizationName":
+                                text.Text = @model.Organization.Name;
+                                break;
+                            case "OrganizationContactEmail":
+                                text.Text = @model.Organization.ContactEmail;
+                                break;
+                            case "OrganizationContactPhone":
+                                text.Text = @model.Organization.ContactPhone.ToString();
+                                break;
+                            case "ClientName":
+                                text.Text = @model.Project.Client.Name;
+                                break;
+                            case "ClientContactEmail":
+                                text.Text = @model.Project.Client.ContactEmail;
+                                break;
+                            case "ClientContactPhone":
+                                text.Text = @model.Project.Client.ContactPhone;
+                                break;
+                            case "StartDate":
+                                text.Text = @model.Project.StartDate.ToShortDateString();
+                                break;
+                            case "EndDate":
+                                text.Text = @model.Project.EndDate.ToShortDateString();
+                                break;
+                            case "DateTimeYear":
+                                text.Text = DateTime.Now.Year.ToString();
+                                break;
+                        }
+                    }
+                }
+
+                foreach (Text text in texts)
                 {
                     switch (text.Text)
                     {
                         case @"ProjectName":
                             text.Text = @model.Project.Name;
                             break;
-                        case @"OrganizationName":
-                            text.Text = @model.Organization.Name;
-                            break;
-                        case "OrganizationContactEmail":
-                            text.Text = @model.Organization.ContactEmail;
-                            break;
-                        case "OrganizationContactPhone":
-                            text.Text = @model.Organization.ContactPhone.ToString();
-                            break;
-                        case "ClientName":
-                            text.Text = @model.Project.Client.Name;
-                            break;
-                        case "ClientContactEmail":
-                            text.Text = @model.Project.Client.ContactEmail;
-                            break;
-                        case "ClientContactPhone":
-                            text.Text = @model.Project.Client.ContactPhone;
-                            break;
-                        case "StartDate":
-                            text.Text = @model.Project.StartDate.ToShortDateString();
-                            break;
-                        case "EndDate":
-                            text.Text = @model.Project.EndDate.ToShortDateString();
-                            break;
-                        case "DateTimeYear":
-                            text.Text = DateTime.Now.Year.ToString();
-                            break;
-                    }
-                }
-            }
-
-            foreach (var footerPart in document.MainDocumentPart.FooterParts)
-            {
-                //Gets the text in footers
-                foreach (var text in footerPart.RootElement.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>())
-                {
-                    switch (text.Text)
-                    {
-                        case @"ProjectName":
-                            text.Text = @model.Project.Name;
-                            break;
-                        case @"OrganizationName":
-                            text.Text = @model.Organization.Name;
-                            break;
-                        case "OrganizationContactEmail":
-                            text.Text = @model.Organization.ContactEmail;
-                            break;
-                        case "OrganizationContactPhone":
-                            text.Text = @model.Organization.ContactPhone.ToString();
-                            break;
-                        case "ClientName":
-                            text.Text = @model.Project.Client.Name;
-                            break;
-                        case "ClientContactEmail":
-                            text.Text = @model.Project.Client.ContactEmail;
-                            break;
-                        case "ClientContactPhone":
-                            text.Text = @model.Project.Client.ContactPhone;
-                            break;
-                        case "StartDate":
-                            text.Text = @model.Project.StartDate.ToShortDateString();
-                            break;
-                        case "EndDate":
-                            text.Text = @model.Project.EndDate.ToShortDateString();
-                            break;
-                        case "DateTimeYear":
-                            text.Text = DateTime.Now.Year.ToString();
-                            break;
-                    }
-                }
-            }
-
-            foreach (Text text in texts)
-            {
-                switch (text.Text)
-                {
-                    case @"ProjectName":
-                        text.Text = @model.Project.Name;
-                        break;
-                    case "ProjectDescription":
-                        
-                        var parentProjectDesc = text.Parent;
-                        var projectDescription = converter.Parse(pro.Description);
-                        for (int i = projectDescription.Count() - 1 ; i >= 0; i--)
-                        {
-                            parentProjectDesc.InsertAfterSelf(projectDescription.ElementAt(i));
-                        }
-                        text.Text = String.Empty;
-                        break;
-                    case @"OrganizationName":
-                        text.Text = @model.Organization.Name;
-                        break;
-                    case "OrganizationContactEmail":
-                        text.Text = @model.Organization.ContactEmail;
-                        break;
-                    case "OrganizationContactPhone":
-                        text.Text = @model.Organization.ContactPhone.ToString();
-                        break;
-                    case "ClientName":
-                        text.Text = @model.Project.Client.Name;
-                        break;
-                    case "ClientContactEmail":
-                        text.Text = @model.Project.Client.ContactEmail;
-                        break;
-                    case "ClientContactPhone":
-                        text.Text = @model.Project.Client.ContactPhone;
-                        break;
-                    case "ClientDescription":
-                        
-                        var parentClientdescription = text.Parent;
-                        var clientDescription = converter.Parse(pro.Client.Description);
-                        for (int i = clientDescription.Count() - 1 ; i >= 0; i--)
-                        {
-                            parentClientdescription.InsertAfterSelf(clientDescription.ElementAt(i));
-                        }
-                        text.Text = String.Empty;
-                        break;
-                    case "StartDate":
-                        text.Text = @model.Project.StartDate.ToShortDateString();
-                        break;
-                    case "EndDate":
-                        text.Text = @model.Project.EndDate.ToShortDateString();
-                        break;
-                    case "DateTimeYear":
-                        text.Text = DateTime.Now.Year.ToString();
-                        break;
-                    case "VulnCriticalCount":
-                        text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Critical).Count().ToString();
-                        break;
-                    case "VulnHighCount":
-                        text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.High).Count().ToString();
-                        break;
-                    case "VulnMediumCount":
-                        text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Medium).Count().ToString();
-                        break;
-                    case "VulnLowCount":
-                        text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Low).Count().ToString();
-                        break;
-                    case "VulnInfoCount":
-                        text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Info).Count().ToString();
-                        break;
-                    case "ExecutiveSummaryDesc":
-                        var parentExecutiveDesc = text.Parent;
-                        var executiveDescription = converter.Parse(pro.ExecutiveSummary);
-                        for (int i = executiveDescription.Count() - 1 ; i >= 0; i--)
-                        {
-                            parentExecutiveDesc.InsertAfterSelf(executiveDescription.ElementAt(i));
-                        }
-                        text.Text = String.Empty;
-                        break;
-                }
-            }
-            
-            var tables = mainPart.Document.Descendants<Table>().ToList();
-            
-            var w = from c in tables
-                where c.InnerText.Contains("DocumentName") ||
-                      c.InnerText.Contains("DocumentVersion") || c.InnerText.Contains("DocumentDescription")
-                select c;
-            
-            Table documentTable = w.First();
-
-            TableRow rowDocTable = documentTable.Elements<TableRow>().ElementAt(1);
-            List<TableRow> rowsDoc = new List<TableRow>();
-            foreach (var doc in model.Reports)
-            {
-                var row = (TableRow)rowDocTable.CloneNode(true);
-                
-                /*var cellDocTable = row.SelectMany(p => p.Elements<TableCell>());
-                // Find the first paragraph in the table cell.
-                var pDocTable = cellDocTable.SelectMany(p => p.Elements<Paragraph>());*/
-
-                var documentTableText = row.Descendants<Text>();
-                
-                foreach (Text textDoc in documentTableText)
-                {
-                    switch (textDoc.Text)
-                    {
-                        case "DocumentName":
-                            textDoc.Text = doc.Name;
-                            break;
-                        case "DocumentVersion":
-                            textDoc.Text = doc.Version;
-                            break;
-                        case "DocumentDescription":
-                            textDoc.Text = doc.Description;
-                            break;
-                    }
-                }
-
-                rowsDoc.Add(row);
-            }
-
-            for (int i = 0; i < rowsDoc.Count; i++)
-            {
-                documentTable.AppendChild(rowsDoc[i]);
-            }
-            
-            rowDocTable.Remove();
-            
-            
-            var teamTables = from c in tables
-                where c.InnerText.Contains("UserFullName") ||
-                      c.InnerText.Contains("UserEmail") || c.InnerText.Contains("UserPosition")
-                select c;
-            
-            Table teamTable = teamTables.First();
-            TableRow rowTeamTable = teamTable.Elements<TableRow>().ElementAt(1);
-            List<TableRow> rowsTeamTables = new List<TableRow>();
-            
-            foreach (var user in model.Users)
-            {
-                var row = (TableRow)rowTeamTable.CloneNode(true);
-                
-                var userTableText = row.Descendants<Text>();
-                
-                foreach (Text textDoc in userTableText)
-                {
-                    switch (textDoc.Text)
-                    {
-                        case "UserFullName":
-                            textDoc.Text = user.User.FullName;
-                            break;
-                        case "UserEmail":
-                            textDoc.Text = user.User.Email;
-                            break;
-                        case "UserPosition":
-                            textDoc.Text = user.User.Position;
-                            break;
-                    }
-                }
-
-                rowsTeamTables.Add(row);
-            }
-            
-            for (int i = 0; i < rowsTeamTables.Count; i++)
-            {
-                teamTable.AppendChild(rowsTeamTables[i]);
-            }
-            
-            rowTeamTable.Remove();
-            
-             
-            var targetTables = from c in tables
-                where c.InnerText.Contains("TargetName") ||
-                      c.InnerText.Contains("TargetType")
-                select c;
-            
-            Table targetTable = targetTables.First();
-            TableRow rowTargetTable = targetTable.Elements<TableRow>().ElementAt(1);
-            List<TableRow> rowsTargetTables = new List<TableRow>();
-            
-            foreach (var target in model.Targets)
-            {
-                var row = (TableRow)rowTargetTable.CloneNode(true);
-                
-                var targetTableText = row.Descendants<Text>();
-                
-                foreach (Text textDoc in targetTableText)
-                {
-                    switch (textDoc.Text)
-                    {
-                        case "TargetName":
-                            textDoc.Text = target.Name;
-                            break;
-                        case "TargetType":
-                            textDoc.Text = target.Type.ToString();
-                            break;
-                    }
-                }
-
-                rowsTargetTables.Add(row);
-            }
-            
-            for (int i = 0; i < rowsTargetTables.Count; i++)
-            {
-                targetTable.AppendChild(rowsTargetTables[i]);
-            }
-            
-            rowTargetTable.Remove();
-            
-            
-            //select summary count table
-            var q = from c in tables
-                where c.InnerText.Contains("VulnCriticalCount") ||
-                      c.InnerText.Contains("VulnHighCount") || c.InnerText.Contains("VulnMediumCount") || 
-                      c.InnerText.Contains("VulnLowCount") || c.InnerText.Contains("VulnInfoCount")
-                select c;
-            var vulnSummaryTable = q.First();
-
-            var rowVulnSummary = vulnSummaryTable.Elements<TableRow>();
-
-            var cellVulnSummary = rowVulnSummary.SelectMany(p => p.Elements<TableCell>());
-            // Find the first paragraph in the table cell.
-            var pVulnSummary = cellVulnSummary.SelectMany(p => p.Elements<Paragraph>());
-
-            //get all texts
-            var vulnSummaryTableText = pVulnSummary.SelectMany(p => p.Elements<Run>()).SelectMany(r => r.Elements<Text>());
-            
-            //substitutes variables
-            foreach (Text textDoc in vulnSummaryTableText)
-            {
-                switch (textDoc.Text)
-                {
-                    case "VulnCriticalCount":
-                        textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Critical).Count().ToString();
-                        break;
-                    case "VulnHighCount":
-                        textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.High).Count().ToString();
-                        break;
-                    case "VulnMediumCount":
-                        textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Medium).Count().ToString();
-                        break;
-                    case "VulnLowCount":
-                        textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Low).Count().ToString();
-                        break;
-                    case "VulnInfoCount":
-                        textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Info).Count().ToString();
-                        break;
-                }
-            }
-            
-            
-            //select vuln table template
-            var e = from c in tables
-                where c.InnerText.Contains("VulnCVE") ||
-                      c.InnerText.Contains("VulnImpact") || c.InnerText.Contains("VulnRemediation") || 
-                      c.InnerText.Contains("VulnCVSS") || c.InnerText.Contains("VulnRisk")
-                select c;
-            
-            var vulnTable = e.First();
-            
-            //saves vuln tablaes generated
-            List<Table> vTables = new List<Table>();
-
-            //foreach vuln create a table from table template
-            foreach (var vuln in model.Vulns.OrderByDescending(x => x.FindingId))
-            {
-                Table table = new Table(vulnTable.CloneNode(true));
-                var vulnTableText = table.Descendants<Text>();
-
-                foreach (Text textDoc in vulnTableText)
-                {
-                    switch (textDoc.Text)
-                    {
-                        case "VulnName":
-                            textDoc.Text = vuln.FindingId + " " +vuln.Name;
-                            break;
-                        case "VulnCVE":
-                            textDoc.Text = vuln.cve;
-                            break;
-                        case "VulnRisk":
-                            textDoc.Text = vuln.Risk.ToString();
-                            break;
-                        case "VulnCVSS":
-                            textDoc.Text = vuln.CVSS3.ToString();
-                            break;
-                        case "VulnCategory":
-                            textDoc.Text = vuln.VulnCategory.Name;
-                            break;
-                        case "VulnAssets":
-                            StringBuilder assets = new StringBuilder();
-                            if (model.VulnTargets.Where(x => x.VulnId == vuln.Id).Count() != 0)
+                        case "ProjectDescription":
+                            if (pro.Description != null)
                             {
-                                foreach (var asset in model.VulnTargets.Where(x => x.VulnId == vuln.Id))
+                                var parentProjectDesc = text.Parent;
+                                var projectDescription = converter.Parse(pro.Description);
+                                for (int i = projectDescription.Count() - 1; i >= 0; i--)
                                 {
-                                    assets.Append(asset.Target.Name+" ("+asset.Target.Type+"), ");
+                                    parentProjectDesc.InsertAfterSelf(projectDescription.ElementAt(i));
                                 }
 
-                                textDoc.Text = assets.ToString();
+                                text.Text = String.Empty;
                             }
                             else
                             {
-                                textDoc.Text = String.Empty;
+                                text.Text = String.Empty;
                             }
+
                             break;
-                        case "VulnDescription":
-                            var parentVulndescription = textDoc.Parent;
-                            var vulnDescription = converter.Parse(vuln.Description);
-                            for (int i = vulnDescription.Count() - 1 ; i >= 0; i--)
+                        case @"OrganizationName":
+                            text.Text = @model.Organization.Name;
+                            break;
+                        case "OrganizationContactEmail":
+                            text.Text = @model.Organization.ContactEmail;
+                            break;
+                        case "OrganizationContactPhone":
+                            text.Text = @model.Organization.ContactPhone.ToString();
+                            break;
+                        case "ClientName":
+                            text.Text = @model.Project.Client.Name;
+                            break;
+                        case "ClientContactEmail":
+                            text.Text = @model.Project.Client.ContactEmail;
+                            break;
+                        case "ClientContactPhone":
+                            text.Text = @model.Project.Client.ContactPhone;
+                            break;
+                        case "ClientDescription":
+                            if (pro.Client.Description != null)
                             {
-                                parentVulndescription.InsertAfterSelf(vulnDescription.ElementAt(i));
+                                var parentClientdescription = text.Parent;
+                                var clientDescription = converter.Parse(pro.Client.Description);
+                                for (int i = clientDescription.Count() - 1; i >= 0; i--)
+                                {
+                                    parentClientdescription.InsertAfterSelf(clientDescription.ElementAt(i));
+                                }
+
+                                text.Text = String.Empty;
                             }
-                            textDoc.Text = String.Empty;
-                            break;
-                        case "VulnImpact":
-                            var parentVulnImpact = textDoc.Parent;
-                            var vulnImpact = converter.Parse(vuln.Impact);
-                            for (int i = vulnImpact.Count() - 1 ; i >= 0; i--)
+                            else
                             {
-                                parentVulnImpact.InsertAfterSelf(vulnImpact.ElementAt(i));
+                                text.Text = String.Empty;
                             }
-                            textDoc.Text = String.Empty;
+
                             break;
-                        case "VulnPOC":
-                            var parentVulnPoc = textDoc.Parent;
-                            var vulnPoc = converter.Parse(vuln.ProofOfConcept);
-                            for (int i = vulnPoc.Count() - 1 ; i >= 0; i--)
+                        case "StartDate":
+                            text.Text = @model.Project.StartDate.ToShortDateString();
+                            break;
+                        case "EndDate":
+                            text.Text = @model.Project.EndDate.ToShortDateString();
+                            break;
+                        case "DateTimeYear":
+                            text.Text = DateTime.Now.Year.ToString();
+                            break;
+                        case "VulnCriticalCount":
+                            text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Critical).Count().ToString();
+                            break;
+                        case "VulnHighCount":
+                            text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.High).Count().ToString();
+                            break;
+                        case "VulnMediumCount":
+                            text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Medium).Count().ToString();
+                            break;
+                        case "VulnLowCount":
+                            text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Low).Count().ToString();
+                            break;
+                        case "VulnInfoCount":
+                            text.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Info).Count().ToString();
+                            break;
+                        case "ExecutiveSummaryDesc":
+                            var parentExecutiveDesc = text.Parent;
+                            var executiveDescription = converter.Parse(pro.ExecutiveSummary);
+                            for (int i = executiveDescription.Count() - 1; i >= 0; i--)
                             {
-                                parentVulnPoc.InsertAfterSelf(vulnPoc.ElementAt(i));
+                                parentExecutiveDesc.InsertAfterSelf(executiveDescription.ElementAt(i));
                             }
-                            textDoc.Text = String.Empty;
+
+                            text.Text = String.Empty;
                             break;
-                        case "VulnRemediation":
-                            var parentVulnRemediation = textDoc.Parent;
-                            var vulnRemediation = converter.Parse(vuln.Remediation);
-                            for (int i = vulnRemediation.Count() - 1 ; i >= 0; i--)
-                            {
-                                parentVulnRemediation.InsertAfterSelf(vulnRemediation.ElementAt(i));
-                            }
-                            textDoc.Text = String.Empty;
-                            break;
-                        case "VulnComplexity":
-                            textDoc.Text = vuln.RemediationComplexity.ToString();
-                            break;
-                        case "VulnPriority":
-                            textDoc.Text = vuln.RemediationPriority.ToString();
-                            break;
-                            
                     }
                 }
-                
-                vTables.Add(table);
+
+                var tables = mainPart.Document.Descendants<Table>().ToList();
+
+                var w = from c in tables
+                    where c.InnerText.Contains("DocumentName") ||
+                          c.InnerText.Contains("DocumentVersion") || c.InnerText.Contains("DocumentDescription")
+                    select c;
+
+                Table documentTable = w.First();
+
+                TableRow rowDocTable = documentTable.Elements<TableRow>().ElementAt(1);
+                List<TableRow> rowsDoc = new List<TableRow>();
+                foreach (var doc in model.Reports)
+                {
+                    var row = (TableRow) rowDocTable.CloneNode(true);
+
+                    /*var cellDocTable = row.SelectMany(p => p.Elements<TableCell>());
+                    // Find the first paragraph in the table cell.
+                    var pDocTable = cellDocTable.SelectMany(p => p.Elements<Paragraph>());*/
+
+                    var documentTableText = row.Descendants<Text>();
+
+                    foreach (Text textDoc in documentTableText)
+                    {
+                        switch (textDoc.Text)
+                        {
+                            case "DocumentName":
+                                textDoc.Text = doc.Name;
+                                break;
+                            case "DocumentVersion":
+                                textDoc.Text = doc.Version;
+                                break;
+                            case "DocumentDescription":
+                                textDoc.Text = doc.Description;
+                                break;
+                        }
+                    }
+
+                    rowsDoc.Add(row);
+                }
+
+                for (int i = 0; i < rowsDoc.Count; i++)
+                {
+                    documentTable.AppendChild(rowsDoc[i]);
+                }
+
+                rowDocTable.Remove();
+
+
+                var teamTables = from c in tables
+                    where c.InnerText.Contains("UserFullName") ||
+                          c.InnerText.Contains("UserEmail") || c.InnerText.Contains("UserPosition")
+                    select c;
+
+                Table teamTable = teamTables.First();
+                TableRow rowTeamTable = teamTable.Elements<TableRow>().ElementAt(1);
+                List<TableRow> rowsTeamTables = new List<TableRow>();
+
+                foreach (var user in model.Users)
+                {
+                    var row = (TableRow) rowTeamTable.CloneNode(true);
+
+                    var userTableText = row.Descendants<Text>();
+
+                    foreach (Text textDoc in userTableText)
+                    {
+                        switch (textDoc.Text)
+                        {
+                            case "UserFullName":
+                                textDoc.Text = user.User.FullName;
+                                break;
+                            case "UserEmail":
+                                textDoc.Text = user.User.Email;
+                                break;
+                            case "UserPosition":
+                                textDoc.Text = user.User.Position;
+                                break;
+                        }
+                    }
+
+                    rowsTeamTables.Add(row);
+                }
+
+                for (int i = 0; i < rowsTeamTables.Count; i++)
+                {
+                    teamTable.AppendChild(rowsTeamTables[i]);
+                }
+
+                rowTeamTable.Remove();
+
+
+                var targetTables = from c in tables
+                    where c.InnerText.Contains("TargetName") ||
+                          c.InnerText.Contains("TargetType")
+                    select c;
+
+                Table targetTable = targetTables.First();
+                TableRow rowTargetTable = targetTable.Elements<TableRow>().ElementAt(1);
+                List<TableRow> rowsTargetTables = new List<TableRow>();
+
+                foreach (var target in model.Targets)
+                {
+                    var row = (TableRow) rowTargetTable.CloneNode(true);
+
+                    var targetTableText = row.Descendants<Text>();
+
+                    foreach (Text textDoc in targetTableText)
+                    {
+                        switch (textDoc.Text)
+                        {
+                            case "TargetName":
+                                textDoc.Text = target.Name;
+                                break;
+                            case "TargetType":
+                                textDoc.Text = target.Type.ToString();
+                                break;
+                        }
+                    }
+
+                    rowsTargetTables.Add(row);
+                }
+
+                for (int i = 0; i < rowsTargetTables.Count; i++)
+                {
+                    targetTable.AppendChild(rowsTargetTables[i]);
+                }
+
+                rowTargetTable.Remove();
+
+
+                //select summary count table
+                var q = from c in tables
+                    where c.InnerText.Contains("VulnCriticalCount") ||
+                          c.InnerText.Contains("VulnHighCount") || c.InnerText.Contains("VulnMediumCount") ||
+                          c.InnerText.Contains("VulnLowCount") || c.InnerText.Contains("VulnInfoCount")
+                    select c;
+                var vulnSummaryTable = q.First();
+
+                var rowVulnSummary = vulnSummaryTable.Elements<TableRow>();
+
+                var cellVulnSummary = rowVulnSummary.SelectMany(p => p.Elements<TableCell>());
+                // Find the first paragraph in the table cell.
+                var pVulnSummary = cellVulnSummary.SelectMany(p => p.Elements<Paragraph>());
+
+                //get all texts
+                var vulnSummaryTableText =
+                    pVulnSummary.SelectMany(p => p.Elements<Run>()).SelectMany(r => r.Elements<Text>());
+
+                //substitutes variables
+                foreach (Text textDoc in vulnSummaryTableText)
+                {
+                    switch (textDoc.Text)
+                    {
+                        case "VulnCriticalCount":
+                            textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Critical).Count().ToString();
+                            break;
+                        case "VulnHighCount":
+                            textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.High).Count().ToString();
+                            break;
+                        case "VulnMediumCount":
+                            textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Medium).Count().ToString();
+                            break;
+                        case "VulnLowCount":
+                            textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Low).Count().ToString();
+                            break;
+                        case "VulnInfoCount":
+                            textDoc.Text = @model.Vulns.Where(x => x.Risk == VulnRisk.Info).Count().ToString();
+                            break;
+                    }
+                }
+
+
+                //select vuln table template
+                var e = from c in tables
+                    where c.InnerText.Contains("VulnCVE") ||
+                          c.InnerText.Contains("VulnImpact") || c.InnerText.Contains("VulnRemediation") ||
+                          c.InnerText.Contains("VulnCVSS") || c.InnerText.Contains("VulnRisk")
+                    select c;
+
+                var vulnTable = e.First();
+
+                //saves vuln tablaes generated
+                List<Table> vTables = new List<Table>();
+
+                //foreach vuln create a table from table template
+                foreach (var vuln in model.Vulns.OrderByDescending(x => x.FindingId))
+                {
+                    Table table = new Table(vulnTable.CloneNode(true));
+                    var vulnTableText = table.Descendants<Text>();
+
+                    foreach (Text textDoc in vulnTableText)
+                    {
+                        switch (textDoc.Text)
+                        {
+                            case "VulnName":
+                                textDoc.Text = vuln.FindingId + " " + vuln.Name;
+                                break;
+                            case "VulnCVE":
+                                textDoc.Text = vuln.cve;
+                                break;
+                            case "VulnRisk":
+                                textDoc.Text = vuln.Risk.ToString();
+                                break;
+                            case "VulnCVSS":
+                                textDoc.Text = vuln.CVSS3.ToString();
+                                break;
+                            case "VulnCategory":
+                                if (vuln.VulnCategory != null)
+                                {
+                                    textDoc.Text = vuln.VulnCategory.Name;
+                                }
+                                else
+                                {
+                                    textDoc.Text = "No Category";
+                                }
+
+                                break;
+                            case "VulnAssets":
+                                StringBuilder assets = new StringBuilder();
+                                if (model.VulnTargets.Where(x => x.VulnId == vuln.Id).Count() != 0)
+                                {
+                                    foreach (var asset in model.VulnTargets.Where(x => x.VulnId == vuln.Id))
+                                    {
+                                        assets.Append(asset.Target.Name + " (" + asset.Target.Type + "), ");
+                                    }
+
+                                    textDoc.Text = assets.ToString();
+                                }
+                                else
+                                {
+                                    textDoc.Text = String.Empty;
+                                }
+
+                                break;
+                            case "VulnDescription":
+                                if (vuln.Description != null)
+                                {
+                                    var parentVulndescription = textDoc.Parent;
+                                    var vulnDescription = converter.Parse(vuln.Description);
+                                    for (int i = vulnDescription.Count() - 1; i >= 0; i--)
+                                    {
+                                        parentVulndescription.InsertAfterSelf(vulnDescription.ElementAt(i));
+                                    }
+
+                                    textDoc.Text = String.Empty;
+                                }
+                                else
+                                {
+                                    textDoc.Text = String.Empty;
+                                }
+
+                                break;
+                            case "VulnImpact":
+                                var parentVulnImpact = textDoc.Parent;
+                                if (vuln.Impact != null)
+                                {
+                                    var vulnImpact = converter.Parse(vuln.Impact);
+                                    for (int i = vulnImpact.Count() - 1; i >= 0; i--)
+                                    {
+                                        parentVulnImpact.InsertAfterSelf(vulnImpact.ElementAt(i));
+                                    }
+
+                                    textDoc.Text = String.Empty;
+                                }
+                                else
+                                {
+                                    textDoc.Text = String.Empty;
+                                }
+
+                                break;
+                            case "VulnPOC":
+                                if (vuln.ProofOfConcept != null)
+                                {
+                                    var parentVulnPoc = textDoc.Parent;
+                                    var vulnPoc = converter.Parse(vuln.ProofOfConcept);
+                                    for (int i = vulnPoc.Count() - 1; i >= 0; i--)
+                                    {
+                                        parentVulnPoc.InsertAfterSelf(vulnPoc.ElementAt(i));
+                                    }
+
+                                    textDoc.Text = String.Empty;
+                                }
+                                else
+                                {
+                                    textDoc.Text = String.Empty;
+                                }
+
+                                break;
+                            case "VulnRemediation":
+                                if (vuln.Remediation != null)
+                                {
+                                    var parentVulnRemediation = textDoc.Parent;
+                                    var vulnRemediation = converter.Parse(vuln.Remediation);
+                                    for (int i = vulnRemediation.Count() - 1; i >= 0; i--)
+                                    {
+                                        parentVulnRemediation.InsertAfterSelf(vulnRemediation.ElementAt(i));
+                                    }
+
+                                    textDoc.Text = String.Empty;
+                                }
+                                else
+                                {
+                                    textDoc.Text = String.Empty;
+                                }
+
+                                break;
+                            case "VulnComplexity":
+                                textDoc.Text = vuln.RemediationComplexity.ToString();
+                                break;
+                            case "VulnPriority":
+                                textDoc.Text = vuln.RemediationPriority.ToString();
+                                break;
+
+                        }
+                    }
+
+                    vTables.Add(table);
+
+                }
+
+
+                for (int i = 0; i < vTables.Count(); i++)
+                {
+                    vulnTable.InsertAfterSelf(vTables[i]);
+                    vulnTable.InsertAfterSelf(new Paragraph());
+                }
+
+                vulnTable.Remove();
+
+                var result = document.SaveAs(resultPath);
+                result.Close();
 
             }
 
-            
-            for (int i = 0; i < vTables.Count();i++)
-            {
-                vulnTable.InsertAfterSelf(vTables[i]);
-                vulnTable.InsertAfterSelf(new Paragraph());
-            }
-            
-            vulnTable.Remove();
-            
-            var result = document.SaveAs(resultPath);
-            result.Close();
+            return RedirectToAction("Details", "Project", new {id = form["project"]});
+        }
+        catch (Exception ex)
+        {
+            TempData["error"] = "Error generating Report!";
 
+            _logger.LogError(ex, "An error ocurred generating Report. User: {0}",
+                User.FindFirstValue(ClaimTypes.Name));
+            return RedirectToAction("Details", "Project", new {id = form["project"]} );
         }
-        return RedirectToAction("Details", "Project", new {id = form["project"]});
-        }
+    }
 
     [Authorize(Roles = "Admin,SuperUser")]
     public IActionResult Templates()
