@@ -135,4 +135,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<ReportTemplate> ReportTemplates { get; set; }
     public DbSet<Jira> Jira { get; set; }
     public DbSet<JiraComments> JiraComments { get; set; }
+    public DbSet<Cwe> Cwe { get; set; }
+    public DbSet<VulnCwe> VulnCwe { get; set; }
 }

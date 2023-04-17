@@ -141,6 +141,25 @@ namespace Cervantes.DAL.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("Cervantes.CORE.Cwe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cwe");
+                });
+
             modelBuilder.Entity("Cervantes.CORE.Document", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1544,6 +1563,27 @@ namespace Cervantes.DAL.Migrations
                     b.ToTable("VulnCategories");
                 });
 
+            modelBuilder.Entity("Cervantes.CORE.VulnCwe", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CweId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("VulnId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CweId");
+
+                    b.HasIndex("VulnId");
+
+                    b.ToTable("VulnCwe");
+                });
+
             modelBuilder.Entity("Cervantes.CORE.VulnNote", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2675,6 +2715,25 @@ namespace Cervantes.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+
+                    b.Navigation("Vuln");
+                });
+
+            modelBuilder.Entity("Cervantes.CORE.VulnCwe", b =>
+                {
+                    b.HasOne("Cervantes.CORE.Cwe", "Cwe")
+                        .WithMany()
+                        .HasForeignKey("CweId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cervantes.CORE.Vuln", "Vuln")
+                        .WithMany()
+                        .HasForeignKey("VulnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cwe");
 
                     b.Navigation("Vuln");
                 });

@@ -105,6 +105,9 @@ public class Startup
         services.AddScoped<IMASTGManager, MASTGManager>();
         services.AddScoped<IBurpParser, BurpParser>();
         services.AddScoped<INessusParser, NessusParser>();
+        services.AddScoped<ICweManager, CweManager>();
+        services.AddScoped<IVulnCweManager, VulnCweManager>();
+
 
 
         var cultures = new[]

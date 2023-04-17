@@ -10,6 +10,7 @@ using NLog;
 using NLog.Web;
 using System;
 using Microsoft.EntityFrameworkCore;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Cervantes.Web;
 
@@ -57,8 +58,10 @@ public class Program
                     var vulnCategoryManager = serviceProvider.GetRequiredService<Contracts.IVulnCategoryManager>();
                     var organizationManager = serviceProvider.GetRequiredService<Contracts.IOrganizationManager>();
                     var reportTemplateManager = serviceProvider.GetRequiredService<Contracts.IReportTemplateManager>();
+                    var cweManager = serviceProvider.GetRequiredService<Contracts.ICweManager>();
+                    var _appEnvironment = serviceProvider.GetRequiredService<IHostingEnvironment>();
 
-                    DataInitializer.SeedData(userManager, roleManager, vulnCategoryManager, organizationManager,reportTemplateManager);
+                    DataInitializer.SeedData(userManager, roleManager, vulnCategoryManager, organizationManager,reportTemplateManager,cweManager,_appEnvironment);
                 }
                 catch (Exception ex)
                 {

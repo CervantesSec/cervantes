@@ -2,6 +2,8 @@
 using Cervantes.CORE;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using System.Xml;
+using Cervantes.Contracts;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Cervantes.DAL;
@@ -10,13 +12,45 @@ public class DataInitializer
 {
     public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
         Contracts.IVulnCategoryManager vulnCategoryManager,
-        Contracts.IOrganizationManager organizationManager, Contracts.IReportTemplateManager reportTemplateManager)
+        Contracts.IOrganizationManager organizationManager, Contracts.IReportTemplateManager reportTemplateManager, ICweManager cweManager,
+        IHostingEnvironment _appEnvironment)
     {
         SeedRoles(roleManager);
         SeedUsers(userManager);
         SeedVulnCategories(vulnCategoryManager);
         SeedOrganization(organizationManager);
         SeedTemplates(reportTemplateManager,userManager);
+        SeedCwe(cweManager, _appEnvironment);
+    }
+    
+    public static void SeedCwe(ICweManager cweManager, IHostingEnvironment _appEnvironment)
+    {
+        if (cweManager.GetAll().Count() == 0)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+
+            xmlDocument.Load(_appEnvironment.WebRootPath+ "/Attachments/Templates/cwe.xml");
+
+            XmlNodeList weaknessNodes = xmlDocument.GetElementsByTagName("Weakness");
+
+            foreach (XmlNode weaknessNode in weaknessNodes)
+            {
+                string id = weaknessNode.Attributes["ID"].Value;
+
+                string name = weaknessNode.Attributes["Name"].Value;
+
+                string desc = weaknessNode.ChildNodes[0].InnerText;
+
+
+                Cwe cwe = new Cwe();
+                cwe.Id = Convert.ToInt32(id);
+                cwe.Name = name;
+                cwe.Description = desc;
+                
+                cweManager.Add(cwe);
+                cweManager.Context.SaveChanges();
+            }
+        }
     }
 
     private static void SeedUsers(UserManager<ApplicationUser> userManager)
