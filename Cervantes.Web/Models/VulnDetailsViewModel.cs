@@ -22,4 +22,5 @@ public class VulnDetailsViewModel
     
     public Jira Jira { get; set; }
     public IEnumerable<JiraComments> JiraComments { get; set; }
+    public List<VulnCwe> Cwe { get; set; }
 }

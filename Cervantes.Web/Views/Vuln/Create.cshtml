@@ -1,4 +1,5 @@
 @using Cervantes.CORE
+@using DocumentFormat.OpenXml.Spreadsheet
 @model Cervantes.Web.Models.VulnCreateViewModel
 
 @{
@@ -64,35 +65,48 @@
                 </div><!-- /.card-header -->
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="active tab-pane" id="details">
-                            <div class="form-group">
-                                <label asp-for="Template" class="control-label" localize-content>Template</label>
-                                <input asp-for="Template" class="form-control"/>
-                                <span asp-validation-for="Template" class="text-danger"></span>
-                            </div>
-                        <div class="form-group">
-                          <label asp-for="Name" class="control-label" localize-content>Name</label>
-                          <input asp-for="Name" class="form-control"/>
-                          <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                          <label class="control-label" localize-content>Project</label>
-                          <select class="form-control" data-val="true" id="ProjectId" name="ProjectId">
+                    <div class="active tab-pane" id="details">
+                      <div class="form-group">
+                        <label asp-for="Template" class="control-label" localize-content>Template</label>
+                        <input asp-for="Template" class="form-control"/>
+                        <span asp-validation-for="Template" class="text-danger"></span>
+                      </div>
+                      <div class="form-group">
+                        <label asp-for="Name" class="control-label" localize-content>Name</label>
+                        <input asp-for="Name" class="form-control"/>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label" localize-content>Project</label>
+                        <select class="form-control" data-val="true" id="ProjectId" name="ProjectId">
                           <option value="">No Project</option>
-                            @foreach (var pro in Model.Projects.Where(x => x.Template == false))
-                              {
-                                <option value="@pro.Id">@pro.Name - @pro.Client.Name</option>
-                              }
+                          @foreach (var pro in Model.Projects.Where(x => x.Template == false))
+                          {
+                            <option value="@pro.Id">@pro.Name - @pro.Client.Name</option>
+                          }
                             
-                          </select>
-                          <span asp-validation-for="Status" class="text-danger"></span>
-                        </div>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                      </div>
                         
-                            <div class="form-group">
-                                <label asp-for="cve" class="control-label">CVE</label>
-                                <input asp-for="cve" class="form-control"/>
-                                <span asp-validation-for="cve" class="text-danger"></span>
-                            </div>
+                      <div class="form-group">
+                        <label asp-for="cve" class="control-label">CVE</label>
+                        <input asp-for="cve" class="form-control"/>
+                        <span asp-validation-for="cve" class="text-danger"></span>
+                      </div>
+                    <div class="form-group">
+                      <label class="control-label">CWE</label>
+                      <select class="form-control cwe" data-val="true" id="CweId" name="CweId" multiple="multiple">
+                        @foreach (var cwe in Model.Cwe)
+                        {
+                          <option value="@cwe.Id">CWE-@cwe.Id - @cwe.Name</option>
+                        }
+
+                      </select>
+                      <span class="text-danger field-validation-valid" data-valmsg-for="CweId" data-valmsg-replace="true"></span>
+
+                    </div>
+                    
                             <div class="form-group">
                                 <label asp-for="Description" class="control-label" localize-content>Description</label>
                                 <textarea id="descriptionTxt" asp-for="Description" class="form-control" rows="4"></textarea>
@@ -562,7 +576,7 @@
     $(document).ready(function() {
         $('.targets').select2();
         $('.categories').select2();
-       
+       $('.cwe').select2();
 });
     
     

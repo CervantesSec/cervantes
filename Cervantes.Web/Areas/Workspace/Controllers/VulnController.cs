@@ -22,6 +22,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using MimeDetective;
 
 namespace Cervantes.Web.Areas.Workspace.Controllers;
@@ -47,13 +48,15 @@ public class VulnController : Controller
     private IPwndocParser pwndocParser = null;
     private IBurpParser burpParser = null;
     private INessusParser nessusParser = null;
+    private ICweManager cweManager = null;
+    private IVulnCweManager vulnCweManager = null;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<VulnController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IProjectUserManager projectUserManager, IHostingEnvironment _appEnvironment,
         IJIraService jiraService, IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IProjectAttachmentManager projectAttachmentManager,
-        ICsvParser csvParser, IPwndocParser pwndocParser,IBurpParser burpParser, INessusParser nessusParser )
+        ICsvParser csvParser, IPwndocParser pwndocParser,IBurpParser burpParser, INessusParser nessusParser, ICweManager cweManager, IVulnCweManager vulnCweManager )
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -73,6 +76,8 @@ public class VulnController : Controller
         this.pwndocParser = pwndocParser;
         this.burpParser = burpParser;
         this.nessusParser = nessusParser;
+        this.cweManager = cweManager;
+        this.vulnCweManager = vulnCweManager;
     }
 
     // GET: VulnController
@@ -144,8 +149,8 @@ public class VulnController : Controller
                         TargetList = targets,
                         JiraEnabled = jiraService.JiraEnabled(),
                         Jira = jira,
-                        JiraComments = jiraCommentManager.GetAll().Where(x => x.JiraId == jira.Id).ToList()
-                
+                        JiraComments = jiraCommentManager.GetAll().Where(x => x.JiraId == jira.Id).ToList(),
+                        Cwe = vulnCweManager.GetAll().Where(x => x.VulnId == id).ToList()
                     };
                     return View(model);
                 }
@@ -161,7 +166,7 @@ public class VulnController : Controller
                         Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
                         TargetList = targets,
                         JiraEnabled = jiraService.JiraEnabled(),
-
+                        Cwe = vulnCweManager.GetAll().Where(x => x.VulnId == id).ToList()
                     };
                     return View(model);
                 }
@@ -176,7 +181,8 @@ public class VulnController : Controller
                     Attachments = vulnAttachmentManager.GetAll().Where(x => x.VulnId == id),
                     Targets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList(),
                     TargetList = targets,
-                    JiraEnabled = jiraService.JiraEnabled()
+                    JiraEnabled = jiraService.JiraEnabled(),
+                    Cwe = vulnCweManager.GetAll().Where(x => x.VulnId == id).ToList()
                 };
                 return View(model);
             }
@@ -231,6 +237,7 @@ public class VulnController : Controller
                 //VulnCatList = vulnCat,
                 Project = projectManager.GetById(project),
                 VulnCategories = vulnCategoryManager.GetAll().ToList(),
+                Cwe = cweManager.GetAll().ToList(),
             };
 
             return View(model);
@@ -289,6 +296,7 @@ public class VulnController : Controller
                 //model.VulnCatList = vulnCat;
                 model.Project = projectModel;
                 model.VulnCategories = vulnCategoryManager.GetAll().ToList();
+                model.Cwe = cweManager.GetAll().ToList();
                 return View(model);
             }
 
@@ -334,6 +342,21 @@ public class VulnController : Controller
                         }
 
                         vulnTargetManager.Context.SaveChanges();
+                    }
+                    
+                    if (model.CweId != null)
+                    {
+                        foreach (var cwe in model.CweId)
+                        {
+                            VulnCwe vulnCwe = new VulnCwe
+                            {
+                                VulnId = vuln.Id,
+                                CweId = cwe
+                            };
+                            vulnCweManager.Add(vulnCwe);
+                        }
+
+                        vulnCweManager.Context.SaveChanges();
                     }
 
                     TempData["addedVuln"] = "added";
@@ -384,6 +407,21 @@ public class VulnController : Controller
 
                         vulnTargetManager.Context.SaveChanges();
                     }
+                    
+                    if (model.CweId != null)
+                    {
+                        foreach (var cwe in model.CweId)
+                        {
+                            VulnCwe vulnCwe = new VulnCwe
+                            {
+                                VulnId = vuln.Id,
+                                CweId = cwe
+                            };
+                            vulnCweManager.Add(vulnCwe);
+                        }
+
+                        vulnCweManager.Context.SaveChanges();
+                    }
 
                     TempData["addedVuln"] = "added";
                     _logger.LogInformation("User: {0} Created a new Vuln on Project {1}",
@@ -416,18 +454,7 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var vulnResult = vulnManager.GetById(id);
-
-
-            var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
-            {
-                TargetId = e.Id,
-                TargetName = e.Name
-            }).ToList();
-
-            var targets = new List<SelectListItem>();
-
-            foreach (var item in result)
-                targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
+            
 
             var vulnCategories = vulnCategoryManager.GetAll().ToList();
 
@@ -456,9 +483,11 @@ public class VulnController : Controller
                 OwaspLikehood = vulnResult.OWASPLikehood,
                 OwaspVector = vulnResult.OWASPVector,
                 OwaspRisk = vulnResult.OWASPRisk,
-                TargetList = targets,
                 VulnCategories = vulnCategories,
-                SelectedTargets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).Select(e => e.Id).ToList()
+                SelectedTargets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).Select(e => e.TargetId).ToList(),
+                CweId = vulnCweManager.GetAll().Where(x => x.VulnId == id).Select(e => e.CweId).ToList(),
+                Targets = targetManager.GetAll().Where(x => x.ProjectId == project).ToList(),
+                Cwe = cweManager.GetAll().ToList(),
             };
 
             switch (projectResult.Score)
@@ -538,8 +567,54 @@ public class VulnController : Controller
                 
             }
             
-            
             vulnManager.Context.SaveChanges();
+            
+            if (model.CweId != null)
+            {
+                
+                var cwes = vulnCweManager.GetAll().Where(x => x.VulnId == id).ToList();
+                foreach (var cwe in cwes)
+                {
+                    vulnCweManager.Remove(cwe);
+                }
+                vulnCweManager.Context.SaveChanges();
+                
+                foreach (var cwe in model.CweId)
+                {
+                    VulnCwe vulnCwe = new VulnCwe
+                    {
+                        VulnId = id,
+                        CweId = cwe
+                    };
+                    vulnCweManager.Add(vulnCwe);
+                }
+
+                vulnCweManager.Context.SaveChanges();
+            }
+            
+            if (model.SelectedTargets != null)
+            {
+                
+                var tars = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList();
+                foreach (var tar in tars)
+                {
+                    vulnTargetManager.Remove(tar);
+                }
+                vulnTargetManager.Context.SaveChanges();
+                
+                foreach (var tar in model.SelectedTargets)
+                {
+                    VulnTargets vulnTarget = new VulnTargets
+                    {
+                        VulnId = id,
+                        TargetId = tar,
+                    };
+                    vulnTargetManager.Add(vulnTarget);
+                }
+
+                vulnTargetManager.Context.SaveChanges();
+            }
+            
             TempData["editedVuln"] = "edited";
             _logger.LogInformation("User: {0} edited Vuln: {1} on Project {2}", User.FindFirstValue(ClaimTypes.Name),
                 id, project);
@@ -657,18 +732,7 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var vulnResult = vulnManager.GetById(id);
-
-
-            var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
-            {
-                TargetId = e.Id,
-                TargetName = e.Name
-            }).ToList();
-
-            var targets = new List<SelectListItem>();
-
-            foreach (var item in result)
-                targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
+            
 
             var categories = vulnCategoryManager.GetAll().ToList();
 
@@ -693,12 +757,15 @@ public class VulnController : Controller
                 RemediationPriority = vulnResult.RemediationPriority,
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
-                TargetList = targets,
                 VulnCategories = categories,
                 OwaspVector = vulnResult.OWASPVector,
                 OwaspImpact = vulnResult.OWASPImpact,
                 OwaspLikehood = vulnResult.OWASPLikehood,
-                OwaspRisk = vulnResult.OWASPRisk
+                OwaspRisk = vulnResult.OWASPRisk,
+                Cwe = cweManager.GetAll().ToList(),
+                CweId = vulnCweManager.GetAll().Where(x => x.VulnId == id).Select(e => e.CweId).ToList(),
+                Targets = targetManager.GetAll().Where(x => x.ProjectId == project).ToList(),
+                SelectedTargets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).Select(e => e.TargetId).ToList(),
             };
 
             return View(model);
@@ -780,6 +847,53 @@ public class VulnController : Controller
 
             vulnManager.Add(result);
             vulnManager.Context.SaveChanges();
+            
+            if (model.CweId != null)
+            {
+                
+                var cwes = vulnCweManager.GetAll().Where(x => x.VulnId == id).ToList();
+                foreach (var cwe in cwes)
+                {
+                    vulnCweManager.Remove(cwe);
+                }
+                vulnCweManager.Context.SaveChanges();
+                
+                foreach (var cwe in model.CweId)
+                {
+                    VulnCwe vulnCwe = new VulnCwe
+                    {
+                        VulnId = id,
+                        CweId = cwe
+                    };
+                    vulnCweManager.Add(vulnCwe);
+                }
+
+                vulnCweManager.Context.SaveChanges();
+            }
+            
+            if (model.SelectedTargets != null)
+            {
+                
+                var tars = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList();
+                foreach (var tar in tars)
+                {
+                    vulnTargetManager.Remove(tar);
+                }
+                vulnTargetManager.Context.SaveChanges();
+                
+                foreach (var tar in model.SelectedTargets)
+                {
+                    VulnTargets vulnTarget = new VulnTargets
+                    {
+                        VulnId = id,
+                        TargetId = tar,
+                    };
+                    vulnTargetManager.Add(vulnTarget);
+                }
+
+                vulnTargetManager.Context.SaveChanges();
+            }
+            
             TempData["addedVuln"] = "edited";
             _logger.LogInformation("User: {0} added Vuln: {1} on Project {2}", User.FindFirstValue(ClaimTypes.Name), id,
                 project);
@@ -806,22 +920,9 @@ public class VulnController : Controller
                 return RedirectToAction("Index", "Workspaces",new {area =""});
             }
             var vulnResult = vulnManager.GetById(id);
-
-
-            var result = targetManager.GetAll().Where(x => x.ProjectId == project).Select(e => new VulnCreateViewModel
-            {
-                TargetId = e.Id,
-                TargetName = e.Name
-            }).ToList();
-
-            var targets = new List<SelectListItem>();
-
-            foreach (var item in result)
-                targets.Add(new SelectListItem {Text = item.TargetName, Value = item.TargetId.ToString()});
-
-            var categories = vulnCategoryManager.GetAll().ToList();
             
 
+            var categories = vulnCategoryManager.GetAll().ToList();
 
             var model = new VulnCreateViewModel
             {
@@ -843,12 +944,17 @@ public class VulnController : Controller
                 RemediationPriority = vulnResult.RemediationPriority,
                 CreatedDate = vulnResult.CreatedDate,
                 UserId = vulnResult.UserId,
-                TargetList = targets,
                 VulnCategories = categories,
                 OwaspVector = vulnResult.OWASPVector,
                 OwaspImpact = vulnResult.OWASPImpact,
                 OwaspLikehood = vulnResult.OWASPLikehood,
-                OwaspRisk = vulnResult.OWASPRisk
+                OwaspRisk = vulnResult.OWASPRisk,
+                Cwe = cweManager.GetAll().ToList(),
+                CweId = vulnCweManager.GetAll().Where(x => x.VulnId == id).Select(e => e.CweId).ToList(),
+                Targets = targetManager.GetAll().Where(x => x.ProjectId == project).ToList(),
+                SelectedTargets = vulnTargetManager.GetAll().Where(x => x.VulnId == id).Select(e => e.TargetId).ToList(),
+
+    
             };
 
             return View(model);
@@ -920,7 +1026,54 @@ public class VulnController : Controller
                 
             }
             
+            
             vulnManager.Context.SaveChanges();
+            
+            if (model.CweId != null)
+            {
+                
+                var cwes = vulnCweManager.GetAll().Where(x => x.VulnId == id).ToList();
+                foreach (var cwe in cwes)
+                {
+                    vulnCweManager.Remove(cwe);
+                }
+                vulnCweManager.Context.SaveChanges();
+                
+                foreach (var cwe in model.CweId)
+                {
+                    VulnCwe vulnCwe = new VulnCwe
+                    {
+                        VulnId = id,
+                        CweId = cwe
+                    };
+                    vulnCweManager.Add(vulnCwe);
+                }
+
+                vulnCweManager.Context.SaveChanges();
+            }
+            
+            if (model.SelectedTargets != null)
+            {
+                
+                var tars = vulnTargetManager.GetAll().Where(x => x.VulnId == id).ToList();
+                foreach (var tar in tars)
+                {
+                    vulnTargetManager.Remove(tar);
+                }
+                vulnTargetManager.Context.SaveChanges();
+                
+                foreach (var tar in model.SelectedTargets)
+                {
+                    VulnTargets vulnTarget = new VulnTargets
+                    {
+                        VulnId = id,
+                        TargetId = tar,
+                    };
+                    vulnTargetManager.Add(vulnTarget);
+                }
+
+                vulnTargetManager.Context.SaveChanges();
+            }
             TempData["editedVuln"] = "edited";
             _logger.LogInformation("User: {0} edited Vuln Template: {1} on Project {2}", User.FindFirstValue(ClaimTypes.Name), id,
                 project);

@@ -148,4 +148,9 @@ public class VulnCreateViewModel
     public string OwaspImpact { get; set; }
     public List<VulnCategory> VulnCategories { get; set; }
     public List<Project> Projects { get; set; }
+ 
+    public List<Cwe> Cwe { get; set; }
+
+    public List<int> CweId { get; set; }
+    public List<Target> Targets { get; set; }
 }

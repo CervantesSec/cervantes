@@ -77,11 +77,22 @@
                                 <input asp-for="Name" class="form-control"/>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
-                            <div class="form-group">
-                                <label asp-for="cve" class="control-label">CVE</label>
-                                <input asp-for="cve" class="form-control"/>
-                                <span asp-validation-for="cve" class="text-danger"></span>
-                            </div>
+                        <div class="form-group">
+                          <label asp-for="cve" class="control-label">CVE</label>
+                          <input asp-for="cve" class="form-control"/>
+                          <span asp-validation-for="cve" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label">CWE</label>
+                          <select class="form-control cwe" data-val="true" id="CweId" name="CweId" multiple="multiple">
+                            @foreach (var cwe in Model.Cwe)
+                            {
+                              <option value="@cwe.Id">CWE-@cwe.Id - @cwe.Name</option>
+                            }
+                          </select>
+                          <span class="text-danger field-validation-valid" data-valmsg-for="CweId" data-valmsg-replace="true"></span>
+                        </div>
+                        
                             <div class="form-group">
                                 <label asp-for="Description" class="control-label" localize-content>Description</label>
                                 <textarea id="descriptionTxt" asp-for="Description" class="form-control" rows="4"></textarea>
@@ -557,7 +568,7 @@
     $(document).ready(function() {
         $('.targets').select2();
         $('.categories').select2();
-       
+       $('.cwe').select2();
 });
     
     
