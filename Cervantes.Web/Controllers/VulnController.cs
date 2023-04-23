@@ -964,7 +964,53 @@ public class VulnController : Controller
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
 
+                    if (model.CweId != null)
+                    {
+                
+                        var cwes = vulnCweManager.GetAll().Where(x => x.VulnId == vuln.Id).ToList();
+                        foreach (var cwe in cwes)
+                        {
+                            vulnCweManager.Remove(cwe);
+                        }
+                        vulnCweManager.Context.SaveChanges();
+                
+                        foreach (var cwe in model.CweId)
+                        {
+                            VulnCwe vulnCwe = new VulnCwe
+                            {
+                                VulnId = vuln.Id,
+                                CweId = cwe
+                            };
+                            vulnCweManager.Add(vulnCwe);
+                        }
+
+                        vulnCweManager.Context.SaveChanges();
+                    }
             
+                    if (model.SelectedTargets != null)
+                    {
+                
+                        var targets = vulnTargetManager.GetAll().Where(x => x.VulnId == vuln.Id).ToList();
+                
+                        foreach (var tar in targets)
+                        {
+                            vulnTargetManager.Remove(tar);
+                        }
+                        vulnTargetManager.Context.SaveChanges();
+                
+                        foreach (var tars in model.SelectedTargets)
+                        {
+                            VulnTargets vulnTarget = new VulnTargets
+                            {
+                                VulnId = vuln.Id,
+                                TargetId = tars,
+                            };
+                            vulnTargetManager.Add(vulnTarget);
+                        }
+
+                        vulnTargetManager.Context.SaveChanges();
+                    }
+
 
                     TempData["addedVuln"] = "added";
                     _logger.LogInformation("User: {0} Created a new Vuln",
