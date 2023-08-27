@@ -935,6 +935,8 @@ public class VulnController : Controller
                     vulnCat.Add(new SelectListItem {Text = item.VulnCategoryName, Value = item.VulnCategoryId.ToString()});*/
                 
                 model.VulnCategories = vulnCategoryManager.GetAll().ToList();
+                model.Projects = projectManager.GetAll().ToList();
+                model.Cwe = cweManager.GetAll().ToList();
                 return View(model);
             }
 
