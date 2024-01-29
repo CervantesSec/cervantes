@@ -220,7 +220,7 @@ else
 
 
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 var supportedCultures = new[] { "en-US", "es-ES" };

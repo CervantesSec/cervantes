@@ -49,106 +49,7 @@
       <ProjectReference Include="..\Cervantes.DAL\Cervantes.DAL.csproj" />
       <ProjectReference Include="..\Cervantes.IFR\Cervantes.IFR.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\icons\default\icons.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\langs\README.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\license.txt" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\models\dom\model.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\advlist\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\anchor\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\autolink\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\autoresize\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\autosave\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\charmap\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\code\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\codesample\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\directionality\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\emoticons\js\emojiimages.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\emoticons\js\emojiimages.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\emoticons\js\emojis.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\emoticons\js\emojis.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\emoticons\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\fullscreen\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\help\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\image\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\importcss\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\insertdatetime\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\link\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\lists\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\media\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\nonbreaking\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\pagebreak\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\preview\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\quickbars\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\save\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\searchreplace\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\table\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\template\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\visualblocks\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\visualchars\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\plugins\wordcount\plugin.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\content\dark\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\content\default\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\content\document\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\content\tinymce-5-dark\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\content\tinymce-5\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\content\writer\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\oxide-dark\content.inline.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\oxide-dark\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\oxide-dark\skin.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\oxide-dark\skin.shadowdom.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\oxide\content.inline.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\oxide\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\oxide\skin.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\oxide\skin.shadowdom.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\tinymce-5-dark\content.inline.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\tinymce-5-dark\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\tinymce-5-dark\skin.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\tinymce-5-dark\skin.shadowdom.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\tinymce-5\content.inline.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\tinymce-5\content.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\tinymce-5\skin.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\skins\ui\tinymce-5\skin.shadowdom.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\themes\silver\theme.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\tinymce.d.ts" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\tinymce.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\tinymce\externalPlugins\chatgpt.js" />
-      <_ContentIncludedByDefault Remove="Email\UserCreated.cshtml" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\.gitignore" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\bower.json" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\index-svg.html" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\index.html" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\index.svg" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\jquery.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\LICENSE" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\qrcode.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\qrcode.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\qrcode\README.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\bootstrap\bootstrap.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\bootstrap\bootstrap.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\Documents\f5136283-bf9d-489a-a144-2e7492ad56f4TelerikPdfProcessing-FormFields.pdf" />
-      <_ContentIncludedByDefault Remove="wwwroot\Users\96e3d94e-3f05-413c-b211-909968d16f68LinkedIn_logo_initials.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Users\ad3fc448-4a60-4575-93b1-28716474940dopen-ai-logo.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Users\c9060d6a-061a-42f5-94b4-703c4f787282GitHub-Mark-ea2971cee799.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Vuln\cb8bf4d5-9d32-400c-9594-3cd2a5fba474\832a640f-8adc-452c-84fc-621c8d198d4elogo.svg" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\02dee1dd-523b-4486-a6a6-2e0da0e0af95_test6_vtest.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\0f39f131-b0ec-44fc-abf2-7fd2d7a626f5_test3_vtest.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\19f7e35c-3397-4181-b6a4-901bc6ff0630_test2_vtest.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\3ce7e6a3-9823-4c9d-b2ce-d5c75de9b061_test9_vsdf.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\3db1211f-7b2d-46d4-8df7-d4867a74fc0a_test5_vtest.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\5a08348a-e8f3-42fd-8cf1-2ad9e130a585_dfvdf_vdfv.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\631551e6-8ba7-4acc-b063-e0fbb982009c_test8_vtest.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\88d5735a-ed31-47ad-92e4-f875057674bc_test7_vffdg.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\9773c448-2a66-434e-8c57-0e3ba2d7abd4_test11_vijip.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\b7c0f95b-52f6-4d49-b987-73bbd6fb2e28_test_vtest.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\bb678416-b4ee-45a0-9583-d17e854b34d6_test10_vdfo.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\daceb170-a9c9-49d2-bcad-f75db89b0441_test4_vtest.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Reports\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\f41e4c25-1133-4aff-bd3f-b5abc8d059c7_test12_vkfdvokd.docx" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Projects\0b81ccb6-0dfc-495f-879c-9ad03271e7d0\0089a0a2-cafa-4b9f-8a4b-3cfbb3e198a0nmap_example.xml" />
-      <_ContentIncludedByDefault Remove="wwwroot\Attachments\Vuln\cb8bf4d5-9d32-400c-9594-3cd2a5fba474\725546c8-b5a7-4743-bd0b-926384bba13enmap_example.xml" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <TypeScriptCompile Include="wwwroot\lib\tinymce\tinymce.d.ts" />
     </ItemGroup>
@@ -169,10 +70,6 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="wwwroot\Attachments\Projects\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\" />
     </ItemGroup>
 
 </Project>
