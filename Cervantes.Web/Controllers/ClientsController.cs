@@ -89,22 +89,10 @@ public class ClientsController : ControllerBase
                 var unique = "";
                 if (model.FileContent != null)
                 {
-                    /*string fileExtension = PictureHelper.TryGetExtension(model.FileContent);
-
-                    // check if a valid file extension was found
-                    if (fileExtension != null)
-                    {
-                        unique = Guid.NewGuid().ToString()+model.FileName;
-                        path = $"{env.WebRootPath}/Attachments/Clients/{unique}";
-                        var fs = System.IO.File.Create(path);
-                        fs.Write(model.FileContent, 0, 
-                            model.FileContent.Length);
-                        fs.Close();
-                    }*/
                     
                     if (fileCheck.CheckFile(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString()+model.FileName;
+                        unique = Guid.NewGuid().ToString();
                         path = $"{env.WebRootPath}/Attachments/Clients/{unique}";
                         var fs = System.IO.File.Create(path);
                         fs.Write(model.FileContent, 0, 
@@ -254,7 +242,7 @@ public class ClientsController : ControllerBase
                         
                         if (fileCheck.CheckFile(model.FileContent))
                         {
-                            unique = Guid.NewGuid().ToString()+model.FileName;
+                            unique = Guid.NewGuid().ToString();
                             path = $"{env.WebRootPath}/Attachments/Clients/{unique}";
                             var fs = System.IO.File.Create(path);
                             fs.Write(model.FileContent, 0, 

@@ -921,7 +921,7 @@ public class BackupController : ControllerBase
             {
                 if (fileCheck.CheckFile(model.FileContent))
                 {
-                    unique = Guid.NewGuid().ToString() + model.FileName;
+                    unique = Guid.NewGuid().ToString();
                     path = $"{env.WebRootPath}/Attachments/Temp/{unique}";
                     var fs = System.IO.File.Create(path);
                     fs.Write(model.FileContent, 0,
@@ -968,7 +968,7 @@ public class BackupController : ControllerBase
 
                 if (fileCheck.CheckFile(model.FileContent))
                 {
-                    unique = Guid.NewGuid().ToString() + model.FileName;
+                    unique = Guid.NewGuid().ToString();
                     path = $"{env.WebRootPath}/Attachments/Temp/{unique}";
                     var fs = System.IO.File.Create(path);
                     fs.Write(model.FileContent, 0,

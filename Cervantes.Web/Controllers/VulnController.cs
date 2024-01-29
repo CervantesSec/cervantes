@@ -809,7 +809,7 @@ public class VulnController: ControllerBase
                 {
                     if (fileCheck.CheckFile(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString() + model.FileName;
+                        unique = Guid.NewGuid().ToString();
                         path = $"{env.WebRootPath}/Attachments/Vuln/{model.VulnId}";
                         file = $"{env.WebRootPath}/Attachments/Vuln/{model.VulnId}/{unique}";
                         if (Directory.Exists(path))
@@ -932,7 +932,7 @@ public class VulnController: ControllerBase
                 {
                     if (fileCheck.CheckFile(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString() + model.FileName;
+                        unique = Guid.NewGuid().ToString();
                         path = $"{env.WebRootPath}/Attachments/Imports";
                         file = $"{env.WebRootPath}/Attachments/Imports/{unique}";
                         if (Directory.Exists(path))

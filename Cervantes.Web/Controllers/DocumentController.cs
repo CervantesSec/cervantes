@@ -65,7 +65,7 @@ public class DocumentController : Controller
                 {
                     if (fileCheck.CheckFile(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString()+model.FileName;
+                        unique = Guid.NewGuid().ToString();
                         path = $"{env.WebRootPath}/Attachments/Documents/{unique}";
                         var fs = System.IO.File.Create(path);
                         fs.Write(model.FileContent, 0, 
