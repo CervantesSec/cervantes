@@ -261,7 +261,7 @@ public class TargetController : ControllerBase
 
                             if (fileCheck.CheckFile(model.FileContent))
                             {
-                                unique = Guid.NewGuid().ToString();
+                                unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                                 path = $"{env.WebRootPath}/Attachments/Projects/{model.Project}";
                                 file = $"{env.WebRootPath}/Attachments/Projects/{model.Project}/{unique}";
 
@@ -310,7 +310,7 @@ public class TargetController : ControllerBase
                         case TargetImportType.CSV:
                             if (fileCheck.CheckFile(model.FileContent))
                             {
-                                unique = Guid.NewGuid().ToString();
+                                unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                                 path = $"{env.WebRootPath}/Attachments/Projects/{model.Project}";
                                 file = $"{env.WebRootPath}/Attachments/Projects/{model.Project}/{unique}";
 

@@ -171,4 +171,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\Attachments\Projects\a0f9bd88-9054-4e1b-8bc5-5181bc13a9ef\" />
+    </ItemGroup>
+
 </Project>

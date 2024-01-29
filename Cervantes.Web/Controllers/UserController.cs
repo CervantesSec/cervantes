@@ -155,7 +155,7 @@ private IEmailService emailService;
                 {
                     if (fileCheck.CheckFile(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString();
+                        unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Users/{unique}";
                         var fs = System.IO.File.Create(path);
                         fs.Write(model.FileContent, 0,
@@ -239,7 +239,7 @@ private IEmailService emailService;
                     
                     if (fileCheck.CheckFile(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString();
+                        unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Users/{unique}";
                         var fs = System.IO.File.Create(path);
                         fs.Write(model.FileContent, 0,
@@ -437,7 +437,7 @@ private IEmailService emailService;
                     
                     if (fileCheck.CheckFile(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString();
+                        unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Users/{unique}";
                         var fs = System.IO.File.Create(path);
                         fs.Write(model.FileContent, 0,

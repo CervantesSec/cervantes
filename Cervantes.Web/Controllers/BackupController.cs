@@ -921,7 +921,7 @@ public class BackupController : ControllerBase
             {
                 if (fileCheck.CheckFile(model.FileContent))
                 {
-                    unique = Guid.NewGuid().ToString();
+                    unique = Guid.NewGuid().ToString()+".zip";
                     path = $"{env.WebRootPath}/Attachments/Temp/{unique}";
                     var fs = System.IO.File.Create(path);
                     fs.Write(model.FileContent, 0,
@@ -964,11 +964,9 @@ public class BackupController : ControllerBase
             var unique = "";
             if (model.FileContent != null)
             {
-                _logger.LogInformation("RestoreData contest if");
-
                 if (fileCheck.CheckFile(model.FileContent))
                 {
-                    unique = Guid.NewGuid().ToString();
+                    unique = Guid.NewGuid().ToString()+".json";
                     path = $"{env.WebRootPath}/Attachments/Temp/{unique}";
                     var fs = System.IO.File.Create(path);
                     fs.Write(model.FileContent, 0,

@@ -554,7 +554,7 @@ public class ProjectController : ControllerBase
                 {
                     if (fileCheck.CheckFile(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString();
+                        unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Projects/{model.ProjectId}";
                         file = $"{env.WebRootPath}/Attachments/Projects/{model.ProjectId}/{unique}";
                         if (Directory.Exists(path))

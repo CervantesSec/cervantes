@@ -584,7 +584,7 @@ public class TaskController: ControllerBase
                         
                         if (fileCheck.CheckFile(model.FileContent))
                         {
-                            unique = Guid.NewGuid().ToString();
+                            unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                             path = $"{env.WebRootPath}/Attachments/Task/{model.TaskId}";
                             file = $"{env.WebRootPath}/Attachments/Task/{model.TaskId}/{unique}";
                             if (Directory.Exists(path))
