@@ -1,0 +1,197 @@
+@using Variant = MudBlazor.Variant
+@using Microsoft.AspNetCore.Components
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using CsvHelper.TypeConversion
+@using MudExtensions.Enums
+@inject IJSRuntime jsRuntime
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService DialogService
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.Extensions.Localization
+@using Org.BouncyCastle.Asn1.X509
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+    .mud-overlay-container, .mud-overlay-pane {
+         z-index: 9999 !important;
+    }
+</style>
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+    <MudDialog DisableSidePadding="true">
+        <TitleContent>
+            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+            <MudText Typo="Typo.h4">
+                <MudIcon Icon="@Icons.Material.Filled.BugReport"/> @localizer["createVuln"]
+            </MudText>
+            <MudSpacer/>
+            <MudStack Row="true">
+                @if (aiEnabled)
+                {
+                    <MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
+
+                }
+                <div Class="overflow-y-hidden" style="width: 400px;">
+
+                    <MudSelect @bind-Value="SelectedTemplate" ToStringFunc="@(i => VulnTemplateDisplay(i))"
+                               Label="@localizer["loadVuln"]" AdornmentIcon="@Icons.Material.Filled.BugReport" Adornment="Adornment.Start"
+                               TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                        <MudSelectItem Value="@Guid.Empty" Disabled>@localizer["selectVuln"]</MudSelectItem>
+                        <Virtualize Items="@VulnTemplates" Context="item" OverscanCount="5">
+                            <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                        </Virtualize>
+                    </MudSelect>
+
+                </div>
+            </MudStack>
+</MudItem>
+        </TitleContent>
+        <DialogContent>
+            <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+
+                <MudForm Model="@model" @ref="@form" Validation="@(vulnValidator.ValidateValue)" ValidationDelay="0">
+
+                    <MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details" Style="min-width: 260px;">
+                        <MudStack >
+                            <MudSwitch Color="Color.Primary" T="bool" @bind-Checked="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
+
+                            <MudTextField @bind-Value="model.Name" For="@(() => model.Name)" Immediate="true" Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.BugReport"/>
+                            <MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                @foreach (Language item in Enum.GetValues(typeof(Language)))
+                                {
+                                    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <div Class="overflow-y-hidden" Style="height: 60px">
+                                <MudSelect @bind-Value="@SelectedProject" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                    <MudSelectItem Value="Guid.Empty" Disabled>@localizer["selectProject"]</MudSelectItem>
+                                    @*<Virtualize Items="@Projects" Context="item" OverscanCount="5">
+                                        <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                    </Virtualize>*@
+                                    @foreach (var item in Projects)
+                                    {
+                                        <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </div>
+
+
+                            <MudTextField @bind-Value="model.cve"
+                                          For="@(() => model.cve)"
+                                          Immediate="true"
+                                          Label="CVE" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.BugReport"
+                                          Placeholder="CVE-XXXX-XXXX"/>
+                            @*@if (model.cve != null)
+                                    {
+                                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@((e) => SearchCVE())">@localizer["searchCVE"]</MudButton>
+                                    }*@
+
+
+                            <div Class="overflow-y-hidden" Style="height: 60px">
+                                <MudSelect @bind-SelectedValues="SelectedCwes" MultiSelection="true" ToStringFunc="@(i => CweDisplay(i))" Label="CWE" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                    <Virtualize Items="@Cwes" Context="item" OverscanCount="5">
+                                        <MudSelectItem Value="@item.Id">CWE-@item.Id - @item.Name</MudSelectItem>
+                                    </Virtualize>
+                                </MudSelect>
+                            </div>
+
+
+
+                            <MudText Typo="Typo.body2">@localizer["description"]</MudText>
+                            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+                            <div Class="overflow-y-hidden" Style="height: 60px">
+                                <MudSelect @bind-Value="SelectedCategory" For="@(() => SelectedCategory)" Label="@localizer["vulnCategory"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                    <MudSelectItem Value="Guid.Empty" Disabled>@localizer["selectVulnCategory"]</MudSelectItem>
+                                    <Virtualize Items="@Categories.Where(x => x.Type == VulnCategoryType.General).ToList()" Context="item" OverscanCount="5">
+                                        <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                    </Virtualize>
+                                    <Virtualize Items="@Categories.Where(x => x.Type == VulnCategoryType.OwaspWSTG).ToList()" Context="item" OverscanCount="5">
+                                        <MudSelectItem Value="@item.Id">@item.Name - @item.Description</MudSelectItem>
+                                    </Virtualize>
+                                    <Virtualize Items="@Categories.Where(x => x.Type == VulnCategoryType.OwaspMSTG).ToList()" Context="item" OverscanCount="5">
+                                        <MudSelectItem Value="@item.Id">@item.Name - @item.Description</MudSelectItem>
+                                    </Virtualize>
+                                </MudSelect>
+                            </div>
+
+                            <MudSelect @bind-Value="model.Risk" For="@(() => model.Risk)" Label="@localizer["risk"]" AdornmentIcon="@Icons.Material.Filled.CrisisAlert" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                @foreach (VulnRisk item in Enum.GetValues(typeof(VulnRisk)))
+                                {
+                                    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                                }
+                            </MudSelect>
+
+                            <MudSelect @bind-Value="model.Status" For="@(() => model.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                @foreach (VulnStatus item in Enum.GetValues(typeof(VulnStatus)))
+                                {
+                                    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <MudText Typo="Typo.body2">@localizer["impact"]</MudText>
+                            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Impact" data-mce-placeholder="Description"/>
+
+                            <MudExpansionPanels>
+                                <MudExpansionPanel Text="CVSS">
+                                    <Cervantes.Web.Components.Shared.CVSSCalculator @bind-Vector="@model.CVSSVector" @bind-Score="@model.CVSS3"/>
+                                </MudExpansionPanel>
+                            </MudExpansionPanels>
+
+                            <MudExpansionPanels>
+                                <MudExpansionPanel Text="OWASP">
+                                    <Cervantes.Web.Components.Shared.OWASPRiskCalculator @bind-Vector="@model.OWASPVector" @bind-Risk="@model.OWASPRisk" @bind-Impact="@model.OWASPImpact" @bind-Likehood="@model.OWASPLikehood"/>
+                                </MudExpansionPanel>
+                            </MudExpansionPanels>
+
+                            @if (SelectedProject != Guid.Empty)
+                            {
+                                <MudSelect ToStringFunc="@(i => TargetDisplay(i))" @bind-SelectedValues="@SelectedTargets" MultiSelection="true" Label="@localizer["target"]" AdornmentIcon="@Icons.Material.Filled.Adjust" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                    @foreach (var tar in Targets.Where(x => x.ProjectId == SelectedProject))
+                                    {
+                                        <MudSelectItem Value="@tar.Id">@tar.Name</MudSelectItem>
+                                    }
+                                </MudSelect>
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="@Color.Primary" OnClick="@((e) => OpenTargetCreate(maxWidth))">@localizer["addTarget"]</MudButton>
+
+                            }
+                        </MudStack>
+                    </MudTabPanel>
+                    <MudTabPanel Text="@localizer["exploitation"]" Icon="@Icons.Material.Filled.BugReport" Style="min-width: 260px;">
+                        <MudStack AlignItems="AlignItems.Stretch">
+                            <MudText Typo="Typo.body2">@localizer["poc"]</MudText>
+                            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.ProofOfConcept" data-mce-placeholder="Description"/>
+                        </MudStack>
+                    </MudTabPanel>
+                    <MudTabPanel Text="@localizer["remediation"]" Icon="@Icons.Material.Filled.Build" Style="min-width: 260px;">
+                        <MudStack AlignItems="AlignItems.Stretch">
+                            <MudText Typo="Typo.body2">@localizer["remediation"]</MudText>
+                            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Remediation" data-mce-placeholder="Description"/>
+                            <MudSelect @bind-Value="model.RemediationComplexity" For="@(() => model.RemediationComplexity)" Label="@localizer["complexity"]" AdornmentIcon="@Icons.Material.Filled.Difference" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                @foreach (RemediationComplexity item in Enum.GetValues(typeof(RemediationComplexity)))
+                                {
+                                    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <MudSelect @bind-Value="model.RemediationPriority" For="@(() => model.RemediationPriority)" Label="@localizer["priority"]" AdornmentIcon="@Icons.Material.Filled.PriorityHigh" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                @foreach (RemediationPriority item in Enum.GetValues(typeof(RemediationPriority)))
+                                {
+                                    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                                }
+                            </MudSelect>
+
+                        </MudStack>
+                    </MudTabPanel>
+                </MudForm>
+            </MudTabs>
+
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</MudContainer>

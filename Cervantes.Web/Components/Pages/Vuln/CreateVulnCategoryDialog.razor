@@ -1,0 +1,37 @@
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+    <MudDialog DisableSidePadding="true">
+        <TitleContent>
+                <MudText Typo="Typo.h4">
+                    <MudIcon Icon="@Icons.Material.Filled.Category"/> @localizer["createCategory"]
+                </MudText>
+        </TitleContent>
+        <DialogContent>
+
+            <MudForm Model="@model" @ref="@form" Validation="@(vulnValidator.ValidateValue)" ValidationDelay="0">
+                
+                <MudTextField @bind-Value="model.Name" For="@(() => model.Name)" Immediate="true" Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Category"/>
+                <MudTextField @bind-Value="model.Description" For="@(() => model.Description)" Label="@localizer["description"]" Lines="3" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Description"/>
+                <MudSelect @bind-Value="model.Type" For="@(() => model.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                    @foreach (VulnCategoryType item in Enum.GetValues(typeof(VulnCategoryType)))
+                    {
+                        <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                    }
+                </MudSelect>
+                
+                
+            </MudForm>
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</MudContainer>

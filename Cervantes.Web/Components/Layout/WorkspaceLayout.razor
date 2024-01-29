@@ -1,0 +1,466 @@
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Color = MudBlazor.Color
+@using Size = MudBlazor.Size
+@using Task = System.Threading.Tasks.Task
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Controllers
+@using System.Security.Claims
+@using System.Globalization
+@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
+@inject IStringLocalizer<Resource> localizer
+@inject IHttpContextAccessor _accessor
+@using Blazor.Flags
+@using Cervantes.CORE.ViewModel
+@using Microsoft.AspNetCore.Antiforgery
+@using UriComponents = System.UriComponents
+@inject IAntiforgery Antiforgery
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<style>
+    .mud-nav-link:not(.mud-nav-link-disabled) .mud-nav-link-icon.mud-nav-link-icon-default {
+        color: #ffffff7f;
+    }
+    .mud-nav-link .mud-nav-link-text {
+        color: #ffffff7f;
+    }
+</style>
+<AuthorizeView>
+    <Authorized>
+        <MudLayout>
+            <MudAppBar Style="background-color: #27272fff;" Elevation="1" Fixed="true">
+                            
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" Style="color: rgba(173,173,177,1);"/>
+                <MudImage Src="img/logo-horizontal.png" Fluid="true" Height="25" Width="200"></MudImage>
+                <MudSpacer/>
+                <MudSpacer/>
+                <MudStack Row="true">
+                  <MudIconButton Class="mr-0" Icon="@Icons.Material.Rounded.Search" Color="Color.Inherit" Edge="Edge.End" OnClick="@(() => OpenSearchDialog())"/>
+                 
+                                     <MudDialog @bind-IsVisible="_searchDialogOpen" Options="_dialogOptions" Class="docs-gray-bg">
+                                         <DialogContent>
+                                             <TitleContent>
+                                                 <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+                                                     <MudTextField @bind-Value="@searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                                                   AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" @onkeypress="Search">
+                                                     </MudTextField>
+                                                 </MudItem>
+                                             </TitleContent>
+                                             <DialogContent>
+                                                 @if (searchViewModel.Tasks != null || searchViewModel.Clients != null || searchViewModel.Projects != null || searchViewModel.Documents != null
+                                                      || searchViewModel.Reports != null || searchViewModel.Targets != null || searchViewModel.TargetServices != null || searchViewModel.Vaults != null
+                                                      || searchViewModel.VulnCategories != null || searchViewModel.Vulns != null)
+                                                 {
+                                                     <MudList Clickable="true">
+                                                         <MudListSubheader>
+                                                             @localizer["results"]
+                                                         </MudListSubheader>
+                                                         @foreach (var task in searchViewModel.Tasks)
+                                                         {
+                                                             var link = "/tasks/" + task.Id;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.Task" Href="@link">
+                                                                     @task.Name
+                                                                 </MudListItem>
+                 
+                                                             
+                                                         }
+                                                         @foreach (var client in searchViewModel.Clients)
+                                                         {
+                                                             var link = "/clients/" + client.Id;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.BusinessCenter" Href="@link">
+                                                                     @client.Name
+                                                                 </MudListItem>
+                                                                 
+                                                                 
+                                                             
+                                                         }
+                                                         @foreach (var project in searchViewModel.Projects)
+                                                         {
+                                                             var link = "/projects/" + project.Id;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.Folder" Href="@link">
+                                                                     @project.Name
+                                                                 </MudListItem>
+                                                                 
+                                                            
+                                                         }
+                                                         @foreach (var doc in searchViewModel.Documents)
+                                                         {
+                                                             var link = "/documents/" + doc.Id;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.FileCopy" Href="@link">
+                                                                     @doc.Name
+                                                                 </MudListItem>
+                                                                 
+                                                                 
+                                                             
+                                                         }
+                                                         @foreach (var report in searchViewModel.Reports)
+                                                         {
+                                                             var link = "/projects/" + report.ProjectId;
+                                                                 <MudListItem Icon="@Icons.Custom.FileFormats.FilePdf" Href="@link">
+                                                                     @report.Name
+                                                                 </MudListItem>
+                                                                 
+                                                                 
+                                                             
+                                                         }
+                                                         @foreach (var target in searchViewModel.Targets)
+                                                         {
+                                                             var link = "/workspace/" + @target.ProjectId + "/targets/" + @target.Id;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.Adjust" Href="@link">
+                                                                     @target.Name
+                                                                 </MudListItem>
+                                                                 
+                                                                        
+                                                         }
+                                                         @foreach (var target in searchViewModel.TargetServices)
+                                                         {
+                                                             var link = "/workspace/"+@target.Target.ProjectId+"/targets/"+@target.TargetId;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.Hive" Href="@link">
+                                                                     @target.Name
+                                                                 </MudListItem>
+                                                                 
+                                                                 
+                                                                       
+                                                         }
+                                                         @foreach (var vault in searchViewModel.Vaults)
+                                                         {
+                                                             var link = "/workspace/" + @vault.ProjectId + "/vaults/" + @vault.Id;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.Castle" Href="@link">
+                                                                     @vault.Name
+                                                                 </MudListItem>
+                                                                 
+                                                                 
+                                                                       
+                                                         }
+                                                         @foreach (var cat in searchViewModel.VulnCategories)
+                                                         {
+                                                             var link = "/vuln/categories/" + cat.Id;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.Category" Href="@link">
+                                                                     @cat.Name
+                                                                 </MudListItem>
+                                                                 
+                                                             
+                                                         }
+                                                         @foreach (var vuln in searchViewModel.Vulns)
+                                                         {
+                                                             var link = "/vulns/"+@vuln.Id;
+                                                                 <MudListItem Icon="@Icons.Material.Filled.BugReport" Href="@link">
+                                                                     @vuln.Name
+                                                                 </MudListItem>
+                                                             
+                                                         }
+                 
+                                                     </MudList>
+                                                 }
+                                                 else
+                                                 {
+                                                     <MudPaper Height="200" Class="pa-4">
+                                                         <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                                                             <MudIcon Icon="@Icons.Material.Filled.SearchOff" Size="Size.Large"></MudIcon>
+                                                             <MudStack Justify="Justify.Center" Spacing="0">
+                                                                 <MudText Align="Align.Center">@localizer["noResults"]</MudText>
+                                                             </MudStack>
+                                                         </MudStack>
+                                                     </MudPaper>
+                                                 }
+                 
+                                             </DialogContent>
+                                             <DialogActions>
+                 
+                                             </DialogActions>
+                                         </DialogContent>
+                                     </MudDialog>
+            
+                                     <MudMenu FullWidth="false" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Color="Color.Default">
+                                         <ActivatorContent>
+                                             <MudStack Row="true">
+                                                 @if (string.IsNullOrEmpty(CurrentUser.Avatar))
+                                                 {
+                                                     <MudAvatar Color="Color.Primary" Size="Size.Small">@CurrentUser.FullName[0]</MudAvatar>
+                                                 }
+                                                 else
+                                                 {
+                                                     <MudAvatar Image="@CurrentUser.Avatar" Size="Size.Small"> </MudAvatar>
+                                                 }
+                                                 <MudStack Justify="Justify.Center" Spacing="0">
+                                                     <MudText Typo="Typo.body1">@CurrentUser.FullName</MudText>
+                                                 </MudStack>
+                                                 <MudStack Justify="Justify.Center" Spacing="0">
+                                                     <MudIcon Icon="@Icons.Material.Filled.KeyboardArrowDown" Size="Size.Small"></MudIcon>
+                                                 </MudStack>
+                                             </MudStack>
+                                         </ActivatorContent>
+                                         <ChildContent>
+                                             <MudMenuItem Icon="@Icons.Material.Filled.Person" IconSize="Size.Small" Href="/Account/Profile">@localizer["profile"]</MudMenuItem>
+                                             <MudMenuItem Icon="@Icons.Material.Filled.Note" IconSize="Size.Small" Href="/notes" Match="NavLinkMatch.All">@localizer["notes"]</MudMenuItem>
+                                             <form action="Account/Logout" method="post">
+                                                 <input name="__RequestVerificationToken" type="hidden" value="@GetAntiforgeryToken()"/>
+                                                 <div tabindex="0" class="mud-list-item mud-list-item-gutters mud-list-item-clickable mud-ripple">
+                                                     <div class="mud-list-item-icon">
+                                                         <svg class="mud-icon-root mud-svg-icon mud-secondary-text mud-icon-size-small" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><!--!--><path d="M0 0h24v24H0z" fill="none"></path><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"></path></svg>
+                                                     </div>
+                                                     <div class="mud-list-item-text ">
+                                                         <input type="hidden" name="ReturnUrl" value="@currentUrl"/>
+                                                         <button type="submit" class="mud-typography mud-typography-body1">
+                                                             @localizer["signout"]
+                                                         </button>
+                                                     </div>
+                                                 </div>
+                                             </form>
+                                         </ChildContent>
+                                     </MudMenu>
+                                     
+                                     @if (_isDarkMode)
+                                     {
+                                         <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.LightMode" Color="Color.Inherit" />
+                                     }
+                                     else
+                                     {
+                                         <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" />
+
+                                     }
+                                     @*<MudToggleIconButton @bind-Checked="_isDarkMode" OnClick="@ChangeTheme"
+                                         Icon="@Icons.Material.Filled.DarkMode"
+                                         ToggledIcon="@Icons.Material.Filled.LightMode" Style="color: #adadb1;"/>*@
+                    <MudMenu>
+            
+                        <ActivatorContent>
+                            @switch (Culture.Name)
+                            {
+                                case "en-US":
+                                    <CountryFlag Country="Country.US" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                                    break;
+                                case "es-ES":
+                                    <CountryFlag Country="Country.ES" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                                    break;
+                            }
+            
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[0]))">English</MudMenuItem>
+                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[1]))">Español</MudMenuItem>
+                        </ChildContent>
+                    </MudMenu>
+            
+            
+                </MudStack>
+            </MudAppBar>
+            
+            <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="@DrawerVariant.Mini"  Style="background-color: #27272fff;">
+                <WorkspaceNavMenu project="@project" />
+            </MudDrawer>
+            <MudMainContent>
+                            
+                <MudContainer MaxWidth="MaxWidth.ExtraLarge" >
+                    <CascadingValue Value=@_isDarkMode>
+                        <div  style="padding-bottom:60px">
+                            @Body
+                        </div>
+                    </CascadingValue>
+            
+                </MudContainer>
+            
+            </MudMainContent>
+            <MudAppBar Elevation="1" Style="top: auto; bottom: 0;background-color: #27272fff;" Dense="true" Fixed="true">
+                <MudGrid>
+                    <MudItem sm="12" md="4" lg="4">
+                        <MudText Style="font-size:small">Copyright © @DateTime.Now.Year <MudLink href="https://github.com/CervantesSec" target="_blank" Typo="Typo.body2">Cervantes</MudLink>. Version: <strong>Beta 1.0</strong></MudText>
+                    </MudItem>
+                    <MudItem sm="12" md="4" lg="4">
+                        <MudText Style="font-size:small">Cervantes is an <MudLink href="https://owasp.org/www-project-cervantes/" target="_blank" Typo="Typo.body2">OWASP Foundation Project</MudLink>. Created by <MudLink href="https://linktr.ee/mesquidar" Typo="Typo.body2">Ruben Mesquida</MudLink></MudText>
+                    </MudItem>
+                    <MudSpacer/>
+                    <MudIconButton Icon="@Icons.Custom.Brands.Twitter" Color="Color.Inherit" Link="https://twitter.com/Cervantes_Sec" Target="_blank"/>
+                    <MudIconButton Icon="@Icons.Custom.Brands.Discord" Color="Color.Inherit" Link="https://discord.gg/BvzNjT3Qzc" Target="_blank"/>
+                    <MudIconButton Icon="@Icons.Material.Filled.MenuBook" Color="Color.Inherit" Link="https://docs.cervantessec.org/" Target="_blank"/>
+                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/CervantesSec" Target="_blank"/>
+                </MudGrid>
+            </MudAppBar>
+            
+            
+            <MudScrollToTop Style="z-index:2001;">
+                <MudFab Color="Color.Primary" Icon="@Icons.Material.Filled.ArrowUpward" />
+            </MudScrollToTop>
+        </MudLayout>
+    </Authorized>
+    <NotAuthorized>
+        <Cervantes.Web.Components.Shared.RedirectToLogin />
+    </NotAuthorized>
+    
+</AuthorizeView>
+
+@code {
+
+   private string? currentUrl;
+
+    bool _isDarkMode { get; set; }
+    private MudThemeProvider _mudThemeProvider;
+    /*private HubConnection hubConnection;
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;*/
+    private string CurrentUserId { get; set; }
+    private ApplicationUser CurrentUser { get; set; }
+[Inject] UserController userController { get; set; }
+public string project { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUrl = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+        navigationManager.LocationChanged += OnLocationChanged;
+        await LoadDataAsync();
+        await base.OnInitializedAsync();
+
+    }
+    
+    private async Task LoadDataAsync()
+    {
+        
+        if (_accessor.HttpContext.User == null)
+        {
+            navigationManager.NavigateTo("Account/Login");
+            return;
+        }
+        if (_accessor.HttpContext.User?.Identity?.IsAuthenticated == true)
+        {
+            CurrentUser = userController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier));
+        }
+    }
+    
+    private string GetAntiforgeryToken()
+    {
+        return Antiforgery.GetAndStoreTokens(_accessor.HttpContext).RequestToken;
+    }
+    
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = navigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        navigationManager.LocationChanged -= OnLocationChanged;
+    }
+    
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender == true)
+        {
+            //_isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            if (!(await LocalStorage.ContainKeyAsync("theme")))
+            {
+                await LocalStorage.SetItemAsStringAsync("theme", "dark");
+            }
+            else
+            {
+                string theme = await LocalStorage.GetItemAsStringAsync("theme");
+
+                if (theme == "dark")
+                {
+                    _isDarkMode = true;
+                }
+                else
+                {
+                    _isDarkMode = false;
+                }
+            }
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+    
+    private async Task ChangeTheme()
+    {
+        _isDarkMode = !_isDarkMode;
+        string theme = await LocalStorage.GetItemAsStringAsync("theme");
+
+        if (theme == "dark")
+        {
+            await LocalStorage.SetItemAsStringAsync("theme", "light");
+        }
+        else
+        {
+            await LocalStorage.SetItemAsStringAsync("theme", "dark");
+        }
+    }
+    
+    bool _drawerOpen = false;
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+    
+    private CultureInfo[] supportedCultures = new[]
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("es-ES"),
+    };
+
+    protected override void OnInitialized()
+    {
+        Culture = CultureInfo.CurrentCulture;
+    }
+
+    private CultureInfo Culture
+    {
+        get => CultureInfo.CurrentCulture;
+        set
+        {
+            if (CultureInfo.CurrentCulture != value)
+            {
+                var uri = new Uri(navigationManager.Uri)
+                    .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+                var cultureEscaped = Uri.EscapeDataString(value.Name);
+                var uriEscaped = Uri.EscapeDataString(uri);
+
+                navigationManager.NavigateTo(
+                    $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
+                    forceLoad: true);
+            }
+        }
+    }
+    public void CultureSet(CultureInfo culture)
+    {
+        Culture = culture;
+    }
+    
+    protected override void OnParametersSet()
+    {
+        object project1 = null;
+        if ((this.Body.Target as RouteView)?.RouteData.RouteValues?.TryGetValue("project", out project1) == true)
+        {
+            project = project1?.ToString();
+        }
+    }
+    
+    private bool _searchDialogOpen;
+    private void OpenSearchDialog() => _searchDialogOpen = true;
+    private DialogOptions _dialogOptions = new() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.TopCenter, NoHeader = true };
+    private string searchString = "";
+    private SearchViewModel searchViewModel = new();
+    [Inject] SearchController searchController { get; set; }
+    private  void Search(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            if (string.IsNullOrEmpty(searchString))
+            {
+                searchViewModel = new SearchViewModel();
+                StateHasChanged();
+
+            }
+            else
+            {
+                searchViewModel =  searchController.Search(searchString);
+                StateHasChanged();
+            }
+                    
+        }
+    }
+}

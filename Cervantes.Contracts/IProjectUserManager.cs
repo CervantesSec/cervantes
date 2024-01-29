@@ -1,0 +1,14 @@
+﻿using Cervantes.CORE;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Cervantes.CORE.Entities;
+
+namespace Cervantes.Contracts;
+
+public interface IProjectUserManager : IGenericManager<ProjectUser>
+{
+    ProjectUser VerifyUser(Guid project, string user);
+}

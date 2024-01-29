@@ -1,0 +1,68 @@
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Variant = MudBlazor.Variant
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IJSRuntime jsRuntime
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		<MudStack Row="true">
+					<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.SpaceDashboard"/> @localizer["createComponent"]</MudText>
+					<MudSpacer/>
+			@if (aiEnabled)
+			{
+				<MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
+
+			}
+
+		</MudStack>
+	</TitleContent>
+	<DialogContent>
+
+		<MudForm Model="@model" @ref="@form" Validation="@(templateValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+			<MudStack AlignItems="AlignItems.Stretch">
+				<MudTextField Placeholder="New Template"  @bind-Value="model.Name"
+				              For="@(() => model.Name)"
+				              Immediate="true"
+				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SpaceDashboard"/>
+
+				<MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					@foreach (Language item in Enum.GetValues(typeof(Language)))
+					{
+						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+					}
+				</MudSelect>
+				<MudSelect @bind-Value="model.ComponentType" For="@(() => model.ComponentType)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					@foreach (ReportPartType item in Enum.GetValues(typeof(ReportPartType)))
+					{
+						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+					}
+				</MudSelect>
+				
+				
+				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Content" data-mce-placeholder="Description"/>
+
+				
+			</MudStack>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+	</DialogActions>
+</MudDialog>
+		</MudContainer>
+

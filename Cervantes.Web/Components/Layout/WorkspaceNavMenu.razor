@@ -1,0 +1,61 @@
+@using MudBlazor
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Color = MudBlazor.Color
+@using Cervantes.IFR.Jira
+@inject IStringLocalizer<Resource> localizer
+@inject IJiraConfiguration JiraConfiguration
+
+<MudNavMenu Color="Color.Primary" Bordered="true">
+    <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All">@localizer["home"]</MudNavLink>
+    <MudNavLink Href="/calendar" Icon="@Icons.Material.Filled.CalendarMonth" Match="NavLinkMatch.Prefix">@localizer["calendar"]</MudNavLink>
+    <MudNavLink Href="/knowledgebase" Icon="@Icons.Material.Filled.MenuBook" Match="NavLinkMatch.Prefix">@localizer["knowledgeBase"]</MudNavLink>
+    <MudNavLink Href="/workspaces" Icon="@Icons.Material.Filled.Workspaces" Match="NavLinkMatch.Prefix">@localizer["workspaces"]</MudNavLink>
+    <MudNavLink Href="/projects" Icon="@Icons.Material.Filled.Folder" Match="NavLinkMatch.Prefix">@localizer["projects"]</MudNavLink>
+    <MudNavLink Href="/clients" Icon="@Icons.Material.Filled.BusinessCenter" Match="NavLinkMatch.Prefix">@localizer["clients"]</MudNavLink>
+    <MudNavLink Href="/documents" Icon="@Icons.Material.Filled.InsertDriveFile" Match="NavLinkMatch.Prefix">@localizer["documents"]</MudNavLink>
+ @if(jiraEnabled)
+        {
+            <MudNavLink Href="/jira" Icon="@jiraSVG" Match="NavLinkMatch.Prefix">@localizer["jira"]</MudNavLink>
+        }
+    <MudNavGroup Icon="@Icons.Material.Filled.Workspaces" Title="Workspace" @bind-Expanded=isAdminExpanded>
+        <MudNavLink Icon="@Icons.Material.Filled.Dashboard" Href="@($"/workspace/{project}")" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.Folder" Href="@($"/workspace/{project}/details")" Match="NavLinkMatch.All">@localizer["project"]</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.Checklist" Href="@($"/workspace/{project}/checklist")" Match="NavLinkMatch.All">@localizer["checklist"]</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.Adjust" Href="@($"/workspace/{project}/targets")" Match="NavLinkMatch.All">@localizer["targets"]</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.Task" Href="@($"/workspace/{project}/tasks")" Match="NavLinkMatch.All">@localizer["tasks"]</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.BugReport" Href="@($"/workspace/{project}/vulns")" Match="NavLinkMatch.All">@localizer["vulnerabilities"]</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.Castle" Href="@($"/workspace/{project}/vault")" Match="NavLinkMatch.All">@localizer["dataVault"]</MudNavLink>
+    </MudNavGroup>
+    
+    <AuthorizeView Roles="Admin">
+        <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin" @bind-Expanded=isAdminExpanded>
+            <MudNavLink Icon="@Icons.Material.Filled.ViewCompact" Href="/logs">Logs</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.Backup" Href="/backup">Backup</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.AssignmentInd" Href="/organization">@localizer["organization"]</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.FileCopy" Href="/reports/templates">@localizer["reportTemplates"]</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.Group" Href="/users">@localizer["users"]</MudNavLink>
+        </MudNavGroup>
+    </AuthorizeView>
+    <AuthorizeView Roles="SuperUser">
+        <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin" @bind-Expanded=isAdminExpanded>
+            <MudNavLink Icon="@Icons.Material.Filled.FileCopy" Href="/reports/templates">@localizer["reportTemplates"]</MudNavLink>
+        </MudNavGroup>
+    </AuthorizeView>
+    
+        </MudNavMenu >
+    
+@code
+{
+    private bool isAdminExpanded = true;
+    [Parameter]
+    public string project { get; set; }
+    private bool jiraEnabled = false;
+    const string jiraSVG = @"<svg xmlns=""http://www.w3.org/2000/svg"" width=""24"" height=""24"" viewBox=""0 0 24 24""><path fill=""currentColor"" d=""M11.53 2c0 2.4 1.97 4.35 4.35 4.35h1.78v1.7c0 2.4 1.94 4.34 4.34 4.35V2.84a.84.84 0 0 0-.84-.84zM6.77 6.8a4.362 4.362 0 0 0 4.34 4.34h1.8v1.72a4.362 4.362 0 0 0 4.34 4.34V7.63a.841.841 0 0 0-.83-.83zM2 11.6c0 2.4 1.95 4.34 4.35 4.34h1.78v1.72c.01 2.39 1.95 4.34 4.34 4.34v-9.57a.84.84 0 0 0-.84-.84z""/></svg>";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        jiraEnabled = JiraConfiguration.Enabled;
+    }
+}

@@ -1,0 +1,33 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject HttpClient Http
+@inject IStringLocalizer<Resource> localizer
+
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" >
+            <MudForm Model="@target" @ref="@form" method="dialog" Validation="@(targetValidator.ValidateValue)" ValidationDelay="0">
+                <MudStack AlignItems="AlignItems.Stretch">
+                <MudTextField @bind-Value="target.Name"
+                              For="@(() => target.Name)"
+                              Immediate="true"
+                              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Adjust"/>
+                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="target.Description" data-mce-placeholder="Description"/>
+                <MudSelect @bind-Value="target.Type" For="@(() => target.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                    @foreach (TargetType item in Enum.GetValues(typeof(TargetType)))
+                    {
+                        <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                    }
+                </MudSelect>
+                </MudStack>
+
+            </MudForm>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="@Color.Primary" OnClick="Submit">@localizer["add"]</MudButton>
+    </DialogActions>
+</MudDialog>

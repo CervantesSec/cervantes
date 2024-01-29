@@ -1,0 +1,50 @@
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+<MudDialog>
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["addAttachmentBtn"]</MudText>
+	</TitleContent>
+	<DialogContent>
+		<MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" data-mce-placeholder="Description...">
+
+            <MudForm Model="@model" @ref="@form" method="dialog">
+                <MudStack AlignItems="AlignItems.Stretch">
+                    <MudTextField @bind-Value="model.Name"
+                                  For="@(() => model.Name)"
+                                  Immediate="true"
+                                  Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Attachment"/>
+
+				<MudFileUpload T="IBrowserFile" For="@(() => file)" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp,.doc,.docx,.html,.pdf,.nessus,.json,.xml,.csv,.zip,.odt,.xlsx,.xls,.ppt,.pptx,.burp,.yml,.yaml">
+					<ButtonTemplate>
+						<MudButton HtmlTag="label"
+						           Variant="Variant.Filled"
+						           Color="Color.Primary"
+						           StartIcon="@Icons.Material.Filled.CloudUpload"
+						           for="@context">
+							@localizer["uploadFile"]
+						</MudButton>
+					</ButtonTemplate>
+					<SelectedTemplate>
+
+						@if (file != null)
+						{
+							<MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment" /> @file.Name </MudText>
+                                
+						}
+						else
+						{
+							<MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["noFiles"] </MudText>
+						}
+					</SelectedTemplate>
+				</MudFileUpload>
+                </MudStack>
+            </MudForm>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Attachment" Color="@Color.Primary" OnClick="Submit">@localizer["add"]</MudButton>
+    </DialogActions>
+</MudDialog>

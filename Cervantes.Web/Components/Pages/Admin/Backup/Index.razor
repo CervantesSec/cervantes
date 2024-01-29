@@ -1,0 +1,131 @@
+@page "/backup"
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Color = MudBlazor.Color
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@inject ISnackbar Snackbar
+@inject IJSRuntime JS
+
+<AuthorizeView Roles="Admin">
+<Authorized> 
+<PageTitle>@localizer["backup"] | Cervantes</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12" Class="mt-5">
+        <MudStack Row="true">
+
+            <MudItem xs="12" sm="4" md="4">
+                <MudText Typo="Typo.h4">
+                    <MudText Typo="Typo.h4">
+                        <MudText Typo="Typo.h4">
+                    <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Backup" /> @localizer["backup"]</MudText>
+                        </MudText>
+                    </MudText>
+                </MudText>
+
+            </MudItem>
+            <MudItem xs="12" sm="8" md="8">
+                <div class="d-flex justify-end">
+                    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+                </div>
+            </MudItem>
+        </MudStack>
+
+    </MudItem>
+    
+
+    <MudItem xs="12" sm="6">
+        <MudCard Elevation="25" Class="pa-4" Style="height: 100%">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6"><MudIcon Icon="@Icons.Material.Filled.Backup"/> @localizer["backup"]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudDivider/>
+            <MudCardContent>
+                <MudCard Style="height: 200px;">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6"><MudIcon Icon="@Icons.Material.Filled.Backup" /> @localizer["data"]</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudDivider/>
+                    <MudCardContent>
+                        <MudText>@localizer["backupDataMessage"]</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Save" OnClick="@((e) => BackupData())">@localizer["save"]</MudButton>
+                    </MudCardActions>
+                </MudCard>
+                <br/>
+                <MudCard Style="height: 200px;">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6"><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["attachments"]</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudDivider/>
+                    <MudCardContent>
+                        <MudText>@localizer["backupAttachmentsMessage"]</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Save" OnClick="@((e) => BackupAttachments())">@localizer["save"]</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    
+    <MudItem xs="12" sm="6">
+    <MudCard Elevation="25" Class="pa-4" Style="height: 100%">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6"><MudIcon Icon="@Icons.Material.Filled.Restore"/> @localizer["restore"]</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudDivider/>
+        <MudCardContent>
+            <MudCard Style="height: 200px;">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText Typo="Typo.h6"><MudIcon Icon="@Icons.Material.Filled.Backup" /> @localizer["data"]</MudText>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudDivider/>
+                                <MudCardContent>
+                                    <MudText>@localizer["restoreDataMessage"]</MudText>
+                                </MudCardContent>
+                                <MudCardActions>
+                                    <MudButton Variant="Variant.Text" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload" OnClick="@((e) => RestoreData(maxWidth))">@localizer["restore"]</MudButton>
+                                </MudCardActions>
+                            </MudCard>
+                            <br/>
+                            <MudCard Style="height: 200px;">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText Typo="Typo.h6"><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["attachments"]</MudText>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudDivider/>
+                                <MudCardContent>
+                                    <MudText>@localizer["restoreAttachmentsMessage"]</MudText>
+                                </MudCardContent>
+                                <MudCardActions>
+                                    <MudButton Variant="Variant.Text" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload" OnClick="@((e) => RestoreAttachments(maxWidth))">@localizer["restore"]</MudButton>
+                                </MudCardActions>
+                            </MudCard>
+            
+            
+        </MudCardContent>
+    </MudCard>
+    </MudItem>
+</MudGrid>
+            
+</Authorized>
+    <NotAuthorized>    
+		<Cervantes.Web.Components.Shared.NoRolePermissions />
+    </NotAuthorized>  
+</AuthorizeView> 
+
+

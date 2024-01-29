@@ -1,0 +1,425 @@
+@rendermode InteractiveServer
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+@using Blazor.Flags
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.BusinessCenter"/> @client.Name</MudText>
+		<MudSpacer/>
+        <AuthorizeView Roles="Admin,SuperUser">
+            @if (editMode)
+            		{
+            			<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+            		}
+            		else
+            		{
+            			<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+            
+            		}
+            		<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(@client, medium))"></MudIconButton>
+        </AuthorizeView>
+		
+
+		            </MudItem>
+	</TitleContent>
+	<DialogContent>
+		@if (editMode)
+        	{
+        		<MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" Elevation="25">
+			        <MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
+			<MudStack>
+				
+				@if (client.ImagePath != "None")
+				{
+					<MudImage Src="@client.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="Client Logo" Elevation="25" Class="rounded-lg ma-4"/>
+					<MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
+				}
+				else
+				{
+					<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
+						<ButtonTemplate>
+							<MudButton HtmlTag="label"
+							           Variant="Variant.Filled"
+							           Color="Color.Primary"
+							           StartIcon="@Icons.Material.Filled.CloudUpload"
+							           for="@context">
+								@localizer["uploadFile"]
+							</MudButton>
+						</ButtonTemplate>
+						<SelectedTemplate>
+
+							@if (file != null)
+							{
+								<MudText><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name</MudText>
+                                
+							}
+							else
+							{
+								<MudText><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["noFiles"]</MudText>
+							}
+						</SelectedTemplate>
+					</MudFileUpload>
+				}
+
+				<MudTextField @bind-Value="model.Name"
+				              For="@(() => model.Name)"
+				              Immediate="true"
+				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Contacts"/>
+
+				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description"/>
+
+
+				<MudTextField @bind-Value="model.Url"
+				              For="@(() => model.Url)"
+				              Immediate="true"
+				              Label="URL" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Web"/>
+
+				<MudTextField @bind-Value="model.ContactName"
+				              For="@(() => model.ContactName)"
+				              Immediate="true"
+				              Label="@localizer["contactName"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle"/>
+
+				<MudTextField @bind-Value="model.ContactEmail"
+				              For="@(() => model.ContactEmail)"
+				              Immediate="true"
+				              Label="@localizer["contactEmail"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email"/>
+
+				<MudTextField @bind-Value="model.ContactPhone"
+				              For="@(() => model.ContactPhone)"
+				              Immediate="true"
+				              Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ContactPhone"/>
+
+			</MudStack>
+		</MudForm>
+		</MudContainer>
+        	}
+		else
+		{
+			<MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6"  >
+				<MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details" BadgeData="1" BadgeColor="Color.Primary">
+					<MudGrid>
+                                <MudItem xs="12" sm="4" md="3">
+                                    <MudCard Elevation="25">
+                                        <MudCardContent>
+                                            <div class="d-flex justify-center mb-4">
+                                                @if(client.ImagePath != "None")
+                                                {
+                                                    <MudImage Fluid="true" Src="@client.ImagePath" Width="200" Height="200" Class="rounded-lg">
+                                                    </MudImage>
+                                                }
+                                                else
+                                                {
+                                                    <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Large"/>
+                                                }
+                                              
+
+                                            </div>
+	                                        <MudList Dense="true">
+		                                        <MudListItem Text="@client.Url" Icon="@Icons.Material.Filled.Web" />
+		                                        <MudListItem Text="@client.ContactName" Icon="@Icons.Material.Filled.ContactPage"/>
+		                                        <MudListItem Text="@client.ContactEmail" Icon="@Icons.Material.Filled.ContactMail"/>
+		                                        <MudListItem Text="@client.ContactPhone" Icon="@Icons.Material.Filled.ContactPhone" />
+		                                        <MudListItem Text="@client.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
+	                                        </MudList>
+                                        </MudCardContent>
+                                    </MudCard>
+                                </MudItem>
+                                <MudItem xs="12" sm="8" md="9">
+                                    <MudCard Elevation="25">
+                                        <MudCardHeader>
+                                            <CardHeaderContent>
+                                                <MudText>@localizer["description"]</MudText>
+                                            </CardHeaderContent>
+                                        </MudCardHeader>
+                                        <MudCardContent>
+                                             @((MarkupString)client.Description)
+                                        </MudCardContent>
+                                    </MudCard>
+                                </MudItem>
+                            </MudGrid>
+					
+				</MudTabPanel>
+				<MudTabPanel Text="@localizer["projects"]" Icon="@Icons.Material.Filled.Folder" BadgeData="@projects.Count()" BadgeColor="Color.Primary">
+					<MudDataGrid T="Project" Items="@projects.Where(x => x.Template == false)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterPro"
+                                         Hideable="true" Hover="true" RowClick="@RowClickedProject" MultiSelection="true" SelectedItemsChanged="@SelectedProjectsChanged" Virtualize="true" DragDropColumnReordering="true">
+                                <ToolBarContent>
+                                    <MudStack Row="true">
+                                        <AuthorizeView Roles="Admin,SuperUser">
+                                            @if (selectedProjects.Count() != 0)
+                                            {
+                                                <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                                    <MudButton>@localizer["actions"]</MudButton>
+                                                    <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                                        <MudMenuItem OnClick="@((e) => BtnActionsProject(0))">@localizer["delete"]</MudMenuItem>
+                                                    </MudMenu>
+                                                </MudButtonGroup>
+                                            }
+                                        </AuthorizeView>
+			
+                                    </MudStack>
+                                    <MudSpacer/>
+                                    <MudTextField @bind-Value="searchStringPro" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                                    </MudTextField>
+                                </ToolBarContent>
+                                <Columns>
+                                    <SelectColumn T="Project"/>
+                    
+                                    <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                    
+                                    <PropertyColumn Property="x => x.Language" Title="@localizer["language"]">
+                                        <CellTemplate>
+                                            @switch (@context.Item.Language)
+                                            {
+                                                case Language.English:
+                                                    <CountryFlag Country="Country.US" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                                                    break;
+                                                case Language.Español:
+                                                    <CountryFlag Country="Country.ES" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                    
+                                                    break;
+                                            }
+                    
+                                        </CellTemplate>
+                                    </PropertyColumn>
+                                    <PropertyColumn Property="x => x.ProjectType" Title="@localizer["type"]">
+                                        <CellTemplate>
+                                            @switch (@context.Item.ProjectType)
+                                            {
+                                                case ProjectType.BlackBox:
+                                                    <MudChip Color="Color.Dark" Icon="@Icons.Material.Filled.CheckBoxOutlineBlank">@localizer["blackbox"]</MudChip>
+                                                    break;
+                                                case ProjectType.GrayBox:
+                                                    <MudChip Color="Color.Default" Icon="@Icons.Material.Filled.Inbox">@localizer["graybox"]</MudChip>
+                                                    break;
+                                                case ProjectType.WhiteBox:
+                                                    <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.CheckBox">@localizer["whitebox"]</MudChip>
+                                                    break;
+                                            }
+                    
+                                        </CellTemplate>
+                    
+                                    </PropertyColumn>
+                                    <PropertyColumn Property="x => x.Status" Title="@localizer["status"]">
+                                        <CellTemplate>
+                                            @switch (@context.Item.Status)
+                                            {
+                                                case ProjectStatus.Active:
+                                                    <MudChip Color="Color.Success" Icon="@Icons.Material.Filled.PlayArrow">@localizer["active"]</MudChip>
+                                                    break;
+                                                case ProjectStatus.Waiting:
+                                                    <MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.HourglassEmpty">@localizer["waiting"]</MudChip>
+                                                    break;
+                                                case ProjectStatus.Archived:
+                                                    <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Archive">@localizer["archived"]</MudChip>
+                                                    break;
+                                            }
+                    
+                                        </CellTemplate>
+                    
+                                    </PropertyColumn>
+                                    <PropertyColumn Property="x => x.StartDate" Title="@localizer["startDate"]">
+                                        <CellTemplate>
+                                            <MudStack Row="true">
+                                                <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
+                                                <MudStack Justify="Justify.Center" Spacing="0">
+                                                    <MudText Typo="Typo.body1">@context.Item.StartDate.ToShortDateString()</MudText>
+                                                </MudStack>
+                                            </MudStack>
+                    
+                                        </CellTemplate>
+                                    </PropertyColumn>
+                                    <PropertyColumn Property="x => x.EndDate" Title="@localizer["endDate"]">
+                                        <CellTemplate>
+                                            <MudStack Row="true">
+                                                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small"/>
+                                                <MudStack Justify="Justify.Center" Spacing="0">
+                                                    <MudText Typo="Typo.body1">@context.Item.EndDate.ToShortDateString()</MudText>
+                                                </MudStack>
+                                            </MudStack>
+                    
+                                        </CellTemplate>
+                                    </PropertyColumn>
+                    
+                    
+                                </Columns>
+                                <PagerContent>
+                                    <MudDataGridPager T="Project"/>
+                                </PagerContent>
+                                         </MudDataGrid>
+					
+
+				</MudTabPanel>
+				<MudTabPanel Text="@localizer["vulns"]" Icon="@Icons.Material.Filled.BugReport" BadgeData="@vulns.Count()" BadgeColor="Color.Primary" Style="min-width: 260px;">
+					
+					<MudDataGrid T="Vuln" Items="@vulns.Where(x => x.Template == false)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterVuln"
+                                             Hideable="true" Hover="true" RowClick="@RowClickedVuln" MultiSelection="true" Virtualize="true" DragDropColumnReordering="true"> 
+                                    <ToolBarContent>
+                                        <MudStack Row="true">
+                                        </MudStack>
+                                        <MudSpacer/>
+                                        <MudTextField @bind-Value="searchStringVuln" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                                        </MudTextField>
+                                    </ToolBarContent>
+                                    <Columns>
+                                        <SelectColumn T="Vuln"/>
+                    
+                                        <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                                        <PropertyColumn Property="x => x.Language" Title="@localizer["language"]">
+                                            <CellTemplate>
+                                                @switch (@context.Item.Language)
+                                                {
+                                                    case Language.English:
+                                                        <CountryFlag Country="Country.US" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                                                        break;
+                                                    case Language.Español:
+                                                        <CountryFlag Country="Country.ES" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                    
+                                                        break;
+                                                }
+                    
+                                            </CellTemplate>
+                                        </PropertyColumn>
+                                        <PropertyColumn Property="x => x.CreatedDate" Title="@localizer["createdDate"]">
+                                            <CellTemplate>
+                                                <MudStack Row="true">
+                                                    <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
+                                                    <MudStack Justify="Justify.Center" Spacing="0">
+                                                        <MudText Typo="Typo.body1">@context.Item.CreatedDate.ToShortDateString()</MudText>
+                                                    </MudStack>
+                                                </MudStack>
+                    
+                                            </CellTemplate>
+                                        </PropertyColumn>
+                                        <PropertyColumn Property="x => x.ModifiedDate" Title="@localizer["modifiedDate"]">
+                                            <CellTemplate>
+                                                <MudStack Row="true">
+                                                    <MudIcon Icon="@Icons.Material.Filled.EditCalendar" Size="Size.Small"/>
+                                                    <MudStack Justify="Justify.Center" Spacing="0">
+                                                        <MudText Typo="Typo.body1">@context.Item.ModifiedDate.ToShortDateString()</MudText>
+                                                    </MudStack>
+                                                </MudStack>
+                    
+                                            </CellTemplate>
+                                        </PropertyColumn>
+                                        <TemplateColumn Property="x => x.Project.Name" Title="@localizer["project"]">
+                                            <CellTemplate>
+                                                <MudStack Row="true">
+                                                    @if (@context.Item.Project == null)
+                                                    {
+                                                        <MudIcon Icon="@Icons.Material.Filled.FolderOpen" Size="Size.Small"/>
+                                                        <MudStack Justify="Justify.Center" Spacing="0">
+                                                            <MudText Typo="Typo.body1">@localizer["noProject"]</MudText>
+                                                        </MudStack>
+                                                        
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small"/>
+                                                        <MudStack Justify="Justify.Center" Spacing="0">
+                                                            <MudText Typo="Typo.body1">@context.Item.Project.Name</MudText>
+                                                        </MudStack>
+                                                        
+                                                    }
+                                 
+                                                </MudStack>
+                                                
+                                            </CellTemplate>
+                                        </TemplateColumn>
+                    
+                                        <PropertyColumn Property="x => x.Risk" Title="@localizer["risk"]">
+                                            <CellTemplate>
+                                                @switch (@context.Item.Risk)
+                                                {
+                                                    case VulnRisk.Critical:
+                                                        <MudChip Color="Color.Secondary" Icon="@Icons.Material.Filled.CrisisAlert">@localizer["critical"]</MudChip>
+                                                        break;
+                                                    case VulnRisk.High:
+                                                        <MudChip Color="Color.Error" Icon="@Icons.Material.Filled.Error">@localizer["high"]</MudChip>
+                                                        break;
+                                                    case VulnRisk.Medium:
+                                                        <MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["medium"]</MudChip>
+                                                        break;
+                                                    case VulnRisk.Low:
+                                                        <MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Flag">@localizer["low"]</MudChip>
+                                                        break;
+                                                    case VulnRisk.Info:
+                                                        <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Info">@localizer["info"]</MudChip>
+                                                        break;
+                                                }
+                    
+                                            </CellTemplate>
+                    
+                                        </PropertyColumn>
+                                        <PropertyColumn Property="x => x.Status" Title="@localizer["status"]">
+                                            <CellTemplate>
+                                                @switch (@context.Item.Status)
+                                                {
+                                                    case VulnStatus.Accepted:
+                                                        <MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.CheckCircle">@localizer["accepted"]</MudChip>
+                                                        break;
+                                                    case VulnStatus.Confirmed:
+                                                        <MudChip Color="Color.Error" Icon="@Icons.Material.Filled.CheckBox">@localizer["confirmed"]</MudChip>
+                                                        break;
+                                                    case VulnStatus.Invalid:
+                                                        <MudChip Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["invalid"]</MudChip>
+                                                        break;
+                                                    case VulnStatus.Open:
+                                                        <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Flag">@localizer["open"]</MudChip>
+                                                        break;
+                                                    case VulnStatus.OutOfScope:
+                                                        <MudChip Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["outofScope"]</MudChip>
+                                                        break;
+                                                    case VulnStatus.Resolved:
+                                                        <MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Check">@localizer["resolved"]</MudChip>
+                                                        break;
+                                                }
+                    
+                                            </CellTemplate>
+                    
+                                        </PropertyColumn>
+                    
+                                    </Columns>
+                                    <PagerContent>
+                                        <MudDataGridPager T="Vuln"/>
+                                    </PagerContent>
+                                </MudDataGrid>
+					
+					
+					
+				</MudTabPanel>
+			</MudTabs>
+
+		}
+		
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		@if (editMode)
+		{
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+
+		}
+	</DialogActions>
+</MudDialog>
+		</MudContainer>

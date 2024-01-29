@@ -1,0 +1,117 @@
+@page "/workspaces"
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Align = MudBlazor.Align
+@using Color = MudBlazor.Color
+@using Size = MudBlazor.Size
+@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<AuthorizeView Roles="Admin,SuperUser,User">
+
+<PageTitle>@localizer["workspaces"] | Cervantes</PageTitle>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12" Class="mt-5">
+        <MudStack Row="true">
+                           				    
+            <MudItem xs="12" sm="4" md="4">
+                <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Workspaces"/> @localizer["workspaces"]</MudText>
+               
+            </MudItem>
+            <MudItem xs="12" sm="8" md="8">
+                <div class="d-flex justify-end">
+                    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+                </div>
+            </MudItem>
+        </MudStack>
+                           
+    </MudItem>
+    
+    <MudItem xs="12" sm="12" md="12">
+        <MudGrid>
+            @foreach (var pro in Projects)
+            {
+                <MudItem xs="4">
+            
+                    <MudCard Elevation="25">
+                        <MudCardHeader>
+                            <CardHeaderAvatar>
+                                <MudIcon Icon="@Icons.Material.Filled.Folder"/>
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.body1">@pro.Name</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        @if (pro.Client.ImagePath != "None")
+                        {
+                            <MudCardMedia Image="@pro.Client.ImagePath" Height="250" Style="background-size: contain;"/>
+
+                        }
+                        else
+                        {
+                            @*<MudCardMedia Height="250" Style="background-size: contain;">
+                                <MudIcon Icon="@Icons.Material.Filled.BusinessCenter"  Size="Size.Large"></MudIcon>
+                                
+                                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="250px"/>
+                            </MudCardMedia>*@
+                            <MudPaper Elevation="0" Height="250px" Class="d-flex flex-wrap justify-center align-content-center">
+                                <MudIcon  Icon="@Icons.Material.Filled.BusinessCenter" Style=" height: 75px; width: 75px;background-size: contain;"></MudIcon>
+
+                            </MudPaper>
+
+
+                        }
+                        <MudCardContent>
+                            @{
+                                var progress = Math.Round((((DateTime.Today - @pro.StartDate) / (@pro.EndDate - @pro.StartDate)) * 100));
+                            }
+                            @if (progress >= 100)
+                            {
+                                <MudProgressLinear Color="Color.Success" Size="Size.Medium" Value="@progress" Class="my-7"/>
+                                <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Success">
+                                    <b>@localizer["completed"]</b>
+                                </MudText>
+                            }
+                            else
+                            {
+                                <MudProgressLinear Color="Color.Primary" Size="Size.Medium" Value="@progress" Class="my-7"/>
+                                <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Primary">
+                                    <b>@progress %</b>
+                                </MudText>
+                            }
+            
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudTooltip Text="@localizer["goWorkspace"]" Placement="Placement.End">
+                              <MudIconButton Icon="@Icons.Material.Filled.Details" Color="Color.Primary" OnClick="@((e) => Details(@pro.Id))"/>
+                            </MudTooltip>
+
+                            <MudTooltip Text="@localizer["project"]" Placement="Placement.End">
+                                <MudIconButton Icon="@Icons.Material.Filled.Folder" Color="Color.Default" OnClick="@((e) => Project(@pro, maxWidth))"/>
+                            </MudTooltip>
+
+                            <MudTooltip Text="@localizer["client"]" Placement="Placement.End">
+                                <MudIconButton Icon="@Icons.Material.Filled.BusinessCenter" Color="Color.Default" OnClick="@((e) => Client(@pro.Client, maxWidth))"/>
+                            </MudTooltip>
+                            
+                        </MudCardActions>
+                    </MudCard>
+            
+                </MudItem>
+            }
+                
+        </MudGrid>
+        <br/>
+                        <MudButton Href = "/"
+                        Variant = "Variant.Filled"
+                        StartIcon = "@Icons.Material.Filled.ArrowBack"
+                        Color = "Color.Default" >
+                                @localizer["back"]
+                                </MudButton >
+    </MudItem>
+    
+</MudGrid>
+</AuthorizeView>
+
+    

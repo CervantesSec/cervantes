@@ -1,0 +1,81 @@
+@page "/logs"
+@using Cervantes.CORE.ViewModels
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Color = MudBlazor.Color
+@using Size = MudBlazor.Size
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager navigationManager
+@inject IJSRuntime JS
+@inject ISnackbar Snackbar
+
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <PageTitle>Logs | Cervantes</PageTitle>
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="12" Class="mt-5">
+                <MudStack Row="true">
+
+                    <MudItem xs="12" sm="4" md="4">
+                        <MudText Typo="Typo.h4">
+                            <MudText Typo="Typo.h4">
+                                <MudText Typo="Typo.h4">
+                                    <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.ViewCompact"/> Logs</MudText>
+                                </MudText>
+                            </MudText>
+                        </MudText>
+
+                    </MudItem>
+                    <MudItem xs="12" sm="8" md="8">
+                        <div class="d-flex justify-end">
+                            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+                        </div>
+                    </MudItem>
+                </MudStack>
+
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12">
+
+                <MudDataGrid T="Log" Items="@model.OrderByDescending(x => x.Id)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                             Hideable="true" Hover="true" Virtualize="true" DragDropColumnReordering="true" RowStyleFunc="@_rowStyleFunc">
+                    <ToolBarContent>
+                        <MudStack Row="true">
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="DeleteAll">@localizer["delete"]</MudButton>
+                        </MudStack>
+                        <MudSpacer/>
+                        <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                        </MudTextField>
+                    </ToolBarContent>
+                    <Columns>
+                        <PropertyColumn Property="x => x.Id" Title="Id"/>
+                        <PropertyColumn Property="x => x.CreatedOn" Title="@localizer["createdDate"]"/>
+                        <PropertyColumn Property="x => x.Level" Title="@localizer["level"]"/>
+                        <PropertyColumn Property="x => x.Message" Title="@localizer["message"]"/>
+                        <PropertyColumn Property="x => x.StackTrace" Title="Stack Trace"/>
+                        <PropertyColumn Property="x => x.Exception" Title="@localizer["exception"]"/>
+                        <PropertyColumn Property="x => x.Logger" Title="Logger"/>
+                        <PropertyColumn Property="x => x.Url" Title="Url"/>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="Log"/>
+                    </PagerContent>
+                </MudDataGrid>
+
+                <br/>
+                <MudButton Href="/"
+                           Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.ArrowBack"
+                           Color="Color.Default">
+                    @localizer["back"]
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </Authorized>
+    <NotAuthorized>
+        <Cervantes.Web.Components.Shared.NoRolePermissions/>
+    </NotAuthorized>
+</AuthorizeView>

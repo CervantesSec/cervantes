@@ -1,0 +1,124 @@
+@page "/organization"
+@rendermode InteractiveServer
+@using Cervantes.CORE.ViewModels
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Color = MudBlazor.Color
+@inject IStringLocalizer<Resource> localizer
+@inject ISnackbar Snackbar
+
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <PageTitle>@localizer["organization"] | Cervantes</PageTitle>
+
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="12" Class="mt-5">
+                <MudStack Row="true">
+
+                    <MudItem xs="12" sm="4" md="4">
+                        <MudText Typo="Typo.h4">
+                            <MudText Typo="Typo.h4">
+                                <MudText Typo="Typo.h4">
+                                    <MudText Typo="Typo.h4">
+                                        <MudIcon Icon="@Icons.Material.Filled.AssignmentInd"/> @localizer["organization"]
+                                    </MudText>
+                                </MudText>
+                            </MudText>
+                        </MudText>
+
+                    </MudItem>
+                    <MudItem xs="12" sm="8" md="8">
+                        <div class="d-flex justify-end">
+                            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+                        </div>
+                    </MudItem>
+                </MudStack>
+
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12">
+                <MudStack>
+                    <MudForm Model="@model" @ref="@form" Validation="@(orgValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+                        <MudStack AlignItems="AlignItems.Stretch">
+                            <MudTextField Placeholder="John Doe Enterprise LLC." @bind-Value="model.Name"
+                                          For="@(() => model.Name)"
+                                          Immediate="true"
+                                          Label="@localizer["organization"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Person"/>
+
+
+                            <MudTextField @bind-Value="model.Url"
+                                          For="@(() => model.Url)"
+                                          Immediate="true"
+                                          Label="Url" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Web" InputType="InputType.Url"/>
+
+
+                            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+
+                            <MudTextField Placeholder="John Doe" @bind-Value="model.ContactName"
+                                          For="@(() => model.ContactName)"
+                                          Immediate="true"
+                                          Label="@localizer["contactName"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Person"/>
+
+
+                            <MudTextField Placeholder="john.doe@foobar.com" @bind-Value="model.ContactEmail"
+                                          For="@(() => model.ContactEmail)"
+                                          Immediate="true"
+                                          Label="@localizer["contactEmail"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email" InputType="InputType.Email"/>
+
+                            <MudTextField Placeholder="+00 000 00 00 00" @bind-Value="model.ContactPhone"
+                                          For="@(() => model.ContactPhone)"
+                                          Immediate="true"
+                                          Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Phone" InputType="InputType.Telephone"/>
+
+                            @if(model.ImagePath != null)
+                            {
+                                <MudImage Src="@model.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="Client Logo" Elevation="25" Class="rounded-lg ma-4"/>
+                                <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
+                            }
+                            else
+                            {
+                                <MudFileUpload T="IBrowserFile" @bind-Files="File" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
+                                    <ButtonTemplate Context="buttonContext">
+                                        <MudButton HtmlTag="label"
+                                                   Variant="Variant.Filled"
+                                                   Color="Color.Primary"
+                                                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                                                   for="@buttonContext">
+                                            @localizer["uploadFile"]
+                                        </MudButton>
+                                    </ButtonTemplate>
+                                    <SelectedTemplate Context="fil">
+
+                                        @if (File != null)
+                                        {
+                                            <MudText>
+                                                <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @File.Name
+                                            </MudText>
+                                        }
+                                        else
+                                        {
+                                            <MudText>
+                                                <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"]
+                                            </MudText>
+                                        }
+                                    </SelectedTemplate>
+                                </MudFileUpload>
+                                
+                            }
+                        </MudStack>
+                    </MudForm>
+                <MudStack Row="true">
+                    <MudButton Href="/"
+                               Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Filled.ArrowBack"
+                               Color="Color.Default">
+                        @localizer["back"]
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="Submit" StartIcon="@Icons.Material.Filled.Save">@localizer["save"]</MudButton>
+                </MudStack>
+            </MudStack>
+            </MudItem>
+        </MudGrid>
+    </Authorized>
+</AuthorizeView>

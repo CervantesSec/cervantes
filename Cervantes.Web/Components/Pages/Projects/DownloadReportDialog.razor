@@ -1,0 +1,44 @@
+@using Variant = MudBlazor.Variant
+@using Microsoft.AspNetCore.Components
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IJSRuntime jsRuntime
+@inject IStringLocalizer<Resource> localizer
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+    .mud-overlay-container, .mud-overlay-pane {
+         z-index: 9999 !important;
+    }
+</style>
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Custom.FileFormats.FilePdf" /> @localizer["downloadReport"]</MudText>
+	</TitleContent>
+	<DialogContent>
+		
+
+		<MudForm Model="@model" @ref="@form">
+
+			<MudStack AlignItems="AlignItems.Stretch">
+				<MudSelect @bind-Value="model.FileType" For="@(() => model.FileType)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.FileCopy" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					@foreach (ReportFileType item in Enum.GetValues(typeof(ReportFileType)))
+					{
+						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+					}
+				</MudSelect>
+			</MudStack>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Download" Color="@Color.Primary" OnClick="Submit">@localizer["download"]</MudButton>
+	</DialogActions>
+</MudDialog>
+
+</MudContainer>

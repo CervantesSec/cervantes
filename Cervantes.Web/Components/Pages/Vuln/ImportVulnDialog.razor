@@ -1,0 +1,71 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.BugReport" /> @localizer["vulnImport"]</MudText>
+    </TitleContent>
+    <DialogContent>
+	    <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll">
+		    @if (importLoading == false)
+		    {
+			    <MudForm Model="@model" @ref="@form" method="dialog" ValidationDelay="0">
+				    <MudText>@localizer["messageVulnImport1"]</MudText>
+				    <MudText>@localizer["messageVulnImport2"] <MudLink Href="/Resources/Templates/VulnTemplate.csv">@localizer["here"]</MudLink> </MudText>
+				    <br/>
+				    <MudStack AlignItems="AlignItems.Stretch">
+					    <MudSelect @bind-Value="model.Type" For="@(() => model.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.FileCopy" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+						    @foreach (VulnImportType item in Enum.GetValues(typeof(VulnImportType)))
+						    {
+							    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+						    }
+					    </MudSelect>
+					    <MudSelect @bind-Value="@Project" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+						    <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
+						    @foreach (var project in Projects)
+						    {
+							    <MudSelectItem Value="@project.Id">@project.Name</MudSelectItem>
+						    }
+					    </MudSelect>
+					    <MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".csv,.xml,.nessus,.yml,.yaml">
+						    <ButtonTemplate>
+							    <MudButton HtmlTag="label"
+							               Variant="Variant.Filled"
+							               Color="Color.Primary"
+							               StartIcon="@Icons.Material.Filled.CloudUpload"
+							               for="@context">
+								    @localizer["uploadFile"]
+							    </MudButton>
+						    </ButtonTemplate>
+						    <SelectedTemplate>
+
+							    @if (file != null)
+							    {
+								    <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name </MudText>
+
+							    }
+							    else
+							    {
+								    <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"] </MudText>
+							    }
+						    </SelectedTemplate>
+					    </MudFileUpload>
+
+				    </MudStack>
+
+			    </MudForm>
+		    }
+		    else
+		    {
+			    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+		    }
+	    </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.BugReport" Color="@Color.Primary" OnClick="Submit">@localizer["import"]</MudButton>
+    </DialogActions>
+</MudDialog>

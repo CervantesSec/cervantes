@@ -1,0 +1,16 @@
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject NavigationManager navigationManager
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<Resource> localizer
+
+<div class="loader loader-bouncing"><span>Redirecting...</span></div>
+@code{
+
+    protected override void OnInitialized()
+    {
+        Snackbar.Add(@localizer["noRolePermission"], Severity.Warning);
+        navigationManager.NavigateTo("");
+        
+    }
+}

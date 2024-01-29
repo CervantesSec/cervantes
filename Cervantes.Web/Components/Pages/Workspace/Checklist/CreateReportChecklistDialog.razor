@@ -1,0 +1,66 @@
+@using Variant = MudBlazor.Variant
+@using Microsoft.AspNetCore.Components
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IJSRuntime jsRuntime
+@inject IStringLocalizer<Resource> localizer
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+    .mud-overlay-container, .mud-overlay-pane {
+         z-index: 9999 !important;
+    }
+</style>
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Custom.FileFormats.FilePdf" /> @localizer["createReport"]</MudText>
+	</TitleContent>
+	<DialogContent>
+		
+
+		<MudForm Model="@model" @ref="@form" Validation="@(reportValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+			<MudStack AlignItems="AlignItems.Stretch">
+				
+
+				<MudTextField  @bind-Value="model.Name"
+				              For="@(() => model.Name)"
+				              Immediate="true"
+				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Custom.FileFormats.FilePdf"/>
+				<MudTextField  @bind-Value="model.Version"
+				               For="@(() => model.Version)"
+				               Immediate="true"
+				               Label="@localizer["version"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Category"/>
+				
+				<MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					@foreach (Language item in Enum.GetValues(typeof(Language)))
+					{
+						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+					}
+				</MudSelect>
+				
+				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+				
+				<MudSelect  @bind-Value="model.ReportTemplateId" For="@(() => model.ReportTemplateId)" Label="@localizer["template"]" AdornmentIcon="@Icons.Material.Filled.FileCopy" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					<MudSelectItem Value="Guid.Empty">@localizer["selectReportTemplate"]</MudSelectItem>
+					@foreach (var report in templates.Where(x => x.ReportType != ReportType.General))
+					{
+						<MudSelectItem Value="@report.Id">@report.Name</MudSelectItem>
+					}
+				</MudSelect>
+				
+			</MudStack>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+	</DialogActions>
+</MudDialog>
+
+</MudContainer>

@@ -1,0 +1,2 @@
+﻿Name;Template;VulnCategory;Risk;Status;CVE;Description;Poc;Impact;CVSS3;CVSSVector;Remediation;RemediationComplexity;RemediationPriority;OwaspRisk;OwaspVector;OwaspLikehood;OwaspImpact
+Test;False;Authentication;High;Open;CVE-2022-001;Test;test;test;2;CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:H/I:N/A:N;Test;Low;Low;Low;(SL:9/M:1/O:0/S:2/ED:1/EE:1/A:6/ID:1/LC:2/LI:7/LAV:1/LAC:7/FD:1/RD:9/NC:2/PV:3);4.000;4.000

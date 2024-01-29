@@ -1,0 +1,516 @@
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+
+<MudGrid>
+<MudItem xs="12" sm="12" md="12" lg="12">
+    @switch (@Risk)
+    {
+        case "LOW":
+            <MudPaper Height="250" Class="pa-4 mud-success">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["low"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@Vector</MudText>
+            </MudPaper>
+            break;
+        case "MEDIUM":
+            <MudPaper Height="250" Class="pa-4 mud-warning">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["medium"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@Vector</MudText>
+            </MudPaper>
+            break;
+        case "HIGH":
+            <MudPaper Height="250" Style="@($"color:{Colors.DeepOrange.Lighten5}; background:{Colors.DeepOrange.Default};")" Class="pa-4">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["high"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@Vector</MudText>
+            </MudPaper>
+            break;
+        case "CRITICAL":
+            <MudPaper Height="250" Class="pa-4 mud-secondary">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["critical"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@Vector</MudText>
+            </MudPaper>
+            break;
+        default:
+            <MudPaper Height="250" Class="pa-4 mud-info">
+                <MudText Typo="Typo.h6" Align="Align.Center">N/A</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@Vector</MudText>
+            </MudPaper>
+            break;
+    }
+
+</MudItem>
+
+
+<MudItem xs="12" sm="6" md="6">
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Person"/> @localizer["owaspThreatAgentFactors"]
+                </MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudDivider/>
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12" sm="12" md="6">
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="sl" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["skillLevel"]</MudListSubheaderExtended>
+                            <MudListItemExtended T="int" Value="1">@localizer["skillLevel"] (1)</MudListItemExtended>
+                            <MudListItemExtended T="int" Value="3">@localizer["someTechnicalSkills"] (3)</MudListItemExtended>
+                            <MudListItemExtended T="int" Value="5">@localizer["advancedComputerUser"] (5)</MudListItemExtended>
+                            <MudListItemExtended T="int" Value="9">@localizer["securityPenetrationSkills"] (9)</MudListItemExtended>
+
+                        </MudListExtended>
+                    </MudPaper>
+                    <br/>
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="m" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["motive"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["lowReward"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="4">@localizer["possibleReward"] (4)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["highReward"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="6">
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="o" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["opportunity"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="0">@localizer["fullAccess"] (0)</MudListItemExtended>
+                            <MudListItemExtended Value="4">@localizer["specialAccess"] (4)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["someAccess"] (7)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["noAccess"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+                    <br/>
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="s" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["size"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="2">@localizer["developerUsers"] (2)</MudListItemExtended>
+                            <MudListItemExtended Value="4">@localizer["intranetUsers"] (4)</MudListItemExtended>
+                            <MudListItemExtended Value="5">@localizer["partners"] (5)</MudListItemExtended>
+                            <MudListItemExtended Value="6">@localizer["authenticatedUsers"] (6)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["anonymousUsers"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+
+                </MudItem>
+
+
+            </MudGrid>
+            @*<MudSelect T="int" @bind-Value="@sl" Label="@localizer["skillLevel"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["skillLevel"] (1)</MudSelectItem>
+                    <MudSelectItem Value="3">@localizer["someTechnicalSkills"] (3)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["advancedComputerUser"] (5)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["securityPenetrationSkills"] (9)</MudSelectItem>
+                </MudSelect>
+                <MudSelect T="int" @bind-Value="@m" Label="@localizer["motive"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["lowReward"] (1)</MudSelectItem>
+                    <MudSelectItem Value="4">@localizer["possibleReward"] (4)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["highReward"] (9)</MudSelectItem>
+                </MudSelect>
+                <MudSelect T="int" @bind-Value="@o" Label="@localizer["opportunity"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="0">@localizer["fullAccess"] (0)</MudSelectItem>
+                    <MudSelectItem Value="4">@localizer["specialAccess"] (4)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["someAccess"] (7)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["noAccess"] (9)</MudSelectItem>
+                </MudSelect>
+                <MudSelect T="int" @bind-Value="@s" Label="@localizer["size"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="2">@localizer["developerUsers"] (2)</MudSelectItem>
+                    <MudSelectItem Value="4">@localizer["intranetUsers"] (4)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["partners"] (5)</MudSelectItem>
+                    <MudSelectItem Value="6">@localizer["authenticatedUsers"] (6)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["anonymousUsers"] (9)</MudSelectItem>
+                </MudSelect>*@
+
+        </MudCardContent>
+    </MudCard>
+</MudItem>
+
+<MudItem xs="12" sm="6" md="6">
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Build"/> @localizer["owaspTechnicalImpactFactors"]
+                </MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudDivider/>
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12" sm="12" md="6">
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="lc" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["skillLevel"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="2">@localizer["minimalNonSensitiveDataDisclosed"] (2)</MudListItemExtended>
+                            <MudListItemExtended Value="6">@localizer["minimalCriticalDataDisclosed"] (6)</MudListItemExtended>
+                            <MudListItemExtended Value="6">@localizer["extensiveNonSensitiveDataDisclosed"] (6)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["extensiveCriticalDataDisclosed"] (7)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["allDataDisclosed"] (9)</MudListItemExtended>
+
+                        </MudListExtended>
+                    </MudPaper>
+                    <br/>
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="li" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["lossIntegrity"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["minimalSlightlyCorrupt"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="3">@localizer["minimalSeriouslyCorrupt"] (3)</MudListItemExtended>
+                            <MudListItemExtended Value="5">@localizer["extensiveSlightlyCorrupt"] (5)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["extensiveSeriouslyCorrupt"] (7)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["allCorrupt"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="6">
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="la" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["lossAvailability"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["minimalSecondaryServices"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="5">@localizer["minimalPrimaryServices"] (5)</MudListItemExtended>
+                            <MudListItemExtended Value="5">@localizer["extensiveSecondaryServices"] (5)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["extensivePrimaryServices"] (7)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["allServicesLost"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+                    <br/>
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="lac" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["lossAccountability"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["fullyTraceable"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["possiblyTraceable"] (7)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["completelyAnonymous"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+
+                </MudItem>
+
+
+            </MudGrid>
+
+            @*<MudSelect T="int" @bind-Value="@lc" Label="@localizer["lossConfidentiality"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="2">@localizer["minimalNonSensitiveDataDisclosed"] (2)</MudSelectItem>
+                    <MudSelectItem Value="6">@localizer["minimalCriticalDataDisclosed"] (6)</MudSelectItem>
+                    <MudSelectItem Value="6">@localizer["extensiveNonSensitiveDataDisclosed"] (6)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["extensiveCriticalDataDisclosed"] (7)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["allDataDisclosed"] (9)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@li" Label="@localizer["lossIntegrity"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["minimalSlightlyCorrupt"] (1)</MudSelectItem>
+                    <MudSelectItem Value="3">@localizer["minimalSeriouslyCorrupt"] (3)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["extensiveSlightlyCorrupt"] (5)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["extensiveSeriouslyCorrupt"] (7)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["allCorrupt"] (9)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@la" Label="@localizer["lossAvailability"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["minimalSecondaryServices"] (1)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["minimalPrimaryServices"] (5)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["extensiveSecondaryServices"] (5)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["extensivePrimaryServices"] (7)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["allServicesLost"] (9)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@lac" Label="Loss of accountability" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["fullyTraceable"] (1)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["possiblyTraceable"] (7)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["completelyAnonymous"] (9)</MudSelectItem>
+                </MudSelect>*@
+
+        </MudCardContent>
+    </MudCard>
+
+</MudItem>
+
+<MudItem xs="12" sm="6" md="6">
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.BugReport"/> @localizer["owaspVulnerabilityFactors"]
+                </MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudDivider/>
+        <MudCardContent>
+
+            <MudGrid>
+                <MudItem xs="12" sm="12" md="6">
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="ed" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["easeDiscovery"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["practicallyImpossible"] (1)</MudListItemExtended>
+
+                            <MudListItemExtended Value="2">@localizer["minimalNonSensitiveDataDisclosed"] (2)</MudListItemExtended>
+                            <MudListItemExtended Value="3">@localizer["difficult"] (3)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["easy"] (7)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["automatedTools"] (9)</MudListItemExtended>
+
+                        </MudListExtended>
+                    </MudPaper>
+                    <br/>
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="ee" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["easeExploit"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["theoretical"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="3">@localizer["difficult"] (3)</MudListItemExtended>
+                            <MudListItemExtended Value="5">@localizer["easy"] (5)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["automatedTools"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="6">
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="a" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["awareness"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["minimalSecondaryServices"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="1">@localizer["unknown"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="4">@localizer["hidden"] (4)</MudListItemExtended>
+                            <MudListItemExtended Value="6">@localizer["obvious"] (6)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["publicKnowledge"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+                    <br/>
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="id" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["intrusionDetection"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["activeDetection"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="3">@localizer["loggedReviewed"] (3)</MudListItemExtended>
+                            <MudListItemExtended Value="8">@localizer["loggedNoReview"] (8)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["notLogged"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+
+                </MudItem>
+
+
+            </MudGrid>
+
+            @*<MudSelect T="int" @bind-Value="@ed" Label="@localizer["easeDiscovery"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["practicallyImpossible"] (1)</MudSelectItem>
+                    <MudSelectItem Value="3">@localizer["difficult"] (3)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["easy"] (7)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["automatedTools"] (9)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@ee" Label="@localizer["easeExploit"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["theoretical"] (1)</MudSelectItem>
+                    <MudSelectItem Value="3">@localizer["difficult"] (3)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["easy"] (5)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["automatedTools"] (9)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@a" Label="@localizer["awareness"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["unknown"] (1)</MudSelectItem>
+                    <MudSelectItem Value="4">@localizer["hidden"] (4)</MudSelectItem>
+                    <MudSelectItem Value="6">@localizer["obvious"] (6)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["publicKnowledge"] (9)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@id" Label="@localizer["intrusionDetection"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["activeDetection"] (1)</MudSelectItem>
+                    <MudSelectItem Value="3">@localizer["loggedReviewed"] (3)</MudSelectItem>
+                    <MudSelectItem Value="8">@localizer["loggedNoReview"] (8)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["notLogged"] (9)</MudSelectItem>
+                </MudSelect>*@
+
+        </MudCardContent>
+    </MudCard>
+
+</MudItem>
+
+<MudItem xs="12" sm="6" md="6">
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Business"/> @localizer["owaspBusinessImpactFactors"]
+                </MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudDivider/>
+        <MudCardContent>
+
+            <MudGrid>
+                <MudItem xs="12" sm="12" md="6">
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="fd" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["financialDamage"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["costFixVuln"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="3">@localizer["minorEffectProfit"] (3)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["significantEffectProfit"] (7)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["bankruptcy"] (9)</MudListItemExtended>
+
+                        </MudListExtended>
+                    </MudPaper>
+                    <br/>
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="rd" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["reputationDamage"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="1">@localizer["minimalDamage"] (1)</MudListItemExtended>
+                            <MudListItemExtended Value="4">@localizer["lossMajorAccounts"] (4)</MudListItemExtended>
+                            <MudListItemExtended Value="5">@localizer["lossGoodwill"] (5)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["brandDamage"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="6">
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="nc" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["nonCompliance"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="2">@localizer["minorViolation"] (2)</MudListItemExtended>
+                            <MudListItemExtended Value="5">@localizer["clearViolation"] (5)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["highViolation"] (7)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+                    <br/>
+                    <MudPaper>
+                        <MudListExtended T="int" Clickable="true" @bind-SelectedValue="pv" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                            <MudListSubheaderExtended T="int" Sticky="true" SecondaryBackground="true">@localizer["privacyViolation"]</MudListSubheaderExtended>
+                            <MudListItemExtended Value="3">@localizer["oneIndividual"] (3)</MudListItemExtended>
+                            <MudListItemExtended Value="5">@localizer["hundredsPeople"] (5)</MudListItemExtended>
+                            <MudListItemExtended Value="7">@localizer["thousandsPeople"] (7)</MudListItemExtended>
+                            <MudListItemExtended Value="9">@localizer["milionsPeople"] (9)</MudListItemExtended>
+                        </MudListExtended>
+                    </MudPaper>
+
+                </MudItem>
+
+
+            </MudGrid>
+
+
+            @*<MudSelect T="int" @bind-Value="@fd" Label="@localizer["financialDamage"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["costFixVuln"] (1)</MudSelectItem>
+                    <MudSelectItem Value="3">@localizer["minorEffectProfit"] (3)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["significantEffectProfit"] (7)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["bankruptcy"] (9)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@rd" Label="Reputation damage" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="1">@localizer["minimalDamage"] (1)</MudSelectItem>
+                    <MudSelectItem Value="4">@localizer["lossMajorAccounts"] (4)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["lossGoodwill"] (5)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["brandDamage"] (9)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@nc" Label="Non-compliance" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="2">@localizer["minorViolation"] (2)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["clearViolation"] (5)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["highViolation"] (7)</MudSelectItem>
+                </MudSelect>
+
+                <MudSelect T="int" @bind-Value="@pv" Label="Privacy violation" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="3">@localizer["oneIndividual"] (3)</MudSelectItem>
+                    <MudSelectItem Value="5">@localizer["hundredsPeople"] (5)</MudSelectItem>
+                    <MudSelectItem Value="7">@localizer["thousandsPeople"] (7)</MudSelectItem>
+                    <MudSelectItem Value="9">@localizer["milionsPeople"] (9)</MudSelectItem>
+                </MudSelect>*@
+
+        </MudCardContent>
+    </MudCard>
+
+</MudItem>
+<MudItem xs="12" sm="6" md="6">
+    @switch (FLS)
+    {
+        case "LOW":
+            <MudPaper Height="250" Class="pa-4 mud-success">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["likelihoodScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["low"] @LS</MudText>
+            </MudPaper>
+            break;
+        case "MEDIUM":
+            <MudPaper Height="250" Class="pa-4 mud-warning">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["likelihoodScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["medium"] @LS</MudText>
+            </MudPaper>
+            break;
+        case "HIGH":
+            <MudPaper Height="250" Style="@($"color:{Colors.DeepOrange.Lighten5}; background:{Colors.DeepOrange.Default};")" Class="pa-4">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["likelihoodScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["high"] @LS</MudText>
+            </MudPaper>
+            break;
+        case "NOTE":
+            <MudPaper Height="250" Class="pa-4 mud-info">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["likelihoodScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["note"] @LS</MudText>
+            </MudPaper>
+            break;
+        default:
+            <MudPaper Height="250" Class="pa-4 mud-info">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["likelihoodScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["note"] @LS</MudText>
+            </MudPaper>
+            break;
+    }
+
+</MudItem>
+<MudItem xs="12" sm="6" md="6">
+    @switch (FIS)
+    {
+        case "LOW":
+            <MudPaper Height="250" Class="pa-4 mud-success">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["impactScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["low"] @IS</MudText>
+            </MudPaper>
+            break;
+        case "MEDIUM":
+            <MudPaper Height="250" Class="pa-4 mud-warning">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["impactScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["medium"] @IS</MudText>
+            </MudPaper>
+            break;
+        case "HIGH":
+            <MudPaper Height="250" Style="@($"color:{Colors.DeepOrange.Lighten5}; background:{Colors.DeepOrange.Default};")" Class="pa-4">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["impactScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["high"] @IS</MudText>
+            </MudPaper>
+            break;
+        case "NOTE":
+            <MudPaper Height="250" Class="pa-4 mud-info">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["impactScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["note"] @IS</MudText>
+            </MudPaper>
+            break;
+        default:
+            <MudPaper Height="250" Class="pa-4 mud-info">
+                <MudText Typo="Typo.h6" Align="Align.Center">@localizer["impactScore"]</MudText>
+                <MudDivider/>
+                <MudText Align="Align.Center">@localizer["note"] @IS</MudText>
+            </MudPaper>
+            break;
+    }
+
+</MudItem>
+
+
+</MudGrid>

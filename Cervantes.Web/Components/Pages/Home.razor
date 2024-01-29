@@ -1,0 +1,284 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using Cervantes.Web.Localization
+@using ApexCharts
+@using Cervantes.CORE.Entities
+@using DocumentFormat.OpenXml.Drawing.Charts
+@using Color = MudBlazor.Color
+@using Size = MudBlazor.Size
+@inject IStringLocalizer<Resource> localizer
+
+<PageTitle>@localizer["home"] | Cervantes</PageTitle>
+
+<AuthorizeView Roles="Admin,User,SuperUser">
+<MudGrid>
+<MudItem xs="12" sm="12" md="12" Class="mt-5">
+    <MudStack Row="true">
+                				    
+        <MudItem xs="12" sm="4" md="4">
+            <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Home" /> @localizer["home"]</MudText>
+                
+                
+        </MudItem>
+        <MudItem xs="12" sm="8" md="8">
+            <div class="d-flex justify-end">
+                <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+            </div>
+        </MudItem>
+    </MudStack>
+                
+</MudItem>
+            
+<MudItem xs="12" sm="6" md="3">
+    <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+        <MudIcon Icon="@Icons.Material.Filled.Folder" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+        <div>
+            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["projects"]</MudText>
+            <MudText Typo="Typo.h5">@Projects.Count()</MudText>
+        </div>
+    </MudPaper>
+</MudItem>
+<MudItem xs="12" sm="6" md="3">
+    <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+        <MudIcon Icon="@Icons.Material.Filled.BugReport" Color="Color.Secondary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+        <div>
+            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["vulns"]</MudText>
+            <MudText Typo="Typo.h5">@Vulns.Count()</MudText>
+        </div>
+    </MudPaper>
+</MudItem>
+<MudItem xs="12" sm="6" md="3">
+    <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+        <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+        <div>
+            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["tasks"]</MudText>
+            <MudText Typo="Typo.h5">@Tasks.Count()</MudText>
+        </div>
+    </MudPaper>
+</MudItem>
+<MudItem xs="12" sm="6" md="3">
+    <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+        <MudIcon Icon="@Icons.Material.Filled.Contacts" Color="Color.Warning" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+        <div>
+            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["clients"]</MudText>
+            <MudText Typo="Typo.h5">@Clients.Count()</MudText>
+        </div>
+    </MudPaper>
+</MudItem>
+<MudItem xs="12" sm="6">
+    <MudPaper Class="pa-4" Style="height:300px;">
+        <MudContainer>
+    
+            <ApexChart TItem="Project"
+                       Title="@localizer["projectStatus"]" Options="optionsProject">
+    
+                <ApexPointSeries TItem="Project"
+                                 Items="Projects"
+                                 Name="Gross Value"
+                                 SeriesType="SeriesType.Pie"
+                                 XValue="@(e => e.Status)"
+                                 YAggregate="@(e => e.Count())"
+                                 OrderByDescending="e => e.Y"
+                                 PointColor="e => GetPointColorProject(e)"/>
+            </ApexChart>
+        </MudContainer>
+    
+    </MudPaper>
+</MudItem>
+<MudItem xs="12" sm="6">
+    <MudCard Style="height:300px;">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@localizer["recentClients"]</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent >
+            <MudList Dense="true">
+                @foreach (var client in Clients.Take(3).OrderByDescending(c => c.CreatedDate))
+                {
+                    <MudListItem>
+                        <div class="d-flex flex-row">
+                            @if (client.ImagePath != "None")
+                            {
+                                <MudImage Src="@client.ImagePath" Class="mx-4" ObjectFit="ObjectFit.ScaleDown" Height="50" Width="50"/>
+                            }
+                            else
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.BusinessCenter" Class="mx-4"/>
+                            }
+                            <div class="ml-6">
+                                <MudText Typo="Typo.subtitle2">@client.Name</MudText>
+                                <MudText Typo="Typo.body2">@client.Url</MudText>
+                            </div>
+                            <MudChip Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@client.CreatedDate.ToShortDateString()</MudChip>
+                        </div>
+                    </MudListItem>
+                }
+            </MudList>
+        </MudCardContent>
+    </MudCard>
+</MudItem>
+<MudItem xs="12" sm="12" md="4">
+    <MudCard Style="height:100%;">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@localizer["recentTasks"]</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent Class="px-0">
+            <MudList Dense="true">
+                @foreach (var task in Tasks.Take(3).OrderByDescending(v => v.StartDate))
+                {
+                    <MudListItem>
+                        <div class="d-flex flex-row">
+                            <MudAvatar Class="mud-elevation-25">
+                                <MudIcon Icon="@Icons.Material.Filled.BugReport" Class="mx-4"/>
+                            </MudAvatar>
+                            <div class="ml-6">
+                                <MudText Typo="Typo.subtitle2">@task.Name</MudText>
+                                <MudText Typo="Typo.body2">@task.Status</MudText>
+                            </div>
+                            <MudChip Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@task.AsignedUser.FullName</MudChip>
+                        </div>
+                    </MudListItem>
+                }
+            </MudList>
+        </MudCardContent>
+    </MudCard>
+</MudItem>
+    
+<MudItem xs="12" sm="12" md="8">
+    <MudPaper Class="pa-4" Style="height:300px;">
+        <MudContainer>
+            <ApexChart TItem="CORE.Entities.Vuln"
+                       Title="@localizer["vulns"]" Options="optionsVulns">
+    
+                <ApexPointSeries TItem="CORE.Entities.Vuln"
+                                 Items="Vulns"
+                                 Name="@localizer["vulns"]"
+                                 XValue="@(e => e.Risk)"
+                                 YAggregate="@(e => e.Count())"
+                                 OrderByDescending="e => e.Y"
+                                 SeriesType="SeriesType.Bar" PointColor="e => GetPointColorVulns(e)"/>
+            </ApexChart>
+    
+        </MudContainer>
+    
+    </MudPaper>
+    
+</MudItem>
+<MudItem xs="12" sm="12" md="8">
+    <MudCard Style="height:300px;">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@localizer["recentVulns"]</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent Class="px-0">
+            <MudSimpleTable Style="overflow-x: auto;" Dense="true">
+                <thead>
+                <tr>
+                    <th>@localizer["name"]</th>
+                    <th>@localizer["risk"]</th>
+                    <th>@localizer["status"]</th>
+                    <th>@localizer["category"]</th>
+                    <th>@localizer["createdDate"]</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var x in Vulns.Take(3).OrderByDescending(x => x.CreatedDate))
+                {
+                    <tr>
+                        <td>@x.Name</td>
+                        @switch (x.Risk)
+                        {
+                            case VulnRisk.Info:
+                                <td><MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Info">@localizer["info"]</MudChip></td>
+                                break;
+                            case VulnRisk.Low:
+                                <td><MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Flag">@localizer["low"]</MudChip></td>
+                                break;
+                            case VulnRisk.Medium:
+                                <td><MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["medium"]</MudChip></td>
+                                break;
+                            case VulnRisk.High:
+                                <td><MudChip Color="Color.Error" Icon="@Icons.Material.Filled.Error">@localizer["high"]</MudChip></td>
+                                break;
+                            case VulnRisk.Critical:
+                                <td><MudChip Color="Color.Secondary" Icon="@Icons.Material.Filled.CrisisAlert">@localizer["critical"]</MudChip></td>
+                                break;
+                        }
+                        @switch (x.Status)
+                        {
+                            case VulnStatus.Open:
+                                <td><MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Flag">@localizer["open"]</MudChip></td>
+                                break;
+                            case VulnStatus.Accepted:
+                                <td><MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.CheckCircle">@localizer["accepted"]</MudChip></td>
+                                break;
+                            case VulnStatus.Confirmed:
+                                <td><MudChip Color="Color.Error" Icon="@Icons.Material.Filled.CheckBox">@localizer["confirmed"]</MudChip></td>
+                                break;
+                            case VulnStatus.Invalid:
+                                <td><MudChip Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["invalid"]</MudChip></td>
+                                break;
+                            case VulnStatus.OutOfScope:
+                                <td><MudChip Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["outofScope"]</MudChip></td>
+                                break;
+                            case VulnStatus.Resolved:
+                                <td><MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Check">@localizer["resolved"]</MudChip></td>
+                                break;
+                        }
+                        @if (x.VulnCategory != null)
+                        {
+                            <td>@x.VulnCategory.Name</td>
+
+                        }
+                        else
+                        {
+                            <td>@localizer["noCategory"]</td>
+                        }
+                        <td>@x.CreatedDate</td>
+                    </tr>
+                }
+                </tbody>
+            </MudSimpleTable>
+    
+        </MudCardContent>
+    </MudCard>
+    
+    
+</MudItem>
+    
+<MudItem xs="12" sm="12" md="4">
+    <MudPaper Class="pa-4" Style="height:300px;">
+        <MudContainer>
+            <ApexChart TItem="CORE.Entities.Task"
+                       Title="@localizer["tasksStatus"]" Options="optionsTask">
+    
+                <ApexPointSeries TItem="CORE.Entities.Task"
+                                 Items="Tasks"
+                                 SeriesType=SeriesType.Donut
+                                 Name="Gross Value"
+                                 XValue="@(e => e.Status)"
+                                 YAggregate="@(e => e.Count())"
+                                 OrderByDescending="e => e.Y" PointColor="e => GetPointColorTasks(e)"/>
+            </ApexChart>
+    
+    
+        </MudContainer>
+    
+    </MudPaper>
+    
+</MudItem>
+    
+    
+    
+    
+</MudGrid>
+
+</AuthorizeView>
+
+<AuthorizeView Roles="Client">
+<Cervantes.Web.Components.Shared.RedirectClient></Cervantes.Web.Components.Shared.RedirectClient>
+</AuthorizeView>

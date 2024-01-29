@@ -1,0 +1,117 @@
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+<MudGrid>
+    <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+        <MudGrid>
+        
+            <MudItem>
+                <MudPaper Width="150PX">
+                    <MudListExtended T="string" Clickable="true" @bind-SelectedValue="av"  Style="max-height:400px; overflow-y: auto;" DisablePadding="true" >
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["attackVector"]</MudListSubheaderExtended>
+                        <MudListItemExtended T="string" Text="@localizer["network"]" Value="@("N")" Icon="@Icons.Material.Filled.Web"/>
+                        <MudListItemExtended T="string" Text="@localizer["adjacent"]" Value="@("A")" Icon="@Icons.Material.Filled.Wifi"/>
+                        <MudListItemExtended T="string" Text="@localizer["local"]" Value="@("L")" Icon="@Icons.Material.Filled.Lan"/>
+                        <MudListItemExtended T="string" Text="@localizer["physical"]" Value="@("P")" Icon="@Icons.Material.Filled.Cable"/>
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+            <MudItem>
+                <MudPaper Width="150PX">
+                    <MudListExtended T="string" Clickable="true" @bind-SelectedValue="ac"  Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["attackComplexity"]</MudListSubheaderExtended>
+                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Outlined.Label"/>
+                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.LabelImportant"/>
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+            <MudItem>
+                <MudPaper Width="150PX">
+                    <MudListExtended T="string" Clickable="true" @bind-SelectedValue="pr" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["privilegesRequired"]</MudListSubheaderExtended>
+                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.PermIdentity"/>
+                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.SupervisedUserCircle"/>
+                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.AdminPanelSettings"/>
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+
+            <MudItem>
+                <MudPaper Width="150PX">
+                    <MudListExtended T="string" Clickable="true" @bind-SelectedValue="ui" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["userInteraction"]</MudListSubheaderExtended>
+                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.DoNotTouch"/>
+                        <MudListItemExtended T="string" Text="@localizer["required"]" Value="@("R")" Icon="@Icons.Material.Filled.TouchApp"/>
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+            <MudItem>
+                <MudPaper Width="150PX">
+                    <MudListExtended T="string" Clickable="true" @bind-SelectedValue="s" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["scope"]</MudListSubheaderExtended>
+                        <MudListItemExtended T="string" Text="@localizer["changed"]" Value="@("C")" Icon="@Icons.Material.Filled.Circle"/>
+                        <MudListItemExtended T="string" Text="@localizer["unchanged"]" Value="@("U")" Icon="@Icons.Material.Outlined.Circle"/>
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+            <MudItem>
+                <MudPaper Width="150PX">
+                    <MudListExtended T="string" Clickable="true" @bind-SelectedValue="c" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["confidentiality"]</MudListSubheaderExtended>
+                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.Error"/>
+                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Outlined.ErrorOutline"/>
+                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Outlined.Circle"/>
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+            <MudItem>
+                <MudPaper Width="150PX">
+                    <MudListExtended  T="string" Clickable="true" @bind-SelectedValue="i" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["integrity"]</MudListSubheaderExtended>
+                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.BrightnessHigh"/>
+                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.BrightnessMedium"/>
+                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.BrightnessLow"/>
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+            <MudItem>
+                <MudPaper Width="150PX">
+                    <MudListExtended T="string" Clickable="true" @bind-SelectedValue="a" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["availability"]</MudListSubheaderExtended>
+                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.SignalWifi4Bar"/>
+                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.NetworkWifi2Bar"/>
+                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.SignalWifi0Bar"/>
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="12">
+                <MudPaper Height="250" Class="d-flex align-center flex-wrap flex-grow-1 gap-4">
+                    @if (Score == 0.0)
+                    {
+                        <MudPaper Class="pa-4 mud-info" Width="100"><MudText Typo="Typo.h6">Info @Score</MudText> </MudPaper>
+                    }
+                    else if(Score >= 0.1 & Score <= 3.9)
+                    {
+                        <MudPaper Class="pa-4 mud-success" Width="100"><MudText Typo="Typo.h6">@localizer["low"] @Score</MudText></MudPaper>
+                    }
+                    else if (Score >= 4.0 & Score <= 6.9)
+                    {
+                        <MudPaper Class="pa-4 mud-warning" Width="100"><MudText Typo="Typo.h6">@localizer["medium"] @Score</MudText></MudPaper>
+                    }
+                    else if (Score >= 7.0 & Score <= 8.9)
+                    {
+                        <MudPaper Class="pa-4" Style="@($"color:{Colors.DeepOrange.Lighten5}; background:{Colors.DeepOrange.Default};")" Width="100"><MudText Typo="Typo.h6">@localizer["high"] @Score</MudText></MudPaper>
+                    }
+                    else if (Score >= 9.0 )
+                    {
+                        <MudPaper Class="pa-4 mud-error" Width="100"><MudText Typo="Typo.h6">@localizer["critical"] @Score</MudText></MudPaper>
+                    }
+
+                    <MudText Typo="Typo.h6">CVSS:3.1/AV:@SelectedAttackVector/AC:@SelectedAttackComplexity/PR:@SelectedPrivilegesRequired/UI:@SelectedUserInteraction/S:@SelectedScope/C:@SelectedConfidentiality/I:@SelectedIntegrity/A:@SelectedAvailability</MudText>
+
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>

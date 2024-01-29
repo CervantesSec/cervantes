@@ -1,0 +1,62 @@
+@using Variant = MudBlazor.Variant
+@using Microsoft.AspNetCore.Components
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using TaskStatus = Cervantes.CORE.Entities.TaskStatus
+@inject IJSRuntime jsRuntime
+@inject IStringLocalizer<Resource> localizer
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+    .mud-overlay-container, .mud-overlay-pane {
+         z-index: 9999 !important;
+    }
+</style>
+
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Castle" /> @localizer["createVault"]</MudText>
+	</TitleContent>
+	<DialogContent>
+		
+
+		<MudForm Model="@model" @ref="@form" Validation="@(vaultValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+			<MudStack AlignItems="AlignItems.Stretch">
+				
+				<MudTextField  @bind-Value="model.Name"
+				              For="@(() => model.Name)"
+				              Immediate="true"
+				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Castle"/>
+
+				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+				
+				<MudSelect  @bind-Value="model.Type" For="@(() => model.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					@foreach (VaultType item in Enum.GetValues(typeof(VaultType)))
+					{
+						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+					}
+				</MudSelect>
+
+				<MudTextField @bind-Value="model.Value"
+				              For="@(() => model.Value)"
+                              Immediate="true"
+				              Label="@localizer["value"]" Adornment="Adornment.Start"  InputType="@PasswordInput"
+				              AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ValueClick" AdornmentAriaLabel="Show Password"/>
+
+
+			</MudStack>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+	</DialogActions>
+</MudDialog>
+
+</MudContainer>

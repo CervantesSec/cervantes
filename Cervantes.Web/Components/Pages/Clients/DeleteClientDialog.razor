@@ -1,0 +1,24 @@
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@inject IStringLocalizer<Resource> localizer
+
+
+<MudDialog>
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.BusinessCenter" /> @localizer["deleteClient"]: @client.Name</MudText>
+	</TitleContent>
+	<DialogContent>
+		<MudForm Model="@client" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
+			<MudText>@localizer["deleteMessageIntro"] @client.Name ?</MudText>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="@Color.Secondary" OnClick="Submit">@localizer["delete"]</MudButton>
+	</DialogActions>
+</MudDialog>
+

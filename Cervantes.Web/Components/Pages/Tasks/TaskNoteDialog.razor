@@ -1,0 +1,105 @@
+@rendermode InteractiveServer
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@using TaskStatus = Cervantes.CORE.Entities.TaskStatus
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Task"/> @note.Name</MudText>
+		<MudSpacer/>
+
+		@if (inProject)
+		{
+			@if (editMode)
+			{
+				<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+			}
+			else
+			{
+				<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+
+			}
+			<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteTaskNoteDialog(@note, medium))"></MudIconButton>
+		}
+
+		            </MudItem>
+	</TitleContent>
+	<DialogContent>
+		@if (editMode)
+        	{
+			        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll;">
+				        <MudForm Model="@model" @ref="@form" method="dialog">
+					        <MudStack AlignItems="AlignItems.Stretch">
+						        <MudTextField @bind-Value="model.Name"
+						                      For="@(() => model.Name)"
+						                      Immediate="true"
+						                      Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Note"/>
+
+						        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+
+					        </MudStack>
+				        </MudForm>
+				        
+			        </MudContainer>
+		        
+	        }
+		else
+		{
+			<MudGrid>
+				<MudItem xs="12" sm="4" md="3">
+					<MudCard Elevation="25">
+						<MudCardContent>
+							<div class="d-flex justify-center mb-4">
+								<MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Task" Size="Size.Large" />
+							</div>
+							<MudList Dense="true">
+								<MudListItem Text="@note.Name" Icon="@Icons.Material.Filled.Note" />
+								<MudListItem Text="@note.User.FullName" Icon="@Icons.Material.Filled.Person" />
+							</MudList>
+						</MudCardContent>
+					</MudCard>
+				</MudItem>
+				<MudItem xs="12" sm="8" md="9">
+					<MudCard Elevation="25">
+						<MudCardHeader>
+							<CardHeaderContent>
+								<MudText>@localizer["description"]</MudText>
+							</CardHeaderContent>
+						</MudCardHeader>
+						<MudCardContent>
+							@((MarkupString)note.Description)
+						</MudCardContent>
+					</MudCard>
+				</MudItem>
+			</MudGrid>
+
+		}
+		
+	</DialogContent>
+	<DialogActions>
+		<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+		@if (editMode)
+		{
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+
+		}
+	</DialogActions>
+</MudDialog>
+		</MudContainer>

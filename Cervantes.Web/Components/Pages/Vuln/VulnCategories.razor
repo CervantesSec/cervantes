@@ -1,0 +1,107 @@
+@rendermode InteractiveServer
+@page "/vulns/categories"
+@using Microsoft.AspNetCore.Authorization
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using DialogOptions = MudBlazor.DialogOptions
+@using Task = System.Threading.Tasks.Task
+@using Variant = MudBlazor.Variant
+@using Cervantes.CORE.ViewModels
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IDialogService DialogService
+@using TinyMCE.Blazor
+@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager navigationManager
+@inject IHttpContextAccessor _accessor
+@using Blazor.Flags
+@inject IJSRuntime JS
+@inject ISnackbar Snackbar
+<PageTitle>@localizer["categories"] | Cervantes</PageTitle>
+
+<AuthorizeView Context="innerContext" Roles="SuperUser,Admin">
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="12" Class="mt-5">
+            <MudStack Row="true">
+
+                <MudItem xs="12" sm="4" md="4">
+                    <MudText Typo="Typo.h4">
+                        <MudText Typo="Typo.h4">
+                            <MudText Typo="Typo.h4">
+                                <MudIcon Icon="@Icons.Material.Filled.Category"/> @localizer["categories"]
+                            </MudText>
+                        </MudText>
+                    </MudText>
+
+                </MudItem>
+                <MudItem xs="12" sm="8" md="8">
+                    <div class="d-flex justify-end">
+                        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+                    </div>
+                </MudItem>
+            </MudStack>
+
+        </MudItem>
+        <MudItem xs="12" sm="12" md="12">
+            <MudDataGrid T="CORE.Entities.VulnCategory" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                         Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                <ToolBarContent>
+                    <MudStack Row="true">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                        @if (seleCats.Count() != 0)
+                        {
+                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                <MudButton>@localizer["actions"]</MudButton>
+                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteCategory"]</MudMenuItem>
+                                </MudMenu>
+                            </MudButtonGroup>
+                        }
+
+                    </MudStack>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                    </MudTextField>
+                </ToolBarContent>
+                <Columns>
+                    <SelectColumn T="CORE.Entities.VulnCategory"/>
+
+                    <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                    <PropertyColumn Property="x => x.Description" Title="@localizer["description"]"/>
+                    <PropertyColumn Property="x => x.Type" Title="@localizer["type"]">
+                        <CellTemplate>
+                            @switch (@context.Item.Type)
+                            {
+                                case VulnCategoryType.General:
+                                    <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Category">@localizer["general"]</MudChip>
+                                    break;
+                                case VulnCategoryType.OwaspMSTG:
+                                    <MudChip Color="Color.Surface" Icon="@Icons.Material.Filled.Smartphone">OWASP MASTG</MudChip>
+                                    break;
+                                case VulnCategoryType.OwaspWSTG:
+                                    <MudChip Color="Color.Primary" Icon="@Icons.Material.Filled.Web">OWASP WSTG</MudChip>
+                                    break;
+                            }
+
+                        </CellTemplate>
+                    </PropertyColumn>
+
+
+                </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="CORE.Entities.VulnCategory"/>
+                </PagerContent>
+            </MudDataGrid>
+
+            <br/>
+            <MudButton Href="/vulns"
+                       Variant="Variant.Filled"
+                       StartIcon="@Icons.Material.Filled.ArrowBack"
+                       Color="Color.Default">
+                @localizer["back"]
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</AuthorizeView>

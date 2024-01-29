@@ -1,0 +1,87 @@
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@inject IStringLocalizer<Resource> localizer
+
+
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+    <MudDialog DisableSidePadding="true">
+        <TitleContent>
+            <MudText Typo="Typo.h4">
+                <MudIcon Icon="@aiSVG"/> @localizer["aiGenerate"]
+            </MudText>
+            <MudSpacer/>
+        </TitleContent>
+        <DialogContent>
+            <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+
+                <MudTabPanel Text="@localizer["default"]" Icon="@Icons.Material.Filled.Details" Style="min-width: 260px;">
+                    @if (_isBusy)
+                    {
+                        <MudStack AlignItems="AlignItems.Center">
+                            <MudProgressCircular Color="Color.Primary" Style="height:70px;width:70px;" Indeterminate="true">
+                                                        <MudIcon Icon="@aiSVG"/>
+                                                    </MudProgressCircular>
+                                                    <MudText Typo="Typo.h5">@localizer["generating"]</MudText>
+                                                    
+                        </MudStack>
+                        
+                    }
+                    else
+                    {
+                            
+                            <MudStack Row="true" Justify="Justify.FlexEnd">
+                                <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+                                <MudButton Variant="Variant.Filled" StartIcon="@aiSVG" Color="@Color.Primary" OnClick="SubmitDefault">@localizer["generate"]</MudButton>
+
+                            </MudStack>
+                    }
+                </MudTabPanel>
+
+                <MudTabPanel Text="@localizer["custom"]" Icon="@Icons.Material.Filled.Settings" Style="min-width: 260px;">
+                    <MudStack>
+                    
+                        <MudForm Model="@customModel" @ref="@form" Validation="@(customValidator.ValidateValue)" ValidationDelay="0">
+                    
+                    
+                            <MudTextField @bind-Value="customModel.Prompt" For="@(() => customModel.Prompt)" Immediate="true" Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@aiSVG" Lines="5"/>
+                        </MudForm>
+                        
+                            @if (_isBusy)
+                            {
+                                <MudStack AlignItems="AlignItems.Center">
+                                    <MudProgressCircular Color="Color.Primary" Style="height:70px;width:70px;" Indeterminate="true">
+                                        <MudIcon Icon="@aiSVG"/>
+                                    </MudProgressCircular>
+                                    <MudText Typo="Typo.h5">@localizer["generating"]</MudText>
+                                                    
+                                </MudStack>
+                            }
+                            else
+                            {
+                                <MudText Typo="Typo.h5" Class="mt-6">@localizer["result"]</MudText>
+                                if (result != null)
+                                {
+                                    <MudText Typo="Typo.body2" Class="mt-6">@result</MudText>
+
+                                }
+                            }
+                        
+                        
+                        <MudStack Row="true" Justify="Justify.FlexEnd">
+                            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="SubmitCustom">@localizer["generate"]</MudButton>
+                    
+                        </MudStack>
+                    </MudStack>
+                    
+                </MudTabPanel>
+
+
+            </MudTabs>
+
+        </DialogContent>
+        <DialogActions>
+        </DialogActions>
+    </MudDialog>
+
+</MudContainer>

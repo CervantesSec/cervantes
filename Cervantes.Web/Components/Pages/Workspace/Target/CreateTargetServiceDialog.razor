@@ -1,0 +1,42 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Hive" /> @localizer["addService"]</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" >
+            <MudForm Model="@service" @ref="@form" method="dialog" Validation="@(targetValidator.ValidateValue)" ValidationDelay="0">
+                <MudStack AlignItems="AlignItems.Stretch">
+                    <MudTextField @bind-Value="service.Name"
+                                  For="@(() => service.Name)"
+                                  Immediate="true"
+                                  Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Hive"/>
+                    
+                    <MudNumericField @bind-Value="service.Port" Label="@localizer["port"]" Variant="Variant.Text" Min="0" Max="65535" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Numbers" />
+                    <MudTextField @bind-Value="service.Version"
+                                  For="@(() => service.Version)"
+                                  Immediate="true"
+                                  Label="@localizer["version"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Category"/>
+                    <MudText Typo="Typo.body2">@localizer["description"]</MudText>
+
+                    <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="service.Description" data-mce-placeholder="Description"/>
+                    <MudText Typo="Typo.body2">@localizer["note"]</MudText>
+
+                    <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="service.Note" data-mce-placeholder="Description"/>
+
+                    
+                </MudStack>
+
+            </MudForm>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="@Color.Primary" OnClick="Submit">@localizer["add"]</MudButton>
+    </DialogActions>
+</MudDialog>

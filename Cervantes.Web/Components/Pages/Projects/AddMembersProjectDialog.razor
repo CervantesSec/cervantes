@@ -1,0 +1,24 @@
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" data-mce-placeholder="Description...">
+        
+            <MudForm Model="@member" @ref="@form" method="dialog" Validation="@(memberValidator.ValidateValue)" ValidationDelay="0">
+                <MudSelect Placeholder="@localizer["user"]" @bind-Value="member.MemberId" For="@(() => member.MemberId)" Label="@localizer["user"]" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                    <MudSelectItem Value="Guid.Empty.ToString()" Disabled="true">@localizer["selectMembers"]</MudSelectItem>
+                    @foreach (var user in users)
+                    {
+                        <MudSelectItem Value="@user.Id.ToString()">@user.FullName</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudForm>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.PersonAdd" Color="@Color.Primary" OnClick="Submit">@localizer["add"]</MudButton>
+    </DialogActions>
+</MudDialog>

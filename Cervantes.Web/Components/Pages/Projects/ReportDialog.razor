@@ -1,0 +1,167 @@
+@rendermode InteractiveServer
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@using TaskStatus = Cervantes.CORE.Entities.TaskStatus
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+@inject IHttpContextAccessor _accessor
+
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+    <MudDialog DisableSidePadding="true">
+        <TitleContent>
+            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+
+                <MudText Typo="Typo.h4">
+                    <MudIcon Icon="@Icons.Custom.FileFormats.FilePdf"/> @report.Name
+                </MudText>
+                <MudSpacer/>
+                @if (inProject)
+                {
+                    @if (aiEnabled)
+                    {
+                        <MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
+                    }
+                    
+                    <MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download())"></MudIconButton>
+                    
+
+                    @if (editMode)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Success" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+
+                    }
+                    else
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+
+                    }
+                    
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteReport(report, medium))"></MudIconButton>
+                }
+                
+                @if (rolUser.Contains("Client"))
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download())"></MudIconButton>
+
+                }
+                
+            </MudItem>
+        </TitleContent>
+        <DialogContent>
+            @if (editMode)
+            {
+                <MudForm Model="@model" @ref="@form" Validation="@(reportValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+                    <MudStack AlignItems="AlignItems.Stretch">
+				
+
+                        <MudTextField  @bind-Value="model.Name"
+                                       For="@(() => model.Name)"
+                                       Immediate="true"
+                                       Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Custom.FileFormats.FilePdf"/>
+                        <MudTextField  @bind-Value="model.Version"
+                                       For="@(() => model.Version)"
+                                       Immediate="true"
+                                       Label="@localizer["version"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Category"/>
+				
+                        <MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                            @foreach (Language item in Enum.GetValues(typeof(Language)))
+                            {
+                                <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                            }
+                        </MudSelect>
+                        <MudText>
+                            @localizer["description"]
+                        </MudText>
+                        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+				                        <MudText>
+                            @localizer["report"]
+                        </MudText>
+                        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf2" @bind-Value="model.HtmlCode" data-mce-placeholder="Description"/>
+
+				
+                    </MudStack>
+                </MudForm>
+            }
+            else
+            {
+
+                <MudGrid>
+
+                    <MudItem xs="12" sm="4" md="3">
+                        <MudCard Elevation="25">
+                            <MudCardContent>
+                                <div class="d-flex justify-center mb-4">
+                                    <MudIcon Color="Color.Default" Icon="@Icons.Custom.FileFormats.FilePdf" Size="Size.Large"/>
+
+
+                                </div>
+                                <MudList Dense="true">
+                                    <MudListItem Text="@report.Name" Icon="@Icons.Custom.FileFormats.FilePdf"/>
+                                    <MudListItem Text="@report.Version.ToString()" Icon="@Icons.Material.Filled.Category"/>
+                                    <MudListItem Text="@report.User.FullName" Icon="@Icons.Material.Filled.Person"/>
+                                    <MudListItem Text="@report.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
+                                    <MudListItem Text="@report.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
+                                </MudList>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" sm="8" md="9">
+                        <MudStack>
+                            <MudItem sm="12" md="12" lg="12">
+                                <MudCard Elevation="25">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudStack Row="true">
+                                                <MudIcon Icon="@Icons.Material.Filled.Description" Color="Color.Default" Size="Size.Small" aria-label="delete"></MudIcon>
+                                                <MudText>@localizer["description"]</MudText>
+
+                                            </MudStack>
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        @((MarkupString)report.Description)
+                                    </MudCardContent>
+                                </MudCard>
+                            </MudItem>
+                            <MudItem sm="12" md="12" lg="12">
+                                <MudCard Elevation="25">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudStack Row="true">
+                                                <MudIcon Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Default" Size="Size.Small" aria-label="delete"></MudIcon>
+                                                <MudText>@localizer["report"]</MudText>
+                                            </MudStack>
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        <div class="d-flex flex-column" style="height:100vh; overflow-x:auto;background-color: white;">
+
+                                            @((MarkupString)report.HtmlCode)
+                                        </div>
+                                    </MudCardContent>
+                                </MudCard>
+
+                            </MudItem>
+                        </MudStack>
+                    </MudItem>
+                </MudGrid>
+
+            }
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+            @if(editMode)
+            {
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</MudContainer>

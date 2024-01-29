@@ -1,0 +1,34 @@
+@using System.Globalization
+
+@*<MudSelect T="CultureInfo" @bind-value="Culture" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed" Style="display: flex;flex-grow: 0;position: relative;">
+    <MudSelectItem Value="@cultures[0]">English</MudSelectItem>
+    <MudSelectItem Value="@cultures[1]">Español</MudSelectItem>
+    @foreach (var culture in cultures)
+    {
+        <MudSelectItem Value="@culture.">@culture.DisplayName</MudSelectItem>
+    }
+</MudSelect>*@
+
+<MudMenu>
+    <ActivatorContent>
+        @switch (Culture.Name)
+        {
+            case "en-US" :
+                <MudImage Src="img/english.png" Height="20" Width="20"/>
+                break;
+            case "es-ES":
+                <MudImage Src="img/spain.png" Height="20" Width="20"/>
+                break;
+        }
+        
+    </ActivatorContent>
+    <ChildContent>
+        <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[0]))"><MudImage Src="img/english.png" Height="15" Width="15"/> English</MudMenuItem>
+        <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[1]))"><MudImage Src="img/spain.png" Height="15" Width="15"/> Español</MudMenuItem>
+    </ChildContent>
+</MudMenu>
+
+@*<select class="mud-input-control mud-select" @bind="Culture" style="width:150px; margin-left:10px;">
+    <option value="en-US">English</option>
+    <option value="es-ES">Español</option>
+</select>*@

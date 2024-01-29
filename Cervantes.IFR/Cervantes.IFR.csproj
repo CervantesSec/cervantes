@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Cervantes.Contracts\Cervantes.Contracts.csproj" />
+      <ProjectReference Include="..\Cervantes.CORE\Cervantes.CORE.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Atlassian.SDK" Version="13.0.0" />
+      <PackageReference Include="CsvHelper" Version="30.0.1" />
+      <PackageReference Include="Html2JiraMarkup" Version="1.0.4" />
+      <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
+      <PackageReference Include="MailKit" Version="4.3.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+      <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+      <PackageReference Include="Microsoft.SemanticKernel" Version="1.1.0" />
+      <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="1.1.0" />
+      <PackageReference Include="Mime-Detective" Version="23.10.1" />
+      <PackageReference Include="Mime-Detective.Definitions.Exhaustive" Version="23.10.1" />
+      <PackageReference Include="YamlDotNet" Version="13.7.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions">
+        <HintPath>..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\8.0.0\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

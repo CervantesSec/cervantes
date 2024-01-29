@@ -1,0 +1,21 @@
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Hive" /> @localizer["deleteService"]</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm Model="@services" @ref="@form"  ValidationDelay="0">
+            <MudText>@localizer["deleteMessageIntro"]?</MudText>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="@Color.Secondary" OnClick="Submit">@localizer["delete"]</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -1,0 +1,104 @@
+@rendermode InteractiveServer
+@page "/clients"
+@page "/clients/{clientId:guid}"
+@using Cervantes.Web.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.CORE.Entities
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager navigationManager
+@inject IJSRuntime JS
+@inject ISnackbar Snackbar
+
+<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+<PageTitle>@localizer["clients"] | Cervantes</PageTitle>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12" Class="mt-5">
+        <MudStack Row="true">
+
+            <MudItem xs="12" sm="4" md="4">
+                <MudText Typo="Typo.h4">
+                    <MudIcon Icon="@Icons.Material.Filled.BusinessCenter"/> @localizer["clients"]
+                </MudText>
+
+            </MudItem>
+            <MudItem xs="12" sm="8" md="8">
+                <div class="d-flex justify-end">
+                    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+                </div>
+            </MudItem>
+        </MudStack>
+
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12">
+        <MudDataGrid T="Client" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+            <ToolBarContent>
+                <MudStack Row="true">
+                    <AuthorizeView Roles="Admin,SuperUser">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                        @if (seleClients.Count() != 0)
+                        {
+                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" >
+                                <MudButton>@localizer["actions"]</MudButton>
+                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                </MudMenu>
+                            </MudButtonGroup>
+                        }
+                    </AuthorizeView>
+                </MudStack>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                </MudTextField>
+            </ToolBarContent>
+            <Columns>
+                <SelectColumn T="Client" />
+
+                <PropertyColumn Property="x => x.Name" Title="@localizer["name"]">
+                    <CellTemplate>
+                        <MudStack Row="true">
+                            @if (@context.Item.ImagePath != "None")
+                            {
+                                <MudImage Src="@context.Item.ImagePath" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+
+                            }
+                            else
+                            {
+                                    <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Small"/>
+                            }
+                            <MudStack Justify="Justify.Center" Spacing="0">
+                                <MudText Typo="Typo.body1">@context.Item.Name</MudText>
+                            </MudStack>
+                        </MudStack>
+
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.Url" Title="Url">
+                    <CellTemplate>
+                        <MudLink Href="@context.Item.Url" Target="_blank" Color="Color.Primary">@context.Item.Url</MudLink>
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.ContactName" Title="@localizer["contactName"]"/>
+                <PropertyColumn Property="x => x.ContactEmail" Title="@localizer["contactEmail"]">
+                    <CellTemplate>
+                        <MudLink href="@context.Item.ContactEmail" Typo="Typo.body2">@context.Item.ContactEmail</MudLink>
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.ContactPhone" Title="@localizer["contactPhone"]"/>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="Client"/>
+            </PagerContent>
+        </MudDataGrid>
+        <br/>
+        <MudButton Href="/"
+                   Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.ArrowBack"
+                   Color="Color.Default">
+            @localizer["back"]
+        </MudButton>
+    </MudItem>
+</MudGrid>
+</AuthorizeView>

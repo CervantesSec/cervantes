@@ -1,0 +1,62 @@
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+
+<MudDialog DisableSidePadding="true">
+    <TitleContent>
+        <MudText Typo="Typo.h4">
+            <MudIcon Icon="@Icons.Material.Filled.Category"/> @localizer["categories"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer>
+            <MudDataGrid T="KnowledgeBaseCategories" Items="@Categories" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                         Hideable="true" Hover="true" Elevation="25" RowClick="@RowClicked">
+                <ToolBarContent>
+                    <MudStack Row="true">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => AddCategory(maxWidth))">@localizer["addCategory"]</MudButton>
+                        @*<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+        										<MudButton>@localizer["export"]</MudButton>
+        										<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+        											<MudMenuItem OnClick="@((e) => Export(0))">CSV</MudMenuItem>
+        										</MudMenu>
+        									</MudButtonGroup>*@
+                    </MudStack>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                    </MudTextField>
+                </ToolBarContent>
+                <Columns>
+                    <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                    <PropertyColumn Property="x => x.Order" Title="@localizer["order"]"/>
+                    <PropertyColumn Property="x => x.User.FullName" Title="@localizer["createdBy"]">
+                        <CellTemplate>
+                            <MudStack Row="true">
+                                @if (@context.Item.User.Avatar != null)
+                                {
+                                    <MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+                                }
+                                else
+                                {
+                                    <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
+                                }
+                                <MudStack Justify="Justify.Center" Spacing="0">
+                                    <MudText Typo="Typo.body1">@context.Item.User.FullName</MudText>
+                                </MudStack>
+                            </MudStack>
+
+                        </CellTemplate>
+                    </PropertyColumn>
+                </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="KnowledgeBaseCategories"/>
+                </PagerContent>
+            </MudDataGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+
+    </DialogActions>
+</MudDialog>

@@ -1,0 +1,97 @@
+@page "/documents"
+@inject IDialogService Dialog
+@using TinyMCE.Blazor
+@using Cervantes.CORE.ViewModels
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Color = MudBlazor.Color
+@inject IStringLocalizer<Resource> localizer
+
+<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+
+<PageTitle>@localizer["documents"] | Cervantes</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12" Class="mt-5">
+        <MudStack Row="true">
+
+            <MudItem xs="12" sm="4" md="4">
+                <MudText Typo="Typo.h4">
+                    <MudText Typo="Typo.h4">
+                        <MudIcon Icon="@Icons.Material.Filled.InsertDriveFile"/> @localizer["documents"]
+                    </MudText>
+                </MudText>
+
+            </MudItem>
+            <MudItem xs="12" sm="8" md="8">
+                <div class="d-flex justify-end">
+                    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+                </div>
+            </MudItem>
+        </MudStack>
+
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12">
+
+        <MudDataGrid T="CORE.Entities.Document" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                     Hideable="true" Hover="true" RowClick="@RowClicked" Virtualize="true" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" DragDropColumnReordering="true">
+            <ToolBarContent>
+                <MudStack Row="true">
+                    <AuthorizeView Roles="Admin,SuperUser">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                        @if (seleDocs.Count() != 0)
+                        {
+                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                <MudButton>@localizer["actions"]</MudButton>
+                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                </MudMenu>
+                            </MudButtonGroup>
+                        }
+
+                    </AuthorizeView>
+                </MudStack>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                </MudTextField>
+            </ToolBarContent>
+            <Columns>
+                <SelectColumn T="Document"/>
+
+                <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                <PropertyColumn Property="x => x.User.FullName" Title="@localizer["createdBy"]">
+                    <CellTemplate>
+                        <MudStack Row="true">
+                            @if (@context.Item.User.Avatar != null)
+                            {
+                                <MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+                
+                            }
+                            else
+                            {
+                                <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
+                            }
+                            <MudStack Justify="Justify.Center" Spacing="0">
+                                <MudText Typo="Typo.body1">@context.Item.User.FullName</MudText>
+                            </MudStack>
+                        </MudStack>
+                
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.CreatedDate.ToShortDateString()" Title="@localizer["createdDate"]"/>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="CORE.Entities.Document"/>
+            </PagerContent>
+        </MudDataGrid>
+        <br/>
+        <MudButton Href="/"
+                   Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.ArrowBack"
+                   Color="Color.Default">
+            @localizer["back"]
+        </MudButton>
+    </MudItem>
+</MudGrid>
+</AuthorizeView>

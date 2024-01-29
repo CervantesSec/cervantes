@@ -1,0 +1,150 @@
+@rendermode InteractiveServer
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@using TaskStatus = Cervantes.CORE.Entities.TaskStatus
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+@attribute [StreamRendering]
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Castle"/> @vault.Name</MudText>
+		<MudSpacer/>
+
+		@if (editMode)
+		{
+			<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+		}
+		else
+		{
+			<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+
+		}
+		<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteVaultDialog(@vault, medium))"></MudIconButton>
+
+		            </MudItem>
+	</TitleContent>
+	<DialogContent>
+		@if (editMode)
+        	{
+			        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll;">
+				        <MudForm Model="@model" @ref="@form" Validation="@(vaultValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+                        
+					        <MudStack AlignItems="AlignItems.Stretch">
+                        				
+						        <MudTextField  @bind-Value="model.Name"
+						                       For="@(() => model.Name)"
+						                       Immediate="true"
+						                       Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Castle"/>
+                        
+						        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+                        				
+						        <MudSelect  @bind-Value="model.Type" For="@(() => model.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							        @foreach (VaultType item in Enum.GetValues(typeof(VaultType)))
+							        {
+								        <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+							        }
+						        </MudSelect>
+                        
+						        <MudTextField @bind-Value="model.Value"
+						                      For="@(() => model.Value)"
+						                      Immediate="true"
+						                      Label="@localizer["value"]" Adornment="Adornment.Start"  InputType="@PasswordInput"
+						                      AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ValueClick" AdornmentAriaLabel="Show Password"/>
+                        
+                        
+					        </MudStack>
+				        </MudForm>
+				        
+				        
+			        </MudContainer>
+		        
+	        }
+		else
+		{
+			<MudGrid>
+				<MudItem xs="12" sm="4" md="3">
+					<MudCard Elevation="25">
+						<MudCardContent>
+							<div class="d-flex justify-center mb-4">
+								<MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Castle" Size="Size.Large" />
+							</div>
+							<MudList Dense="true">
+								<MudListItem Text="@vault.Name" Icon="@Icons.Material.Filled.Castle" />
+								<MudListItem Text="@vault.Type.ToString()" Icon="@Icons.Material.Filled.Category" />
+								<MudListItem Text="@vault.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth" />
+
+								<MudListItem Text="@vault.User.FullName" Icon="@Icons.Material.Filled.Person" />
+							</MudList>
+						</MudCardContent>
+					</MudCard>
+				</MudItem>
+				
+				<MudItem xs="12" sm="8" md="9">
+					<MudStack>
+					<MudItem xs="12" sm="12" md="12">
+						<MudCard Elevation="25">
+							<MudCardHeader>
+								<CardHeaderContent>
+									<MudText>@localizer["description"]</MudText>
+								</CardHeaderContent>
+							</MudCardHeader>
+							<MudCardContent>
+								@((MarkupString)vault.Description)
+							</MudCardContent>
+						</MudCard>
+					</MudItem>
+
+					<MudItem xs="12" sm="12" md="12">
+						<MudCard Elevation="25">
+							<MudCardHeader>
+								<CardHeaderContent>
+									<MudText>@localizer["value"]</MudText>
+								</CardHeaderContent>
+							</MudCardHeader>
+							<MudCardContent>
+								<MudTextField @bind-Value="vault.Value"
+								              For="@(() => vault.Value)"
+								              Immediate="true"
+								              Label="@localizer["value"]" Adornment="Adornment.Start" InputType="@PasswordInput"
+								              AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ValueClick" AdornmentAriaLabel="Show Password"/>
+							</MudCardContent>
+						</MudCard>
+
+
+
+
+					</MudItem>
+</MudStack>
+				</MudItem>
+			</MudGrid>
+
+		}
+		
+	</DialogContent>
+	<DialogActions>
+		<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+		@if (editMode)
+		{
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+
+		}
+	</DialogActions>
+</MudDialog>
+		</MudContainer>

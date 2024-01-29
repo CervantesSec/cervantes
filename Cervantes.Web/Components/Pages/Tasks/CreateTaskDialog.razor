@@ -1,0 +1,88 @@
+@using Variant = MudBlazor.Variant
+@using Microsoft.AspNetCore.Components
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using TaskStatus = Cervantes.CORE.Entities.TaskStatus
+@inject IJSRuntime jsRuntime
+@inject IStringLocalizer<Resource> localizer
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+    .mud-overlay-container, .mud-overlay-pane {
+         z-index: 9999 !important;
+    }
+</style>
+
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Task" /> @localizer["createTask"]</MudText>
+	</TitleContent>
+	<DialogContent>
+		
+
+		<MudForm Model="@model" @ref="@form" Validation="@(taskValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+			<MudStack AlignItems="AlignItems.Stretch">
+				
+				<MudTextField  @bind-Value="model.Name"
+				              For="@(() => model.Name)"
+				              Immediate="true"
+				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Task"/>
+
+				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+				<MudSelect @bind-Value="@SelectedProject" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					<MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
+					@foreach (var project in Projects)
+					{
+						<MudSelectItem Value="@project.Id">@project.Name</MudSelectItem>
+					}
+				</MudSelect>
+				
+				<MudSelect @bind-Value="model.CreatedUserId" For="@(() => model.CreatedUserId)" Label="@localizer["createdBy"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					@foreach (var user in Users)
+					{
+						<MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
+					}
+				</MudSelect>
+				
+				<MudSelect @bind-Value="model.AsignedUserId" For="@(() => model.AsignedUserId)" Label="@localizer["assignedTo"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					@foreach (var user in Users)
+					{
+						<MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
+					}
+				</MudSelect>
+				
+				<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["startDate"]" @bind-date="dateStart" DisableToolbar="true" />
+				<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["endDate"]" @bind-date="dateEnd"  DisableToolbar="true" />
+
+				@*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" @bind-Value="model.TargetId" @bind-SelectedValues="model.SelectedTargets" SelectAll="true" For="@(() => model.TargetId)" Label="@localizer["target"]" AdornmentIcon="@Icons.Material.Filled.Adjust" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed" MultiSelection="true">
+					@foreach (var tar in model.Targets)
+					{
+						<MudSelectItem Value="@tar.Id">@tar.Name</MudSelectItem>
+					}
+				</MudSelect>*@
+				
+				<MudSelect  @bind-Value="model.Status" For="@(() => model.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					@foreach (TaskStatus item in Enum.GetValues(typeof(TaskStatus)))
+					{
+						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+					}
+				</MudSelect>
+
+
+
+			</MudStack>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+	</DialogActions>
+</MudDialog>
+
+</MudContainer>

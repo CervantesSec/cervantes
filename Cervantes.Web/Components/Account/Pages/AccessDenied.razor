@@ -1,0 +1,17 @@
+@page "/Account/AccessDenied"
+@using Cervantes.Web.Components.Layout
+@layout LoginLayout
+@inject NavigationManager NavigationManager
+
+<MudContainer>
+    <MudText Typo="Typo.h4" Color="Color.Warning" Class="my-4"><MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Warning" Size="Size.Medium"></MudIcon> Access Denied</MudText>
+    <MudText Typo="Typo.body1" Class="my-4">You do not have permission to access this page.</MudText>
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="GoHome">Go to Home Page</MudButton>
+</MudContainer>
+
+@code {
+    private void GoHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

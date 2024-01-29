@@ -1,0 +1,46 @@
+@using Cervantes.CORE.Entities
+@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Checklist" /> @localizer["createChecklist"]</MudText>
+    </TitleContent>
+    
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll">
+            <MudForm Model="@model" @ref="@form" method="dialog" Validation="@(checklistValidator.ValidateValue)" ValidationDelay="0">
+                <MudStack AlignItems="AlignItems.Stretch">
+                    <MudSelect Placeholder="@localizer["target"]" @bind-Value="model.TargetId" For="@(() => model.TargetId)" Label="@localizer["target"]" AdornmentIcon="@Icons.Material.Filled.Adjust" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                        <MudSelectItem Value="Guid.Empty" Disabled="true">@localizer["selectTarget"]</MudSelectItem>
+                        @foreach (var tar in targets)
+                        {
+                            <MudSelectItem Value="@tar.Id">@tar.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudSelect @bind-Value="model.Type" For="@(() => model.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Style" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                        <MudSelectItem Value="ChecklistType.OWASPWSTG">OWASP WSTG</MudSelectItem>
+                        <MudSelectItem Value="ChecklistType.OWASPMASVS">OWASP MSTG</MudSelectItem>
+                    </MudSelect>
+                    @if (model.Type == ChecklistType.OWASPMASVS)
+                    {
+                        <MudSelect @bind-Value="model.MobileAppPlatform" For="@(() => model.MobileAppPlatform)" Label="@localizer["platform"]" AdornmentIcon="@Icons.Material.Filled.MobileFriendly" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                            <MudSelectItem Value="MobileAppPlatform.Android">Android</MudSelectItem>
+                            <MudSelectItem Value="MobileAppPlatform.iOS">iOS</MudSelectItem>
+                        </MudSelect>
+                    }
+                </MudStack>
+
+            </MudForm>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="@Color.Primary" OnClick="Submit">@localizer["add"]</MudButton>
+    </DialogActions>
+</MudDialog>

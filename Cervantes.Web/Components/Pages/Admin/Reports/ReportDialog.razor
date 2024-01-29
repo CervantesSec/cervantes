@@ -1,0 +1,353 @@
+@rendermode InteractiveServer
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@using Color = MudBlazor.Color
+@using Size = MudBlazor.Size
+@using System.Diagnostics
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+
+<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+<MudDialog DisableSidePadding="true">
+    <TitleContent>
+        <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+
+            <MudText Typo="Typo.h4">
+                <MudIcon Icon="@Icons.Custom.FileFormats.FilePdf"/> @report.Name
+            </MudText>
+            <MudSpacer/>
+
+            @*
+		<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => DownloadTemplate())"></MudIconButton>
+		*@
+
+            @if (editMode)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+            }
+            else
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+            }
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(@report, medium))"></MudIconButton>
+
+        </MudItem>
+    </TitleContent>
+    <DialogContent>
+        @if (editMode)
+        {
+            <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll;">
+
+                <MudForm Model="@model" @ref="@form" Validation="@(templateValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+                    <MudStack AlignItems="AlignItems.Stretch">
+                        <MudTextField Placeholder="New Template" @bind-Value="model.Name"
+                                      For="@(() => model.Name)"
+                                      Immediate="true"
+                                      Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.FileCopy"/>
+
+                        <MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                            @foreach (Language item in Enum.GetValues(typeof(Language)))
+                            {
+                                <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                            }
+                        </MudSelect>
+                        <MudSelect @bind-Value="model.ReportType" For="@(() => model.ReportType)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                            @foreach (ReportType item in Enum.GetValues(typeof(ReportType)))
+                            {
+                                <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+
+                        @if (model.Language == Language.English)
+                        {
+                            <MudDropContainer T="DropItem" Items="_dropItems.Where(x => x.Language == Language.English).OrderBy(x => x.Order)" ItemsSelector="@((item, dropzone) => item.Identifier.ToString() == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-column flex-grow-1">
+                                <ChildContent>
+                                    <div class="d-flex flex-wrap justify-space-between">
+                                        <MudDropZone T="DropItem" Identifier="Cover" AllowReorder="true" CanDrop="@((item) => item.ComponentType == ReportPartType.Cover)" Class="rounded mud-background-gray  pa-4 ma-4 flex-grow-1">
+                                            <MudText Typo="Typo.button" Class="ma-2" Color="Color.Info">@localizer["cover"]</MudText>
+                                        </MudDropZone>
+                                        <MudDropZone T="DropItem" Identifier="Header" AllowReorder="true" CanDrop="@((item) => item.ComponentType == ReportPartType.Header)" Class="rounded mud-background-gray  pa-4 ma-4 flex-grow-1">
+                                            <MudText Typo="Typo.button" Class="ma-2" Color="Color.Success">@localizer["header"]</MudText>
+                                        </MudDropZone>
+
+                                        <MudDropZone T="DropItem" Identifier="Footer" AllowReorder="true" CanDrop="@((item) => item.ComponentType == ReportPartType.Footer)" Class="rounded mud-background-gray  pa-4 ma-4 flex-grow-1">
+                                            <MudText Typo="Typo.button" Class="ma-2" Color="Color.Warning">@localizer["footer"]</MudText>
+                                        </MudDropZone>
+
+                                        <MudDropZone T="DropItem" Identifier="Body" AllowReorder="true" CanDrop="@((item) => item.ComponentType == ReportPartType.Body)" Class="rounded mud-background-gray  pa-4 ma-4 flex-grow-1">
+                                            <MudText Typo="Typo.button" Class="ma-2" Color="Color.Primary">@localizer["body"]</MudText>
+                                        </MudDropZone>
+
+                                    </div>
+                                    <MudDropZone T="DropItem" Identifier="None" Class="rounded mud-alert-text-normal pa-4 mt-6 mx-4 flex-grow-1 d-flex flex-wrap"/>
+                                </ChildContent>
+                                <ItemRenderer>
+                                    <MudPaper Elevation="25" Class="pa-4 ma-2">
+                                        <MudText Typo="Typo.subtitle1">@context.Name</MudText>
+                                        <MudText Typo="Typo.subtitle2">
+                                            <strong>@localizer["type"]:</strong> 
+                                            @switch(@context.ComponentType){
+                                                case ReportPartType.Cover:
+                                                    <MudChip Color="Color.Info" Size="Size.Small">@localizer["cover"]</MudChip>
+                                                    break;
+                                                case ReportPartType.Header:
+                                                    <MudChip Color="Color.Success" Size="Size.Small">@localizer["header"]</MudChip>
+                                                    break;
+                                                case ReportPartType.Footer:
+                                                    <MudChip Color="Color.Warning" Size="Size.Small">@localizer["footer"]</MudChip>
+                                                    break;
+                                                case ReportPartType.Body:
+                                                    <MudChip Color="Color.Primary" Size="Size.Small">@localizer["body"]</MudChip>
+                                                    break;
+                                            }
+                                            <strong>@localizer["language"]:</strong>
+                                            @switch(@context.Language){
+                                                case Language.English:
+                                                    <MudChip Color="Color.Info" Size="Size.Small">@localizer["english"]</MudChip>
+                                                    break;
+                                                case Language.Español:
+                                                    <MudChip Color="Color.Error" Size="Size.Small">@localizer["español"]</MudChip>
+                                                    break;
+                                            }
+                                        </MudText>
+                                        
+                                    </MudPaper>
+                                </ItemRenderer>
+                            </MudDropContainer>
+                        }
+                        else if (model.Language == Language.Español)
+                        {
+                            <MudDropContainer T="DropItem" Items="_dropItems.Where(x => x.Language == Language.Español).OrderBy(x => x.Order)" ItemsSelector="@((item, dropzone) => item.Identifier.ToString() == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-column flex-grow-1">
+                                <ChildContent>
+                                    <div class="d-flex flex-wrap justify-space-between">
+                                        <MudDropZone T="DropItem" Identifier="Cover" AllowReorder="true" CanDrop="@((item) => item.ComponentType == ReportPartType.Cover)" Class="rounded mud-background-gray  pa-4 ma-4 flex-grow-1">
+                                            <MudText Typo="Typo.button" Class="ma-2" Color="Color.Info">@localizer["cover"]</MudText>
+                                        </MudDropZone>
+                                        <MudDropZone T="DropItem" Identifier="Header" AllowReorder="true" CanDrop="@((item) => item.ComponentType == ReportPartType.Header)" Class="rounded mud-background-gray  pa-4 ma-4 flex-grow-1">
+                                            <MudText Typo="Typo.button" Class="ma-2" Color="Color.Success">@localizer["header"]</MudText>
+                                        </MudDropZone>
+
+                                        <MudDropZone T="DropItem" Identifier="Footer" AllowReorder="true" CanDrop="@((item) => item.ComponentType == ReportPartType.Footer)" Class="rounded mud-background-gray  pa-4 ma-4 flex-grow-1">
+                                            <MudText Typo="Typo.button" Class="ma-2" Color="Color.Warning">@localizer["footer"]</MudText>
+                                        </MudDropZone>
+
+                                        <MudDropZone T="DropItem" Identifier="Body" AllowReorder="true" CanDrop="@((item) => item.ComponentType == ReportPartType.Body)" Class="rounded mud-background-gray  pa-4 ma-4 flex-grow-1">
+                                            <MudText Typo="Typo.button" Class="ma-2" Color="Color.Primary">@localizer["body"]</MudText>
+                                        </MudDropZone>
+
+                                    </div>
+                                    <MudDropZone T="DropItem" Identifier="None" Class="rounded mud-alert-text-normal pa-4 mt-6 mx-4 flex-grow-1 d-flex flex-wrap"/>
+                                </ChildContent>
+                                <ItemRenderer>
+                                    <MudPaper Elevation="25" Class="pa-4 ma-2">
+                                        <MudText Typo="Typo.subtitle1">@context.Name</MudText>
+                                        <MudText Typo="Typo.subtitle2">
+                                            <strong>@localizer["type"]:</strong> 
+                                            @switch(@context.ComponentType){
+                                                case ReportPartType.Cover:
+                                                    <MudChip Color="Color.Info" Size="Size.Small">@localizer["cover"]</MudChip>
+                                                    break;
+                                                case ReportPartType.Header:
+                                                    <MudChip Color="Color.Success" Size="Size.Small">@localizer["header"]</MudChip>
+                                                    break;
+                                                case ReportPartType.Footer:
+                                                    <MudChip Color="Color.Warning" Size="Size.Small">@localizer["footer"]</MudChip>
+                                                    break;
+                                                case ReportPartType.Body:
+                                                    <MudChip Color="Color.Primary" Size="Size.Small">@localizer["body"]</MudChip>
+                                                    break;
+                                            }
+                                            <strong>@localizer["language"]:</strong>
+                                            @switch(@context.Language){
+                                                case Language.English:
+                                                    <MudChip Color="Color.Info" Size="Size.Small">@localizer["english"]</MudChip>
+                                                    break;
+                                                case Language.Español:
+                                                    <MudChip Color="Color.Error" Size="Size.Small">@localizer["español"]</MudChip>
+                                                    break;
+                                            }
+                                        </MudText>
+                                    </MudPaper>
+                                </ItemRenderer>
+                            </MudDropContainer>
+                        }
+
+                    </MudStack>
+                </MudForm>
+            </MudContainer>
+        }
+        else
+        {
+            <MudGrid>
+                <MudItem xs="12" sm="4" md="3">
+                    <MudCard Elevation="25">
+                        <MudCardContent>
+                            <div class="d-flex justify-center mb-4">
+
+                                <MudIcon Color="Color.Default" Icon="@Icons.Custom.FileFormats.FilePdf" Size="Size.Large"/>
+
+                            </div>
+                            <MudList Dense="true">
+                                <MudListItem Text="@report.Name" Icon="@Icons.Custom.FileFormats.FilePdf"/>
+                                <MudListItem Text="@report.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
+                            </MudList>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="12" sm="8" md="9">
+                    <MudStack>
+                        <MudItem xs="12" sm="12" md="12" lg="12">
+                            <MudCard Elevation="25">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudStack Row="true">
+                                            <MudIcon Icon="@Icons.Material.Filled.Description" Size="Size.Small" Color="Color.Default"></MudIcon>
+                                            <MudText>@localizer["description"]</MudText>
+
+                                        </MudStack>
+
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent>
+                                    @((MarkupString)report.Description)
+                                </MudCardContent>
+                            </MudCard>
+
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="12" lg="12">
+                            <MudCard Elevation="25">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudStack Row="true">
+                                            <MudIcon Icon="@Icons.Material.Filled.Description" Size="Size.Small" Color="Color.Default"></MudIcon>
+                                            <MudText>@localizer["reportParts"]</MudText>
+
+                                        </MudStack>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent>
+                                    <MudText Typo="Typo.h6" Color="Color.Info">@localizer["cover"]</MudText>
+
+                                    @foreach (var item in _dropItems.Where(x => x.Identifier != "None" && x.ComponentType == ReportPartType.Cover).OrderBy(x => x.Order))
+                                    {
+                                        <MudPaper Elevation="25" Class="pa-4 ma-2">
+                                            <MudText Typo="Typo.subtitle1">@item.Name</MudText>
+                                            <MudText Typo="Typo.subtitle2">
+                                                <strong>@localizer["type"]:</strong> <MudChip Color="Color.Info" Size="Size.Small">@localizer["cover"]</MudChip>.
+                                                <strong>@localizer["language"]:</strong>
+                                                @switch (@item.Language)
+                                                {
+                                                    case Language.English:
+                                                        <MudChip Color="Color.Info" Size="Size.Small">@localizer["english"]</MudChip>
+                                                        break;
+                                                    case Language.Español:
+                                                        <MudChip Color="Color.Error" Size="Size.Small">@localizer["español"]</MudChip>
+                                                        break;
+                                                }
+                                            </MudText>
+                                        </MudPaper>
+                                    }
+                                    <MudText Typo="Typo.h6" Color="Color.Success">@localizer["header"]</MudText>
+
+                                    @foreach (var item in _dropItems.Where(x => x.Identifier != "None" && x.ComponentType == ReportPartType.Header).OrderBy(x => x.Order))
+                                    {
+                                        <MudPaper Elevation="25" Class="pa-4 ma-2">
+                                            <MudText Typo="Typo.subtitle1">@item.Name</MudText>
+                                            <MudText Typo="Typo.subtitle2">
+                                                <strong>@localizer["type"]:</strong> <MudChip Color="Color.Success" Size="Size.Small">@localizer["header"]</MudChip>.
+                                                <strong>@localizer["language"]:</strong>
+                                                @switch (@item.Language)
+                                                {
+                                                    case Language.English:
+                                                        <MudChip Color="Color.Info" Size="Size.Small">@localizer["english"]</MudChip>
+                                                        break;
+                                                    case Language.Español:
+                                                        <MudChip Color="Color.Error" Size="Size.Small">@localizer["español"]</MudChip>
+                                                        break;
+                                                }
+                                            </MudText>
+                                        </MudPaper>
+                                    }
+                                    <MudText Typo="Typo.h6" Color="Color.Warning">@localizer["footer"]</MudText>
+
+                                    @foreach (var item in _dropItems.Where(x => x.Identifier != "None" && x.ComponentType == ReportPartType.Footer).OrderBy(x => x.Order))
+                                    {
+                                        <MudPaper Elevation="25" Class="pa-4 ma-2">
+                                            <MudText Typo="Typo.subtitle1">@item.Name</MudText>
+                                            <MudText Typo="Typo.subtitle2">
+                                                <strong>@localizer["type"]:</strong> <MudChip Color="Color.Warning" Size="Size.Small">@localizer["footer"]</MudChip>.
+                                                <strong>@localizer["language"]:</strong>
+                                                @switch (@item.Language)
+                                                {
+                                                    case Language.English:
+                                                        <MudChip Color="Color.Info" Size="Size.Small">@localizer["english"]</MudChip>
+                                                        break;
+                                                    case Language.Español:
+                                                        <MudChip Color="Color.Error" Size="Size.Small">@localizer["español"]</MudChip>
+                                                        break;
+                                                }
+                                            </MudText>
+
+                                        </MudPaper>
+                                    }
+                                    <MudText Typo="Typo.h6" Color="Color.Primary">@localizer["body"]</MudText>
+
+                                    @foreach (var item in _dropItems.Where(x => x.Identifier != "None" && x.ComponentType == ReportPartType.Body).OrderBy(x => x.Order))
+                                    {
+                                        <MudPaper Elevation="25" Class="pa-4 ma-2">
+                                            <MudText Typo="Typo.subtitle1">@item.Name</MudText>
+                                            <MudText Typo="Typo.subtitle2">
+                                                <strong>@localizer["type"]:</strong> <MudChip Color="Color.Primary" Size="Size.Small">@localizer["body"]</MudChip>.
+                                                <strong>@localizer["language"]:</strong>
+                                                @switch (@item.Language)
+                                                {
+                                                    case Language.English:
+                                                        <MudChip Color="Color.Info" Size="Size.Small">@localizer["english"]</MudChip>
+                                                        break;
+                                                    case Language.Español:
+                                                        <MudChip Color="Color.Error" Size="Size.Small">@localizer["español"]</MudChip>
+                                                        break;
+                                                }
+                                            </MudText>
+
+                                        </MudPaper>
+                                    }
+                                </MudCardContent>
+                            </MudCard>
+
+                        </MudItem>
+
+                    </MudStack>
+                </MudItem>
+
+            </MudGrid>
+        }
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+        @if (editMode)
+        {
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+        }
+    </DialogActions>
+</MudDialog>
+</MudContainer>

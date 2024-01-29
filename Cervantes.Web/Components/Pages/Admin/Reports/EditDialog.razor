@@ -1,0 +1,47 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Color = MudBlazor.Color
+@inject HttpClient Http
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.FileCopy" /> @localizer["edit"] @localizer["reportTemplate"]</MudText>
+	</TitleContent>
+	<DialogContent>
+
+	<MudForm Model="@report" @ref="@form" Validation="@(templateValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+    
+    			<MudStack AlignItems="AlignItems.Stretch">
+    				<MudTextField Placeholder="New Template"  @bind-Value="report.Name"
+    				              For="@(() => report.Name)"
+    				              Immediate="true"
+    				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.FileCopy"/>
+    
+    				<MudSelect @bind-Value="report.Language" For="@(() => report.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                    					@foreach (Language item in Enum.GetValues(typeof(Language)))
+                    					{
+                    						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                    					}
+                    				</MudSelect>
+    				
+    				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="report.Description" data-mce-placeholder="Description"/>
+				    
+    			</MudStack>
+    		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+	</DialogActions>
+</MudDialog>
+		</MudContainer>

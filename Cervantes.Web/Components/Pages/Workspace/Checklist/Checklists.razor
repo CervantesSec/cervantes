@@ -1,0 +1,83 @@
+@page "/workspace/{project:guid}/checklist"
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using DialogOptions = MudBlazor.DialogOptions
+@using Task = System.Threading.Tasks.Task
+@using Variant = MudBlazor.Variant
+@using Cervantes.CORE.ViewModels
+@using Cervantes.Web.Components.Layout
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IDialogService DialogService
+@using TinyMCE.Blazor
+@inject IStringLocalizer<Resource> localizer
+@layout WorkspaceLayout
+@inject NavigationManager navigationManager
+
+
+<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+
+<PageTitle>@localizer["checklist"] | Cervantes</PageTitle>
+
+        <MudGrid>
+                <MudItem xs="12" sm="12" md="12" Class="mt-5">
+                    <MudStack Row="true">
+            
+                        <MudItem xs="12" sm="4" md="4">
+                            <MudText Typo="Typo.h4">
+            <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Checklist" /> @localizer["checklist"]</MudText>
+                            </MudText>
+            
+                        </MudItem>
+                        <MudItem xs="12" sm="8" md="8">
+                            <div class="d-flex justify-end">
+                                <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+                            </div>
+                        </MudItem>
+                    </MudStack>
+            
+                </MudItem>
+        <MudItem xs="12" sm="12" md="12">
+        
+            <MudDataGrid T="ChecklistViewModel" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                         Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                <ToolBarContent>
+                    <MudStack Row="true">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                         @if (seleChecklists.Count() != 0)
+                                                {
+                                                    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" >
+                                                        <MudButton>@localizer["actions"]</MudButton>
+                                                        <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                                            <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                                        </MudMenu>
+                                                    </MudButtonGroup>
+                                                }
+                    </MudStack>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <Columns>
+                    <SelectColumn T="ChecklistViewModel"></SelectColumn>
+                    <PropertyColumn Property="x => x.Target" Title="@localizer["name"]"/>
+                    <PropertyColumn Property="x => x.Type" Title="@localizer["type"]"/>
+                    <PropertyColumn Property="x => x.CreatedDate.ToShortDateString()" Title="@localizer["createdDate"]"/>
+                    
+                    <PropertyColumn Property="x => x.User" Title="@localizer["createdBy"]"/>
+                </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="ChecklistViewModel"/>
+                </PagerContent>
+            </MudDataGrid>
+            <br/>
+            <MudButton Href="/"
+                       Variant="Variant.Filled"
+                       StartIcon="@Icons.Material.Filled.ArrowBack"
+                       Color="Color.Default">
+                @localizer["back"]
+            </MudButton>
+        </MudItem>
+        </MudGrid>
+</AuthorizeView>

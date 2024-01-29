@@ -1,0 +1,103 @@
+﻿@page "/Account/LoginWithRecoveryCode"
+@layout LoginLayout
+@using System.ComponentModel.DataAnnotations
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Components.Layout
+@using Cervantes.Web.Localization
+@using Microsoft.AspNetCore.Identity
+@using Task = System.Threading.Tasks.Task
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IdentityRedirectManager RedirectManager
+@inject ILogger<LoginWithRecoveryCode> Logger
+@inject IStringLocalizer<Resource> localizer
+@inject ISnackbar Snackbar
+
+<PageTitle>@localizer["recoverCodeVerification"] | Cervantes</PageTitle>
+<div class="mud-grid mud-grid-spacing-xs-3 justify-start">
+<div class="d-flex flex-column gap-3">
+    <h4 class="mud-typography mud-typography-h4">@localizer["recoverCodeVerification"]</h4>
+    
+    <p class="mud-typography mud-typography-body1">
+        @localizer["recoverCodeMessage"]
+    </p>
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Model="Input" FormName="login-with-recovery-code" OnValidSubmit="OnValidSubmitAsync" method="post">
+                <DataAnnotationsValidator/>
+                <ValidationSummary class="text-danger" role="alert"/>
+                <div class="form-floating mb-3">
+                   <label for="recovery-code" class="form-label">@localizer["recoveryCode"]</label>
+<div class="mud-input-control-input-container">
+                        <div class="mud-input mud-input-text mud-input-adorned-start mud-input-underline mud-shrink">
+                            <div class="mud-input-adornment mud-input-adornment-start">
+                                <svg aria-label="Icon" tabindex="-1" class="mud-icon-root mud-icon-default mud-svg-icon mud-icon-size-medium" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><g><rect fill="none" height="24" width="24" x="0"/></g><g><g><g><path d="M22,10V6c0-1.11-0.9-2-2-2H4C2.9,4,2.01,4.89,2.01,6v4C3.11,10,4,10.9,4,12s-0.89,2-2,2v4c0,1.1,0.9,2,2,2h16 c1.1,0,2-0.9,2-2v-4c-1.1,0-2-0.9-2-2S20.9,10,22,10z M13,17.5h-2v-2h2V17.5z M13,13h-2v-2h2V13z M13,8.5h-2v-2h2V8.5z"/></g></g></g>
+                                </svg>
+                            </div>
+                            <InputText @bind-Value="Input.RecoveryCode" class="mud-input-slot mud-input-root mud-input-root-text mud-input-root-adorned-start" type="text" inputmode="text" maxlength="524288" aria-invalid="false" /><div class="mud-input-slot mud-input-root mud-input-root-text mud-input-root-adorned-start" style="display:none" tabindex="-1"></div></div><label class="mud-input-label mud-input-label-animated mud-input-label-text mud-input-label-inputcontrol" for="mudinput-ea32cf80-e491-4055-80e1-4199c45742e0"></label>
+                    </div>
+                    <ValidationMessage For="() => Input.RecoveryCode" class="text-danger"/>
+                </div>
+                <button type="submit" class="mud-button-root mud-button mud-button-filled mud-button-filled-primary mud-button-filled-size-medium mud-ripple" __internal_stopPropagation_onclick><span class="mud-button-label"><span class="mud-button-icon-start mud-button-icon-size-medium"><svg class="mud-icon-root mud-svg-icon mud-icon-size-medium" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><g><rect fill="none" height="24" width="24"/></g><g><path d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z"/></g>
+                    </svg></span>@localizer["login"]</span>
+                </button>        
+            </EditForm>
+        </div>
+    </div>
+</div>
+</div>
+
+@code {
+    private string? message;
+    private ApplicationUser user = default!;
+
+    [SupplyParameterFromForm]
+    private InputModel Input { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    // Ensure the user has gone through the username & password screen first
+        user = await SignInManager.GetTwoFactorAuthenticationUserAsync() ??
+               throw new InvalidOperationException("Unable to load two-factor authentication user.");
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        var recoveryCode = Input.RecoveryCode.Replace(" ", string.Empty);
+
+        var result = await SignInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+
+        var userId = await UserManager.GetUserIdAsync(user);
+
+        if (result.Succeeded)
+        {
+            Logger.LogInformation("User with ID '{UserId}' logged in with a recovery code.", userId);
+            RedirectManager.RedirectTo(ReturnUrl);
+        }
+        else if (result.IsLockedOut)
+        {
+            Logger.LogWarning("User account locked out.");
+            Snackbar.Add(@localizer["accountLocked"], Severity.Error);
+        }
+        else
+        {
+            Logger.LogWarning("Invalid recovery code entered for user with ID '{UserId}' ", userId);
+            Snackbar.Add(@localizer["recoverCodeInvalid"], Severity.Error);
+
+            //message = "Error: Invalid recovery code entered.";
+        }
+    }
+
+    private sealed class InputModel
+    {
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Recovery Code")]
+        public string RecoveryCode { get; set; } = "";
+    }
+
+}

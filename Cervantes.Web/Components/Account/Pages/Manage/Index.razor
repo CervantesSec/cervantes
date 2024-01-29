@@ -1,0 +1,348 @@
+﻿@page "/Account/Profile"
+@rendermode InteractiveServer
+
+@using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+@using System.Text.Encodings.Web
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Controllers
+@using Cervantes.Web.Localization
+@using Microsoft.AspNetCore.Antiforgery
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Identity
+@using Task = System.Threading.Tasks.Task
+
+
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+@inject IHttpContextAccessor _accessor
+@inject UserController userController
+@inject IStringLocalizer<Resource> localizer
+@inject IAntiforgery Antiforgery
+@inject ISnackbar Snackbar
+@inject UrlEncoder UrlEncoder
+@inject IJSRuntime JS
+
+
+<PageTitle>@localizer["profile"] | Cervantes</PageTitle>
+
+<MudGrid>
+<MudItem xs="12" sm="12" md="12" Class="mt-5">
+    <MudStack Row="true">
+
+        <MudItem xs="12" sm="4" md="4">
+            <MudText Typo="Typo.h4">
+                <MudIcon Icon="@Icons.Material.Filled.Person"/> @localizer["profile"]
+            </MudText>
+
+        </MudItem>
+        <MudItem xs="12" sm="8" md="8">
+            <div class="d-flex justify-end">
+                <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+            </div>
+        </MudItem>
+    </MudStack>
+
+</MudItem>
+<MudItem xs="12" sm="12" md="12">
+<MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+<MudTabPanel Text="@localizer["profile"]" Icon="@Icons.Material.Filled.Person">
+    <MudGrid>
+        <MudItem xs="12" sm="4" md="3">
+            <MudCard Elevation="25">
+                <MudCardContent>
+                    <div class="d-flex justify-center mb-4">
+                        @if (!string.IsNullOrEmpty(user.Avatar))
+                        {
+                            <MudImage Src="@user.Avatar" Width="250" Height="250" ObjectFit="ObjectFit.ScaleDown" Class="rounded-lg"> </MudImage>
+                        }
+                        else
+                        {
+                            <MudAvatar Color="Color.Primary" Style="height:250px; width:250px;">@user.FullName</MudAvatar>
+                        }
+                    </div>
+                    <MudText Typo="Typo.h6" Align="Align.Center">@user.FullName</MudText>
+                    <MudText Align="Align.Center" Color="Color.Primary">@user.Email</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.body2" Color="Color.Primary">@localizer["role"]: @Role</MudText>
+                </MudCardContent>
+                <MudCardActions Class="d-flex justify-center">
+
+                    @if (string.IsNullOrEmpty(user.Avatar))
+                    {
+                        <MudFileUpload T="IBrowserFile" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp" FilesChanged="UploadFile">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context">
+                                    @localizer["uploadFile"]
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Text"
+                                   Color="Color.Error"
+                                   StartIcon="@Icons.Material.Filled.Delete"
+                                   Size="Size.Small" OnClick="() => DeleteAvatar(modelEdit.Id)">
+                            @localizer["deleteLogo"]
+                        </MudButton>
+                    }
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="8" md="9">
+            <MudCard Elevation="25">
+                <MudCardContent>
+                    <MudContainer>
+                        <MudForm Model="@modelEdit" @ref="@formEdit" Validation="@(userModelFluentValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+                            <MudStack AlignItems="AlignItems.Stretch">
+                                <MudTextField Placeholder="John Doe" @bind-Value="modelEdit.FullName"
+                                              For="@(() => modelEdit.FullName)"
+                                              Immediate="true"
+                                              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Person"/>
+
+                                <MudTextField Placeholder="+00 000 00 00 00" @bind-Value="modelEdit.PhoneNumber"
+                                              For="@(() => modelEdit.PhoneNumber)"
+                                              Immediate="true"
+                                              Label="@localizer["phone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Phone" InputType="InputType.Telephone"/>
+
+                                <MudTextField Placeholder="Pentester..." @bind-Value="modelEdit.Position"
+                                              For="@(() => modelEdit.Position)"
+                                              Immediate="true"
+                                              Label="@localizer["position"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.PermIdentity"/>
+                            </MudStack>
+                        </MudForm>
+                        <br/>
+
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="SubmitProfile">@localizer["save"]</MudButton>
+
+                    </MudContainer>
+                </MudCardContent>
+
+            </MudCard>
+        </MudItem>
+
+
+    </MudGrid>
+
+</MudTabPanel>
+@if (user.NormalizedEmail != "ADMIN@CERVANTES.LOCAL")
+{
+    <MudTabPanel Text="@localizer["email"]" Icon="@Icons.Material.Filled.Email">
+        <MudItem xs="12" sm="12" md="12">
+            <MudCard Elevation="25">
+                <MudCardContent>
+                    <MudContainer>
+                        <MudForm Model="@emailModel" @ref="@formChange" method="dialog">
+
+                            <MudTextField Placeholder="john.doe@foobar.com" @bind-Value="emailModel.NewEmail"
+                                          For="@(() => emailModel.NewEmail)"
+                                          Immediate="true"
+                                          Label="Email" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email" InputType="InputType.Email"/>
+
+                        </MudForm>
+                        <br/>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="EmailSubmit">@localizer["save"]</MudButton>
+
+                    </MudContainer>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+
+    </MudTabPanel>
+}
+
+<MudTabPanel Text="@localizer["password"]" Icon="@Icons.Material.Filled.Password">
+
+    <MudItem xs="12" sm="12" md="12">
+        <MudCard Elevation="25">
+            <MudCardContent>
+                <MudContainer>
+                    <MudForm Model="@changePasswordModel" @ref="@formChange" Validation="@(changeFluentValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+                        <MudStack AlignItems="AlignItems.Stretch">
+                            <MudTextField @bind-Value="changePasswordModel.OldPassword"
+                                          For="@(() => changePasswordModel.OldPassword)"
+                                          Immediate="true"
+                                          Label="@localizer["oldPassword"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
+                            <MudTextField @bind-Value="changePasswordModel.NewPassword"
+                                          For="@(() => changePasswordModel.NewPassword)"
+                                          Immediate="true"
+                                          Label="@localizer["newPassword"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
+                        </MudStack>
+                    </MudForm>
+                    <br/>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="SubmitPasswordAsync">@localizer["save"]</MudButton>
+
+                </MudContainer>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudTabPanel>
+<MudTabPanel Text="@localizer["twoFactor"]" Icon="@Icons.Material.Filled.LockPerson">
+    <MudItem xs="12" sm="12" md="12">
+
+        @if (user.TwoFactorEnabled)
+        {
+            <MudGrid>
+                <MudItem xs="12" md="6" lg="6">
+                    <MudCard Elevation="25">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">@localizer["disable2fa"]</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            @if (recoveryCodes != null)
+                            {
+                                <MudText Typo="Typo.h6">@localizer["recoveryCode"]</MudText>
+                                <MudText Typo="Typo.h6" Color="Color.Secondary">
+                                    <strong >@localizer["codesSafe"]</strong>
+                                </MudText>
+
+
+                                @foreach (var codes in recoveryCodes)
+                                {
+                                    <kbd>@codes</kbd>
+                                    <br/>
+                                }
+                            }
+                            <MudText>
+                                <strong>@localizer["disable2faAction"]</strong>
+                            </MudText>
+                            <MudText>
+                                @localizer["disable2faAction2"]
+                            </MudText>
+                            <br/>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.DisabledByDefault" Color="@Color.Primary" OnClick="Disable2faSubmit">@localizer["disable2fa"]</MudButton>
+
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" md="6" lg="6">
+                    <MudCard Elevation="25">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">@localizer["resetAuthenticator"]</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText>
+                                <strong>@localizer["resetAuthenticatorAction"]</strong>
+                            </MudText>
+                            <MudText>
+                                @localizer["resetAuthenticatorAction1"]
+                            </MudText>
+                            <br/>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.LockReset" Color="@Color.Primary" OnClick="ResetAuthenticatorSubmit">@localizer["resetAuthenticator"]</MudButton>
+
+                        </MudCardContent>
+
+                    </MudCard>
+
+                </MudItem>
+
+            </MudGrid>
+        }
+        else
+        {
+            <MudCard Elevation="25">
+                <MudCardContent>
+                    <MudContainer>
+                        <div>
+                            <MudText Typo="Typo.h6">@localizer["authenticatorIntro"]</MudText>
+                            <ol class="list">
+                                <li>
+                                    <MudText>
+                                        @localizer["authenticator1"]
+                                        <MudLink href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</MudLink> @localizer["and"]
+                                        <MudLink href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</MudLink> @localizer["or"]
+                                        Google Authenticator @localizer["for"]
+                                        <MudLink href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</MudLink> @localizer["and"]
+                                        <MudLink href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</MudLink>.
+                                    </MudText>
+                                </li>
+                                <li>
+                                    <MudText>
+                                        @localizer["authenticator2"] <kbd>@sharedKey</kbd> @localizer["authenticator3"]
+                                    </MudText>
+                                    <img src="@QRByte" style="width: 200px;height: 200px"/>
+                                </li>
+                                <li>
+                                    <MudText>
+                                        @localizer["authenticator4"]
+                                    </MudText>
+                                    <MudForm Model="twoFactorModel">
+
+                                        <MudTextField @bind-Value="twoFactorModel.Code"
+                                                      For="@(() => twoFactorModel.Code)"
+                                                      Immediate="true"
+                                                      Label="@localizer["verificationCode"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Numbers"/>
+
+
+                                    </MudForm>
+                                    <br/>
+                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Verified" Color="@Color.Primary" OnClick="TwoFactorSubmit">@localizer["verify"]</MudButton>
+
+                                </li>
+                            </ol>
+                        </div>
+                    </MudContainer>
+                </MudCardContent>
+                <MudCardActions>
+
+                </MudCardActions>
+            </MudCard>
+        }
+
+    </MudItem>
+
+</MudTabPanel>
+@if (user.NormalizedEmail != "ADMIN@CERVANTES.LOCAL")
+{
+    <MudTabPanel Text="@localizer["personalData"]" Icon="@Icons.Material.Filled.Info">
+        <MudGrid>
+            <MudItem sm="12" md="12" lg="12">
+                <MudPaper Elevation="25">
+                    <MudText Align="Align.Center">@localizer["personalDataMessage"]</MudText>
+                    <MudText Align="Align.Center">
+                        <strong>@localizer["personalDataMessageDelete"]</strong>
+                    </MudText>
+                    <br/>
+                    <MudStack Row="true" Justify="Justify.Center" Spacing="0">
+                        <form action="Account/Manage/DownloadPersonalData" method="post">
+                            <input name="__RequestVerificationToken" type="hidden" value="@GetAntiforgeryToken()"/>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Download" Color="Color.Primary">@localizer["download"]</MudButton>
+                        </form>
+                        &nbsp;&nbsp;
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="DeletePersonalData">@localizer["delete"]</MudButton>
+
+                    </MudStack>
+                    <br/>
+
+
+                </MudPaper>
+
+            </MudItem>
+
+
+        </MudGrid>
+
+
+    </MudTabPanel>
+}
+</MudTabs>
+
+
+</MudItem>
+</MudGrid>

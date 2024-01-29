@@ -1,0 +1,111 @@
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@inject IJSRuntime jsRuntime
+@inject IStringLocalizer<Resource> localizer
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Person" /> @localizer["createUser"]</MudText>
+	</TitleContent>
+	<DialogContent>
+
+		<MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+			<MudStack AlignItems="AlignItems.Stretch">
+				<MudTextField Placeholder="John Doe"  @bind-Value="model.FullName"
+				              For="@(() => model.FullName)"
+				              Immediate="true"
+				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Person"/>
+
+
+				<MudTextField Placeholder="john.doe@foobar.com" @bind-Value="model.Email"
+				              For="@(() => model.Email)"
+				              Immediate="true"
+				              Label="Email" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email" InputType="InputType.Email"/>
+				
+				<MudTextField Placeholder="+00 000 00 00 00" @bind-Value="model.PhoneNumber"
+				              For="@(() => model.PhoneNumber)"
+				              Immediate="true"
+				              Label="@localizer["phone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Phone" InputType="InputType.Telephone"/>
+				
+				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+
+				<MudTextField @bind-Value="model.Password"
+				              For="@(() => model.Password)"
+				              Immediate="true"
+				              Label="@localizer["password"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
+				
+				<MudTextField @bind-Value="model.ConfirmPassword"
+                				              For="@(() => model.ConfirmPassword)"
+                				              Immediate="true"
+                				              Label="@localizer["confirmPassword"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
+
+				<MudTextField Placeholder="Pentester..."  @bind-Value="model.Position"
+				              For="@(() => model.Position)"
+				              Immediate="true"
+				              Label="@localizer["position"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.PermIdentity"/>
+
+				<MudSelect Placeholder="@localizer["role"]" @bind-Value="model.Role" For="@(() => model.Role)" Label="@localizer["role"]" AdornmentIcon="@Icons.Material.Filled.PersonSearch" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					<MudSelectItem Value="Guid.Empty.ToString()" Disabled="true">@localizer["selectRole"]</MudSelectItem>
+					@foreach (var role in Roles)
+					{
+						<MudSelectItem Value="@role.Name">@role.Name</MudSelectItem>
+					}
+				</MudSelect>
+				
+				@if (model.Role == "Client")
+				{
+					<MudSelect Placeholder="@localizer["client"]" @bind-Value="clientId" For="@(() => clientId)" Label="@localizer["client"]" AdornmentIcon="@Icons.Material.Filled.Contacts" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+						<MudSelectItem Value="Guid.Empty" Disabled="true">@localizer["selectClient"]</MudSelectItem>
+						@foreach (var cli in Clients)
+						{
+							<MudSelectItem Value="@cli.Id">@cli.Name</MudSelectItem>
+						}
+					</MudSelect>
+					
+				}
+
+				<MudFileUpload T="IBrowserFile" @bind-Files="File" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
+					<ButtonTemplate>
+						<MudButton HtmlTag="label"
+						           Variant="Variant.Filled"
+						           Color="Color.Primary"
+						           StartIcon="@Icons.Material.Filled.CloudUpload"
+						           for="@context">
+							@localizer["uploadFile"]
+						</MudButton>
+					</ButtonTemplate>
+					<SelectedTemplate>
+
+						@if (File != null)
+						{
+							<MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment" /> @File.Name </MudText>
+                                
+						}
+						else
+						{
+							<MudText><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["noFiles"]</MudText>
+						}
+					</SelectedTemplate>
+				</MudFileUpload>
+			</MudStack>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+	</DialogActions>
+</MudDialog>
+		</MudContainer>
+

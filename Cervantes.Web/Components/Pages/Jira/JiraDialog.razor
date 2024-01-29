@@ -1,0 +1,248 @@
+@rendermode InteractiveServer
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+<AuthorizeView Roles="SuperUser,User,Admin">
+
+    <MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+        <MudDialog DisableSidePadding="true">
+            <TitleContent>
+                <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+
+                    <MudText Typo="Typo.h4">
+	                    <MudIcon Icon="@jiraSVG"/>
+	                    @jira.Name
+                    </MudText>
+                    <MudSpacer/>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Update" Color="Color.Primary" aria-label="delete" OnClick="UpdateJira"></MudIconButton>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="DeleteJira"></MudIconButton>
+
+                </MudItem>
+
+            </TitleContent>
+            <DialogContent>
+	            <MudGrid>
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.Key" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["key"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.JiraKey</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.Category" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["status"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.JiraStatus</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.Person" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["assignee"]</MudText>
+					            @if (jira.Assignee != null)
+					            {
+						            <MudText Typo="Typo.h5">@jira.Assignee</MudText>
+
+					            }
+					            else
+					            {
+						            <MudText Typo="Typo.h5">@localizer["noAssignee"]</MudText>
+
+					            }
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.PriorityHigh" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["priority"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.Priority</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["createdDate"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.JiraCreatedDate</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.EditCalendar" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["updatedDate"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.JiraUpdatedDate</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["dueDate"]</MudText>
+					            @if (jira.DueDate != null)
+					            {
+						            <MudText Typo="Typo.h5">@jira.DueDate</MudText>
+
+					            }
+					            else
+					            {
+						            <MudText Typo="Typo.h5">@localizer["noDueDate"]</MudText>
+
+					            }
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["resolutionDate"]</MudText>
+					            @if (jira.ResolutionDate != null)
+					            {
+						            <MudText Typo="Typo.h5">@jira.ResolutionDate</MudText>
+
+					            }
+					            else
+					            {
+						            <MudText Typo="Typo.h5">@localizer["noResolutionDate"]</MudText>
+
+					            }
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.Label" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["labels"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.Label</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.BuildCircle" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["component"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.JiraComponent</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.Security" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["securityLevel"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.SecurityLevel</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		            <MudItem xs="12" sm="6" md="3">
+			            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+				            <MudIcon Icon="@Icons.Material.Filled.Folder" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+				            <div>
+					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["project"]</MudText>
+					            <MudText Typo="Typo.h5">@jira.JiraProject</MudText>
+				            </div>
+			            </MudPaper>
+		            </MudItem>
+		                           
+		                           
+		                           
+		                           
+
+		                           
+		                           
+		            <MudItem xs="12" md="12" lg="12">
+			            <MudExpansionPanels>
+				            <MudExpansionPanel>
+					            <TitleContent>
+						            <div class="d-flex">
+							            <MudText Class="mt-1">@localizer["comments"]</MudText>
+							            <MudBadge Content="@JiraComments.Count()" Color="Color.Primary" Overlap="true" Class="d-flex ml-auto">
+								            <MudIcon Icon="@Icons.Material.Filled.Comment" Color="Color.Default" />
+							            </MudBadge>
+						            </div>
+					            </TitleContent>
+					            <ChildContent>
+						            <MudStack>
+							            @foreach (var comment in JiraComments)
+							            {
+								            <MudCard Elevation="25">
+									            <MudCardHeader>
+										            <MudStack Row="true">
+											            <MudAvatar Color="Color.Primary" Size="Size.Small">A</MudAvatar>
+
+											            <MudStack Justify="Justify.Center" Spacing="0">
+												            <MudText Typo="Typo.body1">@comment.Author</MudText>
+											            </MudStack>
+										            </MudStack>
+										            <MudSpacer></MudSpacer>
+										            <MudText Typo="Typo.body2">@comment.CreatedDate</MudText>
+									            </MudCardHeader>
+									            <MudCardContent>
+										            <MudText Typo="Typo.body2">@comment.Body</MudText>
+									            </MudCardContent>
+								            </MudCard>
+
+							            }
+							                           
+							            <MudCard Elevation="25">
+								            <MudCardHeader>
+									            <MudText Typo="Typo.body1">@localizer["addComment"]</MudText>
+								            </MudCardHeader>
+								            <MudCardContent>
+									            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="test" data-mce-placeholder="Description"/>
+
+								            </MudCardContent>
+								            <MudCardActions>
+									            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.AddComment" Color="Color.Primary" OnClick="AddComment">@localizer["add"]</MudButton>
+
+								            </MudCardActions>
+							            </MudCard>
+
+						            </MudStack>
+					            </ChildContent>
+				            </MudExpansionPanel>
+			            </MudExpansionPanels>
+		            </MudItem>
+
+	            </MudGrid>
+	            
+
+            </DialogContent>
+            <DialogActions>
+                <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+            </DialogActions>
+        </MudDialog>
+    </MudContainer>
+</AuthorizeView>

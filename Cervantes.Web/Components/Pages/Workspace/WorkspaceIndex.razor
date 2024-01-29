@@ -1,0 +1,320 @@
+@page "/workspace/{project:guid}"
+@rendermode InteractiveServer
+@using MudExtensions.Enums
+@using MudExtensions
+@using Cervantes.Web.Components.Layout
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@layout WorkspaceLayout
+@using ApexCharts
+@using Cervantes.Web.Components.Pages.Workspace.Target
+@using Color = MudBlazor.Color
+@using Size = MudBlazor.Size
+@inject NavigationManager navigationManager
+@using MudBlazor.Extensions
+<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+
+<PageTitle>@localizer["workspace"] | Cervantes</PageTitle>
+
+<MudGrid>
+<MudItem xs="12" sm="12" md="12" Class="mt-5">
+    <MudStack Row="true">
+
+        <MudItem xs="12" sm="4" md="4">
+            <MudText Typo="Typo.h4">
+                <MudIcon Icon="@Icons.Material.Filled.Folder"/> @Project.Name
+            </MudText>
+
+
+        </MudItem>
+        <MudItem xs="12" sm="8" md="8">
+            <div class="d-flex justify-end">
+                <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+            </div>
+        </MudItem>
+    </MudStack>
+
+</MudItem>
+<MudItem xs="12" sm="3" md="3">
+    <MudStack>
+
+
+        <MudCard Elevation="25">
+            <MudCardContent>
+                <MudListExtended T="string" Dense="true">
+                    <div class="d-flex justify-center mb-4">
+
+                        @if (@Project.Client.ImagePath != "None")
+                        {
+                            <MudImage Fluid="true" Src="@Project.Client.ImagePath" Width="200" Height="200" Class="rounded-lg">
+                            </MudImage>
+                        }
+                        else
+                        {
+                            <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Large"/>
+                        }
+                    </div>
+
+                    <MudListItemExtended T="string" Text="@Project.Name" Icon="@Icons.Material.Filled.Folder"/>
+                    <MudListItemExtended T="string" Text="@Project.Client.Name" Icon="@Icons.Material.Filled.Business"/>
+                    <MudListItemExtended T="string" Text="@Project.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
+                    <MudListItemExtended T="string" Text="@Project.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth"/>
+                    <MudListItemExtended T="string" Text="@Project.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
+                    <MudListItemExtended T="string" Text="@Project.ProjectType.ToString()" Icon="@Icons.Material.Filled.Category"/>
+                    <MudListItemExtended T="string" Text="@Project.Score.ToString()" Icon="@Icons.Material.Filled.Polyline"/>
+
+                </MudListExtended>
+            </MudCardContent>
+        </MudCard>
+
+
+        <MudCard Elevation="25">
+
+            <MudCardHeader>
+                <MudText Typo="Typo.body1">
+                    <MudIcon Icon="@Icons.Material.Filled.Group" Size="Size.Small"/> @localizer["members"]
+                </MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudAvatarGroup Max="7" Spacing="3" MaxColor="Color.Primary">
+                    @foreach (var member in Members)
+                    {
+                        <MudTooltip Text="@member.User.FullName">
+                            @if (string.IsNullOrEmpty(@member.User.Avatar))
+
+                            {
+                                <MudAvatar Color="Color.Primary">@member.User.FullName[0]</MudAvatar>
+                            }
+                            else
+                            {
+                                <MudAvatar Image="@member.User.Avatar"> </MudAvatar>
+                            }
+
+                        </MudTooltip>
+                    }
+                </MudAvatarGroup>
+            </MudCardContent>
+        </MudCard>
+
+
+    </MudStack>
+</MudItem>
+
+<MudItem xs="12" sm="12" md="9" lg="9">
+<MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+<MudTabPanel Text="Dashboard" Icon="@Icons.Material.Filled.Dashboard">
+
+    <MudGrid>
+
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.BugReport" Color="Color.Secondary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["vulns"]</MudText>
+                    <MudText Typo="Typo.h5">@Vulns.Count()</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["tasks"]</MudText>
+                    <MudText Typo="Typo.h5">@Tasks.Count()</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.Adjust" Color="Color.Warning" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["targets"]</MudText>
+                    <MudText Typo="Typo.h5">@Targets.Count()</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.Castle" Color="Color.Info" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["data"]</MudText>
+                    <MudText Typo="Typo.h5">@Vaults.Count()</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="8" lg="8">
+
+            <MudPaper Class="pa-4" Style="height:300px;">
+                <MudContainer>
+                    <ApexChart TItem="CORE.Entities.Task"
+                               Title="@localizer["myTasksStatus"]" Options="optionsTask">
+
+                        <ApexPointSeries TItem="CORE.Entities.Task"
+                                         Items="Tasks"
+                                         SeriesType=SeriesType.Pie
+                                         Name="Gross Value"
+                                         XValue="@(e => e.Status)"
+                                         YAggregate="@(e => e.Count())"
+                                         OrderByDescending="e => e.Y" PointColor="e => GetPointColorTasks(e)"/>
+                    </ApexChart>
+
+
+                </MudContainer>
+
+            </MudPaper>
+        </MudItem>
+
+
+        <MudItem xs="12" sm="12" md="4" lg="4">
+            <MudCard Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@localizer["myTasks"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Class="px-0">
+                    <MudList Dense="true">
+                        @foreach (var task in Tasks.Take(3).OrderByDescending(v => v.StartDate))
+                        {
+                            <MudListItem>
+                                <div class="d-flex flex-row">
+                                    <MudAvatar Class="mud-elevation-25">
+                                        <MudIcon Icon="@Icons.Material.Filled.Task" Class="mx-4"/>
+                                    </MudAvatar>
+                                    <div class="ml-6">
+                                        <MudText Typo="Typo.subtitle2">@task.Name</MudText>
+                                        <MudText Typo="Typo.body2">@task.Status</MudText>
+                                    </div>
+                                    <MudChip Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@task.AsignedUser.FullName</MudChip>
+                                </div>
+                            </MudListItem>
+                        }
+                    </MudList>
+                </MudCardContent>
+            </MudCard>
+
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="4" lg="4">
+            <MudCard Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@localizer["recentTargets"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Class="px-0">
+                    <MudList Dense="true">
+                        @foreach (var target in Targets.Take(3))
+                        {
+                            <MudListItem>
+                                <div class="d-flex flex-row">
+                                    <MudAvatar Class="mud-elevation-25">
+                                        <MudIcon Icon="@Icons.Material.Filled.Adjust" Class="mx-4"/>
+                                    </MudAvatar>
+                                    <div class="ml-6">
+                                        <MudText Typo="Typo.subtitle2">@target.Name</MudText>
+                                        <MudText Typo="Typo.body2">@target.User.FullName</MudText>
+                                    </div>
+                                    <MudChip Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@target.Type</MudChip>
+                                </div>
+                            </MudListItem>
+                        }
+                    </MudList>
+                </MudCardContent>
+            </MudCard>
+
+        </MudItem>
+        <MudItem xs="12" sm="12" md="8">
+            <MudPaper Class="pa-4" Style="height:300px;">
+
+                <ApexChart TItem="CORE.Entities.Vault"
+                           Title="@localizer["dataVault"]"
+                           Options=optionsVault>
+
+                    <ApexPointSeries TItem="CORE.Entities.Vault"
+                                     Items="Vaults"
+                                     Name="@localizer["dataVault"]"
+                                     SeriesType="SeriesType.Donut"
+                                     XValue="@(e => e.Type)"
+                                     YAggregate="@(e => e.Count())"
+                                     OrderByDescending="e => e.Y"
+                                     ShowDataLabels/>
+                </ApexChart>
+            </MudPaper>
+
+        </MudItem>
+        <MudItem xs="12" sm="12" md="8">
+            <MudPaper Class="pa-4" Style="height:300px;">
+                <MudContainer>
+                    <ApexChart TItem="CORE.Entities.Vuln"
+                               Title="@localizer["vulns"]" Options="optionsVulns">
+
+                        <ApexPointSeries TItem="CORE.Entities.Vuln"
+                                         Items="Vulns"
+                                         Name="@localizer["vulns"]"
+                                         XValue="@(e => e.Risk)"
+                                         YAggregate="@(e => e.Count())"
+                                         OrderByDescending="e => e.Y"
+                                         SeriesType="SeriesType.Bar" PointColor="e => GetPointColorVulns(e)"/>
+                    </ApexChart>
+
+                </MudContainer>
+
+            </MudPaper>
+
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="4" lg="4">
+            <MudCard Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@localizer["recentVulns"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Class="px-0">
+                    <MudList Dense="true">
+                        @foreach (var task in Tasks.Take(3).OrderByDescending(v => v.StartDate))
+                        {
+                            <MudListItem>
+                                <div class="d-flex flex-row">
+                                    <MudAvatar Class="mud-elevation-25">
+                                        <MudIcon Icon="@Icons.Material.Filled.Task" Class="mx-4"/>
+                                    </MudAvatar>
+                                    <div class="ml-6">
+                                        <MudText Typo="Typo.subtitle2">@task.Name</MudText>
+                                        <MudText Typo="Typo.body2">@task.Status</MudText>
+                                    </div>
+                                    <MudChip Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@task.AsignedUser.FullName</MudChip>
+                                </div>
+                            </MudListItem>
+                        }
+                    </MudList>
+                </MudCardContent>
+            </MudCard>
+
+        </MudItem>
+
+
+    </MudGrid>
+</MudTabPanel>
+<MudTabPanel Text="@localizer["description"]" Icon="@Icons.Material.Filled.Description">
+    <MudCard Elevation="25">
+
+        <MudCardHeader>
+            <MudText Typo="Typo.body1">
+                <MudIcon Icon="@Icons.Material.Filled.Description" Size="Size.Small"/> @localizer["description"]
+            </MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            @((MarkupString)Project.Description)
+        </MudCardContent>
+    </MudCard>
+</MudTabPanel>
+</MudTabs>
+
+</MudItem>
+</MudGrid>
+</AuthorizeView>

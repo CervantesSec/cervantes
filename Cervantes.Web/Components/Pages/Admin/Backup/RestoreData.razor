@@ -1,0 +1,51 @@
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Variant = MudBlazor.Variant
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@inject IStringLocalizer<Resource> localizer
+
+		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
+<MudDialog DisableSidePadding="true">
+	<TitleContent>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Restore" /> @localizer["restoreData"]</MudText>
+	</TitleContent>
+	<DialogContent>
+
+		<MudForm Model="@model" @ref="@form">
+			<MudStack>
+			<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".json">
+					<ButtonTemplate>
+						<MudButton HtmlTag="label"
+						           Variant="Variant.Filled"
+						           Color="Color.Primary"
+						           StartIcon="@Icons.Material.Filled.CloudUpload"
+						           for="@context">
+							@localizer["uploadFile"]
+						</MudButton>
+					</ButtonTemplate>
+					<SelectedTemplate>
+
+						@if (file != null)
+						{
+							<MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment" /> @file.Name </MudText>
+                                
+						}
+						else
+						{
+							<MudText><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["noFiles"]</MudText>
+						}
+					</SelectedTemplate>
+				</MudFileUpload>
+			</MudStack>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Upload" Color="@Color.Primary" OnClick="@Submit">@localizer["restore"]</MudButton>
+	</DialogActions>
+</MudDialog>
+		</MudContainer>
+
