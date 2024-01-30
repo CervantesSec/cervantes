@@ -1685,4 +1685,7 @@
     <data name="footer" xml:space="preserve">
         <value>Footer</value>
     </data>
+    <data name="deleteChecklist" xml:space="preserve">
+        <value>Delete Checklist</value>
+    </data>
 </root>

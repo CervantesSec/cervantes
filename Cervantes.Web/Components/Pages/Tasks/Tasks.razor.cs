@@ -10,6 +10,7 @@ using Cervantes.IFR.Export;
 using Cervantes.Web.Components.Pages.Projects;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
@@ -137,6 +138,7 @@ public partial class Tasks: ComponentBase
 
         if (!result.Canceled)
         {
+            await Update();
             StateHasChanged();
         }
     }

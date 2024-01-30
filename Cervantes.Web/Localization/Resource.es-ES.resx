@@ -1755,4 +1755,7 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="footer" xml:space="preserve">
         <value>Pie de Página</value>
     </data>
+    <data name="deleteChecklist" xml:space="preserve">
+        <value>Eliminar Lista de Verificación</value>
+    </data>
 </root>

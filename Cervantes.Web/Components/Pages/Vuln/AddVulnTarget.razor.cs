@@ -62,18 +62,18 @@ public partial class AddVulnTarget: ComponentBase
             var response = await _VulnController.AddVulnTarget(model);
             if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")            
             {
-                Snackbar.Add(@localizer["vulnTargetAdded"], Severity.Success);
+                Snackbar.Add(@localizer["targetAdded"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
                 
             }
             else if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkObjectResult")
             {
-                Snackbar.Add(@localizer["vulnTargetExists"], Severity.Info);
+                Snackbar.Add(@localizer["targetExists"], Severity.Info);
                 MudDialog.Close(DialogResult.Ok(true));
             }
             else
             {
-                Snackbar.Add(@localizer["vulnTargetAddedError"], Severity.Error);
+                Snackbar.Add(@localizer["targetAddedError"], Severity.Error);
             }
 
         }

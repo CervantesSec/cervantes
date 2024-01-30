@@ -570,7 +570,7 @@
 
 			</MudTabPanel>
 				
-				<MudTabPanel Text="@localizer["attachments"]" Icon="@Icons.Material.Filled.Attachment" BadgeData="@Attachments.Count()" BadgeColor="Color.Primary">
+				<MudTabPanel Text="@localizer["attachments"]" Icon="@Icons.Material.Filled.Attachment" BadgeData="@Attachments.Count()" BadgeColor="Color.Primary" Style="min-width: 260px;">
 					<MudDataGrid T="ProjectAttachment" Items="@Attachments" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterAttachments"
 					             Hideable="true" Hover="true" RowClick="@RowClickedAttachment" MultiSelection="true" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
 						<ToolBarContent>
