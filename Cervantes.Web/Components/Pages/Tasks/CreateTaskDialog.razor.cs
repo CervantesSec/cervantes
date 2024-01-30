@@ -10,6 +10,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
@@ -121,6 +122,15 @@ public partial class CreateTaskDialog: ComponentBase
 	        {
 		        Snackbar.Add(@localizer["taskCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));
+	        }
+	        else if (response is BadRequestObjectResult badRequestResult)
+	        {
+		        var message = badRequestResult.Value;
+		        if (message.ToString() == "NotAllowed")
+		        {
+			        Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+		        }
+			        
 	        }
 	        else
 	        {

@@ -147,6 +147,15 @@ public class TaskController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                if (model.ProjectId != null && model.ProjectId != Guid.Empty)
+                {
+                    var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
+                    if (user == null)
+                    {
+                        return BadRequest("NotAllowed");
+                    }
+                }
+                
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
 
@@ -217,6 +226,14 @@ public class TaskController: ControllerBase
                 var result = taskManager.GetById(task.Id);
                 if (result != null)
                 {
+                    if (result.ProjectId != null && result.ProjectId != Guid.Empty)
+                    {
+                        var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
+                        if (user == null)
+                        {
+                            return BadRequest("NotAllowed");
+                        }
+                    }
                     var sanitizer = new HtmlSanitizer();
                     sanitizer.AllowedSchemes.Add("data");
                     result.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(task.Name));
@@ -275,6 +292,15 @@ public class TaskController: ControllerBase
                 var result = taskManager.GetById(taskId);
                 if (result != null)
                 {
+                    if (result.ProjectId != null && result.ProjectId != Guid.Empty)
+                    {
+                        var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
+                        if (user == null)
+                        {
+                            return BadRequest("NotAllowed");
+                        }
+                    }
+                    
                     taskManager.Remove(result);
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task deleted successfully. User: {0}",
@@ -313,6 +339,15 @@ public class TaskController: ControllerBase
                 var result = taskManager.GetById(task.Id);
                 if (result != null)
                 {
+                    if (result.ProjectId != null && result.ProjectId != Guid.Empty)
+                    {
+                        var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
+                        if (user == null)
+                        {
+                            return BadRequest("NotAllowed");
+                        }
+                    }
+                    
                     result.Status = task.Status;
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task updated successfully. User: {0}",
@@ -401,11 +436,23 @@ public class TaskController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                var task = taskManager.GetById(model.TaskId);
+                if (task.ProjectId != null && task.ProjectId != Guid.Empty)
+                {
+                    var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
+                    if (user == null)
+                    {
+                        return BadRequest("NotAllowed");
+                    }
+                }
+                
                 var result = taskTargetManager.GetAll()
                     .Where(x => x.TaskId == model.TaskId && x.TargetId == model.TargetId);
 
                 if (result.FirstOrDefault() == null)
                 {
+                    
+                    
                     var target = new TaskTargets()
                     {
                         Id = Guid.NewGuid(),
@@ -446,6 +493,16 @@ public class TaskController: ControllerBase
 
                 if (result != null)
                 {
+                    var task = taskManager.GetById(result.TaskId);
+                    if (task.ProjectId != null && task.ProjectId != Guid.Empty)
+                    {
+                        var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
+                        if (user == null)
+                        {
+                            return BadRequest("NotAllowed");
+                        }
+                    }
+                    
                     taskTargetManager.Remove(result);
                     await taskTargetManager.Context.SaveChangesAsync();
 
@@ -473,6 +530,16 @@ public class TaskController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                var task = taskManager.GetById(model.TaskId);
+                if (task.ProjectId != null && task.ProjectId != Guid.Empty)
+                {
+                    var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
+                    if (user == null)
+                    {
+                        return BadRequest("NotAllowed");
+                    }
+                }
+                
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
                 
@@ -506,6 +573,16 @@ public class TaskController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                var task = taskManager.GetById(model.TaskId);
+                if (task.ProjectId != null && task.ProjectId != Guid.Empty)
+                {
+                    var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
+                    if (user == null)
+                    {
+                        return BadRequest("NotAllowed");
+                    }
+                }
+                
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
                 
@@ -539,10 +616,21 @@ public class TaskController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                
                 var result = taskNoteManager.GetById(id);
 
                 if (result != null)
                 {
+                    var task = taskManager.GetById(result.TaskId);
+                    if (task.ProjectId != null && task.ProjectId != Guid.Empty)
+                    {
+                        var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
+                        if (user == null)
+                        {
+                            return BadRequest("NotAllowed");
+                        }
+                    }
+                    
                     taskNoteManager.Remove(result);
                     await taskNoteManager.Context.SaveChangesAsync();
 
@@ -570,6 +658,16 @@ public class TaskController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                var task = taskManager.GetById(model.TaskId);
+                if (task.ProjectId != null && task.ProjectId != Guid.Empty)
+                {
+                    var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
+                    if (user == null)
+                    {
+                        return BadRequest("NotAllowed");
+                    }
+                }
+                
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
                 if (model.FileContent != null)
@@ -652,6 +750,15 @@ public class TaskController: ControllerBase
 
                 if (result != null)
                 {
+                    var task = taskManager.GetById(result.TaskId);
+                    if (task.ProjectId != null && task.ProjectId != Guid.Empty)
+                    {
+                        var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
+                        if (user == null)
+                        {
+                            return BadRequest("NotAllowed");
+                        }
+                    }
                     
                     var path = $"{env.WebRootPath}/{result.FilePath}";
                     if (System.IO.File.Exists(path))

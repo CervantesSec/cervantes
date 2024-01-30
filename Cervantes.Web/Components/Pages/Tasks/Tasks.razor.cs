@@ -10,6 +10,7 @@ using Cervantes.IFR.Export;
 using Cervantes.Web.Components.Pages.Projects;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -62,6 +63,7 @@ public partial class Tasks: ComponentBase
     
     private async Task ItemUpdated(MudItemDropInfo<CORE.Entities.Task> dropItem)
     {
+        var status = dropItem.Item.Status;
         dropItem.Item.Status = (CORE.Entities.TaskStatus)Enum.Parse(typeof(CORE.Entities.TaskStatus), dropItem.DropzoneIdentifier);
         var update = new TaskUpdateViewModel();
         update.Id = dropItem.Item.Id;
@@ -71,8 +73,20 @@ public partial class Tasks: ComponentBase
         {
             Snackbar.Add(@localizer["taskUpdated"], Severity.Success);
         }
+        else if (response is BadRequestObjectResult badRequestResult)
+        {
+            dropItem.Item.Status = status;
+            var message = badRequestResult.Value;
+            if (message.ToString() == "NotAllowed")
+            {
+                Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+            }
+			        
+        }
         else
         {
+            dropItem.Item.Status = status;
+
             Snackbar.Add(@localizer["taskUpdatedError"], Severity.Error);
         }
     }
