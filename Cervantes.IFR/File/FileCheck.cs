@@ -101,7 +101,7 @@ public class FileCheck: IFileCheck
             var results = inspector.Inspect(file);
             var ResultsByFileExtension = results.ByFileExtension();
             
-            return ResultsByFileExtension.First().Extension;;
+            return ResultsByFileExtension.First().Extension;
         }
         catch (Exception e)
         {

@@ -918,7 +918,6 @@ public class ReportController : ControllerBase
                             {
                                 FileDownloadName = fileName
                             };
-                            break;
                         case ReportFileType.Docx:
                             using (MemoryStream generatedDocument = new MemoryStream())
                             {

@@ -2,6 +2,7 @@
 using Cervantes.CORE;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Xml;
 using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
@@ -67,12 +68,16 @@ public class DataInitializer
             user.Avatar = "Attachments/Users/logo.png";
             user.Description = "Administrator";
 
-            int length = 18;
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-            var random = new Random();
-            string password = new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-            Console.WriteLine("You password for admin@cervantes.local is "+password);
+            int length = 20;
+            var randomNumber = new byte[32];
+            string password;
+            //string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+            }
+            password = Convert.ToBase64String(randomNumber);
+            Console.WriteLine("Your password for admin@cervantes.local is "+password);
             var result = userManager.CreateAsync(user, password).Result;
 
             if (result.Succeeded) userManager.AddToRoleAsync(user, "Admin").Wait();
