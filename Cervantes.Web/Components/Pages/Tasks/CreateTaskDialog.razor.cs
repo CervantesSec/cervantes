@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -96,6 +97,11 @@ public partial class CreateTaskDialog: ComponentBase
 		Targets = _targetController.GetTargets().ToList();
 		Users = _userController.Get().ToList();
 		Projects = _projectController.Get().Where(x => x.Template == false).ToList();
+		if (project != null || project != Guid.Empty)
+		{
+			SelectedProject = project;
+		}
+		model.CreatedUserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 		StateHasChanged();
     }
 

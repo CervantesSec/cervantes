@@ -52,7 +52,9 @@ public partial class WorkspaceVulns: ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
 
-        var dialog = DialogService.Show<CreateVulnDialog>("Custom Options Dialog", options);
+        var parameters = new DialogParameters { ["project"]=Project.Id };
+
+        var dialog = DialogService.Show<CreateVulnDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)

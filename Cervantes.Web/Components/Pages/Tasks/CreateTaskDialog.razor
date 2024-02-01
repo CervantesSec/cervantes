@@ -4,8 +4,8 @@
 @using Cervantes.Web.Localization
 @using Microsoft.Extensions.Localization
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
-@inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
+@inject IHttpContextAccessor _accessor
 
 
 <style>

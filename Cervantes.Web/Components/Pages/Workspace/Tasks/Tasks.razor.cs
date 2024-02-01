@@ -56,7 +56,6 @@ public partial class Tasks: ComponentBase
         users.Clear();
         selectedUser = string.Empty;
         users = _userController.Get().ToList();
-        Projects = _projectController.Get().ToList();
         Project = _projectController.GetById(project);
     }
     
@@ -102,7 +101,7 @@ public partial class Tasks: ComponentBase
 
     private async Task OpenDialogCreate(Guid project,DialogOptions options)
     {
-        var parameters = new DialogParameters { ["project"]=project };
+        var parameters = new DialogParameters { ["project"]=Project.Id };
         var dialog = Dialog.Show<CreateTaskDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;

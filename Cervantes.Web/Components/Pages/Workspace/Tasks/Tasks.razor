@@ -156,14 +156,6 @@
                             <MudSpacer/>
                             <MudSpacer/>
 
-                            <MudSelect @bind-Value="selectedProject" For="@(() => selectedProject)" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                                <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
-                                @foreach (var pro in Projects)
-                                {
-                                    <MudSelectItem Value="@pro.Id">@pro.Name</MudSelectItem>
-                                }
-                            </MudSelect>
-                            &nbsp; &nbsp;
                             <MudSelect @bind-Value="selectedUser" For="@(() => selectedUser)" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
                                 <MudSelectItem Value="string.Empty">@localizer["selectUser"]</MudSelectItem>
                                 @foreach (var user in users)
