@@ -753,8 +753,13 @@ public class ReportController : ControllerBase
                     {
                         targets = targets + asset.Target.Name + " (" + asset.Target.Type + "), ";
                     }
-                 
-                    
+
+                    var cat = "No Category";
+                    if (vuln.VulnCategory != null)
+                    {
+                        cat = vuln.VulnCategory.Name;
+                    }
+
                     VulnsList.Add(new Dictionary<string, string>
                     {
                         {"VulnName", vuln.Name},
@@ -762,7 +767,7 @@ public class ReportController : ControllerBase
                         {"VulnCve", vuln.cve},
                         {"VulnCwes", cwes},
                         {"VulnDescription", vuln.Description},
-                        {"VulnCategory", vuln.VulnCategory.Name},
+                        {"VulnCategory", cat},
                         {"VulnRisk", vuln.Risk.ToString()},
                         {"VulnStatus", vuln.Status.ToString()},
                         {"VulnImpact", vuln.Impact},
@@ -889,20 +894,9 @@ public class ReportController : ControllerBase
                 if (report != null)
                 {
                     var user = projectUserManager.VerifyUser(report.ProjectId, aspNetUserId);
-                    if (user != null)
+                    if (user == null)
                     {
                         return null;
-                    }
-
-                    var user2 = userManager.GetByUserId(user.UserId);
-                    var roles = _userManager.GetRolesAsync(user2).Result;
-                    if (roles.FirstOrDefault() == "Client")
-                    {
-                        if (user2.ClientId != report.Project.ClientId)
-                        {
-                            return null;
-
-                        }
                     }
                     
                     switch (model.FileType)

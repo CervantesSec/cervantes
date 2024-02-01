@@ -37,7 +37,7 @@
 	</DialogContent>
 	<DialogActions>
 		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Download" Color="@Color.Primary" OnClick="Submit">@localizer["download"]</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Download" Color="@Color.Primary" OnClick="@((e) => Submit())">@localizer["download"]</MudButton>
 	</DialogActions>
 </MudDialog>
 

@@ -39,6 +39,10 @@ public partial class DownloadReportDialog: ComponentBase
         {
             model.Id = report.Id;
             var response =  _ReportController.DownloadReport(model);
+            if (response == null)
+            {
+                Snackbar.Add(@localizer["reportDownloadError"], Severity.Error);
+            }
             switch (response.ContentType)
             {
                 case "text/html":

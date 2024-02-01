@@ -458,19 +458,19 @@ public class ChecklistController : ControllerBase
                    return Ok();
                }
 
-               _logger.LogError("An error occurred editing a Checklist. User: {0} Checlist: {1}",
-                   aspNetUserId, model.Id);
+               _logger.LogError("An error occurred editing a Checklist. User: {0}",
+                   aspNetUserId);
                return BadRequest();
             }
 
-            _logger.LogError("An error occurred editing a Checklist. User: {0} Checlist: {1}",
-                aspNetUserId, model.Id);;
+            _logger.LogError("An error occurred editing a Checklist. User: {0}",
+                aspNetUserId);;
             return BadRequest();
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"An error occurred editing a Checklist. User: {0} Checlist: {1}",
-                aspNetUserId, model.Id);
+            _logger.LogError(e,"An error occurred editing a Checklist. User: {0}",
+                aspNetUserId);
             return BadRequest();
         }
     }
@@ -804,19 +804,19 @@ public class ChecklistController : ControllerBase
                    return Ok();
                }
 
-               _logger.LogError("An error occurred editing a MASTG Checklist. User: {0} Checlist: {1}",
-                   aspNetUserId, model.Id);
+               _logger.LogError("An error occurred editing a MASTG Checklist. User: {0}",
+                   aspNetUserId);
                return BadRequest();
             }
 
-            _logger.LogError("An error occurred editing a MASTG Checklist. User: {0} Checlist: {1}",
-                aspNetUserId, model.Id);;
+            _logger.LogError("An error occurred editing a MASTG Checklist. User: {0}",
+                aspNetUserId);
             return BadRequest();
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"An error occurred editing a MASTG Checklist. User: {0} Checlist: {1}",
-                aspNetUserId, model.Id);
+            _logger.LogError(e,"An error occurred editing a MASTG Checklist. User: {0}",
+                aspNetUserId);
             return BadRequest();
         }
     }
