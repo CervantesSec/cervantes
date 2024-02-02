@@ -960,6 +960,8 @@ public class ChecklistController : ControllerBase
                     TargetName = target.Name,
                     TargetDescription = target.Description,
                     TargetType = target.Type.ToString(),
+                    PageBreak = @"<span style=""page-break-after: always;""></span>",
+                    Today = DateTime.Now.ToShortDateString(),
                     Storage1Note = mastg.Storage1Note,
                     Storage1Status = mastg.Storage1Status.ToString(),
                     Storage1Note1 = mastg.Storage1Note1,

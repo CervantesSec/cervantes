@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
@@ -853,7 +854,10 @@ public class ReportController : ControllerBase
                     VulnInfoCount = Vulns.Count(x => x.Risk == VulnRisk.Info),
                     VulnTotalCount = Vulns.Count(),
                     Tasks = TasksList,
-                    Vaults = VaultsList
+                    Vaults = VaultsList,
+                    PageBreak = @"<span style=""page-break-after: always;""></span>",
+                    Today = DateTime.Now.ToShortDateString()
+                    
                 };
                 
 
@@ -924,6 +928,8 @@ public class ReportController : ControllerBase
                                         mainPart = package.AddMainDocumentPart();
                                         new Document(new Body()).Save(mainPart);
                                     }
+                                    
+                                    
 
                                     // Parse the HTML code to extract the header, footer, and cover
                                     var htmlDoc = new HtmlAgilityPack.HtmlDocument();
@@ -1022,7 +1028,7 @@ public class ReportController : ControllerBase
 
                                     string updatedHtmlCode = htmlDoc.DocumentNode.OuterHtml;
                                     converter.ParseHtml(updatedHtmlCode);
-
+                                    
                                     mainPart.Document.Save();
                                 }
 
