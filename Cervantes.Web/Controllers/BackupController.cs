@@ -72,7 +72,8 @@ public class BackupController : ControllerBase
         IWSTGManager wstgManager, IMASTGManager mastgManager, IJiraManager jiraManager,
         IJiraCommentManager jiraCommentManager, IHttpContextAccessor HttpContextAccessor,
         IFileCheck fileCheck, IReportComponentsManager reportComponentsManager,
-        IReportsPartsManager reportsPartsManager, IKnowledgeBaseManager knowledgeBaseManager,IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager)
+        IReportsPartsManager reportsPartsManager, IKnowledgeBaseManager knowledgeBaseManager,
+        IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager)
     {
         this.userManager = userManager;
         _userManager = usrManager;
@@ -831,16 +832,16 @@ public class BackupController : ControllerBase
                     Clnt13Status = x.Clnt13Status,
                     Apit01Status = x.Apit01Status
                 }),
-                KnowledgeBaseCategories = knowledgeBaseCategoryManager.GetAll().Select(x => new KnowledgeBaseCategories()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Description = x.Description,
-                    UserId = x.UserId,
-                    Icon = x.Icon,
-                    Order = x.Order
-                    
-                }),
+                KnowledgeBaseCategories = knowledgeBaseCategoryManager.GetAll().Select(x =>
+                    new KnowledgeBaseCategories()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                        UserId = x.UserId,
+                        Icon = x.Icon,
+                        Order = x.Order
+                    }),
                 KnowledgeBase = knowledgeBaseManager.GetAll().Select(x => new KnowledgeBase()
                 {
                     Id = x.Id,
@@ -921,7 +922,7 @@ public class BackupController : ControllerBase
             {
                 if (fileCheck.CheckFile(model.FileContent))
                 {
-                    unique = Guid.NewGuid().ToString()+".zip";
+                    unique = Guid.NewGuid().ToString() + ".zip";
                     path = $"{env.WebRootPath}/Attachments/Temp/{unique}";
                     var fs = System.IO.File.Create(path);
                     fs.Write(model.FileContent, 0,
@@ -954,11 +955,10 @@ public class BackupController : ControllerBase
 
     [HttpPost]
     [Route("Data")]
-    public Task<IActionResult> RestoreData(BackupFormViewModel model)
+    public async Task<IActionResult> RestoreData(BackupFormViewModel model)
     {
         try
         {
-            _logger.LogInformation("RestoreData method started.");
 
             var path = "";
             var unique = "";
@@ -966,95 +966,138 @@ public class BackupController : ControllerBase
             {
                 if (fileCheck.CheckFile(model.FileContent))
                 {
-                    unique = Guid.NewGuid().ToString()+".json";
+                    unique = Guid.NewGuid().ToString() + ".json";
                     path = $"{env.WebRootPath}/Attachments/Temp/{unique}";
                     var fs = System.IO.File.Create(path);
                     fs.Write(model.FileContent, 0,
                         model.FileContent.Length);
                     fs.Close();
-                    _logger.LogInformation("RestoreData content check");
                 }
                 else
                 {
                     _logger.LogError("An error ocurred adding a client. User: {0}",
                         aspNetUserId);
-                    return System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest("Invalid file type"));
+                    return await System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest("Invalid file type"));
                 }
             }
 
             using FileStream openStream = System.IO.File.OpenRead(path);
             BackupViewModel backupViewModel = JsonSerializer.Deserialize<BackupViewModel>(openStream);
 
+            string oldUserId = "";
             if (backupViewModel.Users != null)
             {
                 foreach (var user in backupViewModel.Users)
                 {
+                    var userExists = await _userManager.FindByIdAsync(user.Id);
+                    if (userExists == null)
+                    {
+                        // Skip this user if it does not exist
+                        continue;
+                    }
+                    
                     if (user.Email == "admin@cervantes.local")
                     {
-                        /*user.Email = "adminbackup@cervantes.local";
-                        user.UserName = "adminbackup@cervantes.local";
-                        user.NormalizedEmail = "ADMINBACKUP@CERVANTES.LOCAL";
-                        user.NormalizedUserName = "ADMINBACKUP@CERVANTES.LOCAL";
-                        userManager.Add(user);
-                        userManager.Context.SaveChanges();
-                        _userManager.AddToRoleAsync(user, "Admin").Wait();*/
+                        oldUserId = user.Id;
                         continue;
                     }
 
-                    userManager.Add(user);
-                    userManager.Context.SaveChanges();
-                    if (user.ClientId != Guid.Empty)
+                    await userManager.AddAsync(user);
+
+                    if (user.ClientId != null)
                     {
-                        _userManager.AddToRoleAsync(user, "Client").Wait();
+                        await _userManager.AddToRoleAsync(user, "Client");
                         continue;
                     }
 
-                    _userManager.AddToRoleAsync(user, "User").Wait();
+                    await _userManager.AddToRoleAsync(user, "User");
                 }
+                await userManager.Context.SaveChangesAsync();
+
             }
 
             if (backupViewModel.Clients != null)
             {
                 foreach (var client in backupViewModel.Clients)
                 {
-                    client.UserId = aspNetUserId;
-                    clientManager.Add(client);
+                    var clientResult = clientManager.GetById(client.Id);
+                    if (clientResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(client.UserId);
+                    if (userExists == null)
+                    {
+                        client.UserId = aspNetUserId;
+                    }
+                    await clientManager.AddAsync(client);
                 }
 
-                clientManager.Context.SaveChanges();
+                await clientManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Projects != null)
             {
                 foreach (var project in backupViewModel.Projects)
                 {
-                    project.UserId = aspNetUserId;
-                    projectManager.Add(project);
+                    var projectResult = projectManager.GetById(project.Id);
+                    if (projectResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(project.UserId);
+                    if (userExists == null)
+                    {
+                        project.UserId = aspNetUserId;
+                    }
+                    await projectManager.AddAsync(project);
                 }
 
-                projectManager.Context.SaveChanges();
+                await projectManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.ProjectAttachments != null)
             {
                 foreach (var attachment in backupViewModel.ProjectAttachments)
                 {
-                    attachment.UserId = aspNetUserId;
-                    projectAttachmentManager.Add(attachment);
+                    var attachmentResult = projectAttachmentManager.GetById(attachment.Id);
+                    if (attachmentResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(attachment.UserId);
+                    if (userExists == null)
+                    {
+                        attachment.UserId = aspNetUserId;
+                    }
+                    await projectAttachmentManager.AddAsync(attachment);
                 }
 
-                projectAttachmentManager.Context.SaveChanges();
+                await projectAttachmentManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.ProjectNotes != null)
             {
                 foreach (var note in backupViewModel.ProjectNotes)
                 {
-                    note.UserId = aspNetUserId;
-                    projectNoteManager.Add(note);
+                    var noteResult = projectNoteManager.GetById(note.Id);
+                    if (noteResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(note.UserId);
+                    if (userExists == null)
+                    {
+                        note.UserId = aspNetUserId;
+                    }
+                    await projectNoteManager.AddAsync(note);
                 }
 
-                projectNoteManager.Context.SaveChanges();
+                await projectNoteManager.Context.SaveChangesAsync();
             }
 
             /*if (backupViewModel.ProjectUsers != null)
@@ -1071,22 +1114,42 @@ public class BackupController : ControllerBase
             {
                 foreach (var doc in backupViewModel.Documents)
                 {
-                    doc.UserId = aspNetUserId;
-                    documentManager.Add(doc);
+                    var docResult = documentManager.GetById(doc.Id);
+                    if (docResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(doc.UserId);
+                    if (userExists == null)
+                    {
+                        doc.UserId = aspNetUserId;
+                    }
+                    await documentManager.AddAsync(doc);
                 }
 
-                documentManager.Context.SaveChanges();
+                await documentManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Notes != null)
             {
                 foreach (var note in backupViewModel.Notes)
                 {
-                    note.UserId = aspNetUserId;
-                    noteManager.Add(note);
+                    var noteResult = noteManager.GetById(note.Id);
+                    if (noteResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(note.UserId);
+                    if (userExists == null)
+                    {
+                        note.UserId = aspNetUserId;
+                    }
+                    await noteManager.AddAsync(note);
                 }
 
-                noteManager.Context.SaveChanges();
+                await noteManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Organization != null)
@@ -1100,99 +1163,177 @@ public class BackupController : ControllerBase
                 org.ContactPhone = backupViewModel.Organization.ContactPhone;
                 org.ImagePath = backupViewModel.Organization.ImagePath;
 
-                organizationManager.Context.SaveChanges();
+                await organizationManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Reports != null)
             {
                 foreach (var rep in backupViewModel.Reports)
                 {
-                    rep.UserId = aspNetUserId;
-                    reportManager.Add(rep);
+                    var repResult = reportManager.GetById(rep.Id);
+                    if (repResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(rep.UserId);
+                    if (userExists == null)
+                    {
+                        rep.UserId = aspNetUserId;
+                    }
+                    await reportManager.AddAsync(rep);
                 }
 
-                reportManager.Context.SaveChanges();
+                await reportManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Targets != null)
             {
                 foreach (var target in backupViewModel.Targets)
                 {
-                    target.UserId = aspNetUserId;
-                    targetManager.Add(target);
+                    var targetResult = targetManager.GetById(target.Id);
+                    if (targetResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(target.UserId);
+                    if (userExists == null)
+                    {
+                        target.UserId = aspNetUserId;
+                    }
+                    await targetManager.AddAsync(target);
                 }
 
-                targetManager.Context.SaveChanges();
+                await targetManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.TargetServices != null)
             {
                 foreach (var services in backupViewModel.TargetServices)
                 {
-                    services.UserId = aspNetUserId;
-                    targetServicesManager.Add(services);
+                    var servicesResult = targetServicesManager.GetById(services.Id);
+                    if (servicesResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(services.UserId);
+                    if (userExists == null)
+                    {
+                        services.UserId = aspNetUserId;
+                    }
+                    await targetServicesManager.AddAsync(services);
                 }
 
-                targetServicesManager.Context.SaveChanges();
+                await targetServicesManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Tasks != null)
             {
                 foreach (var task in backupViewModel.Tasks)
                 {
+                   
+                    
+                    var taskResult = taskManager.GetById(task.Id);
+                    if (taskResult != null)
+                    {
+                        continue;
+                    }
+                    
                     task.CreatedUserId = aspNetUserId;
-                    if (task.AsignedUser.UserName == "admin@cervantes.local")
+
+                    // Check if the AsignedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(task.AsignedUserId);
+                    if (userExists == null)
                     {
                         task.AsignedUserId = aspNetUserId;
+
                     }
 
-                    taskManager.Add(task);
+
+                    await taskManager.AddAsync(task);
                 }
 
-                taskManager.Context.SaveChanges();
+                await taskManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.TaskAttachments != null)
             {
                 foreach (var att in backupViewModel.TaskAttachments)
                 {
-                    att.UserId = aspNetUserId;
-                    taskAttachmentManager.Add(att);
+                    var attResult = taskAttachmentManager.GetById(att.Id);
+                    if (attResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(att.UserId);
+                    if (userExists == null)
+                    {
+                        att.UserId = aspNetUserId;
+                    }
+                    await taskAttachmentManager.AddAsync(att);
                 }
 
-                taskAttachmentManager.Context.SaveChanges();
+                await taskAttachmentManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.TaskNotes != null)
             {
                 foreach (var note in backupViewModel.TaskNotes)
                 {
-                    note.UserId = aspNetUserId;
-                    taskNoteManager.Add(note);
+                    var noteResult = taskNoteManager.GetById(note.Id);
+                    if (noteResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(note.UserId);
+                    if (userExists == null)
+                    {
+                        note.UserId = aspNetUserId;
+                    }
+                    await taskNoteManager.AddAsync(note);
                 }
 
-                taskNoteManager.Context.SaveChanges();
+                await taskNoteManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.TaskTargets != null)
             {
                 foreach (var tar in backupViewModel.TaskTargets)
                 {
-                    taskTargetManager.Add(tar);
+                    var tarResult = taskTargetManager.GetById(tar.Id);
+                    if (tarResult != null)
+                    {
+                        continue;
+                    }
+                    await taskTargetManager.AddAsync(tar);
                 }
 
-                taskTargetManager.Context.SaveChanges();
+                await taskTargetManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Vaults != null)
             {
                 foreach (var vault in backupViewModel.Vaults)
                 {
-                    vault.UserId = aspNetUserId;
-                    vaultManager.Add(vault);
+                    var vaultResult = vaultManager.GetById(vault.Id);
+                    if (vaultResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(vault.UserId);
+                    if (userExists == null)
+                    {
+                        vault.UserId = aspNetUserId;
+                    }
+                    await vaultManager.AddAsync(vault);
                 }
 
-                vaultManager.Context.SaveChanges();
+                await vaultManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.VulnCategories != null)
@@ -1204,8 +1345,7 @@ public class BackupController : ControllerBase
                     {
                         vulnCategoryManager.Add(cat);
                     }
-
-                    vulnCategoryManager.Context.SaveChanges();
+                    await vulnCategoryManager.Context.SaveChangesAsync();
                 }
             }
 
@@ -1213,98 +1353,272 @@ public class BackupController : ControllerBase
             {
                 foreach (var vulns in backupViewModel.Vulns)
                 {
-                    vulns.UserId = aspNetUserId;
-                    vulnManager.Add(vulns);
+                    var vulnResult = vulnManager.GetById(vulns.Id);
+                    if (vulnResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(vulns.UserId);
+                    if (userExists == null)
+                    {
+                        vulns.UserId = aspNetUserId;
+                    }
+                    await vulnManager.AddAsync(vulns);
                 }
 
-                vulnManager.Context.SaveChanges();
+                await vulnManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.VulnAttachments != null)
             {
                 foreach (var att in backupViewModel.VulnAttachments)
                 {
-                    att.UserId = aspNetUserId;
-                    vulnAttachmentManager.Add(att);
+                    var attResult = vulnAttachmentManager.GetById(att.Id);
+                    if (attResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(att.UserId);
+                    if (userExists == null)
+                    {
+                        att.UserId = aspNetUserId;
+                    }
+                    await vulnAttachmentManager.AddAsync(att);
                 }
 
-                vulnAttachmentManager.Context.SaveChanges();
+                await vulnAttachmentManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.VulnNotes != null)
             {
                 foreach (var note in backupViewModel.VulnNotes)
                 {
-                    note.UserId = aspNetUserId;
-                    vulnNoteManager.Add(note);
+                    var noteResult = vulnNoteManager.GetById(note.Id);
+                    if (noteResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(note.UserId);
+                    if (userExists == null)
+                    {
+                        note.UserId = aspNetUserId;
+                    }
+                    await vulnNoteManager.AddAsync(note);
                 }
 
-                vulnNoteManager.Context.SaveChanges();
+                await vulnNoteManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.VulnTargets != null)
             {
                 foreach (var vuln in backupViewModel.VulnTargets)
                 {
-                    vulnTargetManager.Add(vuln);
+                    var vulnResult = vulnTargetManager.GetById(vuln.Id);
+                    if (vulnResult != null)
+                    {
+                        continue;
+                    }
+                    await vulnTargetManager.AddAsync(vuln);
                 }
 
-                vulnTargetManager.Context.SaveChanges();
+                await vulnTargetManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Jira != null)
             {
                 foreach (var jira in backupViewModel.Jira)
                 {
-                    jira.UserId = aspNetUserId;
-                    jiraManager.Add(jira);
+                    var jiraResult = jiraManager.GetById(jira.Id);
+                    if (jiraResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(jira.UserId);
+                    if (userExists == null)
+                    {
+                        jira.UserId = aspNetUserId;
+                    }
+                    await jiraManager.AddAsync(jira);
                 }
 
-                jiraManager.Context.SaveChanges();
+                await jiraManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.JiraComments != null)
             {
                 foreach (var com in backupViewModel.JiraComments)
                 {
-                    jiraCommentManager.Add(com);
+                    var comResult = jiraCommentManager.GetById(com.Id);
+                    if (comResult != null)
+                    {
+                        continue;
+                    }
+                    await jiraCommentManager.AddAsync(com);
                 }
 
-                jiraCommentManager.Context.SaveChanges();
+                await jiraCommentManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Wstgs != null)
             {
                 foreach (var wstg in backupViewModel.Wstgs)
                 {
-                    wstg.UserId = aspNetUserId;
-                    wstgManager.Add(wstg);
+                    var wstgResult = wstgManager.GetById(wstg.Id);
+                    if (wstgResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(wstg.UserId);
+                    if (userExists == null)
+                    {
+                        wstg.UserId = aspNetUserId;
+                    }
+                    await wstgManager.AddAsync(wstg);
                 }
 
-                wstgManager.Context.SaveChanges();
+                await wstgManager.Context.SaveChangesAsync();
             }
 
             if (backupViewModel.Mastgs != null)
             {
                 foreach (var mastg in backupViewModel.Mastgs)
                 {
-                    mastg.UserId = aspNetUserId;
-                    mastgManager.Add(mastg);
+                    var mastgResult = mastgManager.GetById(mastg.Id);
+                    if (mastgResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(mastg.UserId);
+                    if (userExists == null)
+                    {
+                        mastg.UserId = aspNetUserId;
+                    }
+                    
+                    await mastgManager.AddAsync(mastg);
                 }
 
-                mastgManager.Context.SaveChanges();
+                await mastgManager.Context.SaveChangesAsync();
+            }
+            
+            if (backupViewModel.ReportComponents != null)
+            {
+                foreach (var comp in backupViewModel.ReportComponents)
+                {
+                    var compResult = reportComponentsManager.GetById(comp.Id);
+                    if (compResult != null)
+                    {
+                        continue;
+                    }
+                    await reportComponentsManager.AddAsync(comp);
+                }
+
+                await reportComponentsManager.Context.SaveChangesAsync();
+            }
+            
+  
+            
+            if (backupViewModel.ReportTemplates != null)
+            {
+                foreach (var comp in backupViewModel.ReportTemplates)
+                {
+                    var compResult = reportTemplateManager.GetById(comp.Id);
+                    if (compResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(comp.UserId);
+                    if (userExists == null)
+                    {
+                        comp.UserId = aspNetUserId;
+                    }
+                    await reportTemplateManager.AddAsync(comp);
+                }
+                
+                await reportTemplateManager.Context.SaveChangesAsync();
+            }
+
+            if (backupViewModel.ReportParts != null)
+            {
+                foreach (var comp in backupViewModel.ReportParts)
+                {
+                    var compResult = reportsPartsManager.GetById(comp.Id);
+                    if (compResult != null)
+                    {
+                        continue;
+                    }
+                    await reportsPartsManager.AddAsync(comp);
+                }
+                await reportsPartsManager.Context.SaveChangesAsync();
+            }
+            
+            if (backupViewModel.KnowledgeBaseCategories != null)
+            {
+                foreach (var cat in backupViewModel.KnowledgeBaseCategories)
+                {
+                    var catResult = knowledgeBaseCategoryManager.GetById(cat.Id);
+                    if (catResult != null)
+                    {
+                        continue;
+                    }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(cat.UserId);
+                    if (userExists == null)
+                    {
+                        cat.UserId = aspNetUserId;
+                    }
+                    
+                    await knowledgeBaseCategoryManager.AddAsync(cat);
+                }
+
+                await knowledgeBaseCategoryManager.Context.SaveChangesAsync();
+            }
+            
+            if (backupViewModel.KnowledgeBase != null)
+            {
+                foreach (var cat in backupViewModel.KnowledgeBase)
+                {
+                    var catResult = knowledgeBaseManager.GetById(cat.Id);
+                    if (catResult != null)
+                    {
+                        continue;
+                    }
+                    
+                    // Check if the CreatedUserId exists in the AspNetUsers table
+                    var userExists = await _userManager.FindByIdAsync(cat.CreatedUserId);
+                    if (userExists == null)
+                    {
+                        cat.CreatedUserId = aspNetUserId;
+                    }
+                    
+                    var userExists2 = await _userManager.FindByIdAsync(cat.UpdatedUserId);
+                    if (userExists2 == null)
+                    {
+                        cat.UpdatedUserId = aspNetUserId;
+                    }
+                    
+                    await knowledgeBaseManager.AddAsync(cat);
+                }
+
+                await knowledgeBaseManager.Context.SaveChangesAsync();
             }
 
             System.IO.File.Delete(path);
             _logger.LogInformation("Data restored successfully. User: {0}",
                 aspNetUserId);
-            return System.Threading.Tasks.Task.FromResult<IActionResult>(Ok());
+            return await System.Threading.Tasks.Task.FromResult<IActionResult>(Ok());
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error ocurred restoring data. User: {0}",
                 aspNetUserId);
-            return System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest());
+            return await System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest());
         }
     }
 }

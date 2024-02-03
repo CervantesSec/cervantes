@@ -47,12 +47,12 @@ public partial class RestoreData: ComponentBase
                 }
                 else
                 {
-                    Snackbar.Add(@localizer["restoredDataError"], Severity.Error);
+                    Snackbar.Add(@localizer["restoreDataError"], Severity.Error);
                 }
             }
             else
             {
-                Snackbar.Add(@localizer["restoredDataError"], Severity.Error);
+                Snackbar.Add(@localizer["restoreError"], Severity.Error);
             }
 
 

@@ -1700,4 +1700,19 @@
     <data name="outOfTime" xml:space="preserve">
         <value>Out Of Time: </value>
     </data>
+    <data name="restoreDataError" xml:space="preserve">
+        <value>An error occurred restoring the data!</value>
+    </data>
+    <data name="restoreAttachmentsError" xml:space="preserve">
+        <value>An error occurred restoring the attachments!</value>
+    </data>
+    <data name="deleteProject" xml:space="preserve">
+        <value>Delete Project</value>
+    </data>
+    <data name="restoredData" xml:space="preserve">
+        <value>Data restored successfully!</value>
+    </data>
+    <data name="restoredAttachments" xml:space="preserve">
+        <value>Attachments restored successfully!</value>
+    </data>
 </root>

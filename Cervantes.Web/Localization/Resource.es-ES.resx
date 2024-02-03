@@ -1770,4 +1770,19 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="outOfTime" xml:space="preserve">
         <value>Fuera de Tiempo:</value>
     </data>
+    <data name="restoreAttachmentsError" xml:space="preserve">
+        <value>Se ha producido un error al restaurar los adjuntos!</value>
+    </data>
+    <data name="restoreDataError" xml:space="preserve">
+        <value>Se ha producido un error al restaurar los datos!</value>
+    </data>
+    <data name="deleteProject" xml:space="preserve">
+        <value>Eliminar Proyecto</value>
+    </data>
+    <data name="restoredData" xml:space="preserve">
+        <value>Datos restaurados correctamente!</value>
+    </data>
+    <data name="restoredAttachments" xml:space="preserve">
+        <value>Adjuntos restaurados correctamente!</value>
+    </data>
 </root>

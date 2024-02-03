@@ -65,6 +65,7 @@ public class DataInitializer
         if (userManager.FindByEmailAsync("admin@cervantes.local").Result == null)
         {
             var user = new ApplicationUser();
+            user.Id = Guid.NewGuid().ToString();
             user.UserName = "admin@cervantes.local";
             user.Email = "admin@cervantes.local";
             user.FullName = "Administrator";

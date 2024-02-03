@@ -47,12 +47,12 @@ public partial class RestoreAttachments: ComponentBase
                 }
                 else
                 {
-                    Snackbar.Add(@localizer["restoredAttachmentsError"], Severity.Error);
+                    Snackbar.Add(@localizer["restoreAttachmentsError"], Severity.Error);
                 }
             }
             else
             {
-                Snackbar.Add(@localizer["restoredAttachmentsError"], Severity.Error);
+                Snackbar.Add(@localizer["restoreAttachmentsError"], Severity.Error);
             }
             
             
