@@ -1691,4 +1691,13 @@
     <data name="noCategory" xml:space="preserve">
         <value>No Category</value>
     </data>
+    <data name="days" xml:space="preserve">
+        <value>days</value>
+    </data>
+    <data name="daysLeft" xml:space="preserve">
+        <value>Days Left:</value>
+    </data>
+    <data name="outOfTime" xml:space="preserve">
+        <value>Out Of Time: </value>
+    </data>
 </root>

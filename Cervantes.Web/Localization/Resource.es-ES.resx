@@ -1761,4 +1761,13 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="noCategory" xml:space="preserve">
         <value>Sin Categoría</value>
     </data>
+    <data name="days" xml:space="preserve">
+        <value>días</value>
+    </data>
+    <data name="daysLeft" xml:space="preserve">
+        <value>Días Restantes: </value>
+    </data>
+    <data name="outOfTime" xml:space="preserve">
+        <value>Fuera de Tiempo:</value>
+    </data>
 </root>

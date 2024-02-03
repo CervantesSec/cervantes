@@ -14,237 +14,280 @@
 <PageTitle>@localizer["tasks"] | Cervantes</PageTitle>
 
 <MudGrid>
-    <MudItem xs="12" sm="12" md="12" Class="mt-5">
-        <MudStack Row="true">
+<MudItem xs="12" sm="12" md="12" Class="mt-5">
+    <MudStack Row="true">
 
-            <MudItem xs="12" sm="4" md="4">
+        <MudItem xs="12" sm="4" md="4">
+            <MudText Typo="Typo.h4">
                 <MudText Typo="Typo.h4">
-                    <MudText Typo="Typo.h4">
-                        <MudIcon Icon="@Icons.Material.Filled.Task"/> @localizer["tasks"]
-                    </MudText>
+                    <MudIcon Icon="@Icons.Material.Filled.Task"/> @localizer["tasks"]
                 </MudText>
+            </MudText>
 
-            </MudItem>
-            <MudItem xs="12" sm="8" md="8">
-                <div class="d-flex justify-end">
-                    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-                </div>
-            </MudItem>
-        </MudStack>
+        </MudItem>
+        <MudItem xs="12" sm="8" md="8">
+            <div class="d-flex justify-end">
+                <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+            </div>
+        </MudItem>
+    </MudStack>
 
-    </MudItem>
-    <MudItem xs="12" sm="12" md="12">
+</MudItem>
+<MudItem xs="12" sm="12" md="12">
 
-        <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
-            <MudTabPanel Text="@localizer["list"]" Icon="@Icons.Material.Filled.List">
-                <MudDataGrid T="CORE.Entities.Task" Items="@tasks.Where(x => x.Template == false)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
-                             Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
-                    <ToolBarContent>
-                        <MudStack Row="true">
-                            <AuthorizeView Roles="Admin,SuperUser,User">
-                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidth))">@localizer["create"]</MudButton>
-                                @if (seleTasks.Count() != 0)
+    <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+        <MudTabPanel Text="@localizer["list"]" Icon="@Icons.Material.Filled.List">
+            <MudDataGrid T="CORE.Entities.Task" Items="@tasks.Where(x => x.Template == false)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                         Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                <ToolBarContent>
+                    <MudStack Row="true">
+                        <AuthorizeView Roles="Admin,SuperUser,User">
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidth))">@localizer["create"]</MudButton>
+                            @if (seleTasks.Count() != 0)
+                            {
+                                <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                    <MudButton>@localizer["actions"]</MudButton>
+                                    <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                        <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                    </MudMenu>
+                                </MudButtonGroup>
+                            }
+
+                        </AuthorizeView>
+                    </MudStack>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                    </MudTextField>
+                </ToolBarContent>
+                <Columns>
+                    <SelectColumn T="CORE.Entities.Task"/>
+
+                    <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                    <TemplateColumn Title="@localizer["project"]">
+                        <CellTemplate>
+                            @if (@context.Item.Project == null)
+                            {
+                                @localizer["noProject"]
+                            }
+                            else
+                            {
+                                @context.Item.Project.Name
+                            }
+                        </CellTemplate>
+                    </TemplateColumn>
+                    <PropertyColumn Property="x => x.AsignedUser.FullName" Title="@localizer["assignedTo"]">
+                        <CellTemplate>
+                            <MudStack Row="true">
+                                @if (@context.Item.AsignedUser.Avatar != null)
                                 {
-                                    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                                        <MudButton>@localizer["actions"]</MudButton>
-                                        <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                            <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
-                                        </MudMenu>
-                                    </MudButtonGroup>
-                                }
-
-                            </AuthorizeView>
-                        </MudStack>
-                        <MudSpacer/>
-                        <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
-                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
-                        </MudTextField>
-                    </ToolBarContent>
-                    <Columns>
-                        <SelectColumn T="CORE.Entities.Task"/>
-
-                        <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
-                        <TemplateColumn Title="@localizer["project"]">
-                            <CellTemplate>
-                                @if (@context.Item.Project == null)
-                                {
-                                    @localizer["noProject"]
+                                    <MudImage Src="@context.Item.AsignedUser.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
                                 }
                                 else
                                 {
-                                    @context.Item.Project.Name
+                                    <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.AsignedUser.FullName[0]</MudAvatar>
                                 }
-                            </CellTemplate>
-                        </TemplateColumn>
-                        <PropertyColumn Property="x => x.AsignedUser.FullName" Title="@localizer["assignedTo"]">
-                            <CellTemplate>
-                                <MudStack Row="true">
-                                    @if (@context.Item.AsignedUser.Avatar != null)
-                                    {
-                                        <MudImage Src="@context.Item.AsignedUser.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
-                                    }
-                                    else
-                                    {
-                                        <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.AsignedUser.FullName[0]</MudAvatar>
-                                    }
-                                    <MudStack Justify="Justify.Center" Spacing="0">
-                                        <MudText Typo="Typo.body1">@context.Item.AsignedUser.FullName</MudText>
-                                    </MudStack>
+                                <MudStack Justify="Justify.Center" Spacing="0">
+                                    <MudText Typo="Typo.body1">@context.Item.AsignedUser.FullName</MudText>
                                 </MudStack>
+                            </MudStack>
 
-                            </CellTemplate>
-                        </PropertyColumn>
-                        <PropertyColumn Property="x => x.Status" Title="@localizer["status"]">
-                            <CellTemplate>
-                                @switch (@context.Item.Status)
-                                {
-                                    case CORE.Entities.TaskStatus.Backlog:
-                                        <MudChip Icon="@Icons.Material.Filled.List" Color="Color.Info">@localizer["backlog"]</MudChip>
-                                        break;
-                                    case CORE.Entities.TaskStatus.ToDo:
-                                        <MudChip Icon="@Icons.Material.Filled.PlaylistAdd" Color="Color.Primary">@localizer["toDo"]</MudChip>
-                                        break;
-                                    case CORE.Entities.TaskStatus.InProgress:
-                                        <MudChip Icon="@Icons.Material.Filled.DoubleArrow" Color="Color.Warning">@localizer["inProgress"]</MudChip>
-                                        break;
-                                    case CORE.Entities.TaskStatus.Blocked:
-                                        <MudChip Icon="@Icons.Material.Filled.Block" Color="Color.Error">@localizer["blocked"]</MudChip>
-                                        break;
-                                    case CORE.Entities.TaskStatus.Done:
-                                        <MudChip Icon="@Icons.Material.Filled.DoneAll" Color="Color.Success">@localizer["done"]</MudChip>
-                                        break;
-                                }
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <PropertyColumn Property="x => x.Status" Title="@localizer["status"]">
+                        <CellTemplate>
+                            @switch (@context.Item.Status)
+                            {
+                                case CORE.Entities.TaskStatus.Backlog:
+                                    <MudChip Icon="@Icons.Material.Filled.List" Color="Color.Info">@localizer["backlog"]</MudChip>
+                                    break;
+                                case CORE.Entities.TaskStatus.ToDo:
+                                    <MudChip Icon="@Icons.Material.Filled.PlaylistAdd" Color="Color.Primary">@localizer["toDo"]</MudChip>
+                                    break;
+                                case CORE.Entities.TaskStatus.InProgress:
+                                    <MudChip Icon="@Icons.Material.Filled.DoubleArrow" Color="Color.Warning">@localizer["inProgress"]</MudChip>
+                                    break;
+                                case CORE.Entities.TaskStatus.Blocked:
+                                    <MudChip Icon="@Icons.Material.Filled.Block" Color="Color.Error">@localizer["blocked"]</MudChip>
+                                    break;
+                                case CORE.Entities.TaskStatus.Done:
+                                    <MudChip Icon="@Icons.Material.Filled.DoneAll" Color="Color.Success">@localizer["done"]</MudChip>
+                                    break;
+                            }
 
-                            </CellTemplate>
-                        </PropertyColumn>
-                        <PropertyColumn Property="x => x.StartDate" Title="@localizer["startDate"]">
-                            <CellTemplate>
-                                <MudStack Row="true">
-                                    <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
-                                    <MudStack Justify="Justify.Center" Spacing="0">
-                                        <MudText Typo="Typo.body1">@context.Item.StartDate.ToShortDateString()</MudText>
-                                    </MudStack>
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <PropertyColumn Property="x => x.StartDate" Title="@localizer["startDate"]">
+                        <CellTemplate>
+                            <MudStack Row="true">
+                                <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
+                                <MudStack Justify="Justify.Center" Spacing="0">
+                                    <MudText Typo="Typo.body1">@context.Item.StartDate.ToShortDateString()</MudText>
                                 </MudStack>
+                            </MudStack>
 
-                            </CellTemplate>
-                        </PropertyColumn>
-                        <PropertyColumn Property="x => x.EndDate" Title="@localizer["endDate"]">
-                            <CellTemplate>
-                                <MudStack Row="true">
-                                    <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small"/>
-                                    <MudStack Justify="Justify.Center" Spacing="0">
-                                        <MudText Typo="Typo.body1">@context.Item.EndDate.ToShortDateString()</MudText>
-                                    </MudStack>
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <PropertyColumn Property="x => x.EndDate" Title="@localizer["endDate"]">
+                        <CellTemplate>
+                            <MudStack Row="true">
+                                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small"/>
+                                <MudStack Justify="Justify.Center" Spacing="0">
+                                    <MudText Typo="Typo.body1">@context.Item.EndDate.ToShortDateString()</MudText>
                                 </MudStack>
+                            </MudStack>
 
-                            </CellTemplate>
-                        </PropertyColumn>
+                        </CellTemplate>
+                    </PropertyColumn>
 
-                    </Columns>
-                    <PagerContent>
-                        <MudDataGridPager T="CORE.Entities.Task"/>
-                    </PagerContent>
-                </MudDataGrid>
+                </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="CORE.Entities.Task"/>
+                </PagerContent>
+            </MudDataGrid>
 
-            </MudTabPanel>
+        </MudTabPanel>
 
-            <MudTabPanel Text="Kanban" Icon="@Icons.Material.Filled.ViewKanban">
-                <MudStack>
-                    <MudPaper Elevation="25">
-                        <MudToolBar>
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidth))">@localizer["create"]</MudButton>
-                            <MudSpacer/>
-                            <MudSpacer/>
+        <MudTabPanel Text="Kanban" Icon="@Icons.Material.Filled.ViewKanban">
+            <MudStack>
+                <MudPaper Elevation="25">
+                    <MudToolBar>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidth))">@localizer["create"]</MudButton>
+                        <MudSpacer/>
+                        <MudSpacer/>
 
-                            <MudSelect @bind-Value="selectedProject" For="@(() => selectedProject)" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                                <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
-                                @foreach (var pro in Projects)
-                                {
-                                    <MudSelectItem Value="@pro.Id">@pro.Name</MudSelectItem>
-                                }
-                            </MudSelect>
-                            &nbsp; &nbsp;
-                            <MudSelect @bind-Value="selectedUser" For="@(() => selectedUser)" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                                <MudSelectItem Value="string.Empty">@localizer["selectUser"]</MudSelectItem>
-                                @foreach (var user in users)
-                                {
-                                    <MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
-                                }
-                            </MudSelect>
+                        <MudSelect @bind-Value="selectedProject" For="@(() => selectedProject)" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                            <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
+                            @foreach (var pro in Projects)
+                            {
+                                <MudSelectItem Value="@pro.Id">@pro.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+                        &nbsp; &nbsp;
+                        <MudSelect @bind-Value="selectedUser" For="@(() => selectedUser)" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                            <MudSelectItem Value="string.Empty">@localizer["selectUser"]</MudSelectItem>
+                            @foreach (var user in users)
+                            {
+                                <MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
+                            }
+                        </MudSelect>
 
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" OnClick="@((e) => Filter())">@localizer["filter"]</MudButton>
-                            &nbsp; &nbsp;
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FilterAlt" Color="Color.Secondary" OnClick="@((e) => ClearFilter())">@localizer["clear"]</MudButton>
-                        </MudToolBar>
-                    </MudPaper>
-                    <MudPaper Elevation="25">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" OnClick="@((e) => Filter())">@localizer["filter"]</MudButton>
+                        &nbsp; &nbsp;
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FilterAlt" Color="Color.Secondary" OnClick="@((e) => ClearFilter())">@localizer["clear"]</MudButton>
+                    </MudToolBar>
+                </MudPaper>
+                <MudPaper Elevation="25">
 
-                        <MudDropContainer T="CORE.Entities.Task" Items="tasks.Where(x => x.Template == false)" ItemsSelector="@((item, dropzone) => item.Status.ToString() == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
-                            <ChildContent>
+                    <MudDropContainer T="CORE.Entities.Task" Items="tasks.Where(x => x.Template == false)" ItemsSelector="@((item, dropzone) => item.Status.ToString() == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+                        <ChildContent>
 
-                                <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Backlog.ToString()" ItemDraggingClass="mud-info-text" Class="rounded-lg mud-alert-text-info pa-6 ma-8 flex-grow-1 mud-elevation-25">
-                                    <MudText Typo="Typo.h6" Class="mb-4">
-                                        <MudIcon Icon="@Icons.Material.Filled.List" Size="Size.Small"/> @localizer["backlog"]
-                                    </MudText>
-                                </MudDropZone>
+                            <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Backlog.ToString()" ItemDraggingClass="mud-info-text" Class="rounded-lg mud-alert-text-info pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                <MudText Typo="Typo.h6" Class="mb-4">
+                                    <MudIcon Icon="@Icons.Material.Filled.List" Size="Size.Small"/> @localizer["backlog"]
+                                </MudText>
+                            </MudDropZone>
 
-                                <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.ToDo.ToString()" Class="rounded-lg mud-alert-text-primary pa-6 ma-8 flex-grow-1 mud-elevation-25">
-                                    <MudText Typo="Typo.h6" Class="mb-4">
-                                        <MudIcon Icon="@Icons.Material.Filled.PlaylistAdd" Size="Size.Small"/> @localizer["toDo"]
-                                    </MudText>
-                                </MudDropZone>
+                            <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.ToDo.ToString()" Class="rounded-lg mud-alert-text-primary pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                <MudText Typo="Typo.h6" Class="mb-4">
+                                    <MudIcon Icon="@Icons.Material.Filled.PlaylistAdd" Size="Size.Small"/> @localizer["toDo"]
+                                </MudText>
+                            </MudDropZone>
 
-                                <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.InProgress.ToString()" Class="rounded-lg mud-alert-text-warning pa-6 ma-8 flex-grow-1 mud-elevation-25">
-                                    <MudText Typo="Typo.h6" Class="mb-4">
-                                        <MudIcon Icon="@Icons.Material.Filled.DoubleArrow" Size="Size.Small"/> @localizer["inProgress"]
-                                    </MudText>
-                                </MudDropZone>
+                            <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.InProgress.ToString()" Class="rounded-lg mud-alert-text-warning pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                <MudText Typo="Typo.h6" Class="mb-4">
+                                    <MudIcon Icon="@Icons.Material.Filled.DoubleArrow" Size="Size.Small"/> @localizer["inProgress"]
+                                </MudText>
+                            </MudDropZone>
 
-                                <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Blocked.ToString()" Class="rounded-lg mud-alert-text-error pa-6 ma-8 flex-grow-1 mud-elevation-25">
-                                    <MudText Typo="Typo.h6" Class="mb-4">
-                                        <MudIcon Icon="@Icons.Material.Filled.Block" Size="Size.Small"/> @localizer["blocked"]
-                                    </MudText>
-                                </MudDropZone>
+                            <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Blocked.ToString()" Class="rounded-lg mud-alert-text-error pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                <MudText Typo="Typo.h6" Class="mb-4">
+                                    <MudIcon Icon="@Icons.Material.Filled.Block" Size="Size.Small"/> @localizer["blocked"]
+                                </MudText>
+                            </MudDropZone>
 
-                                <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Done.ToString()" Class="rounded-lg mud-alert-text-success pa-6 ma-8 flex-grow-1 mud-elevation-25">
-                                    <MudText Typo="Typo.h6" Class="mb-4">
-                                        <MudIcon Icon="@Icons.Material.Filled.DoneAll" Size="Size.Small"/> @localizer["done"]
-                                    </MudText>
-                                </MudDropZone>
+                            <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Done.ToString()" Class="rounded-lg mud-alert-text-success pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                <MudText Typo="Typo.h6" Class="mb-4">
+                                    <MudIcon Icon="@Icons.Material.Filled.DoneAll" Size="Size.Small"/> @localizer["done"]
+                                </MudText>
+                            </MudDropZone>
 
-                            </ChildContent>
-                            <ItemRenderer>
+                        </ChildContent>
+                        <ItemRenderer>
 
-                                <MudCard Elevation="25" Class="pa-4 my-4">
-                                    <MudCardHeader >
-                                        <CardHeaderActions>
+                            <MudCard Elevation="25" Class="pa-4 my-4">
+                                <MudCardHeader Style="padding: 5px">
+                                    <CardHeaderContent>
 
+                                        <MudStack Row="true">
+                                            <MudText Typo="Typo.h6">@context.Name</MudText>
+                                            <MudSpacer/>
                                             <MudIconButton Icon="@Icons.Material.Filled.Details" Color="Color.Primary" Size="Size.Small" OnClick="@((e) => DetailsDialog(@context, maxWidth))"/>
 
-                                        </CardHeaderActions>
-                                        <CardHeaderContent>
-                                            <MudText Typo="Typo.body1">@context.Name</MudText>
-                                            <MudText Typo="Typo.body2">
-                                                <MudIcon Icon="@Icons.Material.Filled.Person" Style="width:12px; height:12px;"/> @context.AsignedUser.FullName
-                                            </MudText>
-                                        </CardHeaderContent>
-                                    </MudCardHeader>
+                                        </MudStack>
 
-                                </MudCard>
-                            </ItemRenderer>
-                        </MudDropContainer>
-                    </MudPaper>
-                </MudStack>
-            </MudTabPanel>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent>
+                                    <MudStack>
+                                        <MudText Typo="Typo.body2">
+                                            @if (@context.Description.Length > 100)
+                                            {
+                                                @((MarkupString)@context.Description.Substring(0, 100))
+                                            }
+                                            else
+                                            {
+                                                @((MarkupString)@context.Description)
+                                            }
+                                        </MudText>
+                                        <MudStack Row="true">
+                                            @if (string.IsNullOrEmpty(@context.AsignedUser.Avatar))
+                                            {
+                                                <MudTooltip Text="@context.AsignedUser.FullName">
+                                                    <MudAvatar Color="Color.Primary" Size="Size.Small">@context.AsignedUser.FullName[0]</MudAvatar>
+                                                </MudTooltip>
+                                            }
+                                            else
+                                            {
+                                                <MudTooltip Text="@context.AsignedUser.FullName">
+                                                    <MudAvatar Image="@context.AsignedUser.Avatar" Size="Size.Small"> </MudAvatar>
+                                                </MudTooltip>
+                                            }
 
-        </MudTabs>
-        <br/>
-        <MudButton Href="/"
-                   Variant="Variant.Filled"
-                   StartIcon="@Icons.Material.Filled.ArrowBack"
-                   Color="Color.Default">
-            @localizer["back"]
-        </MudButton>
-    </MudItem>
+                                            <MudSpacer/>
+                                            @{
+                                                var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
+                                            }
+                                            @if(@Math.Truncate(totalDays) < 0)
+                                            {
+                                                <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                            }
+                                            else
+                                            {
+                                            <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                            }
+                                        </MudStack>
+
+
+                                    </MudStack>
+
+                                </MudCardContent>
+
+                            </MudCard>
+                        </ItemRenderer>
+                    </MudDropContainer>
+                </MudPaper>
+            </MudStack>
+        </MudTabPanel>
+
+    </MudTabs>
+    <br/>
+    <MudButton Href="/"
+               Variant="Variant.Filled"
+               StartIcon="@Icons.Material.Filled.ArrowBack"
+               Color="Color.Default">
+        @localizer["back"]
+    </MudButton>
+</MudItem>
 </MudGrid>
 </AuthorizeView>
