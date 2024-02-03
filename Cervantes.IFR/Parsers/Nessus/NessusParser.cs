@@ -101,6 +101,7 @@ public class NessusParser: INessusParser
                     vuln.Template = false;
                     vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginName));
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
+                    vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.UserId = user;
                     vuln.ProjectId = project;
                     vuln.VulnCategoryId = null;
@@ -141,10 +142,10 @@ public class NessusParser: INessusParser
                     vuln.RemediationComplexity = RemediationComplexity.Low;
                     vuln.RemediationPriority = RemediationPriority.Low;
                     vuln.JiraCreated = false;
-                    vuln.OWASPRisk = null;
-                    vuln.OWASPImpact = null;
-                    vuln.OWASPLikehood = null;
-                    vuln.OWASPVector = null;
+                    vuln.OWASPRisk = "No Data";
+                    vuln.OWASPImpact = "No Data";
+                    vuln.OWASPLikehood = "No Data";
+                    vuln.OWASPVector = "No Data";
 
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
@@ -209,7 +210,9 @@ public class NessusParser: INessusParser
                     var vuln = new Vuln();
                     vuln.Template = false;
                     vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginName));
+                    vuln.FindingId = "No Project";
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
+                    vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.UserId = user;
                     vuln.ProjectId = null;
                     vuln.VulnCategoryId = null;
@@ -250,10 +253,10 @@ public class NessusParser: INessusParser
                     vuln.RemediationComplexity = RemediationComplexity.Low;
                     vuln.RemediationPriority = RemediationPriority.Low;
                     vuln.JiraCreated = false;
-                    vuln.OWASPRisk = null;
-                    vuln.OWASPImpact = null;
-                    vuln.OWASPLikehood = null;
-                    vuln.OWASPVector = null;
+                    vuln.OWASPRisk = "No Data";
+                    vuln.OWASPImpact = "No Data";
+                    vuln.OWASPLikehood = "No Data";
+                    vuln.OWASPVector = "No Data";
 
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();

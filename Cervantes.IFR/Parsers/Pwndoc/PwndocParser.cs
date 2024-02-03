@@ -43,7 +43,8 @@ public class PwndocParser: IPwndocParser
                 {
                     int i = 0;
                     Vuln vuln = new Vuln();
-                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title)); 
+                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title));
+                    vuln.cve = "No Data";
                     vuln.Description = vul.Details[i].Description  == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
                     vuln.Impact = vul.Details[i].Observation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
                     switch (vul.Priority)
@@ -64,6 +65,7 @@ public class PwndocParser: IPwndocParser
                     }
                     vuln.Status = VulnStatus.Open;
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
+                    vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
                     vuln.Remediation = vul.Details[i].Remediation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
                     switch (vul.Priority)
@@ -101,9 +103,13 @@ public class PwndocParser: IPwndocParser
                     vuln.ProjectId = project;
                     vuln.ProofOfConcept = "No Data";
                     vuln.UserId = user;
-                    vuln.CVSSVector = vul.Cvssv3 == "" ? "No Data" : vul.Cvssv3;
+                    vuln.CVSSVector = vul.Cvssv3 == null ? "No Data" : vul.Cvssv3;
                     var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
                     vuln.FindingId = pro.FindingsId + "-" + vulNum.ToString("D2");
+                    vuln.OWASPRisk = "No Data";
+                    vuln.OWASPImpact = "No Data";
+                    vuln.OWASPLikehood = "No Data";
+                    vuln.OWASPVector = "No Data";
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                     i++;
@@ -116,7 +122,9 @@ public class PwndocParser: IPwndocParser
                 {
                     int i = 0;
                     Vuln vuln = new Vuln();
-                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title)); 
+                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title));
+                    vuln.FindingId = "No Project";
+                    vuln.cve = "No Data";
                     vuln.Description = vul.Details[i].Description  == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
                     vuln.Impact = vul.Details[i].Observation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
                     switch (vul.Priority)
@@ -137,6 +145,7 @@ public class PwndocParser: IPwndocParser
                     }
                     vuln.Status = VulnStatus.Open;
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
+                    vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
                     vuln.Remediation = vul.Details[i].Remediation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
                     switch (vul.Priority)
@@ -174,7 +183,11 @@ public class PwndocParser: IPwndocParser
                     vuln.ProjectId = null;
                     vuln.ProofOfConcept = "No Data";
                     vuln.UserId = user;
-                    vuln.CVSSVector = vul.Cvssv3 == "" ? "No Data" : vul.Cvssv3;
+                    vuln.CVSSVector = vul.Cvssv3 == null ? "No Data" : vul.Cvssv3;
+                    vuln.OWASPRisk = "No Data";
+                    vuln.OWASPImpact = "No Data";
+                    vuln.OWASPLikehood = "No Data";
+                    vuln.OWASPVector = "No Data";
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                     i++;

@@ -100,8 +100,16 @@ public class FileCheck: IFileCheck
         
             var results = inspector.Inspect(file);
             var ResultsByFileExtension = results.ByFileExtension();
-            
-            return ResultsByFileExtension.First().Extension;
+            string extension;
+            if (ResultsByFileExtension.Length != 0)
+            {
+                extension = ResultsByFileExtension.First().Extension;
+
+            }else
+            {
+                extension = "txt";
+            }
+            return extension;
         }
         catch (Exception e)
         {

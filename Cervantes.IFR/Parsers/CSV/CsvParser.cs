@@ -58,6 +58,7 @@ public class CsvParser: ICsvParser
                     vuln.Risk = vul.Risk ?? VulnRisk.Info;
                     vuln.Status = vul.Status ?? VulnStatus.Open;
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
+                    vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
                     vuln.Remediation = vul.Remediation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Remediation));
                     vuln.RemediationPriority = vul.RemediationPriority ?? RemediationPriority.Low;
@@ -100,6 +101,7 @@ public class CsvParser: ICsvParser
                     vuln.Risk = vul.Risk ?? VulnRisk.Info;
                     vuln.Status = vul.Status ?? VulnStatus.Open;
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
+                    vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
                     vuln.Remediation = vul.Remediation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Remediation));
                     vuln.RemediationPriority = vul.RemediationPriority ?? RemediationPriority.Low;
@@ -122,6 +124,7 @@ public class CsvParser: ICsvParser
                     {
                         continue;
                     }
+                    vuln.FindingId = "No Project";
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                 }
