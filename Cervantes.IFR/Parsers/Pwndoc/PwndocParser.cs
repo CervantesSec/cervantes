@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
+using Ganss.Xss;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -31,7 +33,9 @@ public class PwndocParser: IPwndocParser
 
             //yml contains a string containing your YAML
            var vulns = deserializer.Deserialize<List<PwndocVuln>>(reader);
-
+           var sanitizer = new HtmlSanitizer();
+           sanitizer.AllowedSchemes.Add("data");
+           
             if (project != null)
             {
                 var pro = projectManager.GetById((Guid) project);
@@ -39,9 +43,9 @@ public class PwndocParser: IPwndocParser
                 {
                     int i = 0;
                     Vuln vuln = new Vuln();
-                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : vul.Details[i].Title;
-                    vuln.Description = vul.Details[i].Description  == "" ? "No Data" : vul.Details[i].Description;
-                    vuln.Impact = vul.Details[i].Observation == "" ? "No Data" : vul.Details[i].Observation;
+                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title)); 
+                    vuln.Description = vul.Details[i].Description  == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
+                    vuln.Impact = vul.Details[i].Observation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
                     switch (vul.Priority)
                     {
                         case 1:
@@ -61,7 +65,7 @@ public class PwndocParser: IPwndocParser
                     vuln.Status = VulnStatus.Open;
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
-                    vuln.Remediation = vul.Details[i].Remediation == "" ? "No Data" : vul.Details[i].Remediation;
+                    vuln.Remediation = vul.Details[i].Remediation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
                     switch (vul.Priority)
                     {
                         case 1:
@@ -112,9 +116,9 @@ public class PwndocParser: IPwndocParser
                 {
                     int i = 0;
                     Vuln vuln = new Vuln();
-                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : vul.Details[i].Title;
-                    vuln.Description = vul.Details[i].Description  == "" ? "No Data" : vul.Details[i].Description;
-                    vuln.Impact = vul.Details[i].Observation == "" ? "No Data" : vul.Details[i].Observation;
+                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title)); 
+                    vuln.Description = vul.Details[i].Description  == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
+                    vuln.Impact = vul.Details[i].Observation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
                     switch (vul.Priority)
                     {
                         case 1:
@@ -134,7 +138,7 @@ public class PwndocParser: IPwndocParser
                     vuln.Status = VulnStatus.Open;
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
-                    vuln.Remediation = vul.Details[i].Remediation == "" ? "No Data" : vul.Details[i].Remediation;
+                    vuln.Remediation = vul.Details[i].Remediation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
                     switch (vul.Priority)
                     {
                         case 1:

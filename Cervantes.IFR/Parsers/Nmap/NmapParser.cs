@@ -2,11 +2,13 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
+using Ganss.Xss;
 
 
 namespace Cervantes.IFR.Parsers.Nmap;
@@ -34,7 +36,9 @@ public class NmapParser: INmapParser
         XElement nmap = XElement.Load(file);
 
         var hosts = nmap.Descendants("host");
-
+        var sanitizer = new HtmlSanitizer();
+        sanitizer.AllowedSchemes.Add("data");
+        
         foreach (var host in hosts)
         {
             var status = host.Element("status");
@@ -47,7 +51,7 @@ public class NmapParser: INmapParser
             
             Target target = new Target
             {
-                Name = address.Attribute("addr").Value,
+                Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(address.Attribute("addr").Value)),
                 Description = "Imported from Nmap",
                 Type = TargetType.IP,
                 ProjectId = project,
@@ -131,10 +135,10 @@ public class NmapParser: INmapParser
                 {
                     UserId = user,
                     TargetId = target.Id,
-                    Name = product + " (" + name +")",
-                    Description = info + Environment.NewLine + sb.ToString(),
+                    Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(product)) + " (" + sanitizer.Sanitize(HttpUtility.HtmlDecode(name)) +")",
+                    Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(info)) + Environment.NewLine + sanitizer.Sanitize(HttpUtility.HtmlDecode(sb.ToString())),
                     Port = Int32.Parse(number),
-                    Version = version,
+                    Version =sanitizer.Sanitize(HttpUtility.HtmlDecode(version)),
                     Note = "Imported from Nmap"
                     
                     

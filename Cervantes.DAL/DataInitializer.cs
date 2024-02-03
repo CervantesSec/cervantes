@@ -3,9 +3,11 @@ using Cervantes.CORE;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Web;
 using System.Xml;
 using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
+using Ganss.Xss;
 using Microsoft.Extensions.Logging;
 using Task = System.Threading.Tasks.Task;
 
@@ -35,7 +37,9 @@ public class DataInitializer
             xmlDocument.Load(cweFile);
 
             XmlNodeList weaknessNodes = xmlDocument.GetElementsByTagName("Weakness");
-
+            var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedSchemes.Add("data");
+            
             foreach (XmlNode weaknessNode in weaknessNodes)
             {
                 string id = weaknessNode.Attributes["ID"].Value;
@@ -47,8 +51,8 @@ public class DataInitializer
 
                 Cwe cwe = new Cwe();
                 cwe.Id = Convert.ToInt32(id);
-                cwe.Name = name;
-                cwe.Description = desc;
+                cwe.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(name));
+                cwe.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(desc));
                 
                 cweManager.Add(cwe);
                 cweManager.Context.SaveChanges();

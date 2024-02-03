@@ -685,19 +685,22 @@ else
                              Hideable="true" Hover="true" RowClick="@RowClickedReports" MultiSelection="true" SelectedItemsChanged="@SelectedReportsChanged" Virtualize="true" DragDropColumnReordering="true">
                     <ToolBarContent>
                         <MudStack Row="true">
-                            <AuthorizeView Roles="Admin,SuperUser">
-                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Primary" OnClick="@((e) => OpenDialogReportCreate(maxWidth))">@localizer["createReport"]</MudButton>
-                                @if (seleReports.Count() != 0)
-                                {
-                                    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                                        <MudButton>@localizer["actions"]</MudButton>
-                                        <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                            <MudMenuItem OnClick="@((e) => BtnActionsReports(0))">@localizer["delete"]</MudMenuItem>
-                                        </MudMenu>
-                                    </MudButtonGroup>
-                                }
+                            @if (inProject)
+                            {
+                                <AuthorizeView Roles="Admin,SuperUser">
+                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Primary" OnClick="@((e) => OpenDialogReportCreate(maxWidth))">@localizer["createReport"]</MudButton>
+                                    @if (seleReports.Count() != 0)
+                                    {
+                                        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                            <MudButton>@localizer["actions"]</MudButton>
+                                            <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                                <MudMenuItem OnClick="@((e) => BtnActionsReports(0))">@localizer["delete"]</MudMenuItem>
+                                            </MudMenu>
+                                        </MudButtonGroup>
+                                    }
 
-                            </AuthorizeView>
+                                </AuthorizeView>
+                            }
                         </MudStack>
                         <MudSpacer/>
                         <MudTextField @bind-Value="searchStringReport" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"

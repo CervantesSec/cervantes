@@ -1758,4 +1758,7 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="deleteChecklist" xml:space="preserve">
         <value>Eliminar Lista de Verificación</value>
     </data>
+    <data name="noCategory" xml:space="preserve">
+        <value>Sin Categoría</value>
+    </data>
 </root>

@@ -1688,4 +1688,7 @@
     <data name="deleteChecklist" xml:space="preserve">
         <value>Delete Checklist</value>
     </data>
+    <data name="noCategory" xml:space="preserve">
+        <value>No Category</value>
+    </data>
 </root>

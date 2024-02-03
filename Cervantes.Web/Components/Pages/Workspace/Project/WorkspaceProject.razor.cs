@@ -150,7 +150,7 @@ protected override async Task OnInitializedAsync()
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),
             new BreadcrumbItem("Workspace", href: "/workspaces",icon: Icons.Material.Filled.Workspaces),
             new BreadcrumbItem(pro.Name, href: "/workspace/"+project,icon: Icons.Material.Filled.Folder),
-            new BreadcrumbItem(@localizer["checklist"], href: null, disabled: true, icon: Icons.Material.Filled.Checklist)
+            new BreadcrumbItem(@localizer["project"], href: null, disabled: true, icon: Icons.Material.Filled.Folder)
         };
         aiEnabled = _aiService.IsEnabled();
         await base.OnInitializedAsync();

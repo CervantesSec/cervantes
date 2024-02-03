@@ -81,6 +81,20 @@
 
                         <PropertyColumn Property="x => x.Email" Title="@localizer["email"]"/>
                         <PropertyColumn Property="x => x.Position" Title="@localizer["position"]"/>
+                        <PropertyColumn Property="x => x.LockoutEnd" Title="@localizer["locked"]">
+                            <CellTemplate Context="cellContext">
+                                @if (@cellContext.Item.LockoutEnd != null && @cellContext.Item.LockoutEnd > DateTime.Now)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success"/>
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error"/>
+                                }
+                                                
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
                         <PropertyColumn Property="x => x.TwoFactorEnabled" Title="@localizer["mfaEnabled"]">
                             <CellTemplate Context="cellContext">
                                 @if (@cellContext.Item.TwoFactorEnabled)

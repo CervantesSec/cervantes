@@ -1,10 +1,12 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Web;
 using System.Xml;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
+using Ganss.Xss;
 
 namespace Cervantes.IFR.Parsers.Nessus;
 
@@ -28,7 +30,8 @@ public class NessusParser: INessusParser
         doc.Load(path);
 
         XmlNodeList hosts = doc.GetElementsByTagName("ReportHost");
-
+        var sanitizer = new HtmlSanitizer();
+        sanitizer.AllowedSchemes.Add("data");
         if (project != null)
         {
             var pro = projectManager.GetById((Guid) project);
@@ -56,8 +59,8 @@ public class NessusParser: INessusParser
                     {
                         UserId = user,
                         ProjectId = project,
-                        Name = hostName,
-                        Description = "<p>Host created from Nessus Scan Import</p>" + "<p>OS: "+ os +"</p>"+ "<p>Host Ip: "+ hostIp +"</p>",
+                        Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(hostName)),
+                        Description = "<p>Host created from Nessus Scan Import</p>" + "<p>OS: "+ sanitizer.Sanitize(HttpUtility.HtmlDecode(os)) +"</p>"+ "<p>Host Ip: "+ sanitizer.Sanitize(HttpUtility.HtmlDecode(hostIp)) +"</p>",
                         Type = TargetType.Hostname
                     };
 
@@ -96,7 +99,7 @@ public class NessusParser: INessusParser
                     var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
                     vuln.FindingId = pro.FindingsId + "-" + vulNum.ToString("D2");
                     vuln.Template = false;
-                    vuln.Name = pluginName;
+                    vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginName));
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                     vuln.UserId = user;
                     vuln.ProjectId = project;
@@ -120,10 +123,10 @@ public class NessusParser: INessusParser
                             break;
                     }
                     vuln.Status = VulnStatus.Open;
-                    vuln.cve = cve;
-                    vuln.Description = "<p>"+description+"</p>"+ "<p>References: " +"<p>"+refrences+"</p>";
-                    vuln.ProofOfConcept = pluginOutput;
-                    vuln.Impact = impact;
+                    vuln.cve = sanitizer.Sanitize(HttpUtility.HtmlDecode(cve));
+                    vuln.Description = "<p>"+sanitizer.Sanitize(HttpUtility.HtmlDecode(description))+"</p>"+ "<p>References: " +"<p>"+sanitizer.Sanitize(HttpUtility.HtmlDecode(refrences))+"</p>";
+                    vuln.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginOutput));
+                    vuln.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(impact));
                     if (cvss != "")
                     {
                         vuln.CVSS3 = float.Parse(cvss,CultureInfo.InvariantCulture);
@@ -133,8 +136,8 @@ public class NessusParser: INessusParser
                         vuln.CVSS3 = 0;
                     }
                     
-                    vuln.CVSSVector = cvssVector;
-                    vuln.Remediation = solution;
+                    vuln.CVSSVector = sanitizer.Sanitize(HttpUtility.HtmlDecode(cvssVector));
+                    vuln.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(solution));
                     vuln.RemediationComplexity = RemediationComplexity.Low;
                     vuln.RemediationPriority = RemediationPriority.Low;
                     vuln.JiraCreated = false;
@@ -205,7 +208,7 @@ public class NessusParser: INessusParser
                     
                     var vuln = new Vuln();
                     vuln.Template = false;
-                    vuln.Name = pluginName;
+                    vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginName));
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                     vuln.UserId = user;
                     vuln.ProjectId = null;
@@ -229,10 +232,10 @@ public class NessusParser: INessusParser
                             break;
                     }
                     vuln.Status = VulnStatus.Open;
-                    vuln.cve = cve;
-                    vuln.Description = "<p>"+description+"</p>"+ "<p>References: " +"<p>"+refrences+"</p>";
-                    vuln.ProofOfConcept = pluginOutput;
-                    vuln.Impact = impact;
+                    vuln.cve = sanitizer.Sanitize(HttpUtility.HtmlDecode(cve));
+                    vuln.Description = "<p>"+sanitizer.Sanitize(HttpUtility.HtmlDecode(description))+"</p>"+ "<p>References: " +"<p>"+sanitizer.Sanitize(HttpUtility.HtmlDecode(refrences))+"</p>";
+                    vuln.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginOutput));
+                    vuln.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(impact));
                     if (cvss != "")
                     {
                         vuln.CVSS3 = float.Parse(cvss,CultureInfo.InvariantCulture);
@@ -242,8 +245,8 @@ public class NessusParser: INessusParser
                         vuln.CVSS3 = 0;
                     }
                     
-                    vuln.CVSSVector = cvssVector;
-                    vuln.Remediation = solution;
+                    vuln.CVSSVector = sanitizer.Sanitize(HttpUtility.HtmlDecode(cvssVector));
+                    vuln.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(solution));
                     vuln.RemediationComplexity = RemediationComplexity.Low;
                     vuln.RemediationPriority = RemediationPriority.Low;
                     vuln.JiraCreated = false;

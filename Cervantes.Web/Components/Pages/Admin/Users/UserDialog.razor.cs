@@ -110,7 +110,16 @@ public partial class UserDialog: ComponentBase
             model.Position = user.Position;
             model.ImagePath = user.Avatar;
             model.TwoFactorEnabled = user.TwoFactorEnabled;
-            model.LockoutEnabled = user.LockoutEnabled;
+            bool locked = false;
+            if (user.LockoutEnd != null)
+            {
+                locked = true;
+            }
+            else
+            {
+                locked = false;
+            }
+            model.Lockout = locked;
             if (user.ClientId != null)
             {
                 model.ClientId = user.ClientId;
@@ -167,13 +176,13 @@ public partial class UserDialog: ComponentBase
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .EmailAddress();
-            RuleFor(p => p.Password).NotEmpty()
+            RuleFor(p => p.Password)
                 .MinimumLength(8).WithMessage("Your password length must be at least 8.")
                 .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
                 .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
                 .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
                 .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
-            RuleFor(x => x.ConfirmPassword).NotEmpty()
+            RuleFor(x => x.ConfirmPassword)
                 .MinimumLength(8).WithMessage("Your password length must be at least 8.")
                 .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
                 .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")

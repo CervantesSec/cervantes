@@ -267,8 +267,16 @@ private IEmailService emailService;
                 user.FullName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.FullName));
                 user.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
                 user.Position = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Position));
-                user.LockoutEnabled = model.LockoutEnabled;
                 user.TwoFactorEnabled = model.TwoFactorEnabled;
+                if (model.Lockout)
+                {
+                    user.LockoutEnd = DateTimeOffset.MaxValue;
+                }
+                else
+                {
+                    user.LockoutEnd = null;
+                }
+                
                 if (model.Role == "Client")
                 {
                     user.ClientId = model.ClientId;
