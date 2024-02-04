@@ -26,7 +26,7 @@
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @attachment.Name</MudText>
 		<MudSpacer/>
-		@if (inProject)
+		@if (inProject || attachment.Task.ProjectId == null)
 		{
 			<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download(@attachment.FilePath))" ></MudIconButton>
 			<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteTaskAttachment(@attachment, medium))"></MudIconButton>

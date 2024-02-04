@@ -1785,4 +1785,10 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="restoredAttachments" xml:space="preserve">
         <value>Adjuntos restaurados correctamente!</value>
     </data>
+    <data name="deletedAvatar" xml:space="preserve">
+        <value>Avatar eliminado correctamente!</value>
+    </data>
+    <data name="deletedAvatarError" xml:space="preserve">
+        <value>Se ha producido un error al eliminar el avatar!</value>
+    </data>
 </root>

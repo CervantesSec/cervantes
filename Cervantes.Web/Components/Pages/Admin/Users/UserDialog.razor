@@ -101,31 +101,37 @@
 
 						        }
 
-						        <MudFileUpload T="IBrowserFile" @bind-Files="File" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
-							        <ButtonTemplate>
-								        <MudButton HtmlTag="label"
-								                   Variant="Variant.Filled"
-								                   Color="Color.Primary"
-								                   StartIcon="@Icons.Material.Filled.CloudUpload"
-								                   for="@context">
-									        @localizer["uploadFile"]
-								        </MudButton>
-							        </ButtonTemplate>
-							        <SelectedTemplate>
+						        @if (model.ImagePath != null)
+						        {
+							        <MudImage Src="@model.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="User Logo" Elevation="25" Class="rounded-lg ma-4"/>
+							        <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteAvatar())">@localizer["deleteLogo"]</MudButton>
+						        }
+						        else
+						        {
+							        <MudFileUpload T="IBrowserFile" @bind-Files="File" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
+								        <ButtonTemplate>
+									        <MudButton HtmlTag="label"
+									                   Variant="Variant.Filled"
+									                   Color="Color.Primary"
+									                   StartIcon="@Icons.Material.Filled.CloudUpload"
+									                   for="@context">
+										        @localizer["uploadFile"]
+									        </MudButton>
+								        </ButtonTemplate>
+								        <SelectedTemplate>
 
-								        @if (File != null)
-								        {
-									        <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @File.Name </MudText>
+									        @if (File != null)
+									        {
+										        <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @File.Name </MudText>
 
-								        }
-								        else
-								        {
-									        <MudText><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"]</MudText>
-								        }
-							        </SelectedTemplate>
-						        </MudFileUpload>
-
-
+									        }
+									        else
+									        {
+										        <MudText><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"]</MudText>
+									        }
+								        </SelectedTemplate>
+							        </MudFileUpload>
+						        }
 
 					        </MudStack>
 				        </MudForm>

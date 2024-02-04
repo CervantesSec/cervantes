@@ -1715,4 +1715,10 @@
     <data name="restoredAttachments" xml:space="preserve">
         <value>Attachments restored successfully!</value>
     </data>
+    <data name="deletedAvatar" xml:space="preserve">
+        <value>Avatar deleted successfully!</value>
+    </data>
+    <data name="deletedAvatarError" xml:space="preserve">
+        <value>An error occurred deleting the avatar!</value>
+    </data>
 </root>

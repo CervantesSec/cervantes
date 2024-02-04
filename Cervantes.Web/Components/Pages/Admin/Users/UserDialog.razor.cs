@@ -203,4 +203,20 @@ public partial class UserDialog: ComponentBase
         };
     }
     
+    private async Task DeleteAvatar()
+    {
+            var response = await _UserController.DeleteAvatar(model.Id);
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            {
+                Snackbar.Add(localizer["userEdited"], Severity.Success);
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+            else
+            {
+                Snackbar.Add(localizer["userEditedError"], Severity.Error);
+                StateHasChanged();
+            }
+        
+    }
+    
 }

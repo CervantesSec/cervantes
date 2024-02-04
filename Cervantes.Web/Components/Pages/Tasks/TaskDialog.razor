@@ -209,7 +209,7 @@
 					             Hideable="true" Hover="true" RowClick="RowClickedNote" MultiSelection="true" SelectedItemsChanged="@SelectedNotesChanged" Virtualize="true" DragDropColumnReordering="true">
 						<ToolBarContent>
 							<MudStack Row="true">
-								@if (inProject)
+								@if (inProject || task.ProjectId == null)
 								{
 									<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Note" Color="Color.Primary" OnClick="@((e) => OpenCreateNote(@task, maxWidth))">@localizer["addNoteBtn"]</MudButton>
 									@if (seleNotes.Count() != 0)
@@ -263,7 +263,7 @@
 					             Hideable="true" Hover="true" RowClick="RowClickedAttachment" MultiSelection="true" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
 						<ToolBarContent>
 							<MudStack Row="true">
-								@if (inProject)
+								@if (inProject || task.ProjectId == null)
 								{
 									<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Attachment" Color="Color.Primary" OnClick="@((e) => OpenCreateAttachment(@task, maxWidth))">@localizer["addAttachmentBtn"]</MudButton>
 

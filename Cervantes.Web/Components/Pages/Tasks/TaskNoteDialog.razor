@@ -25,7 +25,7 @@
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Task"/> @note.Name</MudText>
 		<MudSpacer/>
 
-		@if (inProject)
+		@if (inProject || note.Task.ProjectId == null)
 		{
 			@if (editMode)
 			{

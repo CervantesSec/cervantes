@@ -58,7 +58,7 @@ public partial class Tasks: ComponentBase
         users.Clear();
         selectedUser = string.Empty;
         users = _userController.Get().ToList();
-        Projects = _projectController.Get().ToList();
+        Projects = _projectController.Get().Where(x => x.Template == false).ToList();
     }
     
     private async Task ItemUpdated(MudItemDropInfo<CORE.Entities.Task> dropItem)
@@ -166,8 +166,6 @@ public partial class Tasks: ComponentBase
         if (element.AsignedUser.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.Status.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Project.Name.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.StartDate.ToString().Contains(searchString))
             return true;

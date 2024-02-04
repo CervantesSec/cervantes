@@ -176,8 +176,6 @@ private async Task Update()
             return true;
         if (element.Status.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.Project.Name.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
         if (element.CreatedDate.ToString().Contains(searchString))
             return true;
         if (element.ModifiedDate.ToString().Contains(searchString))
