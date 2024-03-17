@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM nginx:1.25.4-alpine3.18
 
 # set env variable in order for a non-interactive update process
 ENV DEBIAN_FRONTEND=noninteractive
