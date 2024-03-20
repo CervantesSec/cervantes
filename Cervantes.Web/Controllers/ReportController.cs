@@ -22,6 +22,8 @@ using Microsoft.EntityFrameworkCore;
 using MimeDetective;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Scriban;
+using Scriban.Runtime;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 
 namespace Cervantes.Web.Controllers;
@@ -571,7 +573,7 @@ public class ReportController : ControllerBase
                 var pro = projectManager.GetById(model.ProjectId);
                 var vul = vulnManager.GetAll().Where(x => x.ProjectId == model.ProjectId && x.Template == false)
                     .Select(y => y.Id).ToList();
-                var template = reportTemplateManager.GetById(model.ReportTemplateId);
+                //var template = reportTemplateManager.GetById(model.ReportTemplateId);
                 var userInPro = projectUserManager.VerifyUser(pro.Id, aspNetUserId);
                 if (userInPro == null)
                 {
@@ -602,7 +604,7 @@ public class ReportController : ControllerBase
                     .Where(x => x.ProjectId == model.ProjectId && x.Template == false).ToList();
                 var Targets = targetManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
                 var Users = projectUserManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
-                var Reports = reportManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
+                var Reports = reportManager.GetAll().Where(x => x.ProjectId == model.ProjectId && x.ReportType == ReportType.General).ToList();
                 var VulnTargets = vulnTargetManager.GetAll().Where(x => vul.Contains(x.VulnId)).Include(x => x.Target).ToList();
                 var VulnCwes = vulnCweManager.GetAll().Where(x => vul.Contains(x.VulnId)).Include(x => x.Cwe).ToList();
                 var Tasks = taskManager.GetAll().Where(x => x.ProjectId == model.ProjectId).Include(x => x.AsignedUser).Include(x => x.CreatedUser).ToList();
@@ -669,23 +671,6 @@ public class ReportController : ControllerBase
                 }
 
                 source = source.Replace("{{FooterComponents}}", sbFooter.ToString());
-
-                var handlebars = Handlebars.Create();
-                //handlebars.Configuration.UseNewtonsoftJson();
-                //handlebars.RegisterHelper("lookup", (output, context, arguments) => { output.WriteSafeString(arguments[0]); }); 
-                handlebars.RegisterHelper("lookup", (output, context, arguments) =>
-                   {
-                       var targetObject = arguments[0] as IDictionary<string, object>;
-                       var propertyName = arguments[1].ToString();
-                   
-                       if (targetObject != null && targetObject.ContainsKey(propertyName))
-                       {
-                           output.WriteSafeString(targetObject[propertyName].ToString());
-                       }
-                   });
-                
-                
-                var templateHtml = handlebars.Compile(source);
                 
                 var DocumentsList = new List<Dictionary<string, string>>();
                 var htmlDoc = new HtmlAgilityPack.HtmlDocument();
@@ -698,18 +683,10 @@ public class ReportController : ControllerBase
                     {
                         {"DocumentName", report.Name},
                         {"DocumentVersion", report.Version},
-                        {"DocumentDescription", model.Description}
+                        {"DocumentDescription", report.Description}
                     });
                 }
-                
-                /*htmlDoc.LoadHtml(model.Description);
-                string descriptionWithoutTags2 = htmlDoc.DocumentNode.InnerText;*/
-                DocumentsList.Add(new Dictionary<string, string>
-                {
-                    {"DocumentName", model.Name},
-                    {"DocumentVersion", model.Version},
-                    {"DocumentDescription", model.Description}
-                });
+
                 
                 var UsersList = new List<Dictionary<string, string>>();
                 foreach (var user in Users)
@@ -818,52 +795,63 @@ public class ReportController : ControllerBase
                       
                     });
                 }
-
-                var data = new
-                {
-                    OrganizationName = Organization.Name,
-                    OrganizationEmail = Organization.ContactEmail,
-                    OrganizationPhone = Organization.ContactPhone,
-                    OrganizationDescription = Organization.Description,
-                    OrganizationContactName = Organization.ContactName,
-                    OrganizationUrl = Organization.Url,
-                    ClientName = Client.Name,
-                    ClientDescription = Client.Description,
-                    ClientUrl = Client.Url,
-                    ClientContactName = Client.ContactName,
-                    ClientEmail = Client.ContactEmail,
-                    ClientPhone = Client.ContactPhone,
-                    Year = DateTime.Now.Year.ToString(),
-                    Documents = DocumentsList,
-                    Users = UsersList,
-                    ProjectName = Project.Name,
-                    ProjectDescription = Project.Description,
-                    ProjectLanguage = Project.Language,
-                    ProjecStatus = Project.Status,
-                    StartDate = Project.StartDate.ToString("dd/MM/yyyy"),
-                    EndDate = Project.EndDate.ToString("dd/MM/yyyy"),
-                    ProjectType = Project.ProjectType.ToString(),
-                    ProjectScore = Project.Score,
-                    ProjectExecutiveSummary = Project.ExecutiveSummary,
-                    Targets = TargetList,
-                    Vulns = VulnsList,
-                    VulnCriticalCount = Vulns.Count(x => x.Risk == VulnRisk.Critical),
-                    VulnHighCount = Vulns.Count(x => x.Risk == VulnRisk.High),
-                    VulnMediumCount = Vulns.Count(x => x.Risk == VulnRisk.Medium),
-                    VulnLowCount = Vulns.Count(x => x.Risk == VulnRisk.Low),
-                    VulnInfoCount = Vulns.Count(x => x.Risk == VulnRisk.Info),
-                    VulnTotalCount = Vulns.Count(),
-                    Tasks = TasksList,
-                    Vaults = VaultsList,
-                    PageBreak = @"<span style=""page-break-after: always;""></span>",
-                    Today = DateTime.Now.ToShortDateString()
-                    
-                };
+                
+                var scriptObject = new ScriptObject();
+                scriptObject.Add("OrganizationName", Organization.Name);
+                scriptObject.Add("OrganizationEmail", Organization.ContactEmail);
+                scriptObject.Add("OrganizationPhone", Organization.ContactPhone);
+                scriptObject.Add("OrganizationDescription", Organization.Description);
+                scriptObject.Add("OrganizationContactName", Organization.ContactName);
+                scriptObject.Add("OrganizationUrl", Organization.Url);
+                scriptObject.Add("ClientName", Client.Name);
+                scriptObject.Add("ClientDescription", Client.Description);
+                scriptObject.Add("ClientUrl", Client.Url);
+                scriptObject.Add("ClientContactName", Client.ContactName);
+                scriptObject.Add("ClientEmail", Client.ContactEmail);
+                scriptObject.Add("ClientPhone", Client.ContactPhone);
+                scriptObject.Add("Year", DateTime.Now.Year.ToString());
+                scriptObject.Add("Documents", DocumentsList);
+                scriptObject.Add("Users", UsersList);
+                scriptObject.Add("ProjectName", Project.Name);
+                scriptObject.Add("ProjectDescription", Project.Description);
+                scriptObject.Add("ProjectLanguage", Project.Language);
+                scriptObject.Add("ProjecStatus", Project.Status);
+                scriptObject.Add("StartDate", Project.StartDate.ToString("dd/MM/yyyy"));
+                scriptObject.Add("EndDate", Project.EndDate.ToString("dd/MM/yyyy"));
+                scriptObject.Add("ProjectType", Project.ProjectType.ToString());
+                scriptObject.Add("ProjectScore", Project.Score);
+                scriptObject.Add("ProjectExecutiveSummary", Project.ExecutiveSummary);
+                scriptObject.Add("Targets", TargetList);
+                scriptObject.Add("Vulns", VulnsList);
+                scriptObject.Add("VulnCriticalCount", Vulns.Count(x => x.Risk == VulnRisk.Critical));
+                scriptObject.Add("VulnHighCount", Vulns.Count(x => x.Risk == VulnRisk.High));
+                scriptObject.Add("VulnMediumCount", Vulns.Count(x => x.Risk == VulnRisk.Medium));
+                scriptObject.Add("VulnLowCount", Vulns.Count(x => x.Risk == VulnRisk.Low));
+                scriptObject.Add("VulnInfoCount", Vulns.Count(x => x.Risk == VulnRisk.Info));
+                scriptObject.Add("VulnTotalCount", Vulns.Count());
+                scriptObject.Add("Tasks", TasksList);
+                scriptObject.Add("Vaults", VaultsList);
+                scriptObject.Add("PageBreak", @"<span style=""page-break-after: always;""></span>");
+                scriptObject.Add("Today", DateTime.Now.ToShortDateString());
                 
 
-                var resultHtml = templateHtml(data);
+                var context = new TemplateContext();
+                context.PushGlobal(scriptObject);
 
-                rep.HtmlCode = resultHtml;
+                var templateScriban = Template.Parse(source);
+                // Check for any errors
+                if (templateScriban.HasErrors)
+                {
+                    foreach(var error in templateScriban.Messages)
+                    {
+                        Console.WriteLine(error);
+                    }
+                }
+                
+                var result = await templateScriban.RenderAsync(context);
+
+                rep.HtmlCode = result;
+                
                 reportManager.Add(rep);
                 reportManager.Context.SaveChanges();
 

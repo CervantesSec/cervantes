@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
+using Scriban;
+using Scriban.Runtime;
 
 namespace Cervantes.Web.Controllers;
 
@@ -363,16 +365,16 @@ public class ChecklistController : ControllerBase
                    result.Errh02Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Errh.Errh02Note));
                    result.Errh02Status = model.Errh.Errh02Status;
 
-                   result.Idnt1Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt1Note));
-                   result.Idnt1Status = model.Idnt.Idnt1Status;
-                   result.Idnt2Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt2Note));
-                   result.Idnt2Status = model.Idnt.Idnt2Status;
-                   result.Idnt3Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt3Note));
-                   result.Idnt3Status = model.Idnt.Idnt3Status;
-                   result.Idnt4Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt4Note));
-                   result.Idnt4Status = model.Idnt.Idnt4Status;
-                   result.Idnt5Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt5Note));
-                   result.Idnt5Status = model.Idnt.Idnt5Status;
+                   result.Idnt01Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt01Note));
+                   result.Idnt01Status = model.Idnt.Idnt01Status;
+                   result.Idnt02Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt02Note));
+                   result.Idnt02Status = model.Idnt.Idnt02Status;
+                   result.Idnt03Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt03Note));
+                   result.Idnt03Status = model.Idnt.Idnt03Status;
+                   result.Idnt04Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt04Note));
+                   result.Idnt04Status = model.Idnt.Idnt04Status;
+                   result.Idnt05Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Idnt.Idnt05Note));
+                   result.Idnt05Status = model.Idnt.Idnt05Status;
 
                    result.Info01Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Info.Info01Note));
                    result.Info01Status = model.Info.Info01Status;
@@ -923,277 +925,53 @@ public class ChecklistController : ControllerBase
                 }
 
                 source = source.Replace("{{FooterComponents}}", sbFooter.ToString());
-
-                var handlebars = Handlebars.Create();
-                //handlebars.Configuration.UseNewtonsoftJson();
-                //handlebars.RegisterHelper("lookup", (output, context, arguments) => { output.WriteSafeString(arguments[0]); }); 
-                handlebars.RegisterHelper("lookup", (output, context, arguments) =>
-                   {
-                       var targetObject = arguments[0] as IDictionary<string, object>;
-                       var propertyName = arguments[1].ToString();
-                   
-                       if (targetObject != null && targetObject.ContainsKey(propertyName))
-                       {
-                           output.WriteSafeString(targetObject[propertyName].ToString());
-                       }
-                   });
                 
-                
-                var templateHtml = handlebars.Compile(source);
-               
-                 var data = new
+                var scriptObject = new ScriptObject();
+                scriptObject.Add("OrganizationName", org.Name);
+                scriptObject.Add("OrganizationEmail", org.ContactEmail);
+                scriptObject.Add("OrganizationPhone", org.ContactPhone);
+                scriptObject.Add("OrganizationDescription", org.Description);
+                scriptObject.Add("OrganizationContactName", org.ContactName);
+                scriptObject.Add("OrganizationUrl", org.Url);
+                scriptObject.Add("ClientName", client.Name);
+                scriptObject.Add("ClientDescription", client.Description);
+                scriptObject.Add("ClientUrl", client.Url);
+                scriptObject.Add("ClientContactName", client.ContactName);
+                scriptObject.Add("ClientEmail", client.ContactEmail);
+                scriptObject.Add("ClientPhone", client.ContactPhone);
+                scriptObject.Add("Year", DateTime.Now.Year.ToString());
+                scriptObject.Add("TargetName", target.Name);
+                scriptObject.Add("TargetDescription", target.Description);
+                scriptObject.Add("TargetType", target.Type.ToString());
+                scriptObject.Add("PageBreak", @"<span style=""page-break-after: always;""></span>");
+                scriptObject.Add("Today", DateTime.Now.ToShortDateString());
+                scriptObject.Add("ProjectName", pro.Name);
+                scriptObject.Add("ProjectDescription", pro.Description);
+                var properties = mastg.GetType().GetProperties();
+                foreach (var property in properties)
                 {
-                    OrganizationName = org.Name,
-                    OrganizationEmail = org.ContactEmail,
-                    OrganizationPhone = org.ContactPhone,
-                    OrganizationDescription = org.Description,
-                    OrganizationContactName = org.ContactName,
-                    OrganizationUrl = org.Url,
-                    ClientName = client.Name,
-                    ClientDescription = client.Description,
-                    ClientUrl = client.Url,
-                    ClientContactName = client.ContactName,
-                    ClientEmail = client.ContactEmail,
-                    ClientPhone = client.ContactPhone,
-                    Year = DateTime.Now.Year.ToString(),
-                    CreatedDate = DateTime.Now.ToUniversalTime().ToShortDateString(),
-                    TargetName = target.Name,
-                    TargetDescription = target.Description,
-                    TargetType = target.Type.ToString(),
-                    PageBreak = @"<span style=""page-break-after: always;""></span>",
-                    Today = DateTime.Now.ToShortDateString(),
-                    Storage1Note = mastg.Storage1Note,
-                    Storage1Status = mastg.Storage1Status.ToString(),
-                    Storage1Note1 = mastg.Storage1Note1,
-                    Storage1Status1 = mastg.Storage1Status1.ToString(),
-                    Storage1Note2 = mastg.Storage1Note2,
-                    Storage1Status2 = mastg.Storage1Status2.ToString(),
-                    Storage1Note3 = mastg.Storage1Note3,
-                    Storage1Status3 = mastg.Storage1Status3.ToString(),
-                    Storage2Note = mastg.Storage2Note,
-                    Storage2Status = mastg.Storage2Status.ToString(),
-                    Storage2Note1 = mastg.Storage2Note1,
-                    Storage2Status1 = mastg.Storage2Status1.ToString(),
-                    Storage2Note2 = mastg.Storage2Note2,
-                    Storage2Status2 = mastg.Storage2Status2.ToString(),
-                    Storage2Note3 = mastg.Storage2Note3,
-                    Storage2Status3 = mastg.Storage2Status3.ToString(),
-                    Storage2Note4 = mastg.Storage2Note4,
-                    Storage2Status4 = mastg.Storage2Status4.ToString(),
-                    Storage2Note5 = mastg.Storage2Note5,
-                    Storage2Status5 = mastg.Storage2Status5.ToString(),
-                    Storage2Note6 = mastg.Storage2Note6,
-                    Storage2Status6 = mastg.Storage2Status6.ToString(),
-                    Storage2Note7 = mastg.Storage2Note7,
-                    Storage2Status7 = mastg.Storage2Status7.ToString(),
-                    Storage2Note8 = mastg.Storage2Note8,
-                    Storage2Status8 = mastg.Storage2Status8.ToString(),
-                    Storage2Note9 = mastg.Storage2Note9,
-                    Storage2Status9 = mastg.Storage2Status9.ToString(),
-                    Storage2Note10 = mastg.Storage2Note10,
-                    Storage2Status10 = mastg.Storage2Status10.ToString(),
-                    Storage2Note11 = mastg.Storage2Note11,
-                    Storage2Status11 = mastg.Storage2Status11.ToString(),
-                    Crypto1Note = mastg.Crypto1Note,
-                    Crypto1Status = mastg.Crypto1Status.ToString(),
-                    Crypto1Note1 = mastg.Crypto1Note1,
-                    Crypto1Status1 = mastg.Crypto1Status1.ToString(),
-                    Crypto1Note2 = mastg.Crypto1Note2,
-                    Crypto1Status2 = mastg.Crypto1Status2.ToString(),
-                    Crypto1Note3 = mastg.Crypto1Note3,
-                    Crypto1Status3 = mastg.Crypto1Status3.ToString(),
-                    Crypto1Note4 = mastg.Crypto1Note4,
-                    Crypto1Status4 = mastg.Crypto1Status4.ToString(),
-                    Crypto1Note5 = mastg.Crypto1Note5,
-                    Crypto1Status5 = mastg.Crypto1Status5.ToString(),
-                    Crypto2Note = mastg.Crypto2Note,
-                    Crypto2Status = mastg.Crypto2Status.ToString(),
-                    Crypto2Note1 = mastg.Crypto2Note1,
-                    Crypto2Status1 = mastg.Crypto2Status1.ToString(),
-                    Crypto2Note2 = mastg.Crypto2Note2,
-                    Crypto2Status2 = mastg.Crypto2Status2.ToString(),
-                    Auth1Note = mastg.Auth1Note,
-                    Auth1Status = mastg.Auth1Status.ToString(),
-                    Auth2Note = mastg.Auth2Note,
-                    Auth2Status = mastg.Auth2Status.ToString(),
-                    Auth2Note1 = mastg.Auth2Note1,
-                    Auth2Status1 = mastg.Auth2Status1.ToString(),
-                    Auth2Note2 = mastg.Auth2Note2,
-                    Auth2Status2 = mastg.Auth2Status2.ToString(),
-                    Auth2Note3 = mastg.Auth2Note3,
-                    Auth2Status3 = mastg.Auth2Status3.ToString(),
-                    Auth3Note = mastg.Auth3Note,
-                    Auth3Status = mastg.Auth3Status.ToString(),
-                    Network1Note = mastg.Network1Note,
-                    Network1Status = mastg.Network1Status.ToString(),
-                    Network1Note1 = mastg.Network1Note1,
-                    Network1Status1 = mastg.Network1Status1.ToString(),
-                    Network1Note2 = mastg.Network1Note2,
-                    Network1Status2 = mastg.Network1Status2.ToString(),
-                    Network1Note3 = mastg.Network1Note3,
-                    Network1Status3 = mastg.Network1Status3.ToString(),
-                    Network1Note4 = mastg.Network1Note4,
-                    Network1Status4 = mastg.Network1Status4.ToString(),
-                    Network1Note5 = mastg.Network1Note5,
-                    Network1Status5 = mastg.Network1Status5.ToString(),
-                    Network1Note6 = mastg.Network1Note6,
-                    Network1Status6 = mastg.Network1Status6.ToString(),
-                    Network1Note7 = mastg.Network1Note7,
-                    Network1Status7 = mastg.Network1Status7.ToString(),
-                    Network2Note = mastg.Network2Note,
-                    Network2Status = mastg.Network2Status.ToString(),
-                    Network2Note1 = mastg.Network2Note1,
-                    Network2Status1 = mastg.Network2Status1.ToString(),
-                    Network2Note2 = mastg.Network2Note2,
-                    Network2Status2 = mastg.Network2Status2.ToString(),
-                    Platform1Note = mastg.Platform1Note,
-                    Platform1Status = mastg.Platform1Status.ToString(),
-                    Platform1Note1 = mastg.Platform1Note1,
-                    Platform1Status1 = mastg.Platform1Status1.ToString(),
-                    Platform1Note2 = mastg.Platform1Note2,
-                    Platform1Status2 = mastg.Platform1Status2.ToString(),
-                    Platform1Note3 = mastg.Platform1Note3,
-                    Platform1Status3 = mastg.Platform1Status3.ToString(),
-                    Platform1Note4 = mastg.Platform1Note4,
-                    Platform1Status4 = mastg.Platform1Status4.ToString(),
-                    Platform1Note5 = mastg.Platform1Note5,
-                    Platform1Status5 = mastg.Platform1Status5.ToString(),
-                    Platform1Note6 = mastg.Platform1Note6,
-                    Platform1Status6 = mastg.Platform1Status6.ToString(),
-                    Platform1Note7 = mastg.Platform1Note7,
-                    Platform1Status7 = mastg.Platform1Status7.ToString(),
-                    Platform1Note8 = mastg.Platform1Note8,
-                    Platform1Status8 = mastg.Platform1Status8.ToString(),
-                    Platform1Note9 = mastg.Platform1Note9,
-                    Platform1Status9 = mastg.Platform1Status9.ToString(),
-                    Platform1Note10 = mastg.Platform1Note10,
-                    Platform1Status10 = mastg.Platform1Status10.ToString(),
-                    Platform1Note11 = mastg.Platform1Note11,
-                    Platform1Status11 = mastg.Platform1Status11.ToString(),
-                    Platform1Note12 = mastg.Platform1Note12,
-                    Platform1Status12 = mastg.Platform1Status12.ToString(),
-                    Platform1Note13 = mastg.Platform1Note13,
-                    Platform1Status13 = mastg.Platform1Status13.ToString(),
-                    Platform2Note = mastg.Platform2Note,
-                    Platform2Status = mastg.Platform2Status.ToString(),
-                    Platform2Note1 = mastg.Platform2Note1,
-                    Platform2Status1 = mastg.Platform2Status1.ToString(),
-                    Platform2Note2 = mastg.Platform2Note2,
-                    Platform2Status2 = mastg.Platform2Status2.ToString(),
-                    Platform2Note3 = mastg.Platform2Note3,
-                    Platform2Status3 = mastg.Platform2Status3.ToString(),
-                    Platform2Note4 = mastg.Platform2Note4,
-                    Platform2Status4 = mastg.Platform2Status4.ToString(),
-                    Platform2Note5 = mastg.Platform2Note5,
-                    Platform2Status5 = mastg.Platform2Status5.ToString(),
-                    Platform2Note6 = mastg.Platform2Note6,
-                    Platform2Status6 = mastg.Platform2Status6.ToString(),
-                    Platform2Note7 = mastg.Platform2Note7,
-                    Platform2Status7 = mastg.Platform2Status7.ToString(),
-                    Platform3Note = mastg.Platform3Note,
-                    Platform3Status = mastg.Platform3Status.ToString(),
-                    Platform3Note1 = mastg.Platform3Note1,
-                    Platform3Status1 = mastg.Platform3Status1.ToString(),
-                    Platform3Note2 = mastg.Platform3Note2,
-                    Platform3Status2 = mastg.Platform3Status2.ToString(),
-                    Platform3Note3 = mastg.Platform3Note3,
-                    Platform3Status3 = mastg.Platform3Status3.ToString(),
-                    Platform3Note4 = mastg.Platform3Note4,
-                    Platform3Status4 = mastg.Platform3Status4.ToString(),
-                    Platform3Note5 = mastg.Platform3Note5,
-                    Platform3Status5 = mastg.Platform3Status5.ToString(),
-                    Code1Note = mastg.Code1Note,
-                    Code1Status = mastg.Code1Status.ToString(),
-                    Code2Note = mastg.Code2Note,
-                    Code2Status = mastg.Code2Status.ToString(),
-                    Code2Note1 = mastg.Code2Note1,
-                    Code2Status1 = mastg.Code2Status1.ToString(),
-                    Code2Note2 = mastg.Code2Note2,
-                    Code2Status2 = mastg.Code2Status2.ToString(),
-                    Code3Note = mastg.Code3Note,
-                    Code3Status = mastg.Code3Status.ToString(),
-                    Code3Note1 = mastg.Code3Note1,
-                    Code3Status1 = mastg.Code3Status1.ToString(),
-                    Code3Note2 = mastg.Code3Note2,
-                    Code3Status2 = mastg.Code3Status2.ToString(),
-                    Code4Note = mastg.Code4Note,
-                    Code4Status = mastg.Code4Status.ToString(),
-                    Code4Note1 = mastg.Code4Note1,
-                    Code4Status1 = mastg.Code4Status1.ToString(),
-                    Code4Note2 = mastg.Code4Note2,
-                    Code4Status2 = mastg.Code4Status2.ToString(),
-                    Code4Note3 = mastg.Code4Note3,
-                    Code4Status3 = mastg.Code4Status3.ToString(),
-                    Code4Note4 = mastg.Code4Note4,
-                    Code4Status4 = mastg.Code4Status4.ToString(),
-                    Code4Note5 = mastg.Code4Note5,
-                    Code4Status5 = mastg.Code4Status5.ToString(),
-                    Code4Note6 = mastg.Code4Note6,
-                    Code4Status6 = mastg.Code4Status6.ToString(),
-                    Code4Note7 = mastg.Code4Note7,
-                    Code4Status7 = mastg.Code4Status7.ToString(),
-                    Code4Note8 = mastg.Code4Note8,
-                    Code4Status8 = mastg.Code4Status8.ToString(),
-                    Code4Note9 = mastg.Code4Note9,
-                    Code4Status9 = mastg.Code4Status9.ToString(),
-                    Code4Note10 = mastg.Code4Note10,
-                    Code4Status10 = mastg.Code4Status10.ToString(),
-                    Resilience1Note = mastg.Resilience1Note,
-                    Resilience1Status = mastg.Resilience1Status.ToString(),
-                    Resilience1Note1 = mastg.Resilience1Note1,
-                    Resilience1Status1 = mastg.Resilience1Status1.ToString(),
-                    Resilience1Note2 = mastg.Resilience1Note2,
-                    Resilience1Status2 = mastg.Resilience1Status2.ToString(),
-                    Resilience1Note3 = mastg.Resilience1Note3,
-                    Resilience1Status3 = mastg.Resilience1Status3.ToString(),
-                    Resilience1Note4 = mastg.Resilience1Note4,
-                    Resilience1Status4 = mastg.Resilience1Status4.ToString(),
-                    Resilience2Status = mastg.Resilience2Status.ToString(),
-                    Resilience2Note = mastg.Resilience2Note,
-                    Resilience2Status1 = mastg.Resilience2Status1.ToString(),
-                    Resilience2Note1 = mastg.Resilience2Note1,
-                    Resilience2Status2 = mastg.Resilience2Status2.ToString(),
-                    Resilience2Note2 = mastg.Resilience2Note2,
-                    Resilience2Status3 = mastg.Resilience2Status3.ToString(),
-                    Resilience2Note3 = mastg.Resilience2Note3,
-                    Resilience2Status4 = mastg.Resilience2Status4.ToString(),
-                    Resilience2Note4 = mastg.Resilience2Note4,
-                    Resilience2Status5 = mastg.Resilience2Status5.ToString(),
-                    Resilience2Note5 = mastg.Resilience2Note5,
-                    Resilience3Note = mastg.Resilience3Note,
-                    Resilience3Status = mastg.Resilience3Status.ToString(),
-                    Resilience3Note1 = mastg.Resilience3Note1,
-                    Resilience3Status1 = mastg.Resilience3Status1.ToString(),
-                    Resilience3Note2 = mastg.Resilience3Note2,
-                    Resilience3Status2 = mastg.Resilience3Status2.ToString(),
-                    Resilience3Note3 = mastg.Resilience3Note3,
-                    Resilience3Status3 = mastg.Resilience3Status3.ToString(),
-                    Resilience3Note4 = mastg.Resilience3Note4,
-                    Resilience3Status4 = mastg.Resilience3Status4.ToString(),
-                    Resilience3Note5 = mastg.Resilience3Note5,
-                    Resilience3Status5 = mastg.Resilience3Status5.ToString(),
-                    Resilience3Note6 = mastg.Resilience3Note6,
-                    Resilience3Status6 = mastg.Resilience3Status6.ToString(),
-                    Resilience4Note = mastg.Resilience4Note,
-                    Resilience4Status = mastg.Resilience4Status.ToString(),
-                    Resilience4Status1 = mastg.Resilience4Status1.ToString(),
-                    Resilience4Note1 = mastg.Resilience4Note1,
-                    Resilience4Status2 = mastg.Resilience4Status2.ToString(),
-                    Resilience4Note2 = mastg.Resilience4Note2,
-                    Resilience4Status3 = mastg.Resilience4Status3.ToString(),
-                    Resilience4Note3 = mastg.Resilience4Note3,
-                    Resilience4Status4 = mastg.Resilience4Status4.ToString(),
-                    Resilience4Note4 = mastg.Resilience4Note4,
-                    Resilience4Status5 = mastg.Resilience4Status5.ToString(),
-                    Resilience4Note5 = mastg.Resilience4Note5,
-                    Resilience4Status6 = mastg.Resilience4Status6.ToString(),
-                    Resilience4Note6 = mastg.Resilience4Note6,
-                };
+                    var value = property.GetValue(mastg);
+                    scriptObject.Add(property.Name, value);
+                }
+                
+                    
+                var context = new TemplateContext();
+                context.PushGlobal(scriptObject);
 
-               
-                var resultHtml = templateHtml(data);
+                var templateScriban = Template.Parse(source);
+                // Check for any errors
+                if (templateScriban.HasErrors)
+                {
+                    foreach(var error in templateScriban.Messages)
+                    {
+                        Console.WriteLine(error);
+                    }
+                }
+                
+                var result = await templateScriban.RenderAsync(context);
 
-                rep.HtmlCode = resultHtml;
+                rep.HtmlCode = result;
+                
                 reportManager.Add(rep);
                 reportManager.Context.SaveChanges();
                 _logger.LogInformation("Report MASVS generated successfully. User: {0}",
@@ -1317,223 +1095,56 @@ public class ChecklistController : ControllerBase
                 }
 
                 source = source.Replace("{{FooterComponents}}", sbFooter.ToString());
+                
 
-
-                var templateHtml = Handlebars.Compile(source);
-
-
-                var data = new
+                var scriptObject = new ScriptObject();
+                scriptObject.Add("OrganizationName", Organization.Name);
+                scriptObject.Add("OrganizationEmail", Organization.ContactEmail);
+                scriptObject.Add("OrganizationPhone", Organization.ContactPhone);
+                scriptObject.Add("OrganizationDescription", Organization.Description);
+                scriptObject.Add("OrganizationContactName", Organization.ContactName);
+                scriptObject.Add("OrganizationUrl", Organization.Url);
+                scriptObject.Add("ClientName", Client.Name);
+                scriptObject.Add("ClientDescription", Client.Description);
+                scriptObject.Add("ClientUrl", Client.Url);
+                scriptObject.Add("ClientContactName", Client.ContactName);
+                scriptObject.Add("ClientEmail", Client.ContactEmail);
+                scriptObject.Add("ClientPhone", Client.ContactPhone);
+                scriptObject.Add("Year", DateTime.Now.Year.ToString());
+                //scriptObject.Add("CreatedDate", DateTime.Now.ToUniversalTime().ToShortDateString());
+                scriptObject.Add("TargetName", wstg.Target.Name);
+                scriptObject.Add("TargetDescription", wstg.Target.Description);
+                scriptObject.Add("TargetType", wstg.Target.Type.ToString());
+                scriptObject.Add("PageBreak", @"<span style=""page-break-after: always;""></span>");
+                scriptObject.Add("Today", DateTime.Now.ToShortDateString());
+                scriptObject.Add("ProjectName", pro.Name);
+                scriptObject.Add("ProjectDescription", pro.Description);
+   
+                var properties = wstg.GetType().GetProperties();
+                foreach (var property in properties)
                 {
-                    OrganizationName = Organization.Name,
-                    ClientName = Client.Name,
-                    OrganizationEmail = Organization.ContactEmail,
-                    OrganizationPhone = Organization.ContactPhone,
-                    ClientEmail = Client.ContactEmail,
-                    ClientPhone = Client.ContactPhone,
-                    ProjectName = pro.Name,
-                    ProjectDescription = pro.Description,
-                    CreatedDate = DateTime.Now.ToUniversalTime().ToShortDateString(),
-                    TargetUrl = wstg.Target.Name,
-                    TargetDescription = wstg.Target.Description,
-                    Info01Status = wstg.Info01Status.ToString(),
-                    Info01Note = wstg.Info01Note,
-                    Info02Status = wstg.Info02Status.ToString(),
-                    Info02Note = wstg.Info02Note,
-                    Info03Status = wstg.Info03Status.ToString(),
-                    Info03Note = wstg.Info03Note,
-                    Info04Status = wstg.Info04Status.ToString(),
-                    Info04Note = wstg.Info04Note,
-                    Info05Status = wstg.Info05Status.ToString(),
-                    Info05Note = wstg.Info05Note,
-                    Info06Status = wstg.Info06Status.ToString(),
-                    Info06Note = wstg.Info06Note,
-                    Info07Status = wstg.Info07Status.ToString(),
-                    Info07Note = wstg.Info07Note,
-                    Info08Status = wstg.Info08Status.ToString(),
-                    Info08Note = wstg.Info08Note,
-                    Info09Status = wstg.Info09Status.ToString(),
-                    Info09Note = wstg.Info09Note,
-                    Info10Status = wstg.Info10Status.ToString(),
-                    Info10Note = wstg.Info10Note,
+                    var value = property.GetValue(wstg);
+                    scriptObject.Add(property.Name, value);
+                }
+                
                     
-                    Conf01Status = wstg.Conf01Status.ToString(),
-                    Conf01Note = wstg.Conf01Note,
-                    Conf02Status = wstg.Conf02Status.ToString(),
-                    Conf02Note = wstg.Conf02Note,
-                    Conf03Status = wstg.Conf03Status.ToString(),
-                    Conf03Note = wstg.Conf03Note,
-                    Conf04Status = wstg.Conf04Status.ToString(),
-                    Conf04Note = wstg.Conf04Note,
-                    Conf05Status = wstg.Conf05Status.ToString(),
-                    Conf05Note = wstg.Conf05Note,
-                    Conf06Status = wstg.Conf06Status.ToString(),
-                    Conf06Note = wstg.Conf06Note,
-                    Conf07Status = wstg.Conf07Status.ToString(),
-                    Conf07Note = wstg.Conf07Note,
-                    Conf08Status = wstg.Conf08Status.ToString(),
-                    Conf08Note = wstg.Conf08Note,
-                    Conf09Status = wstg.Conf09Status.ToString(),
-                    Conf09Note = wstg.Conf09Note,
-                    Conf10Status = wstg.Conf10Status.ToString(),
-                    Conf10Note = wstg.Conf10Note,
-                    Conf11Status = wstg.Conf11Status.ToString(),
-                    Conf11Note = wstg.Conf11Note,
-                    
-                    Idnt01Status = wstg.Idnt1Status.ToString(),
-                    Idnt01Note = wstg.Idnt1Note,
-                    Idnt02Status = wstg.Idnt2Status.ToString(),
-                    Idnt02Note = wstg.Idnt2Note,
-                    Idnt03Status = wstg.Idnt3Status.ToString(),
-                    Idnt03Note = wstg.Idnt3Note,
-                    Idnt04Status = wstg.Idnt4Status.ToString(),
-                    Idnt04Note = wstg.Idnt4Note,
-                    Idnt05Status = wstg.Idnt5Status.ToString(),
-                    
-                    Athn01Status = wstg.Athn01Status.ToString(),
-                    Athn01Note = wstg.Athn01Note,
-                    Athn02Status = wstg.Athn02Status.ToString(),
-                    Athn02Note = wstg.Athn02Note,
-                    Athn03Status = wstg.Athn03Status.ToString(),
-                    Athn03Note = wstg.Athn03Note,
-                    Athn04Status = wstg.Athn04Status.ToString(),
-                    Athn04Note = wstg.Athn04Note,
-                    Athn05Status = wstg.Athn05Status.ToString(),
-                    Athn05Note = wstg.Athn05Note,
-                    Athn06Status = wstg.Athn06Status.ToString(),
-                    Athn06Note = wstg.Athn06Note,
-                    Athn07Status = wstg.Athn07Status.ToString(),
-                    Athn07Note = wstg.Athn07Note,
-                    Athn08Status = wstg.Athn08Status.ToString(),
-                    Athn08Note = wstg.Athn08Note,
-                    Athn09Status = wstg.Athn09Status.ToString(),
-                    Athn09Note = wstg.Athn09Note,
-                    Athn10Status = wstg.Athn10Status.ToString(),
-                    
-                    Sess01Status = wstg.Sess01Status.ToString(),
-                    Sess01Note = wstg.Sess01Note,
-                    Sess02Status = wstg.Sess02Status.ToString(),
-                    Sess02Note = wstg.Sess02Note,
-                    Sess03Status = wstg.Sess03Status.ToString(),
-                    Sess03Note = wstg.Sess03Note,
-                    Sess04Status = wstg.Sess04Status.ToString(),
-                    Sess04Note = wstg.Sess04Note,
-                    Sess05Status = wstg.Sess05Status.ToString(),
-                    Sess05Note = wstg.Sess05Note,
-                    Sess06Status = wstg.Sess06Status.ToString(),
-                    Sess06Note = wstg.Sess06Note,
-                    Sess07Status = wstg.Sess07Status.ToString(),
-                    Sess07Note = wstg.Sess07Note,
-                    Sess08Status = wstg.Sess08Status.ToString(),
-                    Sess08Note = wstg.Sess08Note,
-                    Sess09Status = wstg.Sess09Status.ToString(),
-                    Sess09Note = wstg.Sess09Note,
-                    
-                    Inpv01Status = wstg.Inpv01Status.ToString(),
-                    Inpv01Note = wstg.Inpv01Note,
-                    Inpv02Status = wstg.Inpv02Status.ToString(),
-                    Inpv02Note = wstg.Inpv02Note,
-                    Inpv03Status = wstg.Inpv03Status.ToString(),
-                    Inpv03Note = wstg.Inpv03Note,
-                    Inpv04Status = wstg.Inpv04Status.ToString(),
-                    Inpv04Note = wstg.Inpv04Note,
-                    Inpv05Status = wstg.Inpv05Status.ToString(),
-                    Inpv05Note = wstg.Inpv05Note,
-                    Inpv06Status = wstg.Inpv06Status.ToString(),
-                    Inpv06Note = wstg.Inpv06Note,
-                    Inpv07Status = wstg.Inpv07Status.ToString(),
-                    Inpv07Note = wstg.Inpv07Note,
-                    Inpv08Status = wstg.Inpv08Status.ToString(),
-                    Inpv08Note = wstg.Inpv08Note,
-                    Inpv09Status = wstg.Inpv09Status.ToString(),
-                    Inpv09Note = wstg.Inpv09Note,
-                    Inpv10Status = wstg.Inpv10Status.ToString(),
-                    Inpv10Note = wstg.Inpv10Note,
-                    Inpv11Status = wstg.Inpv11Status.ToString(),
-                    Inpv11Note = wstg.Inpv11Note,
-                    Inpv12Status = wstg.Inpv12Status.ToString(),
-                    Inpv12Note = wstg.Inpv12Note,
-                    Inpv13Status = wstg.Inpv13Status.ToString(),
-                    Inpv13Note = wstg.Inpv13Note,
-                    Inpv14Status = wstg.Inpv14Status.ToString(),
-                    Inpv14Note = wstg.Inpv14Note,
-                    Inpv15Status = wstg.Inpv15Status.ToString(),
-                    Inpv15Note = wstg.Inpv15Note,
-                    Inpv16Status = wstg.Inpv16Status.ToString(),
-                    Inpv16Note = wstg.Inpv16Note,
-                    Inpv17Status = wstg.Inpv17Status.ToString(),
-                    Inpv17Note = wstg.Inpv17Note,   
-                    Inpv18Status = wstg.Inpv18Status.ToString(),
-                    Inpv18Note = wstg.Inpv18Note,
-                    Inpv19Status = wstg.Inpv19Status.ToString(),
-                    Inpv19Note = wstg.Inpv19Note,
-                    
-                    Errh01Status = wstg.Errh01Status.ToString(),
-                    Errh01Note = wstg.Errh01Note,
-                    Errh02Status = wstg.Errh02Status.ToString(),
-                    Errh02Note = wstg.Errh02Note,
-                    
-                    Cryp01Status = wstg.Cryp01Status.ToString(),
-                    Cryp01Note = wstg.Cryp01Note,
-                    Cryp02Status = wstg.Cryp02Status.ToString(),
-                    Cryp02Note = wstg.Cryp02Note,
-                    Cryp03Status = wstg.Cryp03Status.ToString(),
-                    Cryp03Note = wstg.Cryp03Note,
-                    Cryp04Status = wstg.Cryp04Status.ToString(),
-                    Cryp04Note = wstg.Cryp04Note,
+                var context = new TemplateContext();
+                context.PushGlobal(scriptObject);
 
-                    Busl01Status = wstg.Busl01Status.ToString(),
-                    Busl01Note = wstg.Busl01Note,
-                    Busl02Status = wstg.Busl02Status.ToString(),
-                    Busl02Note = wstg.Busl02Note,
-                    Busl03Status = wstg.Busl03Status.ToString(),
-                    Busl03Note = wstg.Busl03Note,
-                    Busl04Status = wstg.Busl04Status.ToString(),    
-                    Busl04Note = wstg.Busl04Note,
-                    Busl05Status = wstg.Busl05Status.ToString(),
-                    Busl05Note = wstg.Busl05Note,
-                    Busl06Status = wstg.Busl06Status.ToString(),
-                    Busl06Note = wstg.Busl06Note,
-                    Busl07Status = wstg.Busl07Status.ToString(),
-                    Busl07Note = wstg.Busl07Note,
-                    Busl08Status = wstg.Busl08Status.ToString(),
-                    Busl08Note = wstg.Busl08Note,
-                    Busl09Status = wstg.Busl09Status.ToString(),
-                    Busl09Note = wstg.Busl09Note,
+                var templateScriban = Template.Parse(source);
+                // Check for any errors
+                if (templateScriban.HasErrors)
+                {
+                    foreach(var error in templateScriban.Messages)
+                    {
+                        Console.WriteLine(error);
+                    }
+                }
+                
+                var result = await templateScriban.RenderAsync(context);
 
-                    Clnt01Status = wstg.Clnt01Status.ToString(),
-                    Clnt01Note = wstg.Clnt01Note,
-                    Clnt02Status = wstg.Clnt02Status.ToString(),
-                    Clnt02Note = wstg.Clnt02Note,
-                    Clnt03Status = wstg.Clnt03Status.ToString(),
-                    Clnt03Note = wstg.Clnt03Note,
-                    Clnt04Status = wstg.Clnt04Status.ToString(),
-                    Clnt04Note = wstg.Clnt04Note,
-                    Clnt05Status = wstg.Clnt05Status.ToString(),
-                    Clnt05Note = wstg.Clnt05Note,
-                    Clnt06Status = wstg.Clnt06Status.ToString(),
-                    Clnt06Note = wstg.Clnt06Note,
-                    Clnt07Status = wstg.Clnt07Status.ToString(),
-                    Clnt07Note = wstg.Clnt07Note,
-                    Clnt08Status = wstg.Clnt08Status.ToString(),
-                    Clnt08Note = wstg.Clnt08Note,
-                    Clnt09Status = wstg.Clnt09Status.ToString(),
-                    Clnt09Note = wstg.Clnt09Note,
-                    Clnt10Status = wstg.Clnt10Status.ToString(),
-                    Clnt10Note = wstg.Clnt10Note,
-                    Clnt11Status = wstg.Clnt11Status.ToString(),
-                    Clnt11Note = wstg.Clnt11Note,
-                    Clnt12Status = wstg.Clnt12Status.ToString(),
-                    Clnt12Note = wstg.Clnt12Note,
-                    Clnt13Status = wstg.Clnt13Status.ToString(),
-                    Clnt13Note = wstg.Clnt13Note,
-                    
-                    Apit01Status = wstg.Apit01Status.ToString(),
-                    Apit01Note = wstg.Apit01Note,
-                };
-
-                var resultHtml = templateHtml(data);
-
-                rep.HtmlCode = resultHtml;
+                rep.HtmlCode = result;
+                
                 reportManager.Add(rep);
                 reportManager.Context.SaveChanges();
 

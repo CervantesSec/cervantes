@@ -261,7 +261,7 @@ public class DataInitializer
                 purposeGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 purposeGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
                 purposeGeneralComponent.Content = @"<h1>Purpose</h1>
-                <p><span style=""color: rgb(0, 0, 0);"">{{{ProjectDescription}}}</span></p>
+                <p><span style=""color: rgb(0, 0, 0);"">{{ProjectDescription}}</span></p>
                 <p>&nbsp;</p>";
                 reportComponentsManager.Add(purposeGeneralComponent);
                 
@@ -281,13 +281,12 @@ public class DataInitializer
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Version</span></strong></td>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Description</span></strong></td>
                 </tr>
-                <!--{{#each Documents}} -->
                 <tr>
                 <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{DocumentName}}</span></td>
                 <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{DocumentVersion}}</span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{{DocumentDescription}}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{DocumentDescription}}</span></td>
                 </tr>
-                <!--{{/each}} --></tbody>
+                </tbody>
                 </table>";
                 reportComponentsManager.Add(documentControlGeneralComponent);
                 
@@ -302,7 +301,7 @@ public class DataInitializer
                 <p>&nbsp;</p>
                 <p><span style=""color: rgb(0, 0, 0);"">This document presents the results of a Security Review for {{ClientName}} . This engagement aimed to verify to discover security vulnerabilities that could negatively affect the {{ClientName}} networks or systems</span></p>
                 <p>&nbsp;</p>
-                <p><span style=""color: rgb(0, 0, 0);"">{{{ClientDescription}}}</span></p>
+                <p><span style=""color: rgb(0, 0, 0);"">{{ClientDescription}}</span></p>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgb(0, 0, 0);"">For each vulnerability discovered during the&nbsp;assessment, {{OrganizationName}} attributed a risk severity rating and, whenever possible, validated the existence of the vulnerability with a working exploit code.</span></p>
                 <p>&nbsp;</p>
@@ -336,13 +335,12 @@ public class DataInitializer
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Version</span></strong></td>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Position</span></strong></td>
                 </tr>
-                <!--{{#each Users}} -->
                 <tr>
                 <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{UserFullName}}</span></td>
                 <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{UserEmail}}</span></td>
                 <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{UserPosition}}</span></td>
                 </tr>
-                <!--{{/each}} --></tbody>
+                </tbody>
                 </table>";
                 reportComponentsManager.Add(teamGeneralComponent);
                 
@@ -355,7 +353,7 @@ public class DataInitializer
                 executiveSummaryGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
                 executiveSummaryGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Executive Summary</span></h1>
                 <p>&nbsp;</p>
-                <p><span style=""color: rgb(0, 0, 0);"">{{{ProjectExecutiveSummary}}}</span></p>";
+                <p><span style=""color: rgb(0, 0, 0);"">{{ProjectExecutiveSummary}}</span></p>";
                 
                 reportComponentsManager.Add(executiveSummaryGeneralComponent);
                 
@@ -377,13 +375,12 @@ public class DataInitializer
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Description</span></strong></td>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Type</span></strong></td>
                 </tr>
-                <!--{{#each Targets}} -->
                 <tr>
                 <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{TargetName}}</span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{{TargetDescription}}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{TargetDescription}}</span></td>
                 <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{TargetType}}</span></td>
                 </tr>
-                <!--{{/each}} --></tbody>
+                </tbody>
                 </table>";
                 reportComponentsManager.Add(scopeGeneralComponent);
                 
@@ -496,7 +493,6 @@ public class DataInitializer
                 findingsDetailsGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
                 findingsDetailsGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Findings</span></h1>
                 <p>&nbsp;</p>
-                <p><!--{{#each Vulns}} --></p>
                 <h2><span style=""color: rgb(0, 0, 0);"">{{VulnFindingId}} - {{VulnName}}</span></h2>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""></colgroup>
@@ -529,7 +525,7 @@ public class DataInitializer
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Description</span></strong></td>
                 </tr>
                 <tr>
-                <td style=""text-align: justify;""><span style=""color: rgb(0, 0, 0);"">{{{VulnDescription}}}</span></td>
+                <td style=""text-align: justify;""><span style=""color: rgb(0, 0, 0);"">{{VulnDescription}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -540,7 +536,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgb(0, 0, 0);""><span style=""color: rgb(255, 255, 255);""><strong>Impact</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgb(0, 0, 0);"">{{{VulnImpact}}}</span></td>
+                <td><span style=""color: rgb(0, 0, 0);"">{{VulnImpact}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -551,7 +547,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgb(0, 0, 0);""><span style=""color: rgb(255, 255, 255);""><strong>Proof of Concept</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgb(0, 0, 0);"">{{{VulnPoc}}}</span></td>
+                <td><span style=""color: rgb(0, 0, 0);"">{{VulnPoc}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -562,7 +558,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgb(0, 0, 0);""><span style=""color: rgb(255, 255, 255);""><strong>Remediation</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgb(0, 0, 0);"">{{{VulnRemediation}}}</span></td>
+                <td><span style=""color: rgb(0, 0, 0);"">{{VulnRemediation}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -586,7 +582,6 @@ public class DataInitializer
                 </tr>
                 </tbody>
                 </table>
-                <p><!--{{/each}} --></p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>";
                 reportComponentsManager.Add(findingsDetailsGeneralComponent);
@@ -4102,7 +4097,7 @@ public class DataInitializer
 
                     <tr>
                     <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{TargetName}}</span></td>
-                    <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{{TargetDescription}}}</span></td>
+                    <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{TargetDescription}}</span></td>
                     <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{TargetType}}</span></td>
                     </tr>
                     </tbody>
@@ -4242,7 +4237,7 @@ public class DataInitializer
                 <tr>
                 <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{DocumentName}}</span></td>
                 <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{DocumentVersion}}</span></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{{DocumentDescription}}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{DocumentDescription}}</span></td>
                 </tr>
                 </tbody>
                 </table>";
@@ -4322,7 +4317,7 @@ public class DataInitializer
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">Descripción</span></strong></td>
                 </tr>
                 <tr>
-                <td style=""text-align: justify""><span style=""color: rgba(0, 0, 0, 1)"">{{{VulnDescription}}}</span></td>
+                <td style=""text-align: justify""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnDescription}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4333,7 +4328,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgba(0, 0, 0, 1)""><span style=""color: rgba(255, 255, 255, 1)""><strong>Impacto</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgba(0, 0, 0, 1)"">{{{VulnImpact}}}</span></td>
+                <td><span style=""color: rgba(0, 0, 0, 1)"">{{VulnImpact}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4344,7 +4339,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgba(0, 0, 0, 1)""><span style=""color: rgba(255, 255, 255, 1)""><strong>Prueba de Concepto</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgba(0, 0, 0, 1)"">{{{VulnPoc}}}</span></td>
+                <td><span style=""color: rgba(0, 0, 0, 1)"">{{VulnPoc}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4355,7 +4350,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgba(0, 0, 0, 1)""><span style=""color: rgba(255, 255, 255, 1)""><strong>Remediación</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgba(0, 0, 0, 1)"">{{{VulnRemediation}}}</span></td>
+                <td><span style=""color: rgba(0, 0, 0, 1)"">{{VulnRemediation}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4394,7 +4389,7 @@ public class DataInitializer
                 resumenEjecutivoGeneral.Updated = DateTime.Now.ToUniversalTime();
                 resumenEjecutivoGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Resumen Ejecutivo</span></h1>
                 <p>&nbsp;</p>
-                <p><span style=""color: rgba(0, 0, 0, 1)"">{{{ProjectExecutiveSummary}}}</span></p>";
+                <p><span style=""color: rgba(0, 0, 0, 1)"">{{ProjectExecutiveSummary}}</span></p>";
                 reportComponentsManager.Add(resumenEjecutivoGeneral);
                 reportComponentsManager.Context.SaveChanges();
                 
@@ -4407,7 +4402,7 @@ public class DataInitializer
                 propositoGeneral.Updated = DateTime.Now.ToUniversalTime();
                 propositoGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Propósito</span></h1>
                 <p>&nbsp;</p>
-                <p><span style=""color: rgba(0, 0, 0, 1)"">{{{ProjectDescription}}}</span></p>";
+                <p><span style=""color: rgba(0, 0, 0, 1)"">{{ProjectDescription}}</span></p>";
                 reportComponentsManager.Add(propositoGeneral);
                 reportComponentsManager.Context.SaveChanges();
                 #endregion

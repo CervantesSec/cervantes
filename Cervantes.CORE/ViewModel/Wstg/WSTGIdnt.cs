@@ -4,14 +4,14 @@ namespace Cervantes.CORE.ViewModel.Wstg;
 
 public class WSTGIdnt
 {
-    public string Idnt1Note {get; set;}
-    public string Idnt2Note {get; set;}
-    public string Idnt3Note {get; set;}
-    public string Idnt4Note {get; set;}
-    public string Idnt5Note {get; set;}
-    public WSTGStatus Idnt1Status {get; set;}
-    public WSTGStatus Idnt2Status {get; set;}
-    public WSTGStatus Idnt3Status {get; set;}
-    public WSTGStatus Idnt4Status {get; set;}
-    public WSTGStatus Idnt5Status {get; set;}
+    public string Idnt01Note {get; set;}
+    public string Idnt02Note {get; set;}
+    public string Idnt03Note {get; set;}
+    public string Idnt04Note {get; set;}
+    public string Idnt05Note {get; set;}
+    public WSTGStatus Idnt01Status {get; set;}
+    public WSTGStatus Idnt02Status {get; set;}
+    public WSTGStatus Idnt03Status {get; set;}
+    public WSTGStatus Idnt04Status {get; set;}
+    public WSTGStatus Idnt05Status {get; set;}
 }

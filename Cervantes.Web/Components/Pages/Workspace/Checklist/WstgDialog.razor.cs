@@ -189,16 +189,16 @@ public partial class WstgDialog: ComponentBase
             };
             model.Idnt = new WSTGIdnt
             {
-                Idnt1Note = wstg.Idnt1Note,
-                Idnt2Note = wstg.Idnt2Note,
-                Idnt3Note = wstg.Idnt3Note,
-                Idnt4Note = wstg.Idnt4Note,
-                Idnt5Note = wstg.Idnt5Note,
-                Idnt1Status = wstg.Idnt1Status,
-                Idnt2Status = wstg.Idnt2Status,
-                Idnt3Status = wstg.Idnt3Status,
-                Idnt4Status = wstg.Idnt4Status,
-                Idnt5Status = wstg.Idnt5Status
+                Idnt01Note = wstg.Idnt01Note,
+                Idnt02Note = wstg.Idnt02Note,
+                Idnt03Note = wstg.Idnt03Note,
+                Idnt04Note = wstg.Idnt04Note,
+                Idnt05Note = wstg.Idnt05Note,
+                Idnt01Status = wstg.Idnt01Status,
+                Idnt02Status = wstg.Idnt02Status,
+                Idnt03Status = wstg.Idnt03Status,
+                Idnt04Status = wstg.Idnt04Status,
+                Idnt05Status = wstg.Idnt05Status
             };
             model.Inpv = new WSTGInpv
             {
