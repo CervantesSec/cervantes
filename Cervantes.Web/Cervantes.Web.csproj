@@ -34,7 +34,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MudBlazor" Version="6.17.0" />
+        <PackageReference Include="MudBlazor" Version="6.18.0" />
         <PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="2.0.4" />
         <PackageReference Include="NLog" Version="5.2.8" />
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />

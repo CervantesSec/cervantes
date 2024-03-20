@@ -282,9 +282,9 @@ public class DataInitializer
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Description</span></strong></td>
                 </tr>
                 <tr>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{DocumentName}}</span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{DocumentVersion}}</span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{DocumentDescription}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{tablerow doc in Documents}}{{doc.DocumentName}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{doc.DocumentVersion}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{doc.DocumentDescription}}{{end}}</span></td>
                 </tr>
                 </tbody>
                 </table>";
@@ -336,9 +336,9 @@ public class DataInitializer
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Position</span></strong></td>
                 </tr>
                 <tr>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{UserFullName}}</span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{UserEmail}}</span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{UserPosition}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{tablerow user in Users}}{{user.UserFullName}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{user.UserEmail}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{user.UserPosition}}{{end}}</span></td>
                 </tr>
                 </tbody>
                 </table>";
@@ -376,9 +376,9 @@ public class DataInitializer
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Type</span></strong></td>
                 </tr>
                 <tr>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{TargetName}}</span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{TargetDescription}}</span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{TargetType}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{tablerow target in Targets}}{{target.TargetName}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{target.TargetDescription}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{target.TargetType}}{{end}}</span></td>
                 </tr>
                 </tbody>
                 </table>";
@@ -493,17 +493,18 @@ public class DataInitializer
                 findingsDetailsGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
                 findingsDetailsGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Findings</span></h1>
                 <p>&nbsp;</p>
-                <h2><span style=""color: rgb(0, 0, 0);"">{{VulnFindingId}} - {{VulnName}}</span></h2>
+                <p>{{for vuln in Vulns}}</p>
+                <h2><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnFindingId}} - {{vuln.VulnName}}</span></h2>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""><col style=""width: 16.6263%;""></colgroup>
                 <tbody>
                 <tr>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">CVE</span></strong></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{VulnCve}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnCve}}</span></td>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Risk</span></strong></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{VulnRisk}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnRisk}}</span></td>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">CVSS</span></strong></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{VulnCvss}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnCvss}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -512,9 +513,9 @@ public class DataInitializer
                 <tbody>
                 <tr>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Category</span></strong></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{VulnCategory}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnCategory}}</span></td>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">CWE</span></strong></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{VulnCwes}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnCwes}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -525,7 +526,7 @@ public class DataInitializer
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Description</span></strong></td>
                 </tr>
                 <tr>
-                <td style=""text-align: justify;""><span style=""color: rgb(0, 0, 0);"">{{VulnDescription}}</span></td>
+                <td style=""text-align: justify;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnDescription}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -536,7 +537,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgb(0, 0, 0);""><span style=""color: rgb(255, 255, 255);""><strong>Impact</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgb(0, 0, 0);"">{{VulnImpact}}</span></td>
+                <td><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnImpact}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -547,7 +548,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgb(0, 0, 0);""><span style=""color: rgb(255, 255, 255);""><strong>Proof of Concept</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgb(0, 0, 0);"">{{VulnPoc}}</span></td>
+                <td><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnPoc}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -558,7 +559,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgb(0, 0, 0);""><span style=""color: rgb(255, 255, 255);""><strong>Remediation</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgb(0, 0, 0);"">{{VulnRemediation}}</span></td>
+                <td><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnRemediation}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -567,9 +568,9 @@ public class DataInitializer
                 <tbody>
                 <tr>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Complexity</span></strong></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{VulnComplexity}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnComplexity}}</span></td>
                 <td style=""text-align: center; background-color: rgb(0, 0, 0);""><span style=""color: rgb(255, 255, 255);""><strong>Priority</strong></span></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{VulnPriority}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnPriority}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -578,11 +579,12 @@ public class DataInitializer
                 <tbody>
                 <tr>
                 <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Assets Affected</span></strong></td>
-                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{VulnTargets}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{vuln.VulnTargets}}</span></td>
                 </tr>
                 </tbody>
                 </table>
                 <p>&nbsp;</p>
+                <p>{{end}}</p>
                 <p>&nbsp;</p>";
                 reportComponentsManager.Add(findingsDetailsGeneralComponent);
                 
@@ -4043,9 +4045,9 @@ public class DataInitializer
                 </tr>
 
                 <tr>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{UserFullName}}</span></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{UserEmail}}</span></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{UserPosition}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{tablerow user in Users}}{{user.UserFullName}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{user.UserEmail}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{user.UserPosition}}{{end}}</span></td>
                 </tr>
                 </tbody>
                 </table>";
@@ -4096,9 +4098,9 @@ public class DataInitializer
                     </tr>
 
                     <tr>
-                    <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{TargetName}}</span></td>
-                    <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{TargetDescription}}</span></td>
-                    <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{TargetType}}</span></td>
+                    <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{tablerow target in Targets}}{{target.TargetName}}</span></td>
+                    <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{target.TargetDescription}}</span></td>
+                    <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{target.TargetType}}{{end}}</span></td>
                     </tr>
                     </tbody>
                     </table>";
@@ -4235,9 +4237,9 @@ public class DataInitializer
                 </tr>
 
                 <tr>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{DocumentName}}</span></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{DocumentVersion}}</span></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{DocumentDescription}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{tablerow doc in Documents}}{{doc.DocumentName}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{doc.DocumentVersion}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{doc.DocumentDescription}}{{end}}</span></td>
                 </tr>
                 </tbody>
                 </table>";
@@ -4284,18 +4286,19 @@ public class DataInitializer
                 detallesHallazgosGeneral.Updated = DateTime.Now.ToUniversalTime();
                 detallesHallazgosGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Hallazgos</span></h1>
                 <p>&nbsp;</p>
+                <p>{{for vuln in Vulns}}</p>    
                 <p>&nbsp;</p>
-                <h2><span style=""color: rgba(0, 0, 0, 1)"">{{VulnFindingId}} - {{VulnName}}</span></h2>
+                <h2><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnFindingId}} - {{vuln.VulnName}}</span></h2>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%"" border=""1""><colgroup><col style=""width: 16.6263%""><col style=""width: 16.6263%""><col style=""width: 16.6263%""><col style=""width: 16.6263%""><col style=""width: 16.6263%""><col style=""width: 16.6263%""></colgroup>
                 <tbody>
                 <tr>
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">CVE</span></strong></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnCve}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnCve}}</span></td>
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">Riesgo</span></strong></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnRisk}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnRisk}}</span></td>
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">CVSS</span></strong></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnCvss}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnCvss}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4304,9 +4307,9 @@ public class DataInitializer
                 <tbody>
                 <tr>
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">Categoría</span></strong></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnCategory}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnCategory}}</span></td>
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">CWE</span></strong></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnCwes}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnCwes}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4317,7 +4320,7 @@ public class DataInitializer
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">Descripción</span></strong></td>
                 </tr>
                 <tr>
-                <td style=""text-align: justify""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnDescription}}</span></td>
+                <td style=""text-align: justify""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnDescription}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4328,7 +4331,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgba(0, 0, 0, 1)""><span style=""color: rgba(255, 255, 255, 1)""><strong>Impacto</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgba(0, 0, 0, 1)"">{{VulnImpact}}</span></td>
+                <td><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnImpact}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4339,7 +4342,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgba(0, 0, 0, 1)""><span style=""color: rgba(255, 255, 255, 1)""><strong>Prueba de Concepto</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgba(0, 0, 0, 1)"">{{VulnPoc}}</span></td>
+                <td><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnPoc}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4350,7 +4353,7 @@ public class DataInitializer
                 <td style=""text-align: center; background-color: rgba(0, 0, 0, 1)""><span style=""color: rgba(255, 255, 255, 1)""><strong>Remediación</strong></span></td>
                 </tr>
                 <tr>
-                <td><span style=""color: rgba(0, 0, 0, 1)"">{{VulnRemediation}}</span></td>
+                <td><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnRemediation}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4359,9 +4362,9 @@ public class DataInitializer
                 <tbody>
                 <tr>
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">Complejidad</span></strong></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnComplexity}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnComplexity}}</span></td>
                 <td style=""text-align: center; background-color: rgba(0, 0, 0, 1)""><span style=""color: rgba(255, 255, 255, 1)""><strong>Prioridad</strong></span></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnPriority}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnPriority}}</span></td>
                 </tr>
                 </tbody>
                 </table>
@@ -4370,11 +4373,12 @@ public class DataInitializer
                 <tbody>
                 <tr>
                 <td style=""background-color: rgba(0, 0, 0, 1); text-align: center""><strong><span style=""color: rgba(255, 255, 255, 1)"">Activos Afectados</span></strong></td>
-                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{VulnTargets}}</span></td>
+                <td style=""text-align: center""><span style=""color: rgba(0, 0, 0, 1)"">{{vuln.VulnTargets}}</span></td>
                 </tr>
                 </tbody>
                 </table>
                 <p>&nbsp;</p>
+                <p>{{end}}</p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>";
                 reportComponentsManager.Add(detallesHallazgosGeneral);
