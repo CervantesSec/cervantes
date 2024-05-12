@@ -40,7 +40,7 @@
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
         <PackageReference Include="NLog.Database" Version="5.2.8" />
         <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.8" />
-        <PackageReference Include="Npgsql" Version="8.0.2" />
+        <PackageReference Include="Npgsql" Version="8.0.3" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
         <PackageReference Include="Scriban" Version="5.9.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
