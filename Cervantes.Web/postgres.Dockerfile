@@ -1,4 +1,4 @@
-FROM postgres:alpine
+FROM postgres:16.3-alpine3.20
 
 # set env variable in order for a non-interactive update process
 ENV DEBIAN_FRONTEND=noninteractive
