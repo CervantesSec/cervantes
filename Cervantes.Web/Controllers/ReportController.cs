@@ -466,8 +466,9 @@ public class ReportController : ControllerBase
                 sanitizer.AllowedSchemes.Add("data");
 
                 var comp = new ReportComponents();
+                var test = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Content));
                 comp.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                comp.Content = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Content));
+                comp.Content = HttpUtility.HtmlDecode(test);
                 comp.Language = model.Language;
                 comp.Created = DateTime.Now.ToUniversalTime();
                 comp.Updated = DateTime.Now.ToUniversalTime();
@@ -505,9 +506,9 @@ public class ReportController : ControllerBase
             {
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
-
+                var test = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Content));
                 result.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                result.Content = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Content));
+                result.Content = HttpUtility.HtmlDecode(test);
                 result.Language = model.Language;
                 result.Updated = DateTime.Now.ToUniversalTime();
                 result.ComponentType = model.ComponentType;
@@ -592,7 +593,7 @@ public class ReportController : ControllerBase
                     CreatedDate = DateTime.Now.ToUniversalTime(),
                     Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                     Version = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Version)),
-                    Language = pro.Language,
+                    Language = model.Language,
                     ReportType = ReportType.General
                 };
 

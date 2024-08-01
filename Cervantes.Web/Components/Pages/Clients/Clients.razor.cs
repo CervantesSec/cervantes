@@ -20,7 +20,7 @@ public partial class Clients: ComponentBase
     [Parameter] public Guid clientId { get; set; }
 
     [Inject] private ClientsController _clientsController { get; set; }
-    [Inject ]private IExportToCsv ExportToCsv { get; set; }
+   // [Inject] private IExportToCsv ExportToCsv { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,7 +96,7 @@ public partial class Clients: ComponentBase
         }
     }
     
-    private async Task Export(int id)
+    /*private async Task Export(int id)
     {
         switch (id)
         {
@@ -117,7 +117,7 @@ public partial class Clients: ComponentBase
                 ExportToCsv.DeleteFile(file);
                 break;
         }
-    }
+    }*/
     
     private async Task BtnActions(int id)
     {

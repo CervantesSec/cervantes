@@ -59,6 +59,7 @@ public class ClientsController : ControllerBase
         
     }
     
+    
     [HttpGet]
     [Route("{clientId}")]
     public CORE.Entities.Client GetById(Guid clientId)

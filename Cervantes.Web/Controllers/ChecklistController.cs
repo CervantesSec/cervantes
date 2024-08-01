@@ -858,7 +858,7 @@ public class ChecklistController : ControllerBase
                    CreatedDate = DateTime.Now.ToUniversalTime(),
                    Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                    Version = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Version)),
-                   Language = pro.Language,
+                   Language = model.Language,
                    ReportType = ReportType.MASTG
                };
               
@@ -1024,7 +1024,7 @@ public class ChecklistController : ControllerBase
                     CreatedDate = DateTime.Now.ToUniversalTime(),
                     Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
                     Version = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Version)),
-                    Language = pro.Language,
+                    Language = model.Language,
                     ReportType = ReportType.WSTG
                 };
 

@@ -52,10 +52,6 @@
       <ProjectReference Include="..\Cervantes.DAL\Cervantes.DAL.csproj" />
       <ProjectReference Include="..\Cervantes.IFR\Cervantes.IFR.csproj" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <TypeScriptCompile Include="wwwroot\lib\tinymce\tinymce.d.ts" />
-    </ItemGroup>
 
     <ItemGroup>
       <Reference Include="System.Configuration.ConfigurationManager">
@@ -73,6 +69,10 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="wwwroot\lib\tinymce\tinymce.d.ts" />
     </ItemGroup>
     
 </Project>
