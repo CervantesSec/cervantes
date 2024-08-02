@@ -93,10 +93,10 @@
             </CardHeaderContent>
         </MudCardHeader>
         <MudCardContent >
-            <MudList Dense="true">
+            <MudList T="string" Dense="true">
                 @foreach (var client in Clients.Take(3).OrderByDescending(c => c.CreatedDate))
                 {
-                    <MudListItem>
+                    <MudListItem T="string">
                         <div class="d-flex flex-row">
                             @if (client.ImagePath != "None")
                             {
@@ -110,7 +110,7 @@
                                 <MudText Typo="Typo.subtitle2">@client.Name</MudText>
                                 <MudText Typo="Typo.body2">@client.Url</MudText>
                             </div>
-                            <MudChip Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@client.CreatedDate.ToShortDateString()</MudChip>
+                            <MudChip T="string" Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@client.CreatedDate.ToShortDateString()</MudChip>
                         </div>
                     </MudListItem>
                 }
@@ -126,10 +126,10 @@
             </CardHeaderContent>
         </MudCardHeader>
         <MudCardContent Class="px-0">
-            <MudList Dense="true">
+            <MudList T="string" Dense="true">
                 @foreach (var task in Tasks.Take(3).OrderByDescending(v => v.StartDate))
                 {
-                    <MudListItem>
+                    <MudListItem T="string">
                         <div class="d-flex flex-row">
                             <MudAvatar Class="mud-elevation-25">
                                 <MudIcon Icon="@Icons.Material.Filled.BugReport" Class="mx-4"/>
@@ -138,7 +138,7 @@
                                 <MudText Typo="Typo.subtitle2">@task.Name</MudText>
                                 <MudText Typo="Typo.body2">@task.Status</MudText>
                             </div>
-                            <MudChip Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@task.AsignedUser.FullName</MudChip>
+                            <MudChip T="string" Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@task.AsignedUser.FullName</MudChip>
                         </div>
                     </MudListItem>
                 }
@@ -193,40 +193,40 @@
                         @switch (x.Risk)
                         {
                             case VulnRisk.Info:
-                                <td><MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Info">@localizer["info"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Info" Icon="@Icons.Material.Filled.Info">@localizer["info"]</MudChip></td>
                                 break;
                             case VulnRisk.Low:
-                                <td><MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Flag">@localizer["low"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Success" Icon="@Icons.Material.Filled.Flag">@localizer["low"]</MudChip></td>
                                 break;
                             case VulnRisk.Medium:
-                                <td><MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["medium"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Warning" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["medium"]</MudChip></td>
                                 break;
                             case VulnRisk.High:
-                                <td><MudChip Color="Color.Error" Icon="@Icons.Material.Filled.Error">@localizer["high"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Error" Icon="@Icons.Material.Filled.Error">@localizer["high"]</MudChip></td>
                                 break;
                             case VulnRisk.Critical:
-                                <td><MudChip Color="Color.Secondary" Icon="@Icons.Material.Filled.CrisisAlert">@localizer["critical"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Secondary" Icon="@Icons.Material.Filled.CrisisAlert">@localizer["critical"]</MudChip></td>
                                 break;
                         }
                         @switch (x.Status)
                         {
                             case VulnStatus.Open:
-                                <td><MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Flag">@localizer["open"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Info" Icon="@Icons.Material.Filled.Flag">@localizer["open"]</MudChip></td>
                                 break;
                             case VulnStatus.Accepted:
-                                <td><MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.CheckCircle">@localizer["accepted"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Warning" Icon="@Icons.Material.Filled.CheckCircle">@localizer["accepted"]</MudChip></td>
                                 break;
                             case VulnStatus.Confirmed:
-                                <td><MudChip Color="Color.Error" Icon="@Icons.Material.Filled.CheckBox">@localizer["confirmed"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Error" Icon="@Icons.Material.Filled.CheckBox">@localizer["confirmed"]</MudChip></td>
                                 break;
                             case VulnStatus.Invalid:
-                                <td><MudChip Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["invalid"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["invalid"]</MudChip></td>
                                 break;
                             case VulnStatus.OutOfScope:
-                                <td><MudChip Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["outofScope"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["outofScope"]</MudChip></td>
                                 break;
                             case VulnStatus.Resolved:
-                                <td><MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Check">@localizer["resolved"]</MudChip></td>
+                                <td><MudChip T="string" Color="Color.Success" Icon="@Icons.Material.Filled.Check">@localizer["resolved"]</MudChip></td>
                                 break;
                         }
                         @if (x.VulnCategory != null)

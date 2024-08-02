@@ -85,12 +85,12 @@
 							<div class="d-flex justify-center mb-4">
 								<MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Castle" Size="Size.Large" />
 							</div>
-							<MudList Dense="true">
-								<MudListItem Text="@vault.Name" Icon="@Icons.Material.Filled.Castle" />
-								<MudListItem Text="@vault.Type.ToString()" Icon="@Icons.Material.Filled.Category" />
-								<MudListItem Text="@vault.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth" />
+							<MudList T="string" Dense="true">
+								<MudListItem T="string" Text="@vault.Name" Icon="@Icons.Material.Filled.Castle" />
+								<MudListItem T="string" Text="@vault.Type.ToString()" Icon="@Icons.Material.Filled.Category" />
+								<MudListItem T="string" Text="@vault.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth" />
 
-								<MudListItem Text="@vault.User.FullName" Icon="@Icons.Material.Filled.Person" />
+								<MudListItem T="string" Text="@vault.User.FullName" Icon="@Icons.Material.Filled.Person" />
 							</MudList>
 						</MudCardContent>
 					</MudCard>

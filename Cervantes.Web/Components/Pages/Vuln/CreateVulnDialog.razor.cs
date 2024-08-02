@@ -74,7 +74,6 @@ public partial class CreateVulnDialog: ComponentBase
     VulnModelFluentValidator vulnValidator = new VulnModelFluentValidator();
 	 
     VulnCreateViewModel model = new VulnCreateViewModel();
-    MudStepper _stepper;
     
     private List<VulnCategory> Categories = new List<VulnCategory>();
     private List<Cwe> Cwes = new List<Cwe>();

@@ -31,15 +31,14 @@
 						    }
 					    </MudSelect>
 					    <MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".csv,.xml,.nessus,.yml,.yaml">
-						    <ButtonTemplate>
+						    <ActivatorContent>
 							    <MudButton HtmlTag="label"
 							               Variant="Variant.Filled"
 							               Color="Color.Primary"
-							               StartIcon="@Icons.Material.Filled.CloudUpload"
-							               for="@context">
+							               StartIcon="@Icons.Material.Filled.CloudUpload">
 								    @localizer["uploadFile"]
 							    </MudButton>
-						    </ButtonTemplate>
+						    </ActivatorContent>
 						    <SelectedTemplate>
 
 							    @if (file != null)

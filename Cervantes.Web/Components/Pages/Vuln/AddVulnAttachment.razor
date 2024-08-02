@@ -17,15 +17,14 @@
 					              Immediate="true"
 					              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Attachment"/>
 					<MudFileUpload T="IBrowserFile" For="@(() => file)" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp,.doc,.docx,.pdf,.xml,.csv,.nmap,.txt,.ppt,.pptx,.odt,.odp">
-						<ButtonTemplate>
+						<ActivatorContent>
 							<MudButton HtmlTag="label"
 							           Variant="Variant.Filled"
 							           Color="Color.Primary"
-							           StartIcon="@Icons.Material.Filled.CloudUpload"
-							           for="@context">
+							           StartIcon="@Icons.Material.Filled.CloudUpload">
 								@localizer["uploadFile"]
 							</MudButton>
-						</ButtonTemplate>
+						</ActivatorContent>
 						<SelectedTemplate>
 
 							@if (file != null)

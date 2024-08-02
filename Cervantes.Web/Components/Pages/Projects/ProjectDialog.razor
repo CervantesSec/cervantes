@@ -120,13 +120,13 @@ else
                             </MudImage>
 
                         </div>
-                        <MudList Dense="true">
-                            <MudListItem Text="@project.Client.Name" Icon="@Icons.Material.Filled.BusinessCenter"/>
-                            <MudListItem Text="@project.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
-                            <MudListItem Text="@project.ProjectType.ToString()" Icon="@Icons.Material.Filled.Category"/>
-                            <MudListItem Text="@project.Status.ToString()" Icon="@Icons.Material.Filled.AddTask"/>
-                            <MudListItem Text="@project.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
-                            <MudListItem Text="@project.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth"/>
+                        <MudList T="string" Dense="true">
+                            <MudListItem T="string" Text="@project.Client.Name" Icon="@Icons.Material.Filled.BusinessCenter"/>
+                            <MudListItem T="string" Text="@project.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
+                            <MudListItem T="string" Text="@project.ProjectType.ToString()" Icon="@Icons.Material.Filled.Category"/>
+                            <MudListItem T="string" Text="@project.Status.ToString()" Icon="@Icons.Material.Filled.AddTask"/>
+                            <MudListItem T="string" Text="@project.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
+                            <MudListItem T="string" Text="@project.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth"/>
                         </MudList>
                     </MudCardContent>
                 </MudCard>

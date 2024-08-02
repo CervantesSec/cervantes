@@ -207,33 +207,33 @@
 						<MudItem xs="12" sm="3" md="3">
 							<MudCard Elevation="25">
 								<MudCardContent>
-									<MudList Dense="true">
-										<MudListItem Text="@vuln.Risk.ToString()" Icon="@Icons.Material.Filled.CrisisAlert"/>
+									<MudList T="string" Dense="true">
+										<MudListItem T="string" Text="@vuln.Risk.ToString()" Icon="@Icons.Material.Filled.CrisisAlert"/>
 										@if (vuln.VulnCategory != null)
 										{
-											<MudListItem Text="@vuln.VulnCategory.Name.ToString()" Icon="@Icons.Material.Filled.List"/>
+											<MudListItem T="string" Text="@vuln.VulnCategory.Name.ToString()" Icon="@Icons.Material.Filled.List"/>
 
 										}
 										else
 										{
-											<MudListItem Text="@localizer["noCategory"]" Icon="@Icons.Material.Filled.List"/>
+											<MudListItem T="string" Text="@localizer["noCategory"]" Icon="@Icons.Material.Filled.List"/>
 
 										}
 												
 												
-											<MudListItem Text="@vuln.Status.ToString()" Icon="@Icons.Material.Filled.TaskAlt"/>
+											<MudListItem T="string" Text="@vuln.Status.ToString()" Icon="@Icons.Material.Filled.TaskAlt"/>
 												
-											<MudListItem Text="@vuln.cve.ToString()" Icon="@Icons.Material.Filled.Search"/>
-											<MudListItem Icon="@Icons.Material.Filled.SavedSearch">
+											<MudListItem T="string" Text="@vuln.cve.ToString()" Icon="@Icons.Material.Filled.Search"/>
+											<MudListItem T="string" Icon="@Icons.Material.Filled.SavedSearch">
 												@foreach (var cwe in VulnCwes)
 												{
 													<span>CWE-@cwe.Cwe.Id ,</span>
 												}
 											</MudListItem>
-											<MudListItem Text="@vuln.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
+											<MudListItem T="string" Text="@vuln.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
 										@if (vuln.Project != null)
 										{
-												<MudListItem Text="@vuln.Project.Name.ToString()" Icon="@Icons.Material.Filled.Folder" />
+												<MudListItem T="string" Text="@vuln.Project.Name.ToString()" Icon="@Icons.Material.Filled.Folder" />
 										}
 												
 									</MudList>

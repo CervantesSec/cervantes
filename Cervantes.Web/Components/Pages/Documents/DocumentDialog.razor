@@ -74,9 +74,9 @@
 							<div class="d-flex justify-center mb-4">
 								<MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.FileCopy" Size="Size.Large"/>
 							</div>
-							<MudList Dense="true">
-								<MudListItem Text="@document.Name" Icon="@Icons.Material.Filled.InsertDriveFile"/>
-								<MudListItem Text="@document.User.FullName" Icon="@Icons.Material.Filled.Person"/>
+							<MudList T="string" Dense="true">
+								<MudListItem T="string" Text="@document.Name" Icon="@Icons.Material.Filled.InsertDriveFile"/>
+								<MudListItem T="string" Text="@document.User.FullName" Icon="@Icons.Material.Filled.Person"/>
 							</MudList>
 						</MudCardContent>
 					</MudCard>

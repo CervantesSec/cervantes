@@ -66,9 +66,9 @@
 							<div class="d-flex justify-center mb-4">
 								<MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Note" Size="Size.Large" />
 							</div>
-							<MudList Dense="true">
-								<MudListItem Text="@note.Name" Icon="@Icons.Material.Filled.Note" />
-								<MudListItem Text="@note.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.Person" />
+							<MudList T="string" Dense="true">
+								<MudListItem T="string" Text="@note.Name" Icon="@Icons.Material.Filled.Note" />
+								<MudListItem T="string" Text="@note.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.Person" />
 							</MudList>
 						</MudCardContent>
 					</MudCard>

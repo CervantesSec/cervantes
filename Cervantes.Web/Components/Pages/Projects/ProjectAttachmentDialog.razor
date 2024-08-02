@@ -42,9 +42,9 @@
 							<div class="d-flex justify-center mb-4">
 								<MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Attachment" Size="Size.Large" />
 							</div>
-							<MudList Dense="true">
-								<MudListItem Text="@attachment.Name" Icon="@Icons.Material.Filled.Attachment" />
-								<MudListItem Text="@attachment.User.FullName" Icon="@Icons.Material.Filled.Person" />
+							<MudList T="string" Dense="true">
+								<MudListItem T="string" Text="@attachment.Name" Icon="@Icons.Material.Filled.Attachment" />
+								<MudListItem T="string" Text="@attachment.User.FullName" Icon="@Icons.Material.Filled.Person" />
 							</MudList>
 						</MudCardContent>
 					</MudCard>

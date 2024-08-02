@@ -29,15 +29,14 @@
 				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.InsertDriveFile"/>
 				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 				<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".doc,.docx,.pdf,.odt,.ppt,.pptx,.odp,.txt">
-					<ButtonTemplate>
+					<ActivatorContent>
 						<MudButton HtmlTag="label"
 						           Variant="Variant.Filled"
 						           Color="Color.Primary"
-						           StartIcon="@Icons.Material.Filled.CloudUpload"
-						           for="@context">
+						           StartIcon="@Icons.Material.Filled.CloudUpload">
 							@localizer["uploadFile"]
 						</MudButton>
-					</ButtonTemplate>
+					</ActivatorContent>
 					<SelectedTemplate>
 
 						@if (file != null)

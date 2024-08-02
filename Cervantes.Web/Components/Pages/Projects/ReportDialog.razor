@@ -103,12 +103,12 @@
 
 
                                 </div>
-                                <MudList Dense="true">
-                                    <MudListItem Text="@report.Name" Icon="@Icons.Custom.FileFormats.FilePdf"/>
-                                    <MudListItem Text="@report.Version.ToString()" Icon="@Icons.Material.Filled.Category"/>
-                                    <MudListItem Text="@report.User.FullName" Icon="@Icons.Material.Filled.Person"/>
-                                    <MudListItem Text="@report.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
-                                    <MudListItem Text="@report.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
+                                <MudList  T="string" Dense="true">
+                                    <MudListItem T="string" Text="@report.Name" Icon="@Icons.Custom.FileFormats.FilePdf"/>
+                                    <MudListItem T="string" Text="@report.Version.ToString()" Icon="@Icons.Material.Filled.Category"/>
+                                    <MudListItem T="string" Text="@report.User.FullName" Icon="@Icons.Material.Filled.Person"/>
+                                    <MudListItem T="string" Text="@report.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
+                                    <MudListItem T="string" Text="@report.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
                                 </MudList>
                             </MudCardContent>
                         </MudCard>

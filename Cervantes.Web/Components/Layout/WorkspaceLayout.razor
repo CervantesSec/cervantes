@@ -21,6 +21,7 @@
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
+<MudPopoverProvider />
 
 <style>
     .mud-nav-link:not(.mud-nav-link-disabled) .mud-nav-link-icon.mud-nav-link-icon-default {
@@ -56,14 +57,14 @@
                                                       || searchViewModel.Reports != null || searchViewModel.Targets != null || searchViewModel.TargetServices != null || searchViewModel.Vaults != null
                                                       || searchViewModel.VulnCategories != null || searchViewModel.Vulns != null)
                                                  {
-                                                     <MudList Clickable="true">
+                                                     <MudList T="string" Clickable="true">
                                                          <MudListSubheader>
                                                              @localizer["results"]
                                                          </MudListSubheader>
                                                          @foreach (var task in searchViewModel.Tasks)
                                                          {
                                                              var link = "/tasks/" + task.Id;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.Task" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.Task" Href="@link">
                                                                      @task.Name
                                                                  </MudListItem>
                  
@@ -72,7 +73,7 @@
                                                          @foreach (var client in searchViewModel.Clients)
                                                          {
                                                              var link = "/clients/" + client.Id;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.BusinessCenter" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.BusinessCenter" Href="@link">
                                                                      @client.Name
                                                                  </MudListItem>
                                                                  
@@ -82,7 +83,7 @@
                                                          @foreach (var project in searchViewModel.Projects)
                                                          {
                                                              var link = "/projects/" + project.Id;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.Folder" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.Folder" Href="@link">
                                                                      @project.Name
                                                                  </MudListItem>
                                                                  
@@ -91,7 +92,7 @@
                                                          @foreach (var doc in searchViewModel.Documents)
                                                          {
                                                              var link = "/documents/" + doc.Id;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.FileCopy" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.FileCopy" Href="@link">
                                                                      @doc.Name
                                                                  </MudListItem>
                                                                  
@@ -101,7 +102,7 @@
                                                          @foreach (var report in searchViewModel.Reports)
                                                          {
                                                              var link = "/projects/" + report.ProjectId;
-                                                                 <MudListItem Icon="@Icons.Custom.FileFormats.FilePdf" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Custom.FileFormats.FilePdf" Href="@link">
                                                                      @report.Name
                                                                  </MudListItem>
                                                                  
@@ -111,7 +112,7 @@
                                                          @foreach (var target in searchViewModel.Targets)
                                                          {
                                                              var link = "/workspace/" + @target.ProjectId + "/targets/" + @target.Id;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.Adjust" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.Adjust" Href="@link">
                                                                      @target.Name
                                                                  </MudListItem>
                                                                  
@@ -120,7 +121,7 @@
                                                          @foreach (var target in searchViewModel.TargetServices)
                                                          {
                                                              var link = "/workspace/"+@target.Target.ProjectId+"/targets/"+@target.TargetId;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.Hive" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.Hive" Href="@link">
                                                                      @target.Name
                                                                  </MudListItem>
                                                                  
@@ -130,7 +131,7 @@
                                                          @foreach (var vault in searchViewModel.Vaults)
                                                          {
                                                              var link = "/workspace/" + @vault.ProjectId + "/vaults/" + @vault.Id;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.Castle" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.Castle" Href="@link">
                                                                      @vault.Name
                                                                  </MudListItem>
                                                                  
@@ -140,7 +141,7 @@
                                                          @foreach (var cat in searchViewModel.VulnCategories)
                                                          {
                                                              var link = "/vuln/categories/" + cat.Id;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.Category" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.Category" Href="@link">
                                                                      @cat.Name
                                                                  </MudListItem>
                                                                  
@@ -149,7 +150,7 @@
                                                          @foreach (var vuln in searchViewModel.Vulns)
                                                          {
                                                              var link = "/vulns/"+@vuln.Id;
-                                                                 <MudListItem Icon="@Icons.Material.Filled.BugReport" Href="@link">
+                                                                 <MudListItem T="string" Icon="@Icons.Material.Filled.BugReport" Href="@link">
                                                                      @vuln.Name
                                                                  </MudListItem>
                                                              

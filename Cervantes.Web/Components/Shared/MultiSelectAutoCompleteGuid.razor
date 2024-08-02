@@ -1,3 +1,4 @@
+@*
 @inject HttpClient Http
 @using MudBlazor.Extensions
 @using Color = MudBlazor.Color
@@ -14,7 +15,7 @@
     <MudChipSet AllClosable=true OnClose="RemoveValue">
             @foreach (var val in selectedValues)
             {
-                <MudChip Color="Color.Primary" Size=Size.Small @key="@GetIDFunc(val)" Text="@GetNameFunc(val)"/>
+                <MudChip T="string" Color="Color.Primary" Size=Size.Small @key="@GetIDFunc(val)" Text="@GetNameFunc(val)"/>
             }
         
     </MudChipSet>
@@ -93,3 +94,4 @@
         set { AddValue(value); }
     }
 }
+*@

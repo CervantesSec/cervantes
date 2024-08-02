@@ -109,15 +109,14 @@
 						        else
 						        {
 							        <MudFileUpload T="IBrowserFile" @bind-Files="File" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
-								        <ButtonTemplate>
+								        <ActivatorContent>
 									        <MudButton HtmlTag="label"
 									                   Variant="Variant.Filled"
 									                   Color="Color.Primary"
-									                   StartIcon="@Icons.Material.Filled.CloudUpload"
-									                   for="@context">
+									                   StartIcon="@Icons.Material.Filled.CloudUpload">
 										        @localizer["uploadFile"]
 									        </MudButton>
-								        </ButtonTemplate>
+								        </ActivatorContent>
 								        <SelectedTemplate>
 
 									        @if (File != null)
@@ -158,11 +157,11 @@
 				
 
 							</div>
-							<MudList Dense="true">
-								<MudListItem Text="@user.Email" Icon="@Icons.Material.Filled.Email"/>
-								<MudListItem Text="@user.Position" Icon="@Icons.Material.Filled.Person2"/>
-								<MudListItem Text="@user.PhoneNumber" Icon="@Icons.Material.Filled.ContactPhone"/>
-								<MudListItem Text="@user.TwoFactorEnabled.ToString()" Icon="@Icons.Material.Filled.Lock"/>
+							<MudList  T="string" Dense="true">
+								<MudListItem T="string" Text="@user.Email" Icon="@Icons.Material.Filled.Email"/>
+								<MudListItem T="string" Text="@user.Position" Icon="@Icons.Material.Filled.Person2"/>
+								<MudListItem T="string" Text="@user.PhoneNumber" Icon="@Icons.Material.Filled.ContactPhone"/>
+								<MudListItem T="string" Text="@user.TwoFactorEnabled.ToString()" Icon="@Icons.Material.Filled.Lock"/>
 							</MudList>
 						</MudCardContent>
 					</MudCard>

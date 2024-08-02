@@ -74,15 +74,14 @@
                     @if (string.IsNullOrEmpty(user.Avatar))
                     {
                         <MudFileUpload T="IBrowserFile" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp" FilesChanged="UploadFile">
-                            <ButtonTemplate>
+                            <ActivatorContent>
                                 <MudButton HtmlTag="label"
                                            Variant="Variant.Filled"
                                            Color="Color.Primary"
-                                           StartIcon="@Icons.Material.Filled.CloudUpload"
-                                           for="@context">
+                                           StartIcon="@Icons.Material.Filled.CloudUpload">
                                     @localizer["uploadFile"]
                                 </MudButton>
-                            </ButtonTemplate>
+                            </ActivatorContent>
                         </MudFileUpload>
                     }
                     else

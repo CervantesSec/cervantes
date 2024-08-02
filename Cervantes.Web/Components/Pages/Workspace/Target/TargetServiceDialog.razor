@@ -79,11 +79,11 @@
                                 <div class="d-flex justify-center mb-4">
                                     <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Hive" Size="Size.Large"/>
                                 </div>
-                                <MudList Dense="true">
-                                    <MudListItem Text="@service.Name" Icon="@Icons.Material.Filled.Hive"/>
-                                    <MudListItem Text="@service.Version" Icon="@Icons.Material.Filled.Polyline"/>
-                                    <MudListItem Text="@service.Port.ToString()" Icon="@Icons.Material.Filled.Numbers"/>
-                                    <MudListItem Text="@service.User.FullName" Icon="@Icons.Material.Filled.Person"/>
+                                <MudList T="string" Dense="true">
+                                    <MudListItem T="string" Text="@service.Name" Icon="@Icons.Material.Filled.Hive"/>
+                                    <MudListItem T="string" Text="@service.Version" Icon="@Icons.Material.Filled.Polyline"/>
+                                    <MudListItem T="string" Text="@service.Port.ToString()" Icon="@Icons.Material.Filled.Numbers"/>
+                                    <MudListItem T="string" Text="@service.User.FullName" Icon="@Icons.Material.Filled.Person"/>
                                 </MudList>
                             </MudCardContent>
                         </MudCard>

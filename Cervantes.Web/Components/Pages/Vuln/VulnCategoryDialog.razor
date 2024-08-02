@@ -73,9 +73,9 @@
 							<div class="d-flex justify-center mb-4">
 								<MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Note" Size="Size.Large" />
 							</div>
-							<MudList Dense="true">
-								<MudListItem Text="@category.Name" Icon="@Icons.Material.Filled.Category" />
-								<MudListItem Text="@category.Type.ToString()" Icon="@Icons.Material.Filled.Category" />
+							<MudList T="string" Dense="true">
+								<MudListItem T="string" Text="@category.Name" Icon="@Icons.Material.Filled.Category" />
+								<MudListItem T="string" Text="@category.Type.ToString()" Icon="@Icons.Material.Filled.Category" />
 							</MudList>
 						</MudCardContent>
 					</MudCard>

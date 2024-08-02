@@ -1,6 +1,5 @@
 @page "/workspace/{project:guid}"
 @rendermode InteractiveServer
-@using MudExtensions.Enums
 @using MudExtensions
 @using Cervantes.Web.Components.Layout
 @using Cervantes.Web.Localization
@@ -176,10 +175,10 @@
                     </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent Class="px-0">
-                    <MudList Dense="true">
+                    <MudList T="string" Dense="true">
                         @foreach (var task in Tasks.Take(3).OrderByDescending(v => v.StartDate))
                         {
-                            <MudListItem>
+                            <MudListItem T="string">
                                 <div class="d-flex flex-row">
                                     <MudAvatar Class="mud-elevation-25">
                                         <MudIcon Icon="@Icons.Material.Filled.Task" Class="mx-4"/>
@@ -206,10 +205,10 @@
                     </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent Class="px-0">
-                    <MudList Dense="true">
+                    <MudList T="string" Dense="true">
                         @foreach (var target in Targets.Take(3))
                         {
-                            <MudListItem>
+                            <MudListItem T="string">
                                 <div class="d-flex flex-row">
                                     <MudAvatar Class="mud-elevation-25">
                                         <MudIcon Icon="@Icons.Material.Filled.Adjust" Class="mx-4"/>
@@ -275,10 +274,10 @@
                     </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent Class="px-0">
-                    <MudList Dense="true">
+                    <MudList T="string" Dense="true">
                         @foreach (var task in Tasks.Take(3).OrderByDescending(v => v.StartDate))
                         {
-                            <MudListItem>
+                            <MudListItem T="string">
                                 <div class="d-flex flex-row">
                                     <MudAvatar Class="mud-elevation-25">
                                         <MudIcon Icon="@Icons.Material.Filled.Task" Class="mx-4"/>

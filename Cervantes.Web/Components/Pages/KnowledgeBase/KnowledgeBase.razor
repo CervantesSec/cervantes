@@ -49,12 +49,25 @@
             </MudCardHeader>
 
             <MudCardContent>
-                <MudTreeView Items="TreeItems" @bind-SelectedValue="SelectedValue">
-                    <ItemTemplate>
-                        <MudTreeViewItem Items="@context.TreeItems" Value="@context"
-                                         Text="@context.Title" OnClick="@((e) => SelectedPage(context))" Icon="@context.Icon"/>
+                @*<MudTreeView Items="@TreeItems" SelectionMode="SelectionMode.SingleSelection" @bind-SelectedValue="SelectedValue">
+                    <ItemTemplate Context="context">
+      
+                        <MudTreeViewItem Items="@context.Children" Value="@context.Value"
+                                         Text="@context.Value.Title" OnClick="@((e) => SelectedPage(context.Value))" Icon="@context.Icon"/>
                     </ItemTemplate>
-                </MudTreeView>
+                </MudTreeView>*@
+                <MudNavMenu>
+                        @foreach (var item in categories.OrderBy(x => x.Order))
+                        {
+                            <MudNavGroup Icon="@Icons.Material.Filled.Category" Title="@item.Name" Expanded="true">
+                                @foreach (var pag in Pages.Where(x => x.CategoryId == item.Id).OrderBy(x => x.Order))
+                                {
+                                    <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" OnClick="@((e) => SelectedPage(pag.Id))">@pag.Title</MudNavLink>
+                                }
+                            </MudNavGroup>
+                        }
+                    
+                </MudNavMenu>
             </MudCardContent>
         </MudCard>
         <br/>

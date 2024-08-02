@@ -50,15 +50,14 @@
 				              Immediate="true"
 				              Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ContactPhone"/>
 				<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
-					<ButtonTemplate>
-						<MudButton HtmlTag="label"
+					<ActivatorContent >
+						<MudButton 
 						           Variant="Variant.Filled"
 						           Color="Color.Primary"
-						           StartIcon="@Icons.Material.Filled.CloudUpload"
-						           for="@context">
+						           StartIcon="@Icons.Material.Filled.CloudUpload" >
 							@localizer["uploadFile"]
 						</MudButton>
-					</ButtonTemplate>
+					</ActivatorContent>
 					<SelectedTemplate>
 
 						@if (file != null)

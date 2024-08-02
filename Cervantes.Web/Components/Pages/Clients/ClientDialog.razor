@@ -56,15 +56,14 @@
 				else
 				{
 					<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
-						<ButtonTemplate>
+						<ActivatorContent>
 							<MudButton HtmlTag="label"
 							           Variant="Variant.Filled"
 							           Color="Color.Primary"
-							           StartIcon="@Icons.Material.Filled.CloudUpload"
-							           for="@context">
+							           StartIcon="@Icons.Material.Filled.CloudUpload">
 								@localizer["uploadFile"]
 							</MudButton>
-						</ButtonTemplate>
+						</ActivatorContent>
 						<SelectedTemplate>
 
 							@if (file != null)
@@ -133,12 +132,12 @@
                                               
 
                                             </div>
-	                                        <MudList Dense="true">
-		                                        <MudListItem Text="@client.Url" Icon="@Icons.Material.Filled.Web" />
-		                                        <MudListItem Text="@client.ContactName" Icon="@Icons.Material.Filled.ContactPage"/>
-		                                        <MudListItem Text="@client.ContactEmail" Icon="@Icons.Material.Filled.ContactMail"/>
-		                                        <MudListItem Text="@client.ContactPhone" Icon="@Icons.Material.Filled.ContactPhone" />
-		                                        <MudListItem Text="@client.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
+	                                        <MudList T="string" Dense="true">
+		                                        <MudListItem T="string" Text="@client.Url" Icon="@Icons.Material.Filled.Web" />
+		                                        <MudListItem T="string" Text="@client.ContactName" Icon="@Icons.Material.Filled.ContactPage"/>
+		                                        <MudListItem T="string" Text="@client.ContactEmail" Icon="@Icons.Material.Filled.ContactMail"/>
+		                                        <MudListItem T="string" Text="@client.ContactPhone" Icon="@Icons.Material.Filled.ContactPhone" />
+		                                        <MudListItem T="string" Text="@client.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
 	                                        </MudList>
                                         </MudCardContent>
                                     </MudCard>

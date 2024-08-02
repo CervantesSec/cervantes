@@ -115,13 +115,13 @@
 									</MudImage>
                                                     
 								</div>
-								<MudList Dense="true">
-									<MudListItem Text="@pro.Client.Name" Icon="@Icons.Material.Filled.BusinessCenter" />
-									<MudListItem Text="@pro.Language.ToString()" Icon="@Icons.Material.Filled.ContactPage"/>
-									<MudListItem Text="@pro.ProjectType.ToString()" Icon="@Icons.Material.Filled.ContactMail"/>
-									<MudListItem Text="@pro.Status.ToString()" Icon="@Icons.Material.Filled.ContactPhone" />
-									<MudListItem Text="@pro.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
-									<MudListItem Text="@pro.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
+								<MudList T="string" Dense="true">
+									<MudListItem T="string" Text="@pro.Client.Name" Icon="@Icons.Material.Filled.BusinessCenter" />
+									<MudListItem T="string" Text="@pro.Language.ToString()" Icon="@Icons.Material.Filled.ContactPage"/>
+									<MudListItem T="string" Text="@pro.ProjectType.ToString()" Icon="@Icons.Material.Filled.ContactMail"/>
+									<MudListItem T="string" Text="@pro.Status.ToString()" Icon="@Icons.Material.Filled.ContactPhone" />
+									<MudListItem T="string" Text="@pro.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
+									<MudListItem T="string" Text="@pro.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
 								</MudList>
 							</MudCardContent>
 						</MudCard>

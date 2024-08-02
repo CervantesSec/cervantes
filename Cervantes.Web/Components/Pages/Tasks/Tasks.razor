@@ -260,11 +260,11 @@
                                             }
                                             @if(@Math.Truncate(totalDays) < 0)
                                             {
-                                                <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
                                             }
                                             else
                                             {
-                                            <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
                                             }
                                         </MudStack>
 

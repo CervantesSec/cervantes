@@ -79,15 +79,14 @@
                             else
                             {
                                 <MudFileUpload T="IBrowserFile" @bind-Files="File" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
-                                    <ButtonTemplate Context="buttonContext">
+                                    <ActivatorContent>
                                         <MudButton HtmlTag="label"
                                                    Variant="Variant.Filled"
                                                    Color="Color.Primary"
-                                                   StartIcon="@Icons.Material.Filled.CloudUpload"
-                                                   for="@buttonContext">
+                                                   StartIcon="@Icons.Material.Filled.CloudUpload">
                                             @localizer["uploadFile"]
                                         </MudButton>
-                                    </ButtonTemplate>
+                                    </ActivatorContent>
                                     <SelectedTemplate Context="fil">
 
                                         @if (File != null)

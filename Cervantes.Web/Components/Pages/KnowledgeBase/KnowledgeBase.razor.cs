@@ -24,8 +24,7 @@ public partial class KnowledgeBase: ComponentBase
 
     private List<CORE.Entities.KnowledgeBaseCategories> categories = new List<CORE.Entities.KnowledgeBaseCategories>();
     [Inject] private KnowledgeBaseController _KnowledgeBaseController { get; set; }
-    private HashSet<TreeItemData> TreeItems { get; set; } = new HashSet<TreeItemData>();
-    TreeItemData SelectedValue { get; set; }
+
     private KnowledgePageEditViewModel model = new KnowledgePageEditViewModel();
     MudForm form;
     [CascadingParameter] bool _isDarkMode { get; set; }
@@ -78,28 +77,7 @@ public partial class KnowledgeBase: ComponentBase
             };
     [Inject] private IAiService _aiService { get; set; }
     private bool aiEnabled = false;
-    public class TreeItemData
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        
-        public string Icon { get; set; }
-        public bool Category { get; set; }
-        public HashSet<TreeItemData> TreeItems { get; set; }
 
-        public TreeItemData(Guid id, string title, string icon, bool category)
-        {
-            Id = id;
-            Title = title;
-            Category = category;
-            Icon = icon;
-
-        }
-    }
-    public async Task<HashSet<TreeItemData>> LoadServerData(TreeItemData parentNode)
-    {
-        return parentNode.TreeItems;
-    }
     protected override async Task OnInitializedAsync()
     {
         await Update();
@@ -118,22 +96,6 @@ public partial class KnowledgeBase: ComponentBase
     {
         Pages = _KnowledgeBaseController.GetPages().ToList();
         categories = _KnowledgeBaseController.GetCategories().ToList();
-        var treeItems2 = new HashSet<TreeItemData>();
-
-        foreach (var category in categories.OrderBy(p => p.Order))
-        {
-            var categoryPages = new HashSet<TreeItemData>();
-
-            foreach (var page in Pages.Where(p => p.CategoryId == category.Id).OrderBy(p => p.Order))
-            {
-                categoryPages.Add(new TreeItemData(page.Id, page.Title,Icons.Material.Filled.InsertDriveFile, false));
-            }
-
-            treeItems2.Add(new TreeItemData(category.Id, category.Name,Icons.Material.Filled.Folder, true) { TreeItems = categoryPages });
-        }
-
-        TreeItems = treeItems2;
-        
     }
     
     void EditMode()
@@ -180,16 +142,14 @@ public partial class KnowledgeBase: ComponentBase
         
     }
     
-    private async Task SelectedPage(TreeItemData item)
+    private async Task SelectedPage(Guid id)
     {
-        if (item.Category == false)
-        {
-            var selected  = Pages.FirstOrDefault(p => p.Id == item.Id);
+            var selected  = Pages.FirstOrDefault(p => p.Id == id);
             if (selected != null)
             {
                 Page = selected;
             }
-        }
+        
     }
     
     KnowledgeFluentValidator knowledgeValidator = new KnowledgeFluentValidator();

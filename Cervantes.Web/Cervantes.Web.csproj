@@ -9,41 +9,42 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazor-ApexCharts" Version="3.1.0" />
+        <PackageReference Include="AngleSharp" Version="1.1.0" />
+        <PackageReference Include="Blazor-ApexCharts" Version="3.4.0" />
         <PackageReference Include="Blazor.Flags" Version="1.0.0.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
-        <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="6.9.1" />
-        <PackageReference Include="FluentValidation" Version="11.9.0" />
+        <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="7.0.0" />
+        <PackageReference Include="FluentValidation" Version="11.9.2" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-        <PackageReference Include="Handlebars.Net" Version="2.1.4" />
+        <PackageReference Include="Handlebars.Net" Version="2.1.6" />
         <PackageReference Include="Handlebars.Net.Extension.NewtonsoftJson" Version="1.0.3" />
-        <PackageReference Include="Handlebars.Net.Helpers" Version="2.4.1.5" />
-        <PackageReference Include="Handlebars.Net.Helpers.Core" Version="2.4.1.5" />
-        <PackageReference Include="Hangfire" Version="1.8.11" />
-        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.11" />
-        <PackageReference Include="Hangfire.Core" Version="1.8.11" />
-        <PackageReference Include="Hangfire.PostgreSql" Version="1.20.8" />
-        <PackageReference Include="Heron.MudCalendar" Version="1.1.1" />
-        <PackageReference Include="HtmlSanitizer" Version="8.0.843" />
-        <PackageReference Include="HtmlToOpenXml.dll" Version="2.4.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
+        <PackageReference Include="Handlebars.Net.Helpers" Version="2.4.5" />
+        <PackageReference Include="Handlebars.Net.Helpers.Core" Version="2.4.5" />
+        <PackageReference Include="Hangfire" Version="1.8.14" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
+        <PackageReference Include="Hangfire.Core" Version="1.8.14" />
+        <PackageReference Include="Hangfire.PostgreSql" Version="1.20.9" />
+        <PackageReference Include="Heron.MudCalendar" Version="2.0.0" />
+        <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
+        <PackageReference Include="HtmlToOpenXml.dll" Version="3.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MudBlazor" Version="6.18.0" />
-        <PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="2.0.4" />
-        <PackageReference Include="NLog" Version="5.2.8" />
+        <PackageReference Include="MudBlazor" Version="7.5.0" />
+        <PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="2.0.5" />
+        <PackageReference Include="NLog" Version="5.3.2" />
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
-        <PackageReference Include="NLog.Database" Version="5.2.8" />
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.8" />
-        <PackageReference Include="Npgsql" Version="8.0.2" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
-        <PackageReference Include="Scriban" Version="5.9.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="NLog.Database" Version="5.3.2" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
+        <PackageReference Include="Npgsql" Version="8.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+        <PackageReference Include="Scriban" Version="5.10.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
         <PackageReference Include="TinyMCE.Blazor" Version="1.0.4" />
     </ItemGroup>
 
