@@ -20,7 +20,7 @@
       <PackageReference Include="Html2JiraMarkup" Version="1.0.4" />
       <PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
       <PackageReference Include="HtmlSanitizer" Version="8.0.843" />
-      <PackageReference Include="MailKit" Version="4.4.0" />
+      <PackageReference Include="MailKit" Version="4.6.0" />
       <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
       <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.2.0" />
