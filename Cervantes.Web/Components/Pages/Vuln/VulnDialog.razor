@@ -255,7 +255,7 @@
 									else if (@vuln.CVSS3 >= 0.1 & @vuln.CVSS3 <= 3.9)
 									{
 										<MudPaper Height="200" Class="pa-4 mud-success">
-											<MudText Typo="Typo.body1" Align="Align.Center">CVSS: @localizer["critical"] @vuln.CVSS3</MudText>
+											<MudText Typo="Typo.body1" Align="Align.Center">CVSS: @localizer["low"] @vuln.CVSS3</MudText>
 											<MudDivider/>
 											<MudText Align="Align.Center">@vuln.CVSSVector</MudText>
 										</MudPaper>
@@ -263,7 +263,7 @@
 									else if (@vuln.CVSS3 >= 4.0 & @vuln.CVSS3 <= 6.9)
 									{
 										<MudPaper Height="200" Class="pa-4 mud-warning">
-											<MudText Typo="Typo.body1" Align="Align.Center">CVSS: @localizer["critical"] @vuln.CVSS3</MudText>
+											<MudText Typo="Typo.body1" Align="Align.Center">CVSS: @localizer["medium"] @vuln.CVSS3</MudText>
 											<MudDivider/>
 											<MudText Align="Align.Center">@vuln.CVSSVector</MudText>
 										</MudPaper>
