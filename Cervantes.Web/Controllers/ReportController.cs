@@ -45,6 +45,7 @@ public class ReportController : ControllerBase
     private IVulnManager vulnManager = null;
     private IVulnCweManager vulnCweManager = null;
     private IVulnTargetManager vulnTargetManager = null;
+    private IJiraManager jiraManager = null;
     private IOrganizationManager organizationManager = null;
     private IReportManager reportManager = null;
     private IReportTemplateManager reportTemplateManager = null;
@@ -64,7 +65,7 @@ public class ReportController : ControllerBase
         IUserManager userManager, IVulnManager vulnManager, IVulnCweManager vulnCweManager,
         ILogger<ReportController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager,
         IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck,Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager,
-        IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, IVaultManager vaultManager)
+        IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, IVaultManager vaultManager, IJiraManager jiraManager)
     {
         this.projectManager = projectManager;
         this.clientManager = clientManager;
@@ -88,7 +89,7 @@ public class ReportController : ControllerBase
         this.reportsPartsManager = reportsPartsManager;
         this.vaultManager = vaultManager;
         this._userManager = _userManager;
-
+        this.jiraManager = jiraManager;
     }
 
     [HttpGet]
@@ -739,6 +740,33 @@ public class ReportController : ControllerBase
                         cat = vuln.VulnCategory.Name;
                     }
 
+                    string vulnJira = "";
+                    string vulnJiraStatus = ""; 
+                    string vulnJiraDueDate = "";
+                    string vulnJiraCreatedDate = "";
+                    string vulnJiraAssigned = "";
+                    string vulnJiraPriority = "";
+                    string vulnJiraResolution = "";
+                    string vulnJiraResolutionDate = "";
+                    string vulnJiraType = "";
+                    string vulnJiraComponent = "";
+                    string vulnJiraProject = "";
+                    if (vuln.JiraCreated)
+                    {
+                        var  jira = jiraManager.GetByVulnId(vuln.Id);
+                        vulnJira = jira.JiraKey;
+                        vulnJiraStatus = jira.JiraStatus;
+                        vulnJiraDueDate = jira.DueDate.ToString();
+                        vulnJiraCreatedDate = jira.JiraCreatedDate.ToString();
+                        vulnJiraResolutionDate = jira.ResolutionDate.ToString();
+                        vulnJiraAssigned = jira.Assignee;
+                        vulnJiraPriority = jira.Priority;
+                        vulnJiraResolution = jira.Resolution;
+                        vulnJiraType = jira.JiraType;
+                        vulnJiraComponent = jira.JiraComponent;
+                        vulnJiraProject = jira.JiraProject;
+                    }
+
                     VulnsList.Add(new Dictionary<string, string>
                     {
                         {"VulnName", vuln.Name},
@@ -756,7 +784,17 @@ public class ReportController : ControllerBase
                         {"VulnComplexity", vuln.RemediationComplexity.ToString()},
                         {"VulnPriority", vuln.RemediationPriority.ToString()},
                         {"VulnJiraCreated", vuln.JiraCreated.ToString()},
-                        {"VulnJira", vuln.CVSSVector},
+                        {"VulnJira", vulnJira},
+                        {"VulnJiraStatus",vulnJiraStatus},
+                        {"VulnJiraDueDate",vulnJiraDueDate},
+                        {"VulnJiraCreatedDate",vulnJiraCreatedDate},
+                        {"VulnJiraResolutionDate",vulnJiraResolutionDate},
+                        {"VulnJiraResolution",vulnJiraResolution},
+                        {"VulnJiraPriority",vulnJiraPriority},
+                        {"VulnJiraAssigned",vulnJiraAssigned},
+                        {"VulnJiraType",vulnJiraType},
+                        {"VulnJiraComponent",vulnJiraComponent},
+                        {"VulnJiraProject",vulnJiraProject},
                         {"VulnPoc", vuln.ProofOfConcept},
                         {"VulnOwaspRisk", vuln.OWASPRisk},
                         {"VulnOwaspImpact", vuln.OWASPImpact},
