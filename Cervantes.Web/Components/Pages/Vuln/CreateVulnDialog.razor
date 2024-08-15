@@ -55,7 +55,7 @@
 
                     <MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details" Style="min-width: 260px;">
                         <MudStack >
-                            <MudSwitch Color="Color.Primary" T="bool" @bind-Checked="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
+                            <MudSwitch Color="Color.Primary" T="bool" @bind-Value="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
 
                             <MudTextField @bind-Value="model.Name" For="@(() => model.Name)" Immediate="true" Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.BugReport"/>
                             <MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">

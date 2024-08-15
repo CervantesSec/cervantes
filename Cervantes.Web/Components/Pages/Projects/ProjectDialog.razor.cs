@@ -205,6 +205,7 @@ protected override async Task OnInitializedAsync()
         {
             editMode = true;
             model.Id = project.Id;
+            model.Template = project.Template;
             model.Name = project.Name;
             model.Description = project.Description;
             model.ClientId = project.ClientId;

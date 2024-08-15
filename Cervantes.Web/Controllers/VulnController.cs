@@ -237,9 +237,12 @@ public class VulnController: ControllerBase
                 
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
-                
+                sanitizer.AllowedTags.Add("pre");
+
+                sanitizer.AllowedTags.Add("code");
                 var vuln = new Vuln();
                 vuln.Id = Guid.NewGuid();
+                vuln.Template = model.Template;
                 vuln.UserId = aspNetUserId;
                 vuln.ProjectId = model.ProjectId;
                 if (model.ProjectId != null)
@@ -340,7 +343,10 @@ public class VulnController: ControllerBase
                 }
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
-                
+                sanitizer.AllowedTags.Add("pre");
+                sanitizer.AllowedTags.Add("code");
+                //sanitizer.AllowedAttributes.Add("class");
+                sanitizer.KeepChildNodes = true;
                 var vuln = vulnManager.GetById(model.Id);
                 if (vuln.Id != Guid.Empty)
                 {

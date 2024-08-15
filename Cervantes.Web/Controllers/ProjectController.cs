@@ -140,6 +140,7 @@ public class ProjectController : ControllerBase
                 sanitizer.AllowedSchemes.Add("data");
 
                 var project = new CORE.Entities.Project();
+                project.Template = model.Template;
                 project.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
                 project.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
                 project.UserId = aspNetUserId;

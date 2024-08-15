@@ -51,7 +51,7 @@
 
 			<MudStack AlignItems="AlignItems.Stretch">
 				
-				<MudSwitch Color="Color.Primary" T="bool" @bind-Checked="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
+				<MudSwitch Color="Color.Primary" @bind-Value="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
 
 				<MudTextField  @bind-Value="model.Name"
 				              For="@(() => model.Name)"

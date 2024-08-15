@@ -196,6 +196,7 @@ public partial class VulnDialog: ComponentBase
             VulnTemplates =  _vulnController.GetTemplates().ToList();
              model.Id = vuln.Id;
         model.Name = vuln.Name;
+        model.Template = vuln.Template;
         model.Description = vuln.Description;
         model.ProjectId = vuln.ProjectId;
         model.Template = vuln.Template;
