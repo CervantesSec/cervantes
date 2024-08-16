@@ -607,6 +607,7 @@ public class ReportController : ControllerBase
                 var Targets = targetManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
                 var Users = projectUserManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
                 var Reports = reportManager.GetAll().Where(x => x.ProjectId == model.ProjectId && x.ReportType == ReportType.General).ToList();
+                Reports.Add(rep);
                 var VulnTargets = vulnTargetManager.GetAll().Where(x => vul.Contains(x.VulnId)).Include(x => x.Target).ToList();
                 var VulnCwes = vulnCweManager.GetAll().Where(x => vul.Contains(x.VulnId)).Include(x => x.Cwe).ToList();
                 var Tasks = taskManager.GetAll().Where(x => x.ProjectId == model.ProjectId).Include(x => x.AsignedUser).Include(x => x.CreatedUser).ToList();
