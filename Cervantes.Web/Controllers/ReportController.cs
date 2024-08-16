@@ -685,7 +685,8 @@ public class ReportController : ControllerBase
                     {
                         {"DocumentName", report.Name},
                         {"DocumentVersion", report.Version},
-                        {"DocumentDescription", report.Description}
+                        {"DocumentDescription", report.Description},
+                        {"DocumentCreatedDate", report.CreatedDate.ToShortDateString()},
                     });
                 }
 
@@ -700,7 +701,6 @@ public class ReportController : ControllerBase
                         {"UserPosition", user.User.Position},
                         {"UserPhone", user.User.PhoneNumber},
                         {"UserDescription", user.User.Description},
-                        
                     });
                 }
                 
