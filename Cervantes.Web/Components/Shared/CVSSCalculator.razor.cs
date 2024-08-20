@@ -188,7 +188,10 @@ public partial class CVSSCalculator: ComponentBase
             if (SelectedScope == "U") {
                 baseScore = Roundup(Math.Min((exploitabalitySubScore + impactSubScore), 10));
             }
+            else
+            {
                 baseScore = Roundup(Math.Min((exploitabalitySubScore + impactSubScore) * scopeCoefficient, 10));
+            }
         }
         
         SelectedScore = Math.Round(baseScore,1);
@@ -241,18 +244,18 @@ public partial class CVSSCalculator: ComponentBase
                     return 0.0;
             }
         }
-            switch (value)
-            {
-                case "N":
-                    return 0.85;
-                case "L":
-                    return 0.68;
-                case "H":
-                    return 0.50;
-                default:
-                    return 0.0;
-            }
 
+        switch (value)
+        {
+            case "N":
+                return 0.85;
+            case "L":
+                return 0.68;
+            case "H":
+                return 0.50;
+            default:
+                return 0.0;
+        }
     }
 
     private double GetUserInteractionValue(string value)
