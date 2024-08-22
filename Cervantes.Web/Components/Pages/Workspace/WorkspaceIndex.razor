@@ -88,7 +88,9 @@
                             }
                             else
                             {
-                                <MudAvatar Image="@member.User.Avatar"> </MudAvatar>
+                                <MudAvatar>
+                                    <MudImage Src="@member.User.Avatar"></MudImage>
+                                </MudAvatar>
                             }
 
                         </MudTooltip>

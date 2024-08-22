@@ -1721,4 +1721,7 @@
     <data name="deletedAvatarError" xml:space="preserve">
         <value>An error occurred deleting the avatar!</value>
     </data>
+    <data name="workspace" xml:space="preserve">
+        <value>Workspace</value>
+    </data>
 </root>
