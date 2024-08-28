@@ -15,6 +15,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Ganss.Xss;
 using HandlebarsDotNet;
 using HandlebarsDotNet.Extension.NewtonsoftJson;
+using HtmlAgilityPack;
 using HtmlToOpenXml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -878,6 +879,8 @@ public class ReportController : ControllerBase
                 var context = new TemplateContext();
                 context.PushGlobal(scriptObject);
 
+                source = ReplaceTableRowWithFor(source);
+                //Console.WriteLine(source);
                 var templateScriban = Template.Parse(source);
                 // Check for any errors
                 if (templateScriban.HasErrors)
@@ -912,7 +915,71 @@ public class ReportController : ControllerBase
         }
     }
     
+public static string ReplaceTableRowWithFor(string htmlContent)
+{
+    string pattern = @"<table[^>]*>.*?<tbody>\s*(.*?)\s*</tbody>.*?</table>";
+    
+    return Regex.Replace(htmlContent, pattern, match =>
+    {
+        string tableContent = match.Groups[1].Value;
+        if (!tableContent.Contains("{{tablerow"))
+        {
+            // If the table doesn't contain tablerow syntax, return it unchanged
+            return match.Value;
+        }
 
+        string[] rows = Regex.Split(tableContent, @"(?=<tr>)");
+        StringBuilder updatedTableContent = new StringBuilder();
+
+        bool forLoopAdded = false;
+
+        foreach (string row in rows)
+        {
+            if (row.Contains("{{tablerow"))
+            {
+                string rowPattern = @"<tr>\s*(.*?{{tablerow\s+(\w+)\s+in\s+(\w+)}}.*?{{end}}.*?)\s*</tr>";
+                string updatedRow = Regex.Replace(row, rowPattern, rowMatch =>
+                {
+                    string rowContent = rowMatch.Groups[1].Value;
+                    string itemName = rowMatch.Groups[2].Value;
+                    string collectionName = rowMatch.Groups[3].Value;
+                    
+                    string forLoopStart = $"{{{{for {itemName} in {collectionName}}}}}";
+                    string forLoopEnd = "{{end}}";
+                    
+                    // Remove the tablerow and end syntax from the row content
+                    rowContent = Regex.Replace(rowContent, @"{{tablerow\s+\w+\s+in\s+\w+}}", "");
+                    rowContent = Regex.Replace(rowContent, @"{{end}}", "");
+                    
+                    // Ensure proper structure of td tags
+                    rowContent = Regex.Replace(rowContent, @"</td>\s*<td>", "</td><td>");
+                    
+                    if (!forLoopAdded)
+                    {
+                        updatedTableContent.AppendLine(forLoopStart);
+                        forLoopAdded = true;
+                    }
+                    
+                    return $"<tr>{rowContent}</tr>";
+                }, RegexOptions.Singleline);
+
+                updatedTableContent.AppendLine(updatedRow);
+            }
+            else
+            {
+                // This is likely the header row or a row without tablerow syntax
+                updatedTableContent.AppendLine(row);
+            }
+        }
+
+        if (forLoopAdded)
+        {
+            updatedTableContent.AppendLine("{{end}}");
+        }
+
+        return match.Value.Replace(tableContent, updatedTableContent.ToString());
+    }, RegexOptions.Singleline);
+}
     
     [HttpPost]
     [Route("Download")]
