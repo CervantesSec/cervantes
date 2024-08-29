@@ -80,6 +80,24 @@
                 
                     </CellTemplate>
                 </PropertyColumn>
+                <PropertyColumn Property="x => x.User.FullName" Title="@localizer["createdBy"]">
+                    <CellTemplate>
+                        <MudStack Row="true">
+                            @if (@context.Item.User.Avatar != null)
+                            {
+                            <MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+                            }
+                            else
+                            {
+                            <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
+                            }
+                            <MudStack Justify="Justify.Center" Spacing="0">
+                                <MudText Typo="Typo.body1">@context.Item.User.FullName</MudText>
+                            </MudStack>
+                        </MudStack>
+
+                    </CellTemplate>
+                </PropertyColumn>
                 <PropertyColumn Property="x => x.CreatedDate" Title="@localizer["createdDate"]">
                     <CellTemplate>
                         <MudStack Row="true">
