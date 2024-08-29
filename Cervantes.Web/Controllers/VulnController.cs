@@ -10,6 +10,8 @@ using Cervantes.IFR.Parsers.Burp;
 using Cervantes.IFR.Parsers.CSV;
 using Cervantes.IFR.Parsers.Nessus;
 using Cervantes.IFR.Parsers.Pwndoc;
+using Cervantes.Server.Helpers;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +46,7 @@ public class VulnController: ControllerBase
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private IFileCheck fileCheck;
+    private Sanitizer Sanitizer;
 
     public VulnController(IVulnManager vulnManager, IProjectManager projectManager,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
@@ -52,7 +55,7 @@ public class VulnController: ControllerBase
         IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IProjectAttachmentManager projectAttachmentManager,
         ICsvParser csvParser, IPwndocParser pwndocParser, IBurpParser burpParser, INessusParser nessusParser,
         ICweManager cweManager, IVulnCweManager vulnCweManager, ILogger<VulnController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor,
-        IFileCheck fileCheck, IProjectUserManager projectUserManager)
+        IFileCheck fileCheck, IProjectUserManager projectUserManager,Sanitizer Sanitizer)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -76,6 +79,7 @@ public class VulnController: ControllerBase
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
         this.projectUserManager = projectUserManager;
+        this.Sanitizer = Sanitizer;
     }
     
     [HttpGet]
@@ -234,14 +238,7 @@ public class VulnController: ControllerBase
                     }
                 }
                 
-                
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                sanitizer.AllowedTags.Add("pre");
-
-                sanitizer.AllowedTags.Add("code");
                 var vuln = new Vuln();
-                vuln.Id = Guid.NewGuid();
                 vuln.Template = model.Template;
                 vuln.UserId = aspNetUserId;
                 vuln.ProjectId = model.ProjectId;
@@ -257,21 +254,21 @@ public class VulnController: ControllerBase
                 
                 }
                 vuln.VulnCategoryId = model.VulnCategoryId;
-                vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                vuln.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                vuln.Name = Sanitizer.Sanitize(model.Name);
+                vuln.Description = Sanitizer.Sanitize(model.Description);
                 vuln.Risk = model.Risk;
                 vuln.Status = model.Status;
                 vuln.Template = model.Template;
                 vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                 vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
-                vuln.cve = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.cve));
+                vuln.cve = Sanitizer.Sanitize(model.cve);
                 vuln.Language = model.Language;
-                vuln.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                vuln.Remediation = Sanitizer.Sanitize(model.Remediation);
                 vuln.JiraCreated = false;
                 vuln.RemediationComplexity = model.RemediationComplexity;
                 vuln.RemediationPriority = model.RemediationPriority;
-                vuln.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
-                vuln.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                vuln.ProofOfConcept = Sanitizer.Sanitize(model.ProofOfConcept);
+                vuln.Impact = Sanitizer.Sanitize(model.Impact);
                 vuln.CVSS3 = model.CVSS3;
                 vuln.CVSSVector = model.CVSSVector;
                 vuln.OWASPImpact = model.OWASPImpact;
@@ -341,32 +338,27 @@ public class VulnController: ControllerBase
                         return BadRequest("NotAllowed");
                     }
                 }
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                sanitizer.AllowedTags.Add("pre");
-                sanitizer.AllowedTags.Add("code");
-                //sanitizer.AllowedAttributes.Add("class");
-                sanitizer.KeepChildNodes = true;
+
                 var vuln = vulnManager.GetById(model.Id);
                 if (vuln.Id != Guid.Empty)
                 {
                 vuln.ProjectId = model.ProjectId;
                 vuln.VulnCategoryId = model.VulnCategoryId;
-                vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                vuln.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                vuln.Name = Sanitizer.Sanitize(model.Name);
+                vuln.Description = Sanitizer.Sanitize(model.Description);
                 vuln.Risk = model.Risk;
                 vuln.Status = model.Status;
                 vuln.Template = model.Template;
                 vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                 vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
-                vuln.cve = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.cve));
+                vuln.cve = Sanitizer.Sanitize(model.cve);
                 vuln.Language = model.Language;
-                vuln.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Remediation));
+                vuln.Remediation = Sanitizer.Sanitize(model.Remediation);
                 vuln.JiraCreated = false;
                 vuln.RemediationComplexity = model.RemediationComplexity;
                 vuln.RemediationPriority = model.RemediationPriority;
-                vuln.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ProofOfConcept));
-                vuln.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Impact));
+                vuln.ProofOfConcept = Sanitizer.Sanitize(model.ProofOfConcept);
+                vuln.Impact = Sanitizer.Sanitize(model.Impact);
                 vuln.CVSS3 = model.CVSS3;
                 vuln.CVSSVector = model.CVSSVector;
                 vuln.OWASPImpact = model.OWASPImpact;
@@ -572,13 +564,10 @@ public class VulnController: ControllerBase
                     }
                 }
                 
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var note = new VulnNote();
                 note.Id = Guid.NewGuid();
-                note.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                note.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                note.Name = Sanitizer.Sanitize(model.Name);
+                note.Description = Sanitizer.Sanitize(model.Description);
                 note.VulnId = model.VulnId;
                 note.Visibility = Visibility.Public;
                 note.UserId = aspNetUserId;
@@ -666,14 +655,11 @@ public class VulnController: ControllerBase
                     }
                 }
                 
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                
                 var note = vulnNoteManager.GetById(model.Id);
                 note.Id = model.Id;
                 note.VulnId = model.VulnId;
-                note.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                note.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                note.Name = Sanitizer.Sanitize(model.Name);
+                note.Description = Sanitizer.Sanitize(model.Description);
                 await vulnNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Note edited successfully. User: {0}",
                     aspNetUserId);
@@ -848,7 +834,7 @@ public class VulnController: ControllerBase
                 attachment.Id = Guid.NewGuid();
                 attachment.VulnId = model.VulnId;
                 attachment.UserId = aspNetUserId;
-                attachment.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
+                attachment.Name = Sanitizer.Sanitize(model.Name);
                 attachment.FilePath = "Attachments/Vuln/" + model.VulnId.ToString() + "/" + unique;
 
                 await vulnAttachmentManager.AddAsync(attachment);
@@ -1053,12 +1039,10 @@ public class VulnController: ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                
+              
                 var category = new VulnCategory();
-                category.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                category.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                category.Name = Sanitizer.Sanitize(model.Name);
+                category.Description = Sanitizer.Sanitize(model.Description);
                 category.Type = model.Type;
                 await vulnCategoryManager.AddAsync(category);
                 await vulnCategoryManager.Context.SaveChangesAsync();
@@ -1119,10 +1103,9 @@ public class VulnController: ControllerBase
             if (category != null)
             {
                 var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                
-                category.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                category.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+              
+                category.Name = Sanitizer.Sanitize(model.Name);
+                category.Description = Sanitizer.Sanitize(model.Description);
                 category.Type = model.Type;
                 
                 await vulnCategoryManager.Context.SaveChangesAsync();

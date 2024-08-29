@@ -24,6 +24,7 @@ using Microsoft.EntityFrameworkCore;
 using Cervantes.Web.Components;
 using Cervantes.Web.Components.Account;
 using Cervantes.Web.Controllers;
+using Cervantes.Web.Helpers;
 using Microsoft.AspNetCore.Antiforgery;
 using MudBlazor.Services;
 using MudExtensions.Services;
@@ -182,7 +183,7 @@ builder.Services.AddScoped<IReportsPartsManager, ReportPartsManager>();
 builder.Services.AddSingleton<IAiConfiguration>(builder.Configuration.GetSection("AIConfiguration").Get<AiConfiguration>());
 builder.Services.AddScoped<IAiService, AiService>();
 
-
+builder.Services.AddScoped<Sanitizer>();
 builder.Services.AddScoped<ClientsController>();
 builder.Services.AddScoped<ProjectController>();
 builder.Services.AddScoped<VulnController>();
