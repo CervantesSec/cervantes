@@ -11,6 +11,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.IFR.Email;
 using Cervantes.IFR.File;
 using Cervantes.Server.Helpers;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Hangfire;
 using Microsoft.AspNetCore.Authorization;
@@ -42,6 +43,7 @@ public class ProjectController : ControllerBase
     private readonly ILogger<ProjectController> _logger = null;
     private IFileCheck fileCheck;
     private IEmailService emailService;
+    private Sanitizer sanitizer;
     private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
 
 
@@ -56,7 +58,7 @@ public class ProjectController : ControllerBase
         IUserManager userManager, IVulnManager vulnManager, IReportManager reportManager,
         IReportTemplateManager reportTemplateManager,
         IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, ILogger<ProjectController> logger,
-        IFileCheck fileCheck)
+        IFileCheck fileCheck,Sanitizer sanitizer)
     {
         this.projectManager = projectManager;
         this.clientManager = clientManager;
@@ -74,6 +76,7 @@ public class ProjectController : ControllerBase
         _logger = logger;
         this.emailService = emailService;
         this.fileCheck = fileCheck;
+        this.sanitizer = sanitizer;
     }
 
     [HttpGet]
@@ -136,13 +139,10 @@ public class ProjectController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var project = new CORE.Entities.Project();
                 project.Template = model.Template;
-                project.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                project.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                project.Name = sanitizer.Sanitize(model.Name);
+                project.Description = sanitizer.Sanitize(model.Description);
                 project.UserId = aspNetUserId;
                 project.ClientId = model.ClientId;
                 project.StartDate = model.StartDate.ToUniversalTime();
@@ -153,7 +153,7 @@ public class ProjectController : ControllerBase
                 project.ProjectType = model.ProjectType;
                 project.Language = model.Language;
                 project.Score = model.Score;
-                project.FindingsId = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.FindingsId));
+                project.FindingsId = sanitizer.Sanitize(model.FindingsId);
                 project.ExecutiveSummary = "";
 
 
@@ -187,12 +187,9 @@ public class ProjectController : ControllerBase
                 var project = projectManager.GetById(model.Id);
                 if (project != null)
                 {
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
-
                     project.Template = model.Template;
-                    project.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    project.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    project.Name = sanitizer.Sanitize(model.Name);
+                    project.Description = sanitizer.Sanitize(model.Description);
                     project.Language = model.Language;
                     project.StartDate = model.StartDate.ToUniversalTime();
                     project.EndDate = model.EndDate.ToUniversalTime();
@@ -200,7 +197,7 @@ public class ProjectController : ControllerBase
                     project.ClientId = model.ClientId;
                     project.ProjectType = model.ProjectType;
                     project.Score = model.Score;
-                    project.FindingsId = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.FindingsId));
+                    project.FindingsId = sanitizer.Sanitize(model.FindingsId);
                 }
                 else
                 {
@@ -402,16 +399,12 @@ public class ProjectController : ControllerBase
                 {
                     return BadRequest();
                 }
-
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var note = new CORE.Entities.ProjectNote();
                 note.Id = Guid.NewGuid();
                 note.ProjectId = model.ProjectId;
                 note.UserId = aspNetUserId;
-                note.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                note.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                note.Name = sanitizer.Sanitize(model.Name);
+                note.Description = sanitizer.Sanitize(model.Description);
 
                 await projectNoteManager.AddAsync(note);
                 await projectNoteManager.Context.SaveChangesAsync();
@@ -445,16 +438,12 @@ public class ProjectController : ControllerBase
                 {
                     return BadRequest();
                 }
-
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var note = projectNoteManager.GetById(model.Id);
                 note.Id = model.Id;
                 note.ProjectId = model.ProjectId;
                 note.UserId = aspNetUserId;
-                note.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                note.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                note.Name = sanitizer.Sanitize(model.Name);
+                note.Description = sanitizer.Sanitize(model.Description);
 
                 await projectNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Project Note edited successfully. User: {0}",
@@ -582,14 +571,11 @@ public class ProjectController : ControllerBase
                     }
                 }
 
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var attachment = new CORE.Entities.ProjectAttachment();
                 attachment.Id = Guid.NewGuid();
                 attachment.ProjectId = model.ProjectId;
                 attachment.UserId = aspNetUserId;
-                attachment.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
+                attachment.Name = sanitizer.Sanitize(model.Name);
                 attachment.FilePath = "Attachments/Projects/" + model.ProjectId.ToString() + "/" + unique;
 
                 await projectAttachmentManager.AddAsync(attachment);
@@ -672,7 +658,7 @@ public class ProjectController : ControllerBase
                         return BadRequest();
                     }
 
-                    project.ExecutiveSummary = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ExecutiveSummary));
+                    project.ExecutiveSummary = sanitizer.Sanitize(model.ExecutiveSummary);
                     await projectManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Project executive summary updated successfully. User: {0}",
                         aspNetUserId);

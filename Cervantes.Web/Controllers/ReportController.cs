@@ -8,6 +8,7 @@ using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.IFR.File;
+using Cervantes.Web.Helpers;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
@@ -57,6 +58,7 @@ public class ReportController : ControllerBase
     private IReportComponentsManager reportComponentsManager;
     private IReportsPartsManager reportsPartsManager;
     private IVaultManager vaultManager;
+    private Sanitizer sanitizer;
     private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
 
     public ReportController(IProjectManager projectManager, IClientManager clientManager,
@@ -66,7 +68,8 @@ public class ReportController : ControllerBase
         IUserManager userManager, IVulnManager vulnManager, IVulnCweManager vulnCweManager,
         ILogger<ReportController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager,
         IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck,Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager,
-        IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, IVaultManager vaultManager, IJiraManager jiraManager)
+        IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, 
+        IVaultManager vaultManager, IJiraManager jiraManager,Sanitizer sanitizer)
     {
         this.projectManager = projectManager;
         this.clientManager = clientManager;
@@ -91,6 +94,7 @@ public class ReportController : ControllerBase
         this.vaultManager = vaultManager;
         this._userManager = _userManager;
         this.jiraManager = jiraManager;
+        this.sanitizer = sanitizer;
     }
 
     [HttpGet]
@@ -181,14 +185,12 @@ public class ReportController : ControllerBase
                     {
                         return BadRequest();
                     }
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
-                    
-                    report.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    report.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+
+                    report.Name = sanitizer.Sanitize(model.Name);
+                    report.Description = sanitizer.Sanitize(model.Description);
                     report.Language = model.Language;
-                    report.Version = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Version));
-                    report.HtmlCode = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.HtmlCode));
+                    report.Version = sanitizer.Sanitize(model.Version);
+                    report.HtmlCode = sanitizer.Sanitize(model.HtmlCode);
 
                     await reportManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Report edited successfully. User: {0}",
@@ -242,12 +244,9 @@ public class ReportController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var template = new ReportTemplate();
-                template.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                template.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                template.Name = sanitizer.Sanitize(model.Name);
+                template.Description = sanitizer.Sanitize(model.Description);
                 template.Language = model.Language;
                 template.UserId = aspNetUserId;
                 template.CreatedDate = DateTime.Now.ToUniversalTime();
@@ -295,9 +294,6 @@ public class ReportController : ControllerBase
                 var template = reportTemplateManager.GetById(model.Id);
                 if (template != null)
                 {
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
-
                     var parts = reportsPartsManager.GetAll().Where(x => x.TemplateId == model.Id).ToList();
 
                     foreach (var part in parts)
@@ -318,8 +314,8 @@ public class ReportController : ControllerBase
 
                     await reportsPartsManager.Context.SaveChangesAsync();
 
-                    template.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    template.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    template.Name = sanitizer.Sanitize(model.Name);
+                    template.Description = sanitizer.Sanitize(model.Description);
                     template.Language = model.Language;
                     template.ReportType = model.ReportType;
                     await reportTemplateManager.Context.SaveChangesAsync();
@@ -464,13 +460,9 @@ public class ReportController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var comp = new ReportComponents();
-                var test = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Content));
-                comp.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                comp.Content = HttpUtility.HtmlDecode(test);
+                comp.Name = sanitizer.Sanitize(model.Name);
+                comp.Content = sanitizer.Sanitize(model.Content);
                 comp.Language = model.Language;
                 comp.Created = DateTime.Now.ToUniversalTime();
                 comp.Updated = DateTime.Now.ToUniversalTime();
@@ -506,11 +498,9 @@ public class ReportController : ControllerBase
             var result = reportComponentsManager.GetById(model.Id);
             if (result != null)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                var test = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Content));
-                result.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                result.Content = HttpUtility.HtmlDecode(test);
+
+                result.Name = sanitizer.Sanitize(model.Name);
+                result.Content = sanitizer.Sanitize(model.Content);
                 result.Language = model.Language;
                 result.Updated = DateTime.Now.ToUniversalTime();
                 result.ComponentType = model.ComponentType;
@@ -583,18 +573,15 @@ public class ReportController : ControllerBase
                     return BadRequest();
                 }
 
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 Report rep = new Report
                 {
                     Id = Guid.NewGuid(),
-                    Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name)),
+                    Name = sanitizer.Sanitize(model.Name),
                     ProjectId = model.ProjectId,
                     UserId = aspNetUserId,
                     CreatedDate = DateTime.Now.ToUniversalTime(),
-                    Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
-                    Version = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Version)),
+                    Description = sanitizer.Sanitize(model.Description),
+                    Version = sanitizer.Sanitize(model.Version),
                     Language = model.Language,
                     ReportType = ReportType.General
                 };

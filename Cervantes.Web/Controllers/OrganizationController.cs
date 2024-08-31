@@ -4,6 +4,7 @@ using Cervantes.Contracts;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.File;
 using Cervantes.Server.Helpers;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,18 +22,20 @@ public class OrganizationController: ControllerBase
     private IFileCheck fileCheck;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
+    private Sanitizer sanitizer;
     /// <summary>
     /// Organization Controller Constructor
     /// </summary>
     public OrganizationController(IOrganizationManager organizationManager,
-        ILogger<OrganizationController> logger,IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck)
+        ILogger<OrganizationController> logger,IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor, 
+        IFileCheck fileCheck, Sanitizer sanitizer)
     {
         this.organizationManager = organizationManager;
         this.env = env;        
         _logger = logger;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
-
+        this.sanitizer = sanitizer;
     }
     
     [HttpGet]
@@ -65,8 +68,6 @@ public class OrganizationController: ControllerBase
             
             if (result != null)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
                 
                 var path = "";
                 var unique = "";
@@ -91,12 +92,12 @@ public class OrganizationController: ControllerBase
                     result.ImagePath = "Attachments/Organization/"+unique;
                 }
                 
-                result.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-                result.ContactEmail = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactEmail));
-                result.ContactName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactName));
-                result.ContactPhone = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactPhone));
-                result.Url = model.Url;
+                result.Name = sanitizer.Sanitize(model.Name);
+                result.Description = sanitizer.Sanitize(model.Description);
+                result.ContactEmail = sanitizer.Sanitize(model.ContactEmail);
+                result.ContactName = sanitizer.Sanitize(model.ContactName);
+                result.ContactPhone = sanitizer.Sanitize(model.ContactPhone);
+                result.Url = sanitizer.Sanitize(model.Url);
                
             }
             else

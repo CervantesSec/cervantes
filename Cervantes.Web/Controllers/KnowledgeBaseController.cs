@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Web;
 using Cervantes.Contracts;
 using Cervantes.CORE.ViewModel;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,15 +21,18 @@ public class KnowledgeBaseController : Controller
     private readonly ILogger<KnowledgeBaseController> _logger = null;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
+    private Sanitizer sanitizer;
     
     public KnowledgeBaseController(IKnowledgeBaseManager knowledgeBaseManager, IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager,
-        IKnowledgeBaseTagManager KnowledgeBaseTagManager, ILogger<KnowledgeBaseController> logger,IHttpContextAccessor HttpContextAccessor)
+        IKnowledgeBaseTagManager KnowledgeBaseTagManager, ILogger<KnowledgeBaseController> logger,
+        IHttpContextAccessor HttpContextAccessor, Sanitizer sanitizer)
     {
         this.knowledgeBaseManager = knowledgeBaseManager;
         this.knowledgeBaseCategoryManager = knowledgeBaseCategoryManager;
         this.KnowledgeBaseTagManager = KnowledgeBaseTagManager;
         _logger = logger;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        this.sanitizer = sanitizer;
     }
     [HttpGet]
     [Route("Page")]
@@ -47,13 +51,11 @@ public class KnowledgeBaseController : Controller
         try{
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
                 
                 var page = new CORE.Entities.KnowledgeBase();
                 page.Id = Guid.NewGuid();
-                page.Title = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Title));
-                page.Content = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Content));
+                page.Title = sanitizer.Sanitize(model.Title);
+                page.Content = sanitizer.Sanitize(model.Content);
                 page.CategoryId = model.CategoryId;
                 page.Order = model.Order;
                 page.CreatedAt = DateTime.Now.ToUniversalTime();
@@ -91,11 +93,9 @@ public class KnowledgeBaseController : Controller
                 var page = knowledgeBaseManager.GetById(model.Id);
                 if (page != null)
                 {
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
                     
-                    page.Title = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Title));
-                    page.Content = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Content));
+                    page.Title = sanitizer.Sanitize(model.Title);
+                    page.Content = sanitizer.Sanitize(model.Content);
                     page.CategoryId = model.CategoryId;
                     page.Order = model.Order;
                     page.UpdatedAt = DateTime.Now.ToUniversalTime();
@@ -190,15 +190,13 @@ public class KnowledgeBaseController : Controller
         try{
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
                 
                 var cat = new CORE.Entities.KnowledgeBaseCategories();
                 cat.Id = Guid.NewGuid();
-                cat.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                cat.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                cat.Name = sanitizer.Sanitize(model.Name);
+                cat.Description = sanitizer.Sanitize(model.Description);
                 cat.Order = model.Order;
-                cat.Icon = sanitizer.Sanitize(HttpUtility.HtmlDecode(string.Empty));
+                cat.Icon = sanitizer.Sanitize(string.Empty);
                 cat.UserId = aspNetUserId;
 
 
@@ -230,20 +228,17 @@ public class KnowledgeBaseController : Controller
                 var category = knowledgeBaseCategoryManager.GetById(model.Id);
                 if (category != null)
                 {
-                    
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
-                    
-                    category.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    category.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+
+                    category.Name = sanitizer.Sanitize(model.Name);
+                    category.Description = sanitizer.Sanitize(model.Description);
                     category.Order = model.Order;
                     if (model.Icon == null)
                     {
-                        category.Icon = sanitizer.Sanitize(HttpUtility.HtmlDecode(string.Empty));
+                        category.Icon = sanitizer.Sanitize(string.Empty);
                     }
                     else
                     {
-                        category.Icon = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Icon));
+                        category.Icon = sanitizer.Sanitize(model.Icon);
 
                     }
 

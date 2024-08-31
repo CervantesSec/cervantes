@@ -6,6 +6,7 @@ using System.Web;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.File;
 using Cervantes.Server.Helpers;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -25,12 +26,14 @@ public class ClientsController : ControllerBase
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private IFileCheck fileCheck;
+    private Sanitizer sanitizer;
 
     /// <summary>
     /// Client Controller Constructor
     /// </summary>
     public ClientsController(IClientManager clientManager, IUserManager userManager, IProjectManager projectManager,
-        IWebHostEnvironment env, ILogger<ClientsController> logger,IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck)
+        IWebHostEnvironment env, ILogger<ClientsController> logger,IHttpContextAccessor HttpContextAccessor, 
+        IFileCheck fileCheck, Sanitizer sanitizer)
     {
         this.clientManager = clientManager;
         this.projectManager = projectManager;
@@ -39,6 +42,7 @@ public class ClientsController : ControllerBase
         _logger = logger;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
+        this.sanitizer = sanitizer;
 
     }
     
@@ -109,19 +113,15 @@ public class ClientsController : ControllerBase
                     }
                 
                 }
-            
-            
-
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
+                
             
                 var client = new CORE.Entities.Client();
-                client.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                client.Url = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Url));
-                client.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-                client.ContactName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactName));
-                client.ContactEmail = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactEmail));
-                client.ContactPhone = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactPhone));
+                client.Name = sanitizer.Sanitize(model.Name);
+                client.Url = sanitizer.Sanitize(model.Url);
+                client.Description = sanitizer.Sanitize(model.Description);
+                client.ContactName = sanitizer.Sanitize(model.ContactName);
+                client.ContactEmail = sanitizer.Sanitize(model.ContactEmail);
+                client.ContactPhone = sanitizer.Sanitize(model.ContactPhone);
                 client.CreatedDate = DateTime.Now.ToUniversalTime();
                 client.UserId = aspNetUserId;
                 if (model.FileContent != null)
@@ -260,16 +260,13 @@ public class ClientsController : ControllerBase
 
                         client.ImagePath = "Attachments/Clients/" + unique;
                     }
-
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
                     
-                    client.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    client.Url = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Url));
-                    client.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-                    client.ContactName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactName));
-                    client.ContactEmail = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactEmail));
-                    client.ContactPhone = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.ContactPhone));
+                    client.Name = sanitizer.Sanitize(model.Name);
+                    client.Url = sanitizer.Sanitize(model.Url);
+                    client.Description = sanitizer.Sanitize(model.Description);
+                    client.ContactName = sanitizer.Sanitize(model.ContactName);
+                    client.ContactEmail = sanitizer.Sanitize(model.ContactEmail);
+                    client.ContactPhone = sanitizer.Sanitize(model.ContactPhone);
 
                     await clientManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Client edited successfully. User: {0}",

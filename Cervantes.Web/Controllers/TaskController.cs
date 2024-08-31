@@ -6,6 +6,7 @@ using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.Email;
 using Cervantes.IFR.File;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Hangfire;
 using Microsoft.AspNetCore.Authorization;
@@ -33,12 +34,13 @@ public class TaskController: ControllerBase
     private string aspNetUserId;
     private IFileCheck fileCheck;
     private IEmailService emailService;
+    private Sanitizer sanitizer;
 
     public TaskController(ITaskManager taskManager, IProjectManager projectManager,
         ITargetManager targetManager, ITaskNoteManager taskNoteManager, ITaskAttachmentManager taskAttachmentManager,
         IProjectUserManager projectUserManager, ITaskTargetManager taskTargetManager,
         IUserManager userManager,ILogger<TaskController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor,
-        IEmailService emailService,IFileCheck fileCheck)
+        IEmailService emailService,IFileCheck fileCheck, Sanitizer sanitizer)
     {
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
@@ -53,7 +55,7 @@ public class TaskController: ControllerBase
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.emailService = emailService;
         this.fileCheck = fileCheck;
-
+        this.sanitizer = sanitizer;
     }
     
     [HttpGet]
@@ -155,15 +157,12 @@ public class TaskController: ControllerBase
                         return BadRequest("NotAllowed");
                     }
                 }
-                
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
 
                 var task = new CORE.Entities.Task();
                 task.Id = Guid.NewGuid();
                 task.Template = false;
-                task.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                task.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                task.Name = sanitizer.Sanitize(model.Name);
+                task.Description = sanitizer.Sanitize(model.Description);
                 task.StartDate = model.StartDate;
                 task.EndDate = model.EndDate;
                 if (model.ProjectId != null)
@@ -234,10 +233,9 @@ public class TaskController: ControllerBase
                             return BadRequest("NotAllowed");
                         }
                     }
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
-                    result.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(task.Name));
-                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(task.Description));
+
+                    result.Name = sanitizer.Sanitize(task.Name);
+                    result.Description = sanitizer.Sanitize(task.Description);
                     result.AsignedUserId = task.AsignedUserId;
                     result.CreatedUserId = task.CreatedUserId;
                     result.Status = task.Status;
@@ -540,15 +538,12 @@ public class TaskController: ControllerBase
                     }
                 }
                 
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                
                 var note = new TaskNote()
                     {
                         Id = Guid.NewGuid(),
                         TaskId = model.TaskId,
-                        Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name)),
-                        Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description)),
+                        Name = sanitizer.Sanitize(model.Name),
+                        Description = sanitizer.Sanitize(model.Description),
                         UserId = aspNetUserId
                     };
                 await taskNoteManager.AddAsync(note);
@@ -582,15 +577,12 @@ public class TaskController: ControllerBase
                         return BadRequest("NotAllowed");
                     }
                 }
-                
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                
+
                 var note = taskNoteManager.GetById(model.Id);
                 note.Id = model.Id;
                 note.TaskId = model.TaskId;
-                note.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                note.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                note.Name = sanitizer.Sanitize(model.Name);
+                note.Description = sanitizer.Sanitize(model.Description);
                 await taskNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Task Note edited successfully. User: {0}",
                     aspNetUserId);
@@ -667,9 +659,7 @@ public class TaskController: ControllerBase
                         return BadRequest("NotAllowed");
                     }
                 }
-                
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
+
                 if (model.FileContent != null)
                 {
                     
@@ -714,7 +704,7 @@ public class TaskController: ControllerBase
 
                     var attachment = new TaskAttachment
                     {
-                        Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name)),
+                        Name = sanitizer.Sanitize(model.Name),
                         TaskId = model.TaskId,
                         UserId = aspNetUserId,
                         FilePath = "Attachments/Task/"+model.TaskId+"/"+unique

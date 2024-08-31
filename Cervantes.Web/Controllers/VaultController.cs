@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Web;
 using Cervantes.Contracts;
 using Cervantes.CORE.ViewModel;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +19,18 @@ public class VaultController : ControllerBase
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private IProjectUserManager projectUserManager;
-    
+    private Sanitizer Sanitizer;
+
     public VaultController(IVaultManager vaultManager,
-        IWebHostEnvironment env, ILogger<VaultController> logger,IHttpContextAccessor HttpContextAccessor, IProjectUserManager projectUserManager)
+        IWebHostEnvironment env, ILogger<VaultController> logger,IHttpContextAccessor HttpContextAccessor, 
+        IProjectUserManager projectUserManager,Sanitizer Sanitizer)
     {
         this.vaultManager = vaultManager;
         this.env = env;
         _logger = logger;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.projectUserManager = projectUserManager;
-
+        this.Sanitizer = Sanitizer;
     }
     
     [HttpGet]
@@ -62,15 +65,13 @@ public class VaultController : ControllerBase
                     return BadRequest();
                 }
                 
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
                 
                 var vault = new CORE.Entities.Vault();
-                vault.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                vault.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                vault.Name = Sanitizer.Sanitize(model.Name);
+                vault.Description = Sanitizer.Sanitize(model.Description);
                 vault.CreatedDate = DateTime.Now.ToUniversalTime();
                 vault.Type = model.Type;
-                vault.Value = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Value));
+                vault.Value = Sanitizer.Sanitize(model.Value);
                 vault.ProjectId = model.ProjectId;
                vault.UserId = aspNetUserId;
                
@@ -107,15 +108,12 @@ public class VaultController : ControllerBase
                 {
                     return BadRequest();
                 }
-                
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                
+
                 var vault = vaultManager.GetById(model.Id);
-                vault.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                vault.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                vault.Name = Sanitizer.Sanitize(model.Name);
+                vault.Description = Sanitizer.Sanitize(model.Description);
                 vault.Type = model.Type;
-                vault.Value = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Value));
+                vault.Value = Sanitizer.Sanitize(model.Value);
                 vault.ProjectId = model.ProjectId;
                 await vaultManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vault edited successfully. User: {0}",

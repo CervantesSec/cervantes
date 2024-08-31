@@ -9,6 +9,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.IFR.Email;
 using Cervantes.IFR.File;
 using Cervantes.Server.Helpers;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Hangfire;
 using Microsoft.AspNetCore.Authorization;
@@ -35,6 +36,8 @@ public class UserController: ControllerBase
     private string link;
 private IFileCheck fileCheck;
 private IEmailService emailService;
+
+private Sanitizer sanitizer;
     /// <summary>
     /// UserController Constructor
     /// </summary>
@@ -45,7 +48,8 @@ private IEmailService emailService;
     public UserController(IUserManager usrManager, IRoleManager roleManager,
         Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, IProjectManager projectManager,
         IClientManager clientManager,IEmailService emailService,
-        ILogger<UserController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck)
+        ILogger<UserController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor, 
+        IFileCheck fileCheck, Sanitizer sanitizer)
     {
         this.usrManager = usrManager;
         this.roleManager = roleManager;
@@ -60,7 +64,8 @@ private IEmailService emailService;
             aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             link = HttpContextAccessor.HttpContext.Request.Scheme.ToString() +"://" + HttpContextAccessor.HttpContext.Request.Host.ToString() + "/Account/Login";
         }
-        this.fileCheck = fileCheck; 
+        this.fileCheck = fileCheck;
+        this.sanitizer = sanitizer;
 
     }
     
@@ -144,9 +149,6 @@ private IEmailService emailService;
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var user = new ApplicationUser();
                 var path = "";
                 var unique = "";
@@ -174,15 +176,15 @@ private IEmailService emailService;
 
 
                 user.Id = Guid.NewGuid().ToString();
-                user.UserName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                user.NormalizedUserName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                user.Email = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                user.NormalizedEmail = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email.ToUpper()));
+                user.UserName = sanitizer.Sanitize(model.Email);
+                user.NormalizedUserName = sanitizer.Sanitize(model.Email);
+                user.Email = sanitizer.Sanitize(model.Email);
+                user.NormalizedEmail = sanitizer.Sanitize(model.Email.ToUpper());
                 user.SecurityStamp = Guid.NewGuid().ToString();
-                user.PhoneNumber = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.PhoneNumber));
-                user.FullName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.FullName));
-                user.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-                user.Position = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Position));
+                user.PhoneNumber = sanitizer.Sanitize(model.PhoneNumber);
+                user.FullName = sanitizer.Sanitize(model.FullName);
+                user.Description = sanitizer.Sanitize(model.Description);
+                user.Position = sanitizer.Sanitize(model.Position);
                 user.LockoutEnabled = true;
                 if (model.Role == "Client")
                 {
@@ -227,9 +229,6 @@ private IEmailService emailService;
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var user = usrManager.GetByUserId(model.Id);
                 var path = "";
                 var unique = "";
@@ -257,16 +256,16 @@ private IEmailService emailService;
                     user.Avatar = "Attachments/Users/" + unique;
                     
                 }
-                user.UserName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                user.NormalizedUserName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                user.Email = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                user.NormalizedEmail = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email.ToUpper()));
+                user.UserName = sanitizer.Sanitize(model.Email);
+                user.NormalizedUserName = sanitizer.Sanitize(model.Email);
+                user.Email = sanitizer.Sanitize(model.Email);
+                user.NormalizedEmail = sanitizer.Sanitize(model.Email.ToUpper());
                 user.SecurityStamp = Guid.NewGuid().ToString();
                 user.ConcurrencyStamp = Guid.NewGuid().ToString();
-                user.PhoneNumber = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.PhoneNumber));
-                user.FullName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.FullName));
-                user.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-                user.Position = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Position));
+                user.PhoneNumber = sanitizer.Sanitize(model.PhoneNumber);
+                user.FullName = sanitizer.Sanitize(model.FullName);
+                user.Description = sanitizer.Sanitize(model.Description);
+                user.Position = sanitizer.Sanitize(model.Position);
                 user.TwoFactorEnabled = model.TwoFactorEnabled;
                 if (model.Lockout)
                 {
@@ -323,9 +322,6 @@ private IEmailService emailService;
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var user = usrManager.GetByUserId(model.Id);
                 if (user != null)
                 {
@@ -334,13 +330,13 @@ private IEmailService emailService;
                         return BadRequest();
 
                     }
-                    //user.UserName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                    //user.NormalizedUserName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                    //user.Email = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Email));
-                    user.PhoneNumber = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.PhoneNumber));
-                    user.FullName = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.FullName));
-                    user.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
-                    user.Position = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Position));
+                    //user.UserName = sanitizer.Sanitize(model.Email));
+                    //user.NormalizedUserName = sanitizer.Sanitize(model.Email));
+                    //user.Email = sanitizer.Sanitize(model.Email));
+                    user.PhoneNumber = sanitizer.Sanitize(model.PhoneNumber);
+                    user.FullName = sanitizer.Sanitize(model.FullName);
+                    user.Description = sanitizer.Sanitize(model.Description);
+                    user.Position = sanitizer.Sanitize(model.Position);
                     await usrManager.Context.SaveChangesAsync();
                 
                     _logger.LogInformation("User edited successfully. User: {0}",

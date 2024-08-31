@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Web;
 using Cervantes.Contracts;
 using Cervantes.CORE.ViewModel;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +19,16 @@ public class NoteController : Controller
     private readonly IWebHostEnvironment env;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
+    private Sanitizer sanitizer;
 
-
-    public NoteController(INoteManager noteManager,ILogger<NoteController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor)
+    public NoteController(INoteManager noteManager,ILogger<NoteController> logger, IWebHostEnvironment env,
+        IHttpContextAccessor HttpContextAccessor,Sanitizer sanitizer)
     {
         this.noteManager = noteManager;
         _logger = logger;
         this.env = env;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
+        this.sanitizer = sanitizer;
     }
     
     [HttpPost]
@@ -35,12 +37,10 @@ public class NoteController : Controller
         try{
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
                 
                 var note = new CORE.Entities.Note();
-                note.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                note.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                note.Name = sanitizer.Sanitize(model.Name);
+                note.Description = sanitizer.Sanitize(model.Description);
                 note.CreatedDate = DateTime.Now.ToUniversalTime();
                 note.UserId = aspNetUserId;
                 
@@ -70,11 +70,9 @@ public class NoteController : Controller
                 var note = noteManager.GetById(model.Id);
                 if (note != null)
                 {
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
                     
-                    note.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    note.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    note.Name = sanitizer.Sanitize(model.Name);
+                    note.Description = sanitizer.Sanitize(model.Description);
                     await noteManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Note edited successfully. User: {0}",aspNetUserId);
                     return Ok();

@@ -3,6 +3,7 @@ using System.Web;
 using Cervantes.Contracts;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.Jira;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,12 +28,13 @@ public class JiraController : Controller
     private readonly IWebHostEnvironment env;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
+    private Sanitizer sanitizer;
     
     public JiraController(IVulnManager vulnManager, IProjectManager projectManager, ILogger<JiraController> logger,
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IWebHostEnvironment env, IJIraService jiraService,
-        IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IHttpContextAccessor HttpContextAccessor)
+        IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IHttpContextAccessor HttpContextAccessor, Sanitizer sanitizer)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -47,7 +49,7 @@ public class JiraController : Controller
         this.jiraManager = jiraManager;
         this.jiraCommentManager = jiraCommentManager;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
+        this.sanitizer = sanitizer;
     }
     
     [HttpGet]
@@ -203,10 +205,8 @@ public class JiraController : Controller
     {
         try
         {
-            var sanitizer = new HtmlSanitizer();
-            sanitizer.AllowedSchemes.Add("data");
 
-            var comment = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Comment));
+            var comment = sanitizer.Sanitize(model.Comment);
             var jira = jiraManager.GetByVulnId(model.VulnId);
             var issue = await jiraService.AddCommentAsync(jira.JiraKey, comment);
             if (issue == false)

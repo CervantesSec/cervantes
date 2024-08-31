@@ -7,6 +7,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.IFR.File;
 using Cervantes.IFR.Parsers.Nmap;
+using Cervantes.Web.Helpers;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Ganss.Xss;
@@ -33,6 +34,7 @@ public class TargetController : ControllerBase
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private IFileCheck fileCheck;
+    private Sanitizer sanitizer;
 
     /// <summary>
     /// Target Controller Constructor
@@ -43,7 +45,7 @@ public class TargetController : ControllerBase
     public TargetController(ITargetManager targetManager, ITargetServicesManager targetServicesManager,
         IProjectManager projectManager, IProjectUserManager projectUserManager, ILogger<TargetController> logger,
         IProjectAttachmentManager projectAttachmentManager, INmapParser nmapParser, IWebHostEnvironment env,
-        IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck)
+        IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck, Sanitizer sanitizer)
     {
         this.targetManager = targetManager;
         this.targetServicesManager = targetServicesManager;
@@ -55,6 +57,7 @@ public class TargetController : ControllerBase
         this.env = env;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
+        this.sanitizer = sanitizer;
     }
 
     [HttpGet]
@@ -104,14 +107,11 @@ public class TargetController : ControllerBase
                 {
                     return BadRequest();
                 }
-
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
+                
                 var target = new CORE.Entities.Target();
                 target.Id = Guid.NewGuid();
-                target.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                target.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                target.Name = sanitizer.Sanitize(model.Name);
+                target.Description = sanitizer.Sanitize(model.Description);
                 target.ProjectId = model.ProjectId;
                 target.UserId = aspNetUserId;
 
@@ -150,11 +150,8 @@ public class TargetController : ControllerBase
                         return BadRequest();
                     }
 
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
-
-                    result.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    result.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    result.Name = sanitizer.Sanitize(model.Name);
+                    result.Description = sanitizer.Sanitize(model.Description);
                     result.Type = model.Type;
                     await targetManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Target added successfully. User: {0}",
@@ -423,17 +420,14 @@ public class TargetController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var service = new CORE.Entities.TargetServices();
-                service.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                service.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                service.Name = sanitizer.Sanitize(model.Name);
+                service.Description = sanitizer.Sanitize(model.Description);
                 service.Port = model.Port;
-                service.Version = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Version));
+                service.Version = sanitizer.Sanitize(model.Version);
                 service.TargetId = model.TargetId;
                 service.UserId = aspNetUserId;
-                service.Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Note));
+                service.Note = sanitizer.Sanitize(model.Note);
                 await targetServicesManager.AddAsync(service);
                 await targetServicesManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Target added successfully. User: {0}",
@@ -461,19 +455,16 @@ public class TargetController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var service = targetServicesManager.GetById(model.Id);
                 if (service != null)
                 {
-                    service.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    service.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    service.Name = sanitizer.Sanitize(model.Name);
+                    service.Description = sanitizer.Sanitize(model.Description);
                     service.Port = model.Port;
-                    service.Version = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Version));
+                    service.Version = sanitizer.Sanitize(model.Version);
                     service.TargetId = model.TargetId;
                     service.UserId = aspNetUserId;
-                    service.Note = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Note));
+                    service.Note = sanitizer.Sanitize(model.Note);
                     await targetServicesManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Target Service edited successfully. User: {0}",
                         aspNetUserId);

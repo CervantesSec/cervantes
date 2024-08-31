@@ -4,6 +4,7 @@ using Cervantes.Contracts;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.IFR.File;
+using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,15 +23,17 @@ public class DocumentController : Controller
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private IFileCheck fileCheck;
+    private Sanitizer sanitizer;
 
     public DocumentController(IDocumentManager docManager,ILogger<DocumentController> logger, IWebHostEnvironment env
-        ,IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck)
+        ,IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck, Sanitizer sanitizer)
     {
         this.docManager = docManager;
         _logger = logger;
         this.env = env;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
+        this.sanitizer = sanitizer;
     }
     
     [HttpGet]
@@ -81,12 +84,9 @@ public class DocumentController : Controller
                     
                 }
                 
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-                
                 var doc = new CORE.Entities.Document();
-                doc.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                doc.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                doc.Name = sanitizer.Sanitize(model.Name);
+                doc.Description = sanitizer.Sanitize(model.Description);
                 doc.CreatedDate = DateTime.Now.ToUniversalTime();
                 doc.UserId = aspNetUserId;
                 doc.FilePath = "Attachments/Documents/"+unique;
@@ -160,11 +160,9 @@ public class DocumentController : Controller
                 var doc = docManager.GetById(model.Id);
                 if (doc != null)
                 {
-                    var sanitizer = new HtmlSanitizer();
-                    sanitizer.AllowedSchemes.Add("data");
                     
-                    doc.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Name));
-                    doc.Description = sanitizer.Sanitize(HttpUtility.HtmlDecode(model.Description));
+                    doc.Name = sanitizer.Sanitize(model.Name);
+                    doc.Description = sanitizer.Sanitize(model.Description);
                     
                     await docManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Document edited successfully. User: {0}",
