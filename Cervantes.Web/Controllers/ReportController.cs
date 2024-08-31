@@ -970,7 +970,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
     
     [HttpPost]
     [Route("Download")]
-    public FileContentResult DownloadReport([FromBody] ReportDownloadModel model)
+    public async Task<FileContentResult> DownloadReport([FromBody] ReportDownloadModel model)
     {
         try
         {
@@ -1109,7 +1109,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     }
 
                                     string updatedHtmlCode = htmlDoc.DocumentNode.OuterHtml;
-                                    converter.ParseHtml(updatedHtmlCode);
+                                    await converter.ParseHtml(updatedHtmlCode);
                                     
                                     mainPart.Document.Save();
                                 }
