@@ -38,7 +38,7 @@ public partial class DownloadReportDialog: ComponentBase
         if (form.IsValid)
         {
             model.Id = report.Id;
-            var response =  _ReportController.DownloadReport(model);
+            var response =  await _ReportController.DownloadReport(model);
             if (response == null)
             {
                 Snackbar.Add(@localizer["reportDownloadError"], Severity.Error);
