@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Anthropic.SDK" Version="4.1.1" />
       <PackageReference Include="Atlassian.SDK" Version="13.0.0" />
       <PackageReference Include="CsvHelper" Version="33.0.1" />
       <PackageReference Include="Html2JiraMarkup" Version="1.0.4" />

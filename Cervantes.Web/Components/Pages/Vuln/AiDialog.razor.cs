@@ -24,7 +24,7 @@ public partial class AiDialog: ComponentBase
 
     bool _isBusy = false;
     private string result;
-    private FunctionResult result2;
+    private string result2;
 
     public class DefaultModel
     {

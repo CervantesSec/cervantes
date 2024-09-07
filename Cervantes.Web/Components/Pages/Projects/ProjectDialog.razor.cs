@@ -886,7 +886,7 @@ protected override async Task OnInitializedAsync()
         var result = await dialog.Result;
         if (!result.Canceled)
         {
-            var data = await dialog.GetReturnValueAsync<FunctionResult>();
+            var data = await dialog.GetReturnValueAsync<string>();
             executive.ExecutiveSummary = executive.ExecutiveSummary + data;
             StateHasChanged();
         }

@@ -22,7 +22,7 @@ public partial class AiDialog: ComponentBase
     private CustomModel customModel = new CustomModel();
 
     bool _isBusy = false;
-    private FunctionResult result;
+    private string result;
     
     public class CustomModel
     {
@@ -58,7 +58,7 @@ public partial class AiDialog: ComponentBase
         {
             _isBusy = true;
             var gen = await aiService.GenerateCustom(customModel.Prompt);
-            result = gen;
+            result = gen.ToString();
             _isBusy = false;
 
         }
@@ -67,7 +67,7 @@ public partial class AiDialog: ComponentBase
     
     private async Task Insert() 
     {
-        MudDialog.Close<FunctionResult>(result);  
+        MudDialog.Close<string>(result);  
         
     } 
 

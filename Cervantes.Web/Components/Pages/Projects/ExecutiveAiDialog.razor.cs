@@ -23,7 +23,7 @@ public partial class ExecutiveAiDialog: ComponentBase
     private CustomModel customModel = new CustomModel();
 
     bool _isBusy = false;
-    private FunctionResult result;
+    private string result;
     
 
     
@@ -31,8 +31,8 @@ public partial class ExecutiveAiDialog: ComponentBase
     {
 
             _isBusy = true;
-            var result = await aiService.GenerateExecutive(project);
-            MudDialog.Close<FunctionResult>(result);  
+            result = await aiService.GenerateExecutive(project);
+            MudDialog.Close<string>(result);  
         
     } 
     
@@ -80,7 +80,7 @@ public partial class ExecutiveAiDialog: ComponentBase
     
     private async Task Insert() 
     {
-        MudDialog.Close<FunctionResult>(result);  
+        MudDialog.Close<string>(result);  
         
     } 
 }
