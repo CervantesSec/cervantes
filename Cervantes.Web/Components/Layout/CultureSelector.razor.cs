@@ -13,6 +13,7 @@ namespace Cervantes.Web.Components.Layout
         {
             new CultureInfo("en-US"),
             new CultureInfo("es-ES"),
+            new CultureInfo("pt-PT"),
         };
 
         protected override void OnInitialized()

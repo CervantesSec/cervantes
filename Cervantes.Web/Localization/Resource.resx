@@ -1724,4 +1724,10 @@
     <data name="workspace" xml:space="preserve">
         <value>Workspace</value>
     </data>
+    <data name="spanish" xml:space="preserve">
+        <value>Spanish</value>
+    </data>
+    <data name="portuguese" xml:space="preserve">
+        <value>Portuguese</value>
+    </data>
 </root>

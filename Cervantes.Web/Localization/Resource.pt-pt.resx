@@ -1,0 +1,1211 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="assignee" xml:space="preserve">
+        <value>Cessionário</value>
+    </data>
+    <data name="assignedTo" xml:space="preserve">
+        <value>Atribuído a</value>
+    </data>
+    <data name="attachmentAdded" xml:space="preserve">
+        <value>Anexo adicionado com sucesso!</value>
+    </data>
+    <data name="attachmentDeleted" xml:space="preserve">
+        <value>Anexo eliminado com sucesso!</value>
+    </data>
+    <data name="attachmentDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o anexo!</value>
+    </data>
+    <data name="attachments" xml:space="preserve">
+        <value>Anexos</value>
+    </data>
+    <data name="accepted" xml:space="preserve">
+        <value>Aceite</value>
+    </data>
+    <data name="accountLocked" xml:space="preserve">
+        <value>Esta conta foi bloqueada, tente novamente mais tarde.</value>
+    </data>
+    <data name="actions" xml:space="preserve">
+        <value>Acções</value>
+    </data>
+    <data name="active" xml:space="preserve">
+        <value>Ativo</value>
+    </data>
+    <data name="activeDetection" xml:space="preserve">
+        <value>Deteção ativa na aplicação</value>
+    </data>
+    <data name="add" xml:space="preserve">
+        <value>Adicionar</value>
+    </data>
+    <data name="addAttachment" xml:space="preserve">
+        <value>Anexo adicionado com sucesso!</value>
+    </data>
+    <data name="addAttachmentBtn" xml:space="preserve">
+        <value>Adicionar anexo</value>
+    </data>
+    <data name="addAttachmentError" xml:space="preserve">
+        <value>Ocorreu um erro ao adicionar o anexo!</value>
+    </data>
+    <data name="addCategory" xml:space="preserve">
+        <value>Adicionar Categoria</value>
+    </data>
+    <data name="addComment" xml:space="preserve">
+        <value>Adicionar Comentário</value>
+    </data>
+    <data name="addedComment" xml:space="preserve">
+        <value>Comentário adicionado com sucesso!</value>
+    </data>
+    <data name="addedCommentError" xml:space="preserve">
+        <value>Ocorreu um erro ao adicionar o comentário!</value>
+    </data>
+    <data name="addMember" xml:space="preserve">
+        <value>Adicionar Membro</value>
+    </data>
+    <data name="addNote" xml:space="preserve">
+        <value>Adicionar Nota</value>
+    </data>
+    <data name="addNoteBtn" xml:space="preserve">
+        <value>Adicionar Nota</value>
+    </data>
+    <data name="addService" xml:space="preserve">
+        <value>Adicionar Serviço</value>
+    </data>
+    <data name="addTarget" xml:space="preserve">
+        <value>Adicionar Objetivo</value>
+    </data>
+    <data name="adjacent" xml:space="preserve">
+        <value>Adjacente</value>
+    </data>
+    <data name="advancedComputerUser" xml:space="preserve">
+        <value>Utilizador Avançado de Computadores</value>
+    </data>
+    <data name="advancedFilters" xml:space="preserve">
+        <value>Filtros Avançados</value>
+    </data>
+    <data name="aiGenerate" xml:space="preserve">
+        <value>Gerar com IA</value>
+    </data>
+    <data name="all" xml:space="preserve">
+        <value>Todos</value>
+    </data>
+    <data name="allCorrupt" xml:space="preserve">
+        <value>Todos os dados totalmente corrompidos</value>
+    </data>
+    <data name="allDataDisclosed" xml:space="preserve">
+        <value>Todos os Dados Divulgados</value>
+    </data>
+    <data name="allServicesLost" xml:space="preserve">
+        <value>Perda total de todos os serviços</value>
+    </data>
+    <data name="and" xml:space="preserve">
+        <value>e</value>
+    </data>
+    <data name="anonymousUsers" xml:space="preserve">
+        <value>Utilizadores Anónimos da Internet</value>
+    </data>
+    <data name="archived" xml:space="preserve">
+        <value>Arquivado</value>
+    </data>
+    <data name="attackComplexity" xml:space="preserve">
+        <value>Complexidade do Ataque</value>
+    </data>
+    <data name="attackVector" xml:space="preserve">
+        <value>Vetor de Ataque</value>
+    </data>
+    <data name="authenticatedUsers" xml:space="preserve">
+        <value>Utilizadores Autenticados</value>
+    </data>
+    <data name="authenticator1" xml:space="preserve">
+        <value>Descarregar uma aplicação de autenticação de dois factores como o Microsoft Authenticator para</value>
+    </data>
+    <data name="authenticator2" xml:space="preserve">
+        <value>Digitalizar o código QR ou introduzir esta chave</value>
+    </data>
+    <data name="authenticator3" xml:space="preserve">
+        <value>na sua aplicação de autenticação de dois factores. Os espaços e o invólucro não são importantes.</value>
+    </data>
+    <data name="authenticator4" xml:space="preserve">
+        <value>Depois de ter digitalizado o código QR ou introduzido a chave acima, a sua aplicação de autenticação de dois factores fornecer-lhe-á um código único. Introduza o código na caixa de confirmação abaixo.</value>
+    </data>
+    <data name="authenticatorIntro" xml:space="preserve">
+        <value>Para utilizar uma aplicação de autenticação, siga os passos seguintes:</value>
+    </data>
+    <data name="automatedTools" xml:space="preserve">
+        <value>Ferramentas automatizadas disponíveis</value>
+    </data>
+    <data name="availability" xml:space="preserve">
+        <value>Disponibilidade</value>
+    </data>
+    <data name="avatarUploaded" xml:space="preserve">
+        <value>Avatar carregado com sucesso!</value>
+    </data>
+    <data name="avatarUploadedError" xml:space="preserve">
+        <value>Ocorreu um erro ao carregar o Avatar!</value>
+    </data>
+    <data name="awareness" xml:space="preserve">
+        <value>Consciencialização</value>
+    </data>
+    <data name="back" xml:space="preserve">
+        <value>Voltar</value>
+    </data>
+    <data name="backlog" xml:space="preserve">
+        <value>Pendentes</value>
+    </data>
+    <data name="backup" xml:space="preserve">
+        <value>Cópia de segurança</value>
+    </data>
+    <data name="backupAttachmentsMessage" xml:space="preserve">
+        <value>Cópia de segurança de todos os dados (Projectos, Vulnerabilidades, Clientes,...)</value>
+    </data>
+    <data name="backupDataMessage" xml:space="preserve">
+        <value>Cópia de segurança de todos os anexos (imagens, relatórios,...)</value>
+    </data>
+    <data name="backupError" xml:space="preserve">
+        <value>Ocorreu um erro ao efetuar a cópia de segurança!</value>
+    </data>
+    <data name="backupSuccessfull" xml:space="preserve">
+        <value>Cópia de segurança efectuada com sucesso!</value>
+    </data>
+    <data name="bankruptcy" xml:space="preserve">
+        <value>Falência</value>
+    </data>
+    <data name="blackbox" xml:space="preserve">
+        <value>Caixa preta</value>
+    </data>
+    <data name="blocked" xml:space="preserve">
+        <value>Bloqueado</value>
+    </data>
+    <data name="body" xml:space="preserve">
+        <value>Corpo</value>
+    </data>
+    <data name="brandDamage" xml:space="preserve">
+        <value>Danos à marca</value>
+    </data>
+    <data name="calendar" xml:space="preserve">
+        <value>Calendário</value>
+    </data>
+    <data name="cancel" xml:space="preserve">
+        <value>Cancelar</value>
+    </data>
+    <data name="categories" xml:space="preserve">
+        <value>Categorias</value>
+    </data>
+    <data name="category" xml:space="preserve">
+        <value>Categoria</value>
+    </data>
+    <data name="categoryCreated" xml:space="preserve">
+        <value>Categoria criada com sucesso!</value>
+    </data>
+    <data name="categoryCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar a categoria!</value>
+    </data>
+    <data name="categoryDeleted" xml:space="preserve">
+        <value>Categoria eliminada com sucesso!</value>
+    </data>
+    <data name="categoryEdited" xml:space="preserve">
+        <value>Categoria editada com sucesso!</value>
+    </data>
+    <data name="categoryEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar a categoria!</value>
+    </data>
+    <data name="changed" xml:space="preserve">
+        <value>Alterado</value>
+    </data>
+    <data name="changePassword" xml:space="preserve">
+        <value>Alterar palavra-passe</value>
+    </data>
+    <data name="checklist" xml:space="preserve">
+        <value>Lista de controlo</value>
+    </data>
+    <data name="checklistCreated" xml:space="preserve">
+        <value>Lista de controlo criada com sucesso!</value>
+    </data>
+    <data name="checklistCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar a lista de controlo!</value>
+    </data>
+    <data name="checklistEdited" xml:space="preserve">
+        <value>Lista de controlo editada com sucesso!</value>
+    </data>
+    <data name="checklistEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar a lista de controlo!</value>
+    </data>
+    <data name="checklistReport" xml:space="preserve">
+        <value>Relatório de lista de controlo criado com sucesso!</value>
+    </data>
+    <data name="checklistReportError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar o relatório da lista de controlo!</value>
+    </data>
+    <data name="clear" xml:space="preserve">
+        <value>Limpar</value>
+    </data>
+    <data name="clearViolation" xml:space="preserve">
+        <value>Violação clara</value>
+    </data>
+    <data name="client" xml:space="preserve">
+        <value>Cliente</value>
+    </data>
+    <data name="clientCreated" xml:space="preserve">
+        <value>Cliente criado com sucesso!</value>
+    </data>
+    <data name="clientCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar o Cliente!</value>
+    </data>
+    <data name="clientDeleted" xml:space="preserve">
+        <value>Cliente eliminado com sucesso!</value>
+    </data>
+    <data name="clientDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o Cliente!</value>
+    </data>
+    <data name="clientEdited" xml:space="preserve">
+        <value>Cliente editado com sucesso!</value>
+    </data>
+    <data name="clientEditedError" xml:space="preserve">
+        <value>Ocorreu um erro na edição do Cliente!</value>
+    </data>
+    <data name="clients" xml:space="preserve">
+        <value>Clientes</value>
+    </data>
+    <data name="code" xml:space="preserve">
+        <value>Código</value>
+    </data>
+    <data name="codesSafe" xml:space="preserve">
+        <value>Guardar estes códigos num local seguro</value>
+    </data>
+    <data name="comments" xml:space="preserve">
+        <value>Comentários</value>
+    </data>
+    <data name="completed" xml:space="preserve">
+        <value>Concluído</value>
+    </data>
+    <data name="completelyAnonymous" xml:space="preserve">
+        <value>Completamente anónimo</value>
+    </data>
+    <data name="complexity" xml:space="preserve">
+        <value>Complexidade</value>
+    </data>
+    <data name="component" xml:space="preserve">
+        <value>Componente</value>
+    </data>
+    <data name="components" xml:space="preserve">
+        <value>Componentes</value>
+    </data>
+    <data name="confidentiality" xml:space="preserve">
+        <value>Confidencialidade</value>
+    </data>
+    <data name="confirmed" xml:space="preserve">
+        <value>Confirmado</value>
+    </data>
+    <data name="confirmPassword" xml:space="preserve">
+        <value>Confirmar a palavra-passe</value>
+    </data>
+    <data name="contactEmail" xml:space="preserve">
+        <value>E-mail de contacto</value>
+    </data>
+    <data name="contactName" xml:space="preserve">
+        <value>Nome do contacto</value>
+    </data>
+    <data name="contactPhone" xml:space="preserve">
+        <value>Telefone de contacto</value>
+    </data>
+    <data name="costFixVuln" xml:space="preserve">
+        <value>Menos do que o custo para corrigir a vulnerabilidade</value>
+    </data>
+    <data name="cover" xml:space="preserve">
+        <value>Página inicial</value>
+    </data>
+    <data name="create" xml:space="preserve">
+        <value>Criar</value>
+    </data>
+    <data name="createCategory" xml:space="preserve">
+        <value>Criar Categoria</value>
+    </data>
+    <data name="createChecklist" xml:space="preserve">
+        <value>Criar Lista de Controlo</value>
+    </data>
+    <data name="createClient" xml:space="preserve">
+        <value>Criar Cliente</value>
+    </data>
+    <data name="createComponent" xml:space="preserve">
+        <value>Criar Componente</value>
+    </data>
+    <data name="createdBy" xml:space="preserve">
+        <value>Criado por</value>
+    </data>
+    <data name="createdDate" xml:space="preserve">
+        <value>Data de criação</value>
+    </data>
+    <data name="createDocument" xml:space="preserve">
+        <value>Criar documento</value>
+    </data>
+    <data name="createJira" xml:space="preserve">
+        <value>Criar Jira</value>
+    </data>
+    <data name="createNote" xml:space="preserve">
+        <value>Criar Nota</value>
+    </data>
+    <data name="createPage" xml:space="preserve">
+        <value>Criar Página</value>
+    </data>
+    <data name="createProject" xml:space="preserve">
+        <value>Criar Projeto</value>
+    </data>
+    <data name="createReport" xml:space="preserve">
+        <value>Criar Relatório</value>
+    </data>
+    <data name="createReportTemplate" xml:space="preserve">
+        <value>Criar modelo de relatório</value>
+    </data>
+    <data name="createTask" xml:space="preserve">
+        <value>Criar Tarefa</value>
+    </data>
+    <data name="createUser" xml:space="preserve">
+        <value>Criar Utilizador</value>
+    </data>
+    <data name="createVault" xml:space="preserve">
+        <value>Criar Cofre de Dados</value>
+    </data>
+    <data name="createVuln" xml:space="preserve">
+        <value>Criar Vulnerabilidade</value>
+    </data>
+    <data name="creationDate" xml:space="preserve">
+        <value>Data de Criação</value>
+    </data>
+    <data name="critical" xml:space="preserve">
+        <value>Crítico</value>
+    </data>
+    <data name="darkMode" xml:space="preserve">
+        <value>Modo Escuro</value>
+    </data>
+    <data name="data" xml:space="preserve">
+        <value>Dados</value>
+    </data>
+    <data name="dataVault" xml:space="preserve">
+        <value>Cofre de Dados</value>
+    </data>
+    <data name="days" xml:space="preserve">
+        <value>dias</value>
+    </data>
+    <data name="daysLeft" xml:space="preserve">
+        <value>Dias restantes:</value>
+    </data>
+    <data name="delete" xml:space="preserve">
+        <value>Eliminar</value>
+    </data>
+    <data name="deleteAttachment" xml:space="preserve">
+        <value>Eliminar Anexo</value>
+    </data>
+    <data name="deleteCategory" xml:space="preserve">
+        <value>Eliminar Categoria</value>
+    </data>
+    <data name="deleteChecklist" xml:space="preserve">
+        <value>Eliminar lista de controlo</value>
+    </data>
+    <data name="deleteClient" xml:space="preserve">
+        <value>Eliminar Cliente</value>
+    </data>
+    <data name="deleteComponent" xml:space="preserve">
+        <value>Eliminar Componente</value>
+    </data>
+    <data name="deletedAvatar" xml:space="preserve">
+        <value>Avatar eliminado com sucesso!</value>
+    </data>
+    <data name="yes" xml:space="preserve">
+        <value>Sim</value>
+    </data>
+    <data name="workspaces" xml:space="preserve">
+        <value>Meus espaços de trabalho</value>
+    </data>
+    <data name="workspace" xml:space="preserve">
+        <value>Espaço de trabalho</value>
+    </data>
+    <data name="whitebox" xml:space="preserve">
+        <value>Caixa Branca</value>
+    </data>
+    <data name="waiting" xml:space="preserve">
+        <value>Em espera</value>
+    </data>
+    <data name="vulnStatus" xml:space="preserve">
+        <value>Estado das Vulnerabilidades</value>
+    </data>
+    <data name="vulnSeverity" xml:space="preserve">
+        <value>Vulnerabilidades Severidade</value>
+    </data>
+    <data name="vulns" xml:space="preserve">
+        <value>Vulnerabilidades</value>
+    </data>
+    <data name="vulnImportedError" xml:space="preserve">
+        <value>Ocorreu um erro ao importar os vulns!</value>
+    </data>
+    <data name="vulnImported" xml:space="preserve">
+        <value>Vulns imported successfully!</value>
+    </data>
+    <data name="vulnImport" xml:space="preserve">
+        <value>Importação de Vulnerabilidades</value>
+    </data>
+    <data name="vulnCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao adicionar o vuln!</value>
+    </data>
+    <data name="vulnCreated" xml:space="preserve">
+        <value>Vuln criado com sucesso!</value>
+    </data>
+    <data name="vulnCategory" xml:space="preserve">
+        <value>Categoria de Vulnerabilidades</value>
+    </data>
+    <data name="vuln" xml:space="preserve">
+        <value>Vulnerabilidade</value>
+    </data>
+    <data name="version" xml:space="preserve">
+        <value>Versão</value>
+    </data>
+    <data name="verify" xml:space="preserve">
+        <value>Verificar</value>
+    </data>
+    <data name="verificationCode" xml:space="preserve">
+        <value>Código de verificação</value>
+    </data>
+    <data name="vaultEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o Vault!</value>
+    </data>
+    <data name="vaultEdited" xml:space="preserve">
+        <value>O cofre foi editado com êxito!</value>
+    </data>
+    <data name="vaultDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao apagar a Abóbada!</value>
+    </data>
+    <data name="vaultDeleted" xml:space="preserve">
+        <value>Cofre eliminado com êxito!</value>
+    </data>
+    <data name="vaultCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao adicionar o Vault!</value>
+    </data>
+    <data name="vaultCreated" xml:space="preserve">
+        <value>A abóbada foi criada com êxito!</value>
+    </data>
+    <data name="value" xml:space="preserve">
+        <value>Valor</value>
+    </data>
+    <data name="users" xml:space="preserve">
+        <value>Utilizadores</value>
+    </data>
+    <data name="userInteraction" xml:space="preserve">
+        <value>Interação com o utilizador</value>
+    </data>
+    <data name="userExists" xml:space="preserve">
+        <value>O utilizador já foi adicionado ao projeto!</value>
+    </data>
+    <data name="userEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o Utilizador!</value>
+    </data>
+    <data name="userEdited" xml:space="preserve">
+        <value>Utilizador editado com sucesso!</value>
+    </data>
+    <data name="userDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o utilizador!</value>
+    </data>
+    <data name="userDeleted" xml:space="preserve">
+        <value>Utilizador eliminado com sucesso!</value>
+    </data>
+    <data name="userAddedError" xml:space="preserve">
+        <value>Ocorreu um erro ao adicionar o membro!</value>
+    </data>
+    <data name="userAdded" xml:space="preserve">
+        <value>Utilizador adicionado com sucesso!</value>
+    </data>
+    <data name="user" xml:space="preserve">
+        <value>Utilizador</value>
+    </data>
+    <data name="uploadFile" xml:space="preserve">
+        <value>Carregar ficheiro</value>
+    </data>
+    <data name="uploadedBy" xml:space="preserve">
+        <value>Carregado por</value>
+    </data>
+    <data name="updatedDate" xml:space="preserve">
+        <value>Data de atualização</value>
+    </data>
+    <data name="unknown" xml:space="preserve">
+        <value>Desconhecido</value>
+    </data>
+    <data name="unchanged" xml:space="preserve">
+        <value>Inalterado</value>
+    </data>
+    <data name="type" xml:space="preserve">
+        <value>Tipo</value>
+    </data>
+    <data name="twoFactorSetted" xml:space="preserve">
+        <value>A sua aplicação de autenticação foi verificada.</value>
+    </data>
+    <data name="twoFactorSetError" xml:space="preserve">
+        <value>Erro: O código de verificação é inválido.</value>
+    </data>
+    <data name="twoFactor" xml:space="preserve">
+        <value>Autenticação de dois factores</value>
+    </data>
+    <data name="toDo" xml:space="preserve">
+        <value>Para Fazer</value>
+    </data>
+    <data name="thousandsPeople" xml:space="preserve">
+        <value>Milhares de pessoas</value>
+    </data>
+    <data name="theoretical" xml:space="preserve">
+        <value>Teórico</value>
+    </data>
+    <data name="templates" xml:space="preserve">
+        <value>Modelos</value>
+    </data>
+    <data name="template" xml:space="preserve">
+        <value>Modelo</value>
+    </data>
+    <data name="taskUpdatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao atualizar a Tarefa!</value>
+    </data>
+    <data name="taskUpdated" xml:space="preserve">
+        <value>Tarefa actualizada com sucesso!</value>
+    </data>
+    <data name="tasksStatus" xml:space="preserve">
+        <value>Estado das Tarefas</value>
+    </data>
+    <data name="tasks" xml:space="preserve">
+        <value>Tarefas</value>
+    </data>
+    <data name="taskEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar a Tarefa!</value>
+    </data>
+    <data name="taskEdited" xml:space="preserve">
+        <value>Tarefa editada com sucesso!</value>
+    </data>
+    <data name="taskDetails" xml:space="preserve">
+        <value>Detalhes da Tarefa</value>
+    </data>
+    <data name="taskDescription" xml:space="preserve">
+        <value>Descrição da Tarefa</value>
+    </data>
+    <data name="taskDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar a Tarefa!</value>
+    </data>
+    <data name="taskDeleted" xml:space="preserve">
+        <value>Tarefa eliminada com sucesso!</value>
+    </data>
+    <data name="taskCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar a Tarefa!</value>
+    </data>
+    <data name="taskCreated" xml:space="preserve">
+        <value>Tarefa criada com sucesso!</value>
+    </data>
+    <data name="targets" xml:space="preserve">
+        <value>Objectivos</value>
+    </data>
+    <data name="targetImportedError" xml:space="preserve">
+        <value>Ocorreu um erro ao importar os Targets!</value>
+    </data>
+    <data name="targetImported" xml:space="preserve">
+        <value>Alvos importados com sucesso!</value>
+    </data>
+    <data name="targetImport" xml:space="preserve">
+        <value>Objectivos de Importação</value>
+    </data>
+    <data name="targetExists" xml:space="preserve">
+        <value>O objetivo já existe!</value>
+    </data>
+    <data name="targetEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o Objectivo!</value>
+    </data>
+    <data name="targetEdited" xml:space="preserve">
+        <value>Objetivo editado com sucesso!</value>
+    </data>
+    <data name="targetDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o Objectivo!</value>
+    </data>
+    <data name="targetDeleted" xml:space="preserve">
+        <value>Objectivo eliminado com êxito!</value>
+    </data>
+    <data name="targetCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar o objetivo!</value>
+    </data>
+    <data name="targetCreated" xml:space="preserve">
+        <value>Objetivo criado com sucesso!</value>
+    </data>
+    <data name="targetAddedError" xml:space="preserve">
+        <value>Ocorreu um erro ao adicionar o objetivo!</value>
+    </data>
+    <data name="targetAdded" xml:space="preserve">
+        <value>Objetivo adicionado com sucesso!</value>
+    </data>
+    <data name="target" xml:space="preserve">
+        <value>Objetivo</value>
+    </data>
+    <data name="status" xml:space="preserve">
+        <value>Estado</value>
+    </data>
+    <data name="startDate" xml:space="preserve">
+        <value>Data de início</value>
+    </data>
+    <data name="specialAccess" xml:space="preserve">
+        <value>Acesso ou recursos especiais necessários</value>
+    </data>
+    <data name="spanish" xml:space="preserve">
+        <value>Espanhol</value>
+    </data>
+    <data name="someTechnicalSkills" xml:space="preserve">
+        <value>Algumas competências técnicas</value>
+    </data>
+    <data name="someAccess" xml:space="preserve">
+        <value>É necessário algum acesso ou recursos</value>
+    </data>
+    <data name="skillLevel" xml:space="preserve">
+        <value>Nível de competência</value>
+    </data>
+    <data name="size" xml:space="preserve">
+        <value>Tamanho</value>
+    </data>
+    <data name="signout" xml:space="preserve">
+        <value>Terminar sessão</value>
+    </data>
+    <data name="signin" xml:space="preserve">
+        <value>Iniciar sessão</value>
+    </data>
+    <data name="significantEffectProfit" xml:space="preserve">
+        <value>Efeito significativo no lucro anual</value>
+    </data>
+    <data name="serviceEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o Serviço!</value>
+    </data>
+    <data name="serviceEdited" xml:space="preserve">
+        <value>Serviço editado com sucesso!</value>
+    </data>
+    <data name="serviceAddedError" xml:space="preserve">
+        <value>Ocorreu um erro ao adicionar o Serviço!</value>
+    </data>
+    <data name="serviceAdded" xml:space="preserve">
+        <value>Serviço adicionado com sucesso!</value>
+    </data>
+    <data name="selectVulnCategory" xml:space="preserve">
+        <value>Selecionar categoria</value>
+    </data>
+    <data name="selectVuln" xml:space="preserve">
+        <value>Selecionar a vulnerabilidade</value>
+    </data>
+    <data name="selectUser" xml:space="preserve">
+        <value>Selecionar utilizador</value>
+    </data>
+    <data name="selectTarget" xml:space="preserve">
+        <value>Selecionar Objetivo</value>
+    </data>
+    <data name="selectRole" xml:space="preserve">
+        <value>Selecionar função</value>
+    </data>
+    <data name="selectReportTemplate" xml:space="preserve">
+        <value>Selecionar modelo de relatório</value>
+    </data>
+    <data name="selectProject" xml:space="preserve">
+        <value>Selecionar projeto</value>
+    </data>
+    <data name="selectMembers" xml:space="preserve">
+        <value>Selecionar membros</value>
+    </data>
+    <data name="selectClient" xml:space="preserve">
+        <value>Selecionar cliente</value>
+    </data>
+    <data name="selectCategory" xml:space="preserve">
+        <value>Selecionar categoria</value>
+    </data>
+    <data name="securityPenetrationSkills" xml:space="preserve">
+        <value>Competências de penetração de segurança</value>
+    </data>
+    <data name="securityLevel" xml:space="preserve">
+        <value>Nível de segurança</value>
+    </data>
+    <data name="searchCVELoadError" xml:space="preserve">
+        <value>Este CVE está errado ou não existe!</value>
+    </data>
+    <data name="searchCVE" xml:space="preserve">
+        <value>Pesquisar CVE</value>
+    </data>
+    <data name="search" xml:space="preserve">
+        <value>Pesquisar</value>
+    </data>
+    <data name="score" xml:space="preserve">
+        <value>Pontuação</value>
+    </data>
+    <data name="scope" xml:space="preserve">
+        <value>Âmbito</value>
+    </data>
+    <data name="save" xml:space="preserve">
+        <value>Guardar</value>
+    </data>
+    <data name="sameEmail" xml:space="preserve">
+        <value>Introduziu o mesmo e-mail!</value>
+    </data>
+    <data name="role" xml:space="preserve">
+        <value>Função</value>
+    </data>
+    <data name="risk" xml:space="preserve">
+        <value>Risco</value>
+    </data>
+    <data name="results" xml:space="preserve">
+        <value>Resultados</value>
+    </data>
+    <data name="result" xml:space="preserve">
+        <value>Resultado</value>
+    </data>
+    <data name="restoredData" xml:space="preserve">
+        <value>Dados restaurados com sucesso!</value>
+    </data>
+    <data name="restoredAttachments" xml:space="preserve">
+        <value>Anexos restaurados com sucesso!</value>
+    </data>
+    <data name="restoreDataMessage" xml:space="preserve">
+        <value>Restaurar todos os anexos (Imagens, Relatórios,...)</value>
+    </data>
+    <data name="restoreDataError" xml:space="preserve">
+        <value>Ocorreu um erro ao restaurar os dados!</value>
+    </data>
+    <data name="restoreData" xml:space="preserve">
+        <value>Restaurar dados</value>
+    </data>
+    <data name="restoreAttachmentsMessage" xml:space="preserve">
+        <value>Restaurar todos os dados (Projectos, Vulnerabilidades, Clientes,...)</value>
+    </data>
+    <data name="restoreAttachmentsError" xml:space="preserve">
+        <value>Ocorreu um erro ao restaurar os anexos!</value>
+    </data>
+    <data name="restoreAttachments" xml:space="preserve">
+        <value>Restaurar Anexos</value>
+    </data>
+    <data name="restore" xml:space="preserve">
+        <value>Restaurar</value>
+    </data>
+    <data name="resolved" xml:space="preserve">
+        <value>Resolvido</value>
+    </data>
+    <data name="resolutionDate" xml:space="preserve">
+        <value>Data de resolução</value>
+    </data>
+    <data name="resetedAuthenticator" xml:space="preserve">
+        <value>A sua chave da aplicação de autenticação foi reposta, terá de configurar a sua aplicação de autenticação utilizando a nova chave</value>
+    </data>
+    <data name="resetAuthenticatorAction1" xml:space="preserve">
+        <value>Este processo desactiva a 2FA até verificar a sua aplicação de autenticação. Se não concluir a configuração da aplicação de autenticação, pode perder o acesso à sua conta.</value>
+    </data>
+    <data name="resetAuthenticatorAction" xml:space="preserve">
+        <value>Se repor a sua chave de autenticação, a sua aplicação de autenticação não funcionará até a reconfigurar.</value>
+    </data>
+    <data name="resetAuthenticator" xml:space="preserve">
+        <value>Repor o autenticador</value>
+    </data>
+    <data name="required" xml:space="preserve">
+        <value>Necessário</value>
+    </data>
+    <data name="reportTemplates" xml:space="preserve">
+        <value>Modelos de Relatórios</value>
+    </data>
+    <data name="reportTemplateEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o modelo de relatório!</value>
+    </data>
+    <data name="reportTemplateEdited" xml:space="preserve">
+        <value>Modelo de relatório editado com sucesso!</value>
+    </data>
+    <data name="reportTemplateDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o modelo de relatório!</value>
+    </data>
+    <data name="reportTemplateDeleted" xml:space="preserve">
+        <value>Modelo de relatório eliminado com êxito!</value>
+    </data>
+    <data name="reportTemplateCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar o modelo de relatório!</value>
+    </data>
+    <data name="reportTemplateCreated" xml:space="preserve">
+        <value>Modelo de relatório criado com sucesso!</value>
+    </data>
+    <data name="reportTemplate" xml:space="preserve">
+        <value>Modelo de Relatório</value>
+    </data>
+    <data name="reports" xml:space="preserve">
+        <value>Relatórios</value>
+    </data>
+    <data name="reportParts" xml:space="preserve">
+        <value>Peças do relatório</value>
+    </data>
+    <data name="reportEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o relatório!</value>
+    </data>
+    <data name="reportEdited" xml:space="preserve">
+        <value>Relatório editado com sucesso!</value>
+    </data>
+    <data name="reportDownloadedError" xml:space="preserve">
+        <value>Ocorreu um erro ao descarregar o relatório!</value>
+    </data>
+    <data name="reportDownloaded" xml:space="preserve">
+        <value>Relatório descarregado com sucesso!</value>
+    </data>
+    <data name="reportDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao apagar o relatório!</value>
+    </data>
+    <data name="reportDeleted" xml:space="preserve">
+        <value>Relatório eliminado com sucesso!</value>
+    </data>
+    <data name="reportCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar o relatório!</value>
+    </data>
+    <data name="reportCreated" xml:space="preserve">
+        <value>Relatório criado com sucesso!</value>
+    </data>
+    <data name="reportComponentEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o componente do relatório!</value>
+    </data>
+    <data name="reportComponentEdited" xml:space="preserve">
+        <value>Componente do relatório editado com sucesso!</value>
+    </data>
+    <data name="reportComponentDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o componente de relatório!</value>
+    </data>
+    <data name="reportComponentDeleted" xml:space="preserve">
+        <value>Componente do relatório eliminado com êxito!</value>
+    </data>
+    <data name="reportComponentCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar o componente de relatório!</value>
+    </data>
+    <data name="reportComponentCreated" xml:space="preserve">
+        <value>Componente de relatório criado com sucesso!</value>
+    </data>
+    <data name="report" xml:space="preserve">
+        <value>Relatório</value>
+    </data>
+    <data name="rememberMe" xml:space="preserve">
+        <value>Lembrar-se de mim</value>
+    </data>
+    <data name="rememberMachine" xml:space="preserve">
+        <value>Lembre-se desta máquina</value>
+    </data>
+    <data name="remediationPriority" xml:space="preserve">
+        <value>Prioridade de correção</value>
+    </data>
+    <data name="remediationComplexity" xml:space="preserve">
+        <value>Complexidade da correção</value>
+    </data>
+    <data name="remediation" xml:space="preserve">
+        <value>Remediação</value>
+    </data>
+    <data name="recoveryCode" xml:space="preserve">
+        <value>Código de recuperação</value>
+    </data>
+    <data name="recoverCodeVerification" xml:space="preserve">
+        <value>Verificação do código de recuperação</value>
+    </data>
+    <data name="recoverCodeMessage" xml:space="preserve">
+        <value>Pediu para iniciar sessão com um código de recuperação. Este início de sessão não será recordado até fornecer um código de aplicação de autenticação ao iniciar sessão ou desativar a 2FA e iniciar sessão novamente.</value>
+    </data>
+    <data name="recoverCodeInvalid" xml:space="preserve">
+        <value>Código de recuperação inválido introduzido.</value>
+    </data>
+    <data name="recentVulns" xml:space="preserve">
+        <value>Vulnerabilidades Recentes</value>
+    </data>
+    <data name="recentTasks" xml:space="preserve">
+        <value>Tarefas Recentes</value>
+    </data>
+    <data name="recentTargets" xml:space="preserve">
+        <value>Objectivos Recentes</value>
+    </data>
+    <data name="recentProjects" xml:space="preserve">
+        <value>Projectos Recentes</value>
+    </data>
+    <data name="recentDocuments" xml:space="preserve">
+        <value>Documentos Recentes</value>
+    </data>
+    <data name="recentClients" xml:space="preserve">
+        <value>Clientes Recentes</value>
+    </data>
+    <data name="publicKnowledge" xml:space="preserve">
+        <value>Conhecimento público</value>
+    </data>
+    <data name="projectStatus" xml:space="preserve">
+        <value>Estado do projeto</value>
+    </data>
+    <data name="projects" xml:space="preserve">
+        <value>Projectos</value>
+    </data>
+    <data name="projectName" xml:space="preserve">
+        <value>Nome do projeto</value>
+    </data>
+    <data name="projectInformation" xml:space="preserve">
+        <value>Informações sobre o projeto</value>
+    </data>
+    <data name="projectEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o projeto!</value>
+    </data>
+    <data name="projectEdited" xml:space="preserve">
+        <value>Projeto editado com sucesso!</value>
+    </data>
+    <data name="projectDetails" xml:space="preserve">
+        <value>Detalhes do projeto</value>
+    </data>
+    <data name="projectDescription" xml:space="preserve">
+        <value>Descrição do projeto</value>
+    </data>
+    <data name="projectDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o projeto!</value>
+    </data>
+    <data name="projectDeleted" xml:space="preserve">
+        <value>Projeto eliminado com êxito!</value>
+    </data>
+    <data name="projectCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar o projeto!</value>
+    </data>
+    <data name="projectCreated" xml:space="preserve">
+        <value>Projeto criado com sucesso!</value>
+    </data>
+    <data name="project" xml:space="preserve">
+        <value>Projeto</value>
+    </data>
+    <data name="profileEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o Perfil!</value>
+    </data>
+    <data name="profileEdited" xml:space="preserve">
+        <value>Perfil editado com sucesso!</value>
+    </data>
+    <data name="profile" xml:space="preserve">
+        <value>Perfil</value>
+    </data>
+    <data name="privilegesRequired" xml:space="preserve">
+        <value>Privilégios necessários</value>
+    </data>
+    <data name="priority" xml:space="preserve">
+        <value>Prioridade</value>
+    </data>
+    <data name="practicallyImpossible" xml:space="preserve">
+        <value>Praticamente impossível</value>
+    </data>
+    <data name="possiblyTraceable" xml:space="preserve">
+        <value>Possivelmente rastreável</value>
+    </data>
+    <data name="possibleReward" xml:space="preserve">
+        <value>Possível recompensa</value>
+    </data>
+    <data name="position" xml:space="preserve">
+        <value>Posição</value>
+    </data>
+    <data name="portuguese" xml:space="preserve">
+        <value>Português</value>
+    </data>
+    <data name="port" xml:space="preserve">
+        <value>Porto</value>
+    </data>
+    <data name="poc" xml:space="preserve">
+        <value>Prova de Conceito</value>
+    </data>
+    <data name="platform" xml:space="preserve">
+        <value>Plataforma</value>
+    </data>
+    <data name="physical" xml:space="preserve">
+        <value>Físico</value>
+    </data>
+    <data name="phone" xml:space="preserve">
+        <value>Telefone</value>
+    </data>
+    <data name="personalDataMessageDelete" xml:space="preserve">
+        <value>A eliminação destes dados elimina permanentemente a sua conta, que não pode ser recuperada.</value>
+    </data>
+    <data name="personalDataMessage" xml:space="preserve">
+        <value>A sua conta contém dados pessoais que nos forneceu. Esta página permite-lhe descarregar ou apagar esses dados.</value>
+    </data>
+    <data name="personalData" xml:space="preserve">
+        <value>Dados pessoais</value>
+    </data>
+    <data name="passwordUppercaseMessage" xml:space="preserve">
+        <value>A sua palavra-passe deve conter pelo menos uma letra maiúscula</value>
+    </data>
+    <data name="passwordSpecialMessage" xml:space="preserve">
+        <value>A sua palavra-passe deve conter pelo menos um (!? *.)</value>
+    </data>
+    <data name="passwordNumberMessage" xml:space="preserve">
+        <value>A sua palavra-passe deve conter pelo menos um número</value>
+    </data>
+    <data name="passwordLowercaseMessage" xml:space="preserve">
+        <value>A sua palavra-passe deve conter pelo menos uma letra minúscula</value>
+    </data>
+    <data name="passwordLengthMessage" xml:space="preserve">
+        <value>O comprimento da palavra-passe deve ser de, pelo menos, 8</value>
+    </data>
+    <data name="passwordChangedError" xml:space="preserve">
+        <value>Ocorreu um erro ao alterar a palavra-passe!</value>
+    </data>
+    <data name="passwordChanged" xml:space="preserve">
+        <value>Palavra-passe alterada com sucesso!</value>
+    </data>
+    <data name="password" xml:space="preserve">
+        <value>Palavra-passe</value>
+    </data>
+    <data name="pass" xml:space="preserve">
+        <value>Aprobado</value>
+    </data>
+    <data name="partners" xml:space="preserve">
+        <value>Colaboradores</value>
+    </data>
+    <data name="pageEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar a página!</value>
+    </data>
+    <data name="pageEdited" xml:space="preserve">
+        <value>Página editada com sucesso!</value>
+    </data>
+    <data name="pageDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar a página!</value>
+    </data>
+    <data name="pageDeleted" xml:space="preserve">
+        <value>Página eliminada com sucesso!</value>
+    </data>
+    <data name="pageCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar a página!</value>
+    </data>
+    <data name="pageCreated" xml:space="preserve">
+        <value>Página criada com sucesso!</value>
+    </data>
+    <data name="owaspVulnerabilityFactors" xml:space="preserve">
+        <value>Factores de vulnerabilidade</value>
+    </data>
+    <data name="owaspThreatAgentFactors" xml:space="preserve">
+        <value>Factores do agente de ameaça</value>
+    </data>
+    <data name="owaspTechnicalImpactFactors" xml:space="preserve">
+        <value>Factores de impacto técnico</value>
+    </data>
+    <data name="owaspBusinessImpactFactors" xml:space="preserve">
+        <value>Factores de impacto nas empresas</value>
+    </data>
+    <data name="outOfTime" xml:space="preserve">
+        <value>Fora do tempo: </value>
+    </data>
+    <data name="outOfScope" xml:space="preserve">
+        <value>Fora do âmbito</value>
+    </data>
+    <data name="orgSavedError" xml:space="preserve">
+        <value>Ocorreu um erro ao guardar a organização!</value>
+    </data>
+    <data name="orgSaved" xml:space="preserve">
+        <value>Organização salva com sucesso!</value>
+    </data>
+    <data name="organization" xml:space="preserve">
+        <value>Organização</value>
+    </data>
+    <data name="order" xml:space="preserve">
+        <value>Ordem</value>
+    </data>
+    <data name="or" xml:space="preserve">
+        <value>ou</value>
+    </data>
+    <data name="options" xml:space="preserve">
+        <value>Opções</value>
+    </data>
+    <data name="opportunity" xml:space="preserve">
+        <value>Oportunidade</value>
+    </data>
+    <data name="open" xml:space="preserve">
+        <value>Aberto</value>
+    </data>
+    <data name="oneIndividual" xml:space="preserve">
+        <value>Um indivíduo</value>
+    </data>
+    <data name="on" xml:space="preserve">
+        <value>el</value>
+    </data>
+    <data name="oldPassword" xml:space="preserve">
+        <value>Palavra-passe antiga</value>
+    </data>
+    <data name="obvious" xml:space="preserve">
+        <value>Óbvio</value>
+    </data>
+    <data name="notStarted" xml:space="preserve">
+        <value>Não iniciado</value>
+    </data>
+    <data name="notLogged" xml:space="preserve">
+        <value>Não registado</value>
+    </data>
+    <data name="notes" xml:space="preserve">
+        <value>Notas</value>
+    </data>
+    <data name="noteEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar a nota!</value>
+    </data>
+    <data name="noteEdited" xml:space="preserve">
+        <value>Nota editada com sucesso!</value>
+    </data>
+    <data name="noteDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar a nota!</value>
+    </data>
+    <data name="noteDeleted" xml:space="preserve">
+        <value>Nota eliminada com sucesso!</value>
+    </data>
+    <data name="noTechnicalSkills" xml:space="preserve">
+        <value>Sem competências técnicas</value>
+    </data>
+    <data name="noteAddedError" xml:space="preserve">
+        <value>Ocorreu um erro ao adicionar a nota!</value>
+    </data>
+    <data name="noteAdded" xml:space="preserve">
+        <value>Nota adicionada com sucesso!</value>
+    </data>
+    <data name="note" xml:space="preserve">
+        <value>Nota</value>
+    </data>
+    <data name="noStatus" xml:space="preserve">
+        <value>Sem estatuto</value>
+    </data>
+    <data name="noRolePermission" xml:space="preserve">
+        <value>Não tem permissões suficientes para ver esta página!</value>
+    </data>
+    <data name="noResults" xml:space="preserve">
+        <value>Sem resultados</value>
+    </data>
+    <data name="noResolutionDate" xml:space="preserve">
+        <value>Sem data de resolução</value>
+    </data>
+    <data name="noProject" xml:space="preserve">
+        <value>Sem projeto</value>
+    </data>
+    <data name="none" xml:space="preserve">
+        <value>Nenhum</value>
+    </data>
+    <data name="noInProject" xml:space="preserve">
+        <value>Não está incluído neste projeto!</value>
+    </data>
+    <data name="noFileSelected" xml:space="preserve">
+        <value>Nenhum ficheiro selecionado!</value>
+    </data>
+    <data name="noFiles" xml:space="preserve">
+        <value>Sem ficheiros</value>
+    </data>
+    <data name="noDueDate" xml:space="preserve">
+        <value>Sem data de vencimento</value>
+    </data>
+    <data name="noCategory" xml:space="preserve">
+        <value>Sem categoria</value>
+    </data>
+    <data name="noAssignee" xml:space="preserve">
+        <value>Sem cessionário</value>
+    </data>
+    <data name="noAccess" xml:space="preserve">
+        <value>Não é necessário acesso ou recursos</value>
+    </data>
+    <data name="newRole" xml:space="preserve">
+        <value>Nova função</value>
+    </data>
+    <data name="newPassword" xml:space="preserve">
+        <value>Nova palavra-passe</value>
+    </data>
+    <data name="network" xml:space="preserve">
+        <value>Rede</value>
+    </data>
+    <data name="name" xml:space="preserve">
+        <value>Nome</value>
+    </data>
+</root>

@@ -1,4 +1,7 @@
 @using System.Globalization
+@using Cervantes.Web.Localization
+@inject IStringLocalizer<Resource> localizer
+
 
 @*<MudSelect T="CultureInfo" @bind-value="Culture" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed" Style="display: flex;flex-grow: 0;position: relative;">
     <MudSelectItem Value="@cultures[0]">English</MudSelectItem>
@@ -19,12 +22,17 @@
             case "es-ES":
                 <MudImage Src="img/spain.png" Height="20" Width="20"/>
                 break;
+            case "pt-PT":
+                <MudImage Src="img/spain.png" Height="20" Width="20"/>
+                break;
         }
         
     </ActivatorContent>
     <ChildContent>
         <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[0]))"><MudImage Src="img/english.png" Height="15" Width="15"/> English</MudMenuItem>
         <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[1]))"><MudImage Src="img/spain.png" Height="15" Width="15"/> Español</MudMenuItem>
+        <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[2]))"><MudImage Src="img/spain.png" Height="15" Width="15"/> @localizer["portuguese"]</MudMenuItem>
+
     </ChildContent>
 </MudMenu>
 

@@ -70,18 +70,18 @@
                                         @foreach (var task in searchViewModel.Tasks)
                                         {
                                             var link = "/tasks/" + task.Id;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.Task" Href="@link">
-                                                    @task.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.Task" Href="@link">
+                                                @task.Name
+                                            </MudListItem>
 
                                             
                                         }
                                         @foreach (var client in searchViewModel.Clients)
                                         {
                                             var link = "/clients/" + client.Id;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.BusinessCenter" Href="@link">
-                                                    @client.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.BusinessCenter" Href="@link">
+                                                @client.Name
+                                            </MudListItem>
                                                 
                                                 
                                             
@@ -89,18 +89,18 @@
                                         @foreach (var project in searchViewModel.Projects)
                                         {
                                             var link = "/projects/" + project.Id;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.Folder" Href="@link">
-                                                    @project.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.Folder" Href="@link">
+                                                @project.Name
+                                            </MudListItem>
                                                 
                                            
                                         }
                                         @foreach (var doc in searchViewModel.Documents)
                                         {
                                             var link = "/documents/" + doc.Id;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.FileCopy" Href="@link">
-                                                    @doc.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.FileCopy" Href="@link">
+                                                @doc.Name
+                                            </MudListItem>
                                                 
                                                 
                                             
@@ -108,9 +108,9 @@
                                         @foreach (var report in searchViewModel.Reports)
                                         {
                                             var link = "/projects/" + report.ProjectId;
-                                                <MudListItem T="string" Icon="@Icons.Custom.FileFormats.FilePdf" Href="@link">
-                                                    @report.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Custom.FileFormats.FilePdf" Href="@link">
+                                                @report.Name
+                                            </MudListItem>
                                                 
                                                 
                                             
@@ -118,18 +118,18 @@
                                         @foreach (var target in searchViewModel.Targets)
                                         {
                                             var link = "/workspace/" + @target.ProjectId + "/targets/" + @target.Id;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.Adjust" Href="@link">
-                                                    @target.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.Adjust" Href="@link">
+                                                @target.Name
+                                            </MudListItem>
                                                 
                                                        
                                         }
                                         @foreach (var target in searchViewModel.TargetServices)
                                         {
                                             var link = "/workspace/"+@target.Target.ProjectId+"/targets/"+@target.TargetId;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.Hive" Href="@link">
-                                                    @target.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.Hive" Href="@link">
+                                                @target.Name
+                                            </MudListItem>
                                                 
                                                 
                                                       
@@ -137,9 +137,9 @@
                                         @foreach (var vault in searchViewModel.Vaults)
                                         {
                                             var link = "/workspace/" + @vault.ProjectId + "/vaults/" + @vault.Id;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.Castle" Href="@link">
-                                                    @vault.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.Castle" Href="@link">
+                                                @vault.Name
+                                            </MudListItem>
                                                 
                                                 
                                                       
@@ -147,18 +147,18 @@
                                         @foreach (var cat in searchViewModel.VulnCategories)
                                         {
                                             var link = "/vuln/categories/" + cat.Id;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.Category" Href="@link">
-                                                    @cat.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.Category" Href="@link">
+                                                @cat.Name
+                                            </MudListItem>
                                                 
                                             
                                         }
                                         @foreach (var vuln in searchViewModel.Vulns)
                                         {
                                             var link = "/vulns/"+@vuln.Id;
-                                                <MudListItem T="string" Icon="@Icons.Material.Filled.BugReport" Href="@link">
-                                                    @vuln.Name
-                                                </MudListItem>
+                                            <MudListItem T="string" Icon="@Icons.Material.Filled.BugReport" Href="@link">
+                                                @vuln.Name
+                                            </MudListItem>
                                             
                                         }
 
@@ -182,7 +182,48 @@
                             </DialogActions>
                         </DialogContent>
                     </MudDialog>
+                    <MudMenu  Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Color="Color.Default">
 
+                        <ActivatorContent>
+                            @switch (Culture.Name)
+                            {
+                            case "en-US":
+                            <MudStack Row="true" AlignItems="AlignItems.Center">
+                                <MudIcon Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIcon>
+                                <MudText Typo="Typo.body2">@localizer["english"]</MudText>
+                            </MudStack>
+                            break;
+                            case "es-ES":
+                            <MudStack Row="true" AlignItems="AlignItems.Center">
+                                <MudIcon Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIcon>
+                                <MudText Typo="Typo.body2">@localizer["spanish"]</MudText>
+                            </MudStack>
+                            break;
+                            case "pt-PT":
+                            <MudStack Row="true" AlignItems="AlignItems.Center">
+                                <MudIcon Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIcon>
+                                <MudText Typo="Typo.body2">@localizer["portuguese"]</MudText>
+                            </MudStack>
+                            break;
+                            }
+
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[0]))">@localizer["english"]</MudMenuItem>
+                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[1]))">@localizer["spanish"]</MudMenuItem>
+                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[2]))">@localizer["portuguese"]</MudMenuItem>
+
+                        </ChildContent>
+                    </MudMenu>
+                    @if (_isDarkMode)
+                    {
+                    <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.LightMode" Color="Color.Inherit" />
+                    }
+                    else
+                    {
+                    <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" />
+
+                    }
                     <MudMenu FullWidth="false" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Color="Color.Default">
                         <ActivatorContent>
                             <MudStack Row="true">
@@ -228,39 +269,12 @@
                             </form>
                         </ChildContent>
                     </MudMenu>
-                     @if (_isDarkMode)
-                                                         {
-                                                             <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.LightMode" Color="Color.Inherit" />
-                                                         }
-                                                         else
-                                                         {
-                                                             <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" />
-                    
-                                                         }
+                     
                     
                     @*<MudToggleIconButton @bind-Checked="_isDarkMode" OnClick="@ChangeTheme"
                                          Icon="@Icons.Material.Filled.DarkMode"
                                          ToggledIcon="@Icons.Material.Filled.LightMode" Style="color: #adadb1;"/>*@
-                    <MudMenu>
-
-                        <ActivatorContent>
-                            @switch (Culture.Name)
-                            {
-                                case "en-US":
-                                    <CountryFlag Country="Country.US" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-                                    break;
-                                case "es-ES":
-                                    <CountryFlag Country="Country.ES" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-                                    break;
-                            }
-
-                        </ActivatorContent>
-                        <ChildContent>
-                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[0]))">English</MudMenuItem>
-                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[1]))">Español</MudMenuItem>
-                        </ChildContent>
-                    </MudMenu>
-
+                   
                 </MudStack>
             </MudAppBar>
             <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="@DrawerVariant.Mini" Style="background-color: #27272fff;">
@@ -421,6 +435,7 @@
     {
         new CultureInfo("en-US"),
         new CultureInfo("es-ES"),
+        new CultureInfo("pt-PT"),
     };
 
     protected override void OnInitialized()

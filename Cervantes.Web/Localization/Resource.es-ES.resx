@@ -1794,4 +1794,10 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="workspace" xml:space="preserve">
         <value>Espacio de Trabajo</value>
     </data>
+    <data name="portuguese" xml:space="preserve">
+        <value>Portugués</value>
+    </data>
+    <data name="spanish" xml:space="preserve">
+        <value>Español</value>
+    </data>
 </root>
