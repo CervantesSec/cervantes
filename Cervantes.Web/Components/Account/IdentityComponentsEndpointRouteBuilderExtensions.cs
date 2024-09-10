@@ -9,11 +9,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Cervantes.Web.Components.Account.Pages;
 using Cervantes.Web.Components.Account.Pages.Manage;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Task = System.Threading.Tasks.Task;
+using Cervantes.Web.Components.Account;
+using Microsoft.AspNetCore.Components;
+
 
 namespace Microsoft.AspNetCore.Routing;
 
+
 internal static class IdentityComponentsEndpointRouteBuilderExtensions
 {
+
+    public const string LoginCallbackAction = "LoginCallback";
+
     // These endpoints are required by the Identity Razor components defined in the /Components/Account/Pages directory of this project.
     public static IEndpointConventionBuilder MapAdditionalIdentityEndpoints(this IEndpointRouteBuilder endpoints)
     {
@@ -21,17 +31,15 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
 
         var accountGroup = endpoints.MapGroup("/Account");
 
-        /*accountGroup.MapPost("/PerformExternalLogin", (
+        accountGroup.MapPost("/PerformExternalLogin", (
             HttpContext context,
             [FromServices] SignInManager<ApplicationUser> signInManager,
             [FromForm] string provider,
             [FromForm] string returnUrl) =>
         {
-            IEnumerable<KeyValuePair<string, StringValues>> query =  [
-                new (
-
-            "ReturnUrl", returnUrl),
-            new("Action", ExternalLogin.LoginCallbackAction)];
+            IEnumerable<KeyValuePair<string, StringValues>> query = [
+                new("ReturnUrl", returnUrl),
+                new("Action", LoginCallbackAction)];
 
             var redirectUrl = UriHelper.BuildRelative(
                 context.Request.PathBase,
@@ -40,7 +48,7 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
 
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return TypedResults.Challenge(properties, [provider]);
-        });*/
+        });
 
         accountGroup.MapPost("/Logout", async (
             ClaimsPrincipal user,

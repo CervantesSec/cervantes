@@ -41,6 +41,12 @@ using Microsoft.OpenApi.Models;
 using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 using LogManager = Cervantes.Application.LogManager;
 
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,17 +63,33 @@ builder.Services.AddAuthentication(options =>
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
-    .AddIdentityCookies(options =>
-    {
-        options.ApplicationCookie.Configure(o =>
+    .AddCookie(IdentityConstants.ApplicationScheme, o => {
+        o.SlidingExpiration = true;
+        o.ExpireTimeSpan = TimeSpan.FromMinutes(240);
+    })
+    .AddCookie(IdentityConstants.ExternalScheme);
+
+if (builder.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
+{
+    builder.Services.AddAuthentication()
+        .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
         {
-            o.SlidingExpiration = true;
-            o.ExpireTimeSpan = TimeSpan.FromMinutes(240);
+            options.RequireHttpsMetadata = false;
+            options.SignInScheme = IdentityConstants.ExternalScheme;
+            options.Authority = builder.Configuration.GetSection("OpenIdConnect:Authority")?.Value;
+            options.ClientId = builder.Configuration.GetSection("OpenIdConnect:ClientId")?.Value;
+            options.ClientSecret = builder.Configuration.GetSection("OpenIdConnect:ClientSecret")?.Value;
+            options.CallbackPath = new PathString("/Account/ExternalLogin");
+            options.SignedOutCallbackPath = new PathString("/Account/Logout");
+            options.ResponseType = OpenIdConnectResponseType.Code;
+            options.SkipUnrecognizedRequests = true;
+            options.GetClaimsFromUserInfoEndpoint = true;
+            options.ClaimActions.MapUniqueJsonKey(ClaimTypes.Name, "email");
+            options.Scope.Add("email");
         });
-    });
+}
 
 builder.Services.AddAuthorization();
-
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

@@ -1,4 +1,4 @@
-﻿@*@using Microsoft.AspNetCore.Authentication
+﻿@using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using Task = System.Threading.Tasks.Task
 @using Cervantes.CORE.Entities
@@ -24,21 +24,20 @@ else
         <div>
             <AntiforgeryToken/>
             <input type="hidden" name="ReturnUrl" value="@ReturnUrl"/>
-            <p>
                 @foreach (var provider in externalLogins)
                 {
-                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                    <div class="mud-grid-item mud-grid-item-xs-12 d-flex justify-center">
+                        <button type="submit" class="mud-button-root mud-button mud-button-filled mud-button-filled-primary mud-button-filled-size-large mud-ripple" style="width: 100%;" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account" __internal_stopPropagation_onclick>
+                            <span class="mud-button-label">@provider.DisplayName</span>
+                        </button>
+                    </div>
                 }
-            </p>
         </div>
     </form>
 }
 
 @code {
-    private AuthenticationScheme[] externalLogins =
-
-    []
-    ;
+    private AuthenticationScheme[] externalLogins = [];
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
@@ -47,5 +46,4 @@ else
     {
         externalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToArray();
     }
-
-}*@
+}
