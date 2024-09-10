@@ -85,6 +85,11 @@ public class AiService: IAiService
                             prompt = @"Eres un pentester redactando los hallazgos de un informe para un cliente. Estás redactando un hallazgo para la siguiente vulnerabilidad: {{$input}}
                         . El hallazgo debe ser redactado en el siguiente formato: Descripción, Impacto, Nivel de Riesgo (Crítico, Alto, Medio, Bajo, Informativo), Prueba de Concepto y Remediación."; ;
                             break;
+                        case Language.Português:
+                            prompt =
+                                @"É um pentester que escreve as descobertas de um relatório para um cliente. Está a escrever uma descoberta para a seguinte vulnerabilidade: {{$input}}
+                                . A constatação deve ser redigida no seguinte formato: Descrição, Impacto, Nível de Risco (Crítico, Alto, Médio, Baixo, Informativo), Prova de Conceito e Remediação.";
+                            break;
                     }
 
                     var summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = _aiConfiguration.MaxTokens });
@@ -178,6 +183,42 @@ public class AiService: IAiService
                                     break;
                             }
                         break;
+                    case Language.Português:
+                         descriptionPattern = @"Descrição:\s*(.*?)\s*Impacto:";
+                         impactPattern = @"Impacto:\s*(.*?)\s*Nível de Risco:";
+                         riskLevelPattern = @"Nível de Risco:\s*(Crítico|Alto|Médio|Baixo|Informativo)";
+                         proofOfConceptPattern = @"Prova de Conceito:\s*(.*?)\s*Remediação:";
+                         remediationPattern = @"Remediação:\s*(.*)";
+                
+                         description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
+                         impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
+                         riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
+                         proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
+                         remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
+                        
+                         vulnAiModel.Description = description;
+                            vulnAiModel.Impact = impact;
+                            vulnAiModel.ProofOfConcept = proofOfConcept;
+                            vulnAiModel.Remediation = remediation;
+                            switch (riskLevel)
+                            {
+                                case "Crítico":
+                                    vulnAiModel.Risk = VulnRisk.Critical;
+                                    break;
+                                case "Alto":
+                                    vulnAiModel.Risk = VulnRisk.High;
+                                    break;
+                                case "Médio":
+                                    vulnAiModel.Risk = VulnRisk.Medium;
+                                    break;
+                                case "Baixo":
+                                    vulnAiModel.Risk = VulnRisk.Low;
+                                    break;
+                                case "Informativo":
+                                    vulnAiModel.Risk = VulnRisk.Info;
+                                    break;
+                            }
+                        break;
                 }
                 }
                 else
@@ -194,6 +235,11 @@ public class AiService: IAiService
                         case Language.Español:
                             prompt = $@"Eres un pentester redactando los hallazgos de un informe para un cliente. Estás redactando un hallazgo para la siguiente vulnerabilidad: {name}
                         . El hallazgo debe ser redactado en el siguiente formato: Descripción, Impacto, Nivel de Riesgo (Crítico, Alto, Medio, Bajo, Informativo), Prueba de Concepto y Remediación."; ;
+                            break;
+                        case Language.Português:
+                            prompt =
+                                $@"É um pentester que escreve as descobertas de um relatório para um cliente. Está a escrever uma descoberta para a seguinte vulnerabilidade: {name}
+                                . A constatação deve ser redigida no seguinte formato: Descrição, Impacto, Nível de Risco (Crítico, Alto, Médio, Baixo, Informativo), Prova de Conceito e Remediação.";
                             break;
                     }
                     
@@ -300,6 +346,43 @@ public class AiService: IAiService
                                     break;
                             }
                         break;
+                     case Language.Português:
+                         descriptionPattern = @"Descrição:\s*(.*?)\s*Impacto:";
+                         impactPattern = @"Impacto:\s*(.*?)\s*Nível de Risco:";
+                         riskLevelPattern = @"Nível de Risco:\s*(Crítico|Alto|Médio|Baixo|Informativo)";
+                         proofOfConceptPattern = @"Prova de Conceito:\s*(.*?)\s*Remediação:";
+                         remediationPattern = @"Remediação:\s*(.*)";
+                
+                         description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
+                         impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
+                         riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
+                         proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
+                         remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
+                        
+                         vulnAiModel.Description = description;
+                            vulnAiModel.Impact = impact;
+                            vulnAiModel.ProofOfConcept = proofOfConcept;
+                            vulnAiModel.Remediation = remediation;
+                            switch (riskLevel)
+                            {
+                                case "Crítico":
+                                    vulnAiModel.Risk = VulnRisk.Critical;
+                                    break;
+                                case "Alto":
+                                    vulnAiModel.Risk = VulnRisk.High;
+                                    break;
+                                case "Médio":
+                                    vulnAiModel.Risk = VulnRisk.Medium;
+                                    break;
+                                case "Baixo":
+                                    vulnAiModel.Risk = VulnRisk.Low;
+                                    break;
+                                case "Informativo":
+                                    vulnAiModel.Risk = VulnRisk.Info;
+                                    break;
+                            }
+                        break;
+                     
                 }
                     
                 }
@@ -577,6 +660,75 @@ This should provide a high-level overview of the key findings and recommendation
                                 .Replace("{Scope}", targets2).Replace("{Vulns}", vulns2);
 
                             break;
+                        case Language.Português:
+                            string message3 = @"É um pentester que está a escrever o resumo executivo de um relatório para um cliente. Este deve fornecer uma visão geral de alto nível das principais conclusões e recomendações de uma forma concisa e facilmente compreensível e o formato deve estar em HTML. Este resumo executivo deve incluir:
+                             Introdução: Explique resumidamente o objetivo do teste de intrusão. Mencione os sistemas ou áreas avaliadas.
+
+                             Âmbito e objetivos: Descreve o âmbito do teste de intrusão, incluindo os sistemas ou redes avaliadas. Resume os objetivos estabelecidos para os testes.
+
+                             Principais conclusões: destaca as vulnerabilidades e fraquezas mais críticas descobertas. Fornece uma breve descrição da gravidade e do impacto potencial.
+
+                             Perfil de risco geral: resume a classificação ou pontuação geral de risco da organização. Inclui uma explicação de alto nível dos fatores de risco considerados.
+
+                             Sucessos e desafios: Mencione brevemente os sucessos em termos de violação dos controlos de segurança (se aplicável). Destaque quaisquer desafios encontrados durante os testes.
+
+                             Recomendações: Resume as principais recomendações para abordar as vulnerabilidades identificadas. Fornece uma visão geral das medidas corretivas sugeridas.
+
+                             Roteiro Estratégico: Descreve o roteiro estratégico para abordar as questões de segurança. Destaca os principais marcos e prioridades.
+
+                             Conclusão: Fornece uma breve declaração final resumindo a postura geral de segurança. Mencione quaisquer conquistas ou melhorias notáveis.
+
+                             Próximos passos: Descreva as ações imediatas que devem ser tomadas após a avaliação. Mencione quaisquer atividades de acompanhamento ou monitorização contínua.
+
+                             As informações do projeto são:
+
+                             Nome do cliente: {Client}
+                             Nome do projeto: {Project}
+                             Data de início do projeto: {StartDate}
+                             Data de fim do projeto: {EndDate}
+                             Descrição do projeto: {ProjectDescription}
+                             Membros: {Members}
+                             Âmbito: {Scope}
+                             Vulnerabilidades: {Vulns}
+                             O resultado deve estar em formato HTML.";
+                            
+                            var membersList3 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                                .Select(x => x.User.FullName).ToList();
+                            string members3 = "";
+                            foreach (var mem in membersList3)
+                            {
+                                members3 += mem + ", ";
+                            }
+
+                            var targetsList3 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                            string targets3 = "";
+                            foreach (var tar in targetsList3)
+                            {
+                                targets3 += tar.Name + ", ";
+                            }
+
+                            var vulnsList3 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                            string vulns3 = "";
+                            foreach (var vul in vulnsList3)
+                            {
+                                var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                                var targetsVuln = "";
+                                foreach (var t in tar)
+                                {
+                                    targetsVuln += t.Target.Name + ", ";
+                                }
+
+                                vulns3 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                          targetsVuln + ". ";
+                            }
+
+                            prompt = message3.Replace("{Client}", project.Client.Name)
+                                .Replace("{Project}", project.Name)
+                                .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                                .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                                .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members3)
+                                .Replace("{Scope}", targets3).Replace("{Vulns}", vulns3);
+                            break;
                     }
 
                     var summarize = kernel.CreateFunctionFromPrompt(prompt,
@@ -734,6 +886,75 @@ This should provide a high-level overview of the key findings and recommendation
                                 .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members2)
                                 .Replace("{Scope}", targets2).Replace("{Vulns}", vulns2);
 
+                            break;
+                        case Language.Português:
+                            string message3 = @"É um pentester que está a escrever o resumo executivo de um relatório para um cliente. Este deve fornecer uma visão geral de alto nível das principais conclusões e recomendações de uma forma concisa e facilmente compreensível e o formato deve estar em HTML. Este resumo executivo deve incluir:
+                             Introdução: Explique resumidamente o objetivo do teste de intrusão. Mencione os sistemas ou áreas avaliadas.
+
+                             Âmbito e objetivos: Descreve o âmbito do teste de intrusão, incluindo os sistemas ou redes avaliadas. Resume os objetivos estabelecidos para os testes.
+
+                             Principais conclusões: destaca as vulnerabilidades e fraquezas mais críticas descobertas. Fornece uma breve descrição da gravidade e do impacto potencial.
+
+                             Perfil de risco geral: resume a classificação ou pontuação geral de risco da organização. Inclui uma explicação de alto nível dos fatores de risco considerados.
+
+                             Sucessos e desafios: Mencione brevemente os sucessos em termos de violação dos controlos de segurança (se aplicável). Destaque quaisquer desafios encontrados durante os testes.
+
+                             Recomendações: Resume as principais recomendações para abordar as vulnerabilidades identificadas. Fornece uma visão geral das medidas corretivas sugeridas.
+
+                             Roteiro Estratégico: Descreve o roteiro estratégico para abordar as questões de segurança. Destaca os principais marcos e prioridades.
+
+                             Conclusão: Fornece uma breve declaração final resumindo a postura geral de segurança. Mencione quaisquer conquistas ou melhorias notáveis.
+
+                             Próximos passos: Descreva as ações imediatas que devem ser tomadas após a avaliação. Mencione quaisquer atividades de acompanhamento ou monitorização contínua.
+
+                             As informações do projeto são:
+
+                             Nome do cliente: {Client}
+                             Nome do projeto: {Project}
+                             Data de início do projeto: {StartDate}
+                             Data de fim do projeto: {EndDate}
+                             Descrição do projeto: {ProjectDescription}
+                             Membros: {Members}
+                             Âmbito: {Scope}
+                             Vulnerabilidades: {Vulns}
+                             O resultado deve estar em formato HTML.";
+                            
+                            var membersList3 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                                .Select(x => x.User.FullName).ToList();
+                            string members3 = "";
+                            foreach (var mem in membersList3)
+                            {
+                                members3 += mem + ", ";
+                            }
+
+                            var targetsList3 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                            string targets3 = "";
+                            foreach (var tar in targetsList3)
+                            {
+                                targets3 += tar.Name + ", ";
+                            }
+
+                            var vulnsList3 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                            string vulns3 = "";
+                            foreach (var vul in vulnsList3)
+                            {
+                                var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                                var targetsVuln = "";
+                                foreach (var t in tar)
+                                {
+                                    targetsVuln += t.Target.Name + ", ";
+                                }
+
+                                vulns3 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                          targetsVuln + ". ";
+                            }
+
+                            prompt = message3.Replace("{Client}", project.Client.Name)
+                                .Replace("{Project}", project.Name)
+                                .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                                .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                                .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members3)
+                                .Replace("{Scope}", targets3).Replace("{Vulns}", vulns3);
                             break;
                     }
                     
