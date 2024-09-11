@@ -257,6 +257,7 @@ public class AiService: IAiService
                         Temperature = 1.0m,
                     };
                     var result = await client.Messages.GetClaudeMessageAsync(parameters);
+                    Console.WriteLine(result.Message.ToString());
                     string descriptionPattern;
                 string impactPattern;
                 string riskLevelPattern;
@@ -353,11 +354,11 @@ public class AiService: IAiService
                          proofOfConceptPattern = @"Prova de Conceito:\s*(.*?)\s*Remediação:";
                          remediationPattern = @"Remediação:\s*(.*)";
                 
-                         description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
-                         impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                         riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
-                         proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
-                         remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
+                         description = Regex.Match(result.Message.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
+                         impact = Regex.Match(result.Message.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
+                         riskLevel = Regex.Match(result.Message.ToString(), riskLevelPattern).Groups[1].Value;
+                         proofOfConcept = Regex.Match(result.Message.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
+                         remediation = Regex.Match(result.Message.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
                         
                          vulnAiModel.Description = description;
                             vulnAiModel.Impact = impact;
