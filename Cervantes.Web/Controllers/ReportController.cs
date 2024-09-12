@@ -16,6 +16,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Ganss.Xss;
 using HandlebarsDotNet;
 using HandlebarsDotNet.Extension.NewtonsoftJson;
+using Hangfire.Dashboard.Resources;
 using HtmlAgilityPack;
 using HtmlToOpenXml;
 using Microsoft.AspNetCore.Authorization;
@@ -462,7 +463,8 @@ public class ReportController : ControllerBase
             {
                 var comp = new ReportComponents();
                 comp.Name = sanitizer.Sanitize(model.Name);
-                comp.Content = sanitizer.Sanitize(model.Content);
+                var test = sanitizer.Sanitize(model.Content);
+                comp.Content = HttpUtility.HtmlDecode(test);
                 comp.Language = model.Language;
                 comp.Created = DateTime.Now.ToUniversalTime();
                 comp.Updated = DateTime.Now.ToUniversalTime();
@@ -500,7 +502,8 @@ public class ReportController : ControllerBase
             {
 
                 result.Name = sanitizer.Sanitize(model.Name);
-                result.Content = sanitizer.Sanitize(model.Content);
+                var test = sanitizer.Sanitize(model.Content);
+                result.Content = HttpUtility.HtmlDecode(test);                
                 result.Language = model.Language;
                 result.Updated = DateTime.Now.ToUniversalTime();
                 result.ComponentType = model.ComponentType;
