@@ -4,11 +4,9 @@ using System.Globalization;
 
 namespace Cervantes.Web.Components.Layout
 {
-    
-    public partial class CultureSelector
+
+    public partial class CultureSelector : ComponentBase
     {
-        NavigationManager Navigation;
-        
         private CultureInfo[] supportedCultures = new[]
         {
             new CultureInfo("en-US"),
@@ -16,9 +14,12 @@ namespace Cervantes.Web.Components.Layout
             new CultureInfo("pt-PT"),
         };
 
-        protected override void OnInitialized()
+        protected async override Task OnInitializedAsync()
         {
+
             Culture = CultureInfo.CurrentCulture;
+
+            await base.OnInitializedAsync();
         }
 
         private CultureInfo Culture
@@ -28,17 +29,18 @@ namespace Cervantes.Web.Components.Layout
             {
                 if (CultureInfo.CurrentCulture != value)
                 {
-                    var uri = new Uri(Navigation.Uri)
+                    var uri = new Uri(NavigationManager.Uri)
                         .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
                     var cultureEscaped = Uri.EscapeDataString(value.Name);
                     var uriEscaped = Uri.EscapeDataString(uri);
 
-                    Navigation.NavigateTo(
+                    NavigationManager.NavigateTo(
                         $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
                         forceLoad: true);
                 }
             }
         }
+
         public void CultureSet(CultureInfo culture)
         {
             Culture = culture;

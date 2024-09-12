@@ -1,0 +1,21 @@
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IStringLocalizer<Resource> localizer
+
+@if (isDarkMode)
+{
+    <MudTooltip Text="@localizer["lightMode"]" Placement="Placement.Right">
+        <MudNavLink OnClick="ChangeTheme" Icon="@Icons.Material.Filled.LightMode">
+            @localizer["lightTheme"]
+        </MudNavLink>
+    </MudTooltip>
+}
+else
+{
+    <MudTooltip Text="@localizer["darkMode"]" Placement="Placement.Right">
+        <MudNavLink OnClick="ChangeTheme" Icon="@Icons.Material.Filled.DarkMode" IconColor="Color.Dark">
+            @localizer["darkTheme"]
+        </MudNavLink>
+    </MudTooltip>
+} 

@@ -1730,4 +1730,13 @@
     <data name="portuguese" xml:space="preserve">
         <value>Portuguese</value>
     </data>
+    <data name="welcomeUser" xml:space="preserve">
+        <value>Welcome back</value>
+    </data>
+    <data name="lightTheme" xml:space="preserve">
+        <value>Light Theme</value>
+    </data>
+    <data name="darkTheme" xml:space="preserve">
+        <value>Dark Theme</value>
+    </data>
 </root>

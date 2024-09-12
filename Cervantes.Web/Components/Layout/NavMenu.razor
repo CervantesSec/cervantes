@@ -7,9 +7,9 @@
 @inject IStringLocalizer<Resource> localizer
 @inject IJiraConfiguration JiraConfiguration
 
-<MudNavMenu Color="Color.Primary" Bordered="true">
+<MudNavMenu Bordered="true" Color="Color.Primary" Style="display: flex; flex-flow: column; height: inherit;">
     <AuthorizeView Roles="SuperUser,User,Admin">
-        <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">@localizer["home"]</MudNavLink>
+        <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All">@localizer["home"]</MudNavLink>
         <MudNavLink Href="/calendar" Icon="@Icons.Material.Filled.CalendarMonth" Match="NavLinkMatch.Prefix">@localizer["calendar"]</MudNavLink>
         <MudNavLink Href="/knowledgebase" Icon="@Icons.Material.Filled.MenuBook" Match="NavLinkMatch.Prefix">@localizer["knowledgeBase"]</MudNavLink>
         <MudNavLink Href="/workspaces" Icon="@Icons.Material.Filled.Workspaces" Match="NavLinkMatch.Prefix">@localizer["workspaces"]</MudNavLink>

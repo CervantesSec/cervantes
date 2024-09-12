@@ -1,0 +1,57 @@
+@using Cervantes.Web.Localization
+@using Microsoft.AspNetCore.Antiforgery
+@using Microsoft.Extensions.Localization
+@inject IHttpContextAccessor _accessor
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<Resource> localizer
+@inject IAntiforgery Antiforgery
+
+
+<MudMenu FullWidth="true" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Color="Color.Default">
+    <ActivatorContent>
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            @if (string.IsNullOrEmpty(CurrentUser.Avatar))
+            {
+            <MudAvatar Color="Color.Primary" Size="Size.Medium">@CurrentUser.FullName[0]</MudAvatar>
+            }
+            else
+            {
+            <MudAvatar Size="Size.Medium">
+                <MudImage Src="@CurrentUser.Avatar"></MudImage>
+            </MudAvatar>
+            }
+            <MudStack Justify="Justify.Center" Spacing="0">
+                <MudStack Spacing="1">
+                    <MudText Typo="Typo.body2">@CurrentUser.FullName</MudText>
+                    <MudText Typo="Typo.caption">@CurrentUser.Email</MudText>
+                </MudStack>
+            </MudStack>
+            <MudStack Justify="Justify.Center" Spacing="0">
+                <MudIcon Icon="@Icons.Material.Filled.KeyboardArrowDown" Size="Size.Small"></MudIcon>
+            </MudStack>
+        </MudStack>
+    </ActivatorContent>
+    <ChildContent>
+        <MudMenuItem Icon="@Icons.Material.Filled.Person" IconSize="Size.Small" Href="/Account/Profile">@localizer["profile"]</MudMenuItem>
+        <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+            <MudMenuItem Icon="@Icons.Material.Filled.Note" IconSize="Size.Small" Href="/notes" Match="NavLinkMatch.All">@localizer["notes"]</MudMenuItem>
+        </AuthorizeView>
+        <form action="Account/Logout" method="post">
+            <input name="__RequestVerificationToken" type="hidden" value="@GetAntiforgeryToken()"/>
+
+            <div tabindex="0" class="mud-list-item mud-list-item-gutters mud-list-item-clickable mud-ripple">
+                <div class="mud-list-item-icon">
+                    <svg class="mud-icon-root mud-svg-icon mud-secondary-text mud-icon-size-small" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                        <!--!--><path d="M0 0h24v24H0z" fill="none"></path><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"></path>
+                    </svg>
+                </div>
+                <div class="mud-list-item-text ">
+                    <input type="hidden" name="ReturnUrl" value="@currentUrl"/>
+                    <button type="submit" class="mud-typography mud-typography-body1">
+                        @localizer["signout"]
+                    </button>
+                </div>
+            </div>
+        </form>
+    </ChildContent>
+</MudMenu>

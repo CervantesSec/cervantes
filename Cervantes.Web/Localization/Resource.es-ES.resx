@@ -1800,4 +1800,13 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="spanish" xml:space="preserve">
         <value>Español</value>
     </data>
+    <data name="welcomeUser" xml:space="preserve">
+        <value>Bienvenido de nuevo</value>
+    </data>
+    <data name="lightTheme" xml:space="preserve">
+        <value>Tema Claro</value>
+    </data>
+    <data name="darkTheme" xml:space="preserve">
+        <value>Tema Oscuro</value>
+    </data>
 </root>

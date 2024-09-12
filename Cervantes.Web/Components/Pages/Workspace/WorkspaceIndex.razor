@@ -16,26 +16,31 @@
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 
 <PageTitle>@localizer["workspace"] | Cervantes</PageTitle>
+    <SectionContent SectionName="appbar">
+        <MudText Typo="Typo.h5">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Workspaces"></MudIcon>
 
-<MudGrid>
-<MudItem xs="12" sm="12" md="12" Class="mt-5">
-    <MudStack Row="true">
+            @localizer["workspace"]
 
-        <MudItem xs="12" sm="4" md="4">
-            <MudText Typo="Typo.h4">
-                <MudIcon Icon="@Icons.Material.Filled.Folder"/> @Project.Name
+        </MudText>
+
+    </SectionContent>
+    <SectionContent SectionName="top-bar">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="0">
+            <MudText Typo="Typo.h5">
+                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Folder"/> @Project.Name
             </MudText>
+            <MudDivider Vertical="true" DividerType="DividerType.Middle" FlexItem="true"></MudDivider>
+            <MudText Typo="Typo.h5">
+                Dashboard
+            </MudText>
+        </MudStack>
+    </SectionContent>
 
-
-        </MudItem>
-        <MudItem xs="12" sm="8" md="8">
-            <div class="d-flex justify-end">
-                <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-            </div>
-        </MudItem>
-    </MudStack>
-
-</MudItem>
+    <SectionContent SectionName="breadcrumbs">
+        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+    </SectionContent>
+<MudGrid>
 <MudItem xs="12" sm="3" md="3">
     <MudStack>
 
@@ -148,10 +153,15 @@
 
         <MudItem xs="12" sm="12" md="8" lg="8">
 
-            <MudPaper Class="pa-4" Style="height:300px;">
-                <MudContainer>
+            <MudCard Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@localizer["myTasksStatus"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
                     <ApexChart TItem="CORE.Entities.Task"
-                               Title="@localizer["myTasksStatus"]" Options="optionsTask">
+                               Options="optionsTask">
 
                         <ApexPointSeries TItem="CORE.Entities.Task"
                                          Items="Tasks"
@@ -163,9 +173,9 @@
                     </ApexChart>
 
 
-                </MudContainer>
+                </MudCardContent>
 
-            </MudPaper>
+            </MudCard>
         </MudItem>
 
 
@@ -229,12 +239,16 @@
 
         </MudItem>
         <MudItem xs="12" sm="12" md="8">
-            <MudPaper Class="pa-4" Style="height:300px;">
-
+            <MudCard Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@localizer["dataVault"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+            <MudCardContent>
                 <ApexChart TItem="CORE.Entities.Vault"
-                           Title="@localizer["dataVault"]"
                            Options=optionsVault>
-
+            
                     <ApexPointSeries TItem="CORE.Entities.Vault"
                                      Items="Vaults"
                                      Name="@localizer["dataVault"]"
@@ -244,14 +258,21 @@
                                      OrderByDescending="e => e.Y"
                                      ShowDataLabels/>
                 </ApexChart>
-            </MudPaper>
+            </MudCardContent>
+                
+            </MudCard>
 
         </MudItem>
         <MudItem xs="12" sm="12" md="8">
-            <MudPaper Class="pa-4" Style="height:300px;">
-                <MudContainer>
+            <MudCard Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@localizer["vulns"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
                     <ApexChart TItem="CORE.Entities.Vuln"
-                               Title="@localizer["vulns"]" Options="optionsVulns">
+                                Options="optionsVulns">
 
                         <ApexPointSeries TItem="CORE.Entities.Vuln"
                                          Items="Vulns"
@@ -262,9 +283,9 @@
                                          SeriesType="SeriesType.Bar" PointColor="e => GetPointColorVulns(e)"/>
                     </ApexChart>
 
-                </MudContainer>
+                </MudCardContent>
 
-            </MudPaper>
+            </MudCard>
 
         </MudItem>
 

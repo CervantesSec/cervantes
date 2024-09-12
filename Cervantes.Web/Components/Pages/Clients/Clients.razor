@@ -11,25 +11,28 @@
 @inject ISnackbar Snackbar
 
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
-<PageTitle>@localizer["clients"] | Cervantes</PageTitle>
-<MudGrid>
-    <MudItem xs="12" sm="12" md="12" Class="mt-5">
-        <MudStack Row="true">
+    <PageTitle>@localizer["clients"] | Cervantes</PageTitle>
 
-            <MudItem xs="12" sm="4" md="4">
-                <MudText Typo="Typo.h4">
-                    <MudIcon Icon="@Icons.Material.Filled.BusinessCenter"/> @localizer["clients"]
-                </MudText>
+    <SectionContent SectionName="appbar">
+        <MudText Typo="Typo.h5">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.BusinessCenter"></MudIcon>
 
-            </MudItem>
-            <MudItem xs="12" sm="8" md="8">
-                <div class="d-flex justify-end">
-                    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-                </div>
-            </MudItem>
+            @localizer["clients"]
+
+        </MudText>
+    </SectionContent>
+    <SectionContent SectionName="top-bar">
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            
         </MudStack>
+    </SectionContent>
 
-    </MudItem>
+    <SectionContent SectionName="breadcrumbs">
+        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+    </SectionContent>
+    
+    <MudGrid>
+    
     <MudItem xs="12" sm="12" md="12">
         <MudDataGrid T="Client" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
@@ -92,13 +95,7 @@
                 <MudDataGridPager T="Client"/>
             </PagerContent>
         </MudDataGrid>
-        <br/>
-        <MudButton Href="/"
-                   Variant="Variant.Filled"
-                   StartIcon="@Icons.Material.Filled.ArrowBack"
-                   Color="Color.Default">
-            @localizer["back"]
-        </MudButton>
+      
     </MudItem>
 </MudGrid>
 </AuthorizeView>

@@ -11,31 +11,24 @@
 <AuthorizeView Roles="Admin">
     <Authorized>
         <PageTitle>@localizer["organization"] | Cervantes</PageTitle>
+        <SectionContent SectionName="appbar">
+            <MudText Typo="Typo.h5">
+                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.AssignmentInd"></MudIcon>
 
+                @localizer["organization"]
+
+            </MudText>
+        </SectionContent>
+        <SectionContent SectionName="top-bar">
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+            
+            </MudStack>
+        </SectionContent>
+
+        <SectionContent SectionName="breadcrumbs">
+            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+        </SectionContent>
         <MudGrid>
-            <MudItem xs="12" sm="12" md="12" Class="mt-5">
-                <MudStack Row="true">
-
-                    <MudItem xs="12" sm="4" md="4">
-                        <MudText Typo="Typo.h4">
-                            <MudText Typo="Typo.h4">
-                                <MudText Typo="Typo.h4">
-                                    <MudText Typo="Typo.h4">
-                                        <MudIcon Icon="@Icons.Material.Filled.AssignmentInd"/> @localizer["organization"]
-                                    </MudText>
-                                </MudText>
-                            </MudText>
-                        </MudText>
-
-                    </MudItem>
-                    <MudItem xs="12" sm="8" md="8">
-                        <div class="d-flex justify-end">
-                            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-                        </div>
-                    </MudItem>
-                </MudStack>
-
-            </MudItem>
             <MudItem xs="12" sm="12" md="12">
                 <MudStack>
                     <MudForm Model="@model" @ref="@form" Validation="@(orgValidator.ValidateValue)" ValidationDelay="0" method="dialog">
@@ -108,12 +101,6 @@
                         </MudStack>
                     </MudForm>
                 <MudStack Row="true">
-                    <MudButton Href="/"
-                               Variant="Variant.Filled"
-                               StartIcon="@Icons.Material.Filled.ArrowBack"
-                               Color="Color.Default">
-                        @localizer["back"]
-                    </MudButton>
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="Submit" StartIcon="@Icons.Material.Filled.Save">@localizer["save"]</MudButton>
                 </MudStack>
             </MudStack>

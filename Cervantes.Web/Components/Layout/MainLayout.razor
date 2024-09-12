@@ -21,33 +21,24 @@
 @using Cervantes.CORE.ViewModel
 @using Microsoft.AspNetCore.Antiforgery
 @using UriComponents = System.UriComponents
-@inject IAntiforgery Antiforgery
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
-<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
+<MudThemeProvider Theme="CervantesTheme.Theme" @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 <MudPopoverProvider />
 
-<style>
-    .mud-nav-link:not(.mud-nav-link-disabled) .mud-nav-link-icon.mud-nav-link-icon-default {
-        color: #ffffff7f;
-    }
-    .mud-nav-link .mud-nav-link-text {
-        color: #ffffff7f;
-    }
-</style>
 <AuthorizeView>
     <Authorized>
         <MudLayout>
-            <MudAppBar Style="background-color: #27272fff;" Elevation="1" Fixed="true">
+            <MudAppBar Color="Color.Inherit" Elevation="0">
+                <SectionOutlet SectionName="appbar"/>
+                <MudDivider Vertical="true" DividerType="DividerType.Middle" FlexItem="true"></MudDivider>
 
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" Style="color: rgba(173,173,177,1);"/>
-                <MudImage Src="img/logo-horizontal.png" Fluid="true" Height="25" Width="200"></MudImage>
-                <MudSpacer/>
+                <MudIconButton Class="mr-0" Icon="@Icons.Material.Rounded.Search" Color="Color.Inherit" Edge="Edge.End" OnClick="@(() => OpenSearchDialog())"/>
+
                 <MudSpacer/>
                 <MudStack Row="true">
-                    <MudIconButton Class="mr-0" Icon="@Icons.Material.Rounded.Search" Color="Color.Inherit" Edge="Edge.End" OnClick="@(() => OpenSearchDialog())"/>
 
                     <MudDialog @bind-Visible="_searchDialogOpen" Options="_dialogOptions" Class="docs-gray-bg">
                         <DialogContent>
@@ -74,7 +65,7 @@
                                                 @task.Name
                                             </MudListItem>
 
-                                            
+
                                         }
                                         @foreach (var client in searchViewModel.Clients)
                                         {
@@ -82,9 +73,9 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.BusinessCenter" Href="@link">
                                                 @client.Name
                                             </MudListItem>
-                                                
-                                                
-                                            
+
+
+
                                         }
                                         @foreach (var project in searchViewModel.Projects)
                                         {
@@ -92,8 +83,8 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.Folder" Href="@link">
                                                 @project.Name
                                             </MudListItem>
-                                                
-                                           
+
+
                                         }
                                         @foreach (var doc in searchViewModel.Documents)
                                         {
@@ -101,9 +92,9 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.FileCopy" Href="@link">
                                                 @doc.Name
                                             </MudListItem>
-                                                
-                                                
-                                            
+
+
+
                                         }
                                         @foreach (var report in searchViewModel.Reports)
                                         {
@@ -111,9 +102,9 @@
                                             <MudListItem T="string" Icon="@Icons.Custom.FileFormats.FilePdf" Href="@link">
                                                 @report.Name
                                             </MudListItem>
-                                                
-                                                
-                                            
+
+
+
                                         }
                                         @foreach (var target in searchViewModel.Targets)
                                         {
@@ -121,18 +112,18 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.Adjust" Href="@link">
                                                 @target.Name
                                             </MudListItem>
-                                                
-                                                       
+
+
                                         }
                                         @foreach (var target in searchViewModel.TargetServices)
                                         {
-                                            var link = "/workspace/"+@target.Target.ProjectId+"/targets/"+@target.TargetId;
+                                            var link = "/workspace/" + @target.Target.ProjectId + "/targets/" + @target.TargetId;
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.Hive" Href="@link">
                                                 @target.Name
                                             </MudListItem>
-                                                
-                                                
-                                                      
+
+
+
                                         }
                                         @foreach (var vault in searchViewModel.Vaults)
                                         {
@@ -140,9 +131,9 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.Castle" Href="@link">
                                                 @vault.Name
                                             </MudListItem>
-                                                
-                                                
-                                                      
+
+
+
                                         }
                                         @foreach (var cat in searchViewModel.VulnCategories)
                                         {
@@ -150,16 +141,16 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.Category" Href="@link">
                                                 @cat.Name
                                             </MudListItem>
-                                                
-                                            
+
+
                                         }
                                         @foreach (var vuln in searchViewModel.Vulns)
                                         {
-                                            var link = "/vulns/"+@vuln.Id;
+                                            var link = "/vulns/" + @vuln.Id;
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.BugReport" Href="@link">
                                                 @vuln.Name
                                             </MudListItem>
-                                            
+
                                         }
 
                                     </MudList>
@@ -182,141 +173,77 @@
                             </DialogActions>
                         </DialogContent>
                     </MudDialog>
-                    <MudMenu  Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Color="Color.Default">
+                    <CultureSelector/>           
+                    <ThemeSwitch @bind-isDarkMode="@_isDarkMode"/>
+                    <MudDivider Vertical="true" DividerType="DividerType.Middle" FlexItem="true"></MudDivider>
+                    <UserMenu/>
 
-                        <ActivatorContent>
-                            @switch (Culture.Name)
-                            {
-                            case "en-US":
-                            <MudStack Row="true" AlignItems="AlignItems.Center">
-                                <MudIcon Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIcon>
-                                <MudText Typo="Typo.body2">@localizer["english"]</MudText>
-                            </MudStack>
-                            break;
-                            case "es-ES":
-                            <MudStack Row="true" AlignItems="AlignItems.Center">
-                                <MudIcon Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIcon>
-                                <MudText Typo="Typo.body2">@localizer["spanish"]</MudText>
-                            </MudStack>
-                            break;
-                            case "pt-PT":
-                            <MudStack Row="true" AlignItems="AlignItems.Center">
-                                <MudIcon Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIcon>
-                                <MudText Typo="Typo.body2">@localizer["portuguese"]</MudText>
-                            </MudStack>
-                            break;
-                            }
+                </MudStack>
+            </MudAppBar>
 
-                        </ActivatorContent>
-                        <ChildContent>
-                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[0]))">@localizer["english"]</MudMenuItem>
-                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[1]))">@localizer["spanish"]</MudMenuItem>
-                            <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[2]))">@localizer["portuguese"]</MudMenuItem>
-
-                        </ChildContent>
-                    </MudMenu>
-                    @if (_isDarkMode)
+            <MudDrawer Color="Color.Dark" Variant="DrawerVariant.Mini" @bind-Open="_drawerOpen" Elevation="2">
+                <MudDrawerHeader LinkToIndex="true" Class="center-image">
+                    @if (_drawerOpen)
                     {
-                    <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.LightMode" Color="Color.Inherit" />
+                    <MudImage Src="img/logo-horizontal.png" Fluid="true" Height="25" Width="200"></MudImage>
                     }
                     else
                     {
-                    <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" />
-
+                    <MudImage Class="mud-nav-link-icon" Src="img/logo.png" Height="40" Width="40"></MudImage>
                     }
-                    <MudMenu FullWidth="false" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Color="Color.Default">
-                        <ActivatorContent>
-                            <MudStack Row="true">
-                                @if (string.IsNullOrEmpty(CurrentUser.Avatar))
-                                {
-                                    <MudAvatar Color="Color.Primary" Size="Size.Small">@CurrentUser.FullName[0]</MudAvatar>
-                                }
-                                else
-                                {
-                                    <MudAvatar Size="Size.Small">
-                                        <MudImage Src="@CurrentUser.Avatar"></MudImage>
-                                    </MudAvatar>
-                                }
-                                <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudText Typo="Typo.body1">@CurrentUser.FullName</MudText>
-                                </MudStack>
-                                <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudIcon Icon="@Icons.Material.Filled.KeyboardArrowDown" Size="Size.Small"></MudIcon>
-                                </MudStack>
-                            </MudStack>
-                        </ActivatorContent>
-                        <ChildContent>
-                            <MudMenuItem Icon="@Icons.Material.Filled.Person" IconSize="Size.Small" Href="/Account/Profile">@localizer["profile"]</MudMenuItem>
-                            <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
-                                <MudMenuItem Icon="@Icons.Material.Filled.Note" IconSize="Size.Small" Href="/notes" Match="NavLinkMatch.All">@localizer["notes"]</MudMenuItem>
-                            </AuthorizeView>
-                            <form action="Account/Logout" method="post">
-                                <input name="__RequestVerificationToken" type="hidden" value="@GetAntiforgeryToken()"/>
-
-                                <div tabindex="0" class="mud-list-item mud-list-item-gutters mud-list-item-clickable mud-ripple">
-                                    <div class="mud-list-item-icon">
-                                        <svg class="mud-icon-root mud-svg-icon mud-secondary-text mud-icon-size-small" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                            <!--!--><path d="M0 0h24v24H0z" fill="none"></path><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="mud-list-item-text ">
-                                        <input type="hidden" name="ReturnUrl" value="@currentUrl"/>
-                                        <button type="submit" class="mud-typography mud-typography-body1">
-                                            @localizer["signout"]
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </ChildContent>
-                    </MudMenu>
-                     
-                    
-                    @*<MudToggleIconButton @bind-Checked="_isDarkMode" OnClick="@ChangeTheme"
-                                         Icon="@Icons.Material.Filled.DarkMode"
-                                         ToggledIcon="@Icons.Material.Filled.LightMode" Style="color: #adadb1;"/>*@
-                   
-                </MudStack>
-            </MudAppBar>
-            <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="@DrawerVariant.Mini" Style="background-color: #27272fff;">
-
+                </MudDrawerHeader>
                 <NavMenu/>
+                <MudStack>
+
+                    @if (_drawerOpen)
+                    {
+                        <MudText Style="font-size:small" Align="Align.Center">Copyright © @DateTime.Now.Year <MudLink href="https://github.com/CervantesSec" target="_blank" Typo="Typo.body2">Cervantes</MudLink><br/>
+                            Created by <MudLink href="https://linktr.ee/mesquidar" Typo="Typo.body2">Ruben Mesquida</MudLink>
+                            <br/>Beta 1.0</MudText>
+                    <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                        <MudIconButton Size="Size.Small" Icon="@Icons.Custom.Brands.LinkedIn" Color="Color.Inherit" Link="https://www.linkedin.com/company/owasp-cervantes/" Target="_blank"/>
+                        <MudIconButton Size="Size.Small" Icon="@Icons.Custom.Brands.Twitter" Color="Color.Inherit" Link="https://twitter.com/Cervantes_Sec" Target="_blank"/>
+                        <MudIconButton Size="Size.Small" Icon="@Icons.Custom.Brands.Discord" Color="Color.Inherit" Link="https://discord.gg/BvzNjT3Qzc" Target="_blank"/>
+                        <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.MenuBook" Color="Color.Inherit" Link="https://www.cervantessec.org/" Target="_blank"/>
+                        <MudIconButton Size="Size.Small" Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/CervantesSec" Target="_blank"/>
+                    </MudStack>
+                    }
+                    <MudDivider/>
+                    @if (_drawerOpen)
+                    {
+                    <MudIconButton Icon="@Icons.Material.Filled.ArrowBackIos" Color="Color.Tertiary" OnClick="@((e) => DrawerToggle())"></MudIconButton>
+                    }
+                    else
+                    {
+                    <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos" Color="Color.Tertiary" OnClick="@((e) => DrawerToggle())"></MudIconButton>
+                    }
+                </MudStack>
 
             </MudDrawer>
             <MudMainContent>
+                <MudPaper Class="ma-0" Elevation="25">
+                    <MudToolBar>
+                        <SectionOutlet SectionName="top-bar"/>
+                        <MudSpacer/>
+                        <SectionOutlet SectionName="breadcrumbs"/>
 
-                <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+                    </MudToolBar>
+                </MudPaper>
+                <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-2 pt-2">
+                    
+                    @*<div style="padding-bottom:60px">
+                                @Body
+                            </div>*@
                     <CascadingValue Value=@_isDarkMode>
-                        <div style="padding-bottom:60px">
-                            @Body
-                        </div>
+                    @Body
                     </CascadingValue>
-
                 </MudContainer>
 
             </MudMainContent>
             <MudScrollToTop Style="z-index:2001;">
                 <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.ArrowUpward"/>
             </MudScrollToTop>
-
-            <MudAppBar Elevation="1" Style="top: auto; bottom: 0;background-color: #27272fff;" Dense="true" Fixed="true">
-                <MudGrid>
-                    <MudItem sm="12" md="4" lg="4" Class="d-flex justify-center align-center">
-                        <MudText Style="font-size:small">Copyright © @DateTime.Now.Year <MudLink href="https://github.com/CervantesSec" target="_blank" Typo="Typo.body2">Cervantes</MudLink>. Version: <strong>Beta 1.0</strong></MudText>
-                    </MudItem>
-                    <MudItem sm="12" md="4" lg="4" Class="d-flex justify-center align-center">
-                        <MudText Style="font-size:small">Cervantes is an <MudLink href="https://owasp.org/www-project-cervantes/" target="_blank" Typo="Typo.body2">OWASP Foundation Project</MudLink>. Created by <MudLink href="https://linktr.ee/mesquidar" Typo="Typo.body2">Ruben Mesquida</MudLink></MudText>
-                    </MudItem>
-                    <MudItem sm="12" md="4" lg="4" Class="d-flex justify-center align-center">
-                        <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Color="Color.Inherit" Link="https://www.linkedin.com/company/owasp-cervantes/" Target="_blank"/>
-                        <MudIconButton Icon="@Icons.Custom.Brands.Twitter" Color="Color.Inherit" Link="https://twitter.com/Cervantes_Sec" Target="_blank"/>
-                        <MudIconButton Icon="@Icons.Custom.Brands.Discord" Color="Color.Inherit" Link="https://discord.gg/BvzNjT3Qzc" Target="_blank"/>
-                        <MudIconButton Icon="@Icons.Material.Filled.MenuBook" Color="Color.Inherit" Link="https://www.cervantessec.org/" Target="_blank"/>
-                        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/CervantesSec" Target="_blank"/>
-                    </MudItem>
-                </MudGrid>
-            </MudAppBar>
-
-
+            
         </MudLayout>
     </Authorized>
     <NotAuthorized>
@@ -325,7 +252,6 @@
 </AuthorizeView>
 
 @code {
-    private string? currentUrl;
 
     bool _isDarkMode { get; set; }
 
@@ -343,17 +269,12 @@
 
     protected async override Task OnInitializedAsync()
     {
-        currentUrl = navigationManager.ToBaseRelativePath(navigationManager.Uri);
-        navigationManager.LocationChanged += OnLocationChanged;
         searchViewModel = new SearchViewModel();
         await LoadDataAsync();
         await base.OnInitializedAsync();
     }
 
-    private string GetAntiforgeryToken()
-    {
-        return Antiforgery.GetAndStoreTokens(_accessor.HttpContext).RequestToken;
-    }
+    
 
     private async Task LoadDataAsync()
     {
@@ -369,17 +290,7 @@
         }
     }
 
-    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
-    {
-        currentUrl = navigationManager.ToBaseRelativePath(e.Location);
-
-        StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        navigationManager.LocationChanged -= OnLocationChanged;
-    }
+    
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -410,63 +321,14 @@
         
     }
 
-    private async Task ChangeTheme()
-    {
-        _isDarkMode = !_isDarkMode;
-        string theme = await LocalStorage.GetItemAsStringAsync("theme");
-
-        if (theme == "dark")
-        {
-            await LocalStorage.SetItemAsStringAsync("theme", "light");
-        }
-        else
-        {
-            await LocalStorage.SetItemAsStringAsync("theme", "dark");
-        }
-    }
+ 
     bool _drawerOpen = false;
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
-
-    private CultureInfo[] supportedCultures = new[]
-    {
-        new CultureInfo("en-US"),
-        new CultureInfo("es-ES"),
-        new CultureInfo("pt-PT"),
-    };
-
-    protected override void OnInitialized()
-    {
-        Culture = CultureInfo.CurrentCulture;
-    }
-
-    private CultureInfo Culture
-    {
-        get => CultureInfo.CurrentCulture;
-        set
-        {
-            if (CultureInfo.CurrentCulture != value)
-            {
-                var uri = new Uri(navigationManager.Uri)
-                    .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
-                var cultureEscaped = Uri.EscapeDataString(value.Name);
-                var uriEscaped = Uri.EscapeDataString(uri);
-
-                navigationManager.NavigateTo(
-                    $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
-                    forceLoad: true);
-            }
-        }
-    }
-
-    public void CultureSet(CultureInfo culture)
-    {
-        Culture = culture;
-    }
-
+    
     private string searchString = "";
     private SearchViewModel searchViewModel = new();
     [Inject] SearchController searchController { get; set; }

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ApexCharts;
 using Cervantes.CORE.Entities;
 using Cervantes.Web.Controllers;
@@ -14,6 +15,7 @@ public partial class Home: ComponentBase
     [Inject] ClientsController _ClientsController { get; set; }
     [Inject] VulnController _VulnController { get; set; }
     [Inject] TaskController _TaskController { get; set; }
+    [Inject] UserController _UserController { get; set; }
 
     private List<BreadcrumbItem> _items;
     [CascadingParameter] bool _isDarkMode { get; set; }
@@ -21,7 +23,7 @@ public partial class Home: ComponentBase
     private List<Client> Clients { get; set; } = new List<Client>();
     private List<CORE.Entities.Vuln> Vulns { get; set; } = new List<CORE.Entities.Vuln>();
     private List<CORE.Entities.Task> Tasks { get; set; } = new List<CORE.Entities.Task>();
-
+    private ApplicationUser User { get; set; }
 
     private ApexChartOptions<Project> optionsProject;
     private ApexChartOptions<CORE.Entities.Vuln> optionsVulns;
@@ -39,7 +41,16 @@ public partial class Home: ComponentBase
             new BreadcrumbItem(localizer["home"], href: null, disabled: true, icon: Icons.Material.Filled.Home)
         };
 
-       
+        if (_accessor.HttpContext.User == null)
+        {
+            NavigationManager.NavigateTo("Account/Login");
+            return;
+        }
+        
+        if (_accessor.HttpContext.User?.Identity?.IsAuthenticated == true)
+        {
+            User = _UserController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier));
+        }
 
     }
 

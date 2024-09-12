@@ -1,0 +1,182 @@
+@page "/tasks/kanban"
+@using Cervantes.CORE.ViewModels
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@inject IJSRuntime JS
+@rendermode InteractiveServer
+@inject NavigationManager navigationManager
+
+<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+
+    <PageTitle>@localizer["tasks"] | Cervantes</PageTitle>
+    <SectionContent SectionName="appbar">
+        <MudText Typo="Typo.h5">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Task"></MudIcon>
+
+            @localizer["tasks"]
+
+        </MudText>
+    </SectionContent>
+    <SectionContent SectionName="top-bar">
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+
+            <MudButton Href="/tasks"
+
+                       StartIcon="@Icons.Material.Filled.List"
+                       Color="Color.Transparent">
+                @localizer["list"]
+            </MudButton>
+
+            <MudButton Href="/tasks/kanban"
+
+                       StartIcon="@Icons.Material.Filled.ViewKanban"
+                       Color="Color.Primary">
+                @localizer["kanban"]
+            </MudButton>
+        </MudStack>
+    </SectionContent>
+
+    <SectionContent SectionName="breadcrumbs">
+        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+    </SectionContent>
+
+    <MudGrid>
+
+        <MudItem xs="12" sm="12" md="12">
+            
+                    <MudStack>
+                        <MudPaper Elevation="25">
+                            <MudToolBar>
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidth))">@localizer["create"]</MudButton>
+                                <MudSpacer/>
+                                <MudSpacer/>
+
+                                <MudSelect @bind-Value="selectedProject" For="@(() => selectedProject)" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                    <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
+                                    @foreach (var pro in Projects)
+                                    {
+                                    <MudSelectItem Value="@pro.Id">@pro.Name</MudSelectItem>
+                                    }
+                                </MudSelect>
+                                &nbsp; &nbsp;
+                                <MudSelect @bind-Value="selectedUser" For="@(() => selectedUser)" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                    <MudSelectItem Value="string.Empty">@localizer["selectUser"]</MudSelectItem>
+                                    @foreach (var user in users)
+                                    {
+                                    <MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
+                                    }
+                                </MudSelect>
+
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" OnClick="@((e) => Filter())">@localizer["filter"]</MudButton>
+                                &nbsp; &nbsp;
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FilterAlt" Color="Color.Secondary" OnClick="@((e) => ClearFilter())">@localizer["clear"]</MudButton>
+                            </MudToolBar>
+                        </MudPaper>
+                        <MudPaper Elevation="25">
+
+                            <MudDropContainer T="CORE.Entities.Task" Items="tasks.Where(x => x.Template == false)" ItemsSelector="@((item, dropzone) => item.Status.ToString() == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+                                <ChildContent>
+
+                                    <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Backlog.ToString()" ItemDraggingClass="mud-info-text" Class="rounded-lg mud-alert-text-info pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                        <MudText Typo="Typo.h6" Class="mb-4">
+                                            <MudIcon Icon="@Icons.Material.Filled.List" Size="Size.Small"/> @localizer["backlog"]
+                                        </MudText>
+                                    </MudDropZone>
+
+                                    <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.ToDo.ToString()" Class="rounded-lg mud-alert-text-primary pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                        <MudText Typo="Typo.h6" Class="mb-4">
+                                            <MudIcon Icon="@Icons.Material.Filled.PlaylistAdd" Size="Size.Small"/> @localizer["toDo"]
+                                        </MudText>
+                                    </MudDropZone>
+
+                                    <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.InProgress.ToString()" Class="rounded-lg mud-alert-text-warning pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                        <MudText Typo="Typo.h6" Class="mb-4">
+                                            <MudIcon Icon="@Icons.Material.Filled.DoubleArrow" Size="Size.Small"/> @localizer["inProgress"]
+                                        </MudText>
+                                    </MudDropZone>
+
+                                    <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Blocked.ToString()" Class="rounded-lg mud-alert-text-error pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                        <MudText Typo="Typo.h6" Class="mb-4">
+                                            <MudIcon Icon="@Icons.Material.Filled.Block" Size="Size.Small"/> @localizer["blocked"]
+                                        </MudText>
+                                    </MudDropZone>
+
+                                    <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Done.ToString()" Class="rounded-lg mud-alert-text-success pa-6 ma-4 flex-grow-1 mud-elevation-25">
+                                        <MudText Typo="Typo.h6" Class="mb-4">
+                                            <MudIcon Icon="@Icons.Material.Filled.DoneAll" Size="Size.Small"/> @localizer["done"]
+                                        </MudText>
+                                    </MudDropZone>
+
+                                </ChildContent>
+                                <ItemRenderer>
+
+                                    <MudCard Elevation="25" Class="pa-4 my-4">
+                                        <MudCardHeader Style="padding: 5px">
+                                            <CardHeaderContent>
+
+                                                <MudStack Row="true">
+                                                    <MudText Typo="Typo.h6">@context.Name</MudText>
+                                                    <MudSpacer/>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Details" Color="Color.Primary" Size="Size.Small" OnClick="@((e) => DetailsDialog(@context, maxWidth))"/>
+
+                                                </MudStack>
+
+                                            </CardHeaderContent>
+                                        </MudCardHeader>
+                                        <MudCardContent>
+                                            <MudStack>
+                                                <MudText Typo="Typo.body2">
+                                                    @if (@context.Description.Length > 100)
+                                                    {
+                                                    @((MarkupString)@context.Description.Substring(0, 100))
+                                                    }
+                                                    else
+                                                    {
+                                                    @((MarkupString)@context.Description)
+                                                    }
+                                                </MudText>
+                                                <MudStack Row="true">
+                                                    @if (string.IsNullOrEmpty(@context.AsignedUser.Avatar))
+                                                    {
+                                                    <MudTooltip Text="@context.AsignedUser.FullName">
+                                                        <MudAvatar Color="Color.Primary" Size="Size.Small">@context.AsignedUser.FullName[0]</MudAvatar>
+                                                    </MudTooltip>
+                                                    }
+                                                    else
+                                                    {
+                                                    <MudTooltip Text="@context.AsignedUser.FullName">
+                                                        <MudAvatar Image="@context.AsignedUser.Avatar" Size="Size.Small"> </MudAvatar>
+                                                    </MudTooltip>
+                                                    }
+
+                                                    <MudSpacer/>
+                                                    @{
+                                                    var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
+                                                    }
+                                                    @if(@Math.Truncate(totalDays) < 0)
+                                                    {
+                                                    <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                    }
+                                                    else
+                                                    {
+                                                    <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                    }
+                                                </MudStack>
+
+
+                                            </MudStack>
+
+                                        </MudCardContent>
+
+                                    </MudCard>
+                                </ItemRenderer>
+                            </MudDropContainer>
+                        </MudPaper>
+                    </MudStack>
+               
+        
+        </MudItem>
+    </MudGrid>
+</AuthorizeView>

@@ -21,28 +21,42 @@
 <PageTitle>@localizer["categories"] | Cervantes</PageTitle>
 
 <AuthorizeView Context="innerContext" Roles="SuperUser,Admin">
+    <SectionContent SectionName="appbar">
+        <MudText Typo="Typo.h5">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.BugReport"></MudIcon>
+
+            @localizer["vulns"]
+
+        </MudText>
+    </SectionContent>
+    <SectionContent SectionName="top-bar">
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                <MudButton Href="/vulns"
+
+                           StartIcon="@Icons.Material.Filled.BugReport"
+                           Color="Color.Transparent">
+                    @localizer["vulns"]
+                </MudButton>
+
+                <MudButton Href="/vulns/templates"
+
+                           StartIcon="@Icons.Material.Outlined.BugReport"
+                           Color="Color.Transparent">
+                    @localizer["templates"]
+                </MudButton>
+            <MudButton Href="/vulns/categories"
+                       StartIcon="@Icons.Material.Filled.Category"
+                       Color="Color.Primary">
+                @localizer["categories"]
+            </MudButton>
+        </MudStack>
+    </SectionContent>
+
+    <SectionContent SectionName="breadcrumbs">
+        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+    </SectionContent>
     <MudGrid>
-        <MudItem xs="12" sm="12" md="12" Class="mt-5">
-            <MudStack Row="true">
-
-                <MudItem xs="12" sm="4" md="4">
-                    <MudText Typo="Typo.h4">
-                        <MudText Typo="Typo.h4">
-                            <MudText Typo="Typo.h4">
-                                <MudIcon Icon="@Icons.Material.Filled.Category"/> @localizer["categories"]
-                            </MudText>
-                        </MudText>
-                    </MudText>
-
-                </MudItem>
-                <MudItem xs="12" sm="8" md="8">
-                    <div class="d-flex justify-end">
-                        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-                    </div>
-                </MudItem>
-            </MudStack>
-
-        </MudItem>
         <MudItem xs="12" sm="12" md="12">
             <MudDataGrid T="CORE.Entities.VulnCategory" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
@@ -94,14 +108,6 @@
                     <MudDataGridPager T="CORE.Entities.VulnCategory"/>
                 </PagerContent>
             </MudDataGrid>
-
-            <br/>
-            <MudButton Href="/vulns"
-                       Variant="Variant.Filled"
-                       StartIcon="@Icons.Material.Filled.ArrowBack"
-                       Color="Color.Default">
-                @localizer["back"]
-            </MudButton>
         </MudItem>
     </MudGrid>
 </AuthorizeView>

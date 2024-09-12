@@ -4,30 +4,36 @@
 @using ApexCharts
 @using Cervantes.CORE.Entities
 @using DocumentFormat.OpenXml.Drawing.Charts
+@using Align = MudBlazor.Align
 @using Color = MudBlazor.Color
 @using Size = MudBlazor.Size
 @inject IStringLocalizer<Resource> localizer
+@inject IHttpContextAccessor _accessor
+@inject NavigationManager NavigationManager
 
 <PageTitle>@localizer["home"] | Cervantes</PageTitle>
 
 <AuthorizeView Roles="Admin,User,SuperUser">
-<MudGrid>
-<MudItem xs="12" sm="12" md="12" Class="mt-5">
-    <MudStack Row="true">
-                				    
-        <MudItem xs="12" sm="4" md="4">
-            <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Home" /> @localizer["home"]</MudText>
-                
-                
-        </MudItem>
-        <MudItem xs="12" sm="8" md="8">
-            <div class="d-flex justify-end">
-                <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-            </div>
-        </MudItem>
+    <SectionContent SectionName="appbar">
+        <MudText Typo="Typo.h5">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Home"></MudIcon>
+
+            @localizer["home"]
+
+        </MudText>
+    </SectionContent>
+<SectionContent SectionName="top-bar">
+    <MudStack Row="true"  AlignItems="AlignItems.Center">
+    <MudText Typo="Typo.h5"> <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Person"></MudIcon>
+        @localizer["welcomeUser"], @User.FullName !</MudText>
     </MudStack>
-                
-</MudItem>
+</SectionContent>
+
+<SectionContent SectionName="breadcrumbs">
+    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+</SectionContent>
+
+<MudGrid>
             
 <MudItem xs="12" sm="6" md="3">
     <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
@@ -66,24 +72,29 @@
     </MudPaper>
 </MudItem>
 <MudItem xs="12" sm="6">
-    <MudPaper Class="pa-4" Style="height:300px;">
-        <MudContainer>
-    
-            <ApexChart TItem="Project"
-                       Title="@localizer["projectStatus"]" Options="optionsProject">
-    
-                <ApexPointSeries TItem="Project"
-                                 Items="Projects"
-                                 Name="Gross Value"
-                                 SeriesType="SeriesType.Pie"
-                                 XValue="@(e => e.Status)"
-                                 YAggregate="@(e => e.Count())"
-                                 OrderByDescending="e => e.Y"
-                                 PointColor="e => GetPointColorProject(e)"/>
-            </ApexChart>
-        </MudContainer>
-    
-    </MudPaper>
+    <MudCard Style="height:300px;">
+        <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">@localizer["projectStatus"]</MudText>
+        </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+                <ApexChart TItem="Project"
+                           Options="optionsProject" Height="200">
+
+                    <ApexPointSeries TItem="Project"
+                                     Items="Projects"
+                                     Name="Gross Value"
+                                     SeriesType="SeriesType.Pie"
+                                     XValue="@(e => e.Status)"
+                                     YAggregate="@(e => e.Count())"
+                                     OrderByDescending="e => e.Y"
+                                     PointColor="e => GetPointColorProject(e)"/>
+                </ApexChart> 
+           
+        </MudCardContent>
+
+    </MudCard>
 </MudItem>
 <MudItem xs="12" sm="6">
     <MudCard Style="height:300px;">
@@ -148,11 +159,16 @@
 </MudItem>
     
 <MudItem xs="12" sm="12" md="8">
-    <MudPaper Class="pa-4" Style="height:300px;">
-        <MudContainer>
+    <MudCard Style="height:300px;">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@localizer["vulns"]</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
             <ApexChart TItem="CORE.Entities.Vuln"
-                       Title="@localizer["vulns"]" Options="optionsVulns">
-    
+                       Options="optionsVulns" Height="200">
+
                 <ApexPointSeries TItem="CORE.Entities.Vuln"
                                  Items="Vulns"
                                  Name="@localizer["vulns"]"
@@ -161,10 +177,10 @@
                                  OrderByDescending="e => e.Y"
                                  SeriesType="SeriesType.Bar" PointColor="e => GetPointColorVulns(e)"/>
             </ApexChart>
-    
-        </MudContainer>
-    
-    </MudPaper>
+
+        </MudCardContent>
+
+    </MudCard>
     
 </MudItem>
 <MudItem xs="12" sm="12" md="8">
@@ -251,11 +267,16 @@
 </MudItem>
     
 <MudItem xs="12" sm="12" md="4">
-    <MudPaper Class="pa-4" Style="height:300px;">
-        <MudContainer>
+    <MudCard Style="height:300px;">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@localizer["tasksStatus"]</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
             <ApexChart TItem="CORE.Entities.Task"
-                       Title="@localizer["tasksStatus"]" Options="optionsTask">
-    
+                       Options="optionsTask" Height="200">
+
                 <ApexPointSeries TItem="CORE.Entities.Task"
                                  Items="Tasks"
                                  SeriesType=SeriesType.Donut
@@ -264,11 +285,11 @@
                                  YAggregate="@(e => e.Count())"
                                  OrderByDescending="e => e.Y" PointColor="e => GetPointColorTasks(e)"/>
             </ApexChart>
-    
-    
-        </MudContainer>
-    
-    </MudPaper>
+
+
+        </MudCardContent>
+
+    </MudCard>
     
 </MudItem>
     

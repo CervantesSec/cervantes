@@ -6,7 +6,7 @@
 @inject IStringLocalizer<Resource> localizer
 @inject IJiraConfiguration JiraConfiguration
 
-<MudNavMenu Color="Color.Primary" Bordered="true">
+<MudNavMenu Bordered="true" Color="Color.Primary" Style="display: flex; flex-flow: column; height: inherit;">
     <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All">@localizer["home"]</MudNavLink>
     <MudNavLink Href="/calendar" Icon="@Icons.Material.Filled.CalendarMonth" Match="NavLinkMatch.Prefix">@localizer["calendar"]</MudNavLink>
     <MudNavLink Href="/knowledgebase" Icon="@Icons.Material.Filled.MenuBook" Match="NavLinkMatch.Prefix">@localizer["knowledgeBase"]</MudNavLink>
@@ -18,7 +18,7 @@
         {
             <MudNavLink Href="/jira" Icon="@jiraSVG" Match="NavLinkMatch.Prefix">@localizer["jira"]</MudNavLink>
         }
-    <MudNavGroup Icon="@Icons.Material.Filled.Workspaces" Title="Workspace" @bind-Expanded=isAdminExpanded>
+    <MudNavGroup Icon="@Icons.Material.Filled.Workspaces" Title="Workspace" @bind-Expanded=isWorkspaceExpanded>
         <MudNavLink Icon="@Icons.Material.Filled.Dashboard" Href="@($"/workspace/{project}")" Match="NavLinkMatch.All">Dashboard</MudNavLink>
         <MudNavLink Icon="@Icons.Material.Filled.Folder" Href="@($"/workspace/{project}/details")" Match="NavLinkMatch.All">@localizer["project"]</MudNavLink>
         <MudNavLink Icon="@Icons.Material.Filled.Checklist" Href="@($"/workspace/{project}/checklist")" Match="NavLinkMatch.All">@localizer["checklist"]</MudNavLink>
@@ -48,6 +48,8 @@
 @code
 {
     private bool isAdminExpanded = true;
+    private bool isWorkspaceExpanded = true;
+
     [Parameter]
     public string project { get; set; }
     private bool jiraEnabled = false;

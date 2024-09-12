@@ -12,27 +12,38 @@
 <AuthorizeView Roles="Admin,SuperUser">
     <Authorized>
         <PageTitle>@localizer["components"] | Cervantes</PageTitle>
+        <SectionContent SectionName="appbar">
+            <MudText Typo="Typo.h5">
+                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.FileCopy"></MudIcon>
 
+                @localizer["reportTemplates"]
+
+            </MudText>
+        </SectionContent>
+        <SectionContent SectionName="top-bar">
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                <MudButton Href="/reports/templates"
+
+                           StartIcon="@Icons.Material.Filled.FolderCopy"
+                           Color="Color.Transparent">
+                    @localizer["templates"]
+                </MudButton>
+                <MudButton Href="/reports/components"
+
+                           StartIcon="@Icons.Material.Filled.SpaceDashboard"
+                           Color="Color.Primary">
+                    @localizer["components"]
+                </MudButton>
+
+            </MudStack>
+        </SectionContent>
+
+    <SectionContent SectionName="breadcrumbs">
+        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+    </SectionContent>
+    
         <MudGrid>
-            <MudItem xs="12" sm="12" md="12" Class="mt-5">
-                <MudStack Row="true">
-
-                    <MudItem xs="12" sm="4" md="4">
-                        <MudText Typo="Typo.h4">
-                            <MudText Typo="Typo.h4">
-                                <MudIcon Icon="@Icons.Material.Filled.SpaceDashboard"/> @localizer["components"]
-                            </MudText>
-                        </MudText>
-
-                    </MudItem>
-                    <MudItem xs="12" sm="8" md="8">
-                        <div class="d-flex justify-end">
-                            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-                        </div>
-                    </MudItem>
-                </MudStack>
-
-            </MudItem>
             <MudItem xs="12" sm="12" md="12">
 
                 <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
@@ -43,12 +54,6 @@
                             <ToolBarContent>
                                 <MudStack Row="true">
                                     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
-                                    <MudButton Href="/reports/templates"
-                                               Variant="Variant.Filled"
-                                               StartIcon="@Icons.Material.Filled.FileCopy"
-                                               Color="Color.Primary">
-                                        @localizer["reportTemplates"]
-                                    </MudButton>
                             
                                     @if (seleComponents.Count() != 0)
                                     {
@@ -281,13 +286,6 @@
                     
                 </MudTabs>
                 
-                <br/>
-                <MudButton Href="/reports/templates"
-                           Variant="Variant.Filled"
-                           StartIcon="@Icons.Material.Filled.ArrowBack"
-                           Color="Color.Default">
-                    @localizer["back"]
-                </MudButton>
             </MudItem>
         </MudGrid>
     </Authorized>

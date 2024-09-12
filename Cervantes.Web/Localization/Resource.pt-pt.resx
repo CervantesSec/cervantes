@@ -1718,4 +1718,13 @@
     <data name="deletedTarget" xml:space="preserve">
         <value>Objetivo removido com sucesso!</value>
     </data>
+    <data name="welcomeUser" xml:space="preserve">
+        <value>Bem-vindo de volta</value>
+    </data>
+    <data name="lightTheme" xml:space="preserve">
+        <value>Tema Claro</value>
+    </data>
+    <data name="darkTheme" xml:space="preserve">
+        <value>Tema Escuro</value>
+    </data>
 </root>

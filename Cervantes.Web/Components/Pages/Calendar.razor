@@ -5,24 +5,24 @@
 @inject IStringLocalizer<Resource> localizer
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 
-<PageTitle>@localizer["calendar"] | Cervantes</PageTitle>
+    <PageTitle>@localizer["calendar"] | Cervantes</PageTitle>
+    <SectionContent SectionName="appbar">
+        <MudText Typo="Typo.h5">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CalendarMonth"></MudIcon>
+
+            @localizer["calendar"]
+
+        </MudText>
+    </SectionContent>
+    <SectionContent SectionName="top-bar">
+        
+    </SectionContent>
+
+    <SectionContent SectionName="breadcrumbs">
+        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+    </SectionContent>
+    
         <MudGrid>
-            <MudItem xs="12" sm="12" md="12" Class="mt-5">
-                <MudStack Row="true">
-            				    
-                    <MudItem xs="12" sm="4" md="4">
-                        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.CalendarMonth" /> @localizer["calendar"]</MudText>
-            
-            
-                    </MudItem>
-                    <MudItem xs="12" sm="8" md="8">
-                        <div class="d-flex justify-end">
-                            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-                        </div>
-                    </MudItem>
-                </MudStack>
-            
-            </MudItem>
             
             <MudItem xs="12" sm="12" md="12">
             <MudCalendar Items="_events" ShowDay="false" ShowWeek="false" MonthCellMinHeight="@(false ? 0 : 115)">
@@ -45,14 +45,7 @@
                 </MudText>
 
             </div>
-
-            <br/>
-            <MudButton Href="/"
-                       Variant="Variant.Filled"
-                       StartIcon="@Icons.Material.Filled.ArrowBack"
-                       Color="Color.Default">
-                @localizer["back"]
-            </MudButton>
+            
             </MudItem>
         </MudGrid>
 
