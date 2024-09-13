@@ -24,7 +24,7 @@
         <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
         <PackageReference Include="Hangfire.Core" Version="1.8.14" />
         <PackageReference Include="Hangfire.PostgreSql" Version="1.20.9" />
-        <PackageReference Include="Heron.MudCalendar" Version="2.0.1" />
+        <PackageReference Include="Heron.MudCalendar" Version="2.0.2" />
         <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
         <PackageReference Include="HtmlToOpenXml.dll" Version="3.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.8" />
@@ -35,16 +35,16 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MudBlazor" Version="7.6.0" />
+        <PackageReference Include="MudBlazor" Version="7.8.0" />
         <PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="2.0.5" />
-        <PackageReference Include="NLog" Version="5.3.3" />
+        <PackageReference Include="NLog" Version="5.3.4" />
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
-        <PackageReference Include="NLog.Database" Version="5.3.3" />
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.12" />
-        <PackageReference Include="Npgsql" Version="8.0.3" />
+        <PackageReference Include="NLog.Database" Version="5.3.4" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.13" />
+        <PackageReference Include="Npgsql" Version="8.0.4" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
         <PackageReference Include="Scriban" Version="5.10.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
         <PackageReference Include="TinyMCE.Blazor" Version="1.0.4" />
     </ItemGroup>
 

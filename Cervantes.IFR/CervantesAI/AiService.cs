@@ -257,7 +257,6 @@ public class AiService: IAiService
                         Temperature = 1.0m,
                     };
                     var result = await client.Messages.GetClaudeMessageAsync(parameters);
-                    Console.WriteLine(result.Message.ToString());
                     string descriptionPattern;
                 string impactPattern;
                 string riskLevelPattern;
