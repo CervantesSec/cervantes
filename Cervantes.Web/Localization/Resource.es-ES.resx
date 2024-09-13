@@ -418,7 +418,7 @@
         <value>Estado de las Vulnerabilidades</value>
     </data>
     <data name="vulnSeverity" xml:space="preserve">
-        <value>Severidad de las Vulenrabilidades</value>
+        <value>Severidad de las Vulnerabilidades</value>
     </data>
     <data name="tasksStatus" xml:space="preserve">
         <value>Estado de las tareas</value>
@@ -1048,10 +1048,10 @@
         <value>Vulnerabilidad creada correctamente!</value>
     </data>
     <data name="vulnCreatedError" xml:space="preserve">
-        <value>Se ha producido un error al añadir la vulenrabilidad!</value>
+        <value>Se ha producido un error al añadir la vulnerabilidad!</value>
     </data>
     <data name="editVuln" xml:space="preserve">
-        <value>Editar Vulenrabilidad</value>
+        <value>Editar Vulnerabilidad</value>
     </data>
     <data name="deletedVuln" xml:space="preserve">
         <value>Vulnerabilidad eliminada correctamente!</value>
