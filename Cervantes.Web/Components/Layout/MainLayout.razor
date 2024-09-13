@@ -314,6 +314,24 @@
                     _isDarkMode = false;
                 }
             }
+            
+            if (!(await LocalStorage.ContainKeyAsync("drawer")))
+            {
+                await LocalStorage.SetItemAsStringAsync("drawer", "true");
+            }
+            else
+            {
+                string drawer = await LocalStorage.GetItemAsStringAsync("drawer");
+
+                if (drawer == "true")
+                {
+                    _drawerOpen = true;
+                }
+                else
+                {
+                    _drawerOpen = false;
+                }
+            }
             StateHasChanged();
         }
 
@@ -322,11 +340,24 @@
     }
 
  
-    bool _drawerOpen = false;
+    bool _drawerOpen;
 
-    void DrawerToggle()
+    private async Task  DrawerToggle()
     {
-        _drawerOpen = !_drawerOpen;
+        //_drawerOpen = !_drawerOpen;
+        string drawer = await LocalStorage.GetItemAsStringAsync("drawer");
+
+        if (drawer == "true")
+        {
+            await LocalStorage.SetItemAsStringAsync("drawer", "false");
+            _drawerOpen = false;
+
+        }
+        else
+        {
+            await LocalStorage.SetItemAsStringAsync("drawer", "true");
+            _drawerOpen = true;
+        }
     }
     
     private string searchString = "";

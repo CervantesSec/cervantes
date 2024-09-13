@@ -18,7 +18,7 @@
         {
             <MudNavLink Href="/jira" Icon="@jiraSVG" Match="NavLinkMatch.Prefix">@localizer["jira"]</MudNavLink>
         }
-    <MudNavGroup Icon="@Icons.Material.Filled.Workspaces" Title="Workspace" @bind-Expanded=isWorkspaceExpanded>
+    <MudNavGroup Icon="@Icons.Material.Filled.Workspaces" Title="@localizer["workspace"]" @bind-Expanded=isWorkspaceExpanded>
         <MudNavLink Icon="@Icons.Material.Filled.Dashboard" Href="@($"/workspace/{project}")" Match="NavLinkMatch.All">Dashboard</MudNavLink>
         <MudNavLink Icon="@Icons.Material.Filled.Folder" Href="@($"/workspace/{project}/details")" Match="NavLinkMatch.All">@localizer["project"]</MudNavLink>
         <MudNavLink Icon="@Icons.Material.Filled.Checklist" Href="@($"/workspace/{project}/checklist")" Match="NavLinkMatch.All">@localizer["checklist"]</MudNavLink>
@@ -47,7 +47,7 @@
     
 @code
 {
-    private bool isAdminExpanded = true;
+    private bool isAdminExpanded = false;
     private bool isWorkspaceExpanded = true;
 
     [Parameter]

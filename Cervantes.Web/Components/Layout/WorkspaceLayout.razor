@@ -279,22 +279,12 @@ public string project { get; set; }
         }
     }
     
-    private string GetAntiforgeryToken()
-    {
-        return Antiforgery.GetAndStoreTokens(_accessor.HttpContext).RequestToken;
-    }
     
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         currentUrl = navigationManager.ToBaseRelativePath(e.Location);
         StateHasChanged();
     }
-
-    public void Dispose()
-    {
-        navigationManager.LocationChanged -= OnLocationChanged;
-    }
-    
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -318,67 +308,53 @@ public string project { get; set; }
                     _isDarkMode = false;
                 }
             }
+            
+            if (!(await LocalStorage.ContainKeyAsync("drawer")))
+            {
+                await LocalStorage.SetItemAsStringAsync("drawer", "true");
+            }
+            else
+            {
+                string drawer = await LocalStorage.GetItemAsStringAsync("drawer");
+
+                if (drawer == "true")
+                {
+                    _drawerOpen = true;
+                }
+                else
+                {
+                    _drawerOpen = false;
+                }
+            }
+            
             StateHasChanged();
         }
 
         await base.OnAfterRenderAsync(firstRender);
     }
     
-    private async Task ChangeTheme()
-    {
-        _isDarkMode = !_isDarkMode;
-        string theme = await LocalStorage.GetItemAsStringAsync("theme");
+    
+    bool _drawerOpen;
 
-        if (theme == "dark")
+    private async Task  DrawerToggle()
+    {
+        //_drawerOpen = !_drawerOpen;
+        string drawer = await LocalStorage.GetItemAsStringAsync("drawer");
+
+        if (drawer == "true")
         {
-            await LocalStorage.SetItemAsStringAsync("theme", "light");
+            await LocalStorage.SetItemAsStringAsync("drawer", "false");
+            _drawerOpen = false;
+
         }
         else
         {
-            await LocalStorage.SetItemAsStringAsync("theme", "dark");
+            await LocalStorage.SetItemAsStringAsync("drawer", "true");
+            _drawerOpen = true;
         }
     }
     
-    bool _drawerOpen = false;
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-    
-    private CultureInfo[] supportedCultures = new[]
-    {
-        new CultureInfo("en-US"),
-        new CultureInfo("es-ES"),
-    };
-
-    protected override void OnInitialized()
-    {
-        Culture = CultureInfo.CurrentCulture;
-    }
-
-    private CultureInfo Culture
-    {
-        get => CultureInfo.CurrentCulture;
-        set
-        {
-            if (CultureInfo.CurrentCulture != value)
-            {
-                var uri = new Uri(navigationManager.Uri)
-                    .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
-                var cultureEscaped = Uri.EscapeDataString(value.Name);
-                var uriEscaped = Uri.EscapeDataString(uri);
-
-                navigationManager.NavigateTo(
-                    $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
-                    forceLoad: true);
-            }
-        }
-    }
-    public void CultureSet(CultureInfo culture)
-    {
-        Culture = culture;
-    }
-    
+   
     protected override void OnParametersSet()
     {
         object project1 = null;
