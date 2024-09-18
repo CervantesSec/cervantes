@@ -6,6 +6,7 @@ public class ReportComponents
     public string Name { get; set; }
 
     public string Content { get; set; }
+    public string ContentCss { get; set; }
     public Language Language { get; set; }
     public ReportPartType ComponentType { get; set; }
     public DateTime Created { get; set; }

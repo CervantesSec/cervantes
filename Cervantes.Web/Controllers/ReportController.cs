@@ -19,6 +19,7 @@ using HandlebarsDotNet.Extension.NewtonsoftJson;
 using Hangfire.Dashboard.Resources;
 using HtmlAgilityPack;
 using HtmlToOpenXml;
+using Mammoth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -1237,5 +1238,65 @@ public static string ReplaceTableRowWithFor(string htmlContent)
         }
     }
     
+    [HttpPost]
+    [Route("Template")]
+    [Authorize (Roles = "Admin,SuperUser")]
+    public async Task<IActionResult> Import([FromBody] ReportImportViewModel model)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.FileContent != null)
+                {
+                    if (fileCheck.CheckFile(model.FileContent))
+                    {
+                        var converter = new DocumentConverter().ImageConverter(image => {
+                            using (var stream = image.GetStream()) {
+                                var base64 = StreamToBase64(stream);
+                                var src = "data:" + image.ContentType + ";base64," + base64;
+                                return new Dictionary<string, string> { { "src", src } };
+                            }
+                        });
+                        MemoryStream stream = new MemoryStream(model.FileContent);
+
+                        var result = converter.ConvertToHtml(stream);
+                        var html = result.Value; // The generated HTML
+                        Console.WriteLine(html);
+                        var warnings = result.Warnings;
+                        
+                    }
+                    else
+                    {
+                        _logger.LogError("An error ocurred adding a client. User: {0}",
+                            aspNetUserId);
+                        return BadRequest("Invalid file type");
+                    }
+                    
+                    
+                    
+                    
+                }
+                _logger.LogError("An error ocurred adding report templates. User: {0}",
+                    aspNetUserId);
+                return BadRequest();
+            }
+
+            _logger.LogError("An error ocurred adding report templates. User: {0}",
+                aspNetUserId);
+            return BadRequest();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred adding report templates. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
    
+    private static string StreamToBase64(System.IO.Stream stream) {
+        var memoryStream = new System.IO.MemoryStream();
+        stream.CopyTo(memoryStream);
+        return System.Convert.ToBase64String(memoryStream.ToArray());
+    }
 }

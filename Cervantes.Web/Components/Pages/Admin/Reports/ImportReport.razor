@@ -1,0 +1,94 @@
+@page "/reports/import"
+@using Cervantes.CORE.ViewModels
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Color = MudBlazor.Color
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@using Blazor.Flags
+
+<AuthorizeView Roles="Admin,SuperUser">
+        <PageTitle>@localizer["components"] | Cervantes</PageTitle>
+        <SectionContent SectionName="appbar">
+            <MudText Typo="Typo.h5">
+                <MudIcon Size="Size.Small" Icon="@Icons.Custom.FileFormats.FilePdf"></MudIcon>
+
+                @localizer["reportTemplates"]
+
+            </MudText>
+        </SectionContent>
+        <SectionContent SectionName="top-bar">
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                <MudButton Href="/reports/templates"
+
+                           StartIcon="@Icons.Custom.FileFormats.FilePdf"
+                           Color="Color.Transparent">
+                    @localizer["templates"]
+                </MudButton>
+                <MudButton Href="/reports/components"
+
+                           StartIcon="@Icons.Material.Filled.SpaceDashboard"
+                           Color="Color.Transparent">
+                    @localizer["components"]
+                </MudButton>
+                <MudButton Href="/reports/import"
+
+                           StartIcon="@Icons.Material.Filled.UploadFile"
+                           Color="Color.Primary">
+                    @localizer["import"]
+                </MudButton>
+            </MudStack>
+        </SectionContent>
+
+        <SectionContent SectionName="breadcrumbs">
+            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+        </SectionContent>
+
+        <MudForm Model="@model" @ref="@form" Validation="@(importValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+            <MudStack AlignItems="AlignItems.Stretch">
+                <MudTextField Placeholder="New Template"  @bind-Value="model.Name"
+                              For="@(() => model.Name)"
+                              Immediate="true"
+                              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SpaceDashboard"/>
+
+                <MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                    @foreach (Language item in Enum.GetValues(typeof(Language)))
+                    {
+                        <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".docx">
+                    <ActivatorContent >
+                        <MudButton
+                            Variant="Variant.Filled"
+                            Color="Color.Primary"
+                            StartIcon="@Icons.Material.Filled.CloudUpload" >
+                            @localizer["uploadFile"]
+                        </MudButton>
+                    </ActivatorContent>
+                    <SelectedTemplate Context="another_name">
+
+                        @if (file != null)
+                        {
+                        <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name </MudText>
+
+                        }
+                        else
+                        {
+                        <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"] </MudText>
+                        }
+                    </SelectedTemplate>
+                </MudFileUpload>
+
+
+
+
+            </MudStack>
+        </MudForm>
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+
+</AuthorizeView>

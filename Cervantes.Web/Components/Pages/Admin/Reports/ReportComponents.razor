@@ -14,7 +14,7 @@
         <PageTitle>@localizer["components"] | Cervantes</PageTitle>
         <SectionContent SectionName="appbar">
             <MudText Typo="Typo.h5">
-                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.FileCopy"></MudIcon>
+                <MudIcon Size="Size.Small" Icon="@Icons.Custom.FileFormats.FilePdf"></MudIcon>
 
                 @localizer["reportTemplates"]
 
@@ -25,7 +25,7 @@
 
                 <MudButton Href="/reports/templates"
 
-                           StartIcon="@Icons.Material.Filled.FolderCopy"
+                           StartIcon="@Icons.Custom.FileFormats.FilePdf"
                            Color="Color.Transparent">
                     @localizer["templates"]
                 </MudButton>
@@ -35,7 +35,12 @@
                            Color="Color.Primary">
                     @localizer["components"]
                 </MudButton>
+                <MudButton Href="/reports/import"
 
+                           StartIcon="@Icons.Material.Filled.UploadFile"
+                           Color="Color.Transparent">
+                    @localizer["import"]
+                </MudButton>
             </MudStack>
         </SectionContent>
 

@@ -24,6 +24,105 @@ public partial class CreateReportComponentDialog: ComponentBase
     private CreateReportComponentModel model = new CreateReportComponentModel();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
 
+    static string contentStyle = @"
+body {
+  background-color: #f0eeee;
+  padding: 1rem;
+}
+
+section {
+  padding: 4rem 4rem 1rem;
+  box-sizing: border-box;
+  max-width: 1050px;
+  min-width: 820px;
+  min-height: 600px;
+  margin: 2rem auto;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  background-size: 100%;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+ 
+  row-gap: 1rem;
+}
+
+section header,
+section aside {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+
+section main {
+  position: relative;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+section footer {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+}
+
+section main:empty::before,
+section main:has(> br[data-mce-bogus]:first-child)::before {
+  content: ""Write something..."";
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #999;
+}
+
+section main > * {
+  margin: 0;
+}
+
+section main > * + * {
+  margin-top: .5rem;
+}
+
+section.cover {
+  background-color: #fed330;
+  background-image: url(""images/template-document-cover-landscape_2x.png"");
+  background-size: cover;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+}
+
+section.cover main {
+  align-self: center;
+}
+
+section.cover h1 {
+  font-weight: 900;
+  font-size: 5rem;
+  letter-spacing: -1px;
+  line-height: 1em;
+  margin-bottom: 2.5rem;
+}
+
+section.end {
+  background-color: #2C3A47;
+  background-image: url(""images/template-document-end-landscape_2x.png"");
+  background-size: 100%;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  color: #C0C4C8;
+}
+
+section.end  a {
+  color: #fff;
+}
+
+.editable:hover:not(:focus) {
+  outline: 3px solid #b4d7ff;
+  outline-offset: 8px;
+}
+
+.editable:focus {
+  outline: none;
+}
+";
+
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
                 {"menubar", "file edit view insert format tools table help"},
@@ -37,6 +136,10 @@ public partial class CreateReportComponentDialog: ComponentBase
                 {"noneditable_noneditable_class", "mceNonEditable"},
                 {"toolbar_mode", "sliding"},
                 {"contextmenu", "link image imagetools table"},
+                {"editable_root",true},
+                {"editable_class",true},
+                {"elementpath",false},
+                {"content_style", contentStyle},
                 {"textpattern_patterns", new object[] {
                     new {start = "#", format = "h1"},
                     new {start = "##", format = "h2"},
@@ -68,7 +171,7 @@ public partial class CreateReportComponentDialog: ComponentBase
                     new {start = "a) ", cmd = "InsertOrderedList", value = "lower-alpha"},
                     new {start = "i. ", cmd = "InsertOrderedList", value = "lower-roman"},
                     new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
-                }}
+                }},
             };
     [Inject] private IAiService _aiService { get; set; }
     private bool aiEnabled = false;
@@ -76,6 +179,7 @@ public partial class CreateReportComponentDialog: ComponentBase
     protected override async Task OnInitializedAsync()
     {
         aiEnabled = _aiService.IsEnabled();
+        model.Content = "<section>  <main class=\"editable\"></main></section>";
         await base.OnInitializedAsync();
     }
     private async Task Submit()

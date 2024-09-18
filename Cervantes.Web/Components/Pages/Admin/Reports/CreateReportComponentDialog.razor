@@ -34,7 +34,7 @@
 		<MudForm Model="@model" @ref="@form" Validation="@(templateValidator.ValidateValue)" ValidationDelay="0" method="dialog">
 
 			<MudStack AlignItems="AlignItems.Stretch">
-				<MudTextField Placeholder="New Template"  @bind-Value="model.Name"
+				<MudTextField Placeholder="@localizer["newComponent"]"  @bind-Value="model.Name"
 				              For="@(() => model.Name)"
 				              Immediate="true"
 				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SpaceDashboard"/>
@@ -51,7 +51,6 @@
 						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
 					}
 				</MudSelect>
-				
 				
 				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Content" data-mce-placeholder="Description"/>
 
