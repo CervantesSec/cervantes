@@ -1809,4 +1809,7 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="darkTheme" xml:space="preserve">
         <value>Tema Oscuro</value>
     </data>
+    <data name="advancedCss" xml:space="preserve">
+        <value>CSS Avanzado</value>
+    </data>
 </root>

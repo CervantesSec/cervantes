@@ -1727,4 +1727,7 @@
     <data name="darkTheme" xml:space="preserve">
         <value>Tema Escuro</value>
     </data>
+    <data name="advancedCss" xml:space="preserve">
+        <value>CSS Avançado</value>
+    </data>
 </root>

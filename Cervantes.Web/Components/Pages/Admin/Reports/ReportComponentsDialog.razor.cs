@@ -1,3 +1,4 @@
+using BlazorMonaco.Editor;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
 using Cervantes.Web.Components.Shared;
@@ -23,8 +24,9 @@ public partial class ReportComponentsDialog: ComponentBase
     
     private EditReportComponentModel model = new EditReportComponentModel();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+    private static string cssCode = "";
 
-    private Dictionary<string, object> editorConf = new Dictionary<string, object>{
+    private static Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
                 {"menubar", "file edit view insert format tools table help"},
                 {"toolbar", "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media link anchor codesample | ltr rtl"},
@@ -37,6 +39,10 @@ public partial class ReportComponentsDialog: ComponentBase
                 {"noneditable_noneditable_class", "mceNonEditable"},
                 {"toolbar_mode", "sliding"},
                 {"contextmenu", "link image imagetools table"},
+                {"editable_root",true},
+                {"editable_class",true},
+                {"elementpath",false},
+                {"content_style", cssCode},
                 {"textpattern_patterns", new object[] {
                     new {start = "#", format = "h1"},
                     new {start = "##", format = "h2"},
@@ -68,7 +74,7 @@ public partial class ReportComponentsDialog: ComponentBase
                     new {start = "a) ", cmd = "InsertOrderedList", value = "lower-alpha"},
                     new {start = "i. ", cmd = "InsertOrderedList", value = "lower-roman"},
                     new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
-                }}
+                }},
             };
     [Inject] private IAiService _aiService { get; set; }
     private bool aiEnabled = false;
@@ -80,9 +86,12 @@ public partial class ReportComponentsDialog: ComponentBase
         model.Id = component.Id;
         model.Name = component.Name;
         model.Content = component.Content;
+        model.CssContent = component.ContentCss;
+        await SetCss();
         model.Language = component.Language;
         model.ComponentType = component.ComponentType;
         aiEnabled = _aiService.IsEnabled();
+        
         await base.OnInitializedAsync();
     }
     
@@ -153,5 +162,58 @@ public partial class ReportComponentsDialog: ComponentBase
             StateHasChanged();
         }
         
+    }
+    
+    private StandaloneCodeEditor _editor = null!;
+    private string _valueToSet = "";
+
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+    {
+        return new StandaloneEditorConstructionOptions
+        {
+            AutomaticLayout = true,
+            Language = "css",
+            GlyphMargin = true,
+            Value = ""
+        };
+    }
+    List<TinyMCE.Blazor.Editor> Editors = new List<TinyMCE.Blazor.Editor>(){
+        new TinyMCE.Blazor.Editor(){Conf=editorConf}
+    };
+    
+    private async Task UpdateCss()
+    {
+        model.CssContent = await _editor.GetValue();
+        cssCode = model.CssContent;
+        Editors.RemoveAt(0);
+        var editedConf = editorConf;
+        editedConf.Keys.ToList().ForEach(key => {
+            if (key == "content_style")
+            {
+                editedConf[key] = cssCode;
+            }
+        });
+        Editors.Add(new TinyMCE.Blazor.Editor(){Conf=editedConf});
+        StateHasChanged();
+    }
+    
+    private async Task SetCss()
+    {
+        if (!string.IsNullOrEmpty(model.CssContent))
+        {
+            await _editor.SetValue(model.CssContent);
+
+        }
+        cssCode = model.CssContent;
+        Editors.RemoveAt(0);
+        var editedConf = editorConf;
+        editedConf.Keys.ToList().ForEach(key => {
+            if (key == "content_style")
+            {
+                editedConf[key] = cssCode;
+            }
+        });
+        Editors.Add(new TinyMCE.Blazor.Editor(){Conf=editedConf});
+        StateHasChanged();
     }
 }

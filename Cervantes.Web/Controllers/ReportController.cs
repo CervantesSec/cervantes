@@ -466,6 +466,8 @@ public class ReportController : ControllerBase
                 comp.Name = sanitizer.Sanitize(model.Name);
                 var test = sanitizer.Sanitize(model.Content);
                 comp.Content = HttpUtility.HtmlDecode(test);
+                var test2 = sanitizer.Sanitize(model.CssContent);
+                comp.ContentCss = HttpUtility.HtmlDecode(test2);
                 comp.Language = model.Language;
                 comp.Created = DateTime.Now.ToUniversalTime();
                 comp.Updated = DateTime.Now.ToUniversalTime();
@@ -504,7 +506,9 @@ public class ReportController : ControllerBase
 
                 result.Name = sanitizer.Sanitize(model.Name);
                 var test = sanitizer.Sanitize(model.Content);
-                result.Content = HttpUtility.HtmlDecode(test);                
+                result.Content = HttpUtility.HtmlDecode(test); 
+                var test2 = sanitizer.Sanitize(model.CssContent);
+                result.ContentCss = HttpUtility.HtmlDecode(test2);
                 result.Language = model.Language;
                 result.Updated = DateTime.Now.ToUniversalTime();
                 result.ComponentType = model.ComponentType;

@@ -13,6 +13,9 @@
 	.tox-tinymce-aux {
         z-index: 999999!important;
     }
+    .editor-class{
+        height: 500px;
+    }
 </style>
 <MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
@@ -55,8 +58,24 @@
                     </MudSelect>
 
 
-                    <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Content" data-mce-placeholder="Description"/>
+                    @foreach (TinyMCE.Blazor.Editor Editor in Editors)
+                    {
 
+                    <TinyMCE.Blazor.Editor @key="Editor" ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@Editor.Conf" @bind-Value="model.Content" data-mce-placeholder="Description"/>
+                    }
+                    <MudExpansionPanels Elevation="25">
+                        <MudExpansionPanel >
+                            <TitleContent>
+                                <div class="d-flex">
+                                    <MudIcon Icon="@Icons.Material.Filled.Css" class="mr-3"></MudIcon>
+                                    <MudText>@localizer["advancedCss"]</MudText>
+                                </div>
+                            </TitleContent>
+                            <ChildContent>
+                                <StandaloneCodeEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" CssClass="editor-class"/>
+                            </ChildContent>
+                        </MudExpansionPanel>
+                    </MudExpansionPanels>
 
                 </MudStack>
             </MudForm>

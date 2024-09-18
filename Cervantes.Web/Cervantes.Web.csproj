@@ -13,6 +13,7 @@
         <PackageReference Include="Blazor-ApexCharts" Version="3.4.0" />
         <PackageReference Include="Blazor.Flags" Version="1.0.0.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+        <PackageReference Include="BlazorMonaco" Version="3.2.0" />
         <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="7.0.1" />
         <PackageReference Include="FluentValidation" Version="11.9.2" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
