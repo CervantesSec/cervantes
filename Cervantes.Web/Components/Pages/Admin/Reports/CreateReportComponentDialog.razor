@@ -68,7 +68,13 @@
 						</div>
 					</TitleContent>
 					<ChildContent>
-						<StandaloneCodeEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" CssClass="editor-class"/>
+						<MudStack>
+							<StandaloneCodeEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" CssClass="editor-class"/>
+							<MudStack Row="true" Justify="Justify.FlexEnd">
+								<MudButton  Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Css" Color="@Color.Primary" OnClick="UpdateCss">@localizer["updateStyle"]</MudButton>
+
+							</MudStack>
+						</MudStack>
 					</ChildContent>
 				</MudExpansionPanel>
 				</MudExpansionPanels>
@@ -79,7 +85,6 @@
 	<DialogActions>
 		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
 		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Update" Color="@Color.Primary" OnClick="UpdateCss">@localizer["update"]</MudButton>
 
 	</DialogActions>
 </MudDialog>

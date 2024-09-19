@@ -637,7 +637,8 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Header)
                              .OrderBy(x => x.Order))
                 {
-                    sbHeader.Append(part.Component.Content);
+                    var header = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    sbHeader.Append(header.Html);
                 }
 
                 source = source.Replace("{{HeaderComponents}}", sbHeader.ToString());
@@ -647,7 +648,8 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Cover)
                              .OrderBy(x => x.Order))
                 {
-                    sbCover.Append(part.Component.Content);
+                    var cover = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    sbCover.Append(cover.Html);
                 }
 
                 source = source.Replace("{{CoverComponents}}", sbCover.ToString());
@@ -656,7 +658,8 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Body)
                              .OrderBy(x => x.Order))
                 {
-                    sbBody.Append(part.Component.Content);
+                    var body = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    sbBody.Append(body.Html);
                 }
 
                 source = source.Replace("{{BodyComponents}}", sbBody.ToString());
@@ -666,7 +669,8 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Footer)
                              .OrderBy(x => x.Order))
                 {
-                    sbFooter.Append(part.Component.Content);
+                    var footer = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    sbFooter.Append(footer.Html);
                 }
 
                 source = source.Replace("{{FooterComponents}}", sbFooter.ToString());
@@ -1245,7 +1249,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
     [HttpPost]
     [Route("Template")]
     [Authorize (Roles = "Admin,SuperUser")]
-    public async Task<IActionResult> Import([FromBody] ReportImportViewModel model)
+    public async Task<ReportImportResultViewModel> Import([FromBody] ReportImportViewModel model)
     {
         try
         {
@@ -1266,29 +1270,20 @@ public static string ReplaceTableRowWithFor(string htmlContent)
 
                         var result = converter.ConvertToHtml(stream);
                         var html = result.Value; // The generated HTML
-                        Console.WriteLine(html);
                         var warnings = result.Warnings;
-                        
-                    }
-                    else
-                    {
-                        _logger.LogError("An error ocurred adding a client. User: {0}",
-                            aspNetUserId);
-                        return BadRequest("Invalid file type");
-                    }
-                    
-                    
-                    
-                    
-                }
-                _logger.LogError("An error ocurred adding report templates. User: {0}",
-                    aspNetUserId);
-                return BadRequest();
-            }
+                        ReportImportResultViewModel res = new ReportImportResultViewModel();
+                        res.Body = html;
+                        res.WarningMessages = warnings.ToList();
+                        return res;
 
-            _logger.LogError("An error ocurred adding report templates. User: {0}",
-                aspNetUserId);
-            return BadRequest();
+                    }
+                    return null;
+
+                }
+
+                return null;
+            }
+            return null;
         }
         catch (Exception e)
         {

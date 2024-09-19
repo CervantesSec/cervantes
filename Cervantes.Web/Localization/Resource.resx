@@ -1742,4 +1742,10 @@
     <data name="advancedCss" xml:space="preserve">
         <value>Advanced CSS</value>
     </data>
+    <data name="updateStyle" xml:space="preserve">
+        <value>Update CSS Style</value>
+    </data>
+    <data name="warnings" xml:space="preserve">
+        <value>Warnings</value>
+    </data>
 </root>

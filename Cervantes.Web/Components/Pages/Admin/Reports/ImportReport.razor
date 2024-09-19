@@ -47,48 +47,79 @@
             <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
         </SectionContent>
 
-        <MudForm Model="@model" @ref="@form" Validation="@(importValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+        @if (!showHtml)
+        {
+            <MudForm Model="@model" @ref="@form" Validation="@(importValidator.ValidateValue)" ValidationDelay="0" method="dialog">
 
-            <MudStack AlignItems="AlignItems.Stretch">
-                <MudTextField Placeholder="New Template"  @bind-Value="model.Name"
-                              For="@(() => model.Name)"
-                              Immediate="true"
-                              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SpaceDashboard"/>
+                <MudStack AlignItems="AlignItems.Stretch">
+                    @*<MudTextField Placeholder="New Template" @bind-Value="model.Name"
+                                  For="@(() => model.Name)"
+                                  Immediate="true"
+                                  Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SpaceDashboard"/>
 
-                <MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                    @foreach (Language item in Enum.GetValues(typeof(Language)))
-                    {
-                        <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
-                    }
-                </MudSelect>
-                <MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".docx">
-                    <ActivatorContent >
-                        <MudButton
-                            Variant="Variant.Filled"
-                            Color="Color.Primary"
-                            StartIcon="@Icons.Material.Filled.CloudUpload" >
-                            @localizer["uploadFile"]
-                        </MudButton>
-                    </ActivatorContent>
-                    <SelectedTemplate Context="another_name">
-
-                        @if (file != null)
+                    <MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                        @foreach (Language item in Enum.GetValues(typeof(Language)))
                         {
-                        <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name </MudText>
-
+                            <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
                         }
-                        else
-                        {
-                        <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"] </MudText>
-                        }
-                    </SelectedTemplate>
-                </MudFileUpload>
+                    </MudSelect>*@
+                    <MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".docx">
+                        <ActivatorContent >
+                            <MudButton
+                                Variant="Variant.Filled"
+                                Color="Color.Primary"
+                                StartIcon="@Icons.Material.Filled.CloudUpload">
+                                @localizer["uploadFile"]
+                            </MudButton>
+                        </ActivatorContent>
+                        <SelectedTemplate Context="another_name">
+
+                            @if (file != null)
+                            {
+                                <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name </MudText>
+
+                            }
+                            else
+                            {
+                                <MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"] </MudText>
+                            }
+                        </SelectedTemplate>
+                    </MudFileUpload>
 
 
 
 
+                </MudStack>
+            </MudForm>
+            <MudStack Row="true" Justify="Justify.FlexEnd">
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.UploadFile" Color="@Color.Primary" OnClick="Submit">@localizer["load"]</MudButton>
             </MudStack>
-        </MudForm>
-    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+        }
+        @if (showHtml)
+        {
+            <MudStack>
 
+            <MudExpansionPanels Elevation="25">
+                <MudExpansionPanel >
+                    <TitleContent>
+                        <div class="d-flex">
+                            <MudIcon Color="Color.Warning" Icon="@Icons.Material.Filled.Warning" class="mr-3"></MudIcon>
+                            <MudBadge Content="_reportImportResultViewModel.WarningMessages.Count()" Color="Color.Warning">
+                                <MudText>@localizer["warnings"]</MudText>
+                            </MudBadge>
+                        </div>
+                    </TitleContent>
+                    <ChildContent>
+                        <MudStack>
+                            @foreach (var item in _reportImportResultViewModel.WarningMessages)
+                            {
+                                <MudText Typo="Typo.body1"> <MudIcon Icon="@Icons.Material.Filled.Warning"/> @item</MudText>
+                            }
+                        </MudStack>
+                    </ChildContent>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="editorConf" @bind-Value="_reportImportResultViewModel.Body" data-mce-placeholder="Description"/>
+            </MudStack>
+        }
 </AuthorizeView>

@@ -87,11 +87,20 @@ public partial class ReportComponentsDialog: ComponentBase
         model.Name = component.Name;
         model.Content = component.Content;
         model.CssContent = component.ContentCss;
-        await SetCss();
+        //await SetCss();
         model.Language = component.Language;
         model.ComponentType = component.ComponentType;
         aiEnabled = _aiService.IsEnabled();
-        
+       cssCode = model.CssContent;
+       Editors.RemoveAt(0);
+       var editedConf = editorConf;
+       editedConf.Keys.ToList().ForEach(key => {
+           if (key == "content_style")
+           {
+               editedConf[key] = cssCode;
+           }
+       });
+       Editors.Add(new TinyMCE.Blazor.Editor(){Conf=editedConf});
         await base.OnInitializedAsync();
     }
     
@@ -174,8 +183,7 @@ public partial class ReportComponentsDialog: ComponentBase
             AutomaticLayout = true,
             Language = "css",
             GlyphMargin = true,
-            Value = ""
-        };
+            Value = model.CssContent,};
     }
     List<TinyMCE.Blazor.Editor> Editors = new List<TinyMCE.Blazor.Editor>(){
         new TinyMCE.Blazor.Editor(){Conf=editorConf}

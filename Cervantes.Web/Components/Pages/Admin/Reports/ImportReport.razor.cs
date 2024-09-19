@@ -24,7 +24,7 @@ public partial class ImportReport : ComponentBase
     }
     
      private static IBrowserFile file;
-
+     private bool showHtml = false;
      [Inject] ISnackbar Snackbar { get; set; }
      [Inject] private ReportController _ReportController { get; set; }
 
@@ -37,6 +37,53 @@ public partial class ImportReport : ComponentBase
 
     
 	private long maxFileSize = 1024 * 1024 * 50;
+	private ReportImportResultViewModel _reportImportResultViewModel = new ReportImportResultViewModel();
+	private Dictionary<string, object> editorConf = new Dictionary<string, object>{
+                {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
+                {"menubar", "file edit view insert format tools table help"},
+                {"toolbar", "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media link anchor codesample | ltr rtl"},
+                {"toolbar_sticky", true},
+                {"image_advtab", true},
+                {"height", 600},
+                {"image_caption", true},
+                {"promotion", false},
+                {"quickbars_selection_toolbar", "bold italic | quicklink h2 h3 blockquote quickimage quicktable"},
+                {"noneditable_noneditable_class", "mceNonEditable"},
+                {"toolbar_mode", "sliding"},
+                {"contextmenu", "link image imagetools table"},
+                {"textpattern_patterns", new object[] {
+                    new {start = "#", format = "h1"},
+                    new {start = "##", format = "h2"},
+                    new {start = "###", format = "h3"},
+                    new {start = "####", format = "h4"},
+                    new {start = "#####", format = "h5"},
+                    new {start = "######", format = "h6"},
+                    new {start = ">", format = "blockquote"},
+                    new {start = "*", end = "*", format = "italic"},
+                    new {start = "_", end = "_", format = "italic"},
+                    new {start = "**", end = "**", format = "bold"},
+                    new {start = "__", end = "__", format = "bold"},
+                    new {start = "***", end = "***", format = "bold italic"},
+                    new {start = "___", end = "___", format = "bold italic"},
+                    new {start = "__*", end = "*__", format = "bold italic"},
+                    new {start = "**_", end = "_**", format = "bold italic"},
+                    new {start = "`", end = "`", format = "code"},
+                    new {start = "---", replacement = "<hr/>"},
+                    new {start = "--", replacement = "—"},
+                    new {start = "-", replacement = "—"},
+                    new {start = "(c)", replacement = "©"},
+                    new {start = "~", end = "~", cmd = "createLink"},
+                    new {start = "<", end = ">", cmd = "createLink"},
+                    new {start = "* ", cmd = "InsertUnorderedList"},
+                    new {start = "-", cmd = "InsertUnorderedList"},
+                    new {start = "1. ", cmd = "InsertOrderedList", value = "decimal"},
+                    new {start = "1) ", cmd = "InsertOrderedList", value = "decimal"},
+                    new {start = "a. ", cmd = "InsertOrderedList", value = "lower-alpha"},
+                    new {start = "a) ", cmd = "InsertOrderedList", value = "lower-alpha"},
+                    new {start = "i. ", cmd = "InsertOrderedList", value = "lower-roman"},
+                    new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
+                }}
+            };
 	
 	 private async Task Submit()
     {
@@ -58,9 +105,11 @@ public partial class ImportReport : ComponentBase
 	        }
 	        
 	        var response =  await _ReportController.Import(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+	        if (response != null)
 	        {
 		        Snackbar.Add(@localizer["clientCreated"], Severity.Success);
+		        _reportImportResultViewModel = response;
+		        showHtml = true;
 	        }
 	        else
 	        {
@@ -78,9 +127,9 @@ public partial class ImportReport : ComponentBase
     {
         public ImportModelFluentValidator()
         {
-            RuleFor(x => x.Name)
+            /*RuleFor(x => x.Name)
                 .NotEmpty()
-                .Length(1,100);
+                .Length(1,100);*/
           
 		}
 	    

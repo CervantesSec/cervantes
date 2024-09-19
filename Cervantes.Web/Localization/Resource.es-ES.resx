@@ -1812,4 +1812,10 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="advancedCss" xml:space="preserve">
         <value>CSS Avanzado</value>
     </data>
+    <data name="updateStyle" xml:space="preserve">
+        <value>Actualizar Estilo CSS</value>
+    </data>
+    <data name="warnings" xml:space="preserve">
+        <value>Advertencias</value>
+    </data>
 </root>

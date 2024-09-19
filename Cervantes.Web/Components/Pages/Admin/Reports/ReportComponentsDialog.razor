@@ -72,7 +72,13 @@
                                 </div>
                             </TitleContent>
                             <ChildContent>
-                                <StandaloneCodeEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" CssClass="editor-class"/>
+                                <MudStack>
+                                    <StandaloneCodeEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" CssClass="editor-class"/>
+                                    <MudStack Row="true" Justify="Justify.FlexEnd">
+                                        <MudButton  Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Css" Color="@Color.Primary" OnClick="UpdateCss">@localizer["updateStyle"]</MudButton>
+
+                                    </MudStack>
+                                </MudStack>
                             </ChildContent>
                         </MudExpansionPanel>
                     </MudExpansionPanels>

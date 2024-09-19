@@ -1730,4 +1730,10 @@
     <data name="advancedCss" xml:space="preserve">
         <value>CSS Avançado</value>
     </data>
+    <data name="updateStyle" xml:space="preserve">
+        <value>Atualizar Estilo CSS</value>
+    </data>
+    <data name="warnings" xml:space="preserve">
+        <value>Avisos</value>
+    </data>
 </root>
