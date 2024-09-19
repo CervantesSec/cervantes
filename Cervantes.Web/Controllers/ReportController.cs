@@ -610,12 +610,11 @@ public class ReportController : ControllerBase
                 var Vaults = vaultManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
                 var reportParts = reportsPartsManager.GetAll().Where(x => x.TemplateId == model.ReportTemplateId)
                     .OrderBy(x => x.Order).Include(x => x.Component).ToList();
-                string source = @"<!DOCTYPE html>
-                <html>
+                string source = @"<!DOCTYPE HTML>
+                <html lang='en' xmlns='http://www.w3.org/1999/xhtml'>
                 <head>
-                    <meta charset=""utf-8"">
+                    <meta charset='utf-8'/>
                     <title></title>
-                    <meta name=""viewport"" content=""width=device-width, initial-scale=1"">
                 </head>
                 <body>
                     <header>
@@ -637,8 +636,18 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Header)
                              .OrderBy(x => x.Order))
                 {
-                    var header = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
-                    sbHeader.Append(header.Html);
+                    var parsed = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    string pattern = @"<html\s*(?:[^>]*)\s*>";
+                    string pattern2 = @"<body\s*(?:[^>]*)\s*>";
+                    string pattern3 = @"<head\s*(?:[^>]*)\s*>";
+                    string html = parsed.Html;
+                    html = Regex.Replace(html, pattern, "", RegexOptions.IgnoreCase);
+                    html = Regex.Replace(html, pattern2, "", RegexOptions.IgnoreCase);
+                    html = Regex.Replace(html, pattern3, "", RegexOptions.IgnoreCase);
+                    html =html.Replace("</html>", "");
+                    html =html.Replace("</head>", "");
+                    html =html.Replace("</body>", "");
+                    sbHeader.Append(html);
                 }
 
                 source = source.Replace("{{HeaderComponents}}", sbHeader.ToString());
@@ -648,8 +657,18 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Cover)
                              .OrderBy(x => x.Order))
                 {
-                    var cover = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
-                    sbCover.Append(cover.Html);
+                    var parsed = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    string pattern = @"<html\s*(?:[^>]*)\s*>";
+                    string pattern2 = @"<body\s*(?:[^>]*)\s*>";
+                    string pattern3 = @"<head\s*(?:[^>]*)\s*>";
+                    string html = parsed.Html;
+                    html = Regex.Replace(html, pattern, "", RegexOptions.IgnoreCase);
+                    html = Regex.Replace(html, pattern2, "", RegexOptions.IgnoreCase);
+                    html = Regex.Replace(html, pattern3, "", RegexOptions.IgnoreCase);
+                    html =html.Replace("</html>", "");
+                    html =html.Replace("</head>", "");
+                    html =html.Replace("</body>", "");
+                    sbCover.Append(html);
                 }
 
                 source = source.Replace("{{CoverComponents}}", sbCover.ToString());
@@ -658,8 +677,18 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Body)
                              .OrderBy(x => x.Order))
                 {
-                    var body = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
-                    sbBody.Append(body.Html);
+                    var parsed = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    string pattern = @"<html\s*(?:[^>]*)\s*>";
+                    string pattern2 = @"<body\s*(?:[^>]*)\s*>";
+                    string pattern3 = @"<head\s*(?:[^>]*)\s*>";
+                    string html = parsed.Html;
+                    html = Regex.Replace(html, pattern, "", RegexOptions.IgnoreCase);
+                    html = Regex.Replace(html, pattern2, "", RegexOptions.IgnoreCase);
+                    html = Regex.Replace(html, pattern3, "", RegexOptions.IgnoreCase);
+                    html =html.Replace("</html>", "");
+                    html =html.Replace("</head>", "");
+                    html =html.Replace("</body>", "");
+                    sbBody.Append(html);
                 }
 
                 source = source.Replace("{{BodyComponents}}", sbBody.ToString());
@@ -669,8 +698,18 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Footer)
                              .OrderBy(x => x.Order))
                 {
-                    var footer = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
-                    sbFooter.Append(footer.Html);
+                    var parsed = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    string pattern = @"<html\s*(?:[^>]*)\s*>";
+                    string pattern2 = @"<body\s*(?:[^>]*)\s*>";
+                    string pattern3 = @"<head\s*(?:[^>]*)\s*>";
+                    string html = parsed.Html;
+                    html = Regex.Replace(html, pattern, "", RegexOptions.IgnoreCase);
+                    html = Regex.Replace(html, pattern2, "", RegexOptions.IgnoreCase);
+                    html = Regex.Replace(html, pattern3, "", RegexOptions.IgnoreCase);
+                    html =html.Replace("</html>", "");
+                    html =html.Replace("</head>", "");
+                    html =html.Replace("</body>", "");
+                    sbFooter.Append(html);
                 }
 
                 source = source.Replace("{{FooterComponents}}", sbFooter.ToString());
@@ -1141,89 +1180,8 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                             }
 
                             break;
-                        /*
-                        case ReportFileType.Pdf:
-                            using (MemoryStream masterStream = new MemoryStream())
-                            {
-                                
-                                var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-                                htmlDoc.LoadHtml(report.HtmlCode);
-                                var headerHtml = htmlDoc.DocumentNode.SelectSingleNode("//header")?.InnerHtml;
-                                var footerHtml = htmlDoc.DocumentNode.SelectSingleNode("//footer")?.InnerHtml;
-                                var coverHtml =
-                                    htmlDoc.DocumentNode.SelectSingleNode("//cover")
-                                        ?.InnerHtml;
-                                
-                                var headerNodes = htmlDoc.DocumentNode.SelectNodes("//header");
-                                var footerNodes = htmlDoc.DocumentNode.SelectNodes("//footer");
-                                var coverNodes = htmlDoc.DocumentNode.SelectNodes("//cover");
-
-                                // Remove all the nodes
-                                if (headerNodes != null)
-                                {
-                                    foreach (var node in headerNodes)
-                                    {
-                                        node.Remove();
-                                    }
-                                }
-
-                                if (footerNodes != null)
-                                {
-                                    foreach (var node in footerNodes)
-                                    {
-                                        node.Remove();
-                                    }
-                                }
-
-                                if (coverNodes != null)
-                                {
-                                    foreach (var node in coverNodes)
-                                    {
-                                        node.Remove();
-                                    }
-                                }
-
-                                string updatedHtmlCode = htmlDoc.DocumentNode.OuterHtml;
-                                
-
-                                // Add HTML to our PDF
-                                if (!string.IsNullOrEmpty(coverHtml))
-                                {
-                                    AppendHTML(masterStream, coverHtml);
-
-                                }
-
-                                if (!string.IsNullOrEmpty(updatedHtmlCode))
-                                {
-                                    AppendHTML(masterStream, updatedHtmlCode);
-
-                                }
-
-                                if (!string.IsNullOrEmpty(headerHtml))
-                                {
-                                    DownloadReportHelper.AppendHTML(masterStream, headerHtml);
-
-                                }
-
-                                if (!string.IsNullOrEmpty(footerHtml))
-                                {
-                                    DownloadReportHelper.AppendHTML(masterStream, footerHtml);
-
-                                }
-                                
-                                // Create a new directory for our output PDF
-                                string newDirectory = $"{executingDirectory}{DateTime.Now.ToString("MM-dd-yyyy")}";
-                                if (!Directory.Exists(newDirectory))
-                                    Directory.CreateDirectory(newDirectory);
-
-                                // Save our in-memory PDF as a PDF on our file system
-                                using (FileStream fileStream = new FileStream($"{newDirectory}\\{DateTime.Now.ToString("HH-mm-ss")} output.pdf", FileMode.Create))
-                                    masterStream.WriteTo(fileStream);
-
-                                Console.Write("PDF was created");
-                            }
-                    
-                                
+                        /*case ReportFileType.Pdf:
+                        
                             
                                 break;*/
                     }
