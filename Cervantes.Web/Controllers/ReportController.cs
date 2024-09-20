@@ -10,7 +10,6 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.IFR.File;
 using Cervantes.Web.Helpers;
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Ganss.Xss;
@@ -19,6 +18,12 @@ using HandlebarsDotNet.Extension.NewtonsoftJson;
 using Hangfire.Dashboard.Resources;
 using HtmlAgilityPack;
 using HtmlToOpenXml;
+using iText.Html2pdf;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using Mammoth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +34,10 @@ using Newtonsoft.Json.Linq;
 using Scriban;
 using Scriban.Runtime;
 using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
+using PageSize = iText.Kernel.Geom.PageSize;
+using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
+using TextAlignment = DocumentFormat.OpenXml.Wordprocessing.TextAlignment;
+using VerticalAlignment = DocumentFormat.OpenXml.Drawing.Wordprocessing.VerticalAlignment;
 
 namespace Cervantes.Web.Controllers;
 
@@ -1180,10 +1189,127 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                             }
 
                             break;
-                        /*case ReportFileType.Pdf:
-                        
+                        case ReportFileType.Pdf:
+                            byte[] pdfContent;
+                            // Parse the HTML code to extract the header, footer, and cover
+                            var htmlDoc2 = new HtmlDocument();
+                            htmlDoc2.LoadHtml(report.HtmlCode);
+                            var headerHtml2 = htmlDoc2.DocumentNode.SelectSingleNode("//header")?.InnerHtml;
+                            var footerHtml2 = htmlDoc2.DocumentNode.SelectSingleNode("//footer")?.InnerHtml;
+                            var coverHtml2 = htmlDoc2.DocumentNode.SelectSingleNode("//cover")?.InnerHtml;
+
+                            // Remove header, footer, and cover nodes from the main content
+                            var nodesToRemove = htmlDoc2.DocumentNode.SelectNodes("//header|//footer|//cover");
+                            if (nodesToRemove != null)
+                            {
+                                foreach (var node in nodesToRemove)
+                                {
+                                    node.Remove();
+                                }
+                            }
+
+                            string mainContent = htmlDoc2.DocumentNode.OuterHtml;
+
+                            using (MemoryStream finalPdfStream = new MemoryStream())
+                            {
+                                PdfDocument pdfDoc = new PdfDocument(new PdfWriter(finalPdfStream));
+                                iText.Layout.Document document = new iText.Layout.Document(pdfDoc);
+
+                                try
+                                {
+                                    // Step 1: Add cover page if it exists
+                                    if (!string.IsNullOrEmpty(coverHtml2))
+                                    {
+                                        using (MemoryStream coverStream = new MemoryStream())
+                                        {
+                                            ConverterProperties coverProps = new ConverterProperties();
+                                            iText.Html2pdf.HtmlConverter.ConvertToPdf(coverHtml2, coverStream, coverProps);
+                                            PdfDocument coverPdfDoc = new PdfDocument(new PdfReader(new MemoryStream(coverStream.ToArray())));
+                                            coverPdfDoc.CopyPagesTo(1, 1, pdfDoc);
+                                            coverPdfDoc.Close();
+                                        }
+                                    }
+
+                                    // Step 2: Convert main content HTML to PDF
+                                    using (MemoryStream mainContentStream = new MemoryStream())
+                                    {
+                                        ConverterProperties props = new ConverterProperties();
+                                        iText.Html2pdf.HtmlConverter.ConvertToPdf(mainContent, mainContentStream, props);
+                                        PdfDocument mainContentPdfDoc = new PdfDocument(new PdfReader(new MemoryStream(mainContentStream.ToArray())));
+                                        mainContentPdfDoc.CopyPagesTo(1, mainContentPdfDoc.GetNumberOfPages(), pdfDoc);
+                                        mainContentPdfDoc.Close();
+                                    }
+
+                                    // Step 3: Add header and footer to all pages except the cover
+                                    int numberOfPages = pdfDoc.GetNumberOfPages();
+                                    int startPage = coverHtml2 != null ? 2 : 1;  // Start from page 2 if cover exists
+
+                                    for (int i = startPage; i <= numberOfPages; i++)
+                                    {
+                                        /*// Add header
+                                        if (headerHtml2 != null)
+                                        {
+                                            document.ShowTextAligned(new iText.Layout.Element.Paragraph(headerHtml2), 30,
+                                                800, i, iText.Layout.Properties.TextAlignment.LEFT,
+                                                iText.Layout.Properties.VerticalAlignment.TOP, 0);
+                                        }
+
+                                        // Add footer
+                                        if (footerHtml2 != null)
+                                        {
+                                            document.ShowTextAligned(new iText.Layout.Element.Paragraph(footerHtml2), 30,
+                                                30, i, iText.Layout.Properties.TextAlignment.LEFT,
+                                                iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
+                                        }*/
+                                        // Add header
+                                        if (headerHtml2 != null)
+                                        {
+                                            var headerElements = iText.Html2pdf.HtmlConverter.ConvertToElements(headerHtml2);
+                                            foreach (var element in headerElements)
+                                            {
+                                                if (element is iText.Layout.Element.Paragraph paragraph)
+                                                {
+                                                    var canvas = new Canvas(new PdfCanvas(document.GetPdfDocument().GetPage(i)), document.GetPdfDocument().GetDefaultPageSize());
+                                                    canvas.ShowTextAligned(paragraph, 30, 800, i, iText.Layout.Properties.TextAlignment.LEFT, iText.Layout.Properties.VerticalAlignment.TOP, 0);
+                                                }
+                                            }
+                                        }
+
+                                        // Add footer
+                                        if (footerHtml2 != null)
+                                        {
+                                            var footerElements = iText.Html2pdf.HtmlConverter.ConvertToElements(footerHtml2);
+                                            foreach (var element in footerElements)
+                                            {
+                                                if (element is iText.Layout.Element.Paragraph paragraph)
+                                                {
+                                                    var canvas = new Canvas(new PdfCanvas(document.GetPdfDocument().GetPage(i)), document.GetPdfDocument().GetDefaultPageSize());
+                                                    canvas.ShowTextAligned(paragraph, 30, 30, i, iText.Layout.Properties.TextAlignment.LEFT, iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                finally
+                                {
+                                    document.Close();
+                                }
+
+                                pdfContent = finalPdfStream.ToArray();
+                            }
+
+                            string fileName3 = $"{report.Name}_{report.Version}.pdf";
+                            var mimeType3 = "application/pdf";
+                            _logger.LogInformation("Report downloaded successfully. User: {0}", aspNetUserId);
+
+                            return new FileContentResult(pdfContent, mimeType3)
+                            {
+                                FileDownloadName = fileName3
+                            };
+                                                      
                             
-                                break;*/
+
+                            break;
                     }
                 }
 

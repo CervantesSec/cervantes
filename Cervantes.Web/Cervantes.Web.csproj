@@ -14,6 +14,7 @@
         <PackageReference Include="Blazor.Flags" Version="1.0.0.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="BlazorMonaco" Version="3.2.0" />
+        <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
         <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="7.0.1" />
         <PackageReference Include="FluentValidation" Version="11.9.2" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
@@ -28,6 +29,10 @@
         <PackageReference Include="Heron.MudCalendar" Version="2.0.2" />
         <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
         <PackageReference Include="HtmlToOpenXml.dll" Version="3.1.1" />
+        <PackageReference Include="itext7" Version="8.0.5" />
+        <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.5" />
+        <PackageReference Include="itext7.commons" Version="8.0.5" />
+        <PackageReference Include="itext7.pdfhtml" Version="5.0.5" />
         <PackageReference Include="Mammoth" Version="1.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.8" />
