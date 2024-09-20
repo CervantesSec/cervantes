@@ -19,10 +19,13 @@ using Hangfire.Dashboard.Resources;
 using HtmlAgilityPack;
 using HtmlToOpenXml;
 using iText.Html2pdf;
+using iText.Html2pdf.Resolver.Font;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
+using iText.Layout.Font;
 using iText.Layout.Properties;
 using Mammoth;
 using Microsoft.AspNetCore.Authorization;
@@ -919,7 +922,7 @@ public class ReportController : ControllerBase
                 scriptObject.Add("VulnTotalCount", Vulns.Count());
                 scriptObject.Add("Tasks", TasksList);
                 scriptObject.Add("Vaults", VaultsList);
-                scriptObject.Add("PageBreak", @"<span style=""page-break-after: always;""></span>");
+                scriptObject.Add("PageBreak", @"<div style=""page-break-after: always;""></div>");
                 scriptObject.Add("Today", DateTime.Now.ToShortDateString());
                 
 
@@ -1194,8 +1197,6 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                             // Parse the HTML code to extract the header, footer, and cover
                             var htmlDoc2 = new HtmlDocument();
                             htmlDoc2.LoadHtml(report.HtmlCode);
-                            var headerHtml2 = htmlDoc2.DocumentNode.SelectSingleNode("//header")?.InnerHtml;
-                            var footerHtml2 = htmlDoc2.DocumentNode.SelectSingleNode("//footer")?.InnerHtml;
                             var coverHtml2 = htmlDoc2.DocumentNode.SelectSingleNode("//cover")?.InnerHtml;
 
                             // Remove header, footer, and cover nodes from the main content
@@ -1207,12 +1208,13 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     node.Remove();
                                 }
                             }
-
+                            
                             string mainContent = htmlDoc2.DocumentNode.OuterHtml;
 
                             using (MemoryStream finalPdfStream = new MemoryStream())
                             {
                                 PdfDocument pdfDoc = new PdfDocument(new PdfWriter(finalPdfStream));
+                                pdfDoc.SetDefaultPageSize(PageSize.A4);
                                 iText.Layout.Document document = new iText.Layout.Document(pdfDoc);
 
                                 try
@@ -1230,6 +1232,65 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                         }
                                     }
 
+                                    htmlDoc2.LoadHtml(report.HtmlCode);
+                                    var nodesToRemove2 = htmlDoc2.DocumentNode.SelectNodes("//cover");
+                                    if (nodesToRemove2 != null)
+                                    {
+                                        foreach (var node in nodesToRemove2)
+                                        {
+                                            node.Remove();
+                                        }
+                                    }
+                                    
+                                    mainContent = htmlDoc2.DocumentNode.OuterHtml;
+                                    
+                                    string cssStyle = @"<style>
+                                      #header {
+                                        position: running(header);
+                                      }
+
+                                      #footer {
+                                        position: running(footer);
+                                      }
+
+                                      @page {
+                                        @top-center {
+                                          content: element(header);
+                                        }
+
+                                        @bottom-center {
+                                          content: element(footer);
+                                        }
+                                      }
+
+                                      #current-page-placeholder::before {
+                                        content: counter(page);
+                                      }
+
+                                      #total-pages-placeholder::before {
+                                        content: counter(pages);
+                                      }
+                                    </style>";
+      
+                                    Match footerMatch = Regex.Match(mainContent, @"<footer>(.*?)</footer>", RegexOptions.Singleline);
+                                    string footerContent = footerMatch.Success ? footerMatch.Groups[1].Value : string.Empty;
+
+                                    // Remove the original footer
+                                    mainContent = Regex.Replace(mainContent, @"<footer>.*?</footer>", "", RegexOptions.Singleline);
+
+                                    // Replace header tag, insert CSS, and add footer content
+                                    string pattern = @"(<body>).*?(<header>.*?</header>)";
+                                    string replacement = "$1" + cssStyle + @"
+                                    $2
+                                    <div id=""footer"">" + footerContent + "</div>";
+        
+                                    mainContent = Regex.Replace(mainContent, pattern, replacement, RegexOptions.Singleline);
+
+                                    // Now replace the header tag with div
+                                    string headerPattern = @"<header>(.*?)</header>";
+                                    string headerReplacement = "<div id=\"header\">$1</div>";
+                                    mainContent = Regex.Replace(mainContent, headerPattern, headerReplacement, RegexOptions.Singleline);
+                                    
                                     // Step 2: Convert main content HTML to PDF
                                     using (MemoryStream mainContentStream = new MemoryStream())
                                     {
@@ -1239,56 +1300,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                         mainContentPdfDoc.CopyPagesTo(1, mainContentPdfDoc.GetNumberOfPages(), pdfDoc);
                                         mainContentPdfDoc.Close();
                                     }
-
-                                    // Step 3: Add header and footer to all pages except the cover
-                                    int numberOfPages = pdfDoc.GetNumberOfPages();
-                                    int startPage = coverHtml2 != null ? 2 : 1;  // Start from page 2 if cover exists
-
-                                    for (int i = startPage; i <= numberOfPages; i++)
-                                    {
-                                        /*// Add header
-                                        if (headerHtml2 != null)
-                                        {
-                                            document.ShowTextAligned(new iText.Layout.Element.Paragraph(headerHtml2), 30,
-                                                800, i, iText.Layout.Properties.TextAlignment.LEFT,
-                                                iText.Layout.Properties.VerticalAlignment.TOP, 0);
-                                        }
-
-                                        // Add footer
-                                        if (footerHtml2 != null)
-                                        {
-                                            document.ShowTextAligned(new iText.Layout.Element.Paragraph(footerHtml2), 30,
-                                                30, i, iText.Layout.Properties.TextAlignment.LEFT,
-                                                iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
-                                        }*/
-                                        // Add header
-                                        if (headerHtml2 != null)
-                                        {
-                                            var headerElements = iText.Html2pdf.HtmlConverter.ConvertToElements(headerHtml2);
-                                            foreach (var element in headerElements)
-                                            {
-                                                if (element is iText.Layout.Element.Paragraph paragraph)
-                                                {
-                                                    var canvas = new Canvas(new PdfCanvas(document.GetPdfDocument().GetPage(i)), document.GetPdfDocument().GetDefaultPageSize());
-                                                    canvas.ShowTextAligned(paragraph, 30, 800, i, iText.Layout.Properties.TextAlignment.LEFT, iText.Layout.Properties.VerticalAlignment.TOP, 0);
-                                                }
-                                            }
-                                        }
-
-                                        // Add footer
-                                        if (footerHtml2 != null)
-                                        {
-                                            var footerElements = iText.Html2pdf.HtmlConverter.ConvertToElements(footerHtml2);
-                                            foreach (var element in footerElements)
-                                            {
-                                                if (element is iText.Layout.Element.Paragraph paragraph)
-                                                {
-                                                    var canvas = new Canvas(new PdfCanvas(document.GetPdfDocument().GetPage(i)), document.GetPdfDocument().GetDefaultPageSize());
-                                                    canvas.ShowTextAligned(paragraph, 30, 30, i, iText.Layout.Properties.TextAlignment.LEFT, iText.Layout.Properties.VerticalAlignment.BOTTOM, 0);
-                                                }
-                                            }
-                                        }
-                                    }
+                                    
                                 }
                                 finally
                                 {
@@ -1382,4 +1394,5 @@ public static string ReplaceTableRowWithFor(string htmlContent)
         stream.CopyTo(memoryStream);
         return System.Convert.ToBase64String(memoryStream.ToArray());
     }
+    
 }
