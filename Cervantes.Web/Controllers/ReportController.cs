@@ -1093,53 +1093,28 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     // Convert the header, footer, and cover HTML to OpenXML elements
                                     HtmlToOpenXml.HtmlConverter converter = new HtmlToOpenXml.HtmlConverter(mainPart);
 
-                                    if (headerHtml != null)
-                                    {
-                                        var headerElements = converter.Parse(headerHtml);
-                                        headerPart.Header = new Header(headerElements);
-                                        headerPart.Header.Save();
-                                    }
+                                    bool hasCover = !string.IsNullOrEmpty(coverHtml);
 
-                                    if (footerHtml != null)
-                                    {
-                                        var footerElements = converter.Parse(footerHtml);
-                                        footerPart.Footer = new Footer(footerElements);
-                                        footerPart.Footer.Save();
-                                    }
-
-                                    if (coverHtml != null)
+                                    // Add cover page if it exists
+                                    if (hasCover)
                                     {
                                         var coverElements = converter.Parse(coverHtml);
                                         foreach (var element in coverElements)
                                         {
-                                            body.Append(element);
+                                            body.AppendChild(element.CloneNode(true));
                                         }
 
-                                        // Add a page break after the cover
-                                        body.Append(new Paragraph(new Run(new Break() { Type = BreakValues.Page })));
-                                        // Add a table of contents after the cover
-                                        /*FieldCode tocFieldCode = new FieldCode("TOC \\o \"1-3\" \\h \\z \\u");
-                                        Run tocFieldRun = new Run(tocFieldCode);
-                                        Paragraph tocParagraph = new Paragraph(tocFieldRun);
-                                        body.Append(tocParagraph);
-                                        body.Append(new Paragraph(new Run(new Break() { Type = BreakValues.Page })));*/
-
+                                        // Add a section break after the cover page
+                                        Paragraph sectionBreak = new Paragraph(
+                                            new ParagraphProperties(
+                                                new SectionProperties(
+                                                    new SectionType() { Val = SectionMarkValues.NextPage }
+                                                )
+                                            )
+                                        );
+                                        body.AppendChild(sectionBreak);
                                     }
-
-                                    // Ensure that the SectionProperties exists
-                                    SectionProperties sectionProps =
-                                        body.Elements<SectionProperties>().FirstOrDefault();
-                                    if (sectionProps == null)
-                                    {
-                                        sectionProps = new SectionProperties();
-                                        body.Append(sectionProps);
-                                    }
-
-                                    // Add the HeaderPart and FooterPart to the Word document
-                                    sectionProps.Append(new HeaderReference()
-                                        { Id = mainPart.GetIdOfPart(headerPart) });
-                                    sectionProps.Append(new FooterReference()
-                                        { Id = mainPart.GetIdOfPart(footerPart) });
+                                    
 
                                     // Select all <header>, <footer>, and <cover> nodes
                                     var headerNodes = htmlDoc.DocumentNode.SelectNodes("//header");
@@ -1172,8 +1147,19 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     }
 
                                     string updatedHtmlCode = htmlDoc.DocumentNode.OuterHtml;
-                                    await converter.ParseHtml(updatedHtmlCode);
                                     
+                                    if (!string.IsNullOrEmpty(headerHtml))
+                                    {
+                                        await converter.ParseHeader(headerHtml);
+                                    }
+                                    
+                                    if (!string.IsNullOrEmpty(footerHtml))
+                                    {
+                                        await converter.ParseFooter(footerHtml);
+                                    }
+                                    
+                                    await converter.ParseBody(updatedHtmlCode);
+
                                     mainPart.Document.Save();
                                 }
 
@@ -1190,7 +1176,6 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     FileDownloadName = fileName2
                                 };
                             }
-
                             break;
                         case ReportFileType.Pdf:
                             byte[] pdfContent;
