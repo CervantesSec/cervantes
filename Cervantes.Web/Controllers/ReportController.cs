@@ -680,7 +680,7 @@ public class ReportController : ControllerBase
                     html =html.Replace("</html>", "");
                     html =html.Replace("</head>", "");
                     html =html.Replace("</body>", "");
-                    sbCover.Append(html);
+                    sbCover.Append(parsed.Html);
                 }
 
                 source = source.Replace("{{CoverComponents}}", sbCover.ToString());
@@ -1178,14 +1178,14 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                             }
                             break;
                         case ReportFileType.Pdf:
+                            
                             byte[] pdfContent;
-                            // Parse the HTML code to extract the header, footer, and cover
                             var htmlDoc2 = new HtmlDocument();
                             htmlDoc2.LoadHtml(report.HtmlCode);
                             var coverHtml2 = htmlDoc2.DocumentNode.SelectSingleNode("//cover")?.InnerHtml;
 
                             // Remove header, footer, and cover nodes from the main content
-                            var nodesToRemove = htmlDoc2.DocumentNode.SelectNodes("//header|//footer|//cover");
+                            var nodesToRemove = htmlDoc2.DocumentNode.SelectNodes("//cover");
                             if (nodesToRemove != null)
                             {
                                 foreach (var node in nodesToRemove)
@@ -1193,103 +1193,114 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     node.Remove();
                                 }
                             }
-                            
+
                             string mainContent = htmlDoc2.DocumentNode.OuterHtml;
 
+                            string cssStyle = @"
+                                <style>
+                                    @page { margin: 0; size: A4; }
+                                    body { margin: 0; padding: 0; }
+                                    #header { position: running(header); }
+                                    #footer { position: running(footer); }
+                                    @page {
+                                        @top-center { content: element(header); }
+                                        @bottom-center { content: element(footer); }
+                                    }
+                                    #current-page-placeholder::before { content: counter(page); }
+                                    #total-pages-placeholder::before { content: counter(pages); }
+                                </style>";
+
+                            List<byte[]> pdfParts = new List<byte[]>();
+
+                            // Convert cover to PDF
+                            if (!string.IsNullOrEmpty(coverHtml2))
+                            {
+                                string fullCoverHtml = cssStyle + "<body>" + coverHtml2 + "</body>";
+                                using (MemoryStream coverStream = new MemoryStream())
+                                {
+                                    ConverterProperties coverProps = new ConverterProperties();
+                                    iText.Html2pdf.HtmlConverter.ConvertToPdf(fullCoverHtml, coverStream, coverProps);
+                                    pdfParts.Add(coverStream.ToArray());
+                                }
+                            }
+
+                            // Process main content
+                            string cssStyle2 = @"
+                              <style>
+                                @page {
+                                    margin: 0.60in 0 0.60in 0;
+                                    size: A4;
+                                }
+                                body {
+                                    margin: 0;
+                                    padding: 0;
+                                }
+                                #header {
+                                    position: running(header);
+                                }
+                                #footer {
+                                    position: running(footer);
+                                }
+                            #document-body-container {
+                                    margin: 0 0.60in 0 0.60in;
+                                }
+                                @page {
+                                    @top-center {
+                                        content: element(header);
+                                    }
+                                    @bottom-center {
+                                        content: element(footer);
+                                    }
+                                }
+                                #current-page-placeholder::before {
+                                    content: counter(page);
+                                }
+                                #total-pages-placeholder::before {
+                                    content: counter(pages);
+                                }
+                            </style>";
+                            Match footerMatch = Regex.Match(mainContent, @"<footer>(.*?)</footer>", RegexOptions.Singleline);
+                            string footerContent = footerMatch.Success ? footerMatch.Groups[1].Value : string.Empty;
+
+                            mainContent = Regex.Replace(mainContent, @"<footer>.*?</footer>", "", RegexOptions.Singleline);
+
+                            string pattern = @"(<body>)";
+                            string replacement = "$1" + cssStyle2;
+
+                            mainContent = Regex.Replace(mainContent, pattern, replacement, RegexOptions.Singleline);
+
+                            string headerPattern = @"<header>(.*?)</header>";
+                            string headerReplacement = "<div id=\"header\">$1</div>";
+                            mainContent = Regex.Replace(mainContent, headerPattern, headerReplacement, RegexOptions.Singleline);
+
+                            string footerReplacement = $"<div id=\"footer\">{footerContent}</div>";
+                            mainContent = Regex.Replace(mainContent, @"(<div id=\""header\"">.*?</div>)", "$1" + footerReplacement, RegexOptions.Singleline);
+
+                            // Wrap the remaining content in a div container
+                            mainContent = Regex.Replace(mainContent, @"(<div id=\""footer\"">.*?</div>)(.*?)(</body>)", "$1<div id=\"document-body-container\">$2</div>$3", RegexOptions.Singleline);
+
+                            // Convert main content to PDF
+                            using (MemoryStream mainContentStream = new MemoryStream())
+                            {
+                                ConverterProperties props = new ConverterProperties();
+                                iText.Html2pdf.HtmlConverter.ConvertToPdf(mainContent, mainContentStream, props);
+                                pdfParts.Add(mainContentStream.ToArray());
+                            }
+
+                            // Combine all PDF parts
                             using (MemoryStream finalPdfStream = new MemoryStream())
                             {
-                                PdfDocument pdfDoc = new PdfDocument(new PdfWriter(finalPdfStream));
-                                pdfDoc.SetDefaultPageSize(PageSize.A4);
-                                iText.Layout.Document document = new iText.Layout.Document(pdfDoc);
-
-                                try
+                                using (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(finalPdfStream)))
                                 {
-                                    // Step 1: Add cover page if it exists
-                                    if (!string.IsNullOrEmpty(coverHtml2))
+                                    foreach (byte[] pdfPart in pdfParts)
                                     {
-                                        using (MemoryStream coverStream = new MemoryStream())
+                                        using (PdfDocument partDoc = new PdfDocument(new PdfReader(new MemoryStream(pdfPart))))
                                         {
-                                            ConverterProperties coverProps = new ConverterProperties();
-                                            iText.Html2pdf.HtmlConverter.ConvertToPdf(coverHtml2, coverStream, coverProps);
-                                            PdfDocument coverPdfDoc = new PdfDocument(new PdfReader(new MemoryStream(coverStream.ToArray())));
-                                            coverPdfDoc.CopyPagesTo(1, 1, pdfDoc);
-                                            coverPdfDoc.Close();
+                                            partDoc.CopyPagesTo(1, partDoc.GetNumberOfPages(), pdfDoc);
                                         }
                                     }
 
-                                    htmlDoc2.LoadHtml(report.HtmlCode);
-                                    var nodesToRemove2 = htmlDoc2.DocumentNode.SelectNodes("//cover");
-                                    if (nodesToRemove2 != null)
-                                    {
-                                        foreach (var node in nodesToRemove2)
-                                        {
-                                            node.Remove();
-                                        }
-                                    }
-                                    
-                                    mainContent = htmlDoc2.DocumentNode.OuterHtml;
-                                    
-                                    string cssStyle = @"<style>
-                                      #header {
-                                        position: running(header);
-                                      }
-
-                                      #footer {
-                                        position: running(footer);
-                                      }
-
-                                      @page {
-                                        @top-center {
-                                          content: element(header);
-                                        }
-
-                                        @bottom-center {
-                                          content: element(footer);
-                                        }
-                                      }
-
-                                      #current-page-placeholder::before {
-                                        content: counter(page);
-                                      }
-
-                                      #total-pages-placeholder::before {
-                                        content: counter(pages);
-                                      }
-                                    </style>";
-      
-                                    Match footerMatch = Regex.Match(mainContent, @"<footer>(.*?)</footer>", RegexOptions.Singleline);
-                                    string footerContent = footerMatch.Success ? footerMatch.Groups[1].Value : string.Empty;
-
-                                    // Remove the original footer
-                                    mainContent = Regex.Replace(mainContent, @"<footer>.*?</footer>", "", RegexOptions.Singleline);
-
-                                    // Replace header tag, insert CSS, and add footer content
-                                    string pattern = @"(<body>).*?(<header>.*?</header>)";
-                                    string replacement = "$1" + cssStyle + @"
-                                    $2
-                                    <div id=""footer"">" + footerContent + "</div>";
-        
-                                    mainContent = Regex.Replace(mainContent, pattern, replacement, RegexOptions.Singleline);
-
-                                    // Now replace the header tag with div
-                                    string headerPattern = @"<header>(.*?)</header>";
-                                    string headerReplacement = "<div id=\"header\">$1</div>";
-                                    mainContent = Regex.Replace(mainContent, headerPattern, headerReplacement, RegexOptions.Singleline);
-                                    
-                                    // Step 2: Convert main content HTML to PDF
-                                    using (MemoryStream mainContentStream = new MemoryStream())
-                                    {
-                                        ConverterProperties props = new ConverterProperties();
-                                        iText.Html2pdf.HtmlConverter.ConvertToPdf(mainContent, mainContentStream, props);
-                                        PdfDocument mainContentPdfDoc = new PdfDocument(new PdfReader(new MemoryStream(mainContentStream.ToArray())));
-                                        mainContentPdfDoc.CopyPagesTo(1, mainContentPdfDoc.GetNumberOfPages(), pdfDoc);
-                                        mainContentPdfDoc.Close();
-                                    }
-                                    
-                                }
-                                finally
-                                {
-                                    document.Close();
+                                   
                                 }
 
                                 pdfContent = finalPdfStream.ToArray();
@@ -1303,7 +1314,6 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                             {
                                 FileDownloadName = fileName3
                             };
-                                                      
                             
 
                             break;
