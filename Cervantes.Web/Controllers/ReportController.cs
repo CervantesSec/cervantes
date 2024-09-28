@@ -23,6 +23,7 @@ using iText.Html2pdf.Resolver.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
+using iText.Kernel.Pdf.Xobject;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Font;
@@ -643,7 +644,6 @@ public class ReportController : ControllerBase
                     </footer>
                 </body>
                 </html>";
-
                 StringBuilder sbHeader = new StringBuilder();
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Header)
                              .OrderBy(x => x.Order))
@@ -680,9 +680,8 @@ public class ReportController : ControllerBase
                     html =html.Replace("</html>", "");
                     html =html.Replace("</head>", "");
                     html =html.Replace("</body>", "");
-                    sbCover.Append(parsed.Html);
+                    sbCover.Append(html);
                 }
-
                 source = source.Replace("{{CoverComponents}}", sbCover.ToString());
 
                 StringBuilder sbBody = new StringBuilder();
@@ -930,6 +929,7 @@ public class ReportController : ControllerBase
                 context.PushGlobal(scriptObject);
 
                 source = ReplaceTableRowWithFor(source);
+                source = HttpUtility.HtmlDecode(source);
                 //Console.WriteLine(source);
                 var templateScriban = Template.Parse(source);
                 // Check for any errors
@@ -1198,32 +1198,109 @@ public static string ReplaceTableRowWithFor(string htmlContent)
 
                             string cssStyle = @"
                                 <style>
-                                    @page { margin: 0; size: A4; }
-                                    body { margin: 0; padding: 0; }
-                                    #header { position: running(header); }
-                                    #footer { position: running(footer); }
-                                    @page {
-                                        @top-center { content: element(header); }
-                                        @bottom-center { content: element(footer); }
+                                    @page { size: A4; margin: 0;}
+                                    html, body { 
+                                        margin: 0; 
+                                        padding: 0; 
+                           
                                     }
+                                    table { page-break-inside: avoid; }
                                     #current-page-placeholder::before { content: counter(page); }
                                     #total-pages-placeholder::before { content: counter(pages); }
                                 </style>";
 
                             List<byte[]> pdfParts = new List<byte[]>();
 
-                            // Convert cover to PDF
+                            /*// Convert cover to PDF
                             if (!string.IsNullOrEmpty(coverHtml2))
                             {
-                                string fullCoverHtml = cssStyle + "<body>" + coverHtml2 + "</body>";
+                                string fullCoverHtml = "<!DOCTYPE HTML>" +
+                                                       "<html lang='en' xmlns='http://www.w3.org/1999/xhtml'>" +
+                                                       "<head>" +
+                                                       "<meta charset='utf-8'/>" +
+                                                       "<title></title>" +
+                                                       "</head>" + cssStyle + "<body>" + coverHtml2 + "</body></html>";
+                                Console.WriteLine(fullCoverHtml);
                                 using (MemoryStream coverStream = new MemoryStream())
                                 {
                                     ConverterProperties coverProps = new ConverterProperties();
                                     iText.Html2pdf.HtmlConverter.ConvertToPdf(fullCoverHtml, coverStream, coverProps);
                                     pdfParts.Add(coverStream.ToArray());
                                 }
-                            }
+                            }*/
+                            
+                            
+         if (!string.IsNullOrEmpty(coverHtml2))
+    {
+        string fullCoverHtml = @"<!DOCTYPE HTML>
+        <html lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+        <head>
+            <meta charset='utf-8'/>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <title></title>
+            <style>
+                @page { 
+                    size: A4; 
+                    margin: 0; 
+                }
+                html, body { 
+                    width: 210mm;
+            height: 297mm;
+            margin: 0;
+            padding: 0;
+                }
+                body {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                }
+                * {
+                    box-sizing: border-box;
+                }
+            </style>
+        </head>
+        <body>" + coverHtml2 + @"</body>
+        </html>";
 
+        using (MemoryStream intermediateStream = new MemoryStream())
+        {
+            PdfWriter writer = new PdfWriter(intermediateStream);
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            pdfDoc.SetDefaultPageSize(PageSize.A4);
+
+            ConverterProperties converterProperties = new ConverterProperties();
+            iText.Html2pdf.HtmlConverter.ConvertToPdf(fullCoverHtml, pdfDoc, converterProperties);
+            pdfDoc.Close();
+
+            using (MemoryStream scaledStream = new MemoryStream())
+            {
+                PdfDocument scaledDoc = new PdfDocument(new PdfWriter(scaledStream));
+                scaledDoc.SetDefaultPageSize(PageSize.A4);
+                PdfPage newPage = scaledDoc.AddNewPage();
+
+                PdfDocument sourceDoc = new PdfDocument(new PdfReader(new MemoryStream(intermediateStream.ToArray())));
+                PdfFormXObject pageCopy = sourceDoc.GetFirstPage().CopyAsFormXObject(scaledDoc);
+
+                Rectangle pageSize = newPage.GetPageSize();
+                Rectangle xObjectRect = pageCopy.GetBBox().ToRectangle();
+
+                float scale = Math.Min(pageSize.GetWidth() / xObjectRect.GetWidth(),
+                                       pageSize.GetHeight() / xObjectRect.GetHeight());
+
+                float x = (pageSize.GetWidth() - xObjectRect.GetWidth() * scale) / 2;
+                float y = (pageSize.GetHeight() - xObjectRect.GetHeight() * scale) / 2;
+
+                new PdfCanvas(newPage)
+                    .AddXObjectFittedIntoRectangle(pageCopy, new Rectangle(x, y, xObjectRect.GetWidth() * scale, xObjectRect.GetHeight() * scale));
+
+                scaledDoc.Close();
+                sourceDoc.Close();
+
+                pdfParts.Add(scaledStream.ToArray());
+            }
+        }
+    }
+                           
                             // Process main content
                             string cssStyle2 = @"
                               <style>
@@ -1235,6 +1312,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     margin: 0;
                                     padding: 0;
                                 }
+                                table { page-break-inside: avoid; }
                                 #header {
                                     position: running(header);
                                 }

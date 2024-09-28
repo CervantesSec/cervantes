@@ -102,6 +102,8 @@ public partial class CreateTaskDialog: ComponentBase
 			SelectedProject = project;
 		}
 		model.CreatedUserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+		model.AsignedUserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
 		StateHasChanged();
     }
 

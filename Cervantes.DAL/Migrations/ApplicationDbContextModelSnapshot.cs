@@ -129,7 +129,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("ToUserId");
 
-                    b.ToTable("ChatMessages");
+                    b.ToTable("ChatMessages", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Client", b =>
@@ -177,7 +177,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Cwe", b =>
@@ -198,7 +198,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cwe");
+                    b.ToTable("Cwe", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Document", b =>
@@ -233,7 +233,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Documents");
+                    b.ToTable("Documents", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Jira", b =>
@@ -315,7 +315,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("VulnId");
 
-                    b.ToTable("Jira");
+                    b.ToTable("Jira", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.JiraComments", b =>
@@ -355,7 +355,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("JiraId");
 
-                    b.ToTable("JiraComments");
+                    b.ToTable("JiraComments", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.KnowledgeBase", b =>
@@ -400,7 +400,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UpdatedUserId");
 
-                    b.ToTable("KnowledgeBase");
+                    b.ToTable("KnowledgeBase", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.KnowledgeBaseCategories", b =>
@@ -431,7 +431,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("KnowledgeBaseCategories");
+                    b.ToTable("KnowledgeBaseCategories", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.KnowledgeBaseTags", b =>
@@ -446,7 +446,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KnowledgeBaseTags");
+                    b.ToTable("KnowledgeBaseTags", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Log", b =>
@@ -487,7 +487,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logs");
+                    b.ToTable("Logs", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.MASTG", b =>
@@ -1197,7 +1197,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MASTG");
+                    b.ToTable("MASTG", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Note", b =>
@@ -1225,7 +1225,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notes");
+                    b.ToTable("Notes", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Organization", b =>
@@ -1265,7 +1265,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organization");
+                    b.ToTable("Organization", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Project", b =>
@@ -1324,7 +1324,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.ProjectAttachment", b =>
@@ -1354,7 +1354,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProjectAttachments");
+                    b.ToTable("ProjectAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.ProjectNote", b =>
@@ -1387,7 +1387,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProjectNotes");
+                    b.ToTable("ProjectNotes", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.ProjectUser", b =>
@@ -1409,7 +1409,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProjectUsers");
+                    b.ToTable("ProjectUsers", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Report", b =>
@@ -1456,7 +1456,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Reports", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.ReportComponents", b =>
@@ -1491,7 +1491,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReportComponents");
+                    b.ToTable("ReportComponents", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.ReportParts", b =>
@@ -1518,7 +1518,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("TemplateId");
 
-                    b.ToTable("ReportParts");
+                    b.ToTable("ReportParts", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.ReportTemplate", b =>
@@ -1552,7 +1552,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ReportTemplates");
+                    b.ToTable("ReportTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Target", b =>
@@ -1585,7 +1585,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Targets");
+                    b.ToTable("Targets", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.TargetServices", b =>
@@ -1626,7 +1626,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TargetServices");
+                    b.ToTable("TargetServices", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Task", b =>
@@ -1674,7 +1674,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.TaskAttachment", b =>
@@ -1704,7 +1704,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TaskAttachments");
+                    b.ToTable("TaskAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.TaskNote", b =>
@@ -1737,7 +1737,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TaskNotes");
+                    b.ToTable("TaskNotes", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.TaskTargets", b =>
@@ -1758,7 +1758,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("TaskId");
 
-                    b.ToTable("TaskTargets");
+                    b.ToTable("TaskTargets", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Vault", b =>
@@ -1798,7 +1798,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Vaults");
+                    b.ToTable("Vaults", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Vuln", b =>
@@ -1903,7 +1903,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("VulnCategoryId");
 
-                    b.ToTable("Vulns");
+                    b.ToTable("Vulns", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.VulnAttachment", b =>
@@ -1933,7 +1933,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("VulnId");
 
-                    b.ToTable("VulnAttachments");
+                    b.ToTable("VulnAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.VulnCategory", b =>
@@ -1955,7 +1955,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VulnCategories");
+                    b.ToTable("VulnCategories", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.VulnCwe", b =>
@@ -1976,7 +1976,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("VulnId");
 
-                    b.ToTable("VulnCwe");
+                    b.ToTable("VulnCwe", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.VulnNote", b =>
@@ -2009,7 +2009,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("VulnId");
 
-                    b.ToTable("VulnNotes");
+                    b.ToTable("VulnNotes", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.VulnTargets", b =>
@@ -2030,7 +2030,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("VulnId");
 
-                    b.ToTable("VulnTargets");
+                    b.ToTable("VulnTargets", (string)null);
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.WSTG", b =>
@@ -2641,7 +2641,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WSTG");
+                    b.ToTable("WSTG", (string)null);
                 });
 
             modelBuilder.Entity("KnowledgeBaseKnowledgeBaseTags", b =>
@@ -2656,7 +2656,7 @@ namespace Cervantes.DAL.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("KnowledgeBaseKnowledgeBaseTags");
+                    b.ToTable("KnowledgeBaseKnowledgeBaseTags", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

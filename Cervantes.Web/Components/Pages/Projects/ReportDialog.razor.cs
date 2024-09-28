@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Web;
+using BlazorMonaco.Editor;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
@@ -195,8 +196,23 @@ public partial class ReportDialog: ComponentBase
                     new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
                 }}
             };
-	
-      private Dictionary<string, object> editorConf2 = new Dictionary<string, object>{
+    
+            private async Task OpenAiDialog(DialogOptions options)
+            {
+                //var parameters = new DialogParameters { ["project"]=SelectedProject };
+
+                var dialog = Dialog.Show<AiDialog>("Custom Options Dialog", options);
+                // wait modal to close
+                var result = await dialog.Result;
+                if (!result.Canceled)
+                {
+                    var data = await dialog.GetReturnValueAsync<FunctionResult>();
+                    model.HtmlCode = model.HtmlCode + data;
+                    StateHasChanged();
+                }
+        
+            }
+             private Dictionary<string, object> editorConf2 = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
                 {"menubar", "file edit view insert format tools table help"},
                 {"toolbar", "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media link anchor codesample | ltr rtl"},
@@ -242,19 +258,5 @@ public partial class ReportDialog: ComponentBase
                     new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
                 }}
             };
-            private async Task OpenAiDialog(DialogOptions options)
-            {
-                //var parameters = new DialogParameters { ["project"]=SelectedProject };
-
-                var dialog = Dialog.Show<AiDialog>("Custom Options Dialog", options);
-                // wait modal to close
-                var result = await dialog.Result;
-                if (!result.Canceled)
-                {
-                    var data = await dialog.GetReturnValueAsync<FunctionResult>();
-                    model.HtmlCode = model.HtmlCode + data;
-                    StateHasChanged();
-                }
-        
-            }
+    
 }
