@@ -1818,4 +1818,7 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="warnings" xml:space="preserve">
         <value>Advertencias</value>
     </data>
+    <data name="assignToMe" xml:space="preserve">
+        <value>Asignarme a Mí</value>
+    </data>
 </root>

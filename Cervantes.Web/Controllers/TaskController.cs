@@ -372,6 +372,51 @@ public class TaskController: ControllerBase
             return BadRequest();
         }
     }
+    
+    public async Task<IActionResult> AssignToMe([FromBody] TaskAssignToMeViewModel task)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                var result = taskManager.GetById(task.TaskId);
+                if (result != null)
+                {
+                    if (result.ProjectId != null && result.ProjectId != Guid.Empty)
+                    {
+                        var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
+                        if (user == null)
+                        {
+                            return BadRequest("NotAllowed");
+                        }
+                    }
+                    
+                    result.AsignedUserId = task.UserId;
+                    await taskManager.Context.SaveChangesAsync();
+                    _logger.LogInformation("Task updated successfully. User: {0}",
+                        aspNetUserId);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+            }
+            else
+            {
+                _logger.LogError("An error occurred updating a Task. User: {0}",
+                    aspNetUserId);
+                return BadRequest();
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred updating a Task. User: {0}",
+                aspNetUserId);
+            return BadRequest();
+        }
+    }
 
     [HttpGet]
     [Route("Notes/{id}")]

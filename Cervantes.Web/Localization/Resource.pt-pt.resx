@@ -1736,4 +1736,7 @@
     <data name="warnings" xml:space="preserve">
         <value>Avisos</value>
     </data>
+    <data name="assignToMe" xml:space="preserve">
+        <value>Atribuir Para Mim</value>
+    </data>
 </root>

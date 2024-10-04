@@ -22,7 +22,6 @@ public class Task
     /// <summary>
     /// User who created project
     /// </summary>
-    [ForeignKey("CreatedUserId")]
     [JsonIgnore]
     public virtual ApplicationUser CreatedUser { get; set; }
 
@@ -41,7 +40,7 @@ public class Task
     /// <summary>
     /// Asined user id
     /// </summary>
-    public string AsignedUserId { get; set; }
+    public string? AsignedUserId { get; set; }
 
     /// <summary>
     /// Project Associated

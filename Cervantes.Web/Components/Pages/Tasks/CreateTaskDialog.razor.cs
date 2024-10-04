@@ -102,8 +102,7 @@ public partial class CreateTaskDialog: ComponentBase
 			SelectedProject = project;
 		}
 		model.CreatedUserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-		model.AsignedUserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-
+		model.AsignedUserId = string.Empty;
 		StateHasChanged();
     }
 
@@ -124,6 +123,12 @@ public partial class CreateTaskDialog: ComponentBase
 	       {
 		       model.ProjectId = null;
 	       }
+
+	       if (model.AsignedUserId == string.Empty)
+	       {
+		       model.AsignedUserId = null;
+	       }	
+
 	        
 	        var response = await _taskController.Add(model);
 	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")

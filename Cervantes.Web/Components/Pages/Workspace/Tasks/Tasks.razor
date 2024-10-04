@@ -9,6 +9,8 @@
 @inject IStringLocalizer<Resource> localizer
 @layout WorkspaceLayout
 @inject NavigationManager navigationManager
+@inject IHttpContextAccessor _accessor
+
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 
 <PageTitle>@localizer["tasks"] | Cervantes</PageTitle>
@@ -79,24 +81,35 @@
                             }
                         </CellTemplate>
                     </TemplateColumn>
-                    <PropertyColumn Property="x => x.AsignedUser.FullName" Title="@localizer["assignedTo"]">
+                    <TemplateColumn Title="@localizer["assignedTo"]">
                         <CellTemplate>
+                            @if (!string.IsNullOrEmpty(@context.Item.AsignedUserId))
+                            {
                             <MudStack Row="true">
+
                                 @if (@context.Item.AsignedUser.Avatar != null)
                                 {
-                                    <MudImage Src="@context.Item.AsignedUser.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+                                <MudImage Src="@context.Item.AsignedUser.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
                                 }
                                 else
                                 {
-                                    <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.AsignedUser.FullName[0]</MudAvatar>
+                                <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.AsignedUser.FullName[0]</MudAvatar>
                                 }
                                 <MudStack Justify="Justify.Center" Spacing="0">
                                     <MudText Typo="Typo.body1">@context.Item.AsignedUser.FullName</MudText>
                                 </MudStack>
                             </MudStack>
+                            }
+                            else
+                            {
+                            <MudStack Row="true" Justify="Justify.FlexStart">
+                                <MudButton Variant="Variant.Outlined" OnClick="@((e) => AssignToMe(@context.Item.Id))">@localizer["assignToMe"]</MudButton>
 
+                            </MudStack>
+
+                            }
                         </CellTemplate>
-                    </PropertyColumn>
+                    </TemplateColumn>
                     <PropertyColumn Property="x => x.Status" Title="@localizer["status"]">
                         <CellTemplate>
                             @switch (@context.Item.Status)
@@ -236,17 +249,26 @@
                                             }
                                         </MudText>
                                         <MudStack Row="true">
-                                            @if (string.IsNullOrEmpty(@context.AsignedUser.Avatar))
+                                            @if (!string.IsNullOrEmpty(@context.AsignedUserId))
                                             {
-                                                <MudTooltip Text="@context.AsignedUser.FullName">
-                                                    <MudAvatar Color="Color.Primary" Size="Size.Small">@context.AsignedUser.FullName[0]</MudAvatar>
-                                                </MudTooltip>
+                                                @if (string.IsNullOrEmpty(@context.AsignedUser.Avatar))
+                                                {
+                                                    <MudTooltip Text="@context.AsignedUser.FullName">
+                                                        <MudAvatar Color="Color.Primary" Size="Size.Small">@context.AsignedUser.FullName[0]</MudAvatar>
+                                                    </MudTooltip>
+                                                }
+                                                else
+                                                {
+                                                    <MudTooltip Text="@context.AsignedUser.FullName">
+                                                        <MudAvatar Size="Size.Small">
+                                                            <MudImage Src="@context.AsignedUser.Avatar" ></MudImage>
+                                                        </MudAvatar>
+                                                    </MudTooltip>
+                                                }
                                             }
                                             else
                                             {
-                                                <MudTooltip Text="@context.AsignedUser.FullName">
-                                                    <MudAvatar Image="@context.AsignedUser.Avatar" Size="Size.Small"> </MudAvatar>
-                                                </MudTooltip>
+                                                <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => AssignToMe(@context.Id))">@localizer["assignToMe"]</MudButton>
                                             }
 
                                             <MudSpacer/>

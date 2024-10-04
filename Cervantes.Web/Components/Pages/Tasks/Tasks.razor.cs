@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Blazor.Flags;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -77,6 +78,22 @@ public partial class Tasks: ComponentBase
         
     }
 
+    private async Task AssignToMe(Guid id)
+    {
+        var model = new TaskAssignToMeViewModel();
+        model.TaskId = id;
+        model.UserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        var response = await _taskController.AssignToMe(model);
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        {
+            Snackbar.Add(@localizer["taskAssigned"], Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add(@localizer["taskAssignedError"], Severity.Error);
+        }
+        
+    }
 
    
     

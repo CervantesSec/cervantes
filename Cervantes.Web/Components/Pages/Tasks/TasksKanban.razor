@@ -7,6 +7,7 @@
 @inject IJSRuntime JS
 @rendermode InteractiveServer
 @inject NavigationManager navigationManager
+@inject IHttpContextAccessor _accessor
 
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 
@@ -138,30 +139,39 @@
                                                     }
                                                 </MudText>
                                                 <MudStack Row="true">
-                                                    @if (string.IsNullOrEmpty(@context.AsignedUser.Avatar))
+                                                    @if (!string.IsNullOrEmpty(@context.AsignedUserId))
                                                     {
-                                                    <MudTooltip Text="@context.AsignedUser.FullName">
-                                                        <MudAvatar Color="Color.Primary" Size="Size.Small">@context.AsignedUser.FullName[0]</MudAvatar>
-                                                    </MudTooltip>
+                                                        @if (string.IsNullOrEmpty(@context.AsignedUser.Avatar))
+                                                        {
+                                                            <MudTooltip Text="@context.AsignedUser.FullName">
+                                                                <MudAvatar Color="Color.Primary" Size="Size.Small">@context.AsignedUser.FullName[0]</MudAvatar>
+                                                            </MudTooltip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudTooltip Text="@context.AsignedUser.FullName">
+                                                                <MudAvatar Size="Size.Small">
+                                                                    <MudImage Src="@context.AsignedUser.Avatar" ></MudImage>
+                                                                </MudAvatar>
+                                                            </MudTooltip>
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                    <MudTooltip Text="@context.AsignedUser.FullName">
-                                                        <MudAvatar Image="@context.AsignedUser.Avatar" Size="Size.Small"> </MudAvatar>
-                                                    </MudTooltip>
+                                                        <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => AssignToMe(@context.Id))">@localizer["assignToMe"]</MudButton>
                                                     }
 
                                                     <MudSpacer/>
                                                     @{
-                                                    var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
+                                                        var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
                                                     }
-                                                    @if(@Math.Truncate(totalDays) < 0)
+                                                    @if (@Math.Truncate(totalDays) < 0)
                                                     {
-                                                    <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
                                                     }
                                                     else
                                                     {
-                                                    <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
                                                     }
                                                 </MudStack>
 
