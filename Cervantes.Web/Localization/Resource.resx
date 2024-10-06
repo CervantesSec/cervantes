@@ -1751,4 +1751,70 @@
     <data name="assignToMe" xml:space="preserve">
         <value>Assign To Me</value>
     </data>
+    <data name="cvssAvNetwork" xml:space="preserve">
+        <value>Worst: A vulnerability exploitable with network access means the vulnerable authorization scope is bound to the network stack and the attacker's path to the vulnerable system is at the network layer. Such a vulnerability is often termed 'remotely exploitable'.</value>
+    </data>
+    <data name="cvssAvAdjacent" xml:space="preserve">
+        <value>Worse: A vulnerability exploitable with adjacent network access means the vulnerable authorization scope is bound to the network stack and the attacker's path to the vulnerable system is at the data link layer. Examples include local IP subnet, Bluetooth, IEEE 802.11, and local Ethernet segment.</value>
+    </data>
+    <data name="cvssAvLocal" xml:space="preserve">
+        <value>Bad: A vulnerability exploitable with local access means the vulnerable authorization scope is not bound to the network stack and the attacker's path to the vulnerable authorization scope is via read / write / execute capabilities. If the attacker has the necessary Privileges Required to interact with the vulnerable authorization scope, they may be logged in locally; otherwise, they may deliver an exploit to a user and rely on User Interaction</value>
+    </data>
+    <data name="cvssAvPhysical" xml:space="preserve">
+        <value>Bad: A vulnerability exploitable with physical access requires the ability to physically touch or manipulate a vulnerable authorization scope. Physical interaction may be brief (evil maid attack) or persistent.</value>
+    </data>
+    <data name="cvssAcLow" xml:space="preserve">
+        <value>Worst: Specialized access conditions or extenuating circumstances do not exist. An attacker can expect repeatable exploit success against a vulnerable target.</value>
+    </data>
+    <data name="cvssAcHigh" xml:space="preserve">
+        <value>Bad: A successful attack depends on conditions outside the attacker's control. That is, a successful attack cannot be accomplished at-will, but requires the attacker to invest in some measurable amount of effort in preparation or execution against a specific target before successful attack can be expected. A successful attack depends on attackers overcoming one OR both of the following conditions: the attacker must gather target-specific reconnaissance; or the attacker must prepare the target environment to improve exploit reliability.</value>
+    </data>
+    <data name="cvssPrNone" xml:space="preserve">
+        <value>Worst: The attacker is unprivileged or unauthenticated.</value>
+    </data>
+    <data name="cvssPrHigh" xml:space="preserve">
+        <value>Bad: The attacker is authenticated with privileges that provide significant control over component resources. With these starting privileges an attacker can cause a Complete impact to one or more of: Confidentiality, Integrity, or Availability. Alternatively, an attacker with High privileges may have the ability to cause a Partial impact to sensitive resources.</value>
+    </data>
+    <data name="cvssPrLow" xml:space="preserve">
+        <value>Worse: The attacker is authenticated with privileges that provide basic, low-impact capabilities. With these starting privileges an attacker is able to cause a Partial impact to one or more of: Confidentiality, Integrity, or Availability. Alternatively, an attacker with Low privileges may have the ability to cause an impact only to non-sensitive resources.</value>
+    </data>
+    <data name="cvssUiNone" xml:space="preserve">
+        <value>Worst: The vulnerable system can be exploited without any interaction from any user.</value>
+    </data>
+    <data name="cvssUiRequired" xml:space="preserve">
+        <value>Bad: Successful exploitation of this vulnerability requires a user to take one or more actions that may or may not be expected in a scenario involving no exploitation, or a scenario involving content provided by a seemingly trustworthy source.</value>
+    </data>
+    <data name="cvssSChanged" xml:space="preserve">
+        <value>Worst: The attacker attacks the vulnerable authorization scope and has an impact to its environment. This causes a direct impact to another scope. Score Impact relative to the Changed Scope.</value>
+    </data>
+    <data name="cvssSUnchanged" xml:space="preserve">
+        <value>Bad: The attacker attacks and impacts the environment that authorizes actions taken by the vulnerable authorization scope. Score Impact relative to the original authorization authority.</value>
+    </data>
+    <data name="cvssCHigh" xml:space="preserve">
+        <value>Worst: There is total information disclosure, resulting in all resources in the affected scope being divulged to the attacker. Alternatively, access to only some restricted information is obtained, but the disclosed information presents a direct, serious impact to the affected scope (e.g. the attacker can read the administrator's password, or private keys in memory are disclosed to the attacker).</value>
+    </data>
+    <data name="cvssCLow" xml:space="preserve">
+        <value>Bad: There is informational disclosure or a bypass of access controls. Access to some restricted information is obtained, but the attacker does not have control over what is obtained, or the scope of the loss is constrained. The information disclosure does not have a direct, serious impact on the affected scope.</value>
+    </data>
+    <data name="cvssCNone" xml:space="preserve">
+        <value>Good: There is no impact to confidentiality within the affected scope.</value>
+    </data>
+    <data name="cvssIHigh" xml:space="preserve">
+        <value>Worst: There is a total compromise of system integrity. There is a complete loss of system protection, resulting in the entire system being compromised. The attacker is able to modify any files on the target system.</value>
+    </data>
+    <data name="cvssILow" xml:space="preserve">
+        <value>Bad: Modification of data is possible, but the attacker does not have control over the end result of a modification, or the scope of modification is constrained. The data modification does not have a direct, serious impact on the affected scope.</value>
+    </data>
+    <data name="cvssINone" xml:space="preserve">
+        <value>Good: There is no impact to integrity within the affected scope.</value>
+    </data>
+    <data name="cvssAHigh" xml:space="preserve">
+        <value>Worst: There is total loss of availability, resulting in the attacker being able to fully deny access to resources in the affected scope; this loss is either sustained (while the attacker continues to deliver the attack) or persistent (the condition persists even after the attack has completed). Alternatively, the attacker has the ability to deny some availability, but the loss of availability presents a direct, serious impact to the affected scope (e.g. the attacker cannot disrupt existing connections, but can prevent new connections; the attacker can repeatedly exploit a vulnerability that, in each instance of a successful attack, leaks a only small amount of memory, but after repeated exploitation causes a service to become completely unavailable).</value>
+    </data>
+    <data name="cvssALow" xml:space="preserve">
+        <value>Bad: There is reduced performance or interruptions in resource availability. The attacker does not have the ability to completely deny service to legitimate users, even through repeated exploitation of the vulnerability. The resources in the affected scope are either partially available all of the time, or fully available only some of the time, but the overall there is no direct, serious impact to the affected scope.</value>
+    </data>
+    <data name="cvssANone" xml:space="preserve">
+        <value>Good: There is no impact to availability within the affected scope.</value>
+    </data>
 </root>

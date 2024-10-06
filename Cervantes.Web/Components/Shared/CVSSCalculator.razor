@@ -10,10 +10,18 @@
                 <MudPaper Width="150PX">
                     <MudListExtended T="string" Clickable="true" @bind-SelectedValue="av"  Style="max-height:400px; overflow-y: auto;" DisablePadding="true" >
                         <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["attackVector"]</MudListSubheaderExtended>
-                        <MudListItemExtended T="string" Text="@localizer["network"]" Value="@("N")" Icon="@Icons.Material.Filled.Web"/>
-                        <MudListItemExtended T="string" Text="@localizer["adjacent"]" Value="@("A")" Icon="@Icons.Material.Filled.Wifi"/>
-                        <MudListItemExtended T="string" Text="@localizer["local"]" Value="@("L")" Icon="@Icons.Material.Filled.Lan"/>
-                        <MudListItemExtended T="string" Text="@localizer["physical"]" Value="@("P")" Icon="@Icons.Material.Filled.Cable"/>
+                        <MudTooltip Text="@localizer["cvssAvNetwork"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["network"]" Value="@("N")" Icon="@Icons.Material.Filled.Web"/>
+                        </MudTooltip>
+                        <MudTooltip Text="@localizer["cvssAvAdjacent"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["adjacent"]" Value="@("A")" Icon="@Icons.Material.Filled.Wifi"/>
+                        </MudTooltip>
+                        <MudTooltip Text="@localizer["cvssAvLocal"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["local"]" Value="@("L")" Icon="@Icons.Material.Filled.Lan"/>
+                        </MudTooltip>
+                            <MudTooltip Text="@localizer["cvssAvPhysical"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                <MudListItemExtended T="string" Text="@localizer["physical"]" Value="@("P")" Icon="@Icons.Material.Filled.Cable"/>
+                            </MudTooltip>
                     </MudListExtended>
                 </MudPaper>
             </MudItem>
@@ -21,8 +29,12 @@
                 <MudPaper Width="150PX">
                     <MudListExtended T="string" Clickable="true" @bind-SelectedValue="ac"  Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
                         <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["attackComplexity"]</MudListSubheaderExtended>
-                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Outlined.Label"/>
-                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.LabelImportant"/>
+                        <MudTooltip Text="@localizer["cvssAcLow"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Outlined.Label"/>
+                        </MudTooltip>
+                            <MudTooltip Text="@localizer["cvssAcHigh"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.LabelImportant"/>
+                            </MudTooltip>
                     </MudListExtended>
                 </MudPaper>
             </MudItem>
@@ -30,9 +42,15 @@
                 <MudPaper Width="150PX">
                     <MudListExtended T="string" Clickable="true" @bind-SelectedValue="pr" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
                         <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["privilegesRequired"]</MudListSubheaderExtended>
-                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.PermIdentity"/>
-                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.SupervisedUserCircle"/>
-                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.AdminPanelSettings"/>
+                        <MudTooltip Text="@localizer["cvssPrNone"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.PermIdentity"/>
+                        </MudTooltip>
+                            <MudTooltip Text="@localizer["cvssPrLow"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.SupervisedUserCircle"/>
+                            </MudTooltip>
+                                <MudTooltip Text="@localizer["cvssPrHigh"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                    <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.AdminPanelSettings"/>
+                                </MudTooltip>
                     </MudListExtended>
                 </MudPaper>
             </MudItem>
@@ -41,8 +59,12 @@
                 <MudPaper Width="150PX">
                     <MudListExtended T="string" Clickable="true" @bind-SelectedValue="ui" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
                         <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["userInteraction"]</MudListSubheaderExtended>
-                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.DoNotTouch"/>
-                        <MudListItemExtended T="string" Text="@localizer["required"]" Value="@("R")" Icon="@Icons.Material.Filled.TouchApp"/>
+                        <MudTooltip Text="@localizer["cvssUiNone"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.DoNotTouch"/>
+                        </MudTooltip>
+                            <MudTooltip Text="@localizer["cvssUiRequired"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                <MudListItemExtended T="string" Text="@localizer["required"]" Value="@("R")" Icon="@Icons.Material.Filled.TouchApp"/>
+                            </MudTooltip>
                     </MudListExtended>
                 </MudPaper>
             </MudItem>
@@ -50,8 +72,12 @@
                 <MudPaper Width="150PX">
                     <MudListExtended T="string" Clickable="true" @bind-SelectedValue="s" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
                         <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["scope"]</MudListSubheaderExtended>
-                        <MudListItemExtended T="string" Text="@localizer["changed"]" Value="@("C")" Icon="@Icons.Material.Filled.Circle"/>
-                        <MudListItemExtended T="string" Text="@localizer["unchanged"]" Value="@("U")" Icon="@Icons.Material.Outlined.Circle"/>
+                        <MudTooltip Text="@localizer["cvssSChanged"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["changed"]" Value="@("C")" Icon="@Icons.Material.Filled.Circle"/>
+                        </MudTooltip>
+                            <MudTooltip Text="@localizer["cvssSUnchanged"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                <MudListItemExtended T="string" Text="@localizer["unchanged"]" Value="@("U")" Icon="@Icons.Material.Outlined.Circle"/>
+                            </MudTooltip>
                     </MudListExtended>
                 </MudPaper>
             </MudItem>
@@ -59,9 +85,16 @@
                 <MudPaper Width="150PX">
                     <MudListExtended T="string" Clickable="true" @bind-SelectedValue="c" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
                         <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["confidentiality"]</MudListSubheaderExtended>
-                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.Error"/>
-                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Outlined.ErrorOutline"/>
-                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Outlined.Circle"/>
+                        <MudTooltip Text="@localizer["cvssCHigh"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.Error"/>
+                        </MudTooltip>
+                            <MudTooltip Text="@localizer["cvssCLow"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Outlined.ErrorOutline"/>
+
+                            </MudTooltip>
+                                <MudTooltip Text="@localizer["cvssCNone"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                    <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Outlined.Circle"/>
+                                </MudTooltip>
                     </MudListExtended>
                 </MudPaper>
             </MudItem>
@@ -69,9 +102,15 @@
                 <MudPaper Width="150PX">
                     <MudListExtended  T="string" Clickable="true" @bind-SelectedValue="i" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
                         <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["integrity"]</MudListSubheaderExtended>
-                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.BrightnessHigh"/>
-                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.BrightnessMedium"/>
-                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.BrightnessLow"/>
+                        <MudTooltip Text="@localizer["cvssIHigh"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.BrightnessHigh"/>
+                        </MudTooltip>
+                            <MudTooltip Text="@localizer["cvssILow"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.BrightnessMedium"/>
+                            </MudTooltip>
+                                <MudTooltip Text="@localizer["cvssINone"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                    <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.BrightnessLow"/>
+                                </MudTooltip>
                     </MudListExtended>
                 </MudPaper>
             </MudItem>
@@ -79,9 +118,15 @@
                 <MudPaper Width="150PX">
                     <MudListExtended T="string" Clickable="true" @bind-SelectedValue="a" Style="max-height:400px; overflow-y: auto;" DisablePadding="true">
                         <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">@localizer["availability"]</MudListSubheaderExtended>
-                        <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.SignalWifi4Bar"/>
-                        <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.NetworkWifi2Bar"/>
-                        <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.SignalWifi0Bar"/>
+                        <MudTooltip Text="@localizer["cvssAHigh"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@localizer["high"]" Value="@("H")" Icon="@Icons.Material.Filled.SignalWifi4Bar"/>
+                        </MudTooltip>
+                            <MudTooltip Text="@localizer["cvssALow"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                <MudListItemExtended T="string" Text="@localizer["low"]" Value="@("L")" Icon="@Icons.Material.Filled.NetworkWifi2Bar"/>
+                            </MudTooltip>
+                                <MudTooltip Text="@localizer["cvssANone"]" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                                    <MudListItemExtended T="string" Text="@localizer["none"]" Value="@("N")" Icon="@Icons.Material.Filled.SignalWifi0Bar"/>
+                                </MudTooltip>
                     </MudListExtended>
                 </MudPaper>
             </MudItem>
