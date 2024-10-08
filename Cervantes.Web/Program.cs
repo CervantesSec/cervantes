@@ -27,6 +27,8 @@ using Cervantes.Web.Controllers;
 using Cervantes.Web.Helpers;
 using Microsoft.AspNetCore.Antiforgery;
 using MudBlazor.Services;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
 using MudExtensions.Services;
 using NLog;
 using NLog.Extensions.Logging;
@@ -125,7 +127,8 @@ builder.Services.AddServerSideBlazor().AddHubOptions(o =>
 });
 
 builder.Services.AddMudServices();
-builder.Services.AddMudExtensions();
+MudExtensions.Services.ExtensionServiceCollectionExtensions.AddMudExtensions(builder.Services);
+MudBlazor.Extensions.ServiceCollectionExtensions.AddMudExtensions(builder.Services,c => c.WithoutAutomaticCssLoading());
 builder.Services.AddLocalization();
 builder.Services.AddAntiforgery();
 builder.Services.AddBlazoredLocalStorage();
@@ -226,7 +229,7 @@ else
     app.UseHsts();
 }
 
-
+app.UseMudExtensions();
 
 app.UseHttpsRedirection();
 

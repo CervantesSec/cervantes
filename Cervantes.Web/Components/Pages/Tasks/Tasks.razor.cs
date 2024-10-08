@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
@@ -63,13 +66,31 @@ public partial class Tasks: ComponentBase
     }
     
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
-
-    private async Task OpenDialogCreate(Guid project,DialogOptions options)
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
     {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Large,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false
+    };
+
+    private async Task OpenDialogCreate(Guid project,DialogOptionsEx options)
+    {
+        
         var parameters = new DialogParameters { ["project"]=project };
-        var dialog = Dialog.Show<CreateTaskDialog>("Custom Options Dialog", parameters, options);
+        IMudExDialogReference<CreateTaskDialog>? dlgReference = await DialogEx.ShowEx<CreateTaskDialog>("Simple Dialog", options);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();

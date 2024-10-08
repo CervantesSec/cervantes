@@ -106,7 +106,15 @@ public partial class TaskDialog: ComponentBase
             model.Id = task.Id;
             model.Name = task.Name;
             model.CreatedUserId = task.CreatedUserId;
-            model.AsignedUserId = task.AsignedUserId;
+            if (task.AsignedUserId != null)
+            {
+                model.AsignedUserId = task.AsignedUserId;
+            }
+            else
+            {
+                model.AsignedUserId = String.Empty;
+
+            }
             model.Description = task.Description;
             model.Status = task.Status;
             dateStart = task.StartDate;
@@ -143,7 +151,10 @@ public partial class TaskDialog: ComponentBase
             {
                 model.ProjectId = null;
             }
-
+            if (model.AsignedUserId == string.Empty)
+            {
+                model.AsignedUserId = null;
+            }	
             var response = await _taskController.Edit(model);
             if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
             {
@@ -168,8 +179,6 @@ public partial class TaskDialog: ComponentBase
             RuleFor(x => x.EndDate)
                 .NotEmpty();
             RuleFor(x => x.StartDate)
-                .NotEmpty();
-            RuleFor(x => x.AsignedUserId)
                 .NotEmpty();
             RuleFor(x => x.CreatedUserId)
                 .NotEmpty();

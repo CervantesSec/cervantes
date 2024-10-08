@@ -3,7 +3,9 @@
 @using Cervantes.CORE.ViewModels
 @using Cervantes.Web.Localization
 @using Microsoft.Extensions.Localization
+@using MudBlazor.Extensions.Core
 @inject IDialogService Dialog
+@inject IMudExDialogService DialogEx
 @inject IStringLocalizer<Resource> localizer
 @inject IJSRuntime JS
 @rendermode InteractiveServer
@@ -53,7 +55,7 @@
                 <ToolBarContent>
                     <MudStack Row="true">
                         <AuthorizeView Roles="Admin,SuperUser,User">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidth))">@localizer["create"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidthEx))">@localizer["create"]</MudButton>
                             @if (seleTasks.Count() != 0)
                             {
                                 <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
