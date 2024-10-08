@@ -26,7 +26,7 @@
         <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
         <PackageReference Include="Hangfire.Core" Version="1.8.14" />
         <PackageReference Include="Hangfire.PostgreSql" Version="1.20.9" />
-        <PackageReference Include="Heron.MudCalendar" Version="2.0.2" />
+        <PackageReference Include="Heron.MudCalendar" Version="2.0.3" />
         <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
         <PackageReference Include="HtmlToOpenXml.dll" Version="3.2.0" />
         <PackageReference Include="itext7" Version="8.0.5" />
@@ -50,10 +50,10 @@
         <PackageReference Include="NLog.Database" Version="5.3.4" />
         <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.14" />
         <PackageReference Include="Npgsql" Version="8.0.4" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
         <PackageReference Include="PreMailer.Net" Version="2.6.0" />
         <PackageReference Include="Scriban" Version="5.10.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
         <PackageReference Include="TinyMCE.Blazor" Version="1.0.4" />
     </ItemGroup>
 
