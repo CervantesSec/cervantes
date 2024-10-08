@@ -6,6 +6,9 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
@@ -107,13 +110,30 @@ public partial class TasksKanban : ComponentBase
     }
     
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
-
-    private async Task OpenDialogCreate(Guid project,DialogOptions options)
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
+    private async Task OpenDialogCreate(Guid project,DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-        var dialog = Dialog.Show<CreateTaskDialog>("Custom Options Dialog", parameters, options);
+        IMudExDialogReference<CreateTaskDialog>? dlgReference = await DialogEx.ShowEx<CreateTaskDialog>("Simple Dialog", options);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -124,12 +144,12 @@ public partial class TasksKanban : ComponentBase
 
 
     
-    async Task DetailsDialog(CORE.Entities.Task task, DialogOptions options)
+    async Task DetailsDialog(CORE.Entities.Task task, DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["task"]=task};
 
-        var dialog =  Dialog.Show<TaskDialog>(task.Name, parameters,options);
-        var result = await dialog.Result;
+        IMudExDialogReference<TaskDialog>? dlgReference = await DialogEx.ShowEx<TaskDialog>("Simple Dialog",parameters, options);
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

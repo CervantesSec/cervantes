@@ -18,30 +18,30 @@
         z-index: 999999!important;
     }
 </style>
-		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
-<MudDialog DisableSidePadding="true">
+<MudDialog Class="mud-ex-dialog-initial">
 	<TitleContent>
-		            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+		            <MudStack Row="true" Spacing="1">
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Task"/> @task.Name</MudText>
-		<MudSpacer/>
 		@if (inProject || task.ProjectId == null)
 		{
 			@if (editMode)
 			{
-				<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+				<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
 			}
 			else
 			{
-				<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+				<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+
 
 			}
-			<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteTaskDialog(@task, medium))"></MudIconButton>
+			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteTaskDialog(task, medium))">@localizer["delete"]</MudChip>
+
 		}
 		
 
-		            </MudItem>
+		            </MudStack>
 	</TitleContent>
 	<DialogContent>
 		@if (editMode)
@@ -333,4 +333,3 @@
 		}
 	</DialogActions>
 </MudDialog>
-		</MudContainer>

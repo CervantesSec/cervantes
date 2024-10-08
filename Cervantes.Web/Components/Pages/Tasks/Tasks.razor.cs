@@ -66,13 +66,15 @@ public partial class Tasks: ComponentBase
     }
     
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
     DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
     {
         MaximizeButton = true,
         CloseButton = true,
         FullHeight = true,
         CloseOnEscapeKey = true,
-        MaxWidth = MaxWidth.Large,
+        MaxWidth = MaxWidth.Medium,
         MaxHeight = MaxHeight.False,
         FullWidth = true,
         DragMode = MudDialogDragMode.Simple,
@@ -80,7 +82,8 @@ public partial class Tasks: ComponentBase
         Position = DialogPosition.CenterRight,
         DisableSizeMarginY = true,
         DisablePositionMargin = true,
-        BackdropClick = false
+        BackdropClick = false,
+        Resizeable = true,
     };
 
     private async Task OpenDialogCreate(Guid project,DialogOptionsEx options)
@@ -121,9 +124,10 @@ public partial class Tasks: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Task> args)
     {
         var parameters = new DialogParameters { ["task"]=args.Item};
+        IMudExDialogReference<TaskDialog>? dlgReference = await DialogEx.ShowEx<TaskDialog>("Simple Dialog",parameters, maxWidthEx);
 
-        var dialog =  Dialog.Show<TaskDialog>(args.Item.Name, parameters,maxWidth);
-        var result = await dialog.Result;
+        //var dialog =  Dialog.Show<TaskDialog>(args.Item.Name, parameters,maxWidth);
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -156,7 +160,7 @@ public partial class Tasks: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["tasks"]=seleTasks };
 
-                var dialog =  Dialog.Show<DeleteTaskBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  Dialog.Show<DeleteTaskBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

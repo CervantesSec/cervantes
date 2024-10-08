@@ -4,6 +4,9 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Clients;
@@ -17,6 +20,25 @@ public partial class Clients: ComponentBase
 
     private string searchString = "";
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     [Parameter] public Guid clientId { get; set; }
 
     [Inject] private ClientsController _clientsController { get; set; }
@@ -54,11 +76,12 @@ public partial class Clients: ComponentBase
             return true;
         return false;
     };
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        var dialog = Dialog.Show<CreateClientDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<CreateClientDialog>? dlgReference = await DialogEx.ShowEx<CreateClientDialog>("Simple Dialog", options);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -71,9 +94,9 @@ public partial class Clients: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<Client> args)
     {
         var parameters = new DialogParameters { ["client"]=args.Item };
+        IMudExDialogReference<ClientDialog>? dlgReference = await DialogEx.ShowEx<ClientDialog>("Simple Dialog",parameters, maxWidthEx);
 
-        var dialog =  Dialog.Show<ClientDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -126,7 +149,7 @@ public partial class Clients: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["clients"]=seleClients };
 
-                var dialog =  Dialog.Show<DeleteClientBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  Dialog.Show<DeleteClientBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

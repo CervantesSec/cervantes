@@ -4,11 +4,13 @@
 @using Cervantes.Web.Localization
 @using Variant = MudBlazor.Variant
 @using Cervantes.CORE.Entities
+@using MudBlazor.Extensions.Core
 @inject IDialogService Dialog
 @inject IStringLocalizer<Resource> localizer
 @inject NavigationManager navigationManager
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
+@inject IMudExDialogService DialogEx
 
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
     <PageTitle>@localizer["clients"] | Cervantes</PageTitle>
@@ -39,7 +41,7 @@
             <ToolBarContent>
                 <MudStack Row="true">
                     <AuthorizeView Roles="Admin,SuperUser">
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                         @if (seleClients.Count() != 0)
                         {
                             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" >
