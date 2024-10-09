@@ -8,11 +8,13 @@
 @using Cervantes.Web.Components.Layout
 @using Cervantes.Web.Localization
 @using Microsoft.Extensions.Localization
+@using MudBlazor.Extensions.Core
 @inject IDialogService DialogService
 @using TinyMCE.Blazor
 @inject IStringLocalizer<Resource> localizer
 @layout WorkspaceLayout
 @inject NavigationManager navigationManager
+@inject IMudExDialogService DialogEx
 
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 
@@ -48,7 +50,7 @@
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
-                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                     @if (seleVaults.Count() != 0)
                     {
                         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">

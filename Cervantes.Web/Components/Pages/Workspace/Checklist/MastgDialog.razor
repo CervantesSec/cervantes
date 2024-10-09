@@ -11,13 +11,12 @@
 
 @if (model.MobilePlatform == MobileAppPlatform.Android)
 {
-    <MudDialog>
+    <MudDialog Class="mud-ex-dialog-initial">
         <TitleContent>
-            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+            <MudStack Row="true" Spacing="1">
                 <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Checklist"/> OWASP MASVS: <MudIcon Icon="@Icons.Material.Filled.Android"/> @checklist.Target</MudText>
-                <MudSpacer/>
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(@checklist, medium))"></MudIconButton>
-            </MudItem>
+                <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(checklist, medium))">@localizer["delete"]</MudChip>
+            </MudStack>
         </TitleContent>
         <DialogContent>
         <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll">
@@ -1553,9 +1552,12 @@
 }
 else
 {
-        <MudDialog>
+        <MudDialog Class="mud-ex-dialog-initial">
         <TitleContent>
+            <MudStack Row="true" Spacing="1">
             <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Checklist"/> OWASP MASVS: <MudIcon Icon="@Icons.Custom.Brands.Apple"/> @checklist.Target</MudText>
+            <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(checklist, medium))">@localizer["delete"]</MudChip>
+            </MudStack>
         </TitleContent>
         <DialogContent>
             <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll">

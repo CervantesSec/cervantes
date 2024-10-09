@@ -6,6 +6,9 @@ using Cervantes.Web.Components.Pages.Workspace.Target;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Checklist;
@@ -24,7 +27,25 @@ public partial class Checklists: ComponentBase
         private CORE.Entities.Project Project = new CORE.Entities.Project();
         private List<BreadcrumbItem> _items;
     private string searchString = "";
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         var user = await _ProjectController.VerifyUser(project);
@@ -103,7 +124,7 @@ public partial class Checklists: ComponentBase
     {
         var parameters = new DialogParameters { ["project"]=project };
 
-        var dialog = DialogService.Show<ImportDialog>("Custom Options Dialog", parameters, options);
+        var dialog = DialogService.Show<ImportDialog>("Custom Options Dialog", parameters, mediumWidth);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -117,10 +138,10 @@ public partial class Checklists: ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
+        IMudExDialogReference<CreateChecklistDialog>? dlgReference = await DialogEx.ShowEx<CreateChecklistDialog>("Simple Dialog", parameters, maxWidthEx);
 
-        var dialog = DialogService.Show<CreateChecklistDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -167,9 +188,9 @@ public partial class Checklists: ComponentBase
         if (args.Item.Type == ChecklistType.OWASPWSTG)
         {
             var parameters = new DialogParameters {["project"]=project, ["checklist"]=args.Item };
+            IMudExDialogReference<WstgDialog>? dlgReference = await DialogEx.ShowEx<WstgDialog>("Simple Dialog", parameters, maxWidthEx);
 
-            var dialog =  DialogService.Show<WstgDialog>("Edit", parameters, maxWidth);
-            var result = await dialog.Result;
+            var result = await dlgReference.Result;
 
             if (!result.Canceled)
             {
@@ -180,9 +201,9 @@ public partial class Checklists: ComponentBase
         else
         {
             var parameters = new DialogParameters { ["project"]=project,["checklist"]=args.Item };
+            IMudExDialogReference<MastgDialog>? dlgReference = await DialogEx.ShowEx<MastgDialog>("Simple Dialog", parameters, maxWidthEx);
 
-            var dialog =  DialogService.Show<MastgDialog>("Edit", parameters, maxWidth);
-            var result = await dialog.Result;
+            var result = await dlgReference.Result;
 
             if (!result.Canceled)
             {
@@ -200,7 +221,7 @@ public partial class Checklists: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["checklists"]=seleChecklists };
 
-                var dialog =  DialogService.Show<DeleteChecklistBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  DialogService.Show<DeleteChecklistBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

@@ -2,6 +2,9 @@ using Cervantes.Web.Components.Pages.Workspace.Target;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Vault;
 
@@ -18,7 +21,25 @@ public partial class Vaults: ComponentBase
 
         private List<BreadcrumbItem> _items;
     private string searchString = "";
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         var user = await _ProjectController.VerifyUser(project);
@@ -51,9 +72,9 @@ public partial class Vaults: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Vault> args)
     {
         var parameters = new DialogParameters { ["vault"]=args.Item };
+        IMudExDialogReference<VaultDialog>? dlgReference = await DialogEx.ShowEx<VaultDialog>("Simple Dialog", parameters, maxWidthEx);
 
-        var dialog =  DialogService.Show<VaultDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -110,13 +131,13 @@ public partial class Vaults: ComponentBase
     
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=project };
+        IMudExDialogReference<CreateVaultDialog>? dlgReference = await DialogEx.ShowEx<CreateVaultDialog>("Simple Dialog", parameters, options);
 
-        var dialog = DialogService.Show<CreateVaultDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();

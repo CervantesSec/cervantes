@@ -14,6 +14,8 @@
 @inject NavigationManager navigationManager
 @layout WorkspaceLayout
 @using Blazor.Flags
+@using MudBlazor.Extensions.Core
+@inject IMudExDialogService DialogEx
 
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 
@@ -48,8 +50,8 @@
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true"> 
             <ToolBarContent>
                 <MudStack Row="true">
-                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.BugReport" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
-                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(maxWidth))">@localizer["import"]</MudButton>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.BugReport" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
                     @if (seleVulns.Count() != 0)
                     {
                         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">

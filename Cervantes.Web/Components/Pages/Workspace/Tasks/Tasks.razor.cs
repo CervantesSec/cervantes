@@ -10,6 +10,9 @@ using Cervantes.Web.Components.Pages.Tasks;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Tasks;
@@ -27,7 +30,25 @@ public partial class Tasks: ComponentBase
     private string selectedUser;
     private Guid selectedProject = Guid.Empty;
     private string searchString = "";
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     [Inject] private TaskController _taskController { get; set; }
     [Inject] private UserController _userController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
@@ -100,12 +121,13 @@ public partial class Tasks: ComponentBase
     
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
 
-    private async Task OpenDialogCreate(Guid project,DialogOptions options)
+    private async Task OpenDialogCreate(Guid project,DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=Project.Id };
-        var dialog = Dialog.Show<CreateTaskDialog>("Custom Options Dialog", parameters, options);
+        IMudExDialogReference<CreateTaskDialog>? dlgReference = await DialogEx.ShowEx<CreateTaskDialog>("Simple Dialog", parameters, maxWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -132,9 +154,9 @@ public partial class Tasks: ComponentBase
     async Task DetailsDialog(CORE.Entities.Task task, DialogOptions options)
     {
         var parameters = new DialogParameters { ["task"]=task};
+        IMudExDialogReference<TaskDialog>? dlgReference = await DialogEx.ShowEx<TaskDialog>("Simple Dialog", parameters, maxWidthEx);
 
-        var dialog =  Dialog.Show<TaskDialog>(task.Name, parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -145,9 +167,9 @@ public partial class Tasks: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Task> args)
     {
         var parameters = new DialogParameters { ["task"]=args.Item};
+        IMudExDialogReference<TaskDialog>? dlgReference = await DialogEx.ShowEx<TaskDialog>("Simple Dialog", parameters, maxWidthEx);
 
-        var dialog =  Dialog.Show<TaskDialog>(args.Item.Name, parameters,maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -212,7 +234,7 @@ public partial class Tasks: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["tasks"]=seleTasks };
 
-                var dialog =  Dialog.Show<DeleteTaskBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  Dialog.Show<DeleteTaskBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

@@ -8,11 +8,13 @@
 @using Cervantes.Web.Components.Layout
 @using Cervantes.Web.Localization
 @using Microsoft.Extensions.Localization
+@using MudBlazor.Extensions.Core
 @inject IDialogService DialogService
 @using TinyMCE.Blazor
 @inject IStringLocalizer<Resource> localizer
 @layout WorkspaceLayout
 @inject NavigationManager navigationManager
+@inject IMudExDialogService DialogEx
 
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 

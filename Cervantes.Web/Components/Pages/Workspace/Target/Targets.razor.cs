@@ -4,6 +4,9 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Target;
@@ -21,7 +24,25 @@ public partial class Targets: ComponentBase
 
         private List<BreadcrumbItem> _items;
     private string searchString = "";
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         var user = await _ProjectController.VerifyUser(project);
@@ -54,9 +75,9 @@ public partial class Targets: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Target> args)
     {
         var parameters = new DialogParameters { ["target"]=args.Item };
-
-        var dialog =  DialogService.Show<TargetDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        IMudExDialogReference<TargetDialog>? dlgReference = await DialogEx.ShowEx<TargetDialog>("Simple Dialog", parameters, maxWidthEx);
+        
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -116,7 +137,7 @@ public partial class Targets: ComponentBase
     {
         var parameters = new DialogParameters { ["project"]=project };
 
-        var dialog = DialogService.Show<ImportDialog>("Custom Options Dialog", parameters, options);
+        var dialog = DialogService.Show<ImportDialog>("Custom Options Dialog", parameters, mediumWidth);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -129,10 +150,10 @@ public partial class Targets: ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
+        IMudExDialogReference<CreateTargetDialog>? dlgReference = await DialogEx.ShowEx<CreateTargetDialog>("Simple Dialog", parameters, maxWidthEx);
 
-        var dialog = DialogService.Show<CreateTargetDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -148,7 +169,7 @@ public partial class Targets: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
 
-                var dialog =  DialogService.Show<DeleteTargetBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  DialogService.Show<DeleteTargetBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

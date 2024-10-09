@@ -3,6 +3,7 @@
 @using Cervantes.Web.Components.Layout
 @using Cervantes.Web.Localization
 @using Microsoft.Extensions.Localization
+@using MudBlazor.Extensions.Core
 @using Color = MudBlazor.Color
 @using Size = MudBlazor.Size
 @inject IDialogService Dialog
@@ -10,6 +11,7 @@
 @layout WorkspaceLayout
 @inject NavigationManager navigationManager
 @inject IHttpContextAccessor _accessor
+@inject IMudExDialogService DialogEx
 
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 
@@ -47,7 +49,7 @@
                 <ToolBarContent>
                     <MudStack Row="true">
                         <AuthorizeView Roles="Admin,SuperUser,User">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidth))">@localizer["create"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidthEx))">@localizer["create"]</MudButton>
                             @if (seleTasks.Count() != 0)
                             {
                                 <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
@@ -169,7 +171,7 @@
             <MudStack>
                 <MudPaper Elevation="25">
                     <MudToolBar>
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidth))">@localizer["create"]</MudButton>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidthEx))">@localizer["create"]</MudButton>
                         <MudSpacer/>
                         <MudSpacer/>
 

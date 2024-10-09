@@ -3,6 +3,9 @@ using Cervantes.Web.Components.Pages.Vuln;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Vulns;
 
@@ -18,7 +21,25 @@ public partial class WorkspaceVulns: ComponentBase
     private List<BreadcrumbItem> _items;
     private string searchString = "";
     [Inject] private VulnController VulnController { get; set; }
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         var user = await _ProjectController.VerifyUser(project);
@@ -49,14 +70,14 @@ public partial class WorkspaceVulns: ComponentBase
 
 
     DialogOptions fullScreen = new DialogOptions() { FullScreen = true, CloseButton = true };
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
 
         var parameters = new DialogParameters { ["project"]=Project.Id };
 
-        var dialog = DialogService.Show<CreateVulnDialog>("Custom Options Dialog", parameters, options);
+        IMudExDialogReference<CreateVulnDialog>? dlgReference = await DialogEx.ShowEx<CreateVulnDialog>("Simple Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -68,7 +89,7 @@ public partial class WorkspaceVulns: ComponentBase
     private async Task OpenDialogImport(DialogOptions options)
     {
 
-        var dialog = DialogService.Show<ImportVulnDialog>("Custom Options Dialog", options);
+        var dialog = DialogService.Show<ImportVulnDialog>("Custom Options Dialog", mediumWidth);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -85,7 +106,7 @@ public partial class WorkspaceVulns: ComponentBase
     {
         var parameters = new DialogParameters { ["vuln"]=vuln };
 
-        var dialog =  DialogService.Show<DeleteVulnDialog>(@localizer["delete"], parameters,options);
+        var dialog =  DialogService.Show<DeleteVulnDialog>(@localizer["delete"], parameters,mediumWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -153,8 +174,8 @@ public partial class WorkspaceVulns: ComponentBase
     {
         var parameters = new DialogParameters { ["vuln"]=args.Item };
 
-        var dialog =  DialogService.Show<VulnDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        IMudExDialogReference<VulnDialog>? dlgReference = await DialogEx.ShowEx<VulnDialog>("Simple Dialog", parameters, maxWidthEx);
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -170,7 +191,7 @@ public partial class WorkspaceVulns: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["vulns"]=seleVulns };
 
-                var dialog =  DialogService.Show<DeleteVulnBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  DialogService.Show<DeleteVulnBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
