@@ -5,6 +5,9 @@ using Cervantes.IFR.Export;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Admin.Users;
@@ -19,7 +22,25 @@ public partial class Users: ComponentBase
     [Inject] private UserController _UserController { get; set; }
     [Inject ]private IExportToCsv ExportToCsv { get; set; }
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         _items = new List<BreadcrumbItem>
@@ -31,7 +52,7 @@ public partial class Users: ComponentBase
         await Update();
         if (navigationManager.Uri.Contains("/users/create"))
         {
-             await OpenDialogCreate(maxWidth);
+             await OpenDialogCreate(maxWidthEx);
         }
     }
     
@@ -56,11 +77,11 @@ public partial class Users: ComponentBase
         return false;
     };
     
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        var dialog = Dialog.Show<CreateUserDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<CreateUserDialog>? dlgReference = await DialogEx.ShowEx<CreateUserDialog>("Simple Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -73,9 +94,8 @@ public partial class Users: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<ApplicationUser> args)
     {
         var parameters = new DialogParameters { ["user"]=args.Item };
-
-        var dialog =  Dialog.Show<UserDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        IMudExDialogReference<UserDialog>? dlgReference = await DialogEx.ShowEx<UserDialog>("Simple Dialog", parameters, maxWidthEx);
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -121,7 +141,7 @@ public partial class Users: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["users"]=seleUsers };
 
-                var dialog =  Dialog.Show<DeleteUsersBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  Dialog.Show<DeleteUsersBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

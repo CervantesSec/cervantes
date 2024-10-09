@@ -8,10 +8,12 @@
 @using Cervantes.CORE.ViewModels
 @using Cervantes.Web.Localization
 @using Microsoft.Extensions.Localization
+@using MudBlazor.Extensions.Core
 @inject IDialogService Dialog
 @using TinyMCE.Blazor
 @inject IStringLocalizer<Resource> localizer
 @inject NavigationManager navigationManager
+@inject IMudExDialogService DialogEx
 
 
 
@@ -42,7 +44,7 @@
             <ToolBarContent>
                 <MudStack Row="true">
                     <AuthorizeView Roles="Admin,SuperUser,User">
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                         @if (seleNotes.Count() != 0)
                         {
                             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" >

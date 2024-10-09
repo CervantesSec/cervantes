@@ -5,6 +5,9 @@ using Cervantes.Web.Components.Pages.Clients;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 
 namespace Cervantes.Web.Components.Pages.Note;
 
@@ -17,7 +20,25 @@ public partial class Notes: ComponentBase
     private List<CORE.Entities.Note> model = new List<CORE.Entities.Note>();
     private List<CORE.Entities.Note> seleNotes = new List<CORE.Entities.Note>();
     private List<BreadcrumbItem> _items;
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,11 +56,11 @@ public partial class Notes: ComponentBase
         model = _NoteController.GetByUserId().ToList();
     }
     
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        var dialog = Dialog.Show<CreateNoteDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<CreateNoteDialog>? dlgReference = await DialogEx.ShowEx<CreateNoteDialog>("Simple Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -64,9 +85,9 @@ public partial class Notes: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Note> args)
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
+        IMudExDialogReference<NoteDialog>? dlgReference = await DialogEx.ShowEx<NoteDialog>("Simple Dialog", parameters, maxWidthEx);
 
-        var dialog =  Dialog.Show<NoteDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -105,7 +126,7 @@ public partial class Notes: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
 
-                var dialog =  Dialog.Show<DeleteNoteBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  Dialog.Show<DeleteNoteBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

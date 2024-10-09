@@ -19,6 +19,8 @@
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
 @using Blazor.Flags
+@using MudBlazor.Extensions.Core
+@inject IMudExDialogService DialogEx
 
 <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
     <PageTitle>@localizer["projects"] | Cervantes</PageTitle>
@@ -67,7 +69,7 @@
                         <ToolBarContent>
                             <MudStack Row="true">
                                 <AuthorizeView Roles="Admin,SuperUser">
-                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                                     @if (selectedProjects.Count() != 0)
                                     {
                                     <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">

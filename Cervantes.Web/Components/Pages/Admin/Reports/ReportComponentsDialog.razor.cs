@@ -25,6 +25,7 @@ public partial class ReportComponentsDialog: ComponentBase
     private EditReportComponentModel model = new EditReportComponentModel();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     private static string cssCode = "";
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
     private static Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},

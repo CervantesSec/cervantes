@@ -1,10 +1,14 @@
 using System.Net.Http.Json;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModels;
+using Cervantes.Web.Components.Pages.Projects;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Documents;
@@ -49,12 +53,32 @@ public partial class Documents: ComponentBase
         return false;
     };
 
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
+    
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Document> args)
     {
         var parameters = new DialogParameters { ["document"]=args.Item};
+        IMudExDialogReference<DocumentDialog>? dlgReference = await DialogEx.ShowEx<DocumentDialog>("Simple Dialog", parameters,maxWidthEx);
 
-        var dialog =  Dialog.Show<DocumentDialog>(args.Item.Name, parameters,maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -94,11 +118,11 @@ public partial class Documents: ComponentBase
         }
     }
     
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        var dialog = Dialog.Show<DocumentCreateDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<DocumentCreateDialog>? dlgReference = await DialogEx.ShowEx<DocumentCreateDialog>("Simple Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -114,7 +138,7 @@ public partial class Documents: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["documents"]=seleDocs };
 
-                var dialog =  Dialog.Show<DocumentDeleteBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  Dialog.Show<DocumentDeleteBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

@@ -5,6 +5,9 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
@@ -17,7 +20,25 @@ public partial class Reports: ComponentBase
     private List<BreadcrumbItem> _items;
     private string searchString = "";
     [Inject] ReportController reportController { get; set; } 
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         _items = new List<BreadcrumbItem>
@@ -51,11 +72,11 @@ public partial class Reports: ComponentBase
     };
     
     DialogOptions fullScreen = new DialogOptions() { FullScreen = true, CloseButton = true };
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        var dialog = Dialog.Show<CreateReport>("Custom Options Dialog", options);
+        IMudExDialogReference<CreateReport>? dlgReference = await DialogEx.ShowEx<CreateReport>("Simple Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -111,9 +132,8 @@ public partial class Reports: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<ReportTemplate> args)
     {
         var parameters = new DialogParameters { ["report"]=args.Item };
-
-        var dialog =  Dialog.Show<ReportDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        IMudExDialogReference<ReportDialog>? dlgReference = await DialogEx.ShowEx<ReportDialog>("Simple Dialog", parameters, maxWidthEx);
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -129,7 +149,7 @@ public partial class Reports: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["reports"]=seleReports };
 
-                var dialog =  Dialog.Show<DeleteReportBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  Dialog.Show<DeleteReportBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

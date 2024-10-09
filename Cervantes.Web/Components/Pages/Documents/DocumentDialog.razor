@@ -17,32 +17,30 @@
         z-index: 999999!important;
     }
 </style>
-		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
-<MudDialog DisableSidePadding="true">
+<MudDialog Class="mud-ex-dialog-initial">
 	<TitleContent>
-		            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+		<MudStack Row="true" Spacing="1">
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.InsertDriveFile"/> @document.Name</MudText>
-		<MudSpacer/>
 		<AuthorizeView Roles="Admin,SuperUser">
 			@if (editMode)
                     		{
-                    			<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+			                    <MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
                     		}
                     		else
                     		{
-                    			<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
-                    
-                    		}
-					<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDocument(@document, medium))"></MudIconButton>
+			                    <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+
+		                    }
+			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDocument(document, medium))">@localizer["delete"]</MudChip>
 
 		</AuthorizeView>
 		
 		        
-		<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download(@document.FilePath))" ></MudIconButton>
+		<MudChip T="string" Icon="@Icons.Material.Filled.Download" Color="Color.Default" aria-label="delete" OnClick="@((e) => Download(@document.FilePath))" >@localizer["download"]</MudChip>
 
-		            </MudItem>
+		            </MudStack>
 	</TitleContent>
 	<DialogContent>
 		@if (editMode)
@@ -110,4 +108,3 @@
 		
 	</DialogActions>
 </MudDialog>
-		</MudContainer>

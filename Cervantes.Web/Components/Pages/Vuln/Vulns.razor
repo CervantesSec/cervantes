@@ -17,8 +17,11 @@
 @inject NavigationManager navigationManager
 @inject IHttpContextAccessor _accessor
 @using Blazor.Flags
+@using MudBlazor.Extensions.Core
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
+@inject IMudExDialogService DialogEx
+
 <PageTitle>@localizer["vulns"] | Cervantes</PageTitle>
 
 <AuthorizeView Context="innerContext" Roles="SuperUser,User,Admin">
@@ -68,8 +71,8 @@
                  Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
         <ToolBarContent>
             <MudStack Row="true">
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
-                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(maxWidth))">@localizer["import"]</MudButton>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
                 
                 @if (seleVulns.Count() != 0)
                 {

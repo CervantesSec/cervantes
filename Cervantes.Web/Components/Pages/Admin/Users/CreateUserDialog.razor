@@ -12,9 +12,8 @@
         z-index: 999999!important;
     }
 </style>
-		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
-<MudDialog DisableSidePadding="true">
+<MudDialog Class="mud-ex-dialog-initial">
 	<TitleContent>
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Person" /> @localizer["createUser"]</MudText>
 	</TitleContent>
@@ -106,5 +105,4 @@
 		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
 	</DialogActions>
 </MudDialog>
-		</MudContainer>
 

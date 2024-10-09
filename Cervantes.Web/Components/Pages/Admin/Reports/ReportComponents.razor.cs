@@ -2,6 +2,9 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
@@ -28,6 +31,25 @@ public partial class ReportComponents: ComponentBase
 </g>
 </svg>";
     const string footerIcon = @"<svg fill=""#000000"" version=""1.1"" id=""Capa_1"" xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"" viewBox=""0 0 470.586 470.586"" xml:space=""preserve""><g id=""SVGRepo_bgCarrier"" stroke-width=""0""></g><g id=""SVGRepo_tracerCarrier"" stroke-linecap=""round"" stroke-linejoin=""round""></g><g id=""SVGRepo_iconCarrier""> <g> <path d=""M327.081,0H90.234c-15.9,0-28.853,12.959-28.853,28.859v412.863c0,15.924,12.953,28.863,28.853,28.863H380.35 c15.917,0,28.855-12.939,28.855-28.863V89.234L327.081,0z M333.891,43.184l35.996,39.121h-35.996V43.184z M384.972,441.723 c0,2.542-2.081,4.629-4.635,4.629H90.234c-2.547,0-4.619-2.087-4.619-4.629V28.859c0-2.548,2.072-4.613,4.619-4.613h219.411v70.181 c0,6.682,5.443,12.099,12.129,12.099h63.198V441.723z M111.593,359.871h236.052v48.421H111.593V359.871z""></path> </g> </g></svg>";
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         _items = new List<BreadcrumbItem>
@@ -45,11 +67,11 @@ public partial class ReportComponents: ComponentBase
         model = reportController.Components().ToList();
     }
     
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        var dialog = Dialog.Show<CreateReportComponentDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<CreateReportComponentDialog>? dlgReference = await DialogEx.ShowEx<CreateReportComponentDialog>("Simple Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -75,9 +97,8 @@ public partial class ReportComponents: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.ReportComponents> args)
     {
         var parameters = new DialogParameters { ["component"]=args.Item };
-
-        var dialog =  Dialog.Show<ReportComponentsDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        IMudExDialogReference<ReportComponentsDialog>? dlgReference = await DialogEx.ShowEx<ReportComponentsDialog>("Simple Dialog", parameters, maxWidthEx);
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -93,7 +114,7 @@ public partial class ReportComponents: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["components"]=seleComponents };
 
-                var dialog =  Dialog.Show<DeleteReportComponentBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  Dialog.Show<DeleteReportComponentBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

@@ -8,6 +8,8 @@
 @inject IDialogService Dialog
 @inject IStringLocalizer<Resource> localizer
 @using Blazor.Flags
+@using MudBlazor.Extensions.Core
+@inject IMudExDialogService DialogEx
 
 <AuthorizeView Roles="Admin,SuperUser">
     <Authorized>
@@ -58,7 +60,7 @@
                                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                             <ToolBarContent>
                                 <MudStack Row="true">
-                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                             
                                     @if (seleComponents.Count() != 0)
                                     {
@@ -113,7 +115,7 @@
                                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                             <ToolBarContent>
                                 <MudStack Row="true">
-                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                                     <MudButton Href="/reports/templates"
                                                Variant="Variant.Filled"
                                                StartIcon="@Icons.Material.Filled.FileCopy"
@@ -173,7 +175,7 @@
                                                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                                                 <ToolBarContent>
                                                     <MudStack Row="true">
-                                                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                                                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                                                         <MudButton Href="/reports/templates"
                                                                    Variant="Variant.Filled"
                                                                    StartIcon="@Icons.Material.Filled.FileCopy"
@@ -233,7 +235,7 @@
                                                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                                                 <ToolBarContent>
                                                     <MudStack Row="true">
-                                                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                                                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                                                         <MudButton Href="/reports/templates"
                                                                    Variant="Variant.Filled"
                                                                    StartIcon="@Icons.Material.Filled.FileCopy"

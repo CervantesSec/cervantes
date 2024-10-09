@@ -8,6 +8,9 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Projects;
@@ -37,6 +40,7 @@ public partial class Projects: ComponentBase
         new BreadcrumbItem(localizer["projects"], href: null, disabled: true,icon: Icons.Material.Filled.Folder)
     };
         await Update();
+        /*
         if (project != Guid.Empty)
         {
             if (navigationManager.Uri.Contains($"/projects/{project}"))
@@ -49,6 +53,7 @@ public partial class Projects: ComponentBase
             
             }
         }
+        */
         
         user = userController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier)); 
         
@@ -98,12 +103,32 @@ public partial class Projects: ComponentBase
         return false;
     };
 
-    private async Task OpenDialogCreate(DialogOptions options)
-    {
+    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
-        var dialog = DialogService.Show<CreateProjectDialog>("Custom Options Dialog", options);
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
+    
+    private async Task OpenDialogCreate(DialogOptionsEx options)
+    {
+        IMudExDialogReference<CreateProjectDialog>? dlgReference = await DialogEx.ShowEx<CreateProjectDialog>("Simple Dialog", options);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -111,36 +136,14 @@ public partial class Projects: ComponentBase
         }
         
     }
-    
-    async Task DetailsDialog(Project project, DialogOptions options)
-    {
-        /*ProjectDetailsViewModel model = new ProjectDetailsViewModel();
-        //model.Project = project;
-        model.Client = project.Client;
-        model.Members = await Http.GetFromJsonAsync<List<CORE.Entities.ProjectUser>>("api/Project/Members/"+project.Id);
-        model.Targets = await Http.GetFromJsonAsync<List<CORE.Entities.Target>>("api/Target/Project/"+project.Id);
-        model.Tasks = await Http.GetFromJsonAsync<List<CORE.Entities.Task>>("api/Task/Project/"+project.Id);
-        model.Vulns = await Http.GetFromJsonAsync<List<CORE.Entities.Vuln>>("api/Vuln/Project/"+project.Id);
-        model.Notes = await Http.GetFromJsonAsync<List<CORE.Entities.ProjectNote>>("api/Project/Note/"+project.Id);
-        model.Attachments = await Http.GetFromJsonAsync<List<CORE.Entities.ProjectAttachment>>("api/Project/Attachment/"+project.Id);
-        model.Reports = await Http.GetFromJsonAsync<List<CORE.Entities.Report>>("api/Report/Project/"+project.Id);*/
-        /*var parameters = new DialogParameters { ["Project"]=project };
-        var dialog =  DialogService.Show<DetailsDialog>(@localizer["projectDetails"], parameters, options);
-        var result = await dialog.Result;
 
-        if (!result.Canceled)
-        {
-            await Update();
-            StateHasChanged();
-        }*/
-    }
     
     async Task RowClicked(DataGridRowClickEventArgs<Project> args)
     {
         var parameters = new DialogParameters { ["project"]=args.Item };
+        IMudExDialogReference<ProjectDialog>? dlgReference = await DialogEx.ShowEx<ProjectDialog>("Simple Dialog", parameters, maxWidthEx);
 
-        var dialog =  DialogService.Show<ProjectDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -187,7 +190,7 @@ public partial class Projects: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["projects"]=selectedProjects };
 
-                var dialog =  DialogService.Show<DeleteProjectBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  DialogService.Show<DeleteProjectBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

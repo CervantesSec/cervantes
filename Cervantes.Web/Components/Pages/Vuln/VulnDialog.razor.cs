@@ -207,7 +207,7 @@ public partial class VulnDialog: ComponentBase
         model.cve = vuln.cve;
         model.ProofOfConcept = vuln.ProofOfConcept;
         model.Impact = vuln.Impact;
-        if (!string.IsNullOrEmpty(model.CVSSVector))
+        if (string.IsNullOrEmpty(model.CVSSVector))
         {
 	        model.CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H";
 	        model.CVSS3 = 10;
@@ -221,7 +221,7 @@ public partial class VulnDialog: ComponentBase
         model.Remediation = vuln.Remediation;
         model.RemediationComplexity = vuln.RemediationComplexity;
         model.RemediationPriority = vuln.RemediationPriority;
-        if (!string.IsNullOrEmpty(model.OWASPVector))
+        if (string.IsNullOrEmpty(model.OWASPVector))
         {
 	        model.OWASPVector = "(SL:1/M:1/O:0/S:2/ED:1/EE:1/A:1/ID:1/LC:2/LI:1/LAV:1/LAC:1/FD:1/RD:1/NC:2/PV:3)";
 	        model.OWASPImpact = String.Empty;
