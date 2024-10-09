@@ -1805,4 +1805,10 @@
     <data name="cvssUiRequired" xml:space="preserve">
         <value>Mau: A exploração bem sucedida desta vulnerabilidade exige que um utilizador tome uma ou mais acções que podem ou não ser esperadas num cenário que não envolva exploração, ou num cenário que envolva conteúdos fornecidos por uma fonte aparentemente fiável.</value>
     </data>
+    <data name="taskAssigned" xml:space="preserve">
+        <value>Tarefa atribuída corretamente!</value>
+    </data>
+    <data name="taskAssignedError" xml:space="preserve">
+        <value>Ocorreu um erro ao atribuir a Tarefa!</value>
+    </data>
 </root>

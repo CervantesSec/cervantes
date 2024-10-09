@@ -1817,4 +1817,10 @@
     <data name="cvssANone" xml:space="preserve">
         <value>Good: There is no impact to availability within the affected scope.</value>
     </data>
+    <data name="taskAssigned" xml:space="preserve">
+        <value>Task assigned successfully!</value>
+    </data>
+    <data name="taskAssignedError" xml:space="preserve">
+        <value>An error occurred assigning the Task!</value>
+    </data>
 </root>

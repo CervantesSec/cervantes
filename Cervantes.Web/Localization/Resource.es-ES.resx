@@ -1887,4 +1887,10 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="cvssUiRequired" xml:space="preserve">
         <value>Malo: La explotación exitosa de esta vulnerabilidad requiere que un usuario tome una o más acciones que pueden o no esperarse en un escenario que no involucre explotación, o un escenario que involucre contenido provisto por una fuente aparentemente confiable.</value>
     </data>
+    <data name="taskAssigned" xml:space="preserve">
+        <value>Tarea asignada correctamente!</value>
+    </data>
+    <data name="taskAssignedError" xml:space="preserve">
+        <value>Se ha producido un error al asignar la Tarea!</value>
+    </data>
 </root>
