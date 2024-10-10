@@ -160,6 +160,7 @@ public class DataInitializer
                 coverGeneralComponent.ComponentType = ReportPartType.Cover;
                 coverGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 coverGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                coverGeneralComponent.ContentCss = "";
                 coverGeneralComponent.Content = @"<p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
@@ -189,6 +190,7 @@ public class DataInitializer
                 headerGeneralComponent.ComponentType = ReportPartType.Header;
                 headerGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 headerGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                headerGeneralComponent.ContentCss = "";
                 headerGeneralComponent.Content = @"<table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none;"" border=""1""><colgroup><col style=""width: 33.2692%;""><col style=""width: 33.2692%;""><col style=""width: 33.2692%;""></colgroup>
                                                 <tbody>
                                                 <tr>
@@ -209,6 +211,7 @@ public class DataInitializer
                 footerGeneralComponent.ComponentType = ReportPartType.Footer;
                 footerGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 footerGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                footerGeneralComponent.ContentCss = "";
                 footerGeneralComponent.Content = @"<hr>
                 <table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none;"" border=""1""><colgroup><col style=""width: 33.2692%;""><col style=""width: 33.2692%;""><col style=""width: 33.2692%;""></colgroup>
                 <tbody>
@@ -230,6 +233,7 @@ public class DataInitializer
                 disclaimerGeneralComponent.ComponentType = ReportPartType.Body;
                 disclaimerGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 disclaimerGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                disclaimerGeneralComponent.ContentCss = "";
                 disclaimerGeneralComponent.Content = @"<table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none;"" border=""1""><colgroup><col style=""width: 50%;""><col style=""width: 50%;""></colgroup>
                 <tbody>
                 <tr>
@@ -260,6 +264,7 @@ public class DataInitializer
                 purposeGeneralComponent.ComponentType = ReportPartType.Body;
                 purposeGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 purposeGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                purposeGeneralComponent.ContentCss = "";
                 purposeGeneralComponent.Content = @"<h1>Purpose</h1>
                 <p><span style=""color: rgb(0, 0, 0);"">{{ProjectDescription}}</span></p>
                 <p>&nbsp;</p>";
@@ -272,6 +277,7 @@ public class DataInitializer
                 documentControlGeneralComponent.ComponentType = ReportPartType.Body;
                 documentControlGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 documentControlGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                documentControlGeneralComponent.ContentCss = "";
                 documentControlGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Document Control</span></h1>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 33.3333%;""><col style=""width: 33.3333%;""><col style=""width: 33.3333%;""></colgroup>
@@ -297,6 +303,7 @@ public class DataInitializer
                 introductionGeneralComponent.ComponentType = ReportPartType.Body;
                 introductionGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 introductionGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                introductionGeneralComponent.ContentCss = "";
                 introductionGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Introduction</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgb(0, 0, 0);"">This document presents the results of a Security Review for {{ClientName}} . This engagement aimed to verify to discover security vulnerabilities that could negatively affect the {{ClientName}} networks or systems</span></p>
@@ -326,6 +333,7 @@ public class DataInitializer
                 teamGeneralComponent.ComponentType = ReportPartType.Body;
                 teamGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 teamGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                teamGeneralComponent.ContentCss = "";
                 teamGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Team</span></h1>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 33.3333%;""><col style=""width: 33.3333%;""><col style=""width: 33.3333%;""></colgroup>
@@ -351,6 +359,7 @@ public class DataInitializer
                 executiveSummaryGeneralComponent.ComponentType = ReportPartType.Body;
                 executiveSummaryGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 executiveSummaryGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                executiveSummaryGeneralComponent.ContentCss = "";
                 executiveSummaryGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Executive Summary</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgb(0, 0, 0);"">{{ProjectExecutiveSummary}}</span></p>";
@@ -364,6 +373,7 @@ public class DataInitializer
                 scopeGeneralComponent.ComponentType = ReportPartType.Body;
                 scopeGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 scopeGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                scopeGeneralComponent.ContentCss = "";
                 scopeGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Scope</span></h1>
                 <p><span style=""color: rgb(0, 0, 0);"">In accordance with the contract signed between {{OrganizationName}} and {{ClientName}}, the penetration test was performed between {{StartDate}} and {{EndDate}}</span></p>
                 <p><span style=""color: rgb(0, 0, 0);"">The scope of the test was limited to targets listed below.</span></p>
@@ -391,6 +401,7 @@ public class DataInitializer
                 findingsOverViewGeneralComponent.ComponentType = ReportPartType.Body;
                 findingsOverViewGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 findingsOverViewGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                findingsOverViewGeneralComponent.ContentCss = "";
                 findingsOverViewGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Findings Overview</span></h1>
                     <p>&nbsp;</p>
                     <p><span style=""color: rgb(0, 0, 0);"">The following sections list both vulnerabilities and implementation issues spotted during the testing period. Note that findings are listed by their degree of severity and impact. The aforementioned severity rank is simply given in brackets following the title heading for each vulnerability</span></p>
@@ -432,6 +443,7 @@ public class DataInitializer
                 findingsClassificationGeneralComponent.ComponentType = ReportPartType.Body;
                 findingsClassificationGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 findingsClassificationGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                findingsClassificationGeneralComponent.ContentCss = "";
                 findingsClassificationGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Findings Classification</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgb(0, 0, 0);"">Each vulnerability or risk identified has been labeled as a finding and categorized as a Critical, High, Medium, Low or Informational Risk which are defined as:</span></p>
@@ -491,6 +503,7 @@ public class DataInitializer
                 findingsDetailsGeneralComponent.ComponentType = ReportPartType.Body;
                 findingsDetailsGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 findingsDetailsGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                findingsDetailsGeneralComponent.ContentCss = "";
                 findingsDetailsGeneralComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Findings</span></h1>
                 <p>&nbsp;</p>
                 <p>{{for vuln in Vulns}}</p>
@@ -596,6 +609,7 @@ public class DataInitializer
                 methodlogyGeneralComponent.ComponentType = ReportPartType.Body;
                 methodlogyGeneralComponent.Created = DateTime.Now.ToUniversalTime();
                 methodlogyGeneralComponent.Updated = DateTime.Now.ToUniversalTime();
+                methodlogyGeneralComponent.ContentCss = "";
                 methodlogyGeneralComponent.Content = @"<h2><span style=""color: rgb(0, 0, 0);"">Methodology</span></h2>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgb(0, 0, 0);"">The methodology consisted of 7 of steps beginning with the determination of test scope, and ending with reporting. These tests were performed by security experts using potential attackers&rsquo; modes of operation while controlling execution to prevent harm to the systems being tested. The approach included but is not limited to manual and automated vulnerability scans, verification of findings (automated and otherwise). This verification step and manual scanning process eliminated false positives and erroneous outputs, resulting in more efficient tests.</span></p>
@@ -622,6 +636,7 @@ public class DataInitializer
                  coverOwaspMastgComponent.ComponentType = ReportPartType.Cover;
                  coverOwaspMastgComponent.Created = DateTime.Now.ToUniversalTime();
                  coverOwaspMastgComponent.Updated = DateTime.Now.ToUniversalTime();
+                 coverOwaspMastgComponent.ContentCss = "";
                  coverOwaspMastgComponent.Content = @"<p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none;"" border=""1""><colgroup><col style=""width: 51.8049%;""><col style=""width: 48.1951%;""></colgroup>
@@ -674,6 +689,7 @@ public class DataInitializer
                 headerOwaspMastgComponent.ComponentType = ReportPartType.Header;
                 headerOwaspMastgComponent.Created = DateTime.Now.ToUniversalTime();
                 headerOwaspMastgComponent.Updated = DateTime.Now.ToUniversalTime();
+                headerOwaspMastgComponent.ContentCss = "";
                 headerOwaspMastgComponent.Content = @"<table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none;"" border=""1""><colgroup><col style=""width: 33.2692%;""><col style=""width: 33.2692%;""><col style=""width: 33.2692%;""></colgroup>
                 <tbody>
                 <tr>
@@ -695,6 +711,7 @@ public class DataInitializer
                 introOwaspMastgComponent.ComponentType = ReportPartType.Body;
                 introOwaspMastgComponent.Created = DateTime.Now.ToUniversalTime();
                 introOwaspMastgComponent.Updated = DateTime.Now.ToUniversalTime();
+                introOwaspMastgComponent.ContentCss = "";
                 introOwaspMastgComponent.Content = @"<h2><span style=""color: rgb(0, 0, 0);"">Introduction</span></h2>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgb(0, 0, 0);"">{{ClientName}} we are pleased to present you with the Open Web Application Security Project (OWASP) Mobile Application Security Testing Guid (MASTG) report as a result of our recent penetration testing engagement on your digital infrastructure. The OWASP MASTG report provides a comprehensive examination of your app from a security perspective.</span></p>
@@ -717,6 +734,7 @@ public class DataInitializer
                 resultsAndroidOwaspMastgComponent.ComponentType = ReportPartType.Body;
                 resultsAndroidOwaspMastgComponent.Created = DateTime.Now.ToUniversalTime();
                 resultsAndroidOwaspMastgComponent.Updated = DateTime.Now.ToUniversalTime();
+                resultsAndroidOwaspMastgComponent.ContentCss = "";
                 resultsAndroidOwaspMastgComponent.Content = @"<h2>Results</h2>
                     <p>&nbsp;</p>
                     <table style=""border-collapse: collapse; width: 100%; height: 268.687px;"" border=""1""><colgroup><col style=""width: 11.9632%;""><col style=""width: 45.5419%;""><col style=""width: 4.45814%;""><col style=""width: 4.21779%;""><col style=""width: 5.06135%;""><col style=""width: 14.6472%;""><col style=""width: 14.1104%;""></colgroup>
@@ -1415,6 +1433,7 @@ public class DataInitializer
                 resultsIosOwaspMastgComponent.ComponentType = ReportPartType.Body;
                 resultsIosOwaspMastgComponent.Created = DateTime.Now.ToUniversalTime();
                 resultsIosOwaspMastgComponent.Updated = DateTime.Now.ToUniversalTime();
+                resultsIosOwaspMastgComponent.ContentCss = "";
                 resultsIosOwaspMastgComponent.Content = @"<h2>Results</h2>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%; height: 223.906px;"" border=""1""><colgroup><col style=""width: 11.9632%;""><col style=""width: 45.5419%;""><col style=""width: 4.45814%;""><col style=""width: 4.21779%;""><col style=""width: 5.06135%;""><col style=""width: 14.6472%;""><col style=""width: 14.1104%;""></colgroup>
@@ -2044,6 +2063,7 @@ public class DataInitializer
                 coverOwaspWstgComponent.ComponentType = ReportPartType.Cover;
                 coverOwaspWstgComponent.Created = DateTime.Now.ToUniversalTime();
                 coverOwaspWstgComponent.Updated = DateTime.Now.ToUniversalTime();
+                coverOwaspWstgComponent.ContentCss = "";
                 coverOwaspWstgComponent.Content = @"<p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none;"" border=""1""><colgroup><col style=""width: 51.8049%;""><col style=""width: 48.1951%;""></colgroup>
@@ -2096,6 +2116,7 @@ public class DataInitializer
                 headerOwaspWstgComponent.ComponentType = ReportPartType.Header;
                 headerOwaspWstgComponent.Created = DateTime.Now.ToUniversalTime();
                 headerOwaspWstgComponent.Updated = DateTime.Now.ToUniversalTime();
+                headerOwaspWstgComponent.ContentCss = "";
                 headerOwaspWstgComponent.Content = @"<table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none;"" border=""1""><colgroup><col style=""width: 33.2692%;""><col style=""width: 33.2692%;""><col style=""width: 33.2692%;""></colgroup>
                 <tbody>
                 <tr>
@@ -2116,6 +2137,7 @@ public class DataInitializer
                 introOwaspWstgComponent.ComponentType = ReportPartType.Body;
                 introOwaspWstgComponent.Created = DateTime.Now.ToUniversalTime();
                 introOwaspWstgComponent.Updated = DateTime.Now.ToUniversalTime();
+                introOwaspWstgComponent.ContentCss = "";
                 introOwaspWstgComponent.Content = @"<h2><span style=""color: rgb(0, 0, 0);"">Introduction</span></h2>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgb(0, 0, 0);"">{{ClientName}} we are pleased to present you with the Open Web Application Security Project (OWASP) Web Security Testing Guide (WSTG) report as a result of our recent penetration testing engagement on your digital infrastructure. The OWASP WSTG report provides a comprehensive examination of your system from a security perspective.</span></p>
@@ -2138,6 +2160,7 @@ public class DataInitializer
                 resultsOwaspWstgComponent.ComponentType = ReportPartType.Body;
                 resultsOwaspWstgComponent.Created = DateTime.Now.ToUniversalTime();
                 resultsOwaspWstgComponent.Updated = DateTime.Now.ToUniversalTime();
+                resultsOwaspWstgComponent.ContentCss = "";
                 resultsOwaspWstgComponent.Content = @"
                 <h2><span style=""color: rgb(0, 0, 0);"">Results</span></h2>
                 <table style=""border-collapse: collapse; width: 100%; height: 246.297px;"" border=""1""><colgroup><col style=""width: 13.4188%;""><col style=""width: 26.6118%;""><col style=""width: 29.2178%;""><col style=""width: 10.8129%;""><col style=""width: 19.9387%;""></colgroup>
@@ -3936,6 +3959,7 @@ public class DataInitializer
                 portadaGeneral.ComponentType = ReportPartType.Cover;
                 portadaGeneral.Created = DateTime.Now.ToUniversalTime();
                 portadaGeneral.Updated = DateTime.Now.ToUniversalTime();
+                portadaGeneral.ContentCss = "";
                 portadaGeneral.Content = @"<p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
@@ -3964,6 +3988,7 @@ public class DataInitializer
                 cabeceraGeneral.ComponentType = ReportPartType.Header;
                 cabeceraGeneral.Created = DateTime.Now.ToUniversalTime();
                 cabeceraGeneral.Updated = DateTime.Now.ToUniversalTime();
+                cabeceraGeneral.ContentCss = "";
                 cabeceraGeneral.Content = @"<table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none"" border=""1""><colgroup><col style=""width: 33.2692%""><col style=""width: 33.2692%""><col style=""width: 33.2692%""></colgroup>
                 <tbody>
                 <tr>
@@ -3985,6 +4010,7 @@ public class DataInitializer
                 pieGeneral.ComponentType = ReportPartType.Footer;
                 pieGeneral.Created = DateTime.Now.ToUniversalTime();
                 pieGeneral.Updated = DateTime.Now.ToUniversalTime();
+                pieGeneral.ContentCss = "";
                 pieGeneral.Content = @"<hr>
                 <table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none"" border=""1""><colgroup><col style=""width: 33.2692%""><col style=""width: 33.2692%""><col style=""width: 33.2692%""></colgroup>
                 <tbody>
@@ -4005,6 +4031,7 @@ public class DataInitializer
                 introGeneral.ComponentType = ReportPartType.Body;
                 introGeneral.Created = DateTime.Now.ToUniversalTime();
                 introGeneral.Updated = DateTime.Now.ToUniversalTime();
+                introGeneral.ContentCss = "";
                 introGeneral.Content = @"<h1><span style=""font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; color: rgba(0, 0, 0, 1)"">Introducción</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgba(0, 0, 0, 1)"">Este documento presenta los resultados de una Auditoría de Seguridad para {{ClientName}}. Este compromiso tenía como objetivo descubrir vulnerabilidades de seguridad que pudieran afectar negativamente a las redes o sistemas de {{ClientName}}.</span></p>
@@ -4034,6 +4061,7 @@ public class DataInitializer
                 equipoGeneral.ComponentType = ReportPartType.Body;
                 equipoGeneral.Created = DateTime.Now.ToUniversalTime();
                 equipoGeneral.Updated = DateTime.Now.ToUniversalTime();
+                equipoGeneral.ContentCss = "";
                 equipoGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Team</span></h1>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%"" border=""1""><colgroup><col style=""width: 33.3333%""><col style=""width: 33.3333%""><col style=""width: 33.3333%""></colgroup>
@@ -4061,6 +4089,7 @@ public class DataInitializer
                 metodologiaGeneral.ComponentType = ReportPartType.Body;
                 metodologiaGeneral.Created = DateTime.Now.ToUniversalTime();
                 metodologiaGeneral.Updated = DateTime.Now.ToUniversalTime();
+                metodologiaGeneral.ContentCss = "";
                 metodologiaGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Metodología</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgba(0, 0, 0, 1)"">La metodología consistió en 7 pasos que comenzaron con la determinación del alcance de la prueba y finalizaron con la elaboración del informe. Estas pruebas fueron realizadas por expertos en seguridad utilizando modos de operación de posibles atacantes, controlando la ejecución para evitar daños a los sistemas probados. El enfoque incluyó, pero no se limitó a, escaneos de vulnerabilidades manuales y automáticos, verificación de hallazgos (tanto automatizados como otros). Este paso de verificación y el proceso de escaneo manual eliminaron falsos positivos y salidas erróneas, lo que resultó en pruebas más eficientes.</span></p>
@@ -4085,6 +4114,7 @@ public class DataInitializer
                 alcanceGeneral.ComponentType = ReportPartType.Body;
                 alcanceGeneral.Created = DateTime.Now.ToUniversalTime();
                 alcanceGeneral.Updated = DateTime.Now.ToUniversalTime();
+                alcanceGeneral.ContentCss = "";
                 alcanceGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Alcance</span></h1>
                     <p>De acuerdo con el acuerdo firmado entre {{OrganizationName}} y {{ClientName}}, la prueba de penetración se llevó a cabo entre {{StartDate}} y {{EndDate}}.</p>
                     <p>El alcance de la prueba se limitó a los objetivos enumerados a continuación.</p>
@@ -4114,6 +4144,7 @@ public class DataInitializer
                 resumenHallazgosGeneral.ComponentType = ReportPartType.Body;
                 resumenHallazgosGeneral.Created = DateTime.Now.ToUniversalTime();
                 resumenHallazgosGeneral.Updated = DateTime.Now.ToUniversalTime();
+                resumenHallazgosGeneral.ContentCss = "";
                 resumenHallazgosGeneral.Content = @"<h1>Resumen de Hallazgos</h1>
                 <p>&nbsp;</p>
                 <p>Las siguientes secciones enumeran tanto vulnerabilidades como problemas de implementación identificados durante el período de prueba. Tenga en cuenta que los hallazgos se enumeran según su grado de gravedad e impacto. El rango de gravedad mencionado anteriormente se proporciona simplemente entre corchetes después del encabezado del título para cada vulnerabilidad.</p>
@@ -4158,6 +4189,7 @@ public class DataInitializer
                 clasHallazgosGeneral.ComponentType = ReportPartType.Body;
                 clasHallazgosGeneral.Created = DateTime.Now.ToUniversalTime();
                 clasHallazgosGeneral.Updated = DateTime.Now.ToUniversalTime();
+                clasHallazgosGeneral.ContentCss = "";
                 clasHallazgosGeneral.Content = @"
                 <h1>Clasificación de Hallazgos</h1>
                 <p>&nbsp;</p>
@@ -4226,6 +4258,7 @@ public class DataInitializer
                 controlDocGeneral.ComponentType = ReportPartType.Body;
                 controlDocGeneral.Created = DateTime.Now.ToUniversalTime();
                 controlDocGeneral.Updated = DateTime.Now.ToUniversalTime();
+                controlDocGeneral.ContentCss = "";
                 controlDocGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Control del Documento</span></h1>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%"" border=""1""><colgroup><col style=""width: 33.3333%""><col style=""width: 33.3333%""><col style=""width: 33.3333%""></colgroup>
@@ -4253,6 +4286,7 @@ public class DataInitializer
                 descargoResponsabilidadGeneral.ComponentType = ReportPartType.Body;
                 descargoResponsabilidadGeneral.Created = DateTime.Now.ToUniversalTime();
                 descargoResponsabilidadGeneral.Updated = DateTime.Now.ToUniversalTime();
+                descargoResponsabilidadGeneral.ContentCss = "";
                 descargoResponsabilidadGeneral.Content = @"<table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none"" border=""1""><colgroup><col style=""width: 50%""><col style=""width: 50%""></colgroup>
 <tbody>
 <tr>
@@ -4284,6 +4318,7 @@ public class DataInitializer
                 detallesHallazgosGeneral.ComponentType = ReportPartType.Body;
                 detallesHallazgosGeneral.Created = DateTime.Now.ToUniversalTime();
                 detallesHallazgosGeneral.Updated = DateTime.Now.ToUniversalTime();
+                detallesHallazgosGeneral.ContentCss = "";
                 detallesHallazgosGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Hallazgos</span></h1>
                 <p>&nbsp;</p>
                 <p>{{for vuln in Vulns}}</p>    
@@ -4391,6 +4426,7 @@ public class DataInitializer
                 resumenEjecutivoGeneral.ComponentType = ReportPartType.Body;
                 resumenEjecutivoGeneral.Created = DateTime.Now.ToUniversalTime();
                 resumenEjecutivoGeneral.Updated = DateTime.Now.ToUniversalTime();
+                resumenEjecutivoGeneral.ContentCss = "";
                 resumenEjecutivoGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Resumen Ejecutivo</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgba(0, 0, 0, 1)"">{{ProjectExecutiveSummary}}</span></p>";
@@ -4404,6 +4440,7 @@ public class DataInitializer
                 propositoGeneral.ComponentType = ReportPartType.Body;
                 propositoGeneral.Created = DateTime.Now.ToUniversalTime();
                 propositoGeneral.Updated = DateTime.Now.ToUniversalTime();
+                propositoGeneral.ContentCss = "";
                 propositoGeneral.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Propósito</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgba(0, 0, 0, 1)"">{{ProjectDescription}}</span></p>";
@@ -4419,6 +4456,7 @@ public class DataInitializer
                 wstgPortada.ComponentType = ReportPartType.Cover;
                 wstgPortada.Created = DateTime.Now.ToUniversalTime();
                 wstgPortada.Updated = DateTime.Now.ToUniversalTime();
+                wstgPortada.ContentCss = "";
                 wstgPortada.Content = @"<p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none"" border=""1""><colgroup><col style=""width: 51.8049%""><col style=""width: 48.1951%""></colgroup>
@@ -4472,6 +4510,7 @@ public class DataInitializer
                 wstgCabecera.ComponentType = ReportPartType.Header;
                 wstgCabecera.Created = DateTime.Now.ToUniversalTime();
                 wstgCabecera.Updated = DateTime.Now.ToUniversalTime();
+                wstgCabecera.ContentCss = "";
                 wstgCabecera.Content = @"<table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none"" border=""1""><colgroup><col style=""width: 33.3655%""><col style=""width: 33.3655%""><col style=""width: 33.3655%""></colgroup>
                 <tbody>
                 <tr>
@@ -4493,6 +4532,7 @@ public class DataInitializer
                 wstgIntroduccion.ComponentType = ReportPartType.Body;
                 wstgIntroduccion.Created = DateTime.Now.ToUniversalTime();
                 wstgIntroduccion.Updated = DateTime.Now.ToUniversalTime();
+                wstgIntroduccion.ContentCss = "";
                 wstgIntroduccion.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Introducción</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgba(0, 0, 0, 1)"">{{ClientName}}, nos complace presentarle el informe del Proyecto de Pruebas de Seguridad de Aplicaciones Web (WSTG) del Proyecto de Seguridad de Aplicaciones Web de Código Abierto (OWASP), como resultado de nuestro reciente compromiso de pruebas de penetración en su infraestructura digital. El informe WSTG de OWASP proporciona un examen integral de su sistema desde una perspectiva de seguridad.</span></p>
@@ -4516,6 +4556,7 @@ public class DataInitializer
                 wstgResultados.ComponentType = ReportPartType.Body;
                 wstgResultados.Created = DateTime.Now.ToUniversalTime();
                 wstgResultados.Updated = DateTime.Now.ToUniversalTime();
+                wstgResultados.ContentCss = "";
                 wstgResultados.Content = @"<h2><span style=""color: rgba(0, 0, 0, 1)"">Resultados</span></h2>
     <table style=""border-collapse: collapse; width: 100%; height: 1058.89px"" border=""1""><colgroup><col style=""width: 13.4188%""><col style=""width: 26.6118%""><col style=""width: 29.2178%""><col style=""width: 10.8129%""><col style=""width: 19.9387%""></colgroup>
     <tbody>
@@ -6055,6 +6096,7 @@ public class DataInitializer
                 mastgPortada.ComponentType = ReportPartType.Cover;
                 mastgPortada.Created = DateTime.Now.ToUniversalTime();
                 mastgPortada.Updated = DateTime.Now.ToUniversalTime();
+                mastgPortada.ContentCss = "";
                 mastgPortada.Content = @"<p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <table style=""border-collapse: collapse; width: 100%; border-width: 1px; border-style: none"" border=""1""><colgroup><col style=""width: 51.8049%""><col style=""width: 48.1951%""></colgroup>
@@ -6108,6 +6150,7 @@ public class DataInitializer
                 mastgCabecera.ComponentType = ReportPartType.Header;
                 mastgCabecera.Created = DateTime.Now.ToUniversalTime();
                 mastgCabecera.Updated = DateTime.Now.ToUniversalTime();
+                mastgCabecera.ContentCss = "";
                 mastgCabecera.Content = @"";
                 reportComponentsManager.Add(mastgCabecera);
                 reportComponentsManager.Context.SaveChanges();
@@ -6119,6 +6162,7 @@ public class DataInitializer
                 mastgIntroduccion.ComponentType = ReportPartType.Body;
                 mastgIntroduccion.Created = DateTime.Now.ToUniversalTime();
                 mastgIntroduccion.Updated = DateTime.Now.ToUniversalTime();
+                mastgIntroduccion.ContentCss = "";
                 mastgIntroduccion.Content = @"<h1><span style=""color: rgba(0, 0, 0, 1)"">Introducción</span></h1>
                 <p>&nbsp;</p>
                 <p><span style=""color: rgba(0, 0, 0, 1)"">{{ClientName}}, nos complace presentarle el informe del Proyecto de Pruebas de Seguridad de Aplicaciones Móviles (MASTG) del Proyecto de Seguridad de Aplicaciones Web de Código Abierto (OWASP) como resultado de nuestro reciente compromiso de pruebas de penetración en su infraestructura digital. El informe MASTG de OWASP proporciona un examen integral de su aplicación desde una perspectiva de seguridad.</span></p>
@@ -6142,6 +6186,7 @@ public class DataInitializer
                  mastgAndroid.ComponentType = ReportPartType.Body;
                  mastgAndroid.Created = DateTime.Now.ToUniversalTime();
                  mastgAndroid.Updated = DateTime.Now.ToUniversalTime();
+                    mastgAndroid.ContentCss = "";
                  mastgAndroid.Content = @"<h2>Resultados</h2>
     <p>&nbsp;</p>
     <table style=""border-collapse: collapse; width: 100%; height: 268.687px"" border=""1""><colgroup><col style=""width: 11.9895%""><col style=""width: 45.5204%""><col style=""width: 4.47958%""><col style=""width: 4.21607%""><col style=""width: 5.07246%""><col style=""width: 14.6245%""><col style=""width: 14.0975%""></colgroup>
@@ -6841,6 +6886,7 @@ public class DataInitializer
                 mastgIos.ComponentType = ReportPartType.Body;
                 mastgIos.Created = DateTime.Now.ToUniversalTime();
                 mastgIos.Updated = DateTime.Now.ToUniversalTime();
+                mastgIos.ContentCss = "";
                 mastgIos.Content = @"<h2>Resultados</h2>
 <p>&nbsp;</p>
 <table style=""border-collapse: collapse; width: 100%; height: 223.906px"" border=""1""><colgroup><col style=""width: 11.9632%""><col style=""width: 45.5419%""><col style=""width: 4.45814%""><col style=""width: 4.21779%""><col style=""width: 5.06135%""><col style=""width: 14.6472%""><col style=""width: 14.1104%""></colgroup>
