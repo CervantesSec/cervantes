@@ -1,0 +1,49 @@
+@using System.Collections.Generic
+@using Cervantes.Web.Localization
+@inject IStringLocalizer<Resource> localizer
+
+    <MudGrid>
+        @foreach (var tactic in tactics)
+        {
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudPaper>
+                    <MudListExtended T="string"
+                                     Clickable="true"
+                                     SelectedValues="selectedTechniques"
+                                     SelectedValuesChanged="OnSelectedTechniquesChanged"
+                                     MultiSelection="true"
+                                     Style="max-height: 300px; overflow-y: auto;">
+                        <MudListSubheaderExtended T="string" Sticky="true" SecondaryBackground="true">
+                            <MudIcon Icon="@Icons.Material.Filled.Security" Size="Size.Small"></MudIcon>
+                            @tactic.Name (@techniques.Where(t => t.TacticId == tactic.Id).Count())
+                        </MudListSubheaderExtended>
+
+                        @foreach (var technique in techniques.Where(t => t.TacticId == tactic.Id))
+                        {
+                            <MudTooltip Text="@technique.Description" RootClass="d-inline" Arrow="true" Placement="Placement.Right"  Style="width: 200px;">
+                            <MudListItemExtended T="string" Text="@technique.Name" Value="@technique.Id"/>
+                            </MudTooltip>
+                           
+                        }
+                    </MudListExtended>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+
+    @*<MudExpansionPanels Class="mt-4">
+        <MudExpansionPanel Text="Selected Techniques">
+            <MudList Clickable="false">
+                @foreach (var techniqueId in selectedTechniques)
+                {
+                    var technique = techniques.FirstOrDefault(t => t.Id == techniqueId);
+                    if (technique != null)
+                    {
+                        <MudListItem Icon="@Icons.Material.Filled.Check">
+                            @technique.Name (@technique.Id)
+                        </MudListItem>
+                    }
+                }
+            </MudList>
+        </MudExpansionPanel>
+    </MudExpansionPanels>*@

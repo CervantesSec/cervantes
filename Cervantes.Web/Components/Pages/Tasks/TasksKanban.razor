@@ -120,7 +120,14 @@
                                             <CardHeaderContent>
 
                                                 <MudStack Row="true">
-                                                    <MudText Typo="Typo.h6">@context.Name</MudText>
+                                                    <MudStack Spacing="1">
+                                                        <MudText Typo="Typo.h6">@context.Name</MudText>
+                                                        @if (@context.Project != null)
+                                                        {
+                                                            <MudText Typo="Typo.body2">@localizer["project"]: @context.Project.Name</MudText>
+
+                                                        }
+                                                    </MudStack>
                                                     <MudSpacer/>
                                                     <MudIconButton Icon="@Icons.Material.Filled.Details" Color="Color.Primary" Size="Size.Small" OnClick="@((e) => DetailsDialog(@context, maxWidthEx))"/>
 

@@ -129,7 +129,11 @@
                             </MudSelect>
                             <MudText Typo="Typo.body2">@localizer["impact"]</MudText>
                             <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Impact" data-mce-placeholder="Description"/>
-
+                            <MudExpansionPanels>
+                                <MudExpansionPanel Text="Mitre Att&ck">
+                                    <Cervantes.Web.Components.Shared.MitreAttack/>
+                                </MudExpansionPanel>
+                            </MudExpansionPanels>
                             <MudExpansionPanels>
                                 <MudExpansionPanel Text="CVSS">
                                     <Cervantes.Web.Components.Shared.CVSSCalculator @bind-Vector="@model.CVSSVector" @bind-Score="@model.CVSS3"/>
