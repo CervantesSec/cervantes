@@ -95,6 +95,7 @@ public class VulnCreateViewModel
     
     public List<int> CweId { get; set; }
     public List<Guid> TargetId { get; set; }
-    
+    public List<string> MitreValues { get; set; }
+    public List<string> MitreTechniques { get; set; }
     public Language Language { get; set; }
 }

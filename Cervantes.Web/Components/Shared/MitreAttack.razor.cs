@@ -4,24 +4,43 @@ namespace Cervantes.Web.Components.Shared;
 
 public partial class MitreAttack : ComponentBase
 {
-    [Parameter] public IEnumerable<string> Techniques{ get; set; }
-    [Parameter] public EventCallback<IEnumerable<string>> TechniquesChanged { get; set; }
-
-    private IEnumerable<string> SelectedVector
+    [Parameter] public List<string> TechniquesValues{ get; set; }
+    [Parameter] public EventCallback<List<string>> TechniquesValuesChanged { get; set; }
+    
+    [Parameter] public List<string> MitreTechniques{ get; set; }
+    [Parameter] public EventCallback<List<string>> MitreTechniquesChanged { get; set; }
+    private List<string> SelectedTechniques
     {
-        get => Techniques;
+        get => TechniquesValues;
         set
         {
-            if (value != Techniques)
+            if (value != TechniquesValues)
             {
-                TechniquesChanged.InvokeAsync(value);        
+                TechniquesValuesChanged.InvokeAsync(value);        
             }
         }
     }
-    private IEnumerable<string> selectedTechniques = new HashSet<string>();
+    
+    private List<string> SelectedMitreTechniques
+    {
+        get => MitreTechniques;
+        set
+        {
+            if (value != MitreTechniques)
+            {
+                MitreTechniquesChanged.InvokeAsync(value);        
+            }
+        }
+    }
+    private async Task OnMitreTechniquesChanged(List<string> value)
+        => await this.MitreTechniquesChanged.InvokeAsync(value);
+    private async Task OnTechniquesChanged(List<string> value)
+        => await this.TechniquesValuesChanged.InvokeAsync(value);
+    
+    private List<string> selectedTechniques = new List<string>();
     protected override void OnParametersSet()
     {
-        selectedTechniques = new HashSet<string>(Techniques);
+        //selectedTechniques = new List<string>(TechniquesValues);
         base.OnParametersSet();
     }
     private List<Tactic> tactics = new List<Tactic>
@@ -292,10 +311,10 @@ new Technique { Id = "T1098", Name = "Account Manipulation", Description = "Adve
     };
 
 
-    private async Task OnSelectedTechniquesChanged(IEnumerable<string> values)
+    private async Task OnSelectedTechniquesChanged(List<string> values)
     {
-        selectedTechniques = new HashSet<string>(values);
-        await TechniquesChanged.InvokeAsync(selectedTechniques);
+        selectedTechniques = new List<string>(values);
+        await TechniquesValuesChanged.InvokeAsync(selectedTechniques);
         StateHasChanged();
     }
     
