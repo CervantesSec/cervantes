@@ -250,7 +250,8 @@ public partial class VulnDialog: ComponentBase
 		}
         
         }
-  
+        model.MitreTechniques = vuln.MitreTechniques.Split(',').ToList();
+        model.MitreValues = vuln.MitreValues.Split(',').ToList();
         MudDialog.StateHasChanged();
     }
     

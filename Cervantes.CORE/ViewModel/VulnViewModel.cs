@@ -121,4 +121,6 @@ public class VulnViewModel
     public string OWASPVector { get; set; }
     public Language Language { get; set; }
     public DateTime ModifiedDate { get; set; }
+    public List<string> MitreValues { get; set; }
+    public List<string> MitreTechniques { get; set; }
 }

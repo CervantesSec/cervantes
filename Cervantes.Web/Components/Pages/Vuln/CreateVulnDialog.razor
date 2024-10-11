@@ -131,7 +131,7 @@
                             <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Impact" data-mce-placeholder="Description"/>
                             <MudExpansionPanels>
                                 <MudExpansionPanel Text="Mitre Att&ck">
-                                    <Cervantes.Web.Components.Shared.MitreAttack/>
+                                    <Cervantes.Web.Components.Shared.MitreAttack @bind-MitreTechniques="@model.MitreTechniques" @bind-TechniquesValues="@model.MitreValues"/>
                                 </MudExpansionPanel>
                             </MudExpansionPanels>
                             <MudExpansionPanels>

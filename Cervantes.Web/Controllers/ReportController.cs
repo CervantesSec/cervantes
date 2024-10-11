@@ -852,7 +852,8 @@ public class ReportController : ControllerBase
                         {"VulnOwaspLikelihood", vuln.OWASPLikehood},
                         {"VulnOwaspVector", vuln.OWASPVector},
                         {"VulnTargets", targets},
-                        {"VulnFindingId", vuln.FindingId}
+                        {"VulnFindingId", vuln.FindingId},
+                        {"VulnMitreTechniques", vuln.MitreTechniques}
                     });
                 }
                 

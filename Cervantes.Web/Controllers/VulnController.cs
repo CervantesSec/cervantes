@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text;
 using System.Web;
 using Cervantes.Contracts;
 using Cervantes.CORE;
@@ -275,6 +276,36 @@ public class VulnController: ControllerBase
                 vuln.OWASPLikehood = model.OWASPLikehood;
                 vuln.OWASPRisk = model.OWASPRisk;
                 vuln.OWASPVector = model.OWASPVector;
+                if (model.MitreTechniques != null)
+                {
+                    StringBuilder mt = new StringBuilder();
+
+                    foreach (var item in model.MitreTechniques)
+                    {
+                        mt.Append(item + ",");
+                    }
+                    vuln.MitreTechniques = mt.ToString();
+                }
+                else
+                {
+                    vuln.MitreTechniques = string.Empty;
+                }
+                
+                if (model.MitreValues != null)
+                {
+                    StringBuilder mv = new StringBuilder();
+
+                    foreach (var item in model.MitreValues)
+                    {
+                        mv.Append(item + ",");
+                    } 
+                    vuln.MitreValues = mv.ToString();
+
+                }
+                else
+                {
+                    vuln.MitreValues = string.Empty;
+                }
 
                 await vulnManager.AddAsync(vuln);
                 await vulnManager.Context.SaveChangesAsync();
@@ -365,7 +396,36 @@ public class VulnController: ControllerBase
                 vuln.OWASPLikehood = model.OWASPLikehood;
                 vuln.OWASPRisk = model.OWASPRisk;
                 vuln.OWASPVector = model.OWASPVector;
+                if (model.MitreTechniques != null)
+                {
+                    StringBuilder mt = new StringBuilder();
 
+                    foreach (var item in model.MitreTechniques)
+                    {
+                        mt.Append(item + ",");
+                    }
+                    vuln.MitreTechniques = mt.ToString();
+                }
+                else
+                {
+                    vuln.MitreTechniques = string.Empty;
+                }
+                
+                if (model.MitreValues != null)
+                {
+                    StringBuilder mv = new StringBuilder();
+
+                    foreach (var item in model.MitreValues)
+                    {
+                        mv.Append(item + ",");
+                    } 
+                    vuln.MitreValues = mv.ToString();
+
+                }
+                else
+                {
+                    vuln.MitreValues = string.Empty;
+                }
                 await vulnManager.Context.SaveChangesAsync();
                 
                 if (model.CweId != null)

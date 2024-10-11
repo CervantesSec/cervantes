@@ -38,9 +38,21 @@ public partial class MitreAttack : ComponentBase
         => await this.TechniquesValuesChanged.InvokeAsync(value);
     
     private List<string> selectedTechniques = new List<string>();
-    protected override void OnParametersSet()
+    
+
+    protected override async Task OnParametersSetAsync()
     {
-        //selectedTechniques = new List<string>(TechniquesValues);
+        if (TechniquesValues != null)
+        {
+            selectedTechniques = new List<string>(TechniquesValues);
+            //await OnSelectedTechniquesChanged(selectedTechniques);
+        }
+        else
+        {
+            selectedTechniques = new List<string>();
+            //await OnSelectedTechniquesChanged(selectedTechniques);
+
+        }
         base.OnParametersSet();
     }
     private List<Tactic> tactics = new List<Tactic>
@@ -311,10 +323,22 @@ new Technique { Id = "T1098", Name = "Account Manipulation", Description = "Adve
     };
 
 
-    private async Task OnSelectedTechniquesChanged(List<string> values)
+    private async Task OnSelectedTechniquesChanged(IEnumerable<string> values)
     {
+        selectedTechniques.Clear();
         selectedTechniques = new List<string>(values);
         await TechniquesValuesChanged.InvokeAsync(selectedTechniques);
+        SelectedMitreTechniques.Clear();
+        SelectedMitreTechniques = new List<string>();
+        foreach (var test in values)
+        {
+            var tech = techniques.FirstOrDefault(x => x.Id == test);
+            if (tech != null)
+            {
+                SelectedMitreTechniques.Add(tech.Id +" - "+ tech.Name);
+            }
+        }
+        await MitreTechniquesChanged.InvokeAsync(SelectedMitreTechniques);
         StateHasChanged();
     }
     

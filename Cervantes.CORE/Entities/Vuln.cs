@@ -142,6 +142,9 @@ public class Vuln
     public string OWASPLikehood { get; set; }
     public string OWASPVector { get; set; }
     
+    public string MitreValues { get; set; }
+    public string MitreTechniques { get; set; }
+    
     //public string References { get; set; }
     
     public List<VulnCwe> VulnCwes { get; set; }
