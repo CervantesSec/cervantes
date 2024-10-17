@@ -1,0 +1,130 @@
+﻿@page "/Account/ExternalLogin"
+
+@using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+@using System.Text
+@using System.Text.Encodings.Web
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.Extensions.Localization
+@using Task = System.Threading.Tasks.Task
+
+@using Cervantes.Web.Components.Layout
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Controllers
+
+@layout LoginLayout
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ILogger<Login> Logger
+@inject IdentityRedirectManager RedirectManager
+@inject IStringLocalizer<Resource> localizer
+@inject ISnackbar Snackbar
+@inject IConfiguration _configuration
+@inject IdentityUserAccessor UserAccessor
+
+
+@code {
+    private ExternalLoginInfo? externalLoginInfo;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery]
+    private string? RemoteError { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string? Action { get; set; }
+
+    private string? ProviderDisplayName => externalLoginInfo?.ProviderDisplayName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RemoteError is not null)
+        {
+            RedirectManager.RedirectToWithStatus("Account/Login", $"Error from external provider: {RemoteError}", HttpContext);
+        }
+
+        var info = await SignInManager.GetExternalLoginInfoAsync();
+        if (info is null)
+        {
+            RedirectManager.RedirectToWithStatus("Account/Login", "Error loading external login information.", HttpContext);
+        }
+
+        externalLoginInfo = info;
+
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            if (Action == IdentityComponentsEndpointRouteBuilderExtensions.LoginCallbackAction)
+            {
+                await OnLoginCallbackAsync();
+                return;
+            }
+
+            // We should only reach this page via the login callback, so redirect back to
+            // the login page if we get here some other way.
+            RedirectManager.RedirectTo("Account/Login");
+        }
+    }
+
+    private async Task OnLoginCallbackAsync()
+    {
+        if (RemoteError is not null)
+        {
+            RedirectManager.RedirectToWithStatus("Account/Login", $"Error from external provider: {RemoteError}", HttpContext);
+        }
+
+        var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
+        if (externalLoginInfo is null)
+        {
+            RedirectManager.RedirectToWithStatus("Account/Login", "Error loading external login information.", HttpContext);
+        }
+
+        // Look for an existing User by username matching the name claim from externalLoginInfo.
+        // User must already exist with a name matching claim name for the login to succeed.
+        var user = await UserAccessor.FindByNameAsync(externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Name) ?? "");
+        if (user is null)
+        {
+            RedirectManager.RedirectToWithStatus("Account/Login", "Error loading external login information.", HttpContext);
+        }
+        else
+        {
+            var userResult = await UserAccessor.AddLoginAsync(user, externalLoginInfo);
+            if (userResult.Succeeded)
+            {
+                Logger.LogInformation("User created an account using {Name} provider.", externalLoginInfo.LoginProvider);
+            }
+            await SignInManager.SignInAsync(user, isPersistent: false, externalLoginInfo.LoginProvider);
+            RedirectManager.RedirectTo(ReturnUrl);
+        }
+
+        // Sign in the user with this external login provider.
+        var result = await SignInManager.ExternalLoginSignInAsync(
+        externalLoginInfo.LoginProvider,
+        externalLoginInfo.ProviderKey,
+        isPersistent: false,
+        bypassTwoFactor: true);
+
+        if (result.Succeeded)
+        {
+            Logger.LogInformation(
+            "{Name} logged in with {LoginProvider} provider.",
+            externalLoginInfo.Principal.Identity?.Name,
+            externalLoginInfo.LoginProvider);
+            RedirectManager.RedirectTo(ReturnUrl);
+        }
+        else if (result.IsLockedOut)
+        {
+            RedirectManager.RedirectTo("Account/Lockout");
+        }
+        else
+        {
+            RedirectManager.RedirectToWithStatus("Account/Login", "Error loading external login information.", HttpContext);
+        }
+    }
+}

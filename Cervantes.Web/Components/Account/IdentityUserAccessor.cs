@@ -18,4 +18,19 @@ internal sealed class IdentityUserAccessor(UserManager<ApplicationUser> userMana
 
         return user;
     }
+
+    public async Task<ApplicationUser> FindByIdAsync(string userId) {
+        var user = await userManager.FindByIdAsync(userId);
+        return user;
+    }
+
+    public async Task<ApplicationUser> FindByNameAsync(string username) {
+        var user = await userManager.FindByNameAsync(username);
+        return user;
+    }
+
+    public async Task<IdentityResult> AddLoginAsync(ApplicationUser user, UserLoginInfo login) {
+        var result = await userManager.AddLoginAsync(user, login);
+        return result;
+    }
 }

@@ -29,6 +29,9 @@
         <PackageReference Include="Heron.MudCalendar" Version="2.0.3" />
         <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
         <PackageReference Include="HtmlToOpenXml.dll" Version="3.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.2" />
+        <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.0.2" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
         <PackageReference Include="itext7" Version="8.0.5" />
         <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.5" />
         <PackageReference Include="itext7.commons" Version="8.0.5" />
