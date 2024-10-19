@@ -74,7 +74,8 @@ public class UserViewModel
     /// lista de rol
     /// </summary>
     public List<IdentityRole> Roles { get; set; }
-    
+    public bool ExternalLogin { get; set; }
+
     public string Role { get; set; }
     public List<Client> Clients { get; set; }
     public Guid ClientId { get; set; }

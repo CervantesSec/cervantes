@@ -110,6 +110,7 @@ public partial class UserDialog: ComponentBase
             model.Position = user.Position;
             model.ImagePath = user.Avatar;
             model.TwoFactorEnabled = user.TwoFactorEnabled;
+            model.ExternalLogin = user.ExternalLogin;
             bool locked = false;
             if (user.LockoutEnd != null)
             {

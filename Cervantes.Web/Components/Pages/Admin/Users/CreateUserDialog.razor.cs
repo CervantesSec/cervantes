@@ -150,19 +150,24 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
 	            .Cascade(CascadeMode.Stop)
 	            .NotEmpty()
 	            .EmailAddress();
-            RuleFor(p => p.Password).NotEmpty()
-	            .MinimumLength(8).WithMessage("Your password length must be at least 8.")
-	            .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
-	            .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
-	            .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
-	            .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
-            RuleFor(x => x.ConfirmPassword).NotEmpty()
-	            .MinimumLength(8).WithMessage("Your password length must be at least 8.")
-	            .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
-	            .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
-	            .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
-	            .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
-            RuleFor(x => x.ConfirmPassword).Equal(x => x.Password).WithMessage("Passwords do not match");
+            When(x => !x.ExternalLogin, () =>
+            {
+	            RuleFor(p => p.Password).NotEmpty()
+		            .MinimumLength(8).WithMessage("Your password length must be at least 8.")
+		            .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
+		            .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
+		            .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
+		            .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
+
+	            RuleFor(x => x.ConfirmPassword).NotEmpty()
+		            .MinimumLength(8).WithMessage("Your password length must be at least 8.")
+		            .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
+		            .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
+		            .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
+		            .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
+
+	            RuleFor(x => x.ConfirmPassword).Equal(x => x.Password).WithMessage("Passwords do not match");
+            });
 	        RuleFor(x => x.Role)
 		        .NotEmpty();
         }

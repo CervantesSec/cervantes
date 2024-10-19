@@ -1823,4 +1823,10 @@
     <data name="taskAssignedError" xml:space="preserve">
         <value>An error occurred assigning the Task!</value>
     </data>
+    <data name="external" xml:space="preserve">
+        <value>External</value>
+    </data>
+    <data name="userType" xml:space="preserve">
+        <value>User Type</value>
+    </data>
 </root>

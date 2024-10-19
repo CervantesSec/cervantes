@@ -72,6 +72,7 @@ public class DataInitializer
             user.Position = "Administrator";
             user.Avatar = "Attachments/Users/logo.png";
             user.Description = "Administrator";
+            user.ExternalLogin = false;
 
             int length = 20;
             var randomNumber = new byte[32];

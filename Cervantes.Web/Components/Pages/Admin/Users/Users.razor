@@ -79,6 +79,19 @@
 
                         <PropertyColumn Property="x => x.Email" Title="@localizer["email"]"/>
                         <PropertyColumn Property="x => x.Position" Title="@localizer["position"]"/>
+                        <PropertyColumn Property="x => x.ExternalLogin" Title="@localizer["userType"]">
+                            <CellTemplate Context="cellContext">
+                                @if (@cellContext.Item.ExternalLogin)
+                                {
+                                <MudText Typo="Typo.body2">@localizer["external"]</MudText>
+                                }
+                                else
+                                {
+                                <MudText Typo="Typo.body2">@localizer["local"]</MudText>
+                                }
+
+                            </CellTemplate>
+                        </PropertyColumn>
                         <PropertyColumn Property="x => x.LockoutEnd" Title="@localizer["locked"]">
                             <CellTemplate Context="cellContext">
                                 @if (@cellContext.Item.LockoutEnd != null && @cellContext.Item.LockoutEnd > DateTime.Now)

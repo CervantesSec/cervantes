@@ -45,6 +45,10 @@
 					        <MudStack AlignItems="AlignItems.Stretch">
 						        <MudSwitch @bind-Value="@model.Lockout" Label="@localizer["locked"]" Color="Color.Primary"  />
 						        <MudSwitch @bind-Value="@model.TwoFactorEnabled" Label="@localizer["twoFactor"]" Color="Color.Primary" />
+						        <MudSelect Placeholder="@localizer["userType"]" @bind-Value="model.ExternalLogin" For="@(() => model.ExternalLogin)" Label="@localizer["userType"]" AdornmentIcon="@Icons.Material.Outlined.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							        <MudSelectItem Value="false">@localizer["local"]</MudSelectItem>
+							        <MudSelectItem Value="true">@localizer["external"]</MudSelectItem>
+						        </MudSelect>
 						        <MudTextField Placeholder="John Doe" @bind-Value="model.FullName"
 						                      For="@(() => model.FullName)"
 						                      Immediate="true"
@@ -63,15 +67,18 @@
 
 						        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 
+						        @if (!model.ExternalLogin)
+						        {
 						        <MudTextField @bind-Value="model.Password"
 						                      For="@(() => model.Password)"
 						                      Immediate="true"
-						                      Label="@localizer["changePassword"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
+						                      Label="@localizer["password"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
+
 						        <MudTextField @bind-Value="model.ConfirmPassword"
 						                      For="@(() => model.ConfirmPassword)"
 						                      Immediate="true"
 						                      Label="@localizer["confirmPassword"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
-
+						        }
 
 						        <MudTextField Placeholder="Pentester..." @bind-Value="model.Position"
 						                      For="@(() => model.Position)"

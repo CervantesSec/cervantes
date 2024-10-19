@@ -39,7 +39,8 @@ public class UserEditViewModel
     
     public Guid? ClientId { get; set; }
     public string ImagePath { get; set; }
-    
+    public bool ExternalLogin { get; set; }
+
     public bool Lockout { get; set; }
     public bool TwoFactorEnabled { get; set; }
 }

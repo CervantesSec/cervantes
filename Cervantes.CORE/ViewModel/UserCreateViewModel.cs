@@ -36,7 +36,8 @@ public class UserCreateViewModel
     public string Role { get; set; }
     public string FileName { get; set; }
     public byte[] FileContent { get; set; }
-    
+    public bool ExternalLogin { get; set; }
+
     public Guid? ClientId { get; set; }
 
 }

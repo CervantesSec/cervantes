@@ -186,6 +186,7 @@ private Sanitizer sanitizer;
                 user.Description = sanitizer.Sanitize(model.Description);
                 user.Position = sanitizer.Sanitize(model.Position);
                 user.LockoutEnabled = true;
+                user.ExternalLogin = model.ExternalLogin;
                 if (model.Role == "Client")
                 {
                     user.ClientId = model.ClientId;
@@ -193,8 +194,11 @@ private Sanitizer sanitizer;
 
 
                 await usrManager.AddAsync(user);
-                var hasher = new PasswordHasher<ApplicationUser>();
-                user.PasswordHash = hasher.HashPassword(user, model.Password);
+                if (!model.ExternalLogin)
+                {
+                    var hasher = new PasswordHasher<ApplicationUser>();
+                    user.PasswordHash = hasher.HashPassword(user, model.Password);
+                }
                 await usrManager.Context.SaveChangesAsync();
                 await _userManager.AddToRoleAsync(user, model.Role);
                 _logger.LogInformation("User added successfully. User: {0}",
@@ -267,6 +271,7 @@ private Sanitizer sanitizer;
                 user.Description = sanitizer.Sanitize(model.Description);
                 user.Position = sanitizer.Sanitize(model.Position);
                 user.TwoFactorEnabled = model.TwoFactorEnabled;
+                user.ExternalLogin = model.ExternalLogin;
                 if (model.Lockout)
                 {
                     user.LockoutEnd = DateTimeOffset.MaxValue;
@@ -280,7 +285,7 @@ private Sanitizer sanitizer;
                 {
                     user.ClientId = model.ClientId;
                 }
-
+                
                 if (model.Password != null)
                 {
                     var hasher = new PasswordHasher<ApplicationUser>();

@@ -28,6 +28,8 @@ public class ApplicationUser : IdentityUser
     
     public Guid? ClientId { get; set; }
     
+    public bool ExternalLogin { get; set; }
+    
     public virtual ICollection<ChatMessage> ChatMessagesFromUsers { get; set; }
     public virtual ICollection<ChatMessage> ChatMessagesToUsers { get; set; }
     public ApplicationUser()

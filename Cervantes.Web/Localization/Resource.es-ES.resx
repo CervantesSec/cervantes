@@ -1893,4 +1893,10 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="taskAssignedError" xml:space="preserve">
         <value>Se ha producido un error al asignar la Tarea!</value>
     </data>
+    <data name="external" xml:space="preserve">
+        <value>Externo</value>
+    </data>
+    <data name="userType" xml:space="preserve">
+        <value>Tipo de Usuario</value>
+    </data>
 </root>
