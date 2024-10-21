@@ -1,4 +1,4 @@
-/*using Cervantes.CORE.Entities;
+using Cervantes.CORE.Entities;
 
 namespace Cervantes.IFR;
 
@@ -299,7 +299,6 @@ public class VulnTemplatesWstgEN
         OWASPVector = "",
         MitreValues = "T1005",
         MitreTechniques = "T1005 - Data from Local System",
-        VulnCwes = new List<string> { "CWE-311", "CWE-312", "CWE-319" },
     };
 
     public static Vuln InsufficientLoggingAndMonitoring => new Vuln
@@ -402,13 +401,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1190",
-        VulnCwes = new List<string> { "CWE-611" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1190",
+        MitreTechniques = "T1190 - Exploit Public-Facing Application",
     };
 
     public static Vuln LackOfRateLimiting => new Vuln
@@ -430,13 +428,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Impact",
-        MitreTechniques = "T1499",
-        VulnCwes = new List<string> { "CWE-770" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1499",
+        MitreTechniques = "T1499 - Endpoint Denial of Service\n",
     };
 
     public static Vuln InadequateOAuth2Implementation => new Vuln
@@ -458,13 +455,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Credential Access, Lateral Movement",
-        MitreTechniques = "T1550",
-        VulnCwes = new List<string> { "CWE-346", "CWE-601" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1550",
+        MitreTechniques = "T1550 - Use Alternate Authentication Material",
     };
     
     public static Vuln InsufficientAntiAutomation => new Vuln
@@ -486,13 +482,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Credential Access",
-        MitreTechniques = "T1110",
-        VulnCwes = new List<string> { "CWE-799", "CWE-837" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1110",
+        MitreTechniques = "T1110 - Brute Force",
     };
     
     public static Vuln WeakCryptographicAlgorithms => new Vuln
@@ -514,13 +509,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Credential Access, Impact",
-        MitreTechniques = "T1557",
-        VulnCwes = new List<string> { "CWE-327", "CWE-326" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1557",
+        MitreTechniques = "T1557 - Adversary-in-the-Middle",
     };
 
     public static Vuln ImproperCertificateValidation => new Vuln
@@ -542,13 +536,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Possible",
-        OWASPVector = "2.0",
-        MitreValues = "Collection, Man-in-the-Middle",
-        MitreTechniques = "T1557",
-        VulnCwes = new List<string> { "CWE-295" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1557",
+        MitreTechniques = "T1557 - Adversary-in-the-Middle",
     };
 
     public static Vuln CrossSiteRequestForgery => new Vuln
@@ -570,13 +563,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Privilege Escalation",
-        MitreTechniques = "T1204",
-        VulnCwes = new List<string> { "CWE-352" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1204",
+        MitreTechniques = "T1204 - User Execution",
     };
 
     public static Vuln InsufficientPasswordRecoveryMechanism => new Vuln
@@ -598,13 +590,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Credential Access",
-        MitreTechniques = "T1552",
-        VulnCwes = new List<string> { "CWE-640" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1552",
+        MitreTechniques = "T1552 - Unsecured Credentials",
     };
 
     public static Vuln LackOfInputSanitization => new Vuln
@@ -626,13 +617,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1190",
-        VulnCwes = new List<string> { "CWE-20", "CWE-79", "CWE-89" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1190",
+        MitreTechniques = "T1190 - Exploit Public-Facing Application",
     };
     
     public static Vuln InsufficientSessionTimeout => new Vuln
@@ -654,13 +644,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Low,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Defense Evasion",
-        MitreTechniques = "T1497",
-        VulnCwes = new List<string> { "CWE-613" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "",
+        MitreTechniques = "",
     };
 
     public static Vuln ImproperErrorHandling => new Vuln
@@ -682,13 +671,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Discovery",
-        MitreTechniques = "T1082",
-        VulnCwes = new List<string> { "CWE-209", "CWE-200" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1082",
+        MitreTechniques = "T1082 - System Information Discovery",
     };
 
     public static Vuln MissingSecurityHeaders => new Vuln
@@ -710,13 +698,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Low,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Defense Evasion",
-        MitreTechniques = "T1556",
-        VulnCwes = new List<string> { "CWE-693", "CWE-1021" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "",
+        MitreTechniques = "",
     };
 
     public static Vuln InsecureUseOfCryptography => new Vuln
@@ -738,13 +725,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Credential Access, Impact",
-        MitreTechniques = "T1552",
-        VulnCwes = new List<string> { "CWE-327", "CWE-320" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1552",
+        MitreTechniques = "T1552 - Unsecured Credentials",
     };
 
     public static Vuln BrokenFunctionLevelAuthorization => new Vuln
@@ -766,13 +752,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Privilege Escalation",
-        MitreTechniques = "T1548",
-        VulnCwes = new List<string> { "CWE-285" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1548",
+        MitreTechniques = "T1548 - Abuse Elevation Control Mechanism",
     };
     
     public static Vuln InsecureCommunicationChannels => new Vuln
@@ -794,13 +779,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Collection, Exfiltration",
-        MitreTechniques = "T1040",
-        VulnCwes = new List<string> { "CWE-319", "CWE-326" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1040",
+        MitreTechniques = "T1040 - Network Sniffing",
     };
 
 
@@ -824,13 +808,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access",
-        MitreTechniques = "T1133",
-        VulnCwes = new List<string> { "CWE-276", "CWE-1188" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "",
+        MitreTechniques = "",
     };
     
 
@@ -853,13 +836,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Credential Access",
-        MitreTechniques = "T1110",
-        VulnCwes = new List<string> { "CWE-799", "CWE-307" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1110",
+        MitreTechniques = "T1110 - Brute Force",
     };
     
     public static Vuln UnvalidatedRedirectsAndForwards => new Vuln
@@ -881,13 +863,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access",
-        MitreTechniques = "T1566",
-        VulnCwes = new List<string> { "CWE-601" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1566",
+        MitreTechniques = "T1566 - Phishing",
     };
 
     public static Vuln InsecureAuthenticationMechanism => new Vuln
@@ -909,13 +890,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Credential Access",
-        MitreTechniques = "T1078",
-        VulnCwes = new List<string> { "CWE-287", "CWE-384" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1078",
+        MitreTechniques = "T1078 - Valid Accounts",
     };
 
     public static Vuln InsufficientAntiCachingHeaders => new Vuln
@@ -937,13 +917,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Low,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Collection",
-        MitreTechniques = "T1557",
-        VulnCwes = new List<string> { "CWE-525" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1557",
+        MitreTechniques = "T1557 - Adversary-in-the-Middle",
     };
 
     public static Vuln LackOfProperTLSConfiguration => new Vuln
@@ -965,13 +944,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Possible",
-        OWASPVector = "2.0",
-        MitreValues = "Command and Control",
-        MitreTechniques = "T1573",
-        VulnCwes = new List<string> { "CWE-326", "CWE-327" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1573",
+        MitreTechniques = "T1573 - Encrypted Channel",
     };
 
     public static Vuln InsufficientDataProtection => new Vuln
@@ -993,13 +971,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Collection, Exfiltration",
-        MitreTechniques = "T1040, T1029",
-        VulnCwes = new List<string> { "CWE-311", "CWE-312" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1040,T1029",
+        MitreTechniques = "T1040 - Network Sniffing, T1029 - Scheduled Transfer",
     };
     
     public static Vuln ImproperAssetManagement => new Vuln
@@ -1021,13 +998,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Discovery",
-        MitreTechniques = "T1046",
-        VulnCwes = new List<string> { "CWE-1059" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1046",
+        MitreTechniques = "T1046 - Network Service Discovery",
     };
 
     public static Vuln LackOfSoftwareUpdates => new Vuln
@@ -1049,13 +1025,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1190",
-        VulnCwes = new List<string> { "CWE-1104" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1190",
+        MitreTechniques = "T1190 - Exploit Public-Facing Application",
     };
 
     public static Vuln InsufficientPrivacyControls => new Vuln
@@ -1077,13 +1052,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Possible",
-        OWASPVector = "2.0",
-        MitreValues = "Collection",
-        MitreTechniques = "T1005",
-        VulnCwes = new List<string> { "CWE-359" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1005",
+        MitreTechniques = "T1005 - Data from Local System",
     };
 
     public static Vuln InsecureAPIEndpoints => new Vuln
@@ -1105,43 +1079,14 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1190",
-        VulnCwes = new List<string> { "CWE-284", "CWE-285" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1190",
+        MitreTechniques = "T1190 - Exploit Public-Facing Application",
     };
-
-    public static Vuln LackOfSecurityHeaders => new Vuln
-    {
-        Template = true,
-        Language = Language.English,
-        Name = "Lack of Security Headers",
-        CreatedDate = DateTime.UtcNow,
-        ModifiedDate = DateTime.UtcNow,
-        Risk = VulnRisk.Medium,
-        Status = VulnStatus.Open,
-        cve = "N/A",
-        Description = "The application does not implement important security headers that can help protect against various attacks such as XSS, clickjacking, and MIME type sniffing.",
-        ProofOfConcept = "Analyze HTTP response headers and demonstrate the absence of important security headers.",
-        Impact = "Increased vulnerability to client-side attacks, potential for clickjacking, or execution of malicious content.",
-        CVSS3 = 6.5,
-        CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-        Remediation = "Implement security headers such as Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Strict-Transport-Security, and Referrer-Policy. Configure these headers correctly based on the application's requirements.",
-        RemediationComplexity = RemediationComplexity.Low,
-        RemediationPriority = RemediationPriority.Medium,
-        JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Defense Evasion",
-        MitreTechniques = "T1556",
-        VulnCwes = new List<string> { "CWE-693", "CWE-1021" },
-    };
-
+    
     public static Vuln InsufficientInputValidation => new Vuln
     {
         Template = true,
@@ -1161,13 +1106,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1190",
-        VulnCwes = new List<string> { "CWE-20" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1190",
+        MitreTechniques = "T1190 - Exploit Public-Facing Application",
     };
 
     public static Vuln ImproperOutputEncoding => new Vuln
@@ -1189,13 +1133,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Medium,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1189",
-        VulnCwes = new List<string> { "CWE-79", "CWE-116" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1189",
+        MitreTechniques = "T1189 - Drive-by Compromise",
     };
 
     public static Vuln InsecureFileHandling => new Vuln
@@ -1217,13 +1160,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1505",
-        VulnCwes = new List<string> { "CWE-73", "CWE-434" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "",
+        MitreTechniques = "",
     };
 
     public static Vuln LackOfSecurePasswordStorage => new Vuln
@@ -1245,13 +1187,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "Critical",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "3.0",
-        MitreValues = "Credential Access",
-        MitreTechniques = "T1003",
-        VulnCwes = new List<string> { "CWE-256", "CWE-916" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "",
+        MitreTechniques = "",
     };
 
     public static Vuln InsufficientProtectionAgainstDoS => new Vuln
@@ -1273,72 +1214,14 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Possible",
-        OWASPVector = "2.0",
-        MitreValues = "Impact",
-        MitreTechniques = "T1498",
-        VulnCwes = new List<string> { "CWE-400" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1498",
+        MitreTechniques = "T1498 - Network Denial of Service",
     };
     
-     public static Vuln InadequateSessionManagement => new Vuln
-    {
-        Template = true,
-        Language = Language.English,
-        Name = "Inadequate Session Management",
-        CreatedDate = DateTime.UtcNow,
-        ModifiedDate = DateTime.UtcNow,
-        Risk = VulnRisk.High,
-        Status = VulnStatus.Open,
-        cve = "N/A",
-        Description = "The application implements weak session management practices, potentially allowing attackers to hijack or predict user sessions.",
-        ProofOfConcept = "Demonstrate the ability to hijack user sessions, predict session tokens, or maintain authenticated sessions beyond the intended duration.",
-        Impact = "Potential for unauthorized access to user accounts, session hijacking, or bypass of authentication mechanisms.",
-        CVSS3 = 8.1,
-        CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
-        Remediation = "Implement secure session management practices: use cryptographically strong session tokens, enforce secure token transmission (HTTPS), implement proper session expiration and rotation, and invalidate sessions on logout.",
-        RemediationComplexity = RemediationComplexity.High,
-        RemediationPriority = RemediationPriority.High,
-        JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Credential Access",
-        MitreTechniques = "T1539",
-        VulnCwes = new List<string> { "CWE-384", "CWE-613" },
-    };
-
-    public static Vuln InsecureDirectObjectReferences => new Vuln
-    {
-        Template = true,
-        Language = Language.English,
-        Name = "Insecure Direct Object References",
-        CreatedDate = DateTime.UtcNow,
-        ModifiedDate = DateTime.UtcNow,
-        Risk = VulnRisk.High,
-        Status = VulnStatus.Open,
-        cve = "N/A",
-        Description = "The application exposes references to internal implementation objects, such as files, directories, database records, or keys, without proper access control checks.",
-        ProofOfConcept = "Demonstrate the ability to access or modify resources belonging to other users by manipulating object references in requests.",
-        Impact = "Unauthorized access to sensitive data, potential data theft, or manipulation of other users' information.",
-        CVSS3 = 7.5,
-        CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
-        Remediation = "Implement proper access controls for all object references. Use indirect references mapped to actual resources on the server side. Validate user authorization for each access to a direct object reference.",
-        RemediationComplexity = RemediationComplexity.High,
-        RemediationPriority = RemediationPriority.High,
-        JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Lateral Movement, Collection",
-        MitreTechniques = "T1213",
-        VulnCwes = new List<string> { "CWE-639" },
-    };
-    
-
     public static Vuln InsufficientSubresourceIntegrity => new Vuln
     {
         Template = true,
@@ -1358,100 +1241,14 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.Low,
         RemediationPriority = RemediationPriority.Medium,
         JiraCreated = false,
-        OWASPRisk = "Medium",
-        OWASPImpact = "Moderate",
-        OWASPLikehood = "Possible",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access",
-        MitreTechniques = "T1195",
-        VulnCwes = new List<string> { "CWE-353" },
-    };
-
-    public static Vuln ImproperAccessControl => new Vuln
-    {
-        Template = true,
-        Language = Language.English,
-        Name = "Improper Access Control",
-        CreatedDate = DateTime.UtcNow,
-        ModifiedDate = DateTime.UtcNow,
-        Risk = VulnRisk.High,
-        Status = VulnStatus.Open,
-        cve = "N/A",
-        Description = "The application fails to properly restrict access to resources or functionalities based on user privileges, potentially allowing unauthorized users to perform actions or access data they shouldn't.",
-        ProofOfConcept = "Demonstrate the ability to access restricted functionalities or data by manipulating request parameters or using a lower-privileged account.",
-        Impact = "Unauthorized access to sensitive data or functionality, potential for privilege escalation or data manipulation.",
-        CVSS3 = 8.1,
-        CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-        Remediation = "Implement proper access controls at both the application and API levels. Use role-based access control (RBAC) and enforce the principle of least privilege. Validate user permissions for every sensitive action or data access.",
-        RemediationComplexity = RemediationComplexity.High,
-        RemediationPriority = RemediationPriority.High,
-        JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Privilege Escalation, Lateral Movement",
-        MitreTechniques = "T1548",
-        VulnCwes = new List<string> { "CWE-284", "CWE-285" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1195",
+        MitreTechniques = "T1195 - Supply Chain Compromise",
     };
     
- 
-    public static Vuln XmlExternalEntityInjection => new Vuln
-    {
-        Template = true,
-        Language = Language.English,
-        Name = "XML External Entity (XXE) Injection",
-        CreatedDate = DateTime.UtcNow,
-        ModifiedDate = DateTime.UtcNow,
-        Risk = VulnRisk.High,
-        Status = VulnStatus.Open,
-        cve = "N/A",
-        Description = "The application processes XML input that includes external entity references without proper validation, allowing attackers to disclose internal files, perform server-side request forgery, or execute denial of service attacks.",
-        ProofOfConcept = "Demonstrate the ability to read internal files or make the server connect to arbitrary hosts using XML input containing malicious external entities.",
-        Impact = "Potential disclosure of sensitive data, server-side request forgery, or denial of service.",
-        CVSS3 = 8.2,
-        CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:H",
-        Remediation = "Disable XML external entity and DTD processing in all XML parsers in the application, use less complex data formats like JSON where possible, and validate and sanitize all XML input.",
-        RemediationComplexity = RemediationComplexity.Medium,
-        RemediationPriority = RemediationPriority.High,
-        JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1190",
-        VulnCwes = new List<string> { "CWE-611" },
-    };
-
-    public static Vuln InsufficientThreatModeling => new Vuln
-    {
-        Template = true,
-        Language = Language.English,
-        Name = "Insufficient Threat Modeling",
-        CreatedDate = DateTime.UtcNow,
-        ModifiedDate = DateTime.UtcNow,
-        Risk = VulnRisk.High,
-        Status = VulnStatus.Open,
-        cve = "N/A",
-        Description = "The application lacks comprehensive threat modeling, potentially missing critical security risks and failing to implement appropriate countermeasures.",
-        ProofOfConcept = "Identify security vulnerabilities or attack vectors that were not considered during the design phase and are not adequately addressed in the application.",
-        Impact = "Increased overall risk of security breaches due to unidentified threats, potentially leading to various types of attacks and compromises.",
-        CVSS3 = 7.5,
-        CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
-        Remediation = "Implement a comprehensive threat modeling process during the design phase. Use methodologies like STRIDE or PASTA. Regularly update threat models and ensure security controls address identified threats.",
-        RemediationComplexity = RemediationComplexity.High,
-        RemediationPriority = RemediationPriority.High,
-        JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Defense Evasion",
-        MitreTechniques = "T1195",
-        VulnCwes = new List<string> { "CWE-1053" },
-    };
-
     public static Vuln InadequateSecurityArchitecture => new Vuln
     {
         Template = true,
@@ -1471,13 +1268,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Defense Evasion, Lateral Movement",
-        MitreTechniques = "T1190",
-        VulnCwes = new List<string> { "CWE-1008" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1190",
+        MitreTechniques = "T1190 - Exploit Public-Facing Application",
     };
 
     public static Vuln FlawedBusinessLogic => new Vuln
@@ -1499,42 +1295,14 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Privilege Escalation",
-        MitreTechniques = "T1195",
-        VulnCwes = new List<string> { "CWE-840" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "",
+        MitreTechniques = "",
     };
-
-    public static Vuln MaliciousCodeInjection => new Vuln
-    {
-        Template = true,
-        Language = Language.English,
-        Name = "Malicious Code Injection",
-        CreatedDate = DateTime.UtcNow,
-        ModifiedDate = DateTime.UtcNow,
-        Risk = VulnRisk.Critical,
-        Status = VulnStatus.Open,
-        cve = "N/A",
-        Description = "The application is vulnerable to injection of malicious code, allowing attackers to execute unauthorized commands or scripts within the application's context.",
-        ProofOfConcept = "Demonstrate the ability to inject and execute malicious code, such as OS commands, SQL queries, or client-side scripts, through various input vectors.",
-        Impact = "Potential for complete system compromise, data theft, or unauthorized actions performed with the application's privileges.",
-        CVSS3 = 9.8,
-        CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-        Remediation = "Implement strict input validation and output encoding. Use parameterized queries for database operations. Avoid using eval() or other dangerous functions that execute dynamic code. Implement Content Security Policy (CSP) headers.",
-        RemediationComplexity = RemediationComplexity.High,
-        RemediationPriority = RemediationPriority.High,
-        JiraCreated = false,
-        OWASPRisk = "Critical",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "3.0",
-        MitreValues = "Execution, Privilege Escalation",
-        MitreTechniques = "T1059",
-        VulnCwes = new List<string> { "CWE-94", "CWE-79", "CWE-89" },
-    };
+    
 
     public static Vuln InsecureThirdPartyComponents => new Vuln
     {
@@ -1555,13 +1323,12 @@ public class VulnTemplatesWstgEN
         RemediationComplexity = RemediationComplexity.High,
         RemediationPriority = RemediationPriority.High,
         JiraCreated = false,
-        OWASPRisk = "High",
-        OWASPImpact = "Severe",
-        OWASPLikehood = "Likely",
-        OWASPVector = "2.0",
-        MitreValues = "Initial Access, Execution",
-        MitreTechniques = "T1195",
-        VulnCwes = new List<string> { "CWE-1104" },
+        OWASPRisk = "",
+        OWASPImpact = "",
+        OWASPLikehood = "",
+        OWASPVector = "",
+        MitreValues = "T1190",
+        MitreTechniques = "T1190 - Exploit Public-Facing Application",
     };
 
-}*/
+}
