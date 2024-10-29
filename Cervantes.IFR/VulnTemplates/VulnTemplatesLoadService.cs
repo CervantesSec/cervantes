@@ -96,7 +96,260 @@ public class VulnTemplatesLoadService: IVulnTemplatesLoadService
     
     public async Task CreateEnglishMastg()
     {
+        Vuln insecureDataStorage = VulnTemplatesMastgEN.InsecureDataStorage;
+        insecureDataStorage.VulnCwes.Add(new VulnCwe { CweId = 312, VulnId = insecureDataStorage.Id });
+        vulnManager.Add(insecureDataStorage);
+        await vulnManager.Context.SaveChangesAsync();
         
+        Vuln insecureCryptography = VulnTemplatesMastgEN.InsecureCryptography;
+        insecureCryptography.VulnCwes.Add(new VulnCwe { CweId = 327, VulnId = insecureCryptography.Id });
+        vulnManager.Add(insecureCryptography);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAuthentication = VulnTemplatesMastgEN.InsecureAuthentication;
+        insecureAuthentication.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureAuthentication.Id });
+        vulnManager.Add(insecureAuthentication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureNetworkCommunication = VulnTemplatesMastgEN.InsecureNetworkCommunication;
+        insecureNetworkCommunication.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureNetworkCommunication.Id });
+        vulnManager.Add(insecureNetworkCommunication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln privacyViolations = VulnTemplatesMastgEN.PrivacyViolation;
+        privacyViolations.VulnCwes.Add(new VulnCwe { CweId = 359, VulnId = privacyViolations.Id });
+        vulnManager.Add(privacyViolations);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataLeakage = VulnTemplatesMastgEN.InsecureDataLeakage;
+        insecureDataLeakage.VulnCwes.Add(new VulnCwe { CweId = 532, VulnId = insecureDataLeakage.Id });
+        vulnManager.Add(insecureDataLeakage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureKeyManagement = VulnTemplatesMastgEN.InsecureKeyManagement;
+        insecureKeyManagement.VulnCwes.Add(new VulnCwe { CweId = 321, VulnId = insecureKeyManagement.Id });
+        vulnManager.Add(insecureKeyManagement);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureLocalAuthentication = VulnTemplatesMastgEN.InsecureLocalAuthentication;
+        insecureLocalAuthentication.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureLocalAuthentication.Id });
+        vulnManager.Add(insecureLocalAuthentication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCertificatePinning = VulnTemplatesMastgEN.InsecureCertificatePinning;
+        insecureCertificatePinning.VulnCwes.Add(new VulnCwe { CweId = 295, VulnId = insecureCertificatePinning.Id });
+        vulnManager.Add(insecureCertificatePinning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureIPC = VulnTemplatesMastgEN.InsecureIPC;
+        insecureIPC.VulnCwes.Add(new VulnCwe { CweId = 927, VulnId = insecureIPC.Id });
+        vulnManager.Add(insecureIPC);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureWebview = VulnTemplatesMastgEN.InsecureWebView;
+        insecureWebview.VulnCwes.Add(new VulnCwe { CweId = 749, VulnId = insecureWebview.Id });
+        vulnManager.Add(insecureWebview);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDeepLinking = VulnTemplatesMastgEN.InsecureDeepLinking;
+        insecureDeepLinking.VulnCwes.Add(new VulnCwe { CweId = 939, VulnId = insecureDeepLinking.Id });
+        vulnManager.Add(insecureDeepLinking);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureSessionHandling = VulnTemplatesMastgEN.InsecureSessionHandling;
+        insecureSessionHandling.VulnCwes.Add(new VulnCwe { CweId = 613, VulnId = insecureSessionHandling.Id });
+        vulnManager.Add(insecureSessionHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureTlsValidation = VulnTemplatesMastgEN.InsecureTlsValidation;
+        insecureTlsValidation.VulnCwes.Add(new VulnCwe { CweId = 295, VulnId = insecureTlsValidation.Id });
+        vulnManager.Add(insecureTlsValidation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureClipboardUsage = VulnTemplatesMastgEN.InsecureClipboardUsage;
+        insecureClipboardUsage.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureClipboardUsage.Id });
+        vulnManager.Add(insecureClipboardUsage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataCaching = VulnTemplatesMastgEN.InsecureDataCaching;
+        insecureDataCaching.VulnCwes.Add(new VulnCwe { CweId = 524, VulnId = insecureDataCaching.Id });
+        vulnManager.Add(insecureDataCaching);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureBackupHandling = VulnTemplatesMastgEN.InsecureBackupHandling;
+        insecureBackupHandling.VulnCwes.Add(new VulnCwe { CweId = 530, VulnId = insecureBackupHandling.Id });
+        vulnManager.Add(insecureBackupHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insufficientInputValidation = VulnTemplatesMastgEN.InsufficientInputValidation;
+        insufficientInputValidation.VulnCwes.Add(new VulnCwe { CweId = 20, VulnId = insufficientInputValidation.Id });
+        vulnManager.Add(insufficientInputValidation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureJailbreakRootDetection = VulnTemplatesMastgEN.InsecureJailbreakRootDetection;
+        insecureJailbreakRootDetection.VulnCwes.Add(new VulnCwe { CweId = 919, VulnId = insecureJailbreakRootDetection.Id });
+        vulnManager.Add(insecureJailbreakRootDetection);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCodeObfuscation = VulnTemplatesMastgEN.InsecureCodeObfuscation;
+        insecureCodeObfuscation.VulnCwes.Add(new VulnCwe { CweId = 656, VulnId = insecureCodeObfuscation.Id });
+        vulnManager.Add(insecureCodeObfuscation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureRuntimeIntegrityChecks = VulnTemplatesMastgEN.InsecureRuntimeIntegrityChecks;
+        insecureRuntimeIntegrityChecks.VulnCwes.Add(new VulnCwe { CweId = 693, VulnId = insecureRuntimeIntegrityChecks.Id });
+        vulnManager.Add(insecureRuntimeIntegrityChecks);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppPackaging = VulnTemplatesMastgEN.InsecureAppPackaging;
+        insecureAppPackaging.VulnCwes.Add(new VulnCwe { CweId = 490, VulnId = insecureAppPackaging.Id });
+        vulnManager.Add(insecureAppPackaging);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureMemoryManagement = VulnTemplatesMastgEN.InsecureMemoryManagement;
+        insecureMemoryManagement.VulnCwes.Add(new VulnCwe { CweId = 316, VulnId = insecureMemoryManagement.Id });
+        vulnManager.Add(insecureMemoryManagement);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureComponentUpgrade = VulnTemplatesMastgEN.InsecureComponentUpgrade;
+        insecureComponentUpgrade.VulnCwes.Add(new VulnCwe { CweId = 494, VulnId = insecureComponentUpgrade.Id });
+        vulnManager.Add(insecureComponentUpgrade);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataResidency = VulnTemplatesMastgEN.InsecureDataResidency;
+        insecureDataResidency.VulnCwes.Add(new VulnCwe { CweId = 359, VulnId = insecureDataResidency.Id });
+        vulnManager.Add(insecureDataResidency);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCloudSyncmechanism = VulnTemplatesMastgEN.InsecureCloudSyncMechanism;
+        insecureCloudSyncmechanism.VulnCwes.Add(new VulnCwe { CweId = 311, VulnId = insecureCloudSyncmechanism.Id });
+        vulnManager.Add(insecureCloudSyncmechanism);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln vulnerableThirdPartyLibraries = VulnTemplatesMastgEN.VulnerableThirdPartyLibrary;
+        vulnerableThirdPartyLibraries.VulnCwes.Add(new VulnCwe { CweId = 1035, VulnId = vulnerableThirdPartyLibraries.Id });
+        vulnManager.Add(vulnerableThirdPartyLibraries);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataExfiltration = VulnTemplatesMastgEN.InsecureDataExfiltration;
+        insecureDataExfiltration.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureDataExfiltration.Id });
+        vulnManager.Add(insecureDataExfiltration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAPIVersioning = VulnTemplatesMastgEN.InsecureAPIVersioning;
+        insecureAPIVersioning.VulnCwes.Add(new VulnCwe { CweId = 330, VulnId = insecureAPIVersioning.Id });
+        vulnManager.Add(insecureAPIVersioning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureQRCodeHandling = VulnTemplatesMastgEN.InsecureQRCodeHandling;
+        insecureQRCodeHandling.VulnCwes.Add(new VulnCwe { CweId = 20, VulnId = insecureQRCodeHandling.Id });
+        vulnManager.Add(insecureQRCodeHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureNFCImplementation = VulnTemplatesMastgEN.InsecureNFCImplementation;
+        insecureNFCImplementation.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureNFCImplementation.Id });
+        vulnManager.Add(insecureNFCImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureARImpementation = VulnTemplatesMastgEN.InsecureARImplementation;
+        insecureARImpementation.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureARImpementation.Id });
+        vulnManager.Add(insecureARImpementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureIoTImplementation = VulnTemplatesMastgEN.InsecureIoTIntegration;
+        insecureIoTImplementation.VulnCwes.Add(new VulnCwe { CweId = 306, VulnId = insecureIoTImplementation.Id });
+        vulnManager.Add(insecureIoTImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecurePushNotification = VulnTemplatesMastgEN.InsecurePushNotifications;
+        insecurePushNotification.VulnCwes.Add(new VulnCwe { CweId = 223, VulnId = insecurePushNotification.Id });
+        vulnManager.Add(insecurePushNotification);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppCloning = VulnTemplatesMastgEN.InsecureAppCloning;
+        insecureAppCloning.VulnCwes.Add(new VulnCwe { CweId = 656, VulnId = insecureAppCloning.Id });
+        vulnManager.Add(insecureAppCloning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureScreenOverlay = VulnTemplatesMastgEN.InsecureScreenOverlay;
+        insecureScreenOverlay.VulnCwes.Add(new VulnCwe { CweId = 1021, VulnId = insecureScreenOverlay.Id });
+        vulnManager.Add(insecureScreenOverlay);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppWidget = VulnTemplatesMastgEN.InsecureAppWidget;
+        insecureAppWidget.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureAppWidget.Id });
+        vulnManager.Add(insecureAppWidget);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureEdgeComputingIntegration = VulnTemplatesMastgEN.InsecureEdgeComputingIntegration;
+        insecureEdgeComputingIntegration.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureEdgeComputingIntegration.Id });
+        vulnManager.Add(insecureEdgeComputingIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAIMLImplementation = VulnTemplatesMastgEN.InsecureAIMLImplementation;
+        insecureAIMLImplementation.VulnCwes.Add(new VulnCwe { CweId = 306, VulnId = insecureAIMLImplementation.Id });
+        vulnManager.Add(insecureAIMLImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureQuantumResistantCrypto = VulnTemplatesMastgEN.InsecureQuantumResistantCrypto;
+        insecureQuantumResistantCrypto.VulnCwes.Add(new VulnCwe { CweId = 327, VulnId = insecureQuantumResistantCrypto.Id });
+        vulnManager.Add(insecureQuantumResistantCrypto);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureVoiceIntegration = VulnTemplatesMastgEN.InsecureVoiceUIIntegration;
+        insecureVoiceIntegration.VulnCwes.Add(new VulnCwe { CweId = 350, VulnId = insecureVoiceIntegration.Id });
+        vulnManager.Add(insecureVoiceIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureMultiDeviceSynchronization= VulnTemplatesMastgEN.InsecureMultiDeviceSynchronization;
+        insecureMultiDeviceSynchronization.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureMultiDeviceSynchronization.Id });
+        vulnManager.Add(insecureMultiDeviceSynchronization);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureBlockchainIntegration = VulnTemplatesMastgEN.InsecureBlockchainIntegration;
+        insecureBlockchainIntegration.VulnCwes.Add(new VulnCwe { CweId = 320, VulnId = insecureBlockchainIntegration.Id });
+        vulnManager.Add(insecureBlockchainIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureKeychainKeystore = VulnTemplatesMastgEN.InsecureKeychainKeystore;
+        insecureKeychainKeystore.VulnCwes.Add(new VulnCwe { CweId = 522, VulnId = insecureKeychainKeystore.Id });
+        vulnManager.Add(insecureKeychainKeystore);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureRandomNumberGeneration = VulnTemplatesMastgEN.InsecureRandomNumberGeneration;
+        insecureRandomNumberGeneration.VulnCwes.Add(new VulnCwe { CweId = 338, VulnId = insecureRandomNumberGeneration.Id });
+        vulnManager.Add(insecureRandomNumberGeneration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureSSOImplementation = VulnTemplatesMastgEN.InsecureSSOImplementation;
+        insecureSSOImplementation.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureSSOImplementation.Id });
+        vulnManager.Add(insecureSSOImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureVPNUsage = VulnTemplatesMastgEN.InsecureVPNUsage;
+        insecureVPNUsage.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureVPNUsage.Id });
+        vulnManager.Add(insecureVPNUsage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCustomURLScheme = VulnTemplatesMastgEN.InsecureCustomURLScheme;
+        insecureCustomURLScheme.VulnCwes.Add(new VulnCwe { CweId = 749, VulnId = insecureCustomURLScheme.Id });
+        vulnManager.Add(insecureCustomURLScheme);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln timeOfCheckToTimeOfUse = VulnTemplatesMastgEN.TimeOfCheckToTimeOfUse;
+        timeOfCheckToTimeOfUse.VulnCwes.Add(new VulnCwe { CweId = 367, VulnId = timeOfCheckToTimeOfUse.Id });
+        vulnManager.Add(timeOfCheckToTimeOfUse);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAntiDebugging = VulnTemplatesMastgEN.InsecureAntiDebugging;
+        insecureAntiDebugging.VulnCwes.Add(new VulnCwe { CweId = 388, VulnId = insecureAntiDebugging.Id });
+        vulnManager.Add(insecureAntiDebugging);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln overPrivilegedApp = VulnTemplatesMastgEN.OverPrivilegedApplication;
+        overPrivilegedApp.VulnCwes.Add(new VulnCwe { CweId = 250, VulnId = overPrivilegedApp.Id });
+        vulnManager.Add(overPrivilegedApp);
+        await vulnManager.Context.SaveChangesAsync();
     }
     
     public async Task CreateEnglishWstg()
@@ -384,7 +637,260 @@ public class VulnTemplatesLoadService: IVulnTemplatesLoadService
     
     public async Task CreateSpanishMastg()
     {
+        Vuln insecureDataStorage = VulnTemplatesMastgES.InsecureDataStorage;
+        insecureDataStorage.VulnCwes.Add(new VulnCwe { CweId = 312, VulnId = insecureDataStorage.Id });
+        vulnManager.Add(insecureDataStorage);
+        await vulnManager.Context.SaveChangesAsync();
         
+        Vuln insecureCryptography = VulnTemplatesMastgES.InsecureCryptography;
+        insecureCryptography.VulnCwes.Add(new VulnCwe { CweId = 327, VulnId = insecureCryptography.Id });
+        vulnManager.Add(insecureCryptography);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAuthentication = VulnTemplatesMastgES.InsecureAuthentication;
+        insecureAuthentication.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureAuthentication.Id });
+        vulnManager.Add(insecureAuthentication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureNetworkCommunication = VulnTemplatesMastgES.InsecureNetworkCommunication;
+        insecureNetworkCommunication.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureNetworkCommunication.Id });
+        vulnManager.Add(insecureNetworkCommunication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln privacyViolations = VulnTemplatesMastgES.PrivacyViolation;
+        privacyViolations.VulnCwes.Add(new VulnCwe { CweId = 359, VulnId = privacyViolations.Id });
+        vulnManager.Add(privacyViolations);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataLeakage = VulnTemplatesMastgES.InsecureDataLeakage;
+        insecureDataLeakage.VulnCwes.Add(new VulnCwe { CweId = 532, VulnId = insecureDataLeakage.Id });
+        vulnManager.Add(insecureDataLeakage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureKeyManagement = VulnTemplatesMastgES.InsecureKeyManagement;
+        insecureKeyManagement.VulnCwes.Add(new VulnCwe { CweId = 321, VulnId = insecureKeyManagement.Id });
+        vulnManager.Add(insecureKeyManagement);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureLocalAuthentication = VulnTemplatesMastgES.InsecureLocalAuthentication;
+        insecureLocalAuthentication.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureLocalAuthentication.Id });
+        vulnManager.Add(insecureLocalAuthentication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCertificatePinning = VulnTemplatesMastgES.InsecureCertificatePinning;
+        insecureCertificatePinning.VulnCwes.Add(new VulnCwe { CweId = 295, VulnId = insecureCertificatePinning.Id });
+        vulnManager.Add(insecureCertificatePinning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureIPC = VulnTemplatesMastgES.InsecureIPC;
+        insecureIPC.VulnCwes.Add(new VulnCwe { CweId = 927, VulnId = insecureIPC.Id });
+        vulnManager.Add(insecureIPC);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureWebview = VulnTemplatesMastgES.InsecureWebView;
+        insecureWebview.VulnCwes.Add(new VulnCwe { CweId = 749, VulnId = insecureWebview.Id });
+        vulnManager.Add(insecureWebview);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDeepLinking = VulnTemplatesMastgES.InsecureDeepLinking;
+        insecureDeepLinking.VulnCwes.Add(new VulnCwe { CweId = 939, VulnId = insecureDeepLinking.Id });
+        vulnManager.Add(insecureDeepLinking);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureSessionHandling = VulnTemplatesMastgES.InsecureSessionHandling;
+        insecureSessionHandling.VulnCwes.Add(new VulnCwe { CweId = 613, VulnId = insecureSessionHandling.Id });
+        vulnManager.Add(insecureSessionHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureTlsValidation = VulnTemplatesMastgES.InsecureTlsValidation;
+        insecureTlsValidation.VulnCwes.Add(new VulnCwe { CweId = 295, VulnId = insecureTlsValidation.Id });
+        vulnManager.Add(insecureTlsValidation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureClipboardUsage = VulnTemplatesMastgES.InsecureClipboardUsage;
+        insecureClipboardUsage.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureClipboardUsage.Id });
+        vulnManager.Add(insecureClipboardUsage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataCaching = VulnTemplatesMastgES.InsecureDataCaching;
+        insecureDataCaching.VulnCwes.Add(new VulnCwe { CweId = 524, VulnId = insecureDataCaching.Id });
+        vulnManager.Add(insecureDataCaching);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureBackupHandling = VulnTemplatesMastgES.InsecureBackupHandling;
+        insecureBackupHandling.VulnCwes.Add(new VulnCwe { CweId = 530, VulnId = insecureBackupHandling.Id });
+        vulnManager.Add(insecureBackupHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insufficientInputValidation = VulnTemplatesMastgES.InsufficientInputValidation;
+        insufficientInputValidation.VulnCwes.Add(new VulnCwe { CweId = 20, VulnId = insufficientInputValidation.Id });
+        vulnManager.Add(insufficientInputValidation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureJailbreakRootDetection = VulnTemplatesMastgES.InsecureJailbreakRootDetection;
+        insecureJailbreakRootDetection.VulnCwes.Add(new VulnCwe { CweId = 919, VulnId = insecureJailbreakRootDetection.Id });
+        vulnManager.Add(insecureJailbreakRootDetection);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCodeObfuscation = VulnTemplatesMastgES.InsecureCodeObfuscation;
+        insecureCodeObfuscation.VulnCwes.Add(new VulnCwe { CweId = 656, VulnId = insecureCodeObfuscation.Id });
+        vulnManager.Add(insecureCodeObfuscation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureRuntimeIntegrityChecks = VulnTemplatesMastgES.InsecureRuntimeIntegrityChecks;
+        insecureRuntimeIntegrityChecks.VulnCwes.Add(new VulnCwe { CweId = 693, VulnId = insecureRuntimeIntegrityChecks.Id });
+        vulnManager.Add(insecureRuntimeIntegrityChecks);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppPackaging = VulnTemplatesMastgES.InsecureAppPackaging;
+        insecureAppPackaging.VulnCwes.Add(new VulnCwe { CweId = 490, VulnId = insecureAppPackaging.Id });
+        vulnManager.Add(insecureAppPackaging);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureMemoryManagement = VulnTemplatesMastgES.InsecureMemoryManagement;
+        insecureMemoryManagement.VulnCwes.Add(new VulnCwe { CweId = 316, VulnId = insecureMemoryManagement.Id });
+        vulnManager.Add(insecureMemoryManagement);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureComponentUpgrade = VulnTemplatesMastgES.InsecureComponentUpgrade;
+        insecureComponentUpgrade.VulnCwes.Add(new VulnCwe { CweId = 494, VulnId = insecureComponentUpgrade.Id });
+        vulnManager.Add(insecureComponentUpgrade);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataResidency = VulnTemplatesMastgES.InsecureDataResidency;
+        insecureDataResidency.VulnCwes.Add(new VulnCwe { CweId = 359, VulnId = insecureDataResidency.Id });
+        vulnManager.Add(insecureDataResidency);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCloudSyncmechanism = VulnTemplatesMastgES.InsecureCloudSyncMechanism;
+        insecureCloudSyncmechanism.VulnCwes.Add(new VulnCwe { CweId = 311, VulnId = insecureCloudSyncmechanism.Id });
+        vulnManager.Add(insecureCloudSyncmechanism);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln vulnerableThirdPartyLibraries = VulnTemplatesMastgES.VulnerableThirdPartyLibrary;
+        vulnerableThirdPartyLibraries.VulnCwes.Add(new VulnCwe { CweId = 1035, VulnId = vulnerableThirdPartyLibraries.Id });
+        vulnManager.Add(vulnerableThirdPartyLibraries);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataExfiltration = VulnTemplatesMastgES.InsecureDataExfiltration;
+        insecureDataExfiltration.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureDataExfiltration.Id });
+        vulnManager.Add(insecureDataExfiltration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAPIVersioning = VulnTemplatesMastgES.InsecureAPIVersioning;
+        insecureAPIVersioning.VulnCwes.Add(new VulnCwe { CweId = 330, VulnId = insecureAPIVersioning.Id });
+        vulnManager.Add(insecureAPIVersioning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureQRCodeHandling = VulnTemplatesMastgES.InsecureQRCodeHandling;
+        insecureQRCodeHandling.VulnCwes.Add(new VulnCwe { CweId = 20, VulnId = insecureQRCodeHandling.Id });
+        vulnManager.Add(insecureQRCodeHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureNFCImplementation = VulnTemplatesMastgES.InsecureNFCImplementation;
+        insecureNFCImplementation.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureNFCImplementation.Id });
+        vulnManager.Add(insecureNFCImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureARImpementation = VulnTemplatesMastgES.InsecureARImplementation;
+        insecureARImpementation.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureARImpementation.Id });
+        vulnManager.Add(insecureARImpementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureIoTImplementation = VulnTemplatesMastgES.InsecureIoTIntegration;
+        insecureIoTImplementation.VulnCwes.Add(new VulnCwe { CweId = 306, VulnId = insecureIoTImplementation.Id });
+        vulnManager.Add(insecureIoTImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecurePushNotification = VulnTemplatesMastgES.InsecurePushNotifications;
+        insecurePushNotification.VulnCwes.Add(new VulnCwe { CweId = 223, VulnId = insecurePushNotification.Id });
+        vulnManager.Add(insecurePushNotification);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppCloning = VulnTemplatesMastgES.InsecureAppCloning;
+        insecureAppCloning.VulnCwes.Add(new VulnCwe { CweId = 656, VulnId = insecureAppCloning.Id });
+        vulnManager.Add(insecureAppCloning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureScreenOverlay = VulnTemplatesMastgES.InsecureScreenOverlay;
+        insecureScreenOverlay.VulnCwes.Add(new VulnCwe { CweId = 1021, VulnId = insecureScreenOverlay.Id });
+        vulnManager.Add(insecureScreenOverlay);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppWidget = VulnTemplatesMastgES.InsecureAppWidget;
+        insecureAppWidget.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureAppWidget.Id });
+        vulnManager.Add(insecureAppWidget);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureEdgeComputingIntegration = VulnTemplatesMastgES.InsecureEdgeComputingIntegration;
+        insecureEdgeComputingIntegration.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureEdgeComputingIntegration.Id });
+        vulnManager.Add(insecureEdgeComputingIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAIMLImplementation = VulnTemplatesMastgES.InsecureAIMLImplementation;
+        insecureAIMLImplementation.VulnCwes.Add(new VulnCwe { CweId = 306, VulnId = insecureAIMLImplementation.Id });
+        vulnManager.Add(insecureAIMLImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureQuantumResistantCrypto = VulnTemplatesMastgES.InsecureQuantumResistantCrypto;
+        insecureQuantumResistantCrypto.VulnCwes.Add(new VulnCwe { CweId = 327, VulnId = insecureQuantumResistantCrypto.Id });
+        vulnManager.Add(insecureQuantumResistantCrypto);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureVoiceIntegration = VulnTemplatesMastgES.InsecureVoiceUIIntegration;
+        insecureVoiceIntegration.VulnCwes.Add(new VulnCwe { CweId = 350, VulnId = insecureVoiceIntegration.Id });
+        vulnManager.Add(insecureVoiceIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureMultiDeviceSynchronization= VulnTemplatesMastgES.InsecureMultiDeviceSynchronization;
+        insecureMultiDeviceSynchronization.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureMultiDeviceSynchronization.Id });
+        vulnManager.Add(insecureMultiDeviceSynchronization);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureBlockchainIntegration = VulnTemplatesMastgES.InsecureBlockchainIntegration;
+        insecureBlockchainIntegration.VulnCwes.Add(new VulnCwe { CweId = 320, VulnId = insecureBlockchainIntegration.Id });
+        vulnManager.Add(insecureBlockchainIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureKeychainKeystore = VulnTemplatesMastgES.InsecureKeychainKeystore;
+        insecureKeychainKeystore.VulnCwes.Add(new VulnCwe { CweId = 522, VulnId = insecureKeychainKeystore.Id });
+        vulnManager.Add(insecureKeychainKeystore);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureRandomNumberGeneration = VulnTemplatesMastgES.InsecureRandomNumberGeneration;
+        insecureRandomNumberGeneration.VulnCwes.Add(new VulnCwe { CweId = 338, VulnId = insecureRandomNumberGeneration.Id });
+        vulnManager.Add(insecureRandomNumberGeneration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureSSOImplementation = VulnTemplatesMastgES.InsecureSSOImplementation;
+        insecureSSOImplementation.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureSSOImplementation.Id });
+        vulnManager.Add(insecureSSOImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureVPNUsage = VulnTemplatesMastgES.InsecureVPNUsage;
+        insecureVPNUsage.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureVPNUsage.Id });
+        vulnManager.Add(insecureVPNUsage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCustomURLScheme = VulnTemplatesMastgES.InsecureCustomURLScheme;
+        insecureCustomURLScheme.VulnCwes.Add(new VulnCwe { CweId = 749, VulnId = insecureCustomURLScheme.Id });
+        vulnManager.Add(insecureCustomURLScheme);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln timeOfCheckToTimeOfUse = VulnTemplatesMastgES.TimeOfCheckToTimeOfUse;
+        timeOfCheckToTimeOfUse.VulnCwes.Add(new VulnCwe { CweId = 367, VulnId = timeOfCheckToTimeOfUse.Id });
+        vulnManager.Add(timeOfCheckToTimeOfUse);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAntiDebugging = VulnTemplatesMastgES.InsecureAntiDebugging;
+        insecureAntiDebugging.VulnCwes.Add(new VulnCwe { CweId = 388, VulnId = insecureAntiDebugging.Id });
+        vulnManager.Add(insecureAntiDebugging);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln overPrivilegedApp = VulnTemplatesMastgES.OverPrivilegedApplication;
+        overPrivilegedApp.VulnCwes.Add(new VulnCwe { CweId = 250, VulnId = overPrivilegedApp.Id });
+        vulnManager.Add(overPrivilegedApp);
+        await vulnManager.Context.SaveChangesAsync();
     }
     
     public async Task CreateSpanishWstg()
@@ -672,7 +1178,260 @@ public class VulnTemplatesLoadService: IVulnTemplatesLoadService
     
     public async Task CreatePortugueseMastg()
     {
+        Vuln insecureDataStorage = VulnTemplatesMastgPT.InsecureDataStorage;
+        insecureDataStorage.VulnCwes.Add(new VulnCwe { CweId = 312, VulnId = insecureDataStorage.Id });
+        vulnManager.Add(insecureDataStorage);
+        await vulnManager.Context.SaveChangesAsync();
         
+        Vuln insecureCryptography = VulnTemplatesMastgPT.InsecureCryptography;
+        insecureCryptography.VulnCwes.Add(new VulnCwe { CweId = 327, VulnId = insecureCryptography.Id });
+        vulnManager.Add(insecureCryptography);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAuthentication = VulnTemplatesMastgPT.InsecureAuthentication;
+        insecureAuthentication.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureAuthentication.Id });
+        vulnManager.Add(insecureAuthentication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureNetworkCommunication = VulnTemplatesMastgPT.InsecureNetworkCommunication;
+        insecureNetworkCommunication.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureNetworkCommunication.Id });
+        vulnManager.Add(insecureNetworkCommunication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln privacyViolations = VulnTemplatesMastgPT.PrivacyViolation;
+        privacyViolations.VulnCwes.Add(new VulnCwe { CweId = 359, VulnId = privacyViolations.Id });
+        vulnManager.Add(privacyViolations);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataLeakage = VulnTemplatesMastgPT.InsecureDataLeakage;
+        insecureDataLeakage.VulnCwes.Add(new VulnCwe { CweId = 532, VulnId = insecureDataLeakage.Id });
+        vulnManager.Add(insecureDataLeakage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureKeyManagement = VulnTemplatesMastgPT.InsecureKeyManagement;
+        insecureKeyManagement.VulnCwes.Add(new VulnCwe { CweId = 321, VulnId = insecureKeyManagement.Id });
+        vulnManager.Add(insecureKeyManagement);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureLocalAuthentication = VulnTemplatesMastgPT.InsecureLocalAuthentication;
+        insecureLocalAuthentication.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureLocalAuthentication.Id });
+        vulnManager.Add(insecureLocalAuthentication);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCertificatePinning = VulnTemplatesMastgPT.InsecureCertificatePinning;
+        insecureCertificatePinning.VulnCwes.Add(new VulnCwe { CweId = 295, VulnId = insecureCertificatePinning.Id });
+        vulnManager.Add(insecureCertificatePinning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureIPC = VulnTemplatesMastgPT.InsecureIPC;
+        insecureIPC.VulnCwes.Add(new VulnCwe { CweId = 927, VulnId = insecureIPC.Id });
+        vulnManager.Add(insecureIPC);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureWebview = VulnTemplatesMastgPT.InsecureWebView;
+        insecureWebview.VulnCwes.Add(new VulnCwe { CweId = 749, VulnId = insecureWebview.Id });
+        vulnManager.Add(insecureWebview);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDeepLinking = VulnTemplatesMastgPT.InsecureDeepLinking;
+        insecureDeepLinking.VulnCwes.Add(new VulnCwe { CweId = 939, VulnId = insecureDeepLinking.Id });
+        vulnManager.Add(insecureDeepLinking);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureSessionHandling = VulnTemplatesMastgPT.InsecureSessionHandling;
+        insecureSessionHandling.VulnCwes.Add(new VulnCwe { CweId = 613, VulnId = insecureSessionHandling.Id });
+        vulnManager.Add(insecureSessionHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureTlsValidation = VulnTemplatesMastgPT.InsecureTlsValidation;
+        insecureTlsValidation.VulnCwes.Add(new VulnCwe { CweId = 295, VulnId = insecureTlsValidation.Id });
+        vulnManager.Add(insecureTlsValidation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureClipboardUsage = VulnTemplatesMastgPT.InsecureClipboardUsage;
+        insecureClipboardUsage.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureClipboardUsage.Id });
+        vulnManager.Add(insecureClipboardUsage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataCaching = VulnTemplatesMastgPT.InsecureDataCaching;
+        insecureDataCaching.VulnCwes.Add(new VulnCwe { CweId = 524, VulnId = insecureDataCaching.Id });
+        vulnManager.Add(insecureDataCaching);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureBackupHandling = VulnTemplatesMastgPT.InsecureBackupHandling;
+        insecureBackupHandling.VulnCwes.Add(new VulnCwe { CweId = 530, VulnId = insecureBackupHandling.Id });
+        vulnManager.Add(insecureBackupHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insufficientInputValidation = VulnTemplatesMastgPT.InsufficientInputValidation;
+        insufficientInputValidation.VulnCwes.Add(new VulnCwe { CweId = 20, VulnId = insufficientInputValidation.Id });
+        vulnManager.Add(insufficientInputValidation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureJailbreakRootDetection = VulnTemplatesMastgPT.InsecureJailbreakRootDetection;
+        insecureJailbreakRootDetection.VulnCwes.Add(new VulnCwe { CweId = 919, VulnId = insecureJailbreakRootDetection.Id });
+        vulnManager.Add(insecureJailbreakRootDetection);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCodeObfuscation = VulnTemplatesMastgPT.InsecureCodeObfuscation;
+        insecureCodeObfuscation.VulnCwes.Add(new VulnCwe { CweId = 656, VulnId = insecureCodeObfuscation.Id });
+        vulnManager.Add(insecureCodeObfuscation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureRuntimeIntegrityChecks = VulnTemplatesMastgPT.InsecureRuntimeIntegrityChecks;
+        insecureRuntimeIntegrityChecks.VulnCwes.Add(new VulnCwe { CweId = 693, VulnId = insecureRuntimeIntegrityChecks.Id });
+        vulnManager.Add(insecureRuntimeIntegrityChecks);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppPackaging = VulnTemplatesMastgPT.InsecureAppPackaging;
+        insecureAppPackaging.VulnCwes.Add(new VulnCwe { CweId = 490, VulnId = insecureAppPackaging.Id });
+        vulnManager.Add(insecureAppPackaging);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureMemoryManagement = VulnTemplatesMastgPT.InsecureMemoryManagement;
+        insecureMemoryManagement.VulnCwes.Add(new VulnCwe { CweId = 316, VulnId = insecureMemoryManagement.Id });
+        vulnManager.Add(insecureMemoryManagement);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureComponentUpgrade = VulnTemplatesMastgPT.InsecureComponentUpgrade;
+        insecureComponentUpgrade.VulnCwes.Add(new VulnCwe { CweId = 494, VulnId = insecureComponentUpgrade.Id });
+        vulnManager.Add(insecureComponentUpgrade);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataResidency = VulnTemplatesMastgPT.InsecureDataResidency;
+        insecureDataResidency.VulnCwes.Add(new VulnCwe { CweId = 359, VulnId = insecureDataResidency.Id });
+        vulnManager.Add(insecureDataResidency);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCloudSyncmechanism = VulnTemplatesMastgPT.InsecureCloudSyncMechanism;
+        insecureCloudSyncmechanism.VulnCwes.Add(new VulnCwe { CweId = 311, VulnId = insecureCloudSyncmechanism.Id });
+        vulnManager.Add(insecureCloudSyncmechanism);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln vulnerableThirdPartyLibraries = VulnTemplatesMastgPT.VulnerableThirdPartyLibrary;
+        vulnerableThirdPartyLibraries.VulnCwes.Add(new VulnCwe { CweId = 1035, VulnId = vulnerableThirdPartyLibraries.Id });
+        vulnManager.Add(vulnerableThirdPartyLibraries);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureDataExfiltration = VulnTemplatesMastgPT.InsecureDataExfiltration;
+        insecureDataExfiltration.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureDataExfiltration.Id });
+        vulnManager.Add(insecureDataExfiltration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAPIVersioning = VulnTemplatesMastgPT.InsecureAPIVersioning;
+        insecureAPIVersioning.VulnCwes.Add(new VulnCwe { CweId = 330, VulnId = insecureAPIVersioning.Id });
+        vulnManager.Add(insecureAPIVersioning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureQRCodeHandling = VulnTemplatesMastgPT.InsecureQRCodeHandling;
+        insecureQRCodeHandling.VulnCwes.Add(new VulnCwe { CweId = 20, VulnId = insecureQRCodeHandling.Id });
+        vulnManager.Add(insecureQRCodeHandling);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureNFCImplementation = VulnTemplatesMastgPT.InsecureNFCImplementation;
+        insecureNFCImplementation.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureNFCImplementation.Id });
+        vulnManager.Add(insecureNFCImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureARImpementation = VulnTemplatesMastgPT.InsecureARImplementation;
+        insecureARImpementation.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureARImpementation.Id });
+        vulnManager.Add(insecureARImpementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureIoTImplementation = VulnTemplatesMastgPT.InsecureIoTIntegration;
+        insecureIoTImplementation.VulnCwes.Add(new VulnCwe { CweId = 306, VulnId = insecureIoTImplementation.Id });
+        vulnManager.Add(insecureIoTImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecurePushNotification = VulnTemplatesMastgPT.InsecurePushNotifications;
+        insecurePushNotification.VulnCwes.Add(new VulnCwe { CweId = 223, VulnId = insecurePushNotification.Id });
+        vulnManager.Add(insecurePushNotification);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppCloning = VulnTemplatesMastgPT.InsecureAppCloning;
+        insecureAppCloning.VulnCwes.Add(new VulnCwe { CweId = 656, VulnId = insecureAppCloning.Id });
+        vulnManager.Add(insecureAppCloning);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureScreenOverlay = VulnTemplatesMastgPT.InsecureScreenOverlay;
+        insecureScreenOverlay.VulnCwes.Add(new VulnCwe { CweId = 1021, VulnId = insecureScreenOverlay.Id });
+        vulnManager.Add(insecureScreenOverlay);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAppWidget = VulnTemplatesMastgPT.InsecureAppWidget;
+        insecureAppWidget.VulnCwes.Add(new VulnCwe { CweId = 200, VulnId = insecureAppWidget.Id });
+        vulnManager.Add(insecureAppWidget);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureEdgeComputingIntegration = VulnTemplatesMastgPT.InsecureEdgeComputingIntegration;
+        insecureEdgeComputingIntegration.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureEdgeComputingIntegration.Id });
+        vulnManager.Add(insecureEdgeComputingIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAIMLImplementation = VulnTemplatesMastgPT.InsecureAIMLImplementation;
+        insecureAIMLImplementation.VulnCwes.Add(new VulnCwe { CweId = 306, VulnId = insecureAIMLImplementation.Id });
+        vulnManager.Add(insecureAIMLImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureQuantumResistantCrypto = VulnTemplatesMastgPT.InsecureQuantumResistantCrypto;
+        insecureQuantumResistantCrypto.VulnCwes.Add(new VulnCwe { CweId = 327, VulnId = insecureQuantumResistantCrypto.Id });
+        vulnManager.Add(insecureQuantumResistantCrypto);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureVoiceIntegration = VulnTemplatesMastgPT.InsecureVoiceUIIntegration;
+        insecureVoiceIntegration.VulnCwes.Add(new VulnCwe { CweId = 350, VulnId = insecureVoiceIntegration.Id });
+        vulnManager.Add(insecureVoiceIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureMultiDeviceSynchronization= VulnTemplatesMastgPT.InsecureMultiDeviceSynchronization;
+        insecureMultiDeviceSynchronization.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureMultiDeviceSynchronization.Id });
+        vulnManager.Add(insecureMultiDeviceSynchronization);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureBlockchainIntegration = VulnTemplatesMastgPT.InsecureBlockchainIntegration;
+        insecureBlockchainIntegration.VulnCwes.Add(new VulnCwe { CweId = 320, VulnId = insecureBlockchainIntegration.Id });
+        vulnManager.Add(insecureBlockchainIntegration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureKeychainKeystore = VulnTemplatesMastgPT.InsecureKeychainKeystore;
+        insecureKeychainKeystore.VulnCwes.Add(new VulnCwe { CweId = 522, VulnId = insecureKeychainKeystore.Id });
+        vulnManager.Add(insecureKeychainKeystore);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureRandomNumberGeneration = VulnTemplatesMastgPT.InsecureRandomNumberGeneration;
+        insecureRandomNumberGeneration.VulnCwes.Add(new VulnCwe { CweId = 338, VulnId = insecureRandomNumberGeneration.Id });
+        vulnManager.Add(insecureRandomNumberGeneration);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureSSOImplementation = VulnTemplatesMastgPT.InsecureSSOImplementation;
+        insecureSSOImplementation.VulnCwes.Add(new VulnCwe { CweId = 287, VulnId = insecureSSOImplementation.Id });
+        vulnManager.Add(insecureSSOImplementation);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureVPNUsage = VulnTemplatesMastgPT.InsecureVPNUsage;
+        insecureVPNUsage.VulnCwes.Add(new VulnCwe { CweId = 319, VulnId = insecureVPNUsage.Id });
+        vulnManager.Add(insecureVPNUsage);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureCustomURLScheme = VulnTemplatesMastgPT.InsecureCustomURLScheme;
+        insecureCustomURLScheme.VulnCwes.Add(new VulnCwe { CweId = 749, VulnId = insecureCustomURLScheme.Id });
+        vulnManager.Add(insecureCustomURLScheme);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln timeOfCheckToTimeOfUse = VulnTemplatesMastgPT.TimeOfCheckToTimeOfUse;
+        timeOfCheckToTimeOfUse.VulnCwes.Add(new VulnCwe { CweId = 367, VulnId = timeOfCheckToTimeOfUse.Id });
+        vulnManager.Add(timeOfCheckToTimeOfUse);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln insecureAntiDebugging = VulnTemplatesMastgPT.InsecureAntiDebugging;
+        insecureAntiDebugging.VulnCwes.Add(new VulnCwe { CweId = 388, VulnId = insecureAntiDebugging.Id });
+        vulnManager.Add(insecureAntiDebugging);
+        await vulnManager.Context.SaveChangesAsync();
+        
+        Vuln overPrivilegedApp = VulnTemplatesMastgPT.OverPrivilegedApplication;
+        overPrivilegedApp.VulnCwes.Add(new VulnCwe { CweId = 250, VulnId = overPrivilegedApp.Id });
+        vulnManager.Add(overPrivilegedApp);
+        await vulnManager.Context.SaveChangesAsync();
     }
     
     public async Task CreatePortugueseWstg()
