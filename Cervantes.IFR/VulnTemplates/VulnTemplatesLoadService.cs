@@ -1958,367 +1958,367 @@ public class VulnTemplatesLoadService : IVulnTemplatesLoadService
     public async Task CreatePortugueseGeneral()
     {
                  // Add Kerberoasting Vulnerability
-        Vuln kerberoastingVuln = VulnTemplatesGeneralEN.KerberoastingVulnerability;
+        Vuln kerberoastingVuln = VulnTemplatesGeneralPT.KerberoastingVulnerability;
         vulnManager.Add(kerberoastingVuln);
 
 // Add LLMNR Poisoning
-        Vuln llmnrVuln = VulnTemplatesGeneralEN.LLMNRPoisoning;
+        Vuln llmnrVuln = VulnTemplatesGeneralPT.LLMNRPoisoning;
         vulnManager.Add(llmnrVuln);
 
 // Add Local Admin Password Reuse
-        Vuln localAdminVuln = VulnTemplatesGeneralEN.LocalAdminPasswordReuse;
+        Vuln localAdminVuln = VulnTemplatesGeneralPT.LocalAdminPasswordReuse;
         vulnManager.Add(localAdminVuln);
 
 // Add Unquoted Service Path
-        Vuln unquotedServiceVuln = VulnTemplatesGeneralEN.UnquotedServicePath;
+        Vuln unquotedServiceVuln = VulnTemplatesGeneralPT.UnquotedServicePath;
         vulnManager.Add(unquotedServiceVuln);
 
 // Add SMB Signing Issues
-        Vuln smbSigningVuln = VulnTemplatesGeneralEN.SMBSigningDisabled;
+        Vuln smbSigningVuln = VulnTemplatesGeneralPT.SMBSigningDisabled;
         vulnManager.Add(smbSigningVuln);
 
 // Add Excessive Domain Admin Rights
-        Vuln domainAdminVuln = VulnTemplatesGeneralEN.ExcessiveDomainAdminRights;
+        Vuln domainAdminVuln = VulnTemplatesGeneralPT.ExcessiveDomainAdminRights;
         vulnManager.Add(domainAdminVuln);
 
 // Add GPP Password Exposure
-        Vuln gppPasswordVuln = VulnTemplatesGeneralEN.GPPPasswordExposure;
+        Vuln gppPasswordVuln = VulnTemplatesGeneralPT.GPPPasswordExposure;
         vulnManager.Add(gppPasswordVuln);
 
 // Add Weak Service Account Permissions
-        Vuln weakServiceAccountVuln = VulnTemplatesGeneralEN.WeakServiceAccountPermissions;
+        Vuln weakServiceAccountVuln = VulnTemplatesGeneralPT.WeakServiceAccountPermissions;
         vulnManager.Add(weakServiceAccountVuln);
 
 // Add Clear Text Protocols
-        Vuln clearTextVuln = VulnTemplatesGeneralEN.ClearTextProtocols;
+        Vuln clearTextVuln = VulnTemplatesGeneralPT.ClearTextProtocols;
         vulnManager.Add(clearTextVuln);
 
 // Add Insecure LDAP Binding
-        Vuln ldapBindingVuln = VulnTemplatesGeneralEN.InsecureLDAPBinding;
+        Vuln ldapBindingVuln = VulnTemplatesGeneralPT.InsecureLDAPBinding;
         vulnManager.Add(ldapBindingVuln);
 
 // Add Weak TLS Configuration
-        Vuln weakTlsVuln = VulnTemplatesGeneralEN.WeakTLSConfiguration;
+        Vuln weakTlsVuln = VulnTemplatesGeneralPT.WeakTLSConfiguration;
         vulnManager.Add(weakTlsVuln);
 
 // Add Default Credentials
-        Vuln defaultCredsVuln = VulnTemplatesGeneralEN.DefaultCredentials;
+        Vuln defaultCredsVuln = VulnTemplatesGeneralPT.DefaultCredentials;
         vulnManager.Add(defaultCredsVuln);
 
 // Add Missing Security Updates
-        Vuln missingUpdatesVuln = VulnTemplatesGeneralEN.MissingSecurityUpdates;
+        Vuln missingUpdatesVuln = VulnTemplatesGeneralPT.MissingSecurityUpdates;
         vulnManager.Add(missingUpdatesVuln);
 
 // Add Unsecured Shares
-        Vuln unsecuredSharesVuln = VulnTemplatesGeneralEN.UnsecuredShares;
+        Vuln unsecuredSharesVuln = VulnTemplatesGeneralPT.UnsecuredShares;
         vulnManager.Add(unsecuredSharesVuln);
 
 // Add WinRM Misconfiguration
-        Vuln winRmVuln = VulnTemplatesGeneralEN.WinRMMisconfiguration;
+        Vuln winRmVuln = VulnTemplatesGeneralPT.WinRMMisconfiguration;
         vulnManager.Add(winRmVuln);
 
 // Add Print Spooler Vulnerabilities
-        Vuln printSpoolerVuln = VulnTemplatesGeneralEN.PrintSpoolerVulnerable;
+        Vuln printSpoolerVuln = VulnTemplatesGeneralPT.PrintSpoolerVulnerable;
         vulnManager.Add(printSpoolerVuln);
 
 // Add Cached Domain Credentials
-        Vuln cachedCredsVuln = VulnTemplatesGeneralEN.CachedDomainCredentials;
+        Vuln cachedCredsVuln = VulnTemplatesGeneralPT.CachedDomainCredentials;
         vulnManager.Add(cachedCredsVuln);
 
 // Add BitLocker Misconfiguration
-        Vuln bitLockerVuln = VulnTemplatesGeneralEN.BitLockerMisconfiguration;
+        Vuln bitLockerVuln = VulnTemplatesGeneralPT.BitLockerMisconfiguration;
         vulnManager.Add(bitLockerVuln);
 
 // Add WSUS Misconfiguration
-        Vuln wsusVuln = VulnTemplatesGeneralEN.WSUSMisconfiguration;
+        Vuln wsusVuln = VulnTemplatesGeneralPT.WSUSMisconfiguration;
         vulnManager.Add(wsusVuln);
 
 // Add IPv6 Security Issues
-        Vuln ipv6Vuln = VulnTemplatesGeneralEN.IPv6SecurityIssues;
+        Vuln ipv6Vuln = VulnTemplatesGeneralPT.IPv6SecurityIssues;
         vulnManager.Add(ipv6Vuln);
 
 // Add PowerShell Logging Gaps
-        Vuln powerShellLoggingVuln = VulnTemplatesGeneralEN.PowerShellLoggingGaps;
+        Vuln powerShellLoggingVuln = VulnTemplatesGeneralPT.PowerShellLoggingGaps;
         vulnManager.Add(powerShellLoggingVuln);
 
 // Add DnsAdmins Abuse
-        Vuln dnsAdminsVuln = VulnTemplatesGeneralEN.DnsAdminsAbuse;
+        Vuln dnsAdminsVuln = VulnTemplatesGeneralPT.DnsAdminsAbuse;
         vulnManager.Add(dnsAdminsVuln);
 
 // Add Exchange Misconfiguration
-        Vuln exchangeVuln = VulnTemplatesGeneralEN.ExchangeMisconfiguration;
+        Vuln exchangeVuln = VulnTemplatesGeneralPT.ExchangeMisconfiguration;
         vulnManager.Add(exchangeVuln);
 
 // Add Backup System Access
-        Vuln backupSystemVuln = VulnTemplatesGeneralEN.BackupSystemAccess;
+        Vuln backupSystemVuln = VulnTemplatesGeneralPT.BackupSystemAccess;
         vulnManager.Add(backupSystemVuln);
 
 // Add Certificate Template Vulnerabilities
-        Vuln certTemplateVuln = VulnTemplatesGeneralEN.CertificateTemplateVulns;
+        Vuln certTemplateVuln = VulnTemplatesGeneralPT.CertificateTemplateVulns;
         vulnManager.Add(certTemplateVuln);
 
 // Add SQL Server Misconfigurations
-        Vuln sqlServerVuln = VulnTemplatesGeneralEN.SQLServerMisconfigurations;
+        Vuln sqlServerVuln = VulnTemplatesGeneralPT.SQLServerMisconfigurations;
         vulnManager.Add(sqlServerVuln);
 
 // Add RDP Security Issues
-        Vuln rdpSecurityVuln = VulnTemplatesGeneralEN.RDPSecurityIssues;
+        Vuln rdpSecurityVuln = VulnTemplatesGeneralPT.RDPSecurityIssues;
         vulnManager.Add(rdpSecurityVuln);
 
 // Add Excessive User Rights
-        Vuln excessiveUserRightsVuln = VulnTemplatesGeneralEN.ExcessiveUserRights;
+        Vuln excessiveUserRightsVuln = VulnTemplatesGeneralPT.ExcessiveUserRights;
         vulnManager.Add(excessiveUserRightsVuln);
 
 // Add Shadow Copy Abuse
-        Vuln shadowCopyVuln = VulnTemplatesGeneralEN.ShadowCopyAbuse;
+        Vuln shadowCopyVuln = VulnTemplatesGeneralPT.ShadowCopyAbuse;
         vulnManager.Add(shadowCopyVuln);
 
 // Add Service Principal Misconfiguration
-        Vuln servicePrincipalVuln = VulnTemplatesGeneralEN.ServicePrincipalMisconfig;
+        Vuln servicePrincipalVuln = VulnTemplatesGeneralPT.ServicePrincipalMisconfig;
         vulnManager.Add(servicePrincipalVuln);
 
 // Add NTP Server Issues
-        Vuln ntpServerVuln = VulnTemplatesGeneralEN.NTPServerIssues;
+        Vuln ntpServerVuln = VulnTemplatesGeneralPT.NTPServerIssues;
         vulnManager.Add(ntpServerVuln);
 
 // Add Linked Server Vulnerabilities
-        Vuln linkedServerVuln = VulnTemplatesGeneralEN.LinkedServerVulns;
+        Vuln linkedServerVuln = VulnTemplatesGeneralPT.LinkedServerVulns;
         vulnManager.Add(linkedServerVuln);
 
 // Add Defender Exclusions
-        Vuln defenderExclusionsVuln = VulnTemplatesGeneralEN.DefenderExclusions;
+        Vuln defenderExclusionsVuln = VulnTemplatesGeneralPT.DefenderExclusions;
         vulnManager.Add(defenderExclusionsVuln);
 
 // Add Domain Trust Issues
-        Vuln domainTrustVuln = VulnTemplatesGeneralEN.DomainTrustIssues;
+        Vuln domainTrustVuln = VulnTemplatesGeneralPT.DomainTrustIssues;
         vulnManager.Add(domainTrustVuln);
 
 // Add Hyper-V Security
-        Vuln hyperVVuln = VulnTemplatesGeneralEN.HyperVSecurity;
+        Vuln hyperVVuln = VulnTemplatesGeneralPT.HyperVSecurity;
         vulnManager.Add(hyperVVuln);
 
 // Add WSUS Targeting
-        Vuln wsusTargetingVuln = VulnTemplatesGeneralEN.WSUSTargeting;
+        Vuln wsusTargetingVuln = VulnTemplatesGeneralPT.WSUSTargeting;
         vulnManager.Add(wsusTargetingVuln);
 
 // Add ADFS Security Issues
-        Vuln adfsVuln = VulnTemplatesGeneralEN.ADFSSecurityIssues;
+        Vuln adfsVuln = VulnTemplatesGeneralPT.ADFSSecurityIssues;
         vulnManager.Add(adfsVuln);
 
 // Add Constrained Delegation
-        Vuln constrainedDelegationVuln = VulnTemplatesGeneralEN.ConstrainedDelegation;
+        Vuln constrainedDelegationVuln = VulnTemplatesGeneralPT.ConstrainedDelegation;
         vulnManager.Add(constrainedDelegationVuln);
 
 // Add DNS Zone Transfer
-        Vuln dnsZoneTransferVuln = VulnTemplatesGeneralEN.DNSZoneTransfer;
+        Vuln dnsZoneTransferVuln = VulnTemplatesGeneralPT.DNSZoneTransfer;
         vulnManager.Add(dnsZoneTransferVuln);
 
 // Add DFS Share Permissions
-        Vuln dfsShareVuln = VulnTemplatesGeneralEN.DFSSharePermissions;
+        Vuln dfsShareVuln = VulnTemplatesGeneralPT.DFSSharePermissions;
         vulnManager.Add(dfsShareVuln);
 
 // Add Network Device Misconfiguration
-        Vuln networkDeviceVuln = VulnTemplatesGeneralEN.NetworkDeviceMisconfig;
+        Vuln networkDeviceVuln = VulnTemplatesGeneralPT.NetworkDeviceMisconfig;
         vulnManager.Add(networkDeviceVuln);
 
 // Add Azure AD Connect Issues
-        Vuln azureADConnectVuln = VulnTemplatesGeneralEN.AzureADConnectIssues;
+        Vuln azureADConnectVuln = VulnTemplatesGeneralPT.AzureADConnectIssues;
         vulnManager.Add(azureADConnectVuln);
 
 // Add SCCM Security Issues
-        Vuln sccmVuln = VulnTemplatesGeneralEN.SCCMSecurityIssues;
+        Vuln sccmVuln = VulnTemplatesGeneralPT.SCCMSecurityIssues;
         vulnManager.Add(sccmVuln);
 
 // Add Remote Access Policy Issues
-        Vuln remoteAccessVuln = VulnTemplatesGeneralEN.RemoteAccessPolicy;
+        Vuln remoteAccessVuln = VulnTemplatesGeneralPT.RemoteAccessPolicy;
         vulnManager.Add(remoteAccessVuln);
 
 // Add ADCS Misconfiguration
-        Vuln adcsVuln = VulnTemplatesGeneralEN.ADCSMisconfiguration;
+        Vuln adcsVuln = VulnTemplatesGeneralPT.ADCSMisconfiguration;
         vulnManager.Add(adcsVuln);
 
 // Add SQL Server Agent Jobs
-        Vuln sqlAgentJobsVuln = VulnTemplatesGeneralEN.SQLServerAgentJobs;
+        Vuln sqlAgentJobsVuln = VulnTemplatesGeneralPT.SQLServerAgentJobs;
         vulnManager.Add(sqlAgentJobsVuln);
 
 // Add DHCP Misconfiguration
-        Vuln dhcpVuln = VulnTemplatesGeneralEN.DHCPMisconfiguration;
+        Vuln dhcpVuln = VulnTemplatesGeneralPT.DHCPMisconfiguration;
         vulnManager.Add(dhcpVuln);
 
 // Add Windows Firewall Policy
-        Vuln firewallPolicyVuln = VulnTemplatesGeneralEN.WindowsFirewallPolicy;
+        Vuln firewallPolicyVuln = VulnTemplatesGeneralPT.WindowsFirewallPolicy;
         vulnManager.Add(firewallPolicyVuln);
 
 // Add Password Filter DLL
-        Vuln passwordFilterVuln = VulnTemplatesGeneralEN.PasswordFilterDLL;
+        Vuln passwordFilterVuln = VulnTemplatesGeneralPT.PasswordFilterDLL;
         vulnManager.Add(passwordFilterVuln);
 
 // Add Unauthorized Sudo Access
-        Vuln sudoAccessVuln = VulnTemplatesGeneralEN.UnauthorizedSudoAccess;
+        Vuln sudoAccessVuln = VulnTemplatesGeneralPT.UnauthorizedSudoAccess;
         vulnManager.Add(sudoAccessVuln);
 
 // Add Unencrypted Data Storage
-        Vuln unencryptedDataVuln = VulnTemplatesGeneralEN.UnencryptedDataStorage;
+        Vuln unencryptedDataVuln = VulnTemplatesGeneralPT.UnencryptedDataStorage;
         vulnManager.Add(unencryptedDataVuln);
 
 // Add Insecure File Permissions
-        Vuln insecureFileVuln = VulnTemplatesGeneralEN.InsecureFilePermissions;
+        Vuln insecureFileVuln = VulnTemplatesGeneralPT.InsecureFilePermissions;
         vulnManager.Add(insecureFileVuln);
 
 // Add Insecure Service Configuration
-        Vuln insecureServiceVuln = VulnTemplatesGeneralEN.InsecureServiceConfiguration;
+        Vuln insecureServiceVuln = VulnTemplatesGeneralPT.InsecureServiceConfiguration;
         vulnManager.Add(insecureServiceVuln);
 
 // Add Weak Password Storage
-        Vuln weakPasswordStorageVuln = VulnTemplatesGeneralEN.WeakPasswordStorage;
+        Vuln weakPasswordStorageVuln = VulnTemplatesGeneralPT.WeakPasswordStorage;
         vulnManager.Add(weakPasswordStorageVuln);
 
 // Add Unsecure Kernel Parameters
-        Vuln unsecureKernelVuln = VulnTemplatesGeneralEN.UnsecureKernelParameters;
+        Vuln unsecureKernelVuln = VulnTemplatesGeneralPT.UnsecureKernelParameters;
         vulnManager.Add(unsecureKernelVuln);
 
 // Add Unsecured Cron Jobs
-        Vuln unsecuredCronVuln = VulnTemplatesGeneralEN.UnsecuredCronJobs;
+        Vuln unsecuredCronVuln = VulnTemplatesGeneralPT.UnsecuredCronJobs;
         vulnManager.Add(unsecuredCronVuln);
 
 // Add Insecure Log Configuration
-        Vuln insecureLogVuln = VulnTemplatesGeneralEN.InsecureLogConfiguration;
+        Vuln insecureLogVuln = VulnTemplatesGeneralPT.InsecureLogConfiguration;
         vulnManager.Add(insecureLogVuln);
 
 // Add Insecure Time Synchronization
-        Vuln insecureTimeVuln = VulnTemplatesGeneralEN.InsecureTimeSynchronization;
+        Vuln insecureTimeVuln = VulnTemplatesGeneralPT.InsecureTimeSynchronization;
         vulnManager.Add(insecureTimeVuln);
 
 // Add Exposed Development Tools
-        Vuln exposedDevToolsVuln = VulnTemplatesGeneralEN.ExposedDevelopmentTools;
+        Vuln exposedDevToolsVuln = VulnTemplatesGeneralPT.ExposedDevelopmentTools;
         vulnManager.Add(exposedDevToolsVuln);
 
 // Add Insecure Automount Configuration
-        Vuln insecureAutomountVuln = VulnTemplatesGeneralEN.InsecureAutomountConfiguration;
+        Vuln insecureAutomountVuln = VulnTemplatesGeneralPT.InsecureAutomountConfiguration;
         vulnManager.Add(insecureAutomountVuln);
 
 // Add Unrestricted Core Dumps
-        Vuln unrestrictedCoreDumpsVuln = VulnTemplatesGeneralEN.UnrestrictedCoreDumps;
+        Vuln unrestrictedCoreDumpsVuln = VulnTemplatesGeneralPT.UnrestrictedCoreDumps;
         vulnManager.Add(unrestrictedCoreDumpsVuln);
 
 // Add Insecure LDAP Configuration
-        Vuln insecureLdapVuln = VulnTemplatesGeneralEN.InsecureLDAPConfiguration;
+        Vuln insecureLdapVuln = VulnTemplatesGeneralPT.InsecureLDAPConfiguration;
         vulnManager.Add(insecureLdapVuln);
 
 // Add Missing Full Disk Encryption
-        Vuln missingDiskEncryptionVuln = VulnTemplatesGeneralEN.MissingDiskEncryption;
+        Vuln missingDiskEncryptionVuln = VulnTemplatesGeneralPT.MissingDiskEncryption;
         vulnManager.Add(missingDiskEncryptionVuln);
 
 // Add Insecure SSH Configuration
-        Vuln insecureSshVuln = VulnTemplatesGeneralEN.InsecureSSHConfiguration;
+        Vuln insecureSshVuln = VulnTemplatesGeneralPT.InsecureSSHConfiguration;
         vulnManager.Add(insecureSshVuln);
 
 // Add Unrestricted USB Access
-        Vuln unrestrictedUsbVuln = VulnTemplatesGeneralEN.UnrestrictedUSBAccess;
+        Vuln unrestrictedUsbVuln = VulnTemplatesGeneralPT.UnrestrictedUSBAccess;
         vulnManager.Add(unrestrictedUsbVuln);
 
 // Add Insecure Backup Configuration
-        Vuln insecureBackupVuln = VulnTemplatesGeneralEN.InsecureBackupConfiguration;
+        Vuln insecureBackupVuln = VulnTemplatesGeneralPT.InsecureBackupConfiguration;
         vulnManager.Add(insecureBackupVuln);
 
 // Add Insecure Firewall Rules
-        Vuln insecureFirewallVuln = VulnTemplatesGeneralEN.InsecureFirewallRules;
+        Vuln insecureFirewallVuln = VulnTemplatesGeneralPT.InsecureFirewallRules;
         vulnManager.Add(insecureFirewallVuln);
 
 // Add Insecure Home Directories
-        Vuln insecureHomeVuln = VulnTemplatesGeneralEN.InsecureHomeDirectories;
+        Vuln insecureHomeVuln = VulnTemplatesGeneralPT.InsecureHomeDirectories;
         vulnManager.Add(insecureHomeVuln);
 
 // Add Insecure Keychain Configuration
-        Vuln insecureKeychainVuln = VulnTemplatesGeneralEN.InsecureKeychainConfiguration;
+        Vuln insecureKeychainVuln = VulnTemplatesGeneralPT.InsecureKeychainConfiguration;
         vulnManager.Add(insecureKeychainVuln);
 
 // Add Disabled System Integrity Protection
-        Vuln disabledSipVuln = VulnTemplatesGeneralEN.DisabledSystemIntegrityProtection;
+        Vuln disabledSipVuln = VulnTemplatesGeneralPT.DisabledSystemIntegrityProtection;
         vulnManager.Add(disabledSipVuln);
 
 // Add Unsecured Container Configuration
-        Vuln unsecuredContainerVuln = VulnTemplatesGeneralEN.UnsecuredContainerConfiguration;
+        Vuln unsecuredContainerVuln = VulnTemplatesGeneralPT.UnsecuredContainerConfiguration;
         vulnManager.Add(unsecuredContainerVuln);
 
 // Add Insecure PAM Configuration
-        Vuln insecurePamVuln = VulnTemplatesGeneralEN.InsecurePAMConfiguration;
+        Vuln insecurePamVuln = VulnTemplatesGeneralPT.InsecurePAMConfiguration;
         vulnManager.Add(insecurePamVuln);
 
 // Add Insecure Audit Configuration
-        Vuln insecureAuditVuln = VulnTemplatesGeneralEN.InsecureAuditConfiguration;
+        Vuln insecureAuditVuln = VulnTemplatesGeneralPT.InsecureAuditConfiguration;
         vulnManager.Add(insecureAuditVuln);
 
 // Add Insecure X Server Configuration
-        Vuln insecureXServerVuln = VulnTemplatesGeneralEN.InsecureXServerConfiguration;
+        Vuln insecureXServerVuln = VulnTemplatesGeneralPT.InsecureXServerConfiguration;
         vulnManager.Add(insecureXServerVuln);
 
 // Add Insecure Resource Limits
-        Vuln insecureResourceVuln = VulnTemplatesGeneralEN.InsecureResourceLimits;
+        Vuln insecureResourceVuln = VulnTemplatesGeneralPT.InsecureResourceLimits;
         vulnManager.Add(insecureResourceVuln);
 
 // Add Insecure Kernel Module Loading
-        Vuln insecureKernelModuleVuln = VulnTemplatesGeneralEN.InsecureKernelModuleLoading;
+        Vuln insecureKernelModuleVuln = VulnTemplatesGeneralPT.InsecureKernelModuleLoading;
         vulnManager.Add(insecureKernelModuleVuln);
 
 // Add Insecure Syslog Configuration
-        Vuln insecureSyslogVuln = VulnTemplatesGeneralEN.InsecureSyslogConfiguration;
+        Vuln insecureSyslogVuln = VulnTemplatesGeneralPT.InsecureSyslogConfiguration;
         vulnManager.Add(insecureSyslogVuln);
 
 // Add Insecure Gatekeeper Configuration
-        Vuln insecureGatekeeperVuln = VulnTemplatesGeneralEN.InsecureGatekeeperConfiguration;
+        Vuln insecureGatekeeperVuln = VulnTemplatesGeneralPT.InsecureGatekeeperConfiguration;
         vulnManager.Add(insecureGatekeeperVuln);
 
 // Add Insecure Application Sandbox Configuration
-        Vuln insecureSandboxVuln = VulnTemplatesGeneralEN.InsecureSandboxConfiguration;
+        Vuln insecureSandboxVuln = VulnTemplatesGeneralPT.InsecureSandboxConfiguration;
         vulnManager.Add(insecureSandboxVuln);
 
 // Add Insecure Systemd Service Configuration
-        Vuln insecureSystemdVuln = VulnTemplatesGeneralEN.InsecureSystemdServiceConfiguration;
+        Vuln insecureSystemdVuln = VulnTemplatesGeneralPT.InsecureSystemdServiceConfiguration;
         vulnManager.Add(insecureSystemdVuln);
 
 // Add Insecure XProtect Configuration
-        Vuln insecureXProtectVuln = VulnTemplatesGeneralEN.InsecureXProtectConfiguration;
+        Vuln insecureXProtectVuln = VulnTemplatesGeneralPT.InsecureXProtectConfiguration;
         vulnManager.Add(insecureXProtectVuln);
 
 // Add Insecure Memory Protection
-        Vuln insecureMemoryVuln = VulnTemplatesGeneralEN.InsecureMemoryProtection;
+        Vuln insecureMemoryVuln = VulnTemplatesGeneralPT.InsecureMemoryProtection;
         vulnManager.Add(insecureMemoryVuln);
 
 // Add Insecure IPC Configuration
-        Vuln insecureIpcVuln = VulnTemplatesGeneralEN.InsecureIPCConfiguration;
+        Vuln insecureIpcVuln = VulnTemplatesGeneralPT.InsecureIPCConfiguration;
         vulnManager.Add(insecureIpcVuln);
 
 // Add Insecure Process Accounting
-        Vuln insecureProcessVuln = VulnTemplatesGeneralEN.InsecureProcessAccounting;
+        Vuln insecureProcessVuln = VulnTemplatesGeneralPT.InsecureProcessAccounting;
         vulnManager.Add(insecureProcessVuln);
 
 // Add AS-REP Roastable Accounts
-        Vuln asRepRoastVuln = VulnTemplatesGeneralEN.ASREPRoastableAccounts;
+        Vuln asRepRoastVuln = VulnTemplatesGeneralPT.ASREPRoastableAccounts;
         vulnManager.Add(asRepRoastVuln);
 
 // Add Insecure Delegation Configuration
-        Vuln insecureDelegationVuln = VulnTemplatesGeneralEN.InsecureDelegationConfiguration;
+        Vuln insecureDelegationVuln = VulnTemplatesGeneralPT.InsecureDelegationConfiguration;
         vulnManager.Add(insecureDelegationVuln);
 
 // Add Weak GPO Permissions
-        Vuln weakGpoVuln = VulnTemplatesGeneralEN.WeakGPOPermissions;
+        Vuln weakGpoVuln = VulnTemplatesGeneralPT.WeakGPOPermissions;
         vulnManager.Add(weakGpoVuln);
 
 // Add DCOM Exploitation
-        Vuln dcomVuln = VulnTemplatesGeneralEN.DCOMExploitation;
+        Vuln dcomVuln = VulnTemplatesGeneralPT.DCOMExploitation;
         vulnManager.Add(dcomVuln);
 
 // Add Weak Schema Permissions
-        Vuln weakSchemaVuln = VulnTemplatesGeneralEN.WeakSchemaPermissions;
+        Vuln weakSchemaVuln = VulnTemplatesGeneralPT.WeakSchemaPermissions;
         vulnManager.Add(weakSchemaVuln);
 
 // Add Insecure LDAPS Configuration
-        Vuln insecureLdapsVuln = VulnTemplatesGeneralEN.InsecureLDAPSConfiguration;
+        Vuln insecureLdapsVuln = VulnTemplatesGeneralPT.InsecureLDAPSConfiguration;
         vulnManager.Add(insecureLdapsVuln);
 
 // Add Privileged Group Membership
-        Vuln privilegedGroupVuln = VulnTemplatesGeneralEN.PrivilegedGroupMembership;
+        Vuln privilegedGroupVuln = VulnTemplatesGeneralPT.PrivilegedGroupMembership;
         vulnManager.Add(privilegedGroupVuln);
 
 // Save all changes
