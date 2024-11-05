@@ -1,0 +1,77 @@
+@using Cervantes.CORE
+@using Cervantes.CORE.ViewModel
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@inject IJSRuntime jsRuntime
+@inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.RolesAdd)]
+
+<style>
+    .tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Badge" /> @localizer["createRole"]</MudText>
+    </TitleContent>
+    <DialogContent>
+
+        <MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+            <MudStack AlignItems="AlignItems.Stretch">
+               
+
+                <MudTextField Placeholder="John Doe" @bind-Value="model.Name"
+                              For="@(() => model.Name)"
+                              Immediate="true"
+                              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Badge"/>
+
+
+                <MudTextField Placeholder="john.doe@foobar.com" @bind-Value="model.Description"
+                              For="@(() => model.Description)"
+                              Immediate="true"
+                              Label="@localizer["description"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Description" InputType="InputType.Email"/>
+
+                <MudDataGrid T="PermissionsViewModel" Items="@_permissionsViewModels" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                             Hideable="true" Hover="true" Groupable="true" GroupExpanded="false" SelectedItemsChanged="@SelectedItemsChanged" MultiSelection="true" Virtualize="true" DragDropColumnReordering="true" RowsPerPage="50">
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h5">@localizer["permissions"]</MudText>
+                        <MudSpacer/>
+                        <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                        </MudTextField>
+                    </ToolBarContent>
+                    <Columns>
+                        <SelectColumn T="PermissionsViewModel"/>
+
+                        <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                        <PropertyColumn Property="x => x.ShortName" Title="@localizer["description"]"/>
+                        <PropertyColumn Property="x => x.Description" Title="@localizer["permissions"]"/>
+                        <PropertyColumn Property="x => x.Group" Title="Category" Grouping>
+                            <GroupTemplate>
+                                <span style="font-weight:bold">@context.Grouping.Key</span>
+                            </GroupTemplate>
+                        </PropertyColumn>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="PermissionsViewModel"/>
+                    </PagerContent>
+                </MudDataGrid>
+                <MudStack Row="true" Justify="Justify.FlexEnd">
+                    <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+                </MudStack>
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        
+    </DialogActions>
+</MudDialog>

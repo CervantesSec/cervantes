@@ -1899,4 +1899,34 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="userType" xml:space="preserve">
         <value>Tipo de Usuario</value>
     </data>
+    <data name="roles" xml:space="preserve">
+        <value>Roles</value>
+    </data>
+    <data name="permissions" xml:space="preserve">
+        <value>Permisos</value>
+    </data>
+    <data name="createRole" xml:space="preserve">
+        <value>Crear Rol</value>
+    </data>
+    <data name="deleteRole" xml:space="preserve">
+        <value>Eliminar Rol</value>
+    </data>
+    <data name="roleCreated" xml:space="preserve">
+        <value>Rol creado correctamente!</value>
+    </data>
+    <data name="roleCreatedError" xml:space="preserve">
+        <value>Se ha producido un error al crear el rol!</value>
+    </data>
+    <data name="roleDeleted" xml:space="preserve">
+        <value>Rol eliminado correctamente!</value>
+    </data>
+    <data name="roleDeletedError" xml:space="preserve">
+        <value>Se ha producido un error al eliminar el rol!</value>
+    </data>
+    <data name="roleEdited" xml:space="preserve">
+        <value>Rol modificado correctamente!</value>
+    </data>
+    <data name="roleEditedError" xml:space="preserve">
+        <value>Se ha producido un error al modificar el rol!</value>
+    </data>
 </root>

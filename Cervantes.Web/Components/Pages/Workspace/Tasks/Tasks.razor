@@ -1,7 +1,10 @@
 @page "/workspace/{project:guid}/tasks"
+@using Cervantes.CORE
 @using Cervantes.CORE.ViewModels
 @using Cervantes.Web.Components.Layout
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @using MudBlazor.Extensions.Core
 @using Color = MudBlazor.Color
@@ -12,8 +15,8 @@
 @inject NavigationManager navigationManager
 @inject IHttpContextAccessor _accessor
 @inject IMudExDialogService DialogEx
-
-<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.TasksRead)]
 
 <PageTitle>@localizer["tasks"] | Cervantes</PageTitle>
     <SectionContent SectionName="appbar">
@@ -48,8 +51,13 @@
                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                 <ToolBarContent>
                     <MudStack Row="true">
-                        <AuthorizeView Roles="Admin,SuperUser,User">
+                        @if (userAth.HasPermission(Permissions.TasksAdd))
+                        {
                             <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidthEx))">@localizer["create"]</MudButton>
+                        }
+                        
+                        @if (userAth.HasPermission(Permissions.TasksDelete))
+                        {
                             @if (seleTasks.Count() != 0)
                             {
                                 <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
@@ -59,8 +67,8 @@
                                     </MudMenu>
                                 </MudButtonGroup>
                             }
-
-                        </AuthorizeView>
+                        }
+                        
                     </MudStack>
                     <MudSpacer/>
                     <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -171,7 +179,10 @@
             <MudStack>
                 <MudPaper Elevation="25">
                     <MudToolBar>
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidthEx))">@localizer["create"]</MudButton>
+                        @if (userAth.HasPermission(Permissions.TasksAdd))
+                        {
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidthEx))">@localizer["create"]</MudButton>
+                        }
                         <MudSpacer/>
                         <MudSpacer/>
 
@@ -304,4 +315,3 @@
     
 </MudItem>
 </MudGrid>
-</AuthorizeView>

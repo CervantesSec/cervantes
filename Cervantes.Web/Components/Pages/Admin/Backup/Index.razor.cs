@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -9,8 +10,12 @@ public partial class Index: ComponentBase
 {
     private List<BreadcrumbItem> _items;
 [Inject] private BackupController _BackupController { get; set; }
+
+private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(localizer["home"], href: "/",icon: Icons.Material.Filled.Home),

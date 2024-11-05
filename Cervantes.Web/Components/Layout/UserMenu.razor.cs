@@ -13,11 +13,13 @@ public partial class UserMenu: ComponentBase
     private ApplicationUser CurrentUser { get; set; }
     [Inject] UserController userController { get; set; }
     private string? currentUrl;
+    ClaimsPrincipal user;
 
     protected override async Task OnInitializedAsync()
     {
+        
         NavigationManager.LocationChanged += OnLocationChanged;
-
+        user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
 
         if (_accessor.HttpContext.User == null)

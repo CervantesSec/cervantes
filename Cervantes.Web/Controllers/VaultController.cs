@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Helpers;
 using Ganss.Xss;
@@ -10,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cervantes.Web.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class VaultController : ControllerBase
 {
     private IVaultManager vaultManager = null;
@@ -35,6 +37,7 @@ public class VaultController : ControllerBase
     
     [HttpGet]
     [Route("Project/{id}")]
+    [HasPermission(Permissions.VaultRead)]
     public IEnumerable<CORE.Entities.Vault> GetByProject(Guid id)
     {
         IEnumerable<CORE.Entities.Vault> model = vaultManager.GetAll().Where(x => x.ProjectId == id).ToArray();
@@ -53,6 +56,7 @@ public class VaultController : ControllerBase
     }
     
     [HttpPost]
+    [HasPermission(Permissions.VaultAdd)]
     public async Task<IActionResult> Add([FromBody] VaultCreateViewModel model)
     {
         try
@@ -97,6 +101,7 @@ public class VaultController : ControllerBase
     }
     
     [HttpPut]
+    [HasPermission(Permissions.VaultEdit)]
     public async Task<IActionResult> Edit([FromBody] VaultEditViewModel model)
     {
         try
@@ -137,6 +142,7 @@ public class VaultController : ControllerBase
     
     [HttpDelete]
     [Route("{vaultId}")]
+    [HasPermission(Permissions.VaultDelete)]
     public async Task<IActionResult> Delete(Guid vaultId)
     {
         try

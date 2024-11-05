@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Components.Pages.Vuln;
 using Cervantes.Web.Controllers;
@@ -40,8 +41,11 @@ public partial class WorkspaceVulns: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         var user = await _ProjectController.VerifyUser(project);
         if (user == false)
         {

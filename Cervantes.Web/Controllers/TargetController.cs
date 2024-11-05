@@ -1,7 +1,9 @@
 using System.Globalization;
 using System.Security.Claims;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
@@ -20,7 +22,7 @@ namespace Cervantes.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class TargetController : ControllerBase
 {
     private readonly ILogger<TargetController> _logger = null;
@@ -61,6 +63,7 @@ public class TargetController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(Permissions.TargetsRead)]
     public IEnumerable<CORE.Entities.Target> GetTargets()
     {
         try
@@ -78,6 +81,7 @@ public class TargetController : ControllerBase
 
     [HttpGet]
     [Route("Project/{id}")]
+    [HasPermission(Permissions.TargetsRead)]
     public IEnumerable<CORE.Entities.Target> GetByProjectId(Guid id)
     {
         try
@@ -96,6 +100,7 @@ public class TargetController : ControllerBase
     }
 
     [HttpPost]
+    [HasPermission(Permissions.TargetsAdd)]
     public async Task<IActionResult> Add([FromBody] TargetCreateViewModel model)
     {
         try
@@ -135,6 +140,7 @@ public class TargetController : ControllerBase
     }
 
     [HttpPut]
+    [HasPermission(Permissions.TargetsEdit)]
     public async Task<IActionResult> Edit([FromBody] TargetEditViewModel model)
     {
         try
@@ -191,6 +197,7 @@ public class TargetController : ControllerBase
 
     [HttpDelete]
     [Route("{targetId}")]
+    [HasPermission(Permissions.TargetsDelete)]
     public async Task<IActionResult> Delete(Guid targetId)
     {
         try
@@ -234,6 +241,7 @@ public class TargetController : ControllerBase
 
     [HttpPost]
     [Route("Import")]
+    [HasPermission(Permissions.TargetsImport)]
     public async Task<IActionResult> Import([FromBody] TargetImportViewModel model)
     {
         try
@@ -395,6 +403,7 @@ public class TargetController : ControllerBase
 
     [HttpGet]
     [Route("Services/{targetId}")]
+    [HasPermission(Permissions.TargetsServicesRead)]
     public IEnumerable<CORE.Entities.TargetServices> GetServices(Guid targetId)
     {
         try
@@ -414,6 +423,7 @@ public class TargetController : ControllerBase
 
     [HttpPost]
     [Route("Service")]
+    [HasPermission(Permissions.TargetsServicesAdd)]
     public async Task<IActionResult> AddService([FromBody] TargetServiceCreateViewModel model)
     {
         try
@@ -449,6 +459,7 @@ public class TargetController : ControllerBase
 
     [HttpPut]
     [Route("Service")]
+    [HasPermission(Permissions.TargetsServicesEdit)]
     public async Task<IActionResult> EditService([FromBody] TargetServiceEditViewModel model)
     {
         try
@@ -490,6 +501,7 @@ public class TargetController : ControllerBase
 
     [HttpDelete]
     [Route("Service/{serviceId}")]
+    [HasPermission(Permissions.TargetsServicesDelete)]
     public async Task<IActionResult> DeleteService(Guid serviceId)
     {
         try

@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Helpers;
 using Ganss.Xss;
@@ -12,7 +14,7 @@ namespace Cervantes.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class KnowledgeBaseController : Controller
 {
     private IKnowledgeBaseManager knowledgeBaseManager = null;
@@ -36,6 +38,7 @@ public class KnowledgeBaseController : Controller
     }
     [HttpGet]
     [Route("Page")]
+    [HasPermission(Permissions.KnowledgeBaseRead)]
     public IEnumerable<CORE.Entities.KnowledgeBase> GetPages()
     {
         IEnumerable<CORE.Entities.KnowledgeBase> model = knowledgeBaseManager.GetAll().
@@ -46,6 +49,7 @@ public class KnowledgeBaseController : Controller
     
      [HttpPost]
      [Route("Page")]
+     [HasPermission(Permissions.KnowledgeBaseAdd)]
     public async Task<IActionResult> AddPage([FromBody] KnowledgePageCreateViewModel model)
     {
         try{
@@ -83,6 +87,7 @@ public class KnowledgeBaseController : Controller
     
     [HttpPut]
     [Route("Page")]
+    [HasPermission(Permissions.KnowledgeBaseEdit)]
     public async Task<IActionResult> EditPage([FromBody] KnowledgePageEditViewModel model)
     {
         try
@@ -127,6 +132,7 @@ public class KnowledgeBaseController : Controller
 
     [HttpDelete]
     [Route("Page/{pageId}")]
+    [HasPermission(Permissions.KnowledgeBaseDelete)]
     public async Task<IActionResult> DeletePage(Guid pageId)
     {
         try
@@ -167,6 +173,7 @@ public class KnowledgeBaseController : Controller
 
     [HttpGet]
     [Route("Category")]
+    [HasPermission(Permissions.KnowledgeBaseCategoryRead)]
     public IEnumerable<CORE.Entities.KnowledgeBaseCategories> GetCategories()
     {
         try
@@ -185,6 +192,7 @@ public class KnowledgeBaseController : Controller
     
      [HttpPost]
      [Route("Category")]
+     [HasPermission(Permissions.KnowledgeBaseCategoryAdd)]
     public async Task<IActionResult> AddCategory([FromBody] KnowledgeCategoryCreateVIewModel model)
     {
         try{
@@ -218,6 +226,7 @@ public class KnowledgeBaseController : Controller
     }
     [HttpPut]
     [Route("Category")]
+    [HasPermission(Permissions.KnowledgeBaseCategoryEdit)]
     public async Task<IActionResult> EditCategory([FromBody] KnowledgeCategoryEditViewModel model)
     {
         try
@@ -268,6 +277,7 @@ public class KnowledgeBaseController : Controller
     
     [HttpDelete]
     [Route("Category/{categoryId}")]
+    [HasPermission(Permissions.KnowledgeBaseCategoryDelete)]
     public async Task<IActionResult> DeleteCategory(Guid categoryId)
     {
         try

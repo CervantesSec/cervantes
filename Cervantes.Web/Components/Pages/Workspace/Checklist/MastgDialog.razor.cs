@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModel.Mastg;
@@ -27,10 +28,11 @@ public partial class MastgDialog: ComponentBase
     
     MastgViewModel model = new MastgViewModel();
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
-
+    ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         var mastg = _checklistController.GetMASTGById(checklist.Id);
         model = new MastgViewModel();
         model.Id = checklist.Id;

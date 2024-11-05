@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
@@ -68,8 +69,11 @@ public partial class JiraDialog: ComponentBase
   
     private JiraCommentCreate jiraComment = new JiraCommentCreate();
     public CORE.Entities.Vuln vuln { get; set; } = new CORE.Entities.Vuln();
+    private ClaimsPrincipal userAth;
+
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         vuln = _vulnController.GetById(jira.VulnId);
         JiraComments = _jiraController.GetCommentsByVuln(vuln.Id).ToList();
         await base.OnInitializedAsync();

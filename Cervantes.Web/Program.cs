@@ -1,9 +1,14 @@
 using System.Configuration;
 using System.Security.Claims;
 using AngleSharp;
+using AuthPermissions;
+using AuthPermissions.AspNetCore;
+using AuthPermissions.AspNetCore.Services;
+using AuthPermissions.AspNetCore.StartupServices;
 using Blazored.LocalStorage;
 using Cervantes.Application;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.DAL;
 using Cervantes.IFR;
@@ -18,6 +23,7 @@ using Cervantes.IFR.Parsers.Nessus;
 using Cervantes.IFR.Parsers.Nmap;
 using Cervantes.IFR.Parsers.Pwndoc;
 using Cervantes.Server.Helpers;
+using Cervantes.Web.AuthPermissions;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +53,9 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Authentication;
+using RunMethodsSequentially;
+using IndividualAccountUserLookup = Cervantes.Web.AuthPermissions.IndividualAccountUserLookup;
+using SyncIndividualAccountUsers = Cervantes.Web.AuthPermissions.SyncIndividualAccountUsers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +98,12 @@ if (builder.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
         });
 }
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    //this will cause all the logged-in users to have their claims periodically updated
+    options.Events.OnValidatePrincipal = PeriodicCookieEvent.PeriodicRefreshUsersClaims;
+});
+
 builder.Services.AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
@@ -102,6 +117,22 @@ builder.Services.AddIdentityCore<ApplicationUser>().AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
+
+builder.Services.RegisterAuthPermissions<Permissions>(options =>
+    {
+        options.PathToFolderToLock = builder.Environment.WebRootPath;
+    })
+    .UsingEfCorePostgres(connectionString)
+    .IndividualAccountsAuthentication<ApplicationUser>()
+    .AddRolesPermissionsIfEmpty(AppAuthSetupData.RolesDefinition)
+    .AddAuthUsersIfEmpty(AppAuthSetupData.UsersWithRolesDefinition)
+    .RegisterAuthenticationProviderReader<SyncIndividualAccountUsers>()
+    .RegisterFindUserInfoService<IndividualAccountUserLookup>()
+    .SetupAspNetCoreAndDatabase(options =>
+    {
+        //Migrate individual account database
+        options.RegisterServiceToRunInJob<StartupServiceMigrateAnyDbContext<ApplicationDbContext>>();
+    });
 
 builder.Services.AddHangfire(config =>
     config.UsePostgreSqlStorage(c =>
@@ -232,6 +263,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cervantes API", Version = "v1" });
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

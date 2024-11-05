@@ -52,8 +52,10 @@ public partial class Tasks: ComponentBase
     [Inject] private TaskController _taskController { get; set; }
     [Inject] private UserController _userController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
+    ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         var user = await _projectController.VerifyUser(project);
         if (user == false)
         {

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.Export;
@@ -89,9 +90,11 @@ public partial class ClientDialog: ComponentBase
                     new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
                 }}
             };
+     
+     ClaimsPrincipal user;
     protected override async Task OnInitializedAsync()
     {
-        
+        user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         projects =  _projectController.GetByClientId(client.Id).ToList();
         vulns =  _VulnController.GetByClientId(client.Id).ToList();
 

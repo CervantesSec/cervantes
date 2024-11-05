@@ -1,7 +1,9 @@
 using System.Security.Claims;
 using System.Text;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModel.Mastg;
@@ -23,7 +25,7 @@ namespace Cervantes.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class ChecklistController : ControllerBase
 {
     private readonly ILogger<ChecklistController> _logger = null;
@@ -68,6 +70,7 @@ public class ChecklistController : ControllerBase
     
     [HttpGet]
     [Route("WSTG/Project/{projectId}")]
+    [HasPermission(Permissions.ChecklistsRead)]
     public IEnumerable<CORE.Entities.WSTG> GetWSTG(Guid projectId)
     {
         try
@@ -92,6 +95,7 @@ public class ChecklistController : ControllerBase
     
     [HttpGet]
     [Route("WSTG/{checklistId}")]
+    [HasPermission(Permissions.ChecklistsRead)]
     public CORE.Entities.WSTG GetWSTGById(Guid checklistId)
     {
         try
@@ -116,6 +120,7 @@ public class ChecklistController : ControllerBase
     
     [HttpGet]
     [Route("MASTG/Project/{projectId}")]
+    [HasPermission(Permissions.ChecklistsRead)]
     public IEnumerable<CORE.Entities.MASTG> GetMSTG(Guid projectId)
     {
         try
@@ -142,6 +147,7 @@ public class ChecklistController : ControllerBase
     }
     [HttpGet]
     [Route("MASTG/{checklistId}")]
+    [HasPermission(Permissions.ChecklistsRead)]
     public CORE.Entities.MASTG GetMASTGById(Guid checklistId)
     {
         try
@@ -170,6 +176,7 @@ public class ChecklistController : ControllerBase
     }
     
     [HttpPost]
+    [HasPermission(Permissions.ChecklistsAdd)]
     public async Task<IActionResult> Add([FromBody] ChecklistCreateViewModel model)
     {
         try
@@ -233,6 +240,7 @@ public class ChecklistController : ControllerBase
 
     [HttpPut]
     [Route("WSTG")]
+    [HasPermission(Permissions.ChecklistsEdit)]
     public async Task<IActionResult> EditWstg([FromBody] WSTGViewModel model)
     {
         try
@@ -481,6 +489,7 @@ public class ChecklistController : ControllerBase
     
     [HttpDelete]
     [Route("WSTG/{checklistId}")]
+    [HasPermission(Permissions.ChecklistsDelete)]
     public async Task<IActionResult> DeleteWstg(Guid checklistId)
     {
         try
@@ -515,6 +524,7 @@ public class ChecklistController : ControllerBase
     
     [HttpDelete]
     [Route("MASTG/{checklistId}")]
+    [HasPermission(Permissions.ChecklistsDelete)]
     public async Task<IActionResult> DeleteMastg(Guid checklistId)
     {
         try
@@ -550,6 +560,7 @@ public class ChecklistController : ControllerBase
     
     [HttpPut]
     [Route("MASTG/")]
+    [HasPermission(Permissions.ChecklistsEdit)]
     public async Task<IActionResult> EditMastg([FromBody] MastgViewModel model)
     {
         try
@@ -823,6 +834,7 @@ public class ChecklistController : ControllerBase
     
     [HttpPost]
     [Route("MASTG/Report")]
+    [HasPermission(Permissions.ReportsAdd)]
     public async Task<IActionResult> GenerateMastgReport(ReportChecklistCreateModel model)
     {
        try
@@ -989,6 +1001,7 @@ public class ChecklistController : ControllerBase
     
       [HttpPost]
       [Route("WSTG/GenerateReport")]
+      [HasPermission(Permissions.ReportsAdd)]
     public async Task<IActionResult> GenerateWstgReport([FromBody] ReportChecklistCreateModel model)
     {
         try

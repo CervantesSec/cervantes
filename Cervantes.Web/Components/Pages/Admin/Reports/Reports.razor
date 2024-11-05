@@ -8,114 +8,116 @@
 @inject IDialogService Dialog
 @inject IStringLocalizer<Resource> localizer
 @using Blazor.Flags
+@using Cervantes.CORE
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using MudBlazor.Extensions.Core
 @inject IMudExDialogService DialogEx
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ReportTemplatesRead)]
 
-<AuthorizeView Roles="Admin,SuperUser">
-    <Authorized>
-        <PageTitle>@localizer["reportTemplates"] | Cervantes</PageTitle>
-        <SectionContent SectionName="appbar">
-            <MudText Typo="Typo.h5">
-                <MudIcon Size="Size.Small" Icon="@Icons.Custom.FileFormats.FilePdf"></MudIcon>
+<PageTitle>@localizer["reportTemplates"] | Cervantes</PageTitle>
+<SectionContent SectionName="appbar">
+    <MudText Typo="Typo.h5">
+        <MudIcon Size="Size.Small" Icon="@Icons.Custom.FileFormats.FilePdf"></MudIcon>
 
-                @localizer["reportTemplates"]
+        @localizer["reportTemplates"]
 
-            </MudText>
-        </SectionContent>
-        <SectionContent SectionName="top-bar">
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                
-                <MudButton Href="/reports/templates"
+    </MudText>
+</SectionContent>
+<SectionContent SectionName="top-bar">
+    <MudStack Row="true" AlignItems="AlignItems.Center">
 
-                           StartIcon="@Icons.Custom.FileFormats.FilePdf"
-                           Color="Color.Primary">
-                    @localizer["templates"]
-                </MudButton>
-                <MudButton Href="/reports/components"
+        <MudButton Href="/reports/templates"
 
-                           StartIcon="@Icons.Material.Filled.SpaceDashboard"
-                           Color="Color.Transparent">
-                    @localizer["components"]
-                </MudButton>
-                <MudButton Href="/reports/import"
+                   StartIcon="@Icons.Custom.FileFormats.FilePdf"
+                   Color="Color.Primary">
+            @localizer["templates"]
+        </MudButton>
+        <MudButton Href="/reports/components"
 
-                           StartIcon="@Icons.Material.Filled.UploadFile"
-                           Color="Color.Transparent">
-                    @localizer["import"]
-                </MudButton>
-            </MudStack>
-        </SectionContent>
+                   StartIcon="@Icons.Material.Filled.SpaceDashboard"
+                   Color="Color.Transparent">
+            @localizer["components"]
+        </MudButton>
+        <MudButton Href="/reports/import"
 
-        <SectionContent SectionName="breadcrumbs">
-            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-        </SectionContent>
-        <MudGrid>
-            <MudItem xs="12" sm="12" md="12">
+                   StartIcon="@Icons.Material.Filled.UploadFile"
+                   Color="Color.Transparent">
+            @localizer["import"]
+        </MudButton>
+    </MudStack>
+</SectionContent>
 
-                <MudDataGrid T="ReportTemplate" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
-                             Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
-                    <ToolBarContent>
-                        <MudStack Row="true">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
-                           
-                            
-                            @if (seleReports.Count() != 0)
-                            {
-                                <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                                    <MudButton>@localizer["actions"]</MudButton>
-                                    <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                        <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
-                                    </MudMenu>
-                                </MudButtonGroup>
-                            }
-                            
-                        </MudStack>
-                        <MudSpacer/>
-                        <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
-                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
-                        </MudTextField>
-                    </ToolBarContent>
-                    <Columns>
-                        <SelectColumn T="ReportTemplate"/>
-                        <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
-                                                <PropertyColumn Property="x => x.ReportType" Title="@localizer["type"]"/>
+<SectionContent SectionName="breadcrumbs">
+    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+</SectionContent>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
 
-                        <PropertyColumn Property="x => x.Language" Title="@localizer["language"]">
-                            <CellTemplate Context="cellContext">
-                                @switch (@cellContext.Item.Language)
-                                {
-                                    case Language.English:
-                                        <CountryFlag Country="Country.US" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-                                        break;
-                                    case Language.Español:
-                                        <CountryFlag Country="Country.ES" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+        <MudDataGrid T="ReportTemplate" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+            <ToolBarContent>
+                <MudStack Row="true">
+                    
+                    @if (userAth.HasPermission(Permissions.ReportTemplatesAdd))
+                    {
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                    }
 
-                                        break;
-                                    case Language.Português:
-                                        <MudStack Row="true" Spacing="0">
-                                            <CountryFlag Country="Country.PT" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-                                            <CountryFlag Country="Country.BR" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-                                        </MudStack>
-                                        break;
-                                        
-                                }
+                    @if (userAth.HasPermission(Permissions.ReportTemplatesDelete))
+                    {
+                        @if (seleReports.Count() != 0)
+                        {
+                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                <MudButton>@localizer["actions"]</MudButton>
+                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                </MudMenu>
+                            </MudButtonGroup>
+                        }
+                    }
+                </MudStack>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                </MudTextField>
+            </ToolBarContent>
+            <Columns>
+                <SelectColumn T="ReportTemplate"/>
+                <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                <PropertyColumn Property="x => x.ReportType" Title="@localizer["type"]"/>
 
-                            </CellTemplate>
-                        </PropertyColumn>
-                        @*
+                <PropertyColumn Property="x => x.Language" Title="@localizer["language"]">
+                    <CellTemplate Context="cellContext">
+                        @switch (@cellContext.Item.Language)
+                        {
+                            case Language.English:
+                                <CountryFlag Country="Country.US" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                                break;
+                            case Language.Español:
+                                <CountryFlag Country="Country.ES" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+
+                                break;
+                            case Language.Português:
+                                <MudStack Row="true" Spacing="0">
+                                    <CountryFlag Country="Country.PT" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                                    <CountryFlag Country="Country.BR" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
+                                </MudStack>
+                                break;
+                        }
+
+                    </CellTemplate>
+                </PropertyColumn>
+                @*
                         <PropertyColumn Property="x => x.Description" Title="@localizer["description"]"/>
                         *@
-                        <PropertyColumn Property="x => x.CreatedDate" Title="@localizer["createdDate"]"/>
-                    </Columns>
-                    <PagerContent>
-                        <MudDataGridPager T="ReportTemplate"/>
-                    </PagerContent>
-                </MudDataGrid>
-                
-            </MudItem>
-        </MudGrid>
-    </Authorized>
-    <NotAuthorized>
-        <Cervantes.Web.Components.Shared.NoRolePermissions/>
-    </NotAuthorized>
-</AuthorizeView>
+                <PropertyColumn Property="x => x.CreatedDate" Title="@localizer["createdDate"]"/>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="ReportTemplate"/>
+            </PagerContent>
+        </MudDataGrid>
+
+    </MudItem>
+</MudGrid>

@@ -7,6 +7,8 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
@@ -33,9 +35,29 @@ public partial class VulnsTemplates : ComponentBase
 private ApplicationUser user;
 private bool jiraEnabled = false;
 [Inject] private IJIraService JiraService { get; set; }
+DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+{
+    MaximizeButton = true,
+    CloseButton = true,
+    FullHeight = true,
+    CloseOnEscapeKey = true,
+    MaxWidth = MaxWidth.Medium,
+    MaxHeight = MaxHeight.False,
+    FullWidth = true,
+    DragMode = MudDialogDragMode.Simple,
+    Animations = new[] { AnimationType.SlideIn },
+    Position = DialogPosition.CenterRight,
+    DisableSizeMarginY = true,
+    DisablePositionMargin = true,
+    BackdropClick = false,
+    Resizeable = true,
+};
+private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(localizer["home"], href: "/",icon: Icons.Material.Filled.Home),
@@ -70,7 +92,7 @@ private async Task Update()
 }
 
 
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
 
         var dialog = DialogService.Show<CreateVulnDialog>("Custom Options Dialog", options);

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
@@ -50,8 +51,10 @@ public partial class ReportComponents: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),

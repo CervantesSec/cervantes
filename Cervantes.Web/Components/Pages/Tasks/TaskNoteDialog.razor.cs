@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
@@ -72,8 +73,10 @@ public partial class TaskNoteDialog: ComponentBase
                 }}
             };
 
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         if (note.Task.ProjectId != null)
         {
             inProject = await _ProjectController.VerifyUser(note.Task.ProjectId.Value);

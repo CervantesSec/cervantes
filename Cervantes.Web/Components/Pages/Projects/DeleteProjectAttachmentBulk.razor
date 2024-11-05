@@ -1,11 +1,14 @@
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.ProjectAttachmentsDelete)]
 
 
 

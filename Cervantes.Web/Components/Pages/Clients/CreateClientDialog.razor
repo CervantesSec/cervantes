@@ -1,18 +1,20 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.ClientsAdd)]
 
 <style>
 	.tox-tinymce-aux {
         z-index: 999999!important;
     }
 </style>
-		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
 <MudDialog DisableSidePadding="true">
 	<TitleContent>
@@ -52,9 +54,9 @@
 				<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
 					<ActivatorContent >
 						<MudButton 
-						           Variant="Variant.Filled"
-						           Color="Color.Primary"
-						           StartIcon="@Icons.Material.Filled.CloudUpload" >
+							Variant="Variant.Filled"
+							Color="Color.Primary"
+							StartIcon="@Icons.Material.Filled.CloudUpload" >
 							@localizer["uploadFile"]
 						</MudButton>
 					</ActivatorContent>
@@ -73,11 +75,13 @@
 				</MudFileUpload>
 			</MudStack>
 		</MudForm>
+		<MudStack Row="true" Justify="Justify.FlexEnd">
+			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		</MudStack>
 	</DialogContent>
 	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		
 	</DialogActions>
 </MudDialog>
-		</MudContainer>
 

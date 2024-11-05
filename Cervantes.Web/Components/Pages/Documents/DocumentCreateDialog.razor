@@ -1,11 +1,14 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.DocumentsAdd)]
 
 <style>
 	.tox-tinymce-aux {
@@ -51,10 +54,13 @@
 				</MudFileUpload>
 			</MudStack>
 		</MudForm>
+		<MudStack Row="true" Justify="Justify.FlexEnd">
+			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		</MudStack>
 	</DialogContent>
 	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		
 	</DialogActions>
 </MudDialog>
 

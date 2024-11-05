@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
@@ -16,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Cervantes.Web.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class TaskController: ControllerBase
 {
 
@@ -59,6 +60,7 @@ public class TaskController: ControllerBase
     }
     
     [HttpGet]
+    [HasPermission(Permissions.TasksRead)]
     public IEnumerable<CORE.Entities.Task> Get()
     {
         try
@@ -78,6 +80,7 @@ public class TaskController: ControllerBase
     
     [HttpGet]
     [Route("Client/{id}")]
+    [HasPermission(Permissions.TasksRead)]
     public IEnumerable<CORE.Entities.Task> GetByClientId(Guid id)
     {
         try
@@ -106,6 +109,7 @@ public class TaskController: ControllerBase
     
     [HttpGet]
     [Route("Project/{id}")]
+    [HasPermission(Permissions.TasksRead)]
     public IEnumerable<CORE.Entities.Task> GetByProject(Guid id)
     {
         try
@@ -124,6 +128,7 @@ public class TaskController: ControllerBase
     
     [HttpGet]
     [Route("Project/{projectId}/User")]
+    [HasPermission(Permissions.TasksRead)]
     public IEnumerable<CORE.Entities.Task> GetByUser(Guid projectId)
     {
         try
@@ -143,6 +148,7 @@ public class TaskController: ControllerBase
    
     
     [HttpPost]
+    [HasPermission(Permissions.TasksAdd)]
     public async Task<IActionResult> Add([FromBody] TaskCreateViewModel model)
     {
         try
@@ -216,6 +222,7 @@ public class TaskController: ControllerBase
     }
     
     [HttpPut]
+    [HasPermission(Permissions.TasksEdit)]
     public async Task<IActionResult> Edit([FromBody] TaskEditViewModel task)
     {
         try
@@ -281,6 +288,7 @@ public class TaskController: ControllerBase
     
     [HttpDelete]
     [Route("{taskId}")]
+    [HasPermission(Permissions.TasksDelete)]
     public async Task<IActionResult> Delete(Guid taskId)
     {
         try
@@ -328,6 +336,7 @@ public class TaskController: ControllerBase
 
     [HttpPost]
     [Route("Update")]
+    [HasPermission(Permissions.TasksEdit)]
     public async Task<IActionResult> UpdateStatus([FromBody] TaskUpdateViewModel task)
     {
         try
@@ -420,6 +429,7 @@ public class TaskController: ControllerBase
 
     [HttpGet]
     [Route("Notes/{id}")]
+    [HasPermission(Permissions.TaskNotesRead)]
     public IEnumerable<CORE.Entities.TaskNote> GetNotes(Guid id)
     {
         try
@@ -437,6 +447,7 @@ public class TaskController: ControllerBase
     
     [HttpGet]
     [Route("Targets/{id}")]
+    [HasPermission(Permissions.TaskTargetsRead)]
     public IEnumerable<CORE.Entities.TaskTargets> GetTargets(Guid id)
     {
         try
@@ -455,6 +466,7 @@ public class TaskController: ControllerBase
     
     [HttpGet]
     [Route("Attachments/{id}")]
+    [HasPermission(Permissions.TaskAttachmentsRead)]
     public IEnumerable<CORE.Entities.TaskAttachment> GetAttachments(Guid id)
     {
         try
@@ -473,6 +485,7 @@ public class TaskController: ControllerBase
 
     [HttpPost]
     [Route("Target")]
+    [HasPermission(Permissions.TaskTargetsAdd)]
     public async Task<IActionResult> AddTarget([FromBody] TaskTargetViewModel model)
     {
         try
@@ -526,6 +539,7 @@ public class TaskController: ControllerBase
    
     [HttpDelete]
     [Route("Target/{id}")]
+    [HasPermission(Permissions.TaskTargetsDelete)]
     public async Task<IActionResult> DeleteTarget(Guid id)
     {
         try
@@ -567,6 +581,7 @@ public class TaskController: ControllerBase
     
     [HttpPost]
     [Route("Notes")]
+    [HasPermission(Permissions.TaskNotesAdd)]
     public async Task<IActionResult> AddNote([FromBody] TaskNoteViewModel model)
     {
         try
@@ -607,6 +622,7 @@ public class TaskController: ControllerBase
     
     [HttpPut]
     [Route("Notes")]
+    [HasPermission(Permissions.TaskNotesEdit)]
     public async Task<IActionResult> EditNote([FromBody] TaskNoteEditViewModel model)
     {
         try
@@ -647,6 +663,7 @@ public class TaskController: ControllerBase
     
     [HttpDelete]
     [Route("Notes/{id}")]
+    [HasPermission(Permissions.TaskNotesDelete)]
     public async Task<IActionResult> DeleteNote(Guid id)
     {
         try
@@ -689,6 +706,7 @@ public class TaskController: ControllerBase
 
     [HttpPost]
     [Route("Attachments")]
+    [HasPermission(Permissions.TaskAttachmentsAdd)]
     public async Task<IActionResult> AddAttachment([FromBody] TaskAttachmentViewModel model)
     {
         try
@@ -775,6 +793,7 @@ public class TaskController: ControllerBase
     
     [HttpDelete]
     [Route("Attachments/{id}")]
+    [HasPermission(Permissions.TaskAttachmentsDelete)]
     public async Task<IActionResult> DeleteAttachment(Guid id)
     {
         try

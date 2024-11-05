@@ -1,12 +1,14 @@
+@using Cervantes.CORE
 @using Variant = MudBlazor.Variant
 @using Microsoft.AspNetCore.Components
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
-
+@attribute [HasPermission(Permissions.VaultAdd)]
 
 <style>
 	.tox-tinymce-aux {
@@ -29,9 +31,9 @@
 			<MudStack AlignItems="AlignItems.Stretch">
 				
 				<MudTextField  @bind-Value="model.Name"
-				              For="@(() => model.Name)"
-				              Immediate="true"
-				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Castle"/>
+				               For="@(() => model.Name)"
+				               Immediate="true"
+				               Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Castle"/>
 
 				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 				
@@ -44,17 +46,20 @@
 
 				<MudTextField @bind-Value="model.Value"
 				              For="@(() => model.Value)"
-                              Immediate="true"
+				              Immediate="true"
 				              Label="@localizer["value"]" Adornment="Adornment.Start"  InputType="@PasswordInput"
 				              AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ValueClick" AdornmentAriaLabel="Show Password"/>
 
 
 			</MudStack>
 		</MudForm>
+		<MudStack Row="true" Justify="Justify.FlexEnd">
+			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		</MudStack>
 	</DialogContent>
 	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		
 	</DialogActions>
 </MudDialog>
 

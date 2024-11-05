@@ -1,9 +1,11 @@
 @page "/calendar"
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @using Color = MudBlazor.Color
 @inject IStringLocalizer<Resource> localizer
-<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+@attribute [HasPermission(Permissions.CalendarRead)]
 
     <PageTitle>@localizer["calendar"] | Cervantes</PageTitle>
     <SectionContent SectionName="appbar">
@@ -49,4 +51,3 @@
             </MudItem>
         </MudGrid>
 
-</AuthorizeView>

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
@@ -16,8 +17,10 @@ public partial class KnowledgeCategoryDialog: ComponentBase
     private List<KnowledgeBaseCategories> Categories = new List<KnowledgeBaseCategories>();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         await base.OnInitializedAsync();
         await Update();
         StateHasChanged();

@@ -1,13 +1,18 @@
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
 @using Variant = MudBlazor.Variant
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ReportComponentsRead)]
 
 <style>
 	.tox-tinymce-aux {
@@ -24,11 +29,19 @@
                 <MudText Typo="Typo.h4">
                     <MudIcon Icon="@Icons.Material.Filled.SpaceDashboard"/> @localizer["component"]
                 </MudText>
-                @if (aiEnabled)
+                
+                @if (userAth.HasPermission(Permissions.AIServiceUsage))
                 {
-                    <MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
+                    @if (aiEnabled)
+                    {
+                        <MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
+                    }
                 }
-                <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(component, mediumWidth))">@localizer["delete"]</MudChip>
+                
+                @if (userAth.HasPermission(Permissions.ReportComponentsDelete))
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(component, mediumWidth))">@localizer["delete"]</MudChip>
+                }
 
             </MudStack>
         </TitleContent>
@@ -83,9 +96,15 @@
 
                 </MudStack>
             </MudForm>
+            <MudStack Row="true" Justify="Justify.FlexEnd">
+                <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+                @if (userAth.HasPermission(Permissions.ReportComponentsEdit))
+                {
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+                }
+            </MudStack>
         </DialogContent>
         <DialogActions>
-            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+           
         </DialogActions>
     </MudDialog>

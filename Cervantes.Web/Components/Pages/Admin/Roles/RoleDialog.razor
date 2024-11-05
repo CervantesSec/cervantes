@@ -1,0 +1,139 @@
+@rendermode InteractiveServer
+@using Cervantes.CORE
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+@attribute [HasPermission(Permissions.RolesRead)]
+@inject AuthenticationStateProvider authenticationStateProvider
+
+<style>
+	.tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+
+<MudDialog Class="mud-ex-dialog-initial">
+	<TitleContent>
+		            <MudStack Row="true" Spacing="1">
+
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Badge"/> @role.Name</MudText>
+
+		@if (userAth.HasPermission(Permissions.RolesEdit))
+		{
+			@if (editMode)
+			{
+				<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+			}
+			else
+			{
+				<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+			}
+		}
+		
+		@if (userAth.HasPermission(Permissions.RolesDelete))
+		{
+
+			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(role, medium))">@localizer["delete"]</MudChip>
+		}
+		
+		            </MudStack>
+	</TitleContent>
+	<DialogContent>
+		@if (editMode)
+        	{
+			        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll;">
+				        <MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+					        <MudStack AlignItems="AlignItems.Stretch">
+
+
+						        <MudTextField Placeholder="John Doe" @bind-Value="model.Name"
+						                      For="@(() => model.Name)"
+						                      Immediate="true"
+						                      Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Badge"/>
+
+
+						        <MudTextField Placeholder="john.doe@foobar.com" @bind-Value="model.Description"
+						                      For="@(() => model.Description)"
+						                      Immediate="true"
+						                      Label="@localizer["description"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Description" InputType="InputType.Email"/>
+
+						        <MudDataGrid T="PermissionsViewModel" Items="@_permissionsViewModels" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+						                     Hideable="true" Hover="true" Groupable="true" GroupExpanded="false" SelectedItems="selectedItems" SelectedItemsChanged="@SelectedItemsChanged" MultiSelection="true" Virtualize="true" DragDropColumnReordering="true" RowsPerPage="50">
+							        <ToolBarContent>
+								        <MudText Typo="Typo.h5">@localizer["permissions"]</MudText>
+								        <MudSpacer/>
+								        <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+								                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+								        </MudTextField>
+							        </ToolBarContent>
+							        <Columns>
+								        <SelectColumn T="PermissionsViewModel"/>
+
+								        <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+								        <PropertyColumn Property="x => x.ShortName" Title="@localizer["description"]"/>
+								        <PropertyColumn Property="x => x.Description" Title="@localizer["permissions"]"/>
+								        <PropertyColumn Property="x => x.Group" Title="Category" Grouping>
+									        <GroupTemplate>
+										        <span style="font-weight:bold">@context.Grouping.Key</span>
+									        </GroupTemplate>
+								        </PropertyColumn>
+							        </Columns>
+							        <PagerContent>
+								        <MudDataGridPager T="PermissionsViewModel"/>
+							        </PagerContent>
+						        </MudDataGrid>
+						        <MudStack Row="true" Justify="Justify.FlexEnd">
+							        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+							        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+						        </MudStack>
+					        </MudStack>
+				        </MudForm>
+				        
+			        </MudContainer>
+		        
+	        }
+		else
+		{
+
+			<MudGrid>
+				<MudItem xs="12" sm="4" md="3">
+					<MudCard Elevation="25">
+						<MudCardContent>
+							
+							<MudList  T="string" Dense="true">
+								<MudListItem T="string" Text="@role.Name" Icon="@Icons.Material.Filled.Badge"/>
+								<MudListItem T="string" Text="@role.PermmissioNumber.ToString()" Icon="@Icons.Material.Filled.Person2"/>
+							</MudList>
+						</MudCardContent>
+					</MudCard>
+				</MudItem>
+				<MudItem xs="12" sm="8" md="9">
+					<MudCard Elevation="25">
+						<MudCardHeader>
+							<CardHeaderContent>
+								<MudText>@localizer["description"]</MudText>
+							</CardHeaderContent>
+						</MudCardHeader>
+						<MudCardContent>
+							@((MarkupString)role.Description)
+						</MudCardContent>
+					</MudCard>
+				</MudItem>
+			</MudGrid>
+		}
+	</DialogContent>
+	<DialogActions>
+		
+	</DialogActions>
+</MudDialog>

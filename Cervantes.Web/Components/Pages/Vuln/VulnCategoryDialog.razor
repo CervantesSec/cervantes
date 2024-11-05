@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,11 +7,14 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
-@attribute [StreamRendering]
+@attribute [HasPermission(Permissions.VulnCategoriesRead)]
+@inject AuthenticationStateProvider authenticationStateProvider
 
 
 <style>
@@ -18,7 +22,6 @@
         z-index: 999999!important;
     }
 </style>
-		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
 <MudDialog DisableSidePadding="true">
 	<TitleContent>
@@ -27,6 +30,8 @@
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Category"/> @category.Name</MudText>
 		<MudSpacer/>
 		
+		@if (userAth.HasPermission(Permissions.VulnCategoriesEdit))
+		{
 			@if (editMode)
 			{
 				<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
@@ -36,10 +41,14 @@
 				<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
 
 			}
+		}
+		
+		@if (userAth.HasPermission(Permissions.VulnCategoriesDelete))
+		{
 			<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteVulnCategoryDialog(@category, medium))"></MudIconButton>
+		}
 
-		
-		
+
 		            </MudItem>
 	</TitleContent>
 	<DialogContent>
@@ -99,11 +108,13 @@
 	</DialogContent>
 	<DialogActions>
 		<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if (editMode)
+		@if (userAth.HasPermission(Permissions.VulnCategoriesEdit))
 		{
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-
+			@if (editMode)
+			{
+				<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+			}
 		}
+		
 	</DialogActions>
 </MudDialog>
-		</MudContainer>

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Components.Pages.Tasks;
@@ -73,9 +74,10 @@ public partial class DocumentDialog: ComponentBase
             };
     [CascadingParameter] bool _isDarkMode { get; set; }
     [Parameter] public CORE.Entities.Document document { get; set; } = new CORE.Entities.Document();
-
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         await base.OnInitializedAsync();
     }
     

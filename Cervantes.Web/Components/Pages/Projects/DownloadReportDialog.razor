@@ -1,10 +1,13 @@
+@using Cervantes.CORE
 @using Variant = MudBlazor.Variant
 @using Microsoft.AspNetCore.Components
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.ReportsDownload)]
 
 
 <style>

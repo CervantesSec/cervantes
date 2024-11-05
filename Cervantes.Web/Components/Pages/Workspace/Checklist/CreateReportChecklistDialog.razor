@@ -1,10 +1,13 @@
+@using Cervantes.CORE
 @using Variant = MudBlazor.Variant
 @using Microsoft.AspNetCore.Components
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.ReportsAdd)]
 
 
 <style>
@@ -15,7 +18,7 @@
          z-index: 9999 !important;
     }
 </style>
-<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+
 <MudDialog DisableSidePadding="true">
 	<TitleContent>
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Custom.FileFormats.FilePdf" /> @localizer["createReport"]</MudText>
@@ -63,4 +66,3 @@
 	</DialogActions>
 </MudDialog>
 
-</MudContainer>

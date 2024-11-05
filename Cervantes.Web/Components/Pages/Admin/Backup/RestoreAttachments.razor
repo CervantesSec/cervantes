@@ -1,13 +1,14 @@
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
 @using Variant = MudBlazor.Variant
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
-
-<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+@attribute [HasPermission(Permissions.BackupRestore)]
 
     <MudDialog DisableSidePadding="true">
         <TitleContent>
@@ -47,4 +48,3 @@
             <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Upload" Color="@Color.Primary" OnClick="Submit">@localizer["restore"]</MudButton>
         </DialogActions>
     </MudDialog>
-</MudContainer>

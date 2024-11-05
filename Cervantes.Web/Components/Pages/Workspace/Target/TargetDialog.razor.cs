@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
@@ -78,9 +79,10 @@ public partial class TargetDialog: ComponentBase
                 }}
             };
     private bool inProject = false;
-
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         Services =  _TargetController.GetServices(target.Id).ToList();
         if (target.ProjectId != Guid.Empty || target.ProjectId != null)
         {

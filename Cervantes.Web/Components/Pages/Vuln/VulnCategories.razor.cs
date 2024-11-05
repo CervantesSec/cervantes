@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -12,9 +13,11 @@ public partial class VulnCategories : ComponentBase
     private string searchString = "";
     [Inject] private VulnController VulnController { get; set; }
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
-
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(localizer["home"], href: "/",icon: Icons.Material.Filled.Home),

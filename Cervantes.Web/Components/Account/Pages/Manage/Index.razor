@@ -29,25 +29,26 @@
 
 
 <PageTitle>@localizer["profile"] | Cervantes</PageTitle>
+<SectionContent SectionName="appbar">
+    <MudText Typo="Typo.h5">
+        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Person"></MudIcon>
+
+        @localizer["profile"]
+
+    </MudText>
+</SectionContent>
+<SectionContent SectionName="top-bar">
+    <MudStack Row="true"  AlignItems="AlignItems.Center">
+        
+    </MudStack>
+</SectionContent>
+
+<SectionContent SectionName="breadcrumbs">
+    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+</SectionContent>
+
 
 <MudGrid>
-<MudItem xs="12" sm="12" md="12" Class="mt-5">
-    <MudStack Row="true">
-
-        <MudItem xs="12" sm="4" md="4">
-            <MudText Typo="Typo.h4">
-                <MudIcon Icon="@Icons.Material.Filled.Person"/> @localizer["profile"]
-            </MudText>
-
-        </MudItem>
-        <MudItem xs="12" sm="8" md="8">
-            <div class="d-flex justify-end">
-                <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-            </div>
-        </MudItem>
-    </MudStack>
-
-</MudItem>
 <MudItem xs="12" sm="12" md="12">
 <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
 <MudTabPanel Text="@localizer["profile"]" Icon="@Icons.Material.Filled.Person">

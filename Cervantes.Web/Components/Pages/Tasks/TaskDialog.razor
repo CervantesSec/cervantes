@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,11 +7,14 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
-@attribute [StreamRendering]
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.TasksRead)]
 
 
 <style>
@@ -26,17 +30,21 @@
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Task"/> @task.Name</MudText>
 		@if (inProject || task.ProjectId == null)
 		{
-			@if (editMode)
+			@if(userAth.HasPermission(Permissions.TasksEdit))
 			{
-				<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+				@if (editMode)
+				{
+					<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+				}
+				else
+				{
+					<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+				}
 			}
-			else
+			@if (userAth.HasPermission(Permissions.TasksDelete))
 			{
-				<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
-
-
+				<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteTaskDialog(task, medium))">@localizer["delete"]</MudChip>
 			}
-			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteTaskDialog(task, medium))">@localizer["delete"]</MudChip>
 
 		}
 		
@@ -50,58 +58,68 @@
 
 				        <MudForm Model="@model" @ref="@form" Validation="@(taskValidator.ValidateValue)" ValidationDelay="0" method="dialog">
                         
-                        			<MudStack AlignItems="AlignItems.Stretch">
+					        <MudStack AlignItems="AlignItems.Stretch">
                         				
-                        				<MudTextField  @bind-Value="model.Name"
-                        				              For="@(() => model.Name)"
-                        				              Immediate="true"
-                        				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Folder"/>
+						        <MudTextField  @bind-Value="model.Name"
+						                       For="@(() => model.Name)"
+						                       Immediate="true"
+						                       Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Folder"/>
                         
-                        				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="task.Description" data-mce-placeholder="Description"/>
-				                        <MudSelect @bind-Value="@SelectedProject" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-					                        <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
-					                        @foreach (var project in Projects)
-					                        {
-						                        <MudSelectItem Value="@project.Id">@project.Name</MudSelectItem>
-					                        }
-				                        </MudSelect>
+						        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="task.Description" data-mce-placeholder="Description"/>
+						        <MudSelect @bind-Value="@SelectedProject" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							        <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
+							        @foreach (var project in Projects)
+							        {
+								        <MudSelectItem Value="@project.Id">@project.Name</MudSelectItem>
+							        }
+						        </MudSelect>
 				                        
-                        				<MudSelect @bind-Value="model.CreatedUserId" For="@(() => model.CreatedUserId)" Label="@localizer["createdBy"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                        					@foreach (var user in Users)
-                        					{
-                        						<MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
-                        					}
-                        				</MudSelect>
+						        <MudSelect @bind-Value="model.CreatedUserId" For="@(() => model.CreatedUserId)" Label="@localizer["createdBy"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							        @foreach (var user in Users)
+							        {
+								        <MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
+							        }
+						        </MudSelect>
 
-				                        <MudSelect @bind-Value="model.AsignedUserId" For="@(() => model.AsignedUserId)" Label="@localizer["assignedTo"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-					                        <MudSelectItem Value="string.Empty">@localizer["selectUser"]</MudSelectItem>
-					                        @foreach (var user in Users)
-					                        {
-					                        <MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
-					                        }
-				                        </MudSelect>
+						        <MudSelect @bind-Value="model.AsignedUserId" For="@(() => model.AsignedUserId)" Label="@localizer["assignedTo"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							        <MudSelectItem Value="string.Empty">@localizer["selectUser"]</MudSelectItem>
+							        @foreach (var user in Users)
+							        {
+								        <MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
+							        }
+						        </MudSelect>
                         				
-                        				<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["startDate"]" @bind-date="dateStart" DisableToolbar="true" />
-                        				<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["endDate"]" @bind-date="dateEnd"  DisableToolbar="true" />
+						        <MudDatePicker Adornment="Adornment.Start"  Label="@localizer["startDate"]" @bind-date="dateStart" DisableToolbar="true" />
+						        <MudDatePicker Adornment="Adornment.Start"  Label="@localizer["endDate"]" @bind-date="dateEnd"  DisableToolbar="true" />
                         
-                        				@*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" @bind-Value="task.TargetId" @bind-SelectedValues="task.SelectedTargets" SelectAll="true" For="@(() => task.TargetId)" Label="@localizer["target"]" AdornmentIcon="@Icons.Material.Filled.Adjust" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed" MultiSelection="true">
+						        @*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" @bind-Value="task.TargetId" @bind-SelectedValues="task.SelectedTargets" SelectAll="true" For="@(() => task.TargetId)" Label="@localizer["target"]" AdornmentIcon="@Icons.Material.Filled.Adjust" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed" MultiSelection="true">
                         					@foreach (var tar in task.Targets)
                         					{
                         						<MudSelectItem Value="@tar.Id">@tar.Name</MudSelectItem>
                         					}
                         				</MudSelect>*@
                         				
-                        				<MudSelect  @bind-Value="model.Status" For="@(() => model.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                        					@foreach (TaskStatus item in Enum.GetValues(typeof(TaskStatus)))
-                        					{
-                        						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
-                        					}
-                        				</MudSelect>
+						        <MudSelect  @bind-Value="model.Status" For="@(() => model.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							        @foreach (TaskStatus item in Enum.GetValues(typeof(TaskStatus)))
+							        {
+								        <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+							        }
+						        </MudSelect>
                         
                         
                         
-                        			</MudStack>
-                        		</MudForm>
+					        </MudStack>
+				        </MudForm>
+				        <MudStack Row="true" Justify="Justify.FlexEnd">
+					        <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+					        @if (userAth.HasPermission(Permissions.TasksEdit))
+					        {
+					        @if (editMode)
+					        {
+					        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+					        }
+					        }
+				        </MudStack>
 			        </MudContainer>
 		        
 	        }
@@ -140,196 +158,222 @@
 					</MudGrid>
 					
 				</MudTabPanel>
-				@if (task.ProjectId != null)
+				@if (userAth.HasPermission(Permissions.TaskAttachmentsRead))
 				{
-					<MudTabPanel Text="@localizer["targets"]" Icon="@Icons.Material.Filled.Adjust" BadgeData="@Targets.Count()" BadgeColor="Color.Primary">
-						
-						<MudDataGrid T="TaskTargets" Items="@Targets" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterTarget"
-						             Hideable="true" Hover="true" RowClick="@RowClickedTarget" MultiSelection="true" SelectedItemsChanged="@SelectedTargetsChanged" Virtualize="true" DragDropColumnReordering="true">
+					@if (task.ProjectId != null)
+					{
+						<MudTabPanel Text="@localizer["targets"]" Icon="@Icons.Material.Filled.Adjust" BadgeData="@Targets.Count()" BadgeColor="Color.Primary">
+
+							<MudDataGrid T="TaskTargets" Items="@Targets" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterTarget"
+							             Hideable="true" Hover="true" RowClick="@RowClickedTarget" MultiSelection="true" SelectedItemsChanged="@SelectedTargetsChanged" Virtualize="true" DragDropColumnReordering="true">
+								<ToolBarContent>
+									<MudStack Row="true">
+										@if (inProject)
+										{
+											@if (userAth.HasPermission(Permissions.TaskTargetsAdd))
+											{
+												<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="Color.Primary" OnClick="@((e) => OpenAddTarget(@task, maxWidth))">@localizer["addTarget"]</MudButton>
+											}
+											@if (userAth.HasPermission(Permissions.TaskTargetsDelete))
+											{
+												@if (seleTargets.Count() != 0)
+												{
+													<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+														<MudButton>@localizer["actions"]</MudButton>
+														<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+															<MudMenuItem OnClick="@((e) => BtnActionsTarget(0))">@localizer["delete"]</MudMenuItem>
+														</MudMenu>
+													</MudButtonGroup>
+												}
+											}
+											
+										}
+
+									</MudStack>
+									<MudSpacer/>
+									<MudTextField @bind-Value="searchStringTarget" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+									              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+									</MudTextField>
+								</ToolBarContent>
+								<Columns>
+									<SelectColumn T="TaskTargets"/>
+									<PropertyColumn Property="x => x.Target.Name" Title="@localizer["name"]"/>
+									<PropertyColumn Property="x => x.Target.Type" Title="@localizer["type"]">
+										<CellTemplate>
+											@switch (@context.Item.Target.Type)
+											{
+												case TargetType.Binary:
+													<MudChip Color="Color.Secondary" Icon="@Icons.Custom.FileFormats.FileCode">Binary</MudChip>
+													break;
+												case TargetType.Hostname:
+													<MudChip Color="Color.Tertiary" Icon="@Icons.Material.Filled.DesktopMac">Hostname</MudChip>
+													break;
+												case TargetType.IP:
+													<MudChip Color="Color.Info" Icon="@Icons.Material.Filled.SettingsEthernet">IP</MudChip>
+													break;
+												case TargetType.URL:
+													<MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Web">Url</MudChip>
+													break;
+												case TargetType.CIDR:
+													<MudChip Color="Color.Surface" Icon="@Icons.Material.Filled.SettingsEthernet">CIDR</MudChip>
+													break;
+											}
+
+										</CellTemplate>
+									</PropertyColumn>
+								</Columns>
+								<PagerContent>
+									<MudDataGridPager T="TaskTargets"/>
+								</PagerContent>
+							</MudDataGrid>
+
+
+
+						</MudTabPanel>
+					}
+				}
+				
+				@if (userAth.HasPermission(Permissions.TaskNotesRead))
+				{
+					<MudTabPanel Text="@localizer["notes"]" Icon="@Icons.Material.Filled.Notes" BadgeData="@Notes.Count()" BadgeColor="Color.Primary">
+						<MudDataGrid T="CORE.Entities.TaskNote" Items="@Notes" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterNote"
+						             Hideable="true" Hover="true" RowClick="RowClickedNote" MultiSelection="true" SelectedItemsChanged="@SelectedNotesChanged" Virtualize="true" DragDropColumnReordering="true">
 							<ToolBarContent>
 								<MudStack Row="true">
-									@if (inProject)
+									@if (inProject || task.ProjectId == null)
 									{
-										<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="Color.Primary" OnClick="@((e) => OpenAddTarget(@task, maxWidth))">@localizer["addTarget"]</MudButton>
-										@if (seleTargets.Count() != 0)
+										@if (userAth.HasPermission(Permissions.TaskNotesAdd))
 										{
-											<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-												<MudButton>@localizer["actions"]</MudButton>
-												<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-													<MudMenuItem OnClick="@((e) => BtnActionsTarget(0))">@localizer["delete"]</MudMenuItem>
-												</MudMenu>
-											</MudButtonGroup>
+											<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Note" Color="Color.Primary" OnClick="@((e) => OpenCreateNote(@task, maxWidth))">@localizer["addNoteBtn"]</MudButton>
 										}
+
+										@if (userAth.HasPermission(Permissions.TaskNotesDelete))
+										{
+											@if (seleNotes.Count() != 0)
+											{
+												<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+													<MudButton>@localizer["actions"]</MudButton>
+													<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+														<MudMenuItem OnClick="@((e) => BtnActionsNotes(0))">@localizer["delete"]</MudMenuItem>
+													</MudMenu>
+												</MudButtonGroup>
+											}
+										}
+										
 									}
-									
+
 								</MudStack>
 								<MudSpacer/>
-								<MudTextField @bind-Value="searchStringTarget" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
-								              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
-								</MudTextField>
+								<MudTextField @bind-Value="searchStringNote" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+								              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
 							</ToolBarContent>
 							<Columns>
-								<SelectColumn T="TaskTargets"/>
-								<PropertyColumn Property="x => x.Target.Name" Title="@localizer["name"]"/>
-								<PropertyColumn Property="x => x.Target.Type" Title="@localizer["type"]">
+								<SelectColumn T="TaskNote"></SelectColumn>
+								<PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+								<PropertyColumn Property="x => x.User.FullName" Title="@localizer["createdBy"]">
 									<CellTemplate>
-										@switch (@context.Item.Target.Type)
-										{
-											case TargetType.Binary:
-												<MudChip Color="Color.Secondary" Icon="@Icons.Custom.FileFormats.FileCode">Binary</MudChip>
-												break;
-											case TargetType.Hostname:
-												<MudChip Color="Color.Tertiary" Icon="@Icons.Material.Filled.DesktopMac">Hostname</MudChip>
-												break;
-											case TargetType.IP:
-												<MudChip Color="Color.Info" Icon="@Icons.Material.Filled.SettingsEthernet">IP</MudChip>
-												break;
-											case TargetType.URL:
-												<MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Web">Url</MudChip>
-												break;
-											case TargetType.CIDR:
-												<MudChip Color="Color.Surface" Icon="@Icons.Material.Filled.SettingsEthernet">CIDR</MudChip>
-												break;
-										}
+										<MudStack Row="true">
+											@if (@context.Item.User.Avatar != null)
+											{
+												<MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+											}
+											else
+											{
+												<MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
+											}
+											<MudStack Justify="Justify.Center" Spacing="0">
+												<MudText Typo="Typo.body1">@context.Item.User.FullName</MudText>
+											</MudStack>
+										</MudStack>
 
 									</CellTemplate>
 								</PropertyColumn>
+
 							</Columns>
 							<PagerContent>
-								<MudDataGridPager T="TaskTargets"/>
+								<MudDataGridPager T="TaskNote"/>
 							</PagerContent>
 						</MudDataGrid>
-						
 
 
 					</MudTabPanel>
 				}
 				
-				<MudTabPanel Text="@localizer["notes"]" Icon="@Icons.Material.Filled.Notes" BadgeData="@Notes.Count()" BadgeColor="Color.Primary">
-					<MudDataGrid T="CORE.Entities.TaskNote" Items="@Notes" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterNote"
-					             Hideable="true" Hover="true" RowClick="RowClickedNote" MultiSelection="true" SelectedItemsChanged="@SelectedNotesChanged" Virtualize="true" DragDropColumnReordering="true">
-						<ToolBarContent>
-							<MudStack Row="true">
-								@if (inProject || task.ProjectId == null)
-								{
-									<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Note" Color="Color.Primary" OnClick="@((e) => OpenCreateNote(@task, maxWidth))">@localizer["addNoteBtn"]</MudButton>
-									@if (seleNotes.Count() != 0)
+				@if (userAth.HasPermission(Permissions.TaskAttachmentsRead))
+				{
+					<MudTabPanel Text="@localizer["attachments"]" Icon="@Icons.Material.Filled.Attachment" BadgeData="@attachments.Count()" BadgeColor="Color.Primary" Style="min-width: 260px;">
+						<MudDataGrid T="CORE.Entities.TaskAttachment" Items="@attachments" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterAttachment"
+						             Hideable="true" Hover="true" RowClick="RowClickedAttachment" MultiSelection="true" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
+							<ToolBarContent>
+								<MudStack Row="true">
+									@if (inProject || task.ProjectId == null)
 									{
-										<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-											<MudButton>@localizer["actions"]</MudButton>
-											<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-												<MudMenuItem OnClick="@((e) => BtnActionsNotes(0))">@localizer["delete"]</MudMenuItem>
-											</MudMenu>
-										</MudButtonGroup>
+										@if (userAth.HasPermission(Permissions.TaskAttachmentsAdd))
+										{
+											<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Attachment" Color="Color.Primary" OnClick="@((e) => OpenCreateAttachment(@task, maxWidth))">@localizer["addAttachmentBtn"]</MudButton>
+										}
+
+										@if (userAth.HasPermission(Permissions.TaskAttachmentsDelete))
+										{
+											@if (seleAttachments.Count() != 0)
+											{
+												<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+													<MudButton>@localizer["actions"]</MudButton>
+													<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+														<MudMenuItem OnClick="@((e) => BtnActionsAttachments(0))">@localizer["delete"]</MudMenuItem>
+													</MudMenu>
+												</MudButtonGroup>
+											}
+										}
 									}
-								}
-								
-							</MudStack>
-							<MudSpacer/>
-							<MudTextField @bind-Value="searchStringNote" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
-							              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-						</ToolBarContent>
-						<Columns>
-							<SelectColumn T="TaskNote"></SelectColumn>
-							<PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
-							<PropertyColumn Property="x => x.User.FullName" Title="@localizer["createdBy"]">
-								<CellTemplate>
-									<MudStack Row="true">
-										@if (@context.Item.User.Avatar != null)
-										{
-											<MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
-										}
-										else
-										{
-											<MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
-										}
-										<MudStack Justify="Justify.Center" Spacing="0">
-											<MudText Typo="Typo.body1">@context.Item.User.FullName</MudText>
+
+
+								</MudStack>
+
+								<MudSpacer/>
+								<MudTextField @bind-Value="searchStringAttachments" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+								              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+
+							</ToolBarContent>
+							<Columns>
+								<SelectColumn T="TaskAttachment"></SelectColumn>
+
+								<PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+								<PropertyColumn Property="x => x.User.FullName" Title="@localizer["createdBy"]">
+									<CellTemplate>
+										<MudStack Row="true">
+											@if (@context.Item.User.Avatar != null)
+											{
+												<MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+											}
+											else
+											{
+												<MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
+											}
+											<MudStack Justify="Justify.Center" Spacing="0">
+												<MudText Typo="Typo.body1">@context.Item.User.FullName</MudText>
+											</MudStack>
 										</MudStack>
-									</MudStack>
-                                                        
-								</CellTemplate>
-							</PropertyColumn>
-							
-						</Columns>
-						<PagerContent>
-							<MudDataGridPager T="TaskNote" />
-						</PagerContent>
-					</MudDataGrid>
-					
-                					
-				</MudTabPanel>
-				<MudTabPanel Text="@localizer["attachments"]" Icon="@Icons.Material.Filled.Attachment" BadgeData="@attachments.Count()" BadgeColor="Color.Primary" Style="min-width: 260px;">
-					<MudDataGrid T="CORE.Entities.TaskAttachment" Items="@attachments" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterAttachment"
-					             Hideable="true" Hover="true" RowClick="RowClickedAttachment" MultiSelection="true" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
-						<ToolBarContent>
-							<MudStack Row="true">
-								@if (inProject || task.ProjectId == null)
-								{
-									<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Attachment" Color="Color.Primary" OnClick="@((e) => OpenCreateAttachment(@task, maxWidth))">@localizer["addAttachmentBtn"]</MudButton>
 
-									@if (seleAttachments.Count() != 0)
-									{
-										<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-											<MudButton>@localizer["actions"]</MudButton>
-											<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-												<MudMenuItem OnClick="@((e) => BtnActionsAttachments(0))">@localizer["delete"]</MudMenuItem>
-											</MudMenu>
-										</MudButtonGroup>
-									}
-								}
-								
+									</CellTemplate>
+								</PropertyColumn>
+							</Columns>
+							<PagerContent>
+								<MudDataGridPager T="TaskAttachment"/>
+							</PagerContent>
+						</MudDataGrid>
 
-							</MudStack>
 
-							<MudSpacer/>
-							<MudTextField @bind-Value="searchStringAttachments" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
-							              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+					</MudTabPanel>
+				}
 
-						</ToolBarContent>
-						<Columns>
-														<SelectColumn T="TaskAttachment"></SelectColumn>
-
-							<PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
-							<PropertyColumn Property="x => x.User.FullName" Title="@localizer["createdBy"]">
-								<CellTemplate>
-									<MudStack Row="true">
-										@if (@context.Item.User.Avatar != null)
-										{
-											<MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
-										}
-										else
-										{
-											<MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
-										}
-										<MudStack Justify="Justify.Center" Spacing="0">
-											<MudText Typo="Typo.body1">@context.Item.User.FullName</MudText>
-										</MudStack>
-									</MudStack>
-
-								</CellTemplate>
-							</PropertyColumn>
-						</Columns>
-						<PagerContent>
-							<MudDataGridPager T="TaskAttachment" />
-						</PagerContent>
-					</MudDataGrid>
-					
-                                					
-				</MudTabPanel>
-				
-				
 			</MudTabs>
 
 		}
 		
 	</DialogContent>
 	<DialogActions>
-		<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if (editMode)
-		{
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-
-		}
+	
+		
 	</DialogActions>
 </MudDialog>

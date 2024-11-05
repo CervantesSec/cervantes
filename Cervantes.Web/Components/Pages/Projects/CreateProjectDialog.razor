@@ -1,11 +1,13 @@
+@using Cervantes.CORE
 @using Variant = MudBlazor.Variant
 @using Microsoft.AspNetCore.Components
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
-
+@attribute [HasPermission(Permissions.ProjectsAdd)]
 
 <style>
 	.tox-tinymce-aux {
@@ -53,9 +55,9 @@
 				<MudSwitch Color="Color.Primary" @bind-Value="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
 
 				<MudTextField  @bind-Value="model.Name"
-				              For="@(() => model.Name)"
-				              Immediate="true"
-				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Folder"/>
+				               For="@(() => model.Name)"
+				               Immediate="true"
+				               Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Folder"/>
 				
 				<MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 					@foreach (Language item in Enum.GetValues(typeof(Language)))
@@ -64,9 +66,9 @@
 					}
 				</MudSelect>
 				<MudTextField  @bind-Value="model.FindingsId"
-                				              For="@(() => model.FindingsId)"
-                				              Immediate="true"
-                				              Label="@localizer["findingsId"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Widgets" Placeholder="FIN"/>
+				               For="@(() => model.FindingsId)"
+				               Immediate="true"
+				               Label="@localizer["findingsId"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Widgets" Placeholder="FIN"/>
 				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 				<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["startDate"]" @bind-date="dateStart" DisableToolbar="true" />
 				<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["endDate"]" @bind-date="dateEnd"  DisableToolbar="true" />
@@ -102,10 +104,13 @@
 
 			</MudStack>
 		</MudForm>
+		<MudStack Row="true" Justify="Justify.FlexEnd">
+			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Folder" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		</MudStack>
 	</DialogContent>
 	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Folder" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		
 	</DialogActions>
 </MudDialog>
 

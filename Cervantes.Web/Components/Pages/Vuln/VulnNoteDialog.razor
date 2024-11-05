@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,11 +7,14 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
-@attribute [StreamRendering]
+@attribute [HasPermission(Permissions.VulnNotesRead)]
+@inject AuthenticationStateProvider authenticationStateProvider
 
 
 <style>
@@ -27,17 +31,22 @@
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Note"/> @note.Name</MudText>
 		<MudSpacer/>
 		@if (inProject || note.Vuln.Project == null)		{
-			@if (editMode)
+			@if (userAth.HasPermission(Permissions.VulnNotesEdit))
 			{
-				<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+				@if (editMode)
+				{
+					<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+				}
+				else
+				{
+					<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+				}
 			}
-			else
+			
+			@if (userAth.HasPermission(Permissions.VulnNotesDelete))
 			{
-				<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
-
+				<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteVulnNoteDialog(@note, medium))"></MudIconButton>
 			}
-			<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteVulnNoteDialog(@note, medium))"></MudIconButton>
-
 		}
 		
 		            </MudItem>
@@ -96,11 +105,14 @@
 	</DialogContent>
 	<DialogActions>
 		<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if (editMode)
+		@if (userAth.HasPermission(Permissions.VulnNotesEdit))
 		{
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-
+			@if (editMode)
+			{
+				<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+			}
 		}
+		
 	</DialogActions>
 </MudDialog>
 		</MudContainer>

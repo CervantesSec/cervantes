@@ -20,7 +20,7 @@ public class DataInitializer
         Contracts.IOrganizationManager organizationManager, Contracts.IReportTemplateManager reportTemplateManager, 
         ICweManager cweManager, string cwe, IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager)
     {
-        SeedRoles(roleManager);
+        //SeedRoles(roleManager);
         SeedUsers(userManager);
         SeedVulnCategories(vulnCategoryManager);
         SeedOrganization(organizationManager);
@@ -86,7 +86,7 @@ public class DataInitializer
             Console.WriteLine("Your password for admin@cervantes.local is "+password);
             var result = userManager.CreateAsync(user, password).Result;
 
-            if (result.Succeeded) userManager.AddToRoleAsync(user, "Admin").Wait();
+            //if (result.Succeeded) userManager.AddToRoleAsync(user, "Admin").Wait();
         }
         
     }

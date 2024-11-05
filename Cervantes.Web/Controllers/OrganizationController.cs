@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.File;
 using Cervantes.Server.Helpers;
@@ -12,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cervantes.Web.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin,SuperUser")]
+[Authorize]
 
 public class OrganizationController: ControllerBase
 {
@@ -39,6 +41,7 @@ public class OrganizationController: ControllerBase
     }
     
     [HttpGet]
+    [HasPermission(Permissions.OrganizationRead)]
     public CORE.Entities.Organization Get()
     {
         try
@@ -57,6 +60,7 @@ public class OrganizationController: ControllerBase
     }
     
     [HttpPut]
+    [HasPermission(Permissions.OrganizationEdit)]
     public async Task<IActionResult> Save([FromBody] OrganizationViewModel model)
     {
         try
@@ -125,6 +129,7 @@ public class OrganizationController: ControllerBase
     
     [HttpDelete]
     [Route("Logo")]
+    [HasPermission(Permissions.OrganizationEdit)]
     public async Task<IActionResult> DeleteAvatar()
     {
         try

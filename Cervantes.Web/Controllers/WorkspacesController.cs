@@ -22,7 +22,7 @@ public class WorkspacesController : ControllerBase
         this.projectUserManager = projectUserManager;
         _logger = logger;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        aspNetUserRole = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value;
+        //aspNetUserRole = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value;
 
     }
     

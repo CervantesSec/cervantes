@@ -3,7 +3,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
@@ -47,7 +49,7 @@ namespace Cervantes.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class ReportController : ControllerBase
 {
     private readonly ILogger<ReportController> _logger = null;
@@ -113,6 +115,7 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(Permissions.ReportsRead)]
     public IEnumerable<CORE.Entities.Report> Get()
     {
         try
@@ -152,6 +155,7 @@ public class ReportController : ControllerBase
 
     [HttpGet]
     [Route("Project/{id}")]
+    [HasPermission(Permissions.ReportsRead)]
     public IEnumerable<CORE.Entities.Report> GetByProject(Guid id)
     {
         try
@@ -185,7 +189,7 @@ public class ReportController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Roles = "Admin,SuperUser,User")] 
+    [HasPermission(Permissions.ReportsEdit)]
     public async Task<IActionResult> EditReport([FromBody] ReportEditModel model)
     {
         try
@@ -232,7 +236,7 @@ public class ReportController : ControllerBase
 
     [HttpGet]
     [Route("Templates")]
-    [Authorize(Roles = "Admin,SuperUser,User")]
+    [HasPermission(Permissions.ReportTemplatesRead)]
     public IEnumerable<CORE.Entities.ReportTemplate> Templates()
     {
         try
@@ -252,7 +256,7 @@ public class ReportController : ControllerBase
 
     [HttpPost]
     [Route("Template")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportTemplatesAdd)]
     public async Task<IActionResult> CreateTemplate([FromBody] CreateReportModel model)
     {
         try
@@ -299,7 +303,7 @@ public class ReportController : ControllerBase
 
     [HttpPut]
     [Route("Template")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportTemplatesEdit)]
     public async Task<IActionResult> Edit([FromBody] EditReportTemplateModel model)
     {
         try
@@ -358,7 +362,7 @@ public class ReportController : ControllerBase
 
     [HttpDelete]
     [Route("Template/{id}")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportTemplatesDelete)]
     public async Task<IActionResult> Delete(Guid id)
     {
         try
@@ -395,7 +399,7 @@ public class ReportController : ControllerBase
 
     [HttpDelete]
     [Route("{reportId}")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportsDelete)]
     public async Task<IActionResult> DeleteReport(Guid reportId)
     {
         try
@@ -431,7 +435,7 @@ public class ReportController : ControllerBase
 
     [HttpGet]
     [Route("Components")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportComponentsRead)]
     public IEnumerable<CORE.Entities.ReportComponents> Components()
     {
         try
@@ -449,7 +453,7 @@ public class ReportController : ControllerBase
 
     [HttpGet]
     [Route("Parts/{templateId}")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportComponentsRead)]
     public IEnumerable<CORE.Entities.ReportParts> GetParts(Guid templateId)
     {
         try
@@ -468,7 +472,7 @@ public class ReportController : ControllerBase
 
     [HttpPost]
     [Route("Components")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportComponentsAdd)]
     public async Task<IActionResult> CreateComponent([FromBody] CreateReportComponentModel model)
     {
         try
@@ -508,7 +512,7 @@ public class ReportController : ControllerBase
 
     [HttpPut]
     [Route("Components")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportComponentsEdit)]
     public async Task<IActionResult> EditComponent([FromBody] EditReportComponentModel model)
     {
         try
@@ -547,7 +551,7 @@ public class ReportController : ControllerBase
 
     [HttpDelete]
     [Route("Components/{componentId}")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportComponentsDelete)]
     public async Task<IActionResult> DeleteComponent(Guid componentId)
     {
         try
@@ -577,7 +581,7 @@ public class ReportController : ControllerBase
 
     [HttpPost]
     [Route("Generate")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportsAdd)]
     public async Task<IActionResult> GenerateNewReport([FromBody] ReportCreateViewModel model)
     {
         try
@@ -1035,6 +1039,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
     
     [HttpPost]
     [Route("Download")]
+    [HasPermission(Permissions.ReportsDownload)]
     public async Task<FileContentResult> DownloadReport([FromBody] ReportDownloadModel model)
     {
         try
@@ -1399,7 +1404,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
     
     [HttpPost]
     [Route("Template")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ReportTemplatesRead)]
     public async Task<ReportImportResultViewModel> Import([FromBody] ReportImportViewModel model)
     {
         try

@@ -1,7 +1,10 @@
 @page "/tasks"
 @page "/tasks/{id:guid}"
+@using Cervantes.CORE
 @using Cervantes.CORE.ViewModels
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @using MudBlazor.Extensions.Core
 @inject IDialogService Dialog
@@ -11,8 +14,10 @@
 @rendermode InteractiveServer
 @inject NavigationManager navigationManager
 @inject IHttpContextAccessor _accessor
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.TasksRead)]
 
-<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+
 
 <PageTitle>@localizer["tasks"] | Cervantes</PageTitle>
     <SectionContent SectionName="appbar">
@@ -54,8 +59,13 @@
                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                 <ToolBarContent>
                     <MudStack Row="true">
-                        <AuthorizeView Roles="Admin,SuperUser,User">
+                        @if (userAth.HasPermission(Permissions.TasksAdd))
+                        {
                             <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(@project, maxWidthEx))">@localizer["create"]</MudButton>
+                        }
+                        
+                        @if (userAth.HasPermission(Permissions.TasksDelete))
+                        {
                             @if (seleTasks.Count() != 0)
                             {
                                 <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
@@ -65,8 +75,9 @@
                                     </MudMenu>
                                 </MudButtonGroup>
                             }
+                        }
+                        
 
-                        </AuthorizeView>
                     </MudStack>
                     <MudSpacer/>
                     <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -173,4 +184,3 @@
 
 </MudItem>
 </MudGrid>
-</AuthorizeView>

@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
@@ -46,8 +47,11 @@ public partial class Checklists: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         var user = await _ProjectController.VerifyUser(project);
         if (user == false)
         {

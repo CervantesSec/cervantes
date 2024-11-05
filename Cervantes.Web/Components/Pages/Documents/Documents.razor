@@ -1,15 +1,18 @@
 @page "/documents"
 @inject IDialogService Dialog
+@using Cervantes.CORE
 @using TinyMCE.Blazor
 @using Cervantes.CORE.ViewModels
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using MudBlazor.Extensions.Core
 @using Color = MudBlazor.Color
 @inject IStringLocalizer<Resource> localizer
 @inject IMudExDialogService DialogEx
-
-<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.DocumentsRead)]
 
     <PageTitle>@localizer["documents"] | Cervantes</PageTitle>
     <SectionContent SectionName="appbar">
@@ -38,19 +41,23 @@
                      Hideable="true" Hover="true" RowClick="@RowClicked" Virtualize="true" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
-                    <AuthorizeView Roles="Admin,SuperUser">
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
-                        @if (seleDocs.Count() != 0)
+                        @if (userAth.HasPermission(Permissions.DocumentsAdd))
                         {
-                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                                <MudButton>@localizer["actions"]</MudButton>
-                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
-                                </MudMenu>
-                            </MudButtonGroup>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                         }
-
-                    </AuthorizeView>
+                        @if (userAth.HasPermission(Permissions.DocumentsDelete))
+                        {
+                            @if (seleDocs.Count() != 0)
+                            {
+                                <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                    <MudButton>@localizer["actions"]</MudButton>
+                                    <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                        <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                    </MudMenu>
+                                </MudButtonGroup>
+                            }
+                        }
+                        
                 </MudStack>
                 <MudSpacer/>
                 <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -88,4 +95,3 @@
         </MudDataGrid>
     </MudItem>
 </MudGrid>
-</AuthorizeView>

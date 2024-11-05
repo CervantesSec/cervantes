@@ -1,6 +1,9 @@
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Web;
+using AuthPermissions.AdminCode;
+using AuthPermissions.AspNetCore;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
@@ -20,7 +23,7 @@ using Task = System.Threading.Tasks.Task;
 namespace Cervantes.Web.Controllers;
 
 [ApiController]
-[Authorize(Roles = "Admin")]
+[Authorize]
 [Route("api/[controller]")]
 public class UserController: ControllerBase
 {
@@ -36,7 +39,8 @@ public class UserController: ControllerBase
     private string link;
 private IFileCheck fileCheck;
 private IEmailService emailService;
-
+private IAuthRolesAdminService authRolesAdminService;
+private IAuthUsersAdminService authUsersAdminService;
 private Sanitizer sanitizer;
     /// <summary>
     /// UserController Constructor
@@ -49,7 +53,7 @@ private Sanitizer sanitizer;
         Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, IProjectManager projectManager,
         IClientManager clientManager,IEmailService emailService,
         ILogger<UserController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor, 
-        IFileCheck fileCheck, Sanitizer sanitizer)
+        IFileCheck fileCheck, Sanitizer sanitizer, IAuthRolesAdminService authRolesAdminService, IAuthUsersAdminService authUsersAdminService)
     {
         this.usrManager = usrManager;
         this.roleManager = roleManager;
@@ -66,10 +70,12 @@ private Sanitizer sanitizer;
         }
         this.fileCheck = fileCheck;
         this.sanitizer = sanitizer;
-
+        this.authRolesAdminService = authRolesAdminService;
+        this.authUsersAdminService = authUsersAdminService;
     }
     
     [HttpGet]
+    [HasPermission(Permissions.UsersRead)]
     public IEnumerable<CORE.Entities.ApplicationUser> Get()
     {
         try
@@ -89,11 +95,12 @@ private Sanitizer sanitizer;
     
     [HttpGet]
     [Route("Roles")]
-    public IEnumerable<IdentityRole> GetRoles()
+    [HasPermission(Permissions.RolesRead)]
+    public IEnumerable<RoleWithPermissionNamesDto> GetRoles()
     {
         try
         {
-            IEnumerable<IdentityRole> model = roleManager.GetAll().ToArray();
+            IEnumerable<RoleWithPermissionNamesDto> model = authRolesAdminService.QueryRoleToPermissions().ToArray();
         
             return model;
         }
@@ -108,14 +115,25 @@ private Sanitizer sanitizer;
     
     [HttpGet]
     [Route("Role")]
-    public async Task<string> GetRole()
+    [HasPermission(Permissions.RolesRead)]
+    public async Task<string> GetRole(string userId)
     {
         try
         {
-            var user2 = usrManager.GetByUserId(aspNetUserId);
-            var rolUser = await _userManager.GetRolesAsync(user2);
-            var test = rolUser.First();
-            return  await Task.FromResult(rolUser.ToString());
+            var user2 = usrManager.GetByUserId(userId);
+
+            var rolUser = await authUsersAdminService.FindAuthUserByUserIdAsync(user2.Id);
+            var test = rolUser.Result.UserRoles;
+
+            if (test.Count == 0)
+            {
+                return String.Empty;
+            }
+            else
+            {
+                return test.First().RoleName;
+            }
+           
         }
         catch (Exception e)
         {
@@ -125,9 +143,112 @@ private Sanitizer sanitizer;
         }
        
     }
+    
+    [HttpGet]
+    [Route("Role/{userId}")]
+    [HasPermission(Permissions.RolesRead)]
+    public IEnumerable<PermissionsViewModel> GetPermissions()
+    {
+        try
+        {
+            var permissions =authRolesAdminService.GetPermissionDisplay(false);
+            List<PermissionsViewModel> model = new List<PermissionsViewModel>();
+            foreach (var item in permissions)
+            {
+                model.Add(new PermissionsViewModel()
+                {
+                    Name = item.PermissionName,
+                    ShortName = item.ShortName,
+                    Group = item.GroupName,
+                    Description = item.Description
+                    });
+            }
+                return model;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting permissions. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+       
+    }
+    
+    [HttpPost]
+    [Route("Role")]
+    [HasPermission(Permissions.RolesRead)]
+    public async Task<IActionResult> AddRole([FromBody] CreateRoleViewModel model)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                await authRolesAdminService.CreateRoleToPermissionsAsync(model.Name, model.Permissions, model.Description);
+                return Ok();
+            }
+            return BadRequest();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred adding role. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+       
+    }
+    
+    [HttpPut]
+    [Route("Role")]
+    [HasPermission(Permissions.RolesEdit)]
+    public async Task<IActionResult> EditRole([FromBody] CreateRoleViewModel model)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                await authRolesAdminService.UpdateRoleToPermissionsAsync(model.Name, model.Permissions, model.Description);
+                return Ok();
+            }
+            return BadRequest();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred adding role. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+       
+    }
+    
+    [HttpDelete]
+    [Route("Role/{roleName}")]
+    [HasPermission(Permissions.RolesDelete)]
+    public async Task<IActionResult> DeleteRole(string roleName)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                await authRolesAdminService.DeleteRoleAsync(roleName, true);
+                    _logger.LogInformation("User deleted successfully. User: {0}",
+                        aspNetUserId);
+                    return Ok();
+            }
+            _logger.LogError("An error ocurred deleting a User. User: {0}",
+                aspNetUserId);
+            return BadRequest();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred deleting a User. User: {0}",
+                aspNetUserId);
+            return BadRequest();
+        }
+    }
 
     [HttpGet]
     [Route("{userId}")]
+    [HasPermission(Permissions.UsersRead)]
     public ApplicationUser GetUser(string userId)
     {
         try
@@ -143,6 +264,7 @@ private Sanitizer sanitizer;
     }
 
     [HttpPost] 
+    [HasPermission(Permissions.UsersAdd)]
     public async Task<IActionResult> Add([FromBody] UserCreateViewModel model)
     {
         try
@@ -177,7 +299,7 @@ private Sanitizer sanitizer;
 
                 user.Id = Guid.NewGuid().ToString();
                 user.UserName = sanitizer.Sanitize(model.Email);
-                user.NormalizedUserName = sanitizer.Sanitize(model.Email);
+                user.NormalizedUserName = sanitizer.Sanitize(model.Email.ToUpper());
                 user.Email = sanitizer.Sanitize(model.Email);
                 user.NormalizedEmail = sanitizer.Sanitize(model.Email.ToUpper());
                 user.SecurityStamp = Guid.NewGuid().ToString();
@@ -187,10 +309,6 @@ private Sanitizer sanitizer;
                 user.Position = sanitizer.Sanitize(model.Position);
                 user.LockoutEnabled = true;
                 user.ExternalLogin = model.ExternalLogin;
-                if (model.Role == "Client")
-                {
-                    user.ClientId = model.ClientId;
-                }
 
 
                 await usrManager.AddAsync(user);
@@ -200,7 +318,10 @@ private Sanitizer sanitizer;
                     user.PasswordHash = hasher.HashPassword(user, model.Password);
                 }
                 await usrManager.Context.SaveChangesAsync();
-                await _userManager.AddToRoleAsync(user, model.Role);
+                List<string> roles = new List<string>();
+                roles.Add(model.Role);
+               await authUsersAdminService.AddNewUserAsync(user.Id,user.Email, user.UserName, roles);
+                
                 _logger.LogInformation("User added successfully. User: {0}",
                     aspNetUserId);
                 
@@ -227,6 +348,7 @@ private Sanitizer sanitizer;
     }
     
     [HttpPut] 
+    [HasPermission(Permissions.UsersEdit)]
     public async Task<IActionResult> Edit([FromBody] UserEditViewModel model)
     {
         try
@@ -261,7 +383,7 @@ private Sanitizer sanitizer;
                     
                 }
                 user.UserName = sanitizer.Sanitize(model.Email);
-                user.NormalizedUserName = sanitizer.Sanitize(model.Email);
+                user.NormalizedUserName = sanitizer.Sanitize(model.Email.ToUpper());
                 user.Email = sanitizer.Sanitize(model.Email);
                 user.NormalizedEmail = sanitizer.Sanitize(model.Email.ToUpper());
                 user.SecurityStamp = Guid.NewGuid().ToString();
@@ -281,11 +403,6 @@ private Sanitizer sanitizer;
                     user.LockoutEnd = null;
                 }
                 
-                if (model.Role == "Client")
-                {
-                    user.ClientId = model.ClientId;
-                }
-                
                 if (model.Password != null)
                 {
                     var hasher = new PasswordHasher<ApplicationUser>();
@@ -296,9 +413,9 @@ private Sanitizer sanitizer;
 
                 if (!string.IsNullOrEmpty(model.Role))
                 {
-                    var role = await _userManager.GetRolesAsync(user);
-                    await _userManager.RemoveFromRoleAsync(user, role.First());
-                    await _userManager.AddToRoleAsync(user, model.Role);
+                    var roles = new List<string>();
+                    roles.Add(model.Role);
+                    await authUsersAdminService.UpdateUserAsync(user.Id, user.Email, user.UserName, roles);
                 }
                 
                 _logger.LogInformation("User edited successfully. User: {0}",
@@ -320,7 +437,6 @@ private Sanitizer sanitizer;
     
     [HttpPut]
     [Route("Profile")]
-    [Authorize(Roles = "Admin,SuperUser,User,Client")]
     public async Task<IActionResult> ProfileEdit([FromBody] ProfileEdit model)
     {
         try
@@ -367,6 +483,7 @@ private Sanitizer sanitizer;
     
     [HttpDelete]
     [Route("{userId}")]
+    [HasPermission(Permissions.UsersDelete)]
     public async Task<IActionResult> Delete(string userId)
     {
         try
@@ -379,6 +496,7 @@ private Sanitizer sanitizer;
                 {
                     usrManager.Remove(user);
                     await usrManager.Context.SaveChangesAsync();
+                    await authUsersAdminService.DeleteUserAsync(user.Id);
                     _logger.LogInformation("User deleted successfully. User: {0}",
                         aspNetUserId);
                     return Ok();
@@ -402,6 +520,7 @@ private Sanitizer sanitizer;
     
     [HttpDelete]
     [Route("Logo/{id}")]
+    [HasPermission(Permissions.UsersEdit)]
     public async Task<IActionResult> DeleteAvatar(string id)
     {
         try

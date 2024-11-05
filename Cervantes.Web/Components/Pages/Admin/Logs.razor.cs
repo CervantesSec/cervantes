@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
@@ -18,9 +19,10 @@ public partial class Logs: ComponentBase
     private string searchString = "";
     [Inject] LogController _logController { get; set; }
     [Inject ]private IExportToCsv ExportToCsv { get; set; }
-
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),

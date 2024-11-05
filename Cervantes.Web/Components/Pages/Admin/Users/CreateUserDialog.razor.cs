@@ -78,7 +78,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
     private long maxFileSize = 1024 * 1024 * 5;
 
     UserCreateViewModel model = new UserCreateViewModel();
-    private List<IdentityRole> Roles = new List<IdentityRole>();
+    private List<RolesViewModel> Roles = new List<RolesViewModel>();
     private List<CORE.Entities.Client> Clients = new List<CORE.Entities.Client>();
     private static IBrowserFile File;
     private string response2;
@@ -129,8 +129,18 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
-		Roles = new List<IdentityRole>();
-		Roles = _UserController.GetRoles().ToList();
+		Roles.RemoveAll(item => true);
+		var roles = _UserController.GetRoles().ToList();
+		foreach (var item in roles)
+		{
+			Roles.Add(new RolesViewModel
+			{
+				Name = item.RoleName,
+				Description = item.Description,
+				PermmissioNumber = item.PermissionNames.Count
+                
+			});
+		}
 		Clients = new List<CORE.Entities.Client>();
 		Clients = _ClientsController.Get().ToList();
 		StateHasChanged();

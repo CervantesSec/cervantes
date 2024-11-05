@@ -1,3 +1,5 @@
+using AuthPermissions.BaseCode.PermissionsCode;
+using Cervantes.CORE;
 using Hangfire.Dashboard;
 
 namespace Cervantes.Server.Helpers;
@@ -12,7 +14,7 @@ public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
         if (httpContext.User.Identity.IsAuthenticated)
         {
             // Check if the user is in the "Admin" role.
-            if (httpContext.User.IsInRole("Admin"))
+            if (httpContext.User.HasPermission(Permissions.JobsRead))
             {
                 return true;
             }

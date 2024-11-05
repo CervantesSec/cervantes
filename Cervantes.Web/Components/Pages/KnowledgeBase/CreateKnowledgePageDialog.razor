@@ -1,14 +1,15 @@
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
+@attribute [HasPermission(Permissions.KnowledgeBaseAdd)]
 
 <style>
 	.tox-tinymce-aux {
         z-index: 999999!important;
     }
 </style>
-
-<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
     <MudDialog DisableSidePadding="true">
         <TitleContent>
@@ -51,4 +52,3 @@
             <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
         </DialogActions>
     </MudDialog>
-</MudContainer>

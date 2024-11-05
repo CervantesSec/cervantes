@@ -9,7 +9,12 @@
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
+@inject AuthenticationStateProvider authenticationStateProvider
 @using Blazor.Flags
+@using Cervantes.CORE
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@attribute [HasPermission(Permissions.ClientsRead)]
 
 
 <style>
@@ -22,20 +27,24 @@
 	<TitleContent>
 		            <MudStack Row="true" Spacing="1">
 
-		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.BusinessCenter"/> @client.Name</MudText>
-        <AuthorizeView Roles="Admin,SuperUser">
-            @if (editMode)
-            		{
-                        <MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
-                    }
-            		else
-            		{
-                        <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+                        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.BusinessCenter"/> @client.Name</MudText>
+                        @if (user.HasPermission(Permissions.ClientsEdit))
+                        {
+                            @if (editMode)
+                            {
+                                <MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+                            }
+                            else
+                            {
+                                <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
             
-                    }
-            <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(client, medium))">@localizer["delete"]</MudChip>
-        </AuthorizeView>
-		
+                            }
+                        }
+           
+                        @if(user.HasPermission(Permissions.ClientsDelete))
+                        {
+                            <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(client, medium))">@localizer["delete"]</MudChip>
+                        }
 
 		            </MudStack>
 	</TitleContent>
@@ -43,70 +52,80 @@
 		@if (editMode)
         	{
         		<MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" Elevation="25">
-			        <MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
-			<MudStack>
+                    <MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
+                        <MudStack>
 				
-				@if (client.ImagePath != "None")
-				{
-					<MudImage Src="@client.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="Client Logo" Elevation="25" Class="rounded-lg ma-4"/>
-					<MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
-				}
-				else
-				{
-					<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
-						<ActivatorContent>
-							<MudButton HtmlTag="label"
-							           Variant="Variant.Filled"
-							           Color="Color.Primary"
-							           StartIcon="@Icons.Material.Filled.CloudUpload">
-								@localizer["uploadFile"]
-							</MudButton>
-						</ActivatorContent>
-						<SelectedTemplate>
+                            @if (client.ImagePath != "None")
+                            {
+                                <MudImage Src="@client.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="Client Logo" Elevation="25" Class="rounded-lg ma-4"/>
+                                <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
+                            }
+                            else
+                            {
+                                <MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
+                                    <ActivatorContent>
+                                        <MudButton HtmlTag="label"
+                                                   Variant="Variant.Filled"
+                                                   Color="Color.Primary"
+                                                   StartIcon="@Icons.Material.Filled.CloudUpload">
+                                            @localizer["uploadFile"]
+                                        </MudButton>
+                                    </ActivatorContent>
+                                    <SelectedTemplate>
 
-							@if (file != null)
-							{
-								<MudText><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name</MudText>
+                                        @if (file != null)
+                                        {
+                                            <MudText><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name</MudText>
                                 
-							}
-							else
-							{
-								<MudText><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["noFiles"]</MudText>
-							}
-						</SelectedTemplate>
-					</MudFileUpload>
-				}
+                                        }
+                                        else
+                                        {
+                                            <MudText><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["noFiles"]</MudText>
+                                        }
+                                    </SelectedTemplate>
+                                </MudFileUpload>
+                            }
 
-				<MudTextField @bind-Value="model.Name"
-				              For="@(() => model.Name)"
-				              Immediate="true"
-				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Contacts"/>
+                            <MudTextField @bind-Value="model.Name"
+                                          For="@(() => model.Name)"
+                                          Immediate="true"
+                                          Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Contacts"/>
 
-				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description"/>
+                            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description"/>
 
 
-				<MudTextField @bind-Value="model.Url"
-				              For="@(() => model.Url)"
-				              Immediate="true"
-				              Label="URL" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Web"/>
+                            <MudTextField @bind-Value="model.Url"
+                                          For="@(() => model.Url)"
+                                          Immediate="true"
+                                          Label="URL" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Web"/>
 
-				<MudTextField @bind-Value="model.ContactName"
-				              For="@(() => model.ContactName)"
-				              Immediate="true"
-				              Label="@localizer["contactName"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle"/>
+                            <MudTextField @bind-Value="model.ContactName"
+                                          For="@(() => model.ContactName)"
+                                          Immediate="true"
+                                          Label="@localizer["contactName"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle"/>
 
-				<MudTextField @bind-Value="model.ContactEmail"
-				              For="@(() => model.ContactEmail)"
-				              Immediate="true"
-				              Label="@localizer["contactEmail"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email"/>
+                            <MudTextField @bind-Value="model.ContactEmail"
+                                          For="@(() => model.ContactEmail)"
+                                          Immediate="true"
+                                          Label="@localizer["contactEmail"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email"/>
 
-				<MudTextField @bind-Value="model.ContactPhone"
-				              For="@(() => model.ContactPhone)"
-				              Immediate="true"
-				              Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ContactPhone"/>
+                            <MudTextField @bind-Value="model.ContactPhone"
+                                          For="@(() => model.ContactPhone)"
+                                          Immediate="true"
+                                          Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ContactPhone"/>
 
-			</MudStack>
-		</MudForm>
+                        </MudStack>
+                    </MudForm>
+                    <MudStack Row="true" Justify="Justify.FlexEnd">
+                        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+                        @if(user.HasPermission(Permissions.ClientsEdit))
+                        {
+                        @if (editMode)
+                        {
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="@((e) => EditMode())">@localizer["save"]</MudButton>
+                        }
+                        }
+                    </MudStack>
 		</MudContainer>
         	}
 		else
@@ -160,7 +179,8 @@
                                          Hideable="true" Hover="true" RowClick="@RowClickedProject" MultiSelection="true" SelectedItemsChanged="@SelectedProjectsChanged" Virtualize="true" DragDropColumnReordering="true">
                                 <ToolBarContent>
                                     <MudStack Row="true">
-                                        <AuthorizeView Roles="Admin,SuperUser">
+                                        @if (user.HasPermission(Permissions.ProjectsDelete))
+                                        {
                                             @if (selectedProjects.Count() != 0)
                                             {
                                                 <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
@@ -169,9 +189,9 @@
                                                         <MudMenuItem OnClick="@((e) => BtnActionsProject(0))">@localizer["delete"]</MudMenuItem>
                                                     </MudMenu>
                                                 </MudButtonGroup>
-                                            }
-                                        </AuthorizeView>
-			
+                                            } 
+                                        }
+                                        
                                     </MudStack>
                                     <MudSpacer/>
                                     <MudTextField @bind-Value="searchStringPro" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -423,11 +443,6 @@
 		
 	</DialogContent>
 	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if (editMode)
-		{
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-
-		}
+       
 	</DialogActions>
 </MudDialog>

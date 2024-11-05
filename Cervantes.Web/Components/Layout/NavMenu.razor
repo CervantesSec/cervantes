@@ -1,49 +1,92 @@
-﻿@using MudBlazor
+﻿@using System.Security.Claims
+@using MudBlazor
 @using Cervantes.Web.Localization
 @using Microsoft.Extensions.Localization
 @using Color = MudBlazor.Color
 @using Cervantes.Contracts
+@using Cervantes.CORE
 @using Cervantes.IFR.Jira
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.AspNetCore.Authentication
 @inject IStringLocalizer<Resource> localizer
 @inject IJiraConfiguration JiraConfiguration
+@inject AuthenticationStateProvider authenticationStateProvider
 
 <MudNavMenu Bordered="true" Color="Color.Primary" Style="display: flex; flex-flow: column; height: inherit;">
-    <AuthorizeView Roles="SuperUser,User,Admin">
-        <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All">@localizer["home"]</MudNavLink>
+    <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All">@localizer["home"]</MudNavLink>
+    @if (user.HasPermission(Permissions.CalendarRead))
+    {
         <MudNavLink Href="/calendar" Icon="@Icons.Material.Filled.CalendarMonth" Match="NavLinkMatch.Prefix">@localizer["calendar"]</MudNavLink>
-        <MudNavLink Href="/knowledgebase" Icon="@Icons.Material.Filled.MenuBook" Match="NavLinkMatch.Prefix">@localizer["knowledgeBase"]</MudNavLink>
+
+    }
+        @if(user.HasPermission(Permissions.KnowledgeBaseRead))
+        {
+            <MudNavLink Href="/knowledgebase" Icon="@Icons.Material.Filled.MenuBook" Match="NavLinkMatch.Prefix">@localizer["knowledgeBase"]</MudNavLink>
+        }
         <MudNavLink Href="/workspaces" Icon="@Icons.Material.Filled.Workspaces" Match="NavLinkMatch.Prefix">@localizer["workspaces"]</MudNavLink>
-        <MudNavLink Href="/projects" Icon="@Icons.Material.Filled.Folder" Match="NavLinkMatch.Prefix">@localizer["projects"]</MudNavLink>
-        <MudNavLink Href="/clients" Icon="@Icons.Material.Filled.BusinessCenter" Match="NavLinkMatch.Prefix">@localizer["clients"]</MudNavLink>
+        @if (user.HasPermission(Permissions.ProjectsRead))
+        {
+            <MudNavLink Href="/projects" Icon="@Icons.Material.Filled.Folder" Match="NavLinkMatch.Prefix">@localizer["projects"]</MudNavLink>
+        }
+        @if(user.HasPermission(Permissions.ClientsRead))
+        {
+            <MudNavLink Href="/clients" Icon="@Icons.Material.Filled.BusinessCenter" Match="NavLinkMatch.Prefix">@localizer["clients"]</MudNavLink>
+        }
+        @if(user.HasPermission(Permissions.DocumentsRead))
+        {
         <MudNavLink Href="/documents" Icon="@Icons.Material.Filled.InsertDriveFile" Match="NavLinkMatch.Prefix">@localizer["documents"]</MudNavLink>
-        <MudNavLink Href="/tasks" Icon="@Icons.Material.Filled.Task" Match="NavLinkMatch.Prefix">@localizer["tasks"]</MudNavLink>
-        <MudNavLink Href="/vulns" Icon="@Icons.Material.Filled.BugReport" Match="NavLinkMatch.Prefix">@localizer["vulns"]</MudNavLink>
-        @if(jiraEnabled)
+        }
+        @if (user.HasPermission(Permissions.TasksRead))
+        {
+            <MudNavLink Href="/tasks" Icon="@Icons.Material.Filled.Task" Match="NavLinkMatch.Prefix">@localizer["tasks"]</MudNavLink>
+        }
+        @if(user.HasPermission(Permissions.VulnsRead))
+        {
+            <MudNavLink Href="/vulns" Icon="@Icons.Material.Filled.BugReport" Match="NavLinkMatch.Prefix">@localizer["vulns"]</MudNavLink>
+        }
+        @if (jiraEnabled)
         {
             <MudNavLink Href="/jira" Icon="@jiraSVG" Match="NavLinkMatch.Prefix">@localizer["jira"]</MudNavLink>
         }
-    </AuthorizeView>
-    <AuthorizeView Roles="Admin">
-        <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin" @bind-Expanded=isAdminExpanded>
-            <MudNavLink Icon="@Icons.Material.Filled.ViewCompact" Href="/logs">Logs</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.QueryBuilder" Href="/jobs" Target="_blank">@localizer["jobs"]</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.Backup" Href="/backup">Backup</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.AssignmentInd" Href="/organization">@localizer["organization"]</MudNavLink>
-            <MudNavLink Icon="@Icons.Custom.FileFormats.FilePdf" Href="/reports/templates">@localizer["reportTemplates"]</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.Group" Href="/users">@localizer["users"]</MudNavLink>
-        </MudNavGroup>
-    </AuthorizeView>
-    <AuthorizeView Roles="SuperUser">
-        <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin" @bind-Expanded=isAdminExpanded>
-            <MudNavLink Icon="@Icons.Material.Filled.FileCopy" Href="/reports/templates">@localizer["reportTemplates"]</MudNavLink>
-        </MudNavGroup>
-    </AuthorizeView>
-</MudNavMenu>
+        
+        @if(user.HasPermission(Permissions.LogsRead) || user.HasPermission(Permissions.JobsRead) || user.HasPermission(Permissions.BackupRead) 
+            || user.HasPermission(Permissions.OrganizationRead) || user.HasPermission(Permissions.ReportTemplatesRead) 
+            || user.HasPermission(Permissions.UsersRead) || user.HasPermission(Permissions.RolesRead))
+        {
+            <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin" @bind-Expanded=isAdminExpanded>
+                @if(user.HasPermission(Permissions.LogsRead))
+                {
+                    <MudNavLink Icon="@Icons.Material.Filled.ViewCompact" Href="/logs">Logs</MudNavLink>
+                }
+                @if(user.HasPermission(Permissions.JobsRead))
+                {
+                    <MudNavLink Icon="@Icons.Material.Filled.QueryBuilder" Href="/jobs" Target="_blank">@localizer["jobs"]</MudNavLink>
+                }
+                @if(user.HasPermission(Permissions.BackupRead))
+                {
+                    <MudNavLink Icon="@Icons.Material.Filled.Backup" Href="/backup">Backup</MudNavLink>
+                }
+                @if(user.HasPermission(Permissions.OrganizationRead))
+                {
+                    <MudNavLink Icon="@Icons.Material.Filled.AssignmentInd" Href="/organization">@localizer["organization"]</MudNavLink>
+                }
+                @if(user.HasPermission(Permissions.ReportTemplatesRead))
+                {
+                    <MudNavLink Icon="@Icons.Custom.FileFormats.FilePdf" Href="/reports/templates">@localizer["reportTemplates"]</MudNavLink>
+                }
+                @if(user.HasPermission(Permissions.UsersRead))
+                {
+                    <MudNavLink Icon="@Icons.Material.Filled.Group" Href="/users">@localizer["users"]</MudNavLink>
+                }
+                @if(user.HasPermission(Permissions.RolesRead))
+                {
+                <MudNavLink Icon="@Icons.Material.Filled.Badge" Href="/roles">@localizer["roles"]</MudNavLink>
+                }
+            </MudNavGroup>
+        }
+        
 
-<AuthorizeView Roles="Client">
-    <MudNavLink Href="/projects" Icon="@Icons.Material.Filled.Folder" Match="NavLinkMatch.Prefix">@localizer["projects"]</MudNavLink>
-    <MudNavLink Href="/vulns" Icon="@Icons.Material.Filled.BugReport" Match="NavLinkMatch.Prefix">@localizer["vulns"]</MudNavLink>
-</AuthorizeView>
+</MudNavMenu>
 
     
 @code
@@ -51,10 +94,11 @@
     private bool isAdminExpanded = true;
     private bool jiraEnabled = false;
     const string jiraSVG = @"<svg xmlns=""http://www.w3.org/2000/svg"" width=""24"" height=""24"" viewBox=""0 0 24 24""><path fill=""currentColor"" d=""M11.53 2c0 2.4 1.97 4.35 4.35 4.35h1.78v1.7c0 2.4 1.94 4.34 4.34 4.35V2.84a.84.84 0 0 0-.84-.84zM6.77 6.8a4.362 4.362 0 0 0 4.34 4.34h1.8v1.72a4.362 4.362 0 0 0 4.34 4.34V7.63a.841.841 0 0 0-.83-.83zM2 11.6c0 2.4 1.95 4.34 4.35 4.34h1.78v1.72c.01 2.39 1.95 4.34 4.34 4.34v-9.57a.84.84 0 0 0-.84-.84z""/></svg>";
-
-    protected override void OnInitialized()
+    ClaimsPrincipal user;
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
+        user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         jiraEnabled = JiraConfiguration.Enabled;
     }
 }

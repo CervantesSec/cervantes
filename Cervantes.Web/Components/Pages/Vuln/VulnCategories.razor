@@ -16,11 +16,15 @@
 @inject NavigationManager navigationManager
 @inject IHttpContextAccessor _accessor
 @using Blazor.Flags
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.VulnCategoriesRead)]
+
 <PageTitle>@localizer["categories"] | Cervantes</PageTitle>
 
-<AuthorizeView Context="innerContext" Roles="SuperUser,Admin">
     <SectionContent SectionName="appbar">
         <MudText Typo="Typo.h5">
             <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.BugReport"></MudIcon>
@@ -62,17 +66,23 @@
                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                 <ToolBarContent>
                     <MudStack Row="true">
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
-                        @if (seleCats.Count() != 0)
+                        @if (userAth.HasPermission(Permissions.VulnCategoriesAdd))
                         {
-                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                                <MudButton>@localizer["actions"]</MudButton>
-                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteCategory"]</MudMenuItem>
-                                </MudMenu>
-                            </MudButtonGroup>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
                         }
-
+                        
+                        @if (userAth.HasPermission(Permissions.VulnCategoriesDelete))
+                        {
+                            @if (seleCats.Count() != 0)
+                            {
+                                <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                    <MudButton>@localizer["actions"]</MudButton>
+                                    <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                        <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteCategory"]</MudMenuItem>
+                                    </MudMenu>
+                                </MudButtonGroup>
+                            }
+                        }
                     </MudStack>
                     <MudSpacer/>
                     <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -110,4 +120,3 @@
             </MudDataGrid>
         </MudItem>
     </MudGrid>
-</AuthorizeView>

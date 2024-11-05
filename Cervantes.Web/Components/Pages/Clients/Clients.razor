@@ -1,9 +1,12 @@
 @rendermode InteractiveServer
 @page "/clients"
 @page "/clients/{clientId:guid}"
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
 @using Variant = MudBlazor.Variant
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using MudBlazor.Extensions.Core
 @inject IDialogService Dialog
 @inject IStringLocalizer<Resource> localizer
@@ -11,8 +14,9 @@
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
 @inject IMudExDialogService DialogEx
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ClientsRead)]
 
-<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
     <PageTitle>@localizer["clients"] | Cervantes</PageTitle>
 
     <SectionContent SectionName="appbar">
@@ -40,18 +44,22 @@
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
-                    <AuthorizeView Roles="Admin,SuperUser">
+                    @if (user.HasPermission(Permissions.ClientsAdd))
+                    {
                         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                    }
+                    @if (user.HasPermission(Permissions.ClientsDelete))
+                    {
                         @if (seleClients.Count() != 0)
                         {
-                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" >
+                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
                                 <MudButton>@localizer["actions"]</MudButton>
                                 <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
                                     <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
                                 </MudMenu>
                             </MudButtonGroup>
                         }
-                    </AuthorizeView>
+                    }
                 </MudStack>
                 <MudSpacer/>
                 <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -100,4 +108,3 @@
       
     </MudItem>
 </MudGrid>
-</AuthorizeView>

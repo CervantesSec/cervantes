@@ -3,6 +3,8 @@ using Cervantes.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Imaging;
 using System.Web;
+using AuthPermissions.AspNetCore;
+using Cervantes.CORE;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.File;
 using Cervantes.Server.Helpers;
@@ -46,6 +48,7 @@ public class ClientsController : ControllerBase
 
     }
     
+    [HasPermission(Permissions.ClientsRead)]
     [HttpGet]
     public IEnumerable<CORE.Entities.Client> Get()
     {
@@ -63,7 +66,7 @@ public class ClientsController : ControllerBase
         
     }
     
-    
+    [HasPermission(Permissions.ClientsRead)]
     [HttpGet]
     [Route("{clientId}")]
     public CORE.Entities.Client GetById(Guid clientId)
@@ -81,6 +84,7 @@ public class ClientsController : ControllerBase
         
     }
     
+    [HasPermission(Permissions.ClientsAdd)]
     [HttpPost]
     [Authorize (Roles = "Admin,SuperUser")]
     public async Task<IActionResult> Add([FromBody] ClientCreateViewModel model)
@@ -151,9 +155,9 @@ public class ClientsController : ControllerBase
         }
     }
     
+    [HasPermission(Permissions.ClientsDelete)]
     [HttpDelete]
     [Route("{clientId}")]
-    [Authorize (Roles = "Admin,SuperUser")]
     public async Task<IActionResult> Delete(Guid clientId)
     {
         try
@@ -191,9 +195,9 @@ public class ClientsController : ControllerBase
         
     }
     
+    [HasPermission(Permissions.ClientsEdit)]
     [HttpDelete]
     [Route("Avatar/{id}")]
-    [Authorize (Roles = "Admin,SuperUser")]
     public async Task<IActionResult> DeleteAvatar(Guid id)
     {
         try
@@ -224,8 +228,8 @@ public class ClientsController : ControllerBase
         }
     }
     
+    [HasPermission(Permissions.ClientsEdit)]
     [HttpPut]
-    [Authorize (Roles = "Admin,SuperUser")]
     public async Task<IActionResult> Edit([FromBody] ClientEditViewModel model)
     {
         try

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
@@ -122,8 +123,10 @@ public partial class VulnDialog: ComponentBase
     private bool inProject = false;
     [Inject] private IAiService _aiService { get; set; }
     private bool aiEnabled = false;
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         VulnTargets = _vulnController.GetVulnTargets(vuln.Id).ToList();
         VulnNotes = _vulnController.GetVulnNotes(vuln.Id).ToList();
         VulnAttachments = _vulnController.GetVulnAttachments(vuln.Id).ToList();

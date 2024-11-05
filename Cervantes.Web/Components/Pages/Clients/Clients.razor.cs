@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.IFR.Export;
 using Cervantes.Web.Controllers;
@@ -43,7 +44,7 @@ public partial class Clients: ComponentBase
 
     [Inject] private ClientsController _clientsController { get; set; }
    // [Inject] private IExportToCsv ExportToCsv { get; set; }
-
+   ClaimsPrincipal user;
     protected override async Task OnInitializedAsync()
     {
         _items = new List<BreadcrumbItem>
@@ -51,6 +52,7 @@ public partial class Clients: ComponentBase
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),
             new BreadcrumbItem(@localizer["clients"], href: null, disabled: true,icon: Icons.Material.Filled.BusinessCenter)
         };
+        user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         await Update();
     }
     

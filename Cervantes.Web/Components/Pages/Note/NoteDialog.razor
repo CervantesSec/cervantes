@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,10 +7,13 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
-
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.NotesRead)]
 
 <style>
 	.tox-tinymce-aux {
@@ -22,17 +26,24 @@
 		            <MudStack Row="true" Spacing="1">
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Note"/> @note.Name</MudText>
-
-		@if (editMode)
+		@if (user.HasPermission(Permissions.NotesEdit))
 		{
-			<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
-		}
-		else
-		{
-			<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+			@if (editMode)
+			{
+				<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+			}
+			else
+			{
+				<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
 
+			}
 		}
+		
+		@if (user.HasPermission(Permissions.NotesDelete))
+		{
 			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteNoteDialog(note, medium))">@localizer["delete"]</MudChip>
+		}
+		
 
 		            </MudStack>
 	</TitleContent>
@@ -50,7 +61,17 @@
 						        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 					        </MudStack>
 				        </MudForm>
-				        
+				        <MudStack Row="true" Justify="Justify.FlexEnd">
+					        <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+					        @if (user.HasPermission(Permissions.NotesEdit))
+					        {
+					        @if (editMode)
+					        {
+					        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+
+					        }
+					        }
+				        </MudStack>
 				        
 			        </MudContainer>
 		        
@@ -89,11 +110,7 @@
 		
 	</DialogContent>
 	<DialogActions>
-		<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if (editMode)
-		{
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-
-		}
+		
+		
 	</DialogActions>
 </MudDialog>

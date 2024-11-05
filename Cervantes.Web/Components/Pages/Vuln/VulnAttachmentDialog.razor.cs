@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -18,9 +19,10 @@ public partial class VulnAttachmentDialog: ComponentBase
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
     [Inject] ISnackbar Snackbar { get; set; }
     private bool inProject = false;
-    
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         if (attachment.Vuln.Project != null)
         {
             inProject = await _ProjectController.VerifyUser(attachment.Vuln.ProjectId.Value);

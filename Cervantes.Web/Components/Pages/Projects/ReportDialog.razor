@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,13 +7,15 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
 @inject IHttpContextAccessor _accessor
-
-<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ReportsRead)]
 
     <MudDialog DisableSidePadding="true">
         <TitleContent>
@@ -24,33 +27,45 @@
                 <MudSpacer/>
                 @if (inProject)
                 {
-                    @if (aiEnabled)
+                    @if (userAth.HasPermission(Permissions.AIServiceUsage))
                     {
-                        <MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
+                        @if (aiEnabled)
+                        {
+                            <MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
+                        }
                     }
                     
-                    <MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download())"></MudIconButton>
-                    
-
-                    @if (editMode)
+                    @if (userAth.HasPermission(Permissions.ReportsDownload))
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Success" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
-
-                    }
-                    else
-                    {
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download())"></MudIconButton>
 
                     }
                     
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteReport(report, medium))"></MudIconButton>
+                    @if (userAth.HasPermission(Permissions.ReportsEdit))
+                    {
+                        @if (editMode)
+                        {
+                            <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Success" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+
+                        }
+                        else
+                        {
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+
+                        }
+                    }
+                    
+                    @if(userAth.HasPermission(Permissions.ReportsDelete))
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteReport(report, medium))"></MudIconButton>
+                    }
                 }
                 
-                @if (rolUser.Contains("Client"))
+                @*@if (rolUser.Contains("Client"))
                 {
                     <MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download())"></MudIconButton>
 
-                }
+                }*@
                 
             </MudItem>
         </TitleContent>
@@ -156,10 +171,13 @@
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-            @if(editMode)
+            @if (userAth.HasPermission(Permissions.ReportsEdit))
             {
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+                @if(editMode)
+                {
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+                }  
             }
+            
         </DialogActions>
     </MudDialog>
-</MudContainer>

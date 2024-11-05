@@ -8,8 +8,10 @@
 @inject IDialogService Dialog
 @inject IStringLocalizer<Resource> localizer
 @using Blazor.Flags
+@using Cervantes.CORE
+@using global::AuthPermissions.AspNetCore
+@attribute [HasPermission(Permissions.ReportTemplatesRead)]
 
-<AuthorizeView Roles="Admin,SuperUser">
         <PageTitle>@localizer["components"] | Cervantes</PageTitle>
         <SectionContent SectionName="appbar">
             <MudText Typo="Typo.h5">
@@ -122,4 +124,3 @@
             <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="editorConf" @bind-Value="_reportImportResultViewModel.Body" data-mce-placeholder="Description"/>
             </MudStack>
         }
-</AuthorizeView>

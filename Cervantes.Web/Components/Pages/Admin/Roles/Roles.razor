@@ -1,0 +1,95 @@
+@rendermode InteractiveServer
+@page "/roles"
+@page "/roles/create"
+@using Cervantes.CORE
+@using Cervantes.CORE.ViewModels
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.Extensions.Localization
+@using MudBlazor.Extensions.Core
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager navigationManager
+@inject IMudExDialogService DialogEx
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.RolesRead)]
+
+<PageTitle>@localizer["roles"] | Cervantes</PageTitle>
+<SectionContent SectionName="appbar">
+    <MudText Typo="Typo.h5">
+        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Badge"></MudIcon>
+
+        @localizer["roles"]
+
+    </MudText>
+</SectionContent>
+<SectionContent SectionName="top-bar">
+    <MudStack Row="true" AlignItems="AlignItems.Center">
+
+        <MudButton Href="/users"
+
+                   StartIcon="@Icons.Material.Filled.Group"
+                   Color="Color.Transparent">
+            @localizer["users"]
+        </MudButton>
+
+        <MudButton Href="/roles"
+
+                   StartIcon="@Icons.Material.Filled.Badge"
+                   Color="Color.Primary">
+            @localizer["roles"]
+        </MudButton>
+    </MudStack>
+</SectionContent>
+
+<SectionContent SectionName="breadcrumbs">
+    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+</SectionContent>
+<MudGrid>
+<MudItem xs="12" sm="12" md="12">
+
+        <MudDataGrid T="RolesViewModel" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+            <ToolBarContent>
+                <MudStack Row="true">
+                    @if (userAth.HasPermission(Permissions.UsersAdd))
+                    {
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                    }
+                    @if (userAth.HasPermission(Permissions.UsersDelete))
+                    {
+                        @if (seleUsers.Count() != 0)
+                        {
+                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                <MudButton>@localizer["actions"]</MudButton>
+                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                </MudMenu>
+                            </MudButtonGroup>
+                        }
+                    }
+                    
+                </MudStack>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                </MudTextField>
+            </ToolBarContent>
+            <Columns>
+                <SelectColumn T="RolesViewModel"/>
+                
+                <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                <PropertyColumn Property="x => x.Description" Title="@localizer["description"]"/>
+                <PropertyColumn Property="x => x.PermmissioNumber" Title="@localizer["permissions"]"/>
+
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="RolesViewModel"/>
+            </PagerContent>
+        </MudDataGrid>
+
+    </MudItem>
+</MudGrid>

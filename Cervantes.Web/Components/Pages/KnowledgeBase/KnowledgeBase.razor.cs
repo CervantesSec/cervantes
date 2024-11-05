@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
 using Cervantes.Web.Components.Shared;
@@ -77,9 +78,10 @@ public partial class KnowledgeBase: ComponentBase
             };
     [Inject] private IAiService _aiService { get; set; }
     private bool aiEnabled = false;
-
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         await Update();
         _items = new List<BreadcrumbItem>
         {

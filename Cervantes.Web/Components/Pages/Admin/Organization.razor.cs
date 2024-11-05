@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using FluentValidation;
@@ -65,9 +66,10 @@ public partial class Organization: ComponentBase
     [Inject] OrganizationController _organizationController { get; set; }
     private long maxFileSize = 1024 * 1024 * 5;
     private IBrowserFile File;
-
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),

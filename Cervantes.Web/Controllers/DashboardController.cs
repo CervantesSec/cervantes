@@ -9,7 +9,7 @@ using TaskStatus = Cervantes.CORE.Entities.TaskStatus;
 
 namespace Cervantes.Web.Controllers;
 
-[Authorize(Roles = "Admin.SuperUser,User")]
+[Authorize]
 public class DashboardController: ControllerBase
 {
     private readonly ILogger<DashboardController> _logger;

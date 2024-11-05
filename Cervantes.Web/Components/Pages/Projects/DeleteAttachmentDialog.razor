@@ -1,8 +1,11 @@
 @inject HttpClient Http
+@using Cervantes.CORE
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.ProjectAttachmentsDelete)]
 
 
 <MudDialog>

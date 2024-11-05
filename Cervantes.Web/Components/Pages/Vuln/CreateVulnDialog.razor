@@ -1,15 +1,17 @@
+@using Cervantes.CORE
 @using Variant = MudBlazor.Variant
 @using Microsoft.AspNetCore.Components
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
 @using CsvHelper.TypeConversion
+@using global::AuthPermissions.AspNetCore
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService DialogService
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.Extensions.Localization
 @using Org.BouncyCastle.Asn1.X509
-
+@attribute [HasPermission(Permissions.VulnsAdd)]
 
 <style>
 	.tox-tinymce-aux {
@@ -182,16 +184,20 @@
                                 }
                             </MudSelect>
 
+                            
                         </MudStack>
                     </MudTabPanel>
                 </MudForm>
+                <MudStack Row="true" Justify="Justify.FlexEnd">
+                    <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+                </MudStack>
             </MudTabs>
 
 
         </DialogContent>
         <DialogActions>
-            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+            
         </DialogActions>
     </MudDialog>
 

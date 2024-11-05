@@ -29,6 +29,8 @@ public partial class ProjectTemplates : ComponentBase
     [Inject] private UserController userController { get; set; }
     private List<CORE.Entities.Project> selectedProjects = new List<CORE.Entities.Project>();
     private ApplicationUser user;
+    ClaimsPrincipal userAth;
+
     protected override async Task OnInitializedAsync()
     {
     _items = new List<BreadcrumbItem>
@@ -38,6 +40,8 @@ public partial class ProjectTemplates : ComponentBase
 
         new BreadcrumbItem(localizer["templates"], href: null, disabled: true,icon: Icons.Material.Filled.Folder)
     };
+    userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+
         await Update();
         /*if (project != Guid.Empty)
         {

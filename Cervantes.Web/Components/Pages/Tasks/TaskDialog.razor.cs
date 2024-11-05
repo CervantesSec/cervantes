@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.Export;
@@ -64,9 +65,11 @@ public partial class TaskDialog: ComponentBase
         {"contextmenu", "link image imagetools table"}
     };
     private bool inProject = false;
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         //model.SelectedTargets = new HashSet<Guid>();
         Targets = _taskController.GetTargets(task.Id).ToList();
         Notes = _taskController.GetNotes(task.Id).ToList();

@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
@@ -91,8 +92,10 @@ public partial class ReportDialog : ComponentBase
         }
     };
 
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         var comp = _reportController.Components().ToList();
         var parts = _reportController.GetParts(report.Id).ToList();
         _dropItems = new List<DropItem>();

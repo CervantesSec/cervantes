@@ -8,6 +8,8 @@
 @using Cervantes.CORE.ViewModels
 @using Cervantes.Web.Components.Layout
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @using MudBlazor.Extensions.Core
 @inject IDialogService DialogService
@@ -16,9 +18,8 @@
 @layout WorkspaceLayout
 @inject NavigationManager navigationManager
 @inject IMudExDialogService DialogEx
-
-
-<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ChecklistsRead)]
 
 <PageTitle>@localizer["checklist"] | Cervantes</PageTitle>
     <SectionContent SectionName="appbar">
@@ -52,16 +53,24 @@
                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                 <ToolBarContent>
                     <MudStack Row="true">
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
-                         @if (seleChecklists.Count() != 0)
-                                                {
-                                                    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" >
-                                                        <MudButton>@localizer["actions"]</MudButton>
-                                                        <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                                            <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
-                                                        </MudMenu>
-                                                    </MudButtonGroup>
-                                                }
+                        @if (userAth.HasPermission(Permissions.ChecklistsAdd))
+                        {
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                        }
+                        
+                        @if (userAth.HasPermission(Permissions.ChecklistsDelete))
+                        {
+                            @if (seleChecklists.Count() != 0)
+                            {
+                                <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                    <MudButton>@localizer["actions"]</MudButton>
+                                    <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                        <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                    </MudMenu>
+                                </MudButtonGroup>
+                            }
+                        }
+                        
                     </MudStack>
                     <MudSpacer/>
                     <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -82,4 +91,3 @@
             
         </MudItem>
         </MudGrid>
-</AuthorizeView>

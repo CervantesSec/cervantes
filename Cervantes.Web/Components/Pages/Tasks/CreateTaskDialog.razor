@@ -1,12 +1,14 @@
+@using Cervantes.CORE
 @using Variant = MudBlazor.Variant
 @using Microsoft.AspNetCore.Components
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IStringLocalizer<Resource> localizer
 @inject IHttpContextAccessor _accessor
-
+@attribute [HasPermission(Permissions.TasksAdd)]
 
 <style>
 	.tox-tinymce-aux {
@@ -29,9 +31,9 @@
 			<MudStack AlignItems="AlignItems.Stretch">
 				
 				<MudTextField  @bind-Value="model.Name"
-				              For="@(() => model.Name)"
-				              Immediate="true"
-				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Task"/>
+				               For="@(() => model.Name)"
+				               Immediate="true"
+				               Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Task"/>
 
 				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 				<MudSelect @bind-Value="@SelectedProject" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
@@ -78,10 +80,13 @@
 
 			</MudStack>
 		</MudForm>
+		<MudStack Row="true" Justify="Justify.FlexEnd">
+			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		</MudStack>
 	</DialogContent>
 	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		
 	</DialogActions>
 </MudDialog>
 

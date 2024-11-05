@@ -1,19 +1,26 @@
 @using Cervantes.CORE.Entities
 @using System.ComponentModel.DataAnnotations
 @using System.Reflection
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<Resource> localizer
 @inject IJSRuntime JS
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
-
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ChecklistsRead)]
 
 <MudDialog Class="mud-ex-dialog-initial">
     <TitleContent>
         <MudStack Row="true" Spacing="1">
             <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Checklist" /> OWASP WSTG: @checklist.Target</MudText>
-            <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(checklist, medium))">@localizer["delete"]</MudChip>
+            @if (userAth.HasPermission(Permissions.ChecklistsDelete))
+            {
+                <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(checklist, medium))">@localizer["delete"]</MudChip>
+            }
 
         </MudStack>   
             </TitleContent>
@@ -2359,10 +2366,20 @@
             </MudForm>
         </MudContainer>
         <MudText Typo="Typo.subtitle2" Align="Align.Center"><MudLink Href="https://owasp.org/www-project-web-security-testing-guide/stable/" Target="_blank">Based on OWASP WSTG 4.2 Stable</MudLink></MudText>
-    </DialogContent>
+        <MudStack Row="true" Justify="Justify.FlexEnd">
+            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+            @if (userAth.HasPermission(Permissions.ChecklistsEdit))
+            {
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+            }
+            @if (userAth.HasPermission(Permissions.ReportsAdd))
+            {
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileDownload" Color="@Color.Primary" OnClick="GenerateReport">@localizer["generateReport"]</MudButton>
+
+            }
+        </MudStack>
+        </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileDownload" Color="@Color.Primary" OnClick="GenerateReport">@localizer["generateReport"]</MudButton>
+        
     </DialogActions>
 </MudDialog>

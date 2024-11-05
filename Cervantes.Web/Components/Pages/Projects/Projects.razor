@@ -19,10 +19,13 @@
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
 @using Blazor.Flags
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using MudBlazor.Extensions.Core
 @inject IMudExDialogService DialogEx
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ProjectsRead)]
 
-<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 <PageTitle>@localizer["projects"] | Cervantes</PageTitle>
 
     <SectionContent SectionName="appbar">
@@ -68,8 +71,12 @@
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
-                    <AuthorizeView Roles="Admin,SuperUser">
+                    @if(userAth.HasPermission(Permissions.ProjectsAdd))
+                    {
                         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                    }
+                    @if (userAth.HasPermission(Permissions.ProjectsDelete))
+                    {
                         @if (selectedProjects.Count() != 0)
                         {
                             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
@@ -79,8 +86,7 @@
                                 </MudMenu>
                             </MudButtonGroup>
                         }
-    
-                    </AuthorizeView>
+                    }
                 </MudStack>
                 <MudSpacer/>
                 <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -201,10 +207,8 @@
     
 </MudGrid>
     
-</AuthorizeView>
 
-<AuthorizeView Context="innerContext" Roles="Client">
-    <PageTitle>@localizer["projects"] | Cervantes</PageTitle>
+    @*<PageTitle>@localizer["projects"] | Cervantes</PageTitle>
     <SectionContent SectionName="appbar">
         <MudText Typo="Typo.h5">
             <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Folder"></MudIcon>
@@ -368,6 +372,5 @@
     </MudItem>
         
         
-    </MudGrid>
+    </MudGrid>*@
     
-</AuthorizeView>

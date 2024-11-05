@@ -10,14 +10,17 @@
 @inject IDialogService Dialog
 @inject IJSRuntime JS
 @using Blazor.Flags
-
+@using Cervantes.CORE
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.TargetsServicesRead)]
 
 <style>
 	.tox-tinymce-aux {
         z-index: 999999!important;
     }
 </style>
-<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
     <MudDialog DisableSidePadding="true">
         <TitleContent>
@@ -29,15 +32,21 @@
                 <MudSpacer/>
                 @if (inProject)
                 {
-                    @if (editMode)
+                    @if (userAth.HasPermission(Permissions.TargetsServicesEdit))
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+                        @if (editMode)
+                        {
+                            <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+                        }
+                        else
+                        {
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+                        }
                     }
-                    else
+                    @if(userAth.HasPermission(Permissions.TargetsServicesDelete))
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(medium))"></MudIconButton>
                     }
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(medium))"></MudIconButton>
                 }
                 
 
@@ -123,10 +132,13 @@
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-            @if (editMode)
+            @if (userAth.HasPermission(Permissions.TargetsServicesEdit))
             {
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+                @if (editMode)
+                {
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+                }
             }
+            
         </DialogActions>
     </MudDialog>
-</MudContainer>

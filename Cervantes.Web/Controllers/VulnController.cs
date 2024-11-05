@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
@@ -21,7 +22,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Cervantes.Web.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class VulnController: ControllerBase
 {
      private IVulnManager vulnManager = null;
@@ -83,6 +84,7 @@ public class VulnController: ControllerBase
         this.Sanitizer = Sanitizer;
     }
     
+    [HasPermission(Permissions.VulnsRead)]
     [HttpGet]
     [Route("Client/{id}")]
     
@@ -112,6 +114,7 @@ public class VulnController: ControllerBase
         
     }
     
+    [HasPermission(Permissions.VulnsRead)]
     [HttpGet]
     [Route("{id}")]
     public CORE.Entities.Vuln GetById(Guid id)
@@ -130,6 +133,7 @@ public class VulnController: ControllerBase
         
     }
     
+    [HasPermission(Permissions.VulnsRead)]
     [HttpGet]
     [Route("Project/{id}")]
     public IEnumerable<CORE.Entities.Vuln> GetByProject(Guid id)
@@ -150,7 +154,7 @@ public class VulnController: ControllerBase
     
     [HttpGet]
     [Route("Categories")]
-    [Authorize (Roles = "Admin,SuperUser,User")]
+    [HasPermission(Permissions.VulnCategoriesRead)]
     public IEnumerable<CORE.Entities.VulnCategory> GetCategories()
     {
         try
@@ -169,7 +173,7 @@ public class VulnController: ControllerBase
     
     [HttpGet]
     [Route("Cwe")]
-    [Authorize (Roles = "Admin,SuperUser,User")]
+    [HasPermission(Permissions.VulnsRead)]
     public IEnumerable<CORE.Entities.Cwe> GetCwes()
     {
         try
@@ -188,7 +192,7 @@ public class VulnController: ControllerBase
     
     [HttpGet]
     [Route("Templates")]
-    [Authorize (Roles = "Admin,SuperUser,User")]
+    [HasPermission(Permissions.VulnsRead)]
     public IEnumerable<CORE.Entities.Vuln> GetTemplates()
     {
         try
@@ -206,6 +210,7 @@ public class VulnController: ControllerBase
     }
     
     [HttpGet]
+    [HasPermission(Permissions.VulnsRead)]
     public IEnumerable<CORE.Entities.Vuln> GetVulns()
     {
         try
@@ -223,7 +228,7 @@ public class VulnController: ControllerBase
     }
 
     [HttpPost]
-    [Authorize (Roles = "Admin,SuperUser,User")]
+    [HasPermission(Permissions.VulnsAdd)]
     public async Task<IActionResult> Add([FromBody] VulnCreateViewModel model)
     {
         try
@@ -354,7 +359,7 @@ public class VulnController: ControllerBase
     }
     
     [HttpPut]
-    [Authorize (Roles = "Admin,SuperUser,User")]
+    [HasPermission(Permissions.VulnsEdit)]
     public async Task<IActionResult> Edit([FromBody] VulnCreateViewModel model)
     {
         try
@@ -493,7 +498,7 @@ public class VulnController: ControllerBase
     
     [HttpGet]
     [Route("Cwe/{id}")]
-    [Authorize (Roles = "Admin,SuperUser,User")]
+    [HasPermission(Permissions.VulnsRead)]
     public IEnumerable<CORE.Entities.VulnCwe> GetVulnCwes(Guid id)
     {
         try
@@ -512,7 +517,7 @@ public class VulnController: ControllerBase
     
     [HttpGet]
     [Route("Targets/{id}")]
-    
+    [HasPermission(Permissions.VulnTargetsRead)]
     public IEnumerable<CORE.Entities.VulnTargets> GetVulnTargets(Guid id)
     {
         try
@@ -531,6 +536,7 @@ public class VulnController: ControllerBase
     
     [HttpDelete]
     [Route("{id}")]
+    [HasPermission(Permissions.VulnsDelete)]
     public async Task<IActionResult> DeleteVuln(Guid id)
     {
         try
@@ -569,6 +575,7 @@ public class VulnController: ControllerBase
     
     [HttpGet]
     [Route("Notes/{id}")]
+    [HasPermission(Permissions.VulnNotesRead)]
     public IEnumerable<CORE.Entities.VulnNote> GetVulnNotes(Guid id)
     {
         try
@@ -587,6 +594,7 @@ public class VulnController: ControllerBase
     
     [HttpGet]
     [Route("Attachments/{id}")]
+    [HasPermission(Permissions.VulnAttachmentsRead)]
     public IEnumerable<CORE.Entities.VulnAttachment> GetVulnAttachments(Guid id)
     {
         try
@@ -605,6 +613,7 @@ public class VulnController: ControllerBase
     
     [HttpPost]
     [Route("Note")]
+    [HasPermission(Permissions.VulnNotesAdd)]
     public async Task<IActionResult> AddVulnNote([FromBody] VulnNoteViewModel model)
     {
         try
@@ -654,6 +663,7 @@ public class VulnController: ControllerBase
     
     [HttpDelete]
     [Route("Note/{id}")]
+    [HasPermission(Permissions.VulnNotesDelete)]
     public async Task<IActionResult> DeleteVulnNote(Guid id)
     {
         try
@@ -696,6 +706,7 @@ public class VulnController: ControllerBase
     
     [HttpPut]
     [Route("Note")]
+    [HasPermission(Permissions.VulnNotesEdit)]
     public async Task<IActionResult> EditNote([FromBody] VulnNoteEditViewModel model)
     {
         try
@@ -737,6 +748,7 @@ public class VulnController: ControllerBase
     
     [HttpPost]
     [Route("Target")]
+    [HasPermission(Permissions.VulnTargetsAdd)]
     public async Task<IActionResult> AddVulnTarget([FromBody] VulnTargetViewModel model)
     {
         try
@@ -794,6 +806,7 @@ public class VulnController: ControllerBase
     }
     [HttpDelete]
     [Route("Target/{id}")]
+    [HasPermission(Permissions.VulnTargetsDelete)]
     public async Task<IActionResult> DeleteVulnTarget(Guid id)
     {
         try
@@ -833,6 +846,7 @@ public class VulnController: ControllerBase
     
     [HttpPost]
     [Route("Attachment")]
+    [HasPermission(Permissions.VulnAttachmentsAdd)]
     public async Task<IActionResult> AddAttachment(VulnAttachmentViewModel model)
     {
         try
@@ -916,6 +930,7 @@ public class VulnController: ControllerBase
     }
     [HttpDelete]
     [Route("Attachment/{id}")]
+    [HasPermission(Permissions.VulnAttachmentsDelete)]
     public async Task<IActionResult> DeleteAttahcment(Guid id)
     {
         try
@@ -962,6 +977,7 @@ public class VulnController: ControllerBase
     
     [HttpPost]
     [Route("Import")]
+    [HasPermission(Permissions.VulnsImport)]
     public async Task<IActionResult> Import(VulnImportViewModel model)
     {
         try
@@ -1092,7 +1108,7 @@ public class VulnController: ControllerBase
     
       [HttpPost]
       [Route("Category")]
-      [Authorize (Roles = "Admin,SuperUser")]
+      [HasPermission(Permissions.VulnCategoriesAdd)]
     public async Task<IActionResult> AddCategory([FromBody] VulnCategoryCreate model)
     {
         try
@@ -1125,7 +1141,7 @@ public class VulnController: ControllerBase
     
     [HttpDelete]
     [Route("Category/{categoryId}")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.VulnCategoriesDelete)]
     public async Task<IActionResult> DeleteCategory(Guid categoryId)
     {
         try
@@ -1154,7 +1170,7 @@ public class VulnController: ControllerBase
     
     [HttpPut]
     [Route("Category")]
-    [Authorize (Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.VulnCategoriesEdit)]
     public async Task<IActionResult> EditCategory([FromBody] VulnCategoryEdit model)
     {
         try

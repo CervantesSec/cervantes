@@ -1,11 +1,14 @@
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @inject IStringLocalizer<Resource> localizer
-
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@attribute [HasPermission(Permissions.ClientsDelete)]
 
 <MudDialog>
 	<TitleContent>

@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,12 +7,14 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
-<AuthorizeView Roles="SuperUser,User,Admin">
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.JiraRead)]
 
-    <MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
         <MudDialog DisableSidePadding="true">
             <TitleContent>
@@ -23,9 +26,15 @@
                     </MudText>
                     <MudSpacer/>
 
-                    <MudIconButton Icon="@Icons.Material.Filled.Update" Color="Color.Primary" aria-label="delete" OnClick="UpdateJira"></MudIconButton>
+                    @if (userAth.HasPermission(Permissions.JiraEdit))
+                    {
+	                    <MudIconButton Icon="@Icons.Material.Filled.Update" Color="Color.Primary" aria-label="delete" OnClick="UpdateJira"></MudIconButton>
+                    }
 
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="DeleteJira"></MudIconButton>
+                    @if(userAth.HasPermission(Permissions.JiraDelete))
+					{
+	                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="DeleteJira"></MudIconButton>
+					}
 
                 </MudItem>
 
@@ -195,40 +204,48 @@
 					            </TitleContent>
 					            <ChildContent>
 						            <MudStack>
-							            @foreach (var comment in JiraComments)
+							            @if (userAth.HasPermission(Permissions.JiraCommentsRead))
+							            {
+								            @foreach (var comment in JiraComments)
+								            {
+									            <MudCard Elevation="25">
+										            <MudCardHeader>
+											            <MudStack Row="true">
+												            <MudAvatar Color="Color.Primary" Size="Size.Small">A</MudAvatar>
+
+												            <MudStack Justify="Justify.Center" Spacing="0">
+													            <MudText Typo="Typo.body1">@comment.Author</MudText>
+												            </MudStack>
+											            </MudStack>
+											            <MudSpacer></MudSpacer>
+											            <MudText Typo="Typo.body2">@comment.CreatedDate</MudText>
+										            </MudCardHeader>
+										            <MudCardContent>
+											            <MudText Typo="Typo.body2">@comment.Body</MudText>
+										            </MudCardContent>
+									            </MudCard>
+
+								            }
+							            }
+							            
+							            @if (userAth.HasPermission(Permissions.JiraCommentsAdd))
 							            {
 								            <MudCard Elevation="25">
 									            <MudCardHeader>
-										            <MudStack Row="true">
-											            <MudAvatar Color="Color.Primary" Size="Size.Small">A</MudAvatar>
-
-											            <MudStack Justify="Justify.Center" Spacing="0">
-												            <MudText Typo="Typo.body1">@comment.Author</MudText>
-											            </MudStack>
-										            </MudStack>
-										            <MudSpacer></MudSpacer>
-										            <MudText Typo="Typo.body2">@comment.CreatedDate</MudText>
+										            <MudText Typo="Typo.body1">@localizer["addComment"]</MudText>
 									            </MudCardHeader>
 									            <MudCardContent>
-										            <MudText Typo="Typo.body2">@comment.Body</MudText>
+										            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="test" data-mce-placeholder="Description"/>
+
 									            </MudCardContent>
+									            <MudCardActions>
+										            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.AddComment" Color="Color.Primary" OnClick="AddComment">@localizer["add"]</MudButton>
+
+									            </MudCardActions>
 								            </MudCard>
-
 							            }
-							                           
-							            <MudCard Elevation="25">
-								            <MudCardHeader>
-									            <MudText Typo="Typo.body1">@localizer["addComment"]</MudText>
-								            </MudCardHeader>
-								            <MudCardContent>
-									            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="test" data-mce-placeholder="Description"/>
 
-								            </MudCardContent>
-								            <MudCardActions>
-									            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.AddComment" Color="Color.Primary" OnClick="AddComment">@localizer["add"]</MudButton>
-
-								            </MudCardActions>
-							            </MudCard>
+							            
 
 						            </MudStack>
 					            </ChildContent>
@@ -244,5 +261,3 @@
                 <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
             </DialogActions>
         </MudDialog>
-    </MudContainer>
-</AuthorizeView>

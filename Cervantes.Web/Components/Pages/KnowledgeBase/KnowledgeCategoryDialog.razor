@@ -1,7 +1,12 @@
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.KnowledgeBaseCategoryRead)]
 
 <MudDialog DisableSidePadding="true">
     <TitleContent>
@@ -10,12 +15,14 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudContainer>
             <MudDataGrid T="KnowledgeBaseCategories" Items="@Categories" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
                          Hideable="true" Hover="true" Elevation="25" RowClick="@RowClicked">
                 <ToolBarContent>
                     <MudStack Row="true">
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => AddCategory(maxWidth))">@localizer["addCategory"]</MudButton>
+                        @if (userAth.HasPermission(Permissions.KnowledgeBaseCategoryAdd))
+                        {
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => AddCategory(maxWidth))">@localizer["addCategory"]</MudButton>
+                        }
                         @*<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
         										<MudButton>@localizer["export"]</MudButton>
         										<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
@@ -54,7 +61,6 @@
                     <MudDataGridPager T="KnowledgeBaseCategories"/>
                 </PagerContent>
             </MudDataGrid>
-        </MudContainer>
     </DialogContent>
     <DialogActions>
 

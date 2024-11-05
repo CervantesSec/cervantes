@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -17,9 +18,10 @@ public partial class ProjectAttachmentDialog: ComponentBase
     [Inject] ISnackbar Snackbar { get; set; }
     
     private bool inProject = false;
-    
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         if (attachment.ProjectId != Guid.Empty)
         {
             inProject = await _ProjectController.VerifyUser(attachment.ProjectId);

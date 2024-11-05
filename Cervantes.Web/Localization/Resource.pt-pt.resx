@@ -1817,4 +1817,34 @@
     <data name="userType" xml:space="preserve">
         <value>Tipo de Utilizador</value>
     </data>
+    <data name="roles" xml:space="preserve">
+        <value>Funções</value>
+    </data>
+    <data name="permissions" xml:space="preserve">
+        <value>Autorizações</value>
+    </data>
+    <data name="createRole" xml:space="preserve">
+        <value>Criar Função</value>
+    </data>
+    <data name="deleteRole" xml:space="preserve">
+        <value>Eliminar Função</value>
+    </data>
+    <data name="roleCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar o função !</value>
+    </data>
+    <data name="roleDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o função !</value>
+    </data>
+    <data name="roleEditedError" xml:space="preserve">
+        <value>Ocorreu um erro ao editar o função !</value>
+    </data>
+    <data name="roleCreated" xml:space="preserve">
+        <value>Função criado com sucesso!</value>
+    </data>
+    <data name="roleDeleted" xml:space="preserve">
+        <value>Função eliminado com sucesso!</value>
+    </data>
+    <data name="roleEdited" xml:space="preserve">
+        <value>Função editado com sucesso!</value>
+    </data>
 </root>

@@ -33,9 +33,10 @@ public partial class TasksKanban : ComponentBase
     [Inject] private TaskController _taskController { get; set; }
     [Inject] private UserController _userController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
+    ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
-        
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         await Update();
         _items = new List<BreadcrumbItem>
         {

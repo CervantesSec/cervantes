@@ -2,7 +2,9 @@ using System.IO.Compression;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.File;
@@ -15,7 +17,7 @@ namespace Cervantes.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class BackupController : ControllerBase
 {
     private readonly ILogger<BackupController> _logger = null;
@@ -115,6 +117,7 @@ public class BackupController : ControllerBase
 
     [HttpGet]
     [Route("Data")]
+    [HasPermission(Permissions.BackupRead)]
     public FileContentResult BackupData()
     {
         try
@@ -880,6 +883,7 @@ public class BackupController : ControllerBase
 
     [HttpGet]
     [Route("Attachments")]
+    [HasPermission(Permissions.BackupRead)]
     public FileContentResult BackupAttachments()
     {
         try
@@ -911,6 +915,7 @@ public class BackupController : ControllerBase
 
     [HttpPost]
     [Route("Attachments")]
+    [HasPermission(Permissions.BackupRestore)]
     public async Task<IActionResult> RestoreAttachments(BackupFormViewModel model)
     {
         try
@@ -955,6 +960,7 @@ public class BackupController : ControllerBase
 
     [HttpPost]
     [Route("Data")]
+    [HasPermission(Permissions.BackupRestore)]
     public async Task<IActionResult> RestoreData(BackupFormViewModel model)
     {
         try

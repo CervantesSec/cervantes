@@ -1,15 +1,18 @@
 @page "/organization"
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Cervantes.CORE.ViewModels
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @using Color = MudBlazor.Color
 @inject IStringLocalizer<Resource> localizer
 @inject ISnackbar Snackbar
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.OrganizationRead)]
 
-<AuthorizeView Roles="Admin">
-    <Authorized>
         <PageTitle>@localizer["organization"] | Cervantes</PageTitle>
         <SectionContent SectionName="appbar">
             <MudText Typo="Typo.h5">
@@ -100,11 +103,12 @@
                             }
                         </MudStack>
                     </MudForm>
-                <MudStack Row="true">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="Submit" StartIcon="@Icons.Material.Filled.Save">@localizer["save"]</MudButton>
-                </MudStack>
+                    <MudStack Row="true">
+                        @if (userAth.HasPermission(Permissions.OrganizationEdit))
+                        {
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="Submit" StartIcon="@Icons.Material.Filled.Save">@localizer["save"]</MudButton>
+                        }
+                    </MudStack>
             </MudStack>
             </MudItem>
         </MudGrid>
-    </Authorized>
-</AuthorizeView>

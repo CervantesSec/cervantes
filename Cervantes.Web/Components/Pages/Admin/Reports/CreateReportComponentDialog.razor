@@ -1,13 +1,16 @@
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
 @using Variant = MudBlazor.Variant
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
+@attribute [HasPermission(Permissions.ReportComponentsAdd)]
 
 <style>
 	.tox-tinymce-aux {
@@ -58,32 +61,34 @@
 					<TinyMCE.Blazor.Editor @key="Editor" ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@Editor.Conf" @bind-Value="model.Content" data-mce-placeholder="Description"/>
 				}
 				<MudExpansionPanels Elevation="25">
-				<MudExpansionPanel >
-					<TitleContent>
-						<div class="d-flex">
-							<MudIcon Icon="@Icons.Material.Filled.Css" class="mr-3"></MudIcon>
-							<MudText>@localizer["advancedCss"]</MudText>
-						</div>
-					</TitleContent>
-					<ChildContent>
-						<MudStack>
-							<StandaloneCodeEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" CssClass="editor-class"/>
-							<MudStack Row="true" Justify="Justify.FlexEnd">
-								<MudButton  Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Css" Color="@Color.Primary" OnClick="UpdateCss">@localizer["updateStyle"]</MudButton>
+					<MudExpansionPanel >
+						<TitleContent>
+							<div class="d-flex">
+								<MudIcon Icon="@Icons.Material.Filled.Css" class="mr-3"></MudIcon>
+								<MudText>@localizer["advancedCss"]</MudText>
+							</div>
+						</TitleContent>
+						<ChildContent>
+							<MudStack>
+								<StandaloneCodeEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" CssClass="editor-class"/>
+								<MudStack Row="true" Justify="Justify.FlexEnd">
+									<MudButton  Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Css" Color="@Color.Primary" OnClick="UpdateCss">@localizer["updateStyle"]</MudButton>
 
+								</MudStack>
 							</MudStack>
-						</MudStack>
-					</ChildContent>
-				</MudExpansionPanel>
+						</ChildContent>
+					</MudExpansionPanel>
 				</MudExpansionPanels>
 
 			</MudStack>
 		</MudForm>
+		<MudStack Row="true" Justify="Justify.FlexEnd">
+			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		</MudStack>
 	</DialogContent>
 	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
-
+	
 	</DialogActions>
 </MudDialog>
 

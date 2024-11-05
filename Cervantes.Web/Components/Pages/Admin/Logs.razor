@@ -1,8 +1,11 @@
 @page "/logs"
+@using Cervantes.CORE
 @using Cervantes.CORE.ViewModels
 @using Cervantes.CORE.Entities
 @using Cervantes.CORE.ViewModel
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @using Color = MudBlazor.Color
 @using Size = MudBlazor.Size
@@ -11,10 +14,10 @@
 @inject NavigationManager navigationManager
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
+@attribute [HasPermission(Permissions.LogsRead)]
+@inject AuthenticationStateProvider authenticationStateProvider
 
-<AuthorizeView Roles="Admin">
-    <Authorized>
-        <PageTitle>Logs | Cervantes</PageTitle>
+<PageTitle>Logs | Cervantes</PageTitle>
         <SectionContent SectionName="appbar">
             <MudText Typo="Typo.h5">
                 <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.ViewCompact"></MudIcon>
@@ -40,7 +43,10 @@
                              Hideable="true" Hover="true" Virtualize="true" DragDropColumnReordering="true" RowStyleFunc="@_rowStyleFunc">
                     <ToolBarContent>
                         <MudStack Row="true">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="DeleteAll">@localizer["delete"]</MudButton>
+                            @if (userAth.HasPermission(Permissions.LogsDelete))
+                            {
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="DeleteAll">@localizer["delete"]</MudButton>
+                            }
                         </MudStack>
                         <MudSpacer/>
                         <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -64,8 +70,4 @@
                 
             </MudItem>
         </MudGrid>
-    </Authorized>
-    <NotAuthorized>
-        <Cervantes.Web.Components.Shared.NoRolePermissions/>
-    </NotAuthorized>
-</AuthorizeView>
+  

@@ -9,10 +9,14 @@
 @using Color = MudBlazor.Color
 @using Size = MudBlazor.Size
 @using System.Diagnostics
+@using Cervantes.CORE
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
-
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ReportTemplatesRead)]
 
 <style>
 	.tox-tinymce-aux {
@@ -31,15 +35,22 @@
 		<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => DownloadTemplate())"></MudIconButton>
 		*@
 
-            @if (editMode)
+            @if (userAth.HasPermission(Permissions.ReportTemplatesEdit))
             {
-                <MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+                @if (editMode)
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+                }
+                else
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+                }
             }
-            else
+            
+            @if(userAth.HasPermission(Permissions.ReportTemplatesDelete))
             {
-                <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+                <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(report, medium))">@localizer["delete"]</MudChip>
             }
-            <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(report, medium))">@localizer["delete"]</MudChip>
 
         </MudStack>
     </TitleContent>
@@ -187,6 +198,16 @@
 
                     </MudStack>
                 </MudForm>
+                <MudStack Row="true" Justify="Justify.FlexEnd">
+                    <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+                    @if(userAth.HasPermission(Permissions.ReportTemplatesEdit))
+                    {
+                    @if (editMode)
+                    {
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+                    }
+                    }
+                </MudStack>
             </MudContainer>
         }
         else
@@ -339,10 +360,7 @@
 
     </DialogContent>
     <DialogActions>
-        <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
-        @if (editMode)
-        {
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-        }
+        
+        
     </DialogActions>
 </MudDialog>

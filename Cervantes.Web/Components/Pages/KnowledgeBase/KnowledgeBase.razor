@@ -1,7 +1,12 @@
 @page "/knowledgebase"
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.KnowledgeBaseRead)]
 
 <style>
 	.tox-tinymce-aux {
@@ -9,7 +14,6 @@
     }
 </style>
 
-<AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
 <PageTitle>@localizer["knowledgeBase"] | Cervantes</PageTitle>
     <SectionContent SectionName="appbar">
         <MudText Typo="Typo.h5">
@@ -38,8 +42,14 @@
 
                         <MudText Typo="Typo.h6"> @localizer["categories"]</MudText>
                         <MudSpacer/>
-                        <MudIconButton Icon="@Icons.Material.Filled.Category" Color="Color.Primary" aria-label="delete" Size="Size.Small" OnClick="@((e) => OpenDialogCategory(maxWidth))"></MudIconButton>
-                        <MudIconButton Icon="@Icons.Material.Filled.InsertDriveFile" Color="Color.Warning" aria-label="delete" Size="Size.Small" OnClick="@((e) => OpenDialogPage(maxWidth))"></MudIconButton>
+                        @if (userAth.HasPermission(Permissions.KnowledgeBaseRead))
+                        {
+                            <MudIconButton Icon="@Icons.Material.Filled.Category" Color="Color.Primary" aria-label="delete" Size="Size.Small" OnClick="@((e) => OpenDialogCategory(maxWidth))"></MudIconButton>
+                        }
+                        @if (userAth.HasPermission(Permissions.KnowledgeBaseAdd))
+                        {
+                            <MudIconButton Icon="@Icons.Material.Filled.InsertDriveFile" Color="Color.Warning" aria-label="delete" Size="Size.Small" OnClick="@((e) => OpenDialogPage(maxWidth))"></MudIconButton>
+                        }
                     </MudItem>
 
                 </CardHeaderContent>
@@ -83,22 +93,30 @@
 
                                 @if (Page.Id != Guid.Empty)
                                 {
-                                    @if (editMode)
+                                    @if (userAth.HasPermission(Permissions.KnowledgeBaseEdit))
                                     {
-                                        @if (aiEnabled)
+                                        @if (editMode)
                                         {
-                                            <MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
+                                            @if (userAth.HasPermission(Permissions.AIServiceUsage))
+                                            {
+                                                @if (aiEnabled)
+                                                {
+                                                    <MudIconButton Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))"></MudIconButton>
 
+                                                }  
+                                            }
+                                            
+                                            <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" Size="Size.Small" OnClick="@((e) => EditMode())"></MudIconButton>
                                         }
-                                        <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" Size="Size.Small" OnClick="@((e) => EditMode())"></MudIconButton>
+                                        else
+                                        {
+                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" Size="Size.Small" OnClick="@((e) => EditMode())"></MudIconButton>
+                                        }
                                     }
-                                    else
+                                    @if (userAth.HasPermission(Permissions.KnowledgeBaseDelete))
                                     {
-                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" Size="Size.Small" OnClick="@((e) => EditMode())"></MudIconButton>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" Size="Size.Small" OnClick="@((e) => OpenDeleteDialog())"></MudIconButton>
                                     }
-
-
-                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" Size="Size.Small" OnClick="@((e) => OpenDeleteDialog())"></MudIconButton>
                                 }
 
 
@@ -136,14 +154,17 @@
 
 
                     </MudCardContent>
-                    @if (editMode)
+                    @if (userAth.HasPermission(Permissions.KnowledgeBaseEdit))
                     {
-                        <MudCardActions>
+                        @if (editMode)
+                        {
+                            <MudCardActions>
 
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-                        </MudCardActions>
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+                            </MudCardActions>
+                        }
                     }
-
+                    
                 </MudCard>
                 @* <MudText Typo="Typo.body2" Align="Align.Center">@localizer["createdBy"] @Page.CreatedUser.FullName @localizer["on"] @Page.CreatedAt.ToShortDateString() . @localizer["lastUpdated"] @Page.CreatedUser.FullName @localizer["on"] @Page.UpdatedAt.ToShortDateString()</MudText> *@
 
@@ -153,4 +174,3 @@
     </MudItem>
 
 </MudGrid>
-</AuthorizeView>

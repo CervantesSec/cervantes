@@ -15,12 +15,15 @@
 @inject NavigationManager navigationManager
 @inject IHttpContextAccessor _accessor
 @using Blazor.Flags
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.JiraRead)]
 
 <PageTitle>Jira | Cervantes</PageTitle>
 
-<AuthorizeView Context="innerContext" Roles="SuperUser,User,Admin">
     <SectionContent SectionName="appbar">
         <MudText Typo="Typo.h5">
             <MudIcon Icon="@jiraSVG"/> Jira
@@ -43,16 +46,18 @@
                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                 <ToolBarContent>
                     <MudStack Row="true">
-                        @if (seleJiras.Count() != 0)
+                        @if (userAth.HasPermission(Permissions.JiraDelete))
                         {
-                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                                <MudButton>@localizer["actions"]</MudButton>
-                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                    <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["deleteJira"]</MudMenuItem>
-                                </MudMenu>
-                            </MudButtonGroup>
+                            @if (seleJiras.Count() != 0)
+                            {
+                                <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                    <MudButton>@localizer["actions"]</MudButton>
+                                    <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                        <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["deleteJira"]</MudMenuItem>
+                                    </MudMenu>
+                                </MudButtonGroup>
+                            }
                         }
-
                     </MudStack>
                     <MudSpacer/>
                     <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -83,4 +88,3 @@
             </MudButton>
         </MudItem>
     </MudGrid>
-</AuthorizeView>

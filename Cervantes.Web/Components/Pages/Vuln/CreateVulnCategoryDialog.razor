@@ -1,10 +1,12 @@
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@attribute [HasPermission(Permissions.VulnCategoriesAdd)]
 
-<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
     <MudDialog DisableSidePadding="true">
         <TitleContent>
                 <MudText Typo="Typo.h4">
@@ -34,4 +36,3 @@
         </DialogActions>
     </MudDialog>
 
-</MudContainer>

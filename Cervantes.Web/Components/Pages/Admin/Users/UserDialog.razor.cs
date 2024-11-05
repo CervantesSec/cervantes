@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Components.Pages.Projects;
@@ -26,7 +27,7 @@ public partial class UserDialog: ComponentBase
     [Inject] private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager { get; set; } 
 
     MudForm form;
-    private List<IdentityRole> Roles = new List<IdentityRole>();
+    private List<RolesViewModel> Roles = new List<RolesViewModel>();
     private List<CORE.Entities.Client> Clients = new List<CORE.Entities.Client>();
     private static IBrowserFile File;
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
@@ -76,6 +77,13 @@ public partial class UserDialog: ComponentBase
                 }}
             };
     private UserEditViewModel model { get; set; } = new UserEditViewModel();
+    ClaimsPrincipal userAth;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+    }
+    
     async Task DeleteDialog(CORE.Entities.ApplicationUser user,DialogOptions options)
     {
         var parameters = new DialogParameters { ["user"]=user };
@@ -98,8 +106,18 @@ public partial class UserDialog: ComponentBase
         else
         {
             editMode = true;
-            Roles = new List<IdentityRole>();
-            Roles = _UserController.GetRoles().ToList();
+            Roles.RemoveAll(item => true);
+            var roles = _UserController.GetRoles().ToList();
+            foreach (var item in roles)
+            {
+                Roles.Add(new RolesViewModel
+                {
+                    Name = item.RoleName,
+                    Description = item.Description,
+                    PermmissioNumber = item.PermissionNames.Count
+                
+                });
+            }
             Clients = new List<CORE.Entities.Client>();
             Clients = _ClientsController.Get().ToList();
             model.Id = user.Id;
@@ -125,9 +143,9 @@ public partial class UserDialog: ComponentBase
             {
                 model.ClientId = user.ClientId;
             }
-            var user2 =  _UserController.GetUser(user.Id);
-            var rolUser = await _userManager.GetRolesAsync(user2);
-            model.Role = rolUser.First();
+            //var user2 =  _UserController.GetUser(user.Id);
+            //var rolUser = await _userManager.GetRolesAsync(user2);
+            model.Role = await _UserController.GetRole(user.Id);
         }
         MudDialog.StateHasChanged();
     }

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.Web.Components.Pages.Workspace.Target;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
@@ -40,8 +41,12 @@ public partial class Vaults: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+
         var user = await _ProjectController.VerifyUser(project);
         if (user == false)
         {

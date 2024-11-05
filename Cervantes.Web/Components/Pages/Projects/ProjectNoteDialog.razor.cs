@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
@@ -76,9 +77,11 @@ public partial class ProjectNoteDialog: ComponentBase
     
     NoteModelFluentValidator noteValidator = new NoteModelFluentValidator();
     private bool inProject = false;
-    
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+
         if (note.ProjectId != Guid.Empty)
         {
             inProject = await ProjectController.VerifyUser(note.ProjectId);

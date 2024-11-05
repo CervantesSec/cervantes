@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Components.Pages.Projects;
@@ -22,9 +23,11 @@ public partial class Documents: ComponentBase
     private string searchString = "";
     [Inject] private DocumentController _documentController { get; set; }
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
-
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(localizer["home"], href: "/",icon: Icons.Material.Filled.Home),

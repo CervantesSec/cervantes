@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Cervantes.CORE.ViewModels;
 using Cervantes.IFR.Export;
 using Cervantes.Web.Components.Pages.Clients;
@@ -40,8 +41,10 @@ public partial class Notes: ComponentBase
         Resizeable = true,
     };
 
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),

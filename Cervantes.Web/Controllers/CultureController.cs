@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 [ApiExplorerSettings(IgnoreApi = true)]
 [Route("[controller]/[action]")]
-[Authorize(Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class CultureController : Controller
 {
     public IActionResult Set(string culture, string redirectUri)

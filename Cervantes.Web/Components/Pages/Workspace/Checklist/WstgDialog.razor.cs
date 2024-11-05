@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModel.Wstg;
@@ -26,9 +27,10 @@ public partial class WstgDialog: ComponentBase
 
     
     WSTGViewModel model = new WSTGViewModel();
-
+    ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         var wstg = _checklistController.GetWSTGById(checklist.Id);
         model = new WSTGViewModel();
 

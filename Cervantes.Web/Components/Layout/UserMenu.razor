@@ -1,10 +1,13 @@
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.AspNetCore.Antiforgery
 @using Microsoft.Extensions.Localization
 @inject IHttpContextAccessor _accessor
 @inject NavigationManager NavigationManager
 @inject IStringLocalizer<Resource> localizer
 @inject IAntiforgery Antiforgery
+@inject AuthenticationStateProvider authenticationStateProvider
 
 
 <MudMenu FullWidth="true" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Color="Color.Default">
@@ -33,9 +36,10 @@
     </ActivatorContent>
     <ChildContent>
         <MudMenuItem Icon="@Icons.Material.Filled.Person" IconSize="Size.Small" Href="/Account/Profile">@localizer["profile"]</MudMenuItem>
-        <AuthorizeView Context="innerContext" Roles="Admin,SuperUser,User">
+        @if (user.HasPermission(Permissions.NotesRead))
+        {
             <MudMenuItem Icon="@Icons.Material.Filled.Note" IconSize="Size.Small" Href="/notes" Match="NavLinkMatch.All">@localizer["notes"]</MudMenuItem>
-        </AuthorizeView>
+        }
         <form action="Account/Logout" method="post">
             <input name="__RequestVerificationToken" type="hidden" value="@GetAntiforgeryToken()"/>
 

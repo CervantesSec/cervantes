@@ -1829,4 +1829,34 @@
     <data name="userType" xml:space="preserve">
         <value>User Type</value>
     </data>
+    <data name="roles" xml:space="preserve">
+        <value>Roles</value>
+    </data>
+    <data name="permissions" xml:space="preserve">
+        <value>Permissions</value>
+    </data>
+    <data name="createRole" xml:space="preserve">
+        <value>Create Role</value>
+    </data>
+    <data name="roleCreated" xml:space="preserve">
+        <value>Role created successfully!</value>
+    </data>
+    <data name="roleCreatedError" xml:space="preserve">
+        <value>An error occurred creating the role!</value>
+    </data>
+    <data name="roleEdited" xml:space="preserve">
+        <value>Role edited successfully!</value>
+    </data>
+    <data name="roleEditedError" xml:space="preserve">
+        <value>An error occurred editing the role!</value>
+    </data>
+    <data name="roleDeleted" xml:space="preserve">
+        <value>Role deleted successfully!</value>
+    </data>
+    <data name="roleDeletedError" xml:space="preserve">
+        <value>An error occurred deleting the role!</value>
+    </data>
+    <data name="deleteRole" xml:space="preserve">
+        <value>Delete Role</value>
+    </data>
 </root>

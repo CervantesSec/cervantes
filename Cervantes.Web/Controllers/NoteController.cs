@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Helpers;
 using Ganss.Xss;
@@ -11,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Cervantes.Web.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class NoteController : Controller
 {
     private INoteManager noteManager = null;
@@ -32,6 +34,7 @@ public class NoteController : Controller
     }
     
     [HttpPost]
+    [HasPermission(Permissions.NotesAdd)]
     public async Task<IActionResult> Add([FromBody] NoteCreateViewModel model)
     {
         try{
@@ -62,6 +65,7 @@ public class NoteController : Controller
     }
     
     [HttpPut]
+    [HasPermission(Permissions.NotesEdit)]
     public async Task<IActionResult> Edit([FromBody] NoteEditViewModel model)
     {
         try{
@@ -96,6 +100,7 @@ public class NoteController : Controller
     
     [HttpDelete]
     [Route("{noteId}")]
+    [HasPermission(Permissions.NotesDelete)]
     public async Task<IActionResult> Delete(Guid noteId)
     {
         try{
@@ -133,6 +138,7 @@ public class NoteController : Controller
 
     
     [HttpGet]
+    [HasPermission(Permissions.NotesRead)]
     public IEnumerable<CORE.Entities.Note> GetByUserId()
     {
         try

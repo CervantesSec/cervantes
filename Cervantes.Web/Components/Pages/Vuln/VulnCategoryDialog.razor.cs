@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
+using Cervantes.IFR.Jira;
 using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
@@ -21,7 +23,12 @@ public partial class VulnCategoryDialog: ComponentBase
     [Inject] ISnackbar Snackbar { get; set; }
     MudForm form;
     private bool editMode = false;
-    
+    ClaimsPrincipal userAth;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+    }
     private async System.Threading.Tasks.Task Submit()
     {
         await form.Validate();

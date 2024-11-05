@@ -1,8 +1,14 @@
+@using Cervantes.CORE
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
+@attribute [HasPermission(Permissions.ProjectNotesRead)]
+@inject AuthenticationStateProvider authenticationStateProvider
+
 
 <style>
 	.tox-tinymce-aux {
@@ -19,18 +25,24 @@
 		<MudSpacer/>
 		@if (inProject)
 		{
-			@if (editMode)
+			@if (userAth.HasPermission(Permissions.ProjectNotesEdit))
 			{
-				<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
-			}
-			else
-			{
-				<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+				@if (editMode)
+				{
+					<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+				}
+				else
+				{
+					<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
 
+				}
 			}
-			<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(@note, medium))"></MudIconButton>
-		}
 		
+			@if (userAth.HasPermission(Permissions.ProjectNotesDelete))
+			{
+				<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(@note, medium))"></MudIconButton>
+			}
+		}
 
 		            </MudItem>
 	</TitleContent>
@@ -91,10 +103,12 @@
 	</DialogContent>
 	<DialogActions>
 		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if (editMode)
+		@if(userAth.HasPermission(Permissions.ProjectNotesEdit))
 		{
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-
+			@if (!editMode)
+			{
+				<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Warning" OnClick="@((e) => EditMode())">@localizer["edit"]</MudButton>
+			}
 		}
 	</DialogActions>
 </MudDialog>

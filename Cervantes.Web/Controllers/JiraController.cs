@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.Jira;
 using Cervantes.Web.Helpers;
@@ -11,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cervantes.Web.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class JiraController : Controller
 {
    private IVulnManager vulnManager = null;
@@ -53,6 +55,7 @@ public class JiraController : Controller
     }
     
     [HttpGet]
+    [HasPermission(Permissions.JiraRead)]
     public IEnumerable<CORE.Entities.Jira> GetJiras()
     {
         try
@@ -72,6 +75,7 @@ public class JiraController : Controller
     
     [HttpGet]
     [Route("{vulnId}")]
+    [HasPermission(Permissions.JiraRead)]
     public CORE.Entities.Jira GetJiraByVuln(Guid vulnId)
     {
         try
@@ -90,6 +94,7 @@ public class JiraController : Controller
     
     [HttpGet]
     [Route("Comments/{vulnId}")]
+    [HasPermission(Permissions.JiraCommentsRead)]
     public IEnumerable<CORE.Entities.JiraComments> GetCommentsByVuln(Guid vulnId)
     {
         try
@@ -109,6 +114,7 @@ public class JiraController : Controller
     
     [HttpPost]
     [Route("{vulnId}")]
+    [HasPermission(Permissions.JiraAdd)]
     public async Task<IActionResult> Add(Guid vulnId)
     {
         try{
@@ -147,6 +153,7 @@ public class JiraController : Controller
     }
 
     [HttpDelete]
+    [HasPermission(Permissions.JiraDelete)]
     public async Task<IActionResult> DeleteIssue(Guid vulnId)
     {
         try
@@ -181,6 +188,7 @@ public class JiraController : Controller
     
     [HttpPost]
     [Route("UpdateIssue/{vulnId}")]
+    [HasPermission(Permissions.JiraEdit)]
     public async Task<IActionResult> UpdateIssue(Guid vulnId)
     {
         try
@@ -201,6 +209,7 @@ public class JiraController : Controller
     
     [HttpPost]
     [Route("Comment")]
+    [HasPermission(Permissions.JiraCommentsAdd)]
     public async Task<IActionResult> AddComment(JiraCommentCreate model)
     {
         try

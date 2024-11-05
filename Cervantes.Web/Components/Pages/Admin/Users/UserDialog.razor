@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,10 +7,13 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
-@attribute [StreamRendering]
+@attribute [HasPermission(Permissions.UsersRead)]
+@inject AuthenticationStateProvider authenticationStateProvider
 
 <style>
 	.tox-tinymce-aux {
@@ -23,16 +27,24 @@
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Person"/> @user.FullName</MudText>
 
-		@if (editMode)
+		@if (userAth.HasPermission(Permissions.UsersEdit))
 		{
-			<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+			@if (editMode)
+			{
+				<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+			}
+			else
+			{
+				<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+			}
 		}
-		else
+		
+		@if (userAth.HasPermission(Permissions.UsersDelete))
 		{
-			<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
-		}
-			            <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(user, medium))">@localizer["delete"]</MudChip>
 
+			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(user, medium))">@localizer["delete"]</MudChip>
+		}
+		
 		            </MudStack>
 	</TitleContent>
 	<DialogContent>
@@ -69,15 +81,15 @@
 
 						        @if (!model.ExternalLogin)
 						        {
-						        <MudTextField @bind-Value="model.Password"
-						                      For="@(() => model.Password)"
-						                      Immediate="true"
-						                      Label="@localizer["password"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
+							        <MudTextField @bind-Value="model.Password"
+							                      For="@(() => model.Password)"
+							                      Immediate="true"
+							                      Label="@localizer["password"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
 
-						        <MudTextField @bind-Value="model.ConfirmPassword"
-						                      For="@(() => model.ConfirmPassword)"
-						                      Immediate="true"
-						                      Label="@localizer["confirmPassword"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
+							        <MudTextField @bind-Value="model.ConfirmPassword"
+							                      For="@(() => model.ConfirmPassword)"
+							                      Immediate="true"
+							                      Label="@localizer["confirmPassword"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password" InputType="InputType.Password"/>
 						        }
 
 						        <MudTextField Placeholder="Pentester..." @bind-Value="model.Position"
@@ -85,15 +97,15 @@
 						                      Immediate="true"
 						                      Label="@localizer["position"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.PermIdentity"/>
 
-						        <MudSelect Placeholder="@localizer["role"]" @bind-Value="model.Role" For="@(() => model.Role)" Label="@localizer["role"]" AdornmentIcon="@Icons.Material.Filled.PersonSearch" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-							        <MudSelectItem Value="Guid.Empty.ToString()" Disabled="true">@localizer["selectRole"]</MudSelectItem>
+						        <MudSelect Placeholder="@localizer["role"]" @bind-Value="model.Role" For="@(() => model.Role)" Label="@localizer["role"]" AdornmentIcon="@Icons.Material.Filled.Badge" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							        <MudSelectItem Value="string.Empty" Disabled="true">@localizer["selectRole"]</MudSelectItem>
 							        @foreach (var role in Roles)
 							        {
 								        <MudSelectItem Value="@role.Name">@role.Name</MudSelectItem>
 							        }
 						        </MudSelect>
 
-						        @if (model.Role == "Client")
+						        @*@if (model.Role == "Client")
 						        {
 							        <MudSelect Placeholder="@localizer["client"]" @bind-Value="model.ClientId" For="@(() => model.ClientId)" Label="Client" AdornmentIcon="@Icons.Material.Filled.Contacts" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 								        <MudSelectItem Value="Guid.Empty.ToString()" Disabled="true">@localizer["selectClient"]</MudSelectItem>
@@ -103,7 +115,7 @@
 								        }
 							        </MudSelect>
 
-						        }
+						        }*@
 
 						        @if (model.ImagePath != null)
 						        {
@@ -138,6 +150,16 @@
 
 					        </MudStack>
 				        </MudForm>
+				        <MudStack Row="true" Justify="Justify.FlexEnd">
+					        <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+					        @if (userAth.HasPermission(Permissions.UsersEdit))
+					        {
+					        @if (editMode)
+					        {
+					        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+					        }
+					        }
+				        </MudStack>
 			        </MudContainer>
 		        
 	        }
@@ -186,11 +208,7 @@
 		}
 	</DialogContent>
 	<DialogActions>
-		<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if (editMode)
-		{
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-
-		}
+		
+		
 	</DialogActions>
 </MudDialog>

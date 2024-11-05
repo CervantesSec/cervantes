@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,9 +7,14 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.VulnsRead)]
+
 
 <style>
 	.tox-tinymce-aux {
@@ -23,36 +29,44 @@
 				<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.BugReport"/> @vuln.Name</MudText>
 				@if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
 				{
-					@if (editMode)
+					@if (userAth.HasPermission(Permissions.VulnsEdit))
 					{
-						<MudStack Row="true">
-
-						@if (aiEnabled)
+						@if (editMode)
 						{
-							<MudChip T="string" Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))">AI</MudChip>
+							<MudStack Row="true">
 
-						}
-						<div Class="overflow-y-hidden" style="width: 400px;">
-							<MudSelect @bind-Value="SelectedTemplate" ToStringFunc="@(i => VulnTemplateDisplay(i))"  
-							           Label="@localizer["loadVuln"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" 
-							           TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-								<MudSelectItem Value="@Guid.Empty" Disabled>@localizer["selectVuln"]</MudSelectItem>
-								<Virtualize Items="@VulnTemplates" Context="item" OverscanCount="5">
-									<MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
-								</Virtualize>
-							</MudSelect>
+								@if (userAth.HasPermission(Permissions.AIServiceUsage))
+								{
+									@if (aiEnabled)
+									{
+										<MudChip T="string" Icon="@aiSVG" OnClick="@((e) => OpenAiDialog(maxWidth))">AI</MudChip>
+									}
+								}
+								
+								<div Class="overflow-y-hidden" style="width: 400px;">
+									<MudSelect @bind-Value="SelectedTemplate" ToStringFunc="@(i => VulnTemplateDisplay(i))"  
+									           Label="@localizer["loadVuln"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" 
+									           TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+										<MudSelectItem Value="@Guid.Empty" Disabled>@localizer["selectVuln"]</MudSelectItem>
+										<Virtualize Items="@VulnTemplates" Context="item" OverscanCount="5">
+											<MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+										</Virtualize>
+									</MudSelect>
                 
-						</div>
-							<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
-						</MudStack>
-					}
-					else
-					{
-				<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
-
+								</div>
+								<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+							</MudStack>
+						}
+						else
+						{
+							<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+						}
 					}
 					
-					<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteVulnDialog(vuln, medium))">@localizer["delete"]</MudChip>
+					@if (userAth.HasPermission(Permissions.VulnsDelete))
+					{
+						<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteVulnDialog(vuln, medium))">@localizer["delete"]</MudChip>
+					}
 
 				}
 			
@@ -197,7 +211,17 @@
                         </MudTabPanel>
                     </MudForm>
                 </MudTabs>
-				
+                <MudStack Row="true" Justify="Justify.FlexEnd">
+	                <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+	                @if (userAth.HasPermission(Permissions.VulnsEdit))
+	                {
+	                @if (editMode)
+	                {
+	                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+	                }
+	                }
+
+                </MudStack>
 				</MudContainer>
 		        
 			}
@@ -421,313 +445,333 @@
 					
 				</MudTabPanel>
 				
-				@if(jiraEnabled)
-                {
-	                <AuthorizeView Roles="SuperUser,User,Admin">
-		                <MudTabPanel Text="Jira" Icon="@jiraSVG">
-                           @if (@vuln.JiraCreated)
-                           {
-	                           <MudGrid>
-		                           <MudItem xs="12" md="12" lg="12">
-			                           <MudPaper Class="d-flex justify-end flex-grow-1 gap-4" Elevation="0">
-				                           <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-					                          	<MudIconButton Icon="@Icons.Material.Filled.Update" Color="Color.Primary" OnClick="UpdateJira"></MudIconButton>
-					                           <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="DeleteJira"></MudIconButton>
-				                           </MudButtonGroup>
-			                           </MudPaper>
-			                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.Key" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["key"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.JiraKey</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.Category" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["status"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.JiraStatus</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.Person" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["assignee"]</MudText>
-					                           @if (jira.Assignee != null)
-					                           {
-						                           <MudText Typo="Typo.h5">@jira.Assignee</MudText>
-
-					                           }
-					                           else
-					                           {
-						                           <MudText Typo="Typo.h5">@localizer["noAssignee"]</MudText>
-
-					                           }
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.PriorityHigh" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["priority"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.Priority</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["createdDate"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.JiraCreatedDate</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.EditCalendar" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["updatedDate"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.JiraUpdatedDate</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["dueDate"]</MudText>
-					                           @if (jira.DueDate != null)
-					                           {
-						                           <MudText Typo="Typo.h5">@jira.DueDate</MudText>
-
-					                           }
-					                           else
-					                           {
-						                           <MudText Typo="Typo.h5">@localizer["noDueDate"]</MudText>
-
-					                           }
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["resolutionDate"]</MudText>
-					                           @if (jira.ResolutionDate != null)
-					                           {
-						                           <MudText Typo="Typo.h5">@jira.ResolutionDate</MudText>
-
-					                           }
-					                           else
-					                           {
-						                           <MudText Typo="Typo.h5">@localizer["noResolutionDate"]</MudText>
-
-					                           }
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.Label" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["labels"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.Label</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.BuildCircle" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["component"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.JiraComponent</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.Security" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["securityLevel"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.SecurityLevel</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           <MudItem xs="12" sm="6" md="3">
-			                           <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-				                           <MudIcon Icon="@Icons.Material.Filled.Folder" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-				                           <div>
-					                           <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["project"]</MudText>
-					                           <MudText Typo="Typo.h5">@jira.JiraProject</MudText>
-				                           </div>
-			                           </MudPaper>
-		                           </MudItem>
-		                           
-		                           
-		                           
-		                           
-
-		                           
-		                           
-		                           <MudItem xs="12" md="12" lg="12">
-			                           <MudExpansionPanels>
-				                           <MudExpansionPanel>
-					                           <TitleContent>
-						                           <div class="d-flex">
-							                           <MudText Class="mt-1">@localizer["comments"]</MudText>
-							                           <MudBadge Content="@JiraComments.Count()" Color="Color.Primary" Overlap="true" Class="d-flex ml-auto">
-								                           <MudIcon Icon="@Icons.Material.Filled.Comment" Color="Color.Default" />
-							                           </MudBadge>
-						                           </div>
-					                           </TitleContent>
-					                           <ChildContent>
-						                           <MudStack>
-							                           @foreach (var comment in JiraComments)
-							                           {
-								                           <MudCard Elevation="25">
-									                           <MudCardHeader>
-										                           <MudStack Row="true">
-											                           <MudAvatar Color="Color.Primary" Size="Size.Small">A</MudAvatar>
-
-											                           <MudStack Justify="Justify.Center" Spacing="0">
-												                           <MudText Typo="Typo.body1">@comment.Author</MudText>
-											                           </MudStack>
-										                           </MudStack>
-										                           <MudSpacer></MudSpacer>
-										                           <MudText Typo="Typo.body2">@comment.CreatedDate</MudText>
-									                           </MudCardHeader>
-									                           <MudCardContent>
-										                           <MudText Typo="Typo.body2">@comment.Body</MudText>
-									                           </MudCardContent>
-								                           </MudCard>
-
-							                           }
-							                           
-							                           <MudCard Elevation="25">
-								                           <MudCardHeader>
-									                           <MudText Typo="Typo.body1">@localizer["addComment"]</MudText>
-								                           </MudCardHeader>
-								                           <MudCardContent>
-									                           <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="test" data-mce-placeholder="Description"/>
-
-								                           </MudCardContent>
-								                           <MudCardActions>
-									                           <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.AddComment" Color="Color.Primary" OnClick="AddComment">@localizer["add"]</MudButton>
-
-								                           </MudCardActions>
-							                           </MudCard>
-
-						                           </MudStack>
-					                           </ChildContent>
-				                           </MudExpansionPanel>
-			                           </MudExpansionPanels>
-		                           </MudItem>
-
-	                           </MudGrid>
-	                           
-                           }
-                           else
-                           {
-	                           @if (vuln.ProjectId != null)
-	                           {
-		                           @if (inProject )
-		                           {
-			                           <MudButton Variant="Variant.Filled" StartIcon="@jiraSVG" Color="Color.Primary" OnClick="CreateJira">@localizer["createJira"]</MudButton>
-
-		                           }
-	                           }
-	                           else
-	                           {
-		                           <MudButton Variant="Variant.Filled" StartIcon="@jiraSVG" Color="Color.Primary" OnClick="CreateJira">@localizer["createJira"]</MudButton>
-
-	                           }
-	                           
-                           }             					
-		                </MudTabPanel>
-	                </AuthorizeView>
-                	
-                }
-				
-				@if (vuln.ProjectId != null)
+				@if (userAth.HasPermission(Permissions.JiraRead))
 				{
-					<MudTabPanel Text="@localizer["targets"]" Icon="@Icons.Material.Filled.Adjust" BadgeData="@VulnTargets.Count()" BadgeColor="Color.Primary">
-						<MudDataGrid T="VulnTargets" Items="@VulnTargets" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterTargets"
-						             Hideable="true" Hover="true" Elevation="25" RowClick="@RowClickedTargets" MultiSelection="true" SelectedItemsChanged="@SelectedTargetsChanged" Virtualize="true" DragDropColumnReordering="true">
-							<ToolBarContent>
-								<MudStack Row="true">
-									@if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
-									{
-										<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="Color.Primary" OnClick="@((e) => OpenDialogAddTarget(maxWidth))">@localizer["addTarget"]</MudButton>
-										@if (seleTargets.Count() != 0)
-										{
+					@if (jiraEnabled)
+					{
+						<MudTabPanel Text="Jira" Icon="@jiraSVG">
+							@if (@vuln.JiraCreated)
+							{
+								<MudGrid>
+									<MudItem xs="12" md="12" lg="12">
+										<MudPaper Class="d-flex justify-end flex-grow-1 gap-4" Elevation="0">
 											<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-												<MudButton>@localizer["actions"]</MudButton>
-												<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-													<MudMenuItem OnClick="@((e) => BtnActionsTargets(0))">@localizer["delete"]</MudMenuItem>
-												</MudMenu>
+												@if (userAth.HasPermission(Permissions.JiraEdit))
+												{
+													<MudIconButton Icon="@Icons.Material.Filled.Update" Color="Color.Primary" OnClick="UpdateJira"></MudIconButton>
+												}
+												@if (userAth.HasPermission(Permissions.JiraDelete))
+												{
+													<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="DeleteJira"></MudIconButton>
+												}
 											</MudButtonGroup>
-										}
-									}
-									
+										</MudPaper>
+									</MudItem>
 
-								</MudStack>
-								<MudSpacer/>
-								<MudTextField @bind-Value="searchStringTargets" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
-								              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-							</ToolBarContent>
-							<Columns>
-								<SelectColumn T="VulnTargets"></SelectColumn>
-								<PropertyColumn Property="x => x.Target.Name" Title="@localizer["name"]"/>
-								<PropertyColumn Property="x => x.Target.Type" Title="@localizer["type"]">
-									<CellTemplate>
-										@switch (@context.Item.Target.Type)
-										{
-											case TargetType.Binary:
-												<MudChip Color="Color.Secondary" Icon="@Icons.Custom.FileFormats.FileCode">Binary</MudChip>
-												break;
-											case TargetType.Hostname:
-												<MudChip Color="Color.Tertiary" Icon="@Icons.Material.Filled.DesktopMac">Hostname</MudChip>
-												break;
-											case TargetType.IP:
-												<MudChip Color="Color.Info" Icon="@Icons.Material.Filled.SettingsEthernet">IP</MudChip>
-												break;
-											case TargetType.URL:    
-												<MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Web">Url</MudChip>
-												break;
-											case TargetType.CIDR: 
-												<MudChip Color="Color.Surface" Icon="@Icons.Material.Filled.SettingsEthernet">CIDR</MudChip>
-												break;
-										}
-                                                 
-									</CellTemplate>
-								</PropertyColumn>
-								
-							</Columns>
-							<PagerContent>
-								<MudDataGridPager T="VulnTargets"/>
-							</PagerContent>
-						</MudDataGrid>
-					</MudTabPanel>
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.Key" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["key"]</MudText>
+												<MudText Typo="Typo.h5">@jira.JiraKey</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.Category" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["status"]</MudText>
+												<MudText Typo="Typo.h5">@jira.JiraStatus</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.Person" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["assignee"]</MudText>
+												@if (jira.Assignee != null)
+												{
+													<MudText Typo="Typo.h5">@jira.Assignee</MudText>
+
+												}
+												else
+												{
+													<MudText Typo="Typo.h5">@localizer["noAssignee"]</MudText>
+
+												}
+											</div>
+										</MudPaper>
+									</MudItem>
+
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.PriorityHigh" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["priority"]</MudText>
+												<MudText Typo="Typo.h5">@jira.Priority</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.CalendarToday" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["createdDate"]</MudText>
+												<MudText Typo="Typo.h5">@jira.JiraCreatedDate</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.EditCalendar" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["updatedDate"]</MudText>
+												<MudText Typo="Typo.h5">@jira.JiraUpdatedDate</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["dueDate"]</MudText>
+												@if (jira.DueDate != null)
+												{
+													<MudText Typo="Typo.h5">@jira.DueDate</MudText>
+
+												}
+												else
+												{
+													<MudText Typo="Typo.h5">@localizer["noDueDate"]</MudText>
+
+												}
+											</div>
+										</MudPaper>
+									</MudItem>
+
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.CalendarToday" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["resolutionDate"]</MudText>
+												@if (jira.ResolutionDate != null)
+												{
+													<MudText Typo="Typo.h5">@jira.ResolutionDate</MudText>
+
+												}
+												else
+												{
+													<MudText Typo="Typo.h5">@localizer["noResolutionDate"]</MudText>
+
+												}
+											</div>
+										</MudPaper>
+									</MudItem>
+
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.Label" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["labels"]</MudText>
+												<MudText Typo="Typo.h5">@jira.Label</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.BuildCircle" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["component"]</MudText>
+												<MudText Typo="Typo.h5">@jira.JiraComponent</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.Security" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["securityLevel"]</MudText>
+												<MudText Typo="Typo.h5">@jira.SecurityLevel</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+									<MudItem xs="12" sm="6" md="3">
+										<MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+											<MudIcon Icon="@Icons.Material.Filled.Folder" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+											<div>
+												<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["project"]</MudText>
+												<MudText Typo="Typo.h5">@jira.JiraProject</MudText>
+											</div>
+										</MudPaper>
+									</MudItem>
+
+
+
+
+
+
+
+									<MudItem xs="12" md="12" lg="12">
+										<MudExpansionPanels>
+											<MudExpansionPanel>
+												<TitleContent>
+													<div class="d-flex">
+														<MudText Class="mt-1">@localizer["comments"]</MudText>
+														<MudBadge Content="@JiraComments.Count()" Color="Color.Primary" Overlap="true" Class="d-flex ml-auto">
+															<MudIcon Icon="@Icons.Material.Filled.Comment" Color="Color.Default"/>
+														</MudBadge>
+													</div>
+												</TitleContent>
+												<ChildContent>
+													<MudStack>
+														@if (userAth.HasPermission(Permissions.JiraCommentsRead))
+														{
+															@foreach (var comment in JiraComments)
+															{
+																<MudCard Elevation="25">
+																	<MudCardHeader>
+																		<MudStack Row="true">
+																			<MudAvatar Color="Color.Primary" Size="Size.Small">A</MudAvatar>
+
+																			<MudStack Justify="Justify.Center" Spacing="0">
+																				<MudText Typo="Typo.body1">@comment.Author</MudText>
+																			</MudStack>
+																		</MudStack>
+																		<MudSpacer></MudSpacer>
+																		<MudText Typo="Typo.body2">@comment.CreatedDate</MudText>
+																	</MudCardHeader>
+																	<MudCardContent>
+																		<MudText Typo="Typo.body2">@comment.Body</MudText>
+																	</MudCardContent>
+																</MudCard>
+
+															}
+														}
+
+														@if (userAth.HasPermission(Permissions.JiraCommentsAdd))
+														{
+															<MudCard Elevation="25">
+																<MudCardHeader>
+																	<MudText Typo="Typo.body1">@localizer["addComment"]</MudText>
+																</MudCardHeader>
+																<MudCardContent>
+																	<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="test" data-mce-placeholder="Description"/>
+
+																</MudCardContent>
+																<MudCardActions>
+																	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.AddComment" Color="Color.Primary" OnClick="AddComment">@localizer["add"]</MudButton>
+
+																</MudCardActions>
+															</MudCard>
+														}
+														
+
+													</MudStack>
+												</ChildContent>
+											</MudExpansionPanel>
+										</MudExpansionPanels>
+									</MudItem>
+
+								</MudGrid>
+
+							}
+							else
+							{
+								@if (userAth.HasPermission(Permissions.JiraAdd))
+								{
+									<MudButton Variant="Variant.Filled" StartIcon="@jiraSVG" Color="Color.Primary" OnClick="CreateJira">@localizer["createJira"]</MudButton>
+								}
+
+							}
+						</MudTabPanel>
+					}
 				}
-				<MudTabPanel Text="@localizer["notes"]" Icon="@Icons.Material.Filled.Notes" BadgeData="@VulnNotes.Count()" BadgeColor="Color.Primary">
+					
+
+				@if (userAth.HasPermission(Permissions.VulnTargetsRead))
+					{
+						@if (vuln.ProjectId != null)
+						{
+
+							<MudTabPanel Text="@localizer["targets"]" Icon="@Icons.Material.Filled.Adjust" BadgeData="@VulnTargets.Count()" BadgeColor="Color.Primary">
+								<MudDataGrid T="VulnTargets" Items="@VulnTargets" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterTargets"
+								             Hideable="true" Hover="true" Elevation="25" RowClick="@RowClickedTargets" MultiSelection="true" SelectedItemsChanged="@SelectedTargetsChanged" Virtualize="true" DragDropColumnReordering="true">
+									<ToolBarContent>
+										<MudStack Row="true">
+											@if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
+											{
+												@if (userAth.HasPermission(Permissions.VulnTargetsAdd))
+												{
+													<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="Color.Primary" OnClick="@((e) => OpenDialogAddTarget(maxWidth))">@localizer["addTarget"]</MudButton>
+												}
+												
+												@if (userAth.HasPermission(Permissions.VulnTargetsDelete))
+												{
+													@if (seleTargets.Count() != 0)
+													{
+														<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+															<MudButton>@localizer["actions"]</MudButton>
+															<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+																<MudMenuItem OnClick="@((e) => BtnActionsTargets(0))">@localizer["delete"]</MudMenuItem>
+															</MudMenu>
+														</MudButtonGroup>
+													}
+												}
+											}
+
+
+										</MudStack>
+										<MudSpacer/>
+										<MudTextField @bind-Value="searchStringTargets" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+										              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+									</ToolBarContent>
+									<Columns>
+										<SelectColumn T="VulnTargets"></SelectColumn>
+										<PropertyColumn Property="x => x.Target.Name" Title="@localizer["name"]"/>
+										<PropertyColumn Property="x => x.Target.Type" Title="@localizer["type"]">
+											<CellTemplate>
+												@switch (@context.Item.Target.Type)
+												{
+													case TargetType.Binary:
+														<MudChip Color="Color.Secondary" Icon="@Icons.Custom.FileFormats.FileCode">Binary</MudChip>
+														break;
+													case TargetType.Hostname:
+														<MudChip Color="Color.Tertiary" Icon="@Icons.Material.Filled.DesktopMac">Hostname</MudChip>
+														break;
+													case TargetType.IP:
+														<MudChip Color="Color.Info" Icon="@Icons.Material.Filled.SettingsEthernet">IP</MudChip>
+														break;
+													case TargetType.URL:
+														<MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Web">Url</MudChip>
+														break;
+													case TargetType.CIDR:
+														<MudChip Color="Color.Surface" Icon="@Icons.Material.Filled.SettingsEthernet">CIDR</MudChip>
+														break;
+												}
+
+											</CellTemplate>
+										</PropertyColumn>
+
+									</Columns>
+									<PagerContent>
+										<MudDataGridPager T="VulnTargets"/>
+									</PagerContent>
+								</MudDataGrid>
+							</MudTabPanel>
+
+						}
+					}
+					
+					@if (userAth.HasPermission(Permissions.VulnNotesRead))
+				{
+					<MudTabPanel Text="@localizer["notes"]" Icon="@Icons.Material.Filled.Notes" BadgeData="@VulnNotes.Count()" BadgeColor="Color.Primary">
 						<MudDataGrid T="VulnNote" Items="@VulnNotes" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterNotes"
 						             Hideable="true" Hover="true" RowClick="@RowClickedNotes" MultiSelection="true" SelectedItemsChanged="@SelectedNotesChanged" Virtualize="true" DragDropColumnReordering="true">
 							<ToolBarContent>
@@ -735,19 +779,25 @@
 									<MudStack Row="true">
 										@if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
 										{
-											<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Note" Color="Color.Primary" OnClick="@((e) => OpenDialogAddNote(maxWidth))">@localizer["addNoteBtn"]</MudButton>
-
-											@if (seleNotes.Count() != 0)
+											@if (userAth.HasPermission(Permissions.VulnNotesAdd))
 											{
-												<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-													<MudButton>@localizer["actions"]</MudButton>
-													<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-														<MudMenuItem OnClick="@((e) => BtnActionsNotes(0))">@localizer["delete"]</MudMenuItem>
-													</MudMenu>
-												</MudButtonGroup>
+												<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Note" Color="Color.Primary" OnClick="@((e) => OpenDialogAddNote(maxWidth))">@localizer["addNoteBtn"]</MudButton>
+											}
+
+											@if (userAth.HasPermission(Permissions.VulnNotesDelete))
+											{
+												@if (seleNotes.Count() != 0)
+												{
+													<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+														<MudButton>@localizer["actions"]</MudButton>
+														<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+															<MudMenuItem OnClick="@((e) => BtnActionsNotes(0))">@localizer["delete"]</MudMenuItem>
+														</MudMenu>
+													</MudButtonGroup>
+												}
 											}
 										}
-										
+
 									</MudStack>
 								</MudStack>
 								<MudSpacer/>
@@ -783,27 +833,36 @@
 							</PagerContent>
 						</MudDataGrid>
 					</MudTabPanel>
+				}
 				
-				<MudTabPanel Text="@localizer["attachments"]" Icon="@Icons.Material.Filled.Attachment" BadgeData="@VulnAttachments.Count()" BadgeColor="Color.Primary" Style="min-width: 260px;">
+				@if (userAth.HasPermission(Permissions.VulnAttachmentsRead))
+				{
+					<MudTabPanel Text="@localizer["attachments"]" Icon="@Icons.Material.Filled.Attachment" BadgeData="@VulnAttachments.Count()" BadgeColor="Color.Primary" Style="min-width: 260px;">
 						<MudDataGrid T="VulnAttachment" Items="@VulnAttachments" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterAttachments"
 						             Hideable="true" Hover="true" Elevation="25" RowClick="@RowClickedAttachments" MultiSelection="true" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
 							<ToolBarContent>
 								<MudStack Row="true">
 									@if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
 									{
-										<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Attachment" Color="Color.Primary" OnClick="@((e) => OpenDialogAddAttachment(maxWidth))">@localizer["addAttachmentBtn"]</MudButton>
-
-										@if (seleAttachments.Count() != 0)
+										@if (userAth.HasPermission(Permissions.VulnAttachmentsAdd))
 										{
-											<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-												<MudButton>@localizer["actions"]</MudButton>
-												<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-													<MudMenuItem OnClick="@((e) => BtnActionsAttachments(0))">@localizer["delete"]</MudMenuItem>
-												</MudMenu>
-											</MudButtonGroup>
+											<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Attachment" Color="Color.Primary" OnClick="@((e) => OpenDialogAddAttachment(maxWidth))">@localizer["addAttachmentBtn"]</MudButton>
+										}
+
+										@if (userAth.HasPermission(Permissions.VulnAttachmentsDelete))
+										{
+											@if (seleAttachments.Count() != 0)
+											{
+												<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+													<MudButton>@localizer["actions"]</MudButton>
+													<MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+														<MudMenuItem OnClick="@((e) => BtnActionsAttachments(0))">@localizer["delete"]</MudMenuItem>
+													</MudMenu>
+												</MudButtonGroup>
+											}
 										}
 									}
-									
+
 								</MudStack>
 								<MudSpacer/>
 								<MudTextField @bind-Value="searchStringAttachment" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
@@ -834,24 +893,19 @@
 
 							</Columns>
 							<PagerContent>
-								<MudDataGridPager T="VulnAttachment" />
+								<MudDataGridPager T="VulnAttachment"/>
 							</PagerContent>
 						</MudDataGrid>
 					</MudTabPanel>
-				
-				
-				
+				}
+
+
 				</MudTabs>
 
 			}
 		
 		</DialogContent>
 		<DialogActions>
-			<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
-			@if (editMode)
-			{
-				<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-
-			}
+			
 		</DialogActions>
 	</MudDialog>

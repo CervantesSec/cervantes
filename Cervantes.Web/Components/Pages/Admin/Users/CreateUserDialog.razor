@@ -1,11 +1,14 @@
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.UsersAdd)]
 
 <style>
 	.tox-tinymce-aux {
@@ -63,15 +66,14 @@
 				              Immediate="true"
 				              Label="@localizer["position"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.PermIdentity"/>
 
-				<MudSelect Placeholder="@localizer["role"]" @bind-Value="model.Role" For="@(() => model.Role)" Label="@localizer["role"]" AdornmentIcon="@Icons.Material.Filled.PersonSearch" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-					<MudSelectItem Value="Guid.Empty.ToString()" Disabled="true">@localizer["selectRole"]</MudSelectItem>
+				<MudSelect Placeholder="@localizer["role"]" @bind-Value="model.Role" For="@(() => model.Role)" Label="@localizer["role"]" AdornmentIcon="@Icons.Material.Filled.Badge" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 					@foreach (var role in Roles)
 					{
 						<MudSelectItem Value="@role.Name">@role.Name</MudSelectItem>
 					}
 				</MudSelect>
 
-				@if (model.Role == "Client")
+				@*@if (model.Role == "Client")
 				{
 					<MudSelect Placeholder="@localizer["client"]" @bind-Value="clientId" For="@(() => clientId)" Label="@localizer["client"]" AdornmentIcon="@Icons.Material.Filled.Contacts" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 						<MudSelectItem Value="Guid.Empty" Disabled="true">@localizer["selectClient"]</MudSelectItem>
@@ -81,7 +83,7 @@
 						}
 					</MudSelect>
 
-				}
+				}*@
 
 				<MudFileUpload T="IBrowserFile" @bind-Files="File" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
 					<ActivatorContent>
@@ -107,10 +109,13 @@
 				</MudFileUpload>
 			</MudStack>
 		</MudForm>
+		<MudStack Row="true" Justify="Justify.FlexEnd">
+			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		</MudStack>
 	</DialogContent>
 	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+		
 	</DialogActions>
 </MudDialog>
 

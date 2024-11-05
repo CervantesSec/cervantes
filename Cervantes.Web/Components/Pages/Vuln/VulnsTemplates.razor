@@ -16,11 +16,15 @@
 @inject NavigationManager navigationManager
 @inject IHttpContextAccessor _accessor
 @using Blazor.Flags
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.VulnsRead)]
+
 <PageTitle>@localizer["vulns"] | Cervantes</PageTitle>
 
-<AuthorizeView Context="innerContext" Roles="SuperUser,User,Admin">
     <SectionContent SectionName="appbar">
         <MudText Typo="Typo.h5">
             <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.BugReport"></MudIcon>
@@ -67,23 +71,33 @@
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
-                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
-                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(maxWidth))">@localizer["import"]</MudButton>
+                    @if(userAth.HasPermission(Permissions.VulnsAdd))
+                    {
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                    }
+                    @if(userAth.HasPermission(Permissions.VulnsImport))
+                    {
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
+                    }
+
+                    @if (userAth.HasPermission(Permissions.VulnsDelete))
+                    {
                     @if (seleVulns.Count() != 0)
                     {
-                        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                            <MudButton>@localizer["actions"]</MudButton>
-                            <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteVuln"]</MudMenuItem>
-                                @if (jiraEnabled)
-                                {
-                                    <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["createJira"]</MudMenuItem>
-                                    <MudMenuItem OnClick="@((e) => BtnActions(2))">@localizer["deleteJira"]</MudMenuItem>
+                    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                        <MudButton>@localizer["actions"]</MudButton>
+                        <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                            <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteVuln"]</MudMenuItem>
+                            @if (jiraEnabled)
+                            {
+                            <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["createJira"]</MudMenuItem>
+                            <MudMenuItem OnClick="@((e) => BtnActions(2))">@localizer["deleteJira"]</MudMenuItem>
 
-                                }
+                            }
 
-                            </MudMenu>
-                        </MudButtonGroup>
+                        </MudMenu>
+                    </MudButtonGroup>
+                    }
                     }
 
                 </MudStack>
@@ -239,4 +253,3 @@
         </MudDataGrid>
     </MudItem>
 </MudGrid>
-</AuthorizeView>

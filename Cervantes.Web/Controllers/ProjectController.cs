@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
@@ -23,7 +24,7 @@ namespace Cervantes.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class ProjectController : ControllerBase
 {
     private IProjectManager projectManager = null;
@@ -80,6 +81,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(Permissions.ProjectsRead)]
     public IEnumerable<CORE.Entities.Project> Get()
     {
         try
@@ -99,6 +101,7 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("{projectId}")]
+    [HasPermission(Permissions.ProjectsRead)]
     public CORE.Entities.Project GetById(Guid projectId)
     {
         try
@@ -116,6 +119,7 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("Client/{id}")]
+    [HasPermission(Permissions.ProjectsRead)]
     public IEnumerable<CORE.Entities.Project> GetByClientId(Guid id)
     {
         try
@@ -132,7 +136,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ProjectsAdd)]
     public async Task<IActionResult> Add([FromBody] ProjectCreateViewModel model)
     {
         try
@@ -177,7 +181,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ProjectsEdit)]
     public async Task<IActionResult> Edit([FromBody] ProjectEditViewModel model)
     {
         try
@@ -224,7 +228,7 @@ public class ProjectController : ControllerBase
 
     [HttpDelete]
     [Route("{projectId}")]
-    [Authorize(Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ProjectsDelete)]
     public async Task<IActionResult> Delete(Guid projectId)
     {
         try
@@ -261,6 +265,7 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("Members/{project}")]
+    [HasPermission(Permissions.ProjectMembersRead)]
     public IEnumerable<CORE.Entities.ProjectUser> GetMembers(Guid project)
     {
         try
@@ -280,7 +285,7 @@ public class ProjectController : ControllerBase
 
     [HttpPost]
     [Route("Member")]
-    [Authorize(Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ProjectMembersAdd)]
     public async Task<IActionResult> AddMember([FromBody] MemberViewModel model)
     {
         try
@@ -333,7 +338,7 @@ public class ProjectController : ControllerBase
 
     [HttpDelete]
     [Route("Member/{memberId}")]
-    [Authorize(Roles = "Admin,SuperUser")]
+    [HasPermission(Permissions.ProjectMembersDelete)]
     public async Task<IActionResult> DeleteMember(Guid memberId)
     {
         try
@@ -369,6 +374,7 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("Note/{project}")]
+    [HasPermission(Permissions.ProjectNotesRead)]
     public IEnumerable<CORE.Entities.ProjectNote> GetNotes(Guid project)
     {
         try
@@ -388,6 +394,7 @@ public class ProjectController : ControllerBase
 
     [HttpPost]
     [Route("Note")]
+    [HasPermission(Permissions.ProjectNotesAdd)]
     public async Task<IActionResult> AddNote(ProjectCreateNoteViewModel model)
     {
         try
@@ -427,6 +434,7 @@ public class ProjectController : ControllerBase
 
     [HttpPut]
     [Route("Note")]
+    [HasPermission(Permissions.ProjectNotesEdit)]
     public async Task<IActionResult> EditNote(ProjectNoteEditViewModel model)
     {
         try
@@ -465,6 +473,7 @@ public class ProjectController : ControllerBase
 
     [HttpDelete]
     [Route("Note/{noteId}")]
+    [HasPermission(Permissions.ProjectNotesDelete)]
     public async Task<IActionResult> DeleteNote(Guid noteId)
     {
         try
@@ -506,6 +515,7 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("Attachment/{project}")]
+    [HasPermission(Permissions.ProjectAttachmentsRead)]
     public IEnumerable<CORE.Entities.ProjectAttachment> GetAttachments(Guid project)
     {
         try
@@ -525,6 +535,7 @@ public class ProjectController : ControllerBase
 
     [HttpPost]
     [Route("Attachment")]
+    [HasPermission(Permissions.ProjectAttachmentsAdd)]
     public async Task<IActionResult> AddAttachment(ProjectAttachmentViewModel model)
     {
         try
@@ -600,6 +611,7 @@ public class ProjectController : ControllerBase
 
     [HttpDelete]
     [Route("Attachment/{attachmentId}")]
+    [HasPermission(Permissions.ProjectAttachmentsDelete)]
     public async Task<IActionResult> DeleteAttahcment(Guid attachmentId)
     {
         try
@@ -639,6 +651,7 @@ public class ProjectController : ControllerBase
 
     [HttpPost]
     [Route("ExecutiveSummary")]
+    [HasPermission(Permissions.ProjectExecutiveSummaryEdit)]
     public async Task<IActionResult> ExecutiveSumamry([FromBody] ExecutiveSummaryViewModel model)
     {
         try

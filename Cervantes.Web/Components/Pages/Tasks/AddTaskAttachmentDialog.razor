@@ -1,14 +1,15 @@
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.TaskAttachmentsAdd)]
 
 <MudDialog>
 	<TitleContent>
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["addAttachmentBtn"]</MudText>
 	</TitleContent>
 	<DialogContent>
-		<MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" data-mce-placeholder="Description...">
-
             <MudForm Model="@model" @ref="@form" method="dialog">
                 <MudStack AlignItems="AlignItems.Stretch">
                     <MudTextField @bind-Value="model.Name"
@@ -40,7 +41,6 @@
 				</MudFileUpload>
                 </MudStack>
             </MudForm>
-        </MudContainer>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>

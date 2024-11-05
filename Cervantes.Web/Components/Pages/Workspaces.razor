@@ -1,5 +1,7 @@
 @page "/workspaces"
+@using Cervantes.CORE
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @using Align = MudBlazor.Align
 @using Color = MudBlazor.Color
@@ -7,8 +9,6 @@
 @inject IStringLocalizer<Resource> localizer
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
-
-<AuthorizeView Roles="Admin,SuperUser,User">
 
     <PageTitle>@localizer["workspaces"] | Cervantes</PageTitle>
     <SectionContent SectionName="appbar">
@@ -109,6 +109,5 @@
     </MudItem>
     
 </MudGrid>
-</AuthorizeView>
 
     

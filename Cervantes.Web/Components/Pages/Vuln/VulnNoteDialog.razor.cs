@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Components.Pages.Tasks;
 using Cervantes.Web.Controllers;
@@ -71,9 +72,11 @@ public partial class VulnNoteDialog: ComponentBase
             };
     
     private bool inProject = false;
-    
+    ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+
         if (note.Vuln.Project != null)
         {
             inProject = await _ProjectController.VerifyUser(note.Vuln.ProjectId.Value);

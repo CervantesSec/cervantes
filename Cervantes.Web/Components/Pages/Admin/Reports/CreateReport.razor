@@ -6,8 +6,11 @@
 @using Cervantes.Web.Localization
 @using Microsoft.Extensions.Localization
 @using System.ComponentModel.DataAnnotations
+@using Cervantes.CORE
+@using global::AuthPermissions.AspNetCore
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.ReportTemplatesAdd)]
 
 <style>
 	.tox-tinymce-aux {
@@ -164,9 +167,12 @@
 
                 </MudStack>
             </MudForm>
+            <MudStack Row="true" Justify="Justify.FlexEnd">
+                <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+            </MudStack>
         </DialogContent>
         <DialogActions>
-            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>
+            
         </DialogActions>
     </MudDialog>

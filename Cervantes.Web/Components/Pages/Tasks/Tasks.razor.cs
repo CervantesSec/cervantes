@@ -42,9 +42,10 @@ public partial class Tasks: ComponentBase
     [Inject] private TaskController _taskController { get; set; }
     [Inject] private UserController _userController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
+    private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
-        
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         await Update();
         _items = new List<BreadcrumbItem>
         {

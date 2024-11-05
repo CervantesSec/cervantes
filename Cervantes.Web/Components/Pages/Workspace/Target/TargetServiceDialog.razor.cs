@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Components.Pages.Clients;
 using Cervantes.Web.Controllers;
@@ -72,8 +73,10 @@ public partial class TargetServiceDialog: ComponentBase
             private bool inProject = false;
             [Inject] private ProjectController _ProjectController { get; set; }
 
+            private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         if (service.Target.ProjectId != Guid.Empty || service.Target.ProjectId != null)
         {
             inProject = await _ProjectController.VerifyUser(service.Target.ProjectId.Value);

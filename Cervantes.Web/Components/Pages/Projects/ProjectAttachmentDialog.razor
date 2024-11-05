@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Cervantes.CORE
 @using Task = System.Threading.Tasks.Task;
 @using FluentValidation;
 @using Microsoft.EntityFrameworkCore
@@ -6,11 +7,14 @@
 @using Variant = MudBlazor.Variant
 @using Cervantes.Web.Localization
 @using Cervantes.CORE.Entities
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService Dialog
 @inject IJSRuntime JS
-
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ProjectAttachmentsRead)]
 
 <style>
 	.tox-tinymce-aux {
@@ -25,10 +29,17 @@
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @attachment.Name</MudText>
 		<MudSpacer/>
+		
 		@if (inProject)
 		{
-			<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download(@attachment.FilePath))" ></MudIconButton>
-			<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteTaskAttachment(@attachment, medium))"></MudIconButton>
+			@if (userAth.HasPermission(Permissions.ProjectAttachmentsDownload))
+			{
+				<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download(@attachment.FilePath))" ></MudIconButton>
+			}
+			@if(userAth.HasPermission(Permissions.ProjectAttachmentsDelete))
+			{
+				<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteTaskAttachment(@attachment, medium))"></MudIconButton>
+			}
 
 		}
 		

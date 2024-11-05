@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Web;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.IFR.File;
@@ -14,7 +16,7 @@ namespace Cervantes.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class DocumentController : Controller
 {
     private IDocumentManager docManager = null;
@@ -37,6 +39,7 @@ public class DocumentController : Controller
     }
     
     [HttpGet]
+    [HasPermission(Permissions.DocumentsRead)]
     public IEnumerable<CORE.Entities.Document> Get()
     {
         try
@@ -55,6 +58,7 @@ public class DocumentController : Controller
     }
     
      [HttpPost]
+     [HasPermission(Permissions.DocumentsAdd)]
     public async Task<IActionResult> Add([FromBody] DocumentCreateViewModel model)
     {
         try{
@@ -110,6 +114,7 @@ public class DocumentController : Controller
     
     [HttpDelete]
     [Route("{docId}")]
+    [HasPermission(Permissions.DocumentsDelete)]
     public async Task<IActionResult> Delete(Guid docId)
     {
         try
@@ -150,6 +155,7 @@ public class DocumentController : Controller
     }
     
     [HttpPut]
+    [HasPermission(Permissions.DocumentsEdit)]
     public async Task<IActionResult> Edit([FromBody] DocumentEditViewModel model)
     {
         try

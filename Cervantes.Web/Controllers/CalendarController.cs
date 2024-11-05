@@ -1,11 +1,13 @@
 using System.Security.Claims;
+using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
+using Cervantes.CORE;
 using Cervantes.CORE.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Controllers;
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class CalendarController: ControllerBase
 {
     private readonly ILogger<CalendarController> _logger = null;
@@ -29,6 +31,7 @@ public class CalendarController: ControllerBase
 
     }
     
+    [HasPermission(Permissions.CalendarRead)]
     public CalendarViewModel Get()
     {
         try

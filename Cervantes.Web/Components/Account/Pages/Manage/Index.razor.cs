@@ -106,8 +106,8 @@ public partial class Index: ComponentBase
         twoFactorModel = new TwoFactorModel();
         
         emailModel.NewEmail = user.Email;
-        var rolUser = await UserManager.GetRolesAsync(user);
-        Role = rolUser.First();
+        var rolUser = await _UserController.GetRole(user.Id);
+        Role = rolUser;
     }
   
     

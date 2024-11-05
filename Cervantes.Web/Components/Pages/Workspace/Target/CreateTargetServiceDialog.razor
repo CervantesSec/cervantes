@@ -1,7 +1,10 @@
+@using Cervantes.CORE
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.TargetsServicesAdd)]
 
 
 <MudDialog>

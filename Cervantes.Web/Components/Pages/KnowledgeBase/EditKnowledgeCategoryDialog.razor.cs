@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using FluentValidation;
@@ -22,7 +23,12 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
     [Inject] private KnowledgeBaseController _KnowledgeBaseController { get; set; }
     MudForm form;
     KnowledgeFluentValidator knowledgeValidator = new KnowledgeFluentValidator();
-
+    private ClaimsPrincipal userAth;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+    }
     private async Task Submit()
     {
         await form.Validate();
