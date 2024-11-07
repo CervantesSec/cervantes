@@ -123,6 +123,10 @@ private Sanitizer sanitizer;
             var user2 = usrManager.GetByUserId(userId);
 
             var rolUser = await authUsersAdminService.FindAuthUserByUserIdAsync(user2.Id);
+            if (rolUser.Result == null)
+            {
+                return String.Empty;
+            }
             var test = rolUser.Result.UserRoles;
 
             if (test.Count == 0)
