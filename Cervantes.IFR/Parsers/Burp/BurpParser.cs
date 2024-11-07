@@ -135,6 +135,8 @@ public class BurpParser: IBurpParser
                 vuln.OWASPImpact = "No Data";
                 vuln.OWASPLikehood = "No Data";
                 vuln.OWASPVector = "No Data";
+                vuln.MitreTechniques = "";
+                vuln.MitreValues = "";
 
                 vulnManager.Add(vuln);
                 vulnManager.Context.SaveChanges();
@@ -248,7 +250,8 @@ public class BurpParser: IBurpParser
                 vuln.OWASPImpact = "No Data";
                 vuln.OWASPLikehood = "No Data";
                 vuln.OWASPVector = "No Data";
-
+                vuln.MitreTechniques = "";
+                vuln.MitreValues = "";
                 vulnManager.Add(vuln);
                 vulnManager.Context.SaveChanges();
 

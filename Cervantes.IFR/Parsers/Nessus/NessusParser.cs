@@ -146,6 +146,8 @@ public class NessusParser: INessusParser
                     vuln.OWASPImpact = "No Data";
                     vuln.OWASPLikehood = "No Data";
                     vuln.OWASPVector = "No Data";
+                    vuln.MitreTechniques = "";
+                    vuln.MitreValues = "";
 
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
@@ -257,7 +259,8 @@ public class NessusParser: INessusParser
                     vuln.OWASPImpact = "No Data";
                     vuln.OWASPLikehood = "No Data";
                     vuln.OWASPVector = "No Data";
-
+                    vuln.MitreTechniques = "";
+                    vuln.MitreValues = "";
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                     

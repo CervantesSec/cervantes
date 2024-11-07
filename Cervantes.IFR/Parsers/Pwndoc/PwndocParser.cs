@@ -110,6 +110,8 @@ public class PwndocParser: IPwndocParser
                     vuln.OWASPImpact = "No Data";
                     vuln.OWASPLikehood = "No Data";
                     vuln.OWASPVector = "No Data";
+                    vuln.MitreTechniques = "";
+                    vuln.MitreValues = "";
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                     i++;
@@ -188,6 +190,8 @@ public class PwndocParser: IPwndocParser
                     vuln.OWASPImpact = "No Data";
                     vuln.OWASPLikehood = "No Data";
                     vuln.OWASPVector = "No Data";
+                    vuln.MitreTechniques = "";
+                    vuln.MitreValues = "";
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                     i++;

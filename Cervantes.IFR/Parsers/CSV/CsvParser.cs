@@ -125,6 +125,8 @@ public class CsvParser: ICsvParser
                         continue;
                     }
                     vuln.FindingId = "No Project";
+                    vuln.MitreTechniques = vul.MitreTechniques == "" ? "" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.MitreTechniques));
+                    vuln.MitreValues = vul.MitreValues == "" ? "" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.MitreValues));
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                 }

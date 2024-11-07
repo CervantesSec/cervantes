@@ -44,4 +44,8 @@ public class VulnImportCsv
     public string OwaspLikehood { get; set; }
     [Index(17)]
     public string OwaspImpact { get; set; }
+    [Index(18)]
+    public string MitreTechniques { get; set; }
+    [Index(19)]
+    public string MitreValues { get; set; }
 }

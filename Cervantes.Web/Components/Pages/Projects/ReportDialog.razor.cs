@@ -55,11 +55,6 @@ public partial class ReportDialog: ComponentBase
             CurrentUser = _UserController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier));
         }
         
-        if (CurrentUser != null)
-        {
-            var rol = await _userManager.GetRolesAsync(CurrentUser);
-            rolUser = rol.First();
-        }
         
         aiEnabled = _aiService.IsEnabled();
         await base.OnInitializedAsync();

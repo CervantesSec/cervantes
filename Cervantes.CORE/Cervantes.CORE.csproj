@@ -9,9 +9,9 @@
     <ItemGroup>
       <PackageReference Include="AuthPermissions.AspNetCore" Version="8.0.0" />
       <PackageReference Include="CsvHelper" Version="33.0.1" />
-      <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.8" />
-      <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.8" />
-      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.8" />
+      <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.10" />
+      <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.10" />
     </ItemGroup>
 
 
