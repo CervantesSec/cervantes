@@ -1847,4 +1847,7 @@
     <data name="roleEdited" xml:space="preserve">
         <value>Função editado com sucesso!</value>
     </data>
+    <data name="permission" xml:space="preserve">
+        <value>Autorizaçõ</value>
+    </data>
 </root>

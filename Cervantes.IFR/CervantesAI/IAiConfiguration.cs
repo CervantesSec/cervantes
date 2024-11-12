@@ -9,5 +9,7 @@ public interface IAiConfiguration
     public string Model { get; set; }
     public int MaxTokens { get; set; }
     public decimal Temperature { get; set; }
+    public string Location { get; set; }
+    public string ProjectId { get; set; }
 
 }

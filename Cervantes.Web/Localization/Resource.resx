@@ -1859,4 +1859,7 @@
     <data name="deleteRole" xml:space="preserve">
         <value>Delete Role</value>
     </data>
+    <data name="permission" xml:space="preserve">
+        <value>Permission</value>
+    </data>
 </root>

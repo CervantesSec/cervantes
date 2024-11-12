@@ -1929,4 +1929,7 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="roleEditedError" xml:space="preserve">
         <value>Se ha producido un error al modificar el rol!</value>
     </data>
+    <data name="permission" xml:space="preserve">
+        <value>Permiso</value>
+    </data>
 </root>

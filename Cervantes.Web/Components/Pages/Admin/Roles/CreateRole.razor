@@ -52,9 +52,9 @@
                         <SelectColumn T="PermissionsViewModel"/>
 
                         <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
-                        <PropertyColumn Property="x => x.ShortName" Title="@localizer["description"]"/>
-                        <PropertyColumn Property="x => x.Description" Title="@localizer["permissions"]"/>
-                        <PropertyColumn Property="x => x.Group" Title="Category" Grouping>
+                        <PropertyColumn Property="x => x.ShortName" Title="@localizer["permission"]"/>
+                        <PropertyColumn Property="x => x.Description" Title="@localizer["description"]"/>
+                        <PropertyColumn Property="x => x.Group" Title="@localizer["category"]" Grouping>
                             <GroupTemplate>
                                 <span style="font-weight:bold">@context.Grouping.Key</span>
                             </GroupTemplate>
