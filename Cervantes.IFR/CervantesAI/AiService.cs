@@ -6,6 +6,8 @@ using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
+using Microsoft.SemanticKernel.Connectors.Google;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.TextGeneration;
 
@@ -103,9 +105,36 @@ public class AiService: IAiService
                             break;
                     }
 
-                    var summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = _aiConfiguration.MaxTokens });
-                     var result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
-                      string descriptionPattern;
+                    KernelFunction summarize;
+                    FunctionResult result;
+                    switch (_aiConfiguration.Type)
+                    {
+                        case "OpenAI":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
+                            break;
+                        case "Azure":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new AzureOpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
+                            break;
+                        case "Google":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens, Temperature = 0.8});
+                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
+                            break;
+                        case "GoogleVertex":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
+                            break;
+                        case "Custom":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
+                            break;
+
+                        default:
+                            throw new Exception("Invalid AI Type");
+                    }
+                    
+                    string descriptionPattern;
                 string impactPattern;
                 string riskLevelPattern;
                 string proofOfConceptPattern;
@@ -432,6 +461,18 @@ public class AiService: IAiService
                             _aiConfiguration.Endpoint, 
                             _aiConfiguration.ApiKey);
                         break;
+                    case "Google":
+                        #pragma warning disable SKEXP0070
+                        builder.AddGoogleAIGeminiChatCompletion(
+                            _aiConfiguration.Model,  
+                            _aiConfiguration.ApiKey);
+                        break;
+                    case "GoogleVertex":
+                        #pragma warning disable SKEXP0070
+                        builder.AddVertexAIGeminiChatCompletion(
+                            _aiConfiguration.Model,  
+                            _aiConfiguration.ApiKey,_aiConfiguration.Location, _aiConfiguration.ProjectId);
+                        break;
                     case "Custom":
                         builder.AddOpenAIChatCompletion(
                             _aiConfiguration.Model,  
@@ -448,10 +489,36 @@ public class AiService: IAiService
                 if (_aiConfiguration.Type != "Anthropic")
                 {
                     var kernel = builder.Build();
-              
 
-                    var summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = _aiConfiguration.MaxTokens });
-                    var result = await kernel.InvokeAsync(summarize);
+                    KernelFunction summarize;
+                    FunctionResult result;
+                    switch (_aiConfiguration.Type)
+                    {
+                        case "OpenAI":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize);
+                            break;
+                        case "Azure":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new AzureOpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize);
+                            break;
+                        case "Google":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize);
+                            break;
+                        case "GoogleVertex":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize);
+                            break;
+                        case "Custom":
+                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                            result = await kernel.InvokeAsync(summarize);
+                            break;
+
+                        default:
+                            throw new Exception("Invalid AI Type");
+                    }
+                    
                 
                     return result.ToString();
                 }
@@ -507,6 +574,18 @@ public class AiService: IAiService
                             _aiConfiguration.Model,  
                             _aiConfiguration.Endpoint, 
                             _aiConfiguration.ApiKey);
+                        break;
+                    case "Google":
+                        #pragma warning disable SKEXP0070
+                        builder.AddGoogleAIGeminiChatCompletion(
+                            _aiConfiguration.Model,  
+                            _aiConfiguration.ApiKey);
+                        break;
+                    case "GoogleVertex":
+                        #pragma warning disable SKEXP0070
+                        builder.AddVertexAIGeminiChatCompletion(
+                            _aiConfiguration.Model,  
+                            _aiConfiguration.ApiKey,_aiConfiguration.Location, _aiConfiguration.ProjectId);
                         break;
                     case "Custom":
                         builder.AddOpenAIChatCompletion(
