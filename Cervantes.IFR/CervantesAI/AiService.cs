@@ -43,7 +43,6 @@ public class AiService: IAiService
             {
                 var builder = Kernel.CreateBuilder();
                 VulnAiModel vulnAiModel = new VulnAiModel();
-
                 switch (_aiConfiguration.Type)
                 {
                     case "OpenAI":
@@ -56,6 +55,18 @@ public class AiService: IAiService
                             _aiConfiguration.Model,  
                             _aiConfiguration.Endpoint, 
                             _aiConfiguration.ApiKey);
+                        break;
+                    case "Google":
+                        #pragma warning disable SKEXP0070
+                        builder.AddGoogleAIGeminiChatCompletion(
+                            _aiConfiguration.Model,  
+                            _aiConfiguration.ApiKey);
+                        break;
+                    case "GoogleVertex":
+                        #pragma warning disable SKEXP0070
+                        builder.AddVertexAIGeminiChatCompletion(
+                            _aiConfiguration.Model,  
+                            _aiConfiguration.ApiKey,_aiConfiguration.Location, _aiConfiguration.ProjectId);
                         break;
                   case "Custom":
                         builder.AddOpenAIChatCompletion(

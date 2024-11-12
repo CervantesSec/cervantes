@@ -28,6 +28,7 @@
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
       <PackageReference Include="Microsoft.SemanticKernel" Version="1.28.0" />
       <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="1.28.0" />
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.Google" Version="1.28.0-alpha" />
       <PackageReference Include="Mime-Detective" Version="24.7.1" />
       <PackageReference Include="Mime-Detective.Definitions.Exhaustive" Version="24.7.1" />
       <PackageReference Include="YamlDotNet" Version="16.1.3" />
