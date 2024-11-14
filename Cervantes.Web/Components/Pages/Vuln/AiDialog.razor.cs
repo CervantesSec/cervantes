@@ -26,10 +26,9 @@ public partial class AiDialog: ComponentBase
     private string result;
     private string result2;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        return base.OnInitializedAsync();
-        defaultModel.Language = Language.English;
+        await base.OnInitializedAsync(); 
     }
 
     public class DefaultModel

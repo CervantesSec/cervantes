@@ -19,10 +19,6 @@
         <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="7.0.2" />
         <PackageReference Include="FluentValidation" Version="11.10.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-        <PackageReference Include="Handlebars.Net" Version="2.1.6" />
-        <PackageReference Include="Handlebars.Net.Extension.NewtonsoftJson" Version="1.0.3" />
-        <PackageReference Include="Handlebars.Net.Helpers" Version="2.4.6" />
-        <PackageReference Include="Handlebars.Net.Helpers.Core" Version="2.4.6" />
         <PackageReference Include="Hangfire" Version="1.8.15" />
         <PackageReference Include="Hangfire.AspNetCore" Version="1.8.15" />
         <PackageReference Include="Hangfire.Core" Version="1.8.15" />

@@ -15,8 +15,6 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Ganss.Xss;
-using HandlebarsDotNet;
-using HandlebarsDotNet.Extension.NewtonsoftJson;
 using Hangfire.Dashboard.Resources;
 using HtmlAgilityPack;
 using HtmlToOpenXml;

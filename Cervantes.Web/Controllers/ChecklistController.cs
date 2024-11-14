@@ -12,7 +12,6 @@ using Cervantes.Web.Helpers;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Ganss.Xss;
-using HandlebarsDotNet;
 using HtmlToOpenXml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -15,12 +15,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Anthropic.SDK" Version="4.3.0" />
       <PackageReference Include="Atlassian.SDK" Version="13.0.0" />
       <PackageReference Include="CsvHelper" Version="33.0.1" />
       <PackageReference Include="Html2JiraMarkup" Version="1.0.4" />
       <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
       <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
+      <PackageReference Include="Lost.SemanticKernel.Connectors.Anthropic" Version="1.25.0-alpha3" />
       <PackageReference Include="MailKit" Version="4.8.0" />
       <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
       <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
@@ -29,6 +29,8 @@
       <PackageReference Include="Microsoft.SemanticKernel" Version="1.28.0" />
       <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="1.28.0" />
       <PackageReference Include="Microsoft.SemanticKernel.Connectors.Google" Version="1.28.0-alpha" />
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.HuggingFace" Version="1.28.0-preview" />
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.MistralAI" Version="1.28.0-alpha" />
       <PackageReference Include="Mime-Detective" Version="24.7.1" />
       <PackageReference Include="Mime-Detective.Definitions.Exhaustive" Version="24.7.1" />
       <PackageReference Include="YamlDotNet" Version="16.1.3" />

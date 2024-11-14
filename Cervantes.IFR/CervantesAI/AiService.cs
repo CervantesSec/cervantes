@@ -1,19 +1,19 @@
 using System.Text.RegularExpressions;
-using Anthropic.SDK;
-using Anthropic.SDK.Constants;
-using Anthropic.SDK.Messaging;
 using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.Anthropic;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using Microsoft.SemanticKernel.Connectors.Google;
+using Microsoft.SemanticKernel.Connectors.HuggingFace;
+using Microsoft.SemanticKernel.Connectors.MistralAI;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.TextGeneration;
 
 namespace Cervantes.IFR.CervantesAI;
 
-public class AiService: IAiService
+public class AiService : IAiService
 {
     private readonly IAiConfiguration _aiConfiguration;
     private IProjectUserManager projectUserManager;
@@ -21,7 +21,8 @@ public class AiService: IAiService
     private ITargetManager targetManager;
     private IVulnTargetManager vulnTargetManager;
 
-    public AiService(IAiConfiguration aiConfiguration, IProjectUserManager projectUserManager, IVulnManager vulnManager, ITargetManager targetManager,
+    public AiService(IAiConfiguration aiConfiguration, IProjectUserManager projectUserManager, IVulnManager vulnManager,
+        ITargetManager targetManager,
         IVulnTargetManager vulnTargetManager)
     {
         _aiConfiguration = aiConfiguration;
@@ -30,274 +31,39 @@ public class AiService: IAiService
         this.targetManager = targetManager;
         this.vulnTargetManager = vulnTargetManager;
     }
-    
+
     public bool IsEnabled()
     {
         return _aiConfiguration.Enabled;
     }
-    
+
     public async Task<VulnAiModel?> GenerateVuln(string name, Language language)
     {
         try
         {
-
             if (IsEnabled())
             {
-                var builder = Kernel.CreateBuilder();
+                var builder = TypeBuilder(_aiConfiguration.Type);
                 VulnAiModel vulnAiModel = new VulnAiModel();
-                switch (_aiConfiguration.Type)
-                {
-                    case "OpenAI":
-                        builder.AddOpenAIChatCompletion(
-                            _aiConfiguration.Model,       
-                            _aiConfiguration.ApiKey); 
-                        break;
-                    case "Azure":
-                        builder.AddAzureOpenAIChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.Endpoint, 
-                            _aiConfiguration.ApiKey);
-                        break;
-                    case "Google":
-                        #pragma warning disable SKEXP0070
-                        builder.AddGoogleAIGeminiChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey);
-                        break;
-                    case "GoogleVertex":
-                        #pragma warning disable SKEXP0070
-                        builder.AddVertexAIGeminiChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey,_aiConfiguration.Location, _aiConfiguration.ProjectId);
-                        break;
-                  case "Custom":
-                        builder.AddOpenAIChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey, 
-                            httpClient: new HttpClient( new LocalHostServer(_aiConfiguration.Endpoint))
-                            );
-                        break;
-                  case "Anthropic":
-                        break;
-                    default:
-                        throw new Exception("Invalid AI Type");
-                }
 
-                if (_aiConfiguration.Type != "Anthropic")
-                {
-                    var kernel = builder.Build();
-                    var prompt = @"";
-                    switch (language)
-                    {
-                        case Language.English:
-                            prompt =
-                                @"You are a penetration tester writing report findings for a client. You are writing a finding for the following vulnerability: {{$input}}
-                        . The finding should be written in the following format: Description, Impact, Risk Level (Critical, High, Medium, Low, Info), Proof of Concept, Remediation";
-                            break;
-                        case Language.Español:
-                            prompt = @"Eres un pentester redactando los hallazgos de un informe para un cliente. Estás redactando un hallazgo para la siguiente vulnerabilidad: {{$input}}
-                        . El hallazgo debe ser redactado en el siguiente formato: Descripción, Impacto, Nivel de Riesgo (Crítico, Alto, Medio, Bajo, Informativo), Prueba de Concepto y Remediación."; ;
-                            break;
-                        case Language.Português:
-                            prompt =
-                                @"É um pentester que escreve as descobertas de um relatório para um cliente. Está a escrever uma descoberta para a seguinte vulnerabilidade: {{$input}}
-                                . A constatação deve ser redigida no seguinte formato: Descrição, Impacto, Nível de Risco (Crítico, Alto, Médio, Baixo, Informativo), Prova de Conceito e Remediação.";
-                            break;
-                    }
-
-                    KernelFunction summarize;
-                    FunctionResult result;
-                    switch (_aiConfiguration.Type)
-                    {
-                        case "OpenAI":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
-                            break;
-                        case "Azure":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new AzureOpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
-                            break;
-                        case "Google":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens, Temperature = 0.8});
-                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
-                            break;
-                        case "GoogleVertex":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
-                            break;
-                        case "Custom":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize, new() { ["input"] = name });
-                            break;
-
-                        default:
-                            throw new Exception("Invalid AI Type");
-                    }
-                    
-                    string descriptionPattern;
-                string impactPattern;
-                string riskLevelPattern;
-                string proofOfConceptPattern;
-                string remediationPattern;
-
-
-                string description;
-                string impact;
-                string riskLevel;
-                string proofOfConcept;
-                string remediation;
-
-                vulnAiModel.Name = name;
-                vulnAiModel.Language = language;
-                
+                var prompt = @"";
+                FunctionResult result;
                 switch (language)
                 {
                     case Language.English:
-                         descriptionPattern = @"Description:\s*(.*?)\s*Impact:";
-                         impactPattern = @"Impact:\s*(.*?)\s*Risk Level:";
-                         riskLevelPattern = @"Risk Level:\s*(Critical|High|Medium|Low|Info)";
-                         proofOfConceptPattern = @"Proof of Concept:\s*(.*?)\s*Remediation:";
-                         remediationPattern = @"Remediation:\s*(.*)";
-                         description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
-                         impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                         riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
-                         proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
-                         remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
-                        
-                            vulnAiModel.Description = description;
-                            vulnAiModel.Impact = impact;
-                            vulnAiModel.ProofOfConcept = proofOfConcept;
-                            vulnAiModel.Remediation = remediation;
-                            switch (riskLevel)
-                            {
-                                case "Critical":
-                                    vulnAiModel.Risk = VulnRisk.Critical;
-                                    break;
-                                case "High":
-                                    vulnAiModel.Risk = VulnRisk.High;
-                                    break;
-                                case "Medium":
-                                    vulnAiModel.Risk = VulnRisk.Medium;
-                                    break;
-                                case "Low":
-                                    vulnAiModel.Risk = VulnRisk.Low;
-                                    break;
-                                case "Info":
-                                    vulnAiModel.Risk = VulnRisk.Info;
-                                    break;
-                            }
-                    break;
+                        prompt = PromptHelper.VulnEnglish;
+                        break;
                     case Language.Español:
-                         descriptionPattern = @"Descripción:\s*(.*?)\s*Impacto:";
-                         impactPattern = @"Impacto:\s*(.*?)\s*Nivel de Riesgo:";
-                         riskLevelPattern = @"Nivel de Riesgo:\s*(Crítico|Alto|Medio|Bajo|Informativo)";
-                         proofOfConceptPattern = @"Prueba de Concepto:\s*(.*?)\s*Remediación:";
-                         remediationPattern = @"Remediación:\s*(.*)";
-                
-                         description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
-                         impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                         riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
-                         proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
-                         remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
-                        
-                         vulnAiModel.Description = description;
-                            vulnAiModel.Impact = impact;
-                            vulnAiModel.ProofOfConcept = proofOfConcept;
-                            vulnAiModel.Remediation = remediation;
-                            switch (riskLevel)
-                            {
-                                case "Crítico":
-                                    vulnAiModel.Risk = VulnRisk.Critical;
-                                    break;
-                                case "Alto":
-                                    vulnAiModel.Risk = VulnRisk.High;
-                                    break;
-                                case "Medio":
-                                    vulnAiModel.Risk = VulnRisk.Medium;
-                                    break;
-                                case "Bajo":
-                                    vulnAiModel.Risk = VulnRisk.Low;
-                                    break;
-                                case "Informativo":
-                                    vulnAiModel.Risk = VulnRisk.Info;
-                                    break;
-                            }
+                        prompt = PromptHelper.VulnSpanish;
                         break;
                     case Language.Português:
-                         descriptionPattern = @"Descrição:\s*(.*?)\s*Impacto:";
-                         impactPattern = @"Impacto:\s*(.*?)\s*Nível de Risco:";
-                         riskLevelPattern = @"Nível de Risco:\s*(Crítico|Alto|Médio|Baixo|Informativo)";
-                         proofOfConceptPattern = @"Prova de Conceito:\s*(.*?)\s*Remediação:";
-                         remediationPattern = @"Remediação:\s*(.*)";
-                
-                         description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
-                         impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                         riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
-                         proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
-                         remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
-                        
-                         vulnAiModel.Description = description;
-                            vulnAiModel.Impact = impact;
-                            vulnAiModel.ProofOfConcept = proofOfConcept;
-                            vulnAiModel.Remediation = remediation;
-                            switch (riskLevel)
-                            {
-                                case "Crítico":
-                                    vulnAiModel.Risk = VulnRisk.Critical;
-                                    break;
-                                case "Alto":
-                                    vulnAiModel.Risk = VulnRisk.High;
-                                    break;
-                                case "Médio":
-                                    vulnAiModel.Risk = VulnRisk.Medium;
-                                    break;
-                                case "Baixo":
-                                    vulnAiModel.Risk = VulnRisk.Low;
-                                    break;
-                                case "Informativo":
-                                    vulnAiModel.Risk = VulnRisk.Info;
-                                    break;
-                            }
+                        prompt = PromptHelper.VulnPortuguese;
                         break;
                 }
-                }
-                else
-                {
-                    var client = new AnthropicClient(_aiConfiguration.ApiKey);
-                    var prompt = @"";
-                    switch (language)
-                    {
-                        case Language.English:
-                            prompt =
-                                $@"You are a penetration tester writing report findings for a client. You are writing a finding for the following vulnerability: {name}
-                        . The finding should be written in the following format: Description, Impact, Risk Level (Critical, High, Medium, Low, Info), Proof of Concept, Remediation";
-                            break;
-                        case Language.Español:
-                            prompt = $@"Eres un pentester redactando los hallazgos de un informe para un cliente. Estás redactando un hallazgo para la siguiente vulnerabilidad: {name}
-                        . El hallazgo debe ser redactado en el siguiente formato: Descripción, Impacto, Nivel de Riesgo (Crítico, Alto, Medio, Bajo, Informativo), Prueba de Concepto y Remediación."; ;
-                            break;
-                        case Language.Português:
-                            prompt =
-                                $@"É um pentester que escreve as descobertas de um relatório para um cliente. Está a escrever uma descoberta para a seguinte vulnerabilidade: {name}
-                                . A constatação deve ser redigida no seguinte formato: Descrição, Impacto, Nível de Risco (Crítico, Alto, Médio, Baixo, Informativo), Prova de Conceito e Remediação.";
-                            break;
-                    }
-                    
-                    var messages = new List<Message>()
-                    {
-                        new Message(RoleType.User, prompt),
-                    };
-                    
-                    var parameters = new MessageParameters()
-                    {
-                        Messages = messages,
-                        MaxTokens = _aiConfiguration.MaxTokens,
-                        Model = AnthropicModels.Claude35Sonnet,
-                        Stream = false,
-                        Temperature = 1.0m,
-                    };
-                    var result = await client.Messages.GetClaudeMessageAsync(parameters);
-                    string descriptionPattern;
+
+                result = await PromptExecution(prompt, _aiConfiguration.Type, name, builder);
+
+                string descriptionPattern;
                 string impactPattern;
                 string riskLevelPattern;
                 string proofOfConceptPattern;
@@ -312,121 +78,130 @@ public class AiService: IAiService
 
                 vulnAiModel.Name = name;
                 vulnAiModel.Language = language;
-                
                 switch (language)
                 {
                     case Language.English:
-                         descriptionPattern = @"Description:\s*(.*?)\s*Impact:";
-                         impactPattern = @"Impact:\s*(.*?)\s*Risk Level:";
-                         riskLevelPattern = @"Risk Level:\s*(Critical|High|Medium|Low|Info)";
-                         proofOfConceptPattern = @"Proof of Concept:\s*(.*?)\s*Remediation:";
-                         remediationPattern = @"Remediation:\s*(.*)";
-                         description = Regex.Match(result.Message.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
-                         impact = Regex.Match(result.Message.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                         riskLevel = Regex.Match(result.Message.ToString(), riskLevelPattern).Groups[1].Value;
-                         proofOfConcept = Regex.Match(result.Message.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
-                         remediation = Regex.Match(result.Message.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
-                        
-                            vulnAiModel.Description = description;
-                            vulnAiModel.Impact = impact;
-                            vulnAiModel.ProofOfConcept = proofOfConcept;
-                            vulnAiModel.Remediation = remediation;
-                            switch (riskLevel)
-                            {
-                                case "Critical":
-                                    vulnAiModel.Risk = VulnRisk.Critical;
-                                    break;
-                                case "High":
-                                    vulnAiModel.Risk = VulnRisk.High;
-                                    break;
-                                case "Medium":
-                                    vulnAiModel.Risk = VulnRisk.Medium;
-                                    break;
-                                case "Low":
-                                    vulnAiModel.Risk = VulnRisk.Low;
-                                    break;
-                                case "Info":
-                                    vulnAiModel.Risk = VulnRisk.Info;
-                                    break;
-                            }
-                    break;
+                        descriptionPattern = @"Description:\s*(.*?)\s*Impact:";
+                        impactPattern = @"Impact:\s*(.*?)\s*Risk Level:";
+                        riskLevelPattern = @"Risk Level:\s*(Critical|High|Medium|Low|Info)";
+                        proofOfConceptPattern = @"Proof of Concept:\s*(.*?)\s*Remediation:";
+                        remediationPattern = @"Remediation:\s*(.*)";
+                        description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+                        impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
+                        riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
+                        proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+                        remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+
+                        vulnAiModel.Description = description;
+                        vulnAiModel.Impact = impact;
+                        vulnAiModel.ProofOfConcept = proofOfConcept;
+                        vulnAiModel.Remediation = remediation;
+                        switch (riskLevel)
+                        {
+                            case "Critical":
+                                vulnAiModel.Risk = VulnRisk.Critical;
+                                break;
+                            case "High":
+                                vulnAiModel.Risk = VulnRisk.High;
+                                break;
+                            case "Medium":
+                                vulnAiModel.Risk = VulnRisk.Medium;
+                                break;
+                            case "Low":
+                                vulnAiModel.Risk = VulnRisk.Low;
+                                break;
+                            case "Info":
+                                vulnAiModel.Risk = VulnRisk.Info;
+                                break;
+                        }
+
+                        break;
                     case Language.Español:
-                         descriptionPattern = @"Descripción:\s*(.*?)\s*Impacto:";
-                         impactPattern = @"Impacto:\s*(.*?)\s*Nivel de Riesgo:";
-                         riskLevelPattern = @"Nivel de Riesgo:\s*(Crítico|Alto|Medio|Bajo|Informativo)";
-                         proofOfConceptPattern = @"Prueba de Concepto:\s*(.*?)\s*Remediación:";
-                         remediationPattern = @"Remediación:\s*(.*)";
-                
-                         description = Regex.Match(result.Message.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
-                         impact = Regex.Match(result.Message.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                         riskLevel = Regex.Match(result.Message.ToString(), riskLevelPattern).Groups[1].Value;
-                         proofOfConcept = Regex.Match(result.Message.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
-                         remediation = Regex.Match(result.Message.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
-                        
-                         vulnAiModel.Description = description;
-                            vulnAiModel.Impact = impact;
-                            vulnAiModel.ProofOfConcept = proofOfConcept;
-                            vulnAiModel.Remediation = remediation;
-                            switch (riskLevel)
-                            {
-                                case "Crítico":
-                                    vulnAiModel.Risk = VulnRisk.Critical;
-                                    break;
-                                case "Alto":
-                                    vulnAiModel.Risk = VulnRisk.High;
-                                    break;
-                                case "Medio":
-                                    vulnAiModel.Risk = VulnRisk.Medium;
-                                    break;
-                                case "Bajo":
-                                    vulnAiModel.Risk = VulnRisk.Low;
-                                    break;
-                                case "Informativo":
-                                    vulnAiModel.Risk = VulnRisk.Info;
-                                    break;
-                            }
+                        descriptionPattern = @"Descripción:\s*(.*?)\s*Impacto:";
+                        impactPattern = @"Impacto:\s*(.*?)\s*Nivel de Riesgo:";
+                        riskLevelPattern = @"Nivel de Riesgo:\s*(Crítico|Alto|Medio|Bajo|Informativo)";
+                        proofOfConceptPattern = @"Prueba de Concepto:\s*(.*?)\s*Remediación:";
+                        remediationPattern = @"Remediación:\s*(.*)";
+
+                        description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+                        impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
+                        riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
+                        proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+                        remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+
+                        vulnAiModel.Description = description;
+                        vulnAiModel.Impact = impact;
+                        vulnAiModel.ProofOfConcept = proofOfConcept;
+                        vulnAiModel.Remediation = remediation;
+                        switch (riskLevel)
+                        {
+                            case "Crítico":
+                                vulnAiModel.Risk = VulnRisk.Critical;
+                                break;
+                            case "Alto":
+                                vulnAiModel.Risk = VulnRisk.High;
+                                break;
+                            case "Medio":
+                                vulnAiModel.Risk = VulnRisk.Medium;
+                                break;
+                            case "Bajo":
+                                vulnAiModel.Risk = VulnRisk.Low;
+                                break;
+                            case "Informativo":
+                                vulnAiModel.Risk = VulnRisk.Info;
+                                break;
+                        }
+
                         break;
-                     case Language.Português:
-                         descriptionPattern = @"Descrição:\s*(.*?)\s*Impacto:";
-                         impactPattern = @"Impacto:\s*(.*?)\s*Nível de Risco:";
-                         riskLevelPattern = @"Nível de Risco:\s*(Crítico|Alto|Médio|Baixo|Informativo)";
-                         proofOfConceptPattern = @"Prova de Conceito:\s*(.*?)\s*Remediação:";
-                         remediationPattern = @"Remediação:\s*(.*)";
-                
-                         description = Regex.Match(result.Message.ToString(), descriptionPattern, RegexOptions.Singleline).Groups[1].Value;
-                         impact = Regex.Match(result.Message.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                         riskLevel = Regex.Match(result.Message.ToString(), riskLevelPattern).Groups[1].Value;
-                         proofOfConcept = Regex.Match(result.Message.ToString(), proofOfConceptPattern, RegexOptions.Singleline).Groups[1].Value;
-                         remediation = Regex.Match(result.Message.ToString(), remediationPattern, RegexOptions.Singleline).Groups[1].Value;
-                        
-                         vulnAiModel.Description = description;
-                            vulnAiModel.Impact = impact;
-                            vulnAiModel.ProofOfConcept = proofOfConcept;
-                            vulnAiModel.Remediation = remediation;
-                            switch (riskLevel)
-                            {
-                                case "Crítico":
-                                    vulnAiModel.Risk = VulnRisk.Critical;
-                                    break;
-                                case "Alto":
-                                    vulnAiModel.Risk = VulnRisk.High;
-                                    break;
-                                case "Médio":
-                                    vulnAiModel.Risk = VulnRisk.Medium;
-                                    break;
-                                case "Baixo":
-                                    vulnAiModel.Risk = VulnRisk.Low;
-                                    break;
-                                case "Informativo":
-                                    vulnAiModel.Risk = VulnRisk.Info;
-                                    break;
-                            }
+                    case Language.Português:
+                        descriptionPattern = @"Descrição:\s*(.*?)\s*Impacto:";
+                        impactPattern = @"Impacto:\s*(.*?)\s*Nível de Risco:";
+                        riskLevelPattern = @"Nível de Risco:\s*(Crítico|Alto|Médio|Baixo|Informativo)";
+                        proofOfConceptPattern = @"Prova de Conceito:\s*(.*?)\s*Remediação:";
+                        remediationPattern = @"Remediação:\s*(.*)";
+
+                        description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+                        impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
+                        riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
+                        proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+                        remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline)
+                            .Groups[1].Value;
+
+                        vulnAiModel.Description = description;
+                        vulnAiModel.Impact = impact;
+                        vulnAiModel.ProofOfConcept = proofOfConcept;
+                        vulnAiModel.Remediation = remediation;
+                        switch (riskLevel)
+                        {
+                            case "Crítico":
+                                vulnAiModel.Risk = VulnRisk.Critical;
+                                break;
+                            case "Alto":
+                                vulnAiModel.Risk = VulnRisk.High;
+                                break;
+                            case "Médio":
+                                vulnAiModel.Risk = VulnRisk.Medium;
+                                break;
+                            case "Baixo":
+                                vulnAiModel.Risk = VulnRisk.Low;
+                                break;
+                            case "Informativo":
+                                vulnAiModel.Risk = VulnRisk.Info;
+                                break;
+                        }
+
                         break;
-                     
                 }
-                    
-                }
-                
+
+
                 return vulnAiModel;
             }
 
@@ -438,111 +213,16 @@ public class AiService: IAiService
             throw;
         }
     }
-    
-     public async Task<string> GenerateCustom(string prompt)
+
+    public async Task<string> GenerateCustom(string prompt)
     {
         try
         {
-
             if (IsEnabled())
             {
-                var builder = Kernel.CreateBuilder();
-
-                switch (_aiConfiguration.Type)
-                {
-                    case "OpenAI":
-                        builder.AddOpenAIChatCompletion(
-                            _aiConfiguration.Model,       
-                            _aiConfiguration.ApiKey); 
-                        break;
-                    case "Azure":
-                        builder.AddAzureOpenAIChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.Endpoint, 
-                            _aiConfiguration.ApiKey);
-                        break;
-                    case "Google":
-                        #pragma warning disable SKEXP0070
-                        builder.AddGoogleAIGeminiChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey);
-                        break;
-                    case "GoogleVertex":
-                        #pragma warning disable SKEXP0070
-                        builder.AddVertexAIGeminiChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey,_aiConfiguration.Location, _aiConfiguration.ProjectId);
-                        break;
-                    case "Custom":
-                        builder.AddOpenAIChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey, 
-                            httpClient: new HttpClient( new LocalHostServer(_aiConfiguration.Endpoint))
-                        );
-                        break;
-                    case "Anthropic":
-                        break;
-                    default:
-                        throw new Exception("Invalid AI Type");
-                }
-
-                if (_aiConfiguration.Type != "Anthropic")
-                {
-                    var kernel = builder.Build();
-
-                    KernelFunction summarize;
-                    FunctionResult result;
-                    switch (_aiConfiguration.Type)
-                    {
-                        case "OpenAI":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize);
-                            break;
-                        case "Azure":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new AzureOpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize);
-                            break;
-                        case "Google":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize);
-                            break;
-                        case "GoogleVertex":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize);
-                            break;
-                        case "Custom":
-                            summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
-                            result = await kernel.InvokeAsync(summarize);
-                            break;
-
-                        default:
-                            throw new Exception("Invalid AI Type");
-                    }
-                    
-                
-                    return result.ToString();
-                }
-                else
-                {
-                    var client = new AnthropicClient(_aiConfiguration.ApiKey);
-                    
-                    var messages = new List<Message>()
-                    {
-                        new Message(RoleType.User, prompt),
-                    };
-                    
-                    var parameters = new MessageParameters()
-                    {
-                        Messages = messages,
-                        MaxTokens = _aiConfiguration.MaxTokens,
-                        Model = AnthropicModels.Claude35Sonnet,
-                        Stream = false,
-                        Temperature = 1.0m,
-                    };
-                    var result = await client.Messages.GetClaudeMessageAsync(parameters);
-                    return result.Message.ToString();
-                }
-                
+                var builder = TypeBuilder(_aiConfiguration.Type);
+                var result = await PromptExecution(prompt, _aiConfiguration.Type, null, builder);
+                return result.ToString();
             }
 
             return String.Empty;
@@ -553,520 +233,141 @@ public class AiService: IAiService
             throw;
         }
     }
+
     public async Task<string> GenerateExecutive(Project project)
     {
         try
         {
-
             if (IsEnabled())
             {
-                var builder = Kernel.CreateBuilder();
-
-                switch (_aiConfiguration.Type)
+                var builder = TypeBuilder(_aiConfiguration.Type);
+                var prompt = @"";
+                switch (project.Language)
                 {
-                    case "OpenAI":
-                        builder.AddOpenAIChatCompletion(
-                            _aiConfiguration.Model,       
-                            _aiConfiguration.ApiKey); 
+                    case Language.English:
+                        string message = PromptHelper.ExecutiveEnglish;
+                        var membersList = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                            .Select(x => x.User.FullName).ToList();
+                        string members = "";
+                        foreach (var mem in membersList)
+                        {
+                            members += mem + ", ";
+                        }
+
+                        var targetsList = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string targets = "";
+                        foreach (var tar in targetsList)
+                        {
+                            targets += tar.Name + ", ";
+                        }
+
+                        var vulnsList = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string vulns = "";
+                        foreach (var vul in vulnsList)
+                        {
+                            var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                            var targetsVuln = "";
+                            foreach (var t in tar)
+                            {
+                                targetsVuln += t.Target.Name + ", ";
+                            }
+
+                            vulns += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                     targetsVuln + ". ";
+                        }
+
+                        prompt = message.Replace("{Client}", project.Client.Name).Replace("{Project}", project.Name)
+                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members)
+                            .Replace("{Scope}", targets).Replace("{Vulns}", vulns);
+
                         break;
-                    case "Azure":
-                        builder.AddAzureOpenAIChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.Endpoint, 
-                            _aiConfiguration.ApiKey);
+                    case Language.Español:
+                        string message2 = PromptHelper.ExecutiveSpanish;
+                        var membersList2 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                            .Select(x => x.User.FullName).ToList();
+                        string members2 = "";
+                        foreach (var mem in membersList2)
+                        {
+                            members2 += mem + ", ";
+                        }
+
+                        var targetsList2 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string targets2 = "";
+                        foreach (var tar in targetsList2)
+                        {
+                            targets2 += tar.Name + ", ";
+                        }
+
+                        var vulnsList2 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string vulns2 = "";
+                        foreach (var vul in vulnsList2)
+                        {
+                            var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                            var targetsVuln = "";
+                            foreach (var t in tar)
+                            {
+                                targetsVuln += t.Target.Name + ", ";
+                            }
+
+                            vulns2 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                      targetsVuln + ". ";
+                        }
+
+                        prompt = message2.Replace("{Client}", project.Client.Name)
+                            .Replace("{Project}", project.Name)
+                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members2)
+                            .Replace("{Scope}", targets2).Replace("{Vulns}", vulns2);
+
                         break;
-                    case "Google":
-                        #pragma warning disable SKEXP0070
-                        builder.AddGoogleAIGeminiChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey);
+                    case Language.Português:
+                        string message3 = PromptHelper.ExecutivePortuguese;
+
+                        var membersList3 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                            .Select(x => x.User.FullName).ToList();
+                        string members3 = "";
+                        foreach (var mem in membersList3)
+                        {
+                            members3 += mem + ", ";
+                        }
+
+                        var targetsList3 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string targets3 = "";
+                        foreach (var tar in targetsList3)
+                        {
+                            targets3 += tar.Name + ", ";
+                        }
+
+                        var vulnsList3 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string vulns3 = "";
+                        foreach (var vul in vulnsList3)
+                        {
+                            var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                            var targetsVuln = "";
+                            foreach (var t in tar)
+                            {
+                                targetsVuln += t.Target.Name + ", ";
+                            }
+
+                            vulns3 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                      targetsVuln + ". ";
+                        }
+
+                        prompt = message3.Replace("{Client}", project.Client.Name)
+                            .Replace("{Project}", project.Name)
+                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members3)
+                            .Replace("{Scope}", targets3).Replace("{Vulns}", vulns3);
                         break;
-                    case "GoogleVertex":
-                        #pragma warning disable SKEXP0070
-                        builder.AddVertexAIGeminiChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey,_aiConfiguration.Location, _aiConfiguration.ProjectId);
-                        break;
-                    case "Custom":
-                        builder.AddOpenAIChatCompletion(
-                            _aiConfiguration.Model,  
-                            _aiConfiguration.ApiKey, 
-                            httpClient: new HttpClient( new LocalHostServer(_aiConfiguration.Endpoint))
-                        );
-                        break;
-                    case "Anthropic":
-                        break;
-                    default:
-                        throw new Exception("Invalid AI Type");
                 }
 
-                if (_aiConfiguration.Type != "Anthropic")
-                {
+                var result = await PromptExecution(prompt, _aiConfiguration.Type, null, builder);
 
-                    var kernel = builder.Build();
-                    var prompt = @"";
-                    switch (project.Language)
-                    {
-                        case Language.English:
-                            string message =
-                                @"You are a penetration tester writing the executive summary of a report for a client. 
-This should provide a high-level overview of the key findings and recommendations in a concise and easily understandable manner and the response should be in HTML.  This executive summary should include:
-
-                            Introduction. Briefly explain the purpose of the penetration test. Mention the systems or areas tested.
-
-                            Scope and Objectives (Outline the scope of the penetration test, including the systems or networks tested. Summarize the objectives set for the testing)
-
-                            Key Findings (Highlight the most critical vulnerabilities and weaknesses discovered. Provide a brief description of the severity and potential impact)
-
-                            Overall Risk Profile( Summarize the overall risk ranking or score for the organization.Include a high-level explanation of the risk factors considered.)
-
-                            Successes and Challenges ( Briefly mention the successes in terms of breaching security controls (if applicable).Highlight any challenges encountered during the testing)
-
-                            Recommendations(Summarize the main recommendations for addressing identified vulnerabilities. Provide an overview of the suggested remediation measures)
-
-                            Strategic Roadmap ( Outline the strategic roadmap for addressing security issues. Emphasize key milestones and priorities)
-
-                            Conclusion (Provide a brief concluding statement summarizing the overall security posture. Mention any notable achievements or improvements)
-
-                            Next Steps (Outline the immediate actions that need to be taken post-assessment.
-                            Mention any follow-up activities or ongoing monitoring)
-
-                            The Project information is:
-
-                            Client Name: {Client}
-                            Project name: Project}
-                            Project Start Date: {StartDate}
-                            Project End Date: {EndDate}
-                            Project Description: {ProjectDescription}
-                            Members: {Members}
-                            Scope: {Scope}
-                            Vulnerabilities: {Vulns}.
-                            ";
-
-                            var membersList = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
-                                .Select(x => x.User.FullName).ToList();
-                            string members = "";
-                            foreach (var mem in membersList)
-                            {
-                                members += mem + ", ";
-                            }
-
-                            var targetsList = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string targets = "";
-                            foreach (var tar in targetsList)
-                            {
-                                targets += tar.Name + ", ";
-                            }
-
-                            var vulnsList = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string vulns = "";
-                            foreach (var vul in vulnsList)
-                            {
-                                var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
-                                var targetsVuln = "";
-                                foreach (var t in tar)
-                                {
-                                    targetsVuln += t.Target.Name + ", ";
-                                }
-
-                                vulns += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
-                                         targetsVuln + ". ";
-                            }
-
-                            prompt = message.Replace("{Client}", project.Client.Name).Replace("{Project}", project.Name)
-                                .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                                .Replace("{EndDate}", project.EndDate.ToShortDateString())
-                                .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members)
-                                .Replace("{Scope}", targets).Replace("{Vulns}", vulns);
-
-                            break;
-                        case Language.Español:
-                            string message2 =
-                                @"Eres un pentester que esta redactando el resumen ejecutivo de un informe para un cliente. Este debe proporcionar una descripción general de alto nivel de los hallazgos clave y recomendaciones de manera concisa y fácilmente comprensible y el formato debe ser en HTML. Este resumen ejecutivo debe incluir:
-                        Introducción: Explica brevemente el propósito de la prueba de penetración. Menciona los sistemas o áreas evaluadas.
-
-                        Alcance y objetivos: Esquematiza el alcance de la prueba de penetración, incluyendo los sistemas o redes evaluadas. Resume los objetivos establecidos para las pruebas.
-
-                        Hallazgos clave: Destaca las vulnerabilidades y debilidades más críticas descubiertas. Proporciona una breve descripción de la gravedad y el impacto potencial.
-
-                        Perfil de riesgo general: Resume la clasificación o puntuación de riesgo general para la organización. Incluye una explicación de alto nivel de los factores de riesgo considerados.
-
-                        Éxitos y desafíos: Menciona brevemente los éxitos en términos de violación de controles de seguridad (si es aplicable). Destaca cualquier desafío encontrado durante las pruebas.
-
-                        Recomendaciones: Resume las principales recomendaciones para abordar las vulnerabilidades identificadas. Proporciona una descripción general de las medidas de remediación sugeridas.
-
-                        Hoja de ruta estratégica: Esquematiza la hoja de ruta estratégica para abordar problemas de seguridad. Destaca hitos clave y prioridades.
-
-                        Conclusión: Proporciona una breve declaración de conclusión resumiendo la postura general de seguridad. Menciona cualquier logro o mejora notable.
-
-                        Próximos pasos: Esquematiza las acciones inmediatas que deben tomarse después de la evaluación. Menciona cualquier actividad de seguimiento o monitoreo continuo.
-
-                        La información del proyecto es:
-
-                        Nombre del cliente: {Client}
-                        Nombre del proyecto: {Project}
-                        Fecha de inicio del proyecto: {StartDate}
-                        Fecha de finalización del proyecto: {EndDate}
-                        Descripción del proyecto: {ProjectDescription}
-                        Miembros: {Members}
-                        Alcance: {Scope}
-                        Vulnerabilidades: {Vulns}
-                        El resultado debe ser en formato HTML.";
-                            var membersList2 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
-                                .Select(x => x.User.FullName).ToList();
-                            string members2 = "";
-                            foreach (var mem in membersList2)
-                            {
-                                members2 += mem + ", ";
-                            }
-
-                            var targetsList2 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string targets2 = "";
-                            foreach (var tar in targetsList2)
-                            {
-                                targets2 += tar.Name + ", ";
-                            }
-
-                            var vulnsList2 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string vulns2 = "";
-                            foreach (var vul in vulnsList2)
-                            {
-                                var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
-                                var targetsVuln = "";
-                                foreach (var t in tar)
-                                {
-                                    targetsVuln += t.Target.Name + ", ";
-                                }
-
-                                vulns2 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
-                                          targetsVuln + ". ";
-                            }
-
-                            prompt = message2.Replace("{Client}", project.Client.Name)
-                                .Replace("{Project}", project.Name)
-                                .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                                .Replace("{EndDate}", project.EndDate.ToShortDateString())
-                                .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members2)
-                                .Replace("{Scope}", targets2).Replace("{Vulns}", vulns2);
-
-                            break;
-                        case Language.Português:
-                            string message3 = @"É um pentester que está a escrever o resumo executivo de um relatório para um cliente. Este deve fornecer uma visão geral de alto nível das principais conclusões e recomendações de uma forma concisa e facilmente compreensível e o formato deve estar em HTML. Este resumo executivo deve incluir:
-                             Introdução: Explique resumidamente o objetivo do teste de intrusão. Mencione os sistemas ou áreas avaliadas.
-
-                             Âmbito e objetivos: Descreve o âmbito do teste de intrusão, incluindo os sistemas ou redes avaliadas. Resume os objetivos estabelecidos para os testes.
-
-                             Principais conclusões: destaca as vulnerabilidades e fraquezas mais críticas descobertas. Fornece uma breve descrição da gravidade e do impacto potencial.
-
-                             Perfil de risco geral: resume a classificação ou pontuação geral de risco da organização. Inclui uma explicação de alto nível dos fatores de risco considerados.
-
-                             Sucessos e desafios: Mencione brevemente os sucessos em termos de violação dos controlos de segurança (se aplicável). Destaque quaisquer desafios encontrados durante os testes.
-
-                             Recomendações: Resume as principais recomendações para abordar as vulnerabilidades identificadas. Fornece uma visão geral das medidas corretivas sugeridas.
-
-                             Roteiro Estratégico: Descreve o roteiro estratégico para abordar as questões de segurança. Destaca os principais marcos e prioridades.
-
-                             Conclusão: Fornece uma breve declaração final resumindo a postura geral de segurança. Mencione quaisquer conquistas ou melhorias notáveis.
-
-                             Próximos passos: Descreva as ações imediatas que devem ser tomadas após a avaliação. Mencione quaisquer atividades de acompanhamento ou monitorização contínua.
-
-                             As informações do projeto são:
-
-                             Nome do cliente: {Client}
-                             Nome do projeto: {Project}
-                             Data de início do projeto: {StartDate}
-                             Data de fim do projeto: {EndDate}
-                             Descrição do projeto: {ProjectDescription}
-                             Membros: {Members}
-                             Âmbito: {Scope}
-                             Vulnerabilidades: {Vulns}
-                             O resultado deve estar em formato HTML.";
-                            
-                            var membersList3 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
-                                .Select(x => x.User.FullName).ToList();
-                            string members3 = "";
-                            foreach (var mem in membersList3)
-                            {
-                                members3 += mem + ", ";
-                            }
-
-                            var targetsList3 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string targets3 = "";
-                            foreach (var tar in targetsList3)
-                            {
-                                targets3 += tar.Name + ", ";
-                            }
-
-                            var vulnsList3 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string vulns3 = "";
-                            foreach (var vul in vulnsList3)
-                            {
-                                var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
-                                var targetsVuln = "";
-                                foreach (var t in tar)
-                                {
-                                    targetsVuln += t.Target.Name + ", ";
-                                }
-
-                                vulns3 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
-                                          targetsVuln + ". ";
-                            }
-
-                            prompt = message3.Replace("{Client}", project.Client.Name)
-                                .Replace("{Project}", project.Name)
-                                .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                                .Replace("{EndDate}", project.EndDate.ToShortDateString())
-                                .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members3)
-                                .Replace("{Scope}", targets3).Replace("{Vulns}", vulns3);
-                            break;
-                    }
-
-                    var summarize = kernel.CreateFunctionFromPrompt(prompt,
-                        executionSettings: new OpenAIPromptExecutionSettings
-                            { MaxTokens = _aiConfiguration.MaxTokens });
-                    var result = await kernel.InvokeAsync(summarize);
-
-                    return result.ToString();
-                }
-                else
-                {
-                    var client = new AnthropicClient(_aiConfiguration.ApiKey);
-                     var prompt = @"";
-                    switch (project.Language)
-                    {
-                        case Language.English:
-                            string message =
-                                @"You are a penetration tester writing the executive summary of a report for a client. 
-This should provide a high-level overview of the key findings and recommendations in a concise and easily understandable manner and the response should be in HTML.  This executive summary should include:
-
-                            Introduction. Briefly explain the purpose of the penetration test. Mention the systems or areas tested.
-
-                            Scope and Objectives (Outline the scope of the penetration test, including the systems or networks tested. Summarize the objectives set for the testing)
-
-                            Key Findings (Highlight the most critical vulnerabilities and weaknesses discovered. Provide a brief description of the severity and potential impact)
-
-                            Overall Risk Profile( Summarize the overall risk ranking or score for the organization.Include a high-level explanation of the risk factors considered.)
-
-                            Successes and Challenges ( Briefly mention the successes in terms of breaching security controls (if applicable).Highlight any challenges encountered during the testing)
-
-                            Recommendations(Summarize the main recommendations for addressing identified vulnerabilities. Provide an overview of the suggested remediation measures)
-
-                            Strategic Roadmap ( Outline the strategic roadmap for addressing security issues. Emphasize key milestones and priorities)
-
-                            Conclusion (Provide a brief concluding statement summarizing the overall security posture. Mention any notable achievements or improvements)
-
-                            Next Steps (Outline the immediate actions that need to be taken post-assessment.
-                            Mention any follow-up activities or ongoing monitoring)
-
-                            The Project information is:
-
-                            Client Name: {Client}
-                            Project name: Project}
-                            Project Start Date: {StartDate}
-                            Project End Date: {EndDate}
-                            Project Description: {ProjectDescription}
-                            Members: {Members}
-                            Scope: {Scope}
-                            Vulnerabilities: {Vulns}.
-                            ";
-
-                            var membersList = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
-                                .Select(x => x.User.FullName).ToList();
-                            string members = "";
-                            foreach (var mem in membersList)
-                            {
-                                members += mem + ", ";
-                            }
-
-                            var targetsList = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string targets = "";
-                            foreach (var tar in targetsList)
-                            {
-                                targets += tar.Name + ", ";
-                            }
-
-                            var vulnsList = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string vulns = "";
-                            foreach (var vul in vulnsList)
-                            {
-                                var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
-                                var targetsVuln = "";
-                                foreach (var t in tar)
-                                {
-                                    targetsVuln += t.Target.Name + ", ";
-                                }
-
-                                vulns += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
-                                         targetsVuln + ". ";
-                            }
-
-                            prompt = message.Replace("{Client}", project.Client.Name).Replace("{Project}", project.Name)
-                                .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                                .Replace("{EndDate}", project.EndDate.ToShortDateString())
-                                .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members)
-                                .Replace("{Scope}", targets).Replace("{Vulns}", vulns);
-
-                            break;
-                        case Language.Español:
-                            string message2 =
-                                @"Eres un pentester que esta redactando el resumen ejecutivo de un informe para un cliente. Este debe proporcionar una descripción general de alto nivel de los hallazgos clave y recomendaciones de manera concisa y fácilmente comprensible y el formato debe ser en HTML. Este resumen ejecutivo debe incluir:
-                        Introducción: Explica brevemente el propósito de la prueba de penetración. Menciona los sistemas o áreas evaluadas.
-
-                        Alcance y objetivos: Esquematiza el alcance de la prueba de penetración, incluyendo los sistemas o redes evaluadas. Resume los objetivos establecidos para las pruebas.
-
-                        Hallazgos clave: Destaca las vulnerabilidades y debilidades más críticas descubiertas. Proporciona una breve descripción de la gravedad y el impacto potencial.
-
-                        Perfil de riesgo general: Resume la clasificación o puntuación de riesgo general para la organización. Incluye una explicación de alto nivel de los factores de riesgo considerados.
-
-                        Éxitos y desafíos: Menciona brevemente los éxitos en términos de violación de controles de seguridad (si es aplicable). Destaca cualquier desafío encontrado durante las pruebas.
-
-                        Recomendaciones: Resume las principales recomendaciones para abordar las vulnerabilidades identificadas. Proporciona una descripción general de las medidas de remediación sugeridas.
-
-                        Hoja de ruta estratégica: Esquematiza la hoja de ruta estratégica para abordar problemas de seguridad. Destaca hitos clave y prioridades.
-
-                        Conclusión: Proporciona una breve declaración de conclusión resumiendo la postura general de seguridad. Menciona cualquier logro o mejora notable.
-
-                        Próximos pasos: Esquematiza las acciones inmediatas que deben tomarse después de la evaluación. Menciona cualquier actividad de seguimiento o monitoreo continuo.
-
-                        La información del proyecto es:
-
-                        Nombre del cliente: {Client}
-                        Nombre del proyecto: {Project}
-                        Fecha de inicio del proyecto: {StartDate}
-                        Fecha de finalización del proyecto: {EndDate}
-                        Descripción del proyecto: {ProjectDescription}
-                        Miembros: {Members}
-                        Alcance: {Scope}
-                        Vulnerabilidades: {Vulns}
-                        El resultado debe ser en formato HTML.";
-                            var membersList2 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
-                                .Select(x => x.User.FullName).ToList();
-                            string members2 = "";
-                            foreach (var mem in membersList2)
-                            {
-                                members2 += mem + ", ";
-                            }
-
-                            var targetsList2 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string targets2 = "";
-                            foreach (var tar in targetsList2)
-                            {
-                                targets2 += tar.Name + ", ";
-                            }
-
-                            var vulnsList2 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string vulns2 = "";
-                            foreach (var vul in vulnsList2)
-                            {
-                                var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
-                                var targetsVuln = "";
-                                foreach (var t in tar)
-                                {
-                                    targetsVuln += t.Target.Name + ", ";
-                                }
-
-                                vulns2 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
-                                          targetsVuln + ". ";
-                            }
-
-                            prompt = message2.Replace("{Client}", project.Client.Name)
-                                .Replace("{Project}", project.Name)
-                                .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                                .Replace("{EndDate}", project.EndDate.ToShortDateString())
-                                .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members2)
-                                .Replace("{Scope}", targets2).Replace("{Vulns}", vulns2);
-
-                            break;
-                        case Language.Português:
-                            string message3 = @"É um pentester que está a escrever o resumo executivo de um relatório para um cliente. Este deve fornecer uma visão geral de alto nível das principais conclusões e recomendações de uma forma concisa e facilmente compreensível e o formato deve estar em HTML. Este resumo executivo deve incluir:
-                             Introdução: Explique resumidamente o objetivo do teste de intrusão. Mencione os sistemas ou áreas avaliadas.
-
-                             Âmbito e objetivos: Descreve o âmbito do teste de intrusão, incluindo os sistemas ou redes avaliadas. Resume os objetivos estabelecidos para os testes.
-
-                             Principais conclusões: destaca as vulnerabilidades e fraquezas mais críticas descobertas. Fornece uma breve descrição da gravidade e do impacto potencial.
-
-                             Perfil de risco geral: resume a classificação ou pontuação geral de risco da organização. Inclui uma explicação de alto nível dos fatores de risco considerados.
-
-                             Sucessos e desafios: Mencione brevemente os sucessos em termos de violação dos controlos de segurança (se aplicável). Destaque quaisquer desafios encontrados durante os testes.
-
-                             Recomendações: Resume as principais recomendações para abordar as vulnerabilidades identificadas. Fornece uma visão geral das medidas corretivas sugeridas.
-
-                             Roteiro Estratégico: Descreve o roteiro estratégico para abordar as questões de segurança. Destaca os principais marcos e prioridades.
-
-                             Conclusão: Fornece uma breve declaração final resumindo a postura geral de segurança. Mencione quaisquer conquistas ou melhorias notáveis.
-
-                             Próximos passos: Descreva as ações imediatas que devem ser tomadas após a avaliação. Mencione quaisquer atividades de acompanhamento ou monitorização contínua.
-
-                             As informações do projeto são:
-
-                             Nome do cliente: {Client}
-                             Nome do projeto: {Project}
-                             Data de início do projeto: {StartDate}
-                             Data de fim do projeto: {EndDate}
-                             Descrição do projeto: {ProjectDescription}
-                             Membros: {Members}
-                             Âmbito: {Scope}
-                             Vulnerabilidades: {Vulns}
-                             O resultado deve estar em formato HTML.";
-                            
-                            var membersList3 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
-                                .Select(x => x.User.FullName).ToList();
-                            string members3 = "";
-                            foreach (var mem in membersList3)
-                            {
-                                members3 += mem + ", ";
-                            }
-
-                            var targetsList3 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string targets3 = "";
-                            foreach (var tar in targetsList3)
-                            {
-                                targets3 += tar.Name + ", ";
-                            }
-
-                            var vulnsList3 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
-                            string vulns3 = "";
-                            foreach (var vul in vulnsList3)
-                            {
-                                var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
-                                var targetsVuln = "";
-                                foreach (var t in tar)
-                                {
-                                    targetsVuln += t.Target.Name + ", ";
-                                }
-
-                                vulns3 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
-                                          targetsVuln + ". ";
-                            }
-
-                            prompt = message3.Replace("{Client}", project.Client.Name)
-                                .Replace("{Project}", project.Name)
-                                .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                                .Replace("{EndDate}", project.EndDate.ToShortDateString())
-                                .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members3)
-                                .Replace("{Scope}", targets3).Replace("{Vulns}", vulns3);
-                            break;
-                    }
-                    
-                    var messages = new List<Message>()
-                    {
-                        new Message(RoleType.User, prompt),
-                    };
-                    
-                    var parameters = new MessageParameters()
-                    {
-                        Messages = messages,
-                        MaxTokens = _aiConfiguration.MaxTokens,
-                        Model = AnthropicModels.Claude35Sonnet,
-                        Stream = false,
-                        Temperature = 1.0m,
-                    };
-                    var result = await client.Messages.GetClaudeMessageAsync(parameters);
-                    return result.Message.ToString();
-                    
-                   
-                }
-
+                return result.ToString();
             }
 
             return String.Empty;
@@ -1077,24 +378,205 @@ This should provide a high-level overview of the key findings and recommendation
             throw;
         }
     }
+
+    public async Task<FunctionResult> PromptExecution(string prompt, string type, string? vuln, IKernelBuilder builder)
+    {
+        var kernel = builder.Build();
+        KernelFunction summarize;
+        FunctionResult result;
+        switch (type)
+        {
+            case "OpenAI":
+                summarize = kernel.CreateFunctionFromPrompt(prompt,
+                    executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = _aiConfiguration.MaxTokens });
+                if (vuln != null)
+                {
+                    result = await kernel.InvokeAsync(summarize, new() { ["input"] = vuln });
+                }
+                else
+                {
+                    result = await kernel.InvokeAsync(summarize);
+                }
+
+                break;
+            case "Azure":
+                summarize = kernel.CreateFunctionFromPrompt(prompt,
+                    executionSettings: new AzureOpenAIPromptExecutionSettings()
+                        { MaxTokens = _aiConfiguration.MaxTokens });
+                if (vuln != null)
+                {
+                    result = await kernel.InvokeAsync(summarize, new() { ["input"] = vuln });
+                }
+                else
+                {
+                    result = await kernel.InvokeAsync(summarize);
+                }
+
+                break;
+            case "Google":
+#pragma warning disable SKEXP0070
+                summarize = kernel.CreateFunctionFromPrompt(prompt,
+                    executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                if (vuln != null)
+                {
+                    result = await kernel.InvokeAsync(summarize, new() { ["input"] = vuln });
+                }
+                else
+                {
+                    result = await kernel.InvokeAsync(summarize);
+                }
+
+                break;
+            case "GoogleVertex":
+#pragma warning disable SKEXP0070
+                summarize = kernel.CreateFunctionFromPrompt(prompt,
+                    executionSettings: new GeminiPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                if (vuln != null)
+                {
+                    result = await kernel.InvokeAsync(summarize, new() { ["input"] = vuln });
+                }
+                else
+                {
+                    result = await kernel.InvokeAsync(summarize);
+                }
+
+                break;
+            case "Mistral":
+                summarize = kernel.CreateFunctionFromPrompt(prompt,
+                    executionSettings: new MistralAIPromptExecutionSettings()
+                        { MaxTokens = _aiConfiguration.MaxTokens });
+                if (vuln != null)
+                {
+                    result = await kernel.InvokeAsync(summarize, new() { ["input"] = vuln });
+                }
+                else
+                {
+                    result = await kernel.InvokeAsync(summarize);
+                }
+
+                break;
+            case "HuggingFace":
+                summarize = kernel.CreateFunctionFromPrompt(prompt,
+                    executionSettings: new HuggingFacePromptExecutionSettings()
+                        { MaxTokens = _aiConfiguration.MaxTokens });
+                if (vuln != null)
+                {
+                    result = await kernel.InvokeAsync(summarize, new() { ["input"] = vuln });
+                }
+                else
+                {
+                    result = await kernel.InvokeAsync(summarize);
+                }
+
+                break;
+            case "Custom":
+                summarize = kernel.CreateFunctionFromPrompt(prompt,
+                    executionSettings: new OpenAIPromptExecutionSettings() { MaxTokens = _aiConfiguration.MaxTokens });
+                if (vuln != null)
+                {
+                    result = await kernel.InvokeAsync(summarize, new() { ["input"] = vuln });
+                }
+                else
+                {
+                    result = await kernel.InvokeAsync(summarize);
+                }
+
+                break;
+            case "Anthropic":
+                summarize = kernel.CreateFunctionFromPrompt(prompt);
+                if (vuln != null)
+                {
+                    result = await kernel.InvokeAsync(summarize, new() { ["input"] = vuln });
+                }
+                else
+                {
+                    result = await kernel.InvokeAsync(summarize);
+                }
+
+                break;
+            default:
+                throw new Exception("Invalid AI Type");
+        }
+
+        return result;
+    }
+
+    public IKernelBuilder TypeBuilder(string type)
+    {
+        var builder = Kernel.CreateBuilder();
+        switch (type)
+        {
+            case "OpenAI":
+                builder.AddOpenAIChatCompletion(
+                    _aiConfiguration.Model,
+                    _aiConfiguration.ApiKey);
+                break;
+            case "Azure":
+                builder.AddAzureOpenAIChatCompletion(
+                    _aiConfiguration.Model,
+                    _aiConfiguration.Endpoint,
+                    _aiConfiguration.ApiKey);
+                break;
+            case "Google":
+#pragma warning disable SKEXP0070
+                builder.AddGoogleAIGeminiChatCompletion(
+                    _aiConfiguration.Model,
+                    _aiConfiguration.ApiKey);
+                break;
+            case "GoogleVertex":
+#pragma warning disable SKEXP0070
+                builder.AddVertexAIGeminiChatCompletion(
+                    _aiConfiguration.Model,
+                    _aiConfiguration.ApiKey, _aiConfiguration.Location, _aiConfiguration.ProjectId);
+                break;
+            case "Mistral":
+                if (_aiConfiguration.Endpoint != "")
+                {
+                    Uri endpoint = new Uri(_aiConfiguration.Endpoint);
+                    builder.AddMistralChatCompletion(
+                        _aiConfiguration.Model,
+                        _aiConfiguration.ApiKey, endpoint, _aiConfiguration.ProjectId);
+                }
+                else
+                {
+                    builder.AddMistralChatCompletion(
+                        _aiConfiguration.Model,
+                        _aiConfiguration.ApiKey);
+                }
+
+                break;
+            case "HuggingFace":
+                builder.AddHuggingFaceChatCompletion(_aiConfiguration.Model, new Uri(_aiConfiguration.Endpoint),
+                    _aiConfiguration.ApiKey, _aiConfiguration.ProjectId);
+                break;
+            case "Custom":
+                builder.AddOpenAIChatCompletion(
+                    _aiConfiguration.Model,
+                    _aiConfiguration.ApiKey,
+                    httpClient: new HttpClient(new LocalHostServer(_aiConfiguration.Endpoint))
+                );
+                break;
+            case "Anthropic":
+                builder.AddAnthropicChatCompletion(
+                    _aiConfiguration.Model,
+                    _aiConfiguration.ApiKey);
+                break;
+            default:
+                throw new Exception("Invalid AI Type");
+        }
+
+        return builder;
+    }
+
     public class LocalHostServer(string url) : HttpClientHandler
     {
         private readonly Uri uri = new Uri(url);
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken)
         {
             request.RequestUri = uri;
             return base.SendAsync(request, cancellationToken);
         }
     }
-    
-    public class LocalHostServerDocker(string url) : HttpClientHandler
-    {
-        private readonly Uri uri = new Uri(url);
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            request.RequestUri = uri;
-            return base.SendAsync(request, cancellationToken);
-        }
-    }
-    
 }
