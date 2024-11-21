@@ -63,145 +63,15 @@ public class AiService : IAiService
 
                 result = await PromptExecution(prompt, _aiConfiguration.Type, name, builder);
 
-                string descriptionPattern;
-                string impactPattern;
-                string riskLevelPattern;
-                string proofOfConceptPattern;
-                string remediationPattern;
-
-
-                string description;
-                string impact;
-                string riskLevel;
-                string proofOfConcept;
-                string remediation;
-
                 vulnAiModel.Name = name;
                 vulnAiModel.Language = language;
-                switch (language)
-                {
-                    case Language.English:
-                        descriptionPattern = @"Description:\s*(.*?)\s*Impact:";
-                        impactPattern = @"Impact:\s*(.*?)\s*Risk Level:";
-                        riskLevelPattern = @"Risk Level:\s*(Critical|High|Medium|Low|Info)";
-                        proofOfConceptPattern = @"Proof of Concept:\s*(.*?)\s*Remediation:";
-                        remediationPattern = @"Remediation:\s*(.*)";
-                        description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-                        impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                        riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
-                        proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-                        remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-
-                        vulnAiModel.Description = description;
-                        vulnAiModel.Impact = impact;
-                        vulnAiModel.ProofOfConcept = proofOfConcept;
-                        vulnAiModel.Remediation = remediation;
-                        switch (riskLevel)
-                        {
-                            case "Critical":
-                                vulnAiModel.Risk = VulnRisk.Critical;
-                                break;
-                            case "High":
-                                vulnAiModel.Risk = VulnRisk.High;
-                                break;
-                            case "Medium":
-                                vulnAiModel.Risk = VulnRisk.Medium;
-                                break;
-                            case "Low":
-                                vulnAiModel.Risk = VulnRisk.Low;
-                                break;
-                            case "Info":
-                                vulnAiModel.Risk = VulnRisk.Info;
-                                break;
-                        }
-
-                        break;
-                    case Language.Español:
-                        descriptionPattern = @"Descripción:\s*(.*?)\s*Impacto:";
-                        impactPattern = @"Impacto:\s*(.*?)\s*Nivel de Riesgo:";
-                        riskLevelPattern = @"Nivel de Riesgo:\s*(Crítico|Alto|Medio|Bajo|Informativo)";
-                        proofOfConceptPattern = @"Prueba de Concepto:\s*(.*?)\s*Remediación:";
-                        remediationPattern = @"Remediación:\s*(.*)";
-
-                        description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-                        impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                        riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
-                        proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-                        remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-
-                        vulnAiModel.Description = description;
-                        vulnAiModel.Impact = impact;
-                        vulnAiModel.ProofOfConcept = proofOfConcept;
-                        vulnAiModel.Remediation = remediation;
-                        switch (riskLevel)
-                        {
-                            case "Crítico":
-                                vulnAiModel.Risk = VulnRisk.Critical;
-                                break;
-                            case "Alto":
-                                vulnAiModel.Risk = VulnRisk.High;
-                                break;
-                            case "Medio":
-                                vulnAiModel.Risk = VulnRisk.Medium;
-                                break;
-                            case "Bajo":
-                                vulnAiModel.Risk = VulnRisk.Low;
-                                break;
-                            case "Informativo":
-                                vulnAiModel.Risk = VulnRisk.Info;
-                                break;
-                        }
-
-                        break;
-                    case Language.Português:
-                        descriptionPattern = @"Descrição:\s*(.*?)\s*Impacto:";
-                        impactPattern = @"Impacto:\s*(.*?)\s*Nível de Risco:";
-                        riskLevelPattern = @"Nível de Risco:\s*(Crítico|Alto|Médio|Baixo|Informativo)";
-                        proofOfConceptPattern = @"Prova de Conceito:\s*(.*?)\s*Remediação:";
-                        remediationPattern = @"Remediação:\s*(.*)";
-
-                        description = Regex.Match(result.ToString(), descriptionPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-                        impact = Regex.Match(result.ToString(), impactPattern, RegexOptions.Singleline).Groups[1].Value;
-                        riskLevel = Regex.Match(result.ToString(), riskLevelPattern).Groups[1].Value;
-                        proofOfConcept = Regex.Match(result.ToString(), proofOfConceptPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-                        remediation = Regex.Match(result.ToString(), remediationPattern, RegexOptions.Singleline)
-                            .Groups[1].Value;
-
-                        vulnAiModel.Description = description;
-                        vulnAiModel.Impact = impact;
-                        vulnAiModel.ProofOfConcept = proofOfConcept;
-                        vulnAiModel.Remediation = remediation;
-                        switch (riskLevel)
-                        {
-                            case "Crítico":
-                                vulnAiModel.Risk = VulnRisk.Critical;
-                                break;
-                            case "Alto":
-                                vulnAiModel.Risk = VulnRisk.High;
-                                break;
-                            case "Médio":
-                                vulnAiModel.Risk = VulnRisk.Medium;
-                                break;
-                            case "Baixo":
-                                vulnAiModel.Risk = VulnRisk.Low;
-                                break;
-                            case "Informativo":
-                                vulnAiModel.Risk = VulnRisk.Info;
-                                break;
-                        }
-
-                        break;
-                }
-
-
+                var vuln = VulnParser.ParseSecurityReport(result.ToString(),language);
+                vulnAiModel.Description = vuln.Description;
+                vulnAiModel.Impact = vuln.Impact;
+                vulnAiModel.ProofOfConcept = vuln.ProofOfConcept;
+                vulnAiModel.Remediation = vuln.Remediation;
+                vulnAiModel.Risk = vuln.Risk;
+                
                 return vulnAiModel;
             }
 

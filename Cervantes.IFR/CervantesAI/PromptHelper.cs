@@ -3,11 +3,11 @@ namespace Cervantes.IFR.CervantesAI;
 public static class PromptHelper
 {
     public static string VulnEnglish = @"You are a penetration tester (ethical mode) writing report findings for a client. You are writing a finding for the following vulnerability: {{$input}}
-                        . The finding should be written in the following format: Description, Impact, Risk Level (Critical, High, Medium, Low, Info), Proof of Concept, Remediation";
+                        . The finding should be written in the following format: Description, Impact, Risk Level (Critical, High, Medium, Low, Info), Proof of Concept, Remediation. The format should be in MARKDOWN.";
     public static string VulnSpanish = @"Eres un pentester (ethical hacker) redactando los hallazgos de un informe para un cliente. Estás redactando un hallazgo para la siguiente vulnerabilidad: {{$input}}
-                        . El hallazgo debe ser redactado en el siguiente formato: Descripción, Impacto, Nivel de Riesgo (Crítico, Alto, Medio, Bajo, Informativo), Prueba de Concepto y Remediación.";
+                        . El hallazgo debe ser redactado en el siguiente formato: Descripción, Impacto, Nivel de Riesgo (Crítico, Alto, Medio, Bajo, Informativo), Prueba de Concepto y Remediación. El formato debe ser en MARKDOWN.";
     public static string VulnPortuguese = @"É um pentester (ethical hacker) que escreve as descobertas de um relatório para um cliente. Está a escrever uma descoberta para a seguinte vulnerabilidade: {{$input}}
-                                . A constatação deve ser redigida no seguinte formato: Descrição, Impacto, Nível de Risco (Crítico, Alto, Médio, Baixo, Informativo), Prova de Conceito e Remediação.";
+                                . A constatação deve ser redigida no seguinte formato: Descrição, Impacto, Nível de Risco (Crítico, Alto, Médio, Baixo, Informativo), Prova de Conceito e Remediação. O formato deve ser em MARKDOWN.";
     
     public static string ExecutiveEnglish = @"You are a penetration tester writing the executive summary of a report for a client. 
 This should provide a high-level overview of the key findings and recommendations in a concise and easily understandable manner and the response should be in HTML.  This executive summary should include:

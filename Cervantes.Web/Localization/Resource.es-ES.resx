@@ -1932,4 +1932,22 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="permission" xml:space="preserve">
         <value>Permiso</value>
     </data>
+    <data name="aiAssistant" xml:space="preserve">
+        <value>Asistente de IA</value>
+    </data>
+    <data name="yourConversations" xml:space="preserve">
+        <value>Tus Conversaciones</value>
+    </data>
+    <data name="startConversation" xml:space="preserve">
+        <value>Inicia una conversación enviando un mensaje a continuación.</value>
+    </data>
+    <data name="newChat" xml:space="preserve">
+        <value>Nuevo Chat</value>
+    </data>
+    <data name="chat" xml:space="preserve">
+        <value>Chat</value>
+    </data>
+    <data name="typeMessage" xml:space="preserve">
+        <value>Escribe tu mensaje</value>
+    </data>
 </root>

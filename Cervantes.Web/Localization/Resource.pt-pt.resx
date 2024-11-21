@@ -1850,4 +1850,22 @@
     <data name="permission" xml:space="preserve">
         <value>Autorizaçõ</value>
     </data>
+    <data name="aiAssistant" xml:space="preserve">
+        <value>Assistente de IA</value>
+    </data>
+    <data name="yourConversations" xml:space="preserve">
+        <value>As suas Conversas</value>
+    </data>
+    <data name="startConversation" xml:space="preserve">
+        <value>Inicie uma conversa enviando uma mensagem abaixo.</value>
+    </data>
+    <data name="newChat" xml:space="preserve">
+        <value>Nova Conversa</value>
+    </data>
+    <data name="chat" xml:space="preserve">
+        <value>Conversa</value>
+    </data>
+    <data name="typeMessage" xml:space="preserve">
+        <value>Escreva a sua mensagem</value>
+    </data>
 </root>

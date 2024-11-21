@@ -1862,4 +1862,22 @@
     <data name="permission" xml:space="preserve">
         <value>Permission</value>
     </data>
+    <data name="aiAssistant" xml:space="preserve">
+        <value>AI Assistant</value>
+    </data>
+    <data name="yourConversations" xml:space="preserve">
+        <value>Your Conversations</value>
+    </data>
+    <data name="startConversation" xml:space="preserve">
+        <value>Start a conversation by sending a message below.</value>
+    </data>
+    <data name="newChat" xml:space="preserve">
+        <value>New Chat</value>
+    </data>
+    <data name="chat" xml:space="preserve">
+        <value>Chat</value>
+    </data>
+    <data name="typeMessage" xml:space="preserve">
+        <value>Type your message</value>
+    </data>
 </root>
