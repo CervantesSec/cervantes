@@ -686,6 +686,7 @@ public class ReportController : ControllerBase
                 }
                 source = source.Replace("{{CoverComponents}}", sbCover.ToString());
 
+                var tocList = new List<Dictionary<string, string>>();
                 StringBuilder sbBody = new StringBuilder();
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Body)
                              .OrderBy(x => x.Order))
@@ -701,6 +702,24 @@ public class ReportController : ControllerBase
                     html =html.Replace("</html>", "");
                     html =html.Replace("</head>", "");
                     html =html.Replace("</body>", "");
+                    
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(html);
+
+                    // Find all heading tags
+                    var headings = doc.DocumentNode.SelectNodes("//h1|//h2|//h3");
+                    if (headings != null)
+                    {
+                        // Process headings and assign IDs
+                        foreach (var heading in headings)
+                        {
+                            tocList.Add(new Dictionary<string, string>
+                            {
+                                {"Title", heading.InnerText},
+                                {"Level", heading.Name.Substring(1)},
+                            });
+                        }
+                    }
                     sbBody.Append(html);
                 }
 
@@ -924,6 +943,7 @@ public class ReportController : ControllerBase
                 scriptObject.Add("VulnTotalCount", Vulns.Count());
                 scriptObject.Add("Tasks", TasksList);
                 scriptObject.Add("Vaults", VaultsList);
+                scriptObject.Add("TableOfContents", tocList);
                 scriptObject.Add("PageBreak", @"<div style=""page-break-after: always;""></div>");
                 scriptObject.Add("Today", DateTime.Now.ToShortDateString());
                 scriptObject.Add("CurrentPage", @"<span id=""current-page""></span>" );
