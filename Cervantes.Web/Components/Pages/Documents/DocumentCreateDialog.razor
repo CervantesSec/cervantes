@@ -32,7 +32,7 @@
 				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 				<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".doc,.docx,.pdf,.odt,.ppt,.pptx,.odp,.txt">
 					<ActivatorContent>
-						<MudButton HtmlTag="label"
+						<MudButton 
 						           Variant="Variant.Filled"
 						           Color="Color.Primary"
 						           StartIcon="@Icons.Material.Filled.CloudUpload">

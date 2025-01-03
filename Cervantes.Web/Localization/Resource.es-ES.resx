@@ -1950,4 +1950,31 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="typeMessage" xml:space="preserve">
         <value>Escribe tu mensaje</value>
     </data>
+    <data name="title" xml:space="preserve">
+        <value>Título</value>
+    </data>
+    <data name="close" xml:space="preserve">
+        <value>Cerrar</value>
+    </data>
+    <data name="selectDocument" xml:space="preserve">
+        <value>Seleccionar Documento</value>
+    </data>
+    <data name="you" xml:space="preserve">
+        <value>Tú</value>
+    </data>
+    <data name="chatCreated" xml:space="preserve">
+        <value>Chat creado correctamente!</value>
+    </data>
+    <data name="chatCreatedError" xml:space="preserve">
+        <value>Se ha producido un error al crear el chat!</value>
+    </data>
+    <data name="chatDeleted" xml:space="preserve">
+        <value>Chat eliminado correctamente!</value>
+    </data>
+    <data name="chatDeletedError" xml:space="preserve">
+        <value>Se ha producido un error al eliminar el chat!</value>
+    </data>
+    <data name="deleteChat" xml:space="preserve">
+        <value>Eliminar Chat</value>
+    </data>
 </root>

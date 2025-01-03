@@ -316,9 +316,31 @@ public enum Permissions: ushort
     ChecklistsAdd = 354,
 
     
+    [Display(GroupName = "Rss News", Name = "View/Read RSS News", Description = "Can read and view the RSS News")]
+    RssNewsRead = 361,
+    [Display(GroupName = "Rss Sources", Name = "View/Read RSS Sources", Description = "Can view the RSS Sources")]
+    RssSourcesRead = 362,
+    [Display(GroupName = "Rss Sources", Name = "Edit RSS Sources", Description = "Can edit the RSS Sources")]
+    RssSourcesEdit = 363,
+    [Display(GroupName = "Rss Sources", Name = "Delete RSS Sources", Description = "Can delete the RSS Sources")]
+    RssSourcesDelete = 364,
+    [Display(GroupName = "Rss Sources", Name = "Add RSS Sources", Description = "Can add new RSS Sources")]
+    RssSourcesAdd = 365,
+    [Display(GroupName = "Rss Categories", Name = "View/Read RSS Categories", Description = "Can read and view the RSS Categories")]
+    RssCategoriesRead = 366,
+    [Display(GroupName = "Rss Categories", Name = "Edit RSS Categories", Description = "Can edit the RSS Categories")]
+    RssCategoriesEdit = 367,
+    [Display(GroupName = "Rss Categories", Name = "Delete RSS Categories", Description = "Can delete the RSS Categories")]
+    RssCategoriesDelete = 368,
+    [Display(GroupName = "Rss Categories", Name = "Add RSS Categories", Description = "Can add new RSS Categories")]
+    RssCategoriesAdd = 369,
+    
+
+    
     [Display(GroupName = "AI Service", Name = "Use AI Service", Description = "Can use the AI generation service")]
     AIServiceUsage = 60000,
-    
+    [Display(GroupName = "AI Service", Name = "Use AI Service", Description = "Can use the AI chat service")]
+    AIChatUsage = 60001,
 
     
 }

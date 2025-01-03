@@ -1,14 +1,16 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using Pgvector;
 
 namespace Cervantes.CORE.Entities;
 
 public class ChatMessage
 {
     public Guid Id { get; set; }
-    public string FromUserId { get; set; }
-    public string ToUserId { get; set; }
-    public string Message { get; set; }
-    public DateTime CreatedDate { get; set; }
-    public virtual ApplicationUser FromUser { get; set; }
-    public virtual ApplicationUser ToUser { get; set; }
+    public Guid ChatId { get; set; }
+    public string Role { get; set; }
+    public string Content { get; set; }
+    public DateTime Timestamp { get; set; }
+    public Vector? Embedding { get; set; }
+    public int MessageIndex { get; set; }  // Orden del mensaje en el chat
 }

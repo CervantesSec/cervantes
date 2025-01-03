@@ -1,0 +1,199 @@
+@page "/chat"
+@using System.Collections.ObjectModel
+@using Cervantes.IFR.CervantesAI
+@using Cervantes.Web.Localization
+@inject IDialogService Dialog
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<Resource> localizer
+@inject IHttpContextAccessor _accessor
+@inject NavigationManager NavigationManager
+@inject IAiConfiguration AiConfiguration
+<PageTitle>@localizer["home"] | Cervantes</PageTitle>
+
+<SectionContent SectionName="appbar">
+    <MudText Typo="Typo.h5">
+        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Chat"></MudIcon>
+
+        @localizer["chat"]
+
+    </MudText>
+</SectionContent>
+<SectionContent SectionName="top-bar">
+    <MudStack Row="true"  AlignItems="AlignItems.Center">
+    </MudStack>
+</SectionContent>
+
+<SectionContent SectionName="breadcrumbs">
+    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+</SectionContent>
+
+<MudGrid>
+    <!-- Main Chat Area -->
+    <MudItem xs="9">
+        <MudPaper Class="pa-4" Style="min-height: 80vh; display: flex; flex-direction: column;">
+            <MudText Typo="Typo.h5" Class="mb-4">@localizer["aiAssistant"]</MudText>
+
+            <MudPaper Class="overflow-auto pa-4" Style="display: flex; flex-direction: column; height: 60vh;">
+                @if (_messages.Any())
+                {
+                    @foreach (var message in _messages)
+                    {
+                        <MudPaper Class=@GetMessageClass(message.IsUser)
+                                 Style=@GetMessageStyle(message.IsUser)
+                                 Elevation="0">
+                            <MudText Typo="Typo.subtitle2" Style="color: #ffffffb3;">
+                                @(message.IsUser ? @localizer["you"] : @localizer["aiAssistant"])
+                            </MudText>
+                            <MudText Class="mt-1" Style="color: #ffffffb3;word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;">@((MarkupString)message.Content)</MudText>
+                            <MudText Typo="Typo.caption" Class="mt-1 d-flex justify-end" Style="color: #ffffffb3;">
+                                @message.Timestamp.ToShortDateString() @message.Timestamp.ToShortTimeString()
+                            </MudText>
+                        </MudPaper>
+                    }
+                }
+                else
+                {
+                    <MudText Align="Align.Center" Class="my-auto">
+                        @localizer["startConversation"]
+                    </MudText>
+                }
+            </MudPaper>
+
+            <MudPaper Class="mt-4" Elevation="0">
+                @if (_isProcessing)
+                {
+                    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="mb-2"/>
+                }
+                @if(_currentChatId != Guid.Empty)
+                {
+                <MudTextField @bind-Value="_currentMessage"
+                                  Label="@localizer["typeMessage"]"
+                                  Variant="Variant.Outlined"
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Filled.Send"
+                                  OnAdornmentClick="SendMessage"
+                                  OnKeyUp="@(async (e) => { if (e.Key == "Enter") await SendMessage(); })"
+                                  Disabled="@_isProcessing"
+                                  Lines="3"
+                                  Class="mt-2"/>
+                }
+            </MudPaper>
+        </MudPaper>
+    </MudItem>
+
+    <!-- Chat List Sidebar -->
+    <MudItem xs="3">
+        <MudPaper Class="pa-4" Style="min-height: 80vh;">
+            <MudText Typo="Typo.h6" Class="mb-4">@localizer["yourConversations"]</MudText>
+            @if (_isChatListVisible)
+            {
+                <MudButton Color="Color.Primary" 
+                           Variant="Variant.Filled" 
+                           StartIcon="@Icons.Material.Filled.Add"
+                           FullWidth="true"
+                           OnClick="StartNewChat"
+                           Class="mb-4">
+                    @localizer["newChat"]
+                </MudButton>
+            }
+            else
+            {
+                <MudButton Color="Color.Default" 
+                           Variant="Variant.Filled" 
+                           StartIcon="@Icons.Material.Filled.Close"
+                           FullWidth="true"
+                           OnClick="StartNewChat"
+                           Class="mb-4">
+                    @localizer["cancel"]
+                </MudButton>
+            }
+            
+            
+            @if (_isChatListVisible)
+            {
+                <MudList T="string" Clickable="true" Class="overflow-auto" Style="max-height: calc(80vh - 120px);">
+                    @foreach (var chat in _chatList)
+                    {
+                        <MudListItem OnClick="@(() => LoadChat(chat.Id))"
+                                     Icon="@Icons.Material.Filled.Chat"
+                                     Text="@chat.Title"
+                                     class="@(chat.Id == _currentChatId ? "mud-selected-item" : "")"
+                                     Dense="true">
+                            <div class="d-flex justify-space-between align-center">
+                                <div class="d-flex flex-column">
+                                    <MudText Typo="Typo.body1">@chat.Title</MudText>
+                                    @*<MudText Typo="Typo.caption" Style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
+                                        @chat.LastMessage
+                                    </MudText>*@
+                                </div>
+                                <MudText Typo="Typo.caption" Style="white-space: nowrap;">
+                                    @chat.LastMessageAt.ToShortDateString() @chat.LastMessageAt.ToShortTimeString()
+                                </MudText>
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="@((e) => DeleteChat(chat))"></MudIconButton>
+
+                            </div>
+                        </MudListItem>
+                        <MudDivider />
+                    }
+                </MudList>
+            }
+            else
+            { 
+                @if (_isCreating)
+                {
+                    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="mb-2"/>
+                }
+                <MudStack AlignItems="AlignItems.Stretch">
+                <MudForm Model="@CreateChatViewModel" @ref="@form" Validation="@(createChatModelFluentValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+
+                    <MudStack>
+                        <MudTextField @bind-Value="CreateChatViewModel.Title"
+                                      For="@(() => CreateChatViewModel.Title)"
+                                      Immediate="true"
+                                      Label="@localizer["title"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Chat"/>
+                        
+                        <MudSelect @bind-Value="CreateChatViewModel.Type" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                            <MudSelectItem Value="@("Default")">@localizer["default"]</MudSelectItem>
+                            @if (AiConfiguration.TextEmbedding.Enabled)
+                            {
+                                <MudSelectItem Value="@("Project")">@localizer["project"]</MudSelectItem>
+                                <MudSelectItem Value="@("Document")">@localizer["documents"]</MudSelectItem>
+                            }
+                        </MudSelect>
+                        
+                        @if(CreateChatViewModel.Type == "Project")
+                        {
+                            <MudSelect @bind-Value="CreateChatViewModel.ProjectId" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                <MudSelectItem Value="@Guid.Empty" Disabled>@localizer["selectProject"]</MudSelectItem>
+                                <Virtualize Items="@Projects" Context="project" OverscanCount="5">
+                                    <MudSelectItem Value="@project.Id">@project.Name</MudSelectItem>
+                                </Virtualize>
+                            </MudSelect>
+                        }
+                        
+                        @if(CreateChatViewModel.Type == "Document")
+                        {
+                            <MudSelect @bind-Value="CreateChatViewModel.DocumentId" Label="@localizer["documents"]" AdornmentIcon="@Icons.Material.Filled.InsertDriveFile" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                <MudSelectItem Value="@Guid.Empty" Disabled>@localizer["selectDocument"]</MudSelectItem>
+                                <Virtualize Items="@Documents" Context="document" OverscanCount="5">
+                                    <MudSelectItem Value="@document.Id">@document.Name</MudSelectItem>
+                                </Virtualize>
+                            </MudSelect>
+                        }
+                    </MudStack>
+                </MudForm>
+                <MudButton Color="Color.Primary" 
+                           Variant="Variant.Filled" 
+                           StartIcon="@Icons.Material.Filled.Add"
+                           FullWidth="true"
+                           OnClick="CreateChat"
+                           Class="mb-4">
+                    @localizer["newChat"]
+                </MudButton>
+                </MudStack>
+            }
+
+            
+        </MudPaper>
+    </MudItem>
+</MudGrid>

@@ -26,6 +26,7 @@
         <PackageReference Include="Heron.MudCalendar" Version="2.0.3" />
         <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
         <PackageReference Include="HtmlToOpenXml.dll" Version="3.2.1" />
+        <PackageReference Include="Markdig" Version="0.38.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.10" />
         <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.2.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.2.0" />

@@ -3,7 +3,7 @@ using Cervantes.CORE.Entities;
 
 namespace Cervantes.Application;
 
-public class ChatManager:GenericManager<ChatMessage>, IChatManager
+public class ChatManager:GenericManager<Chat>, IChatManager
 {
     public ChatManager(IApplicationDbContext context) : base(context)
     {

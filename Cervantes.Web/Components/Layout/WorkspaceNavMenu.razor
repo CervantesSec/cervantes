@@ -20,6 +20,10 @@
     {
         <MudNavLink Href="/knowledgebase" Icon="@Icons.Material.Filled.MenuBook" Match="NavLinkMatch.Prefix">@localizer["knowledgeBase"]</MudNavLink>
     }
+    @if(user.HasPermission(Permissions.AIChatUsage))
+    {
+        <MudNavLink Href="/chat" Icon="@Icons.Material.Filled.Chat" Match="NavLinkMatch.Prefix">@localizer["chat"]</MudNavLink>
+    }
     @if(user.HasPermission(Permissions.WorkspacesRead))
     {
         <MudNavLink Href="/workspaces" Icon="@Icons.Material.Filled.Workspaces" Match="NavLinkMatch.Prefix">@localizer["workspaces"]</MudNavLink>

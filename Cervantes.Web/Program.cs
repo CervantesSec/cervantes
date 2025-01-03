@@ -110,7 +110,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString), ServiceLifetime.Scoped);
+    options.UseNpgsql(connectionString, o => o.UseVector()), ServiceLifetime.Scoped);
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>().AddRoles<IdentityRole>()
@@ -238,6 +238,10 @@ builder.Services.AddScoped<IReportComponentsManager, ReportComponentsManager>();
 builder.Services.AddScoped<IReportsPartsManager, ReportPartsManager>();
 builder.Services.AddSingleton<IAiConfiguration>(builder.Configuration.GetSection("AIConfiguration").Get<AiConfiguration>());
 builder.Services.AddScoped<IAiService, AiService>();
+builder.Services.AddScoped<IChatManager, ChatManager>();
+builder.Services.AddScoped<IChatMessageManager, ChatMessageManager>();
+builder.Services.AddScoped<IRssNewsManager, RssNewsManager>();
+builder.Services.AddScoped<IRssSourceManager, RssSourceManager>();
 
 builder.Services.AddScoped<Sanitizer>();
 builder.Services.AddScoped<ClientsController>();
@@ -259,6 +263,7 @@ builder.Services.AddScoped<CalendarController>();
 builder.Services.AddScoped<VaultController>();
 builder.Services.AddScoped<SearchController>();
 builder.Services.AddScoped<JiraController>();
+builder.Services.AddScoped<ChatController>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cervantes API", Version = "v1" });

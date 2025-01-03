@@ -3,6 +3,7 @@ using System;
 using Cervantes.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Pgvector;
@@ -12,9 +13,11 @@ using Pgvector;
 namespace Cervantes.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241129181314_AddedChat")]
+    partial class AddedChat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,6 +157,7 @@ namespace Cervantes.DAL.Migrations
                         .HasColumnType("text");
 
                     b.Property<Vector>("Embedding")
+                        .IsRequired()
                         .HasColumnType("vector");
 
                     b.Property<int>("MessageIndex")
@@ -1596,72 +1600,6 @@ namespace Cervantes.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ReportTemplates");
-                });
-
-            modelBuilder.Entity("Cervantes.CORE.Entities.RssNews", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("PublishDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("SourceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SourceId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RssNews");
-                });
-
-            modelBuilder.Entity("Cervantes.CORE.Entities.RssSource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RssSource");
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.Target", b =>
@@ -3170,36 +3108,6 @@ namespace Cervantes.DAL.Migrations
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.ReportTemplate", b =>
-                {
-                    b.HasOne("Cervantes.CORE.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Cervantes.CORE.Entities.RssNews", b =>
-                {
-                    b.HasOne("Cervantes.CORE.Entities.RssSource", "Source")
-                        .WithMany()
-                        .HasForeignKey("SourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Cervantes.CORE.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Source");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Cervantes.CORE.Entities.RssSource", b =>
                 {
                     b.HasOne("Cervantes.CORE.Entities.ApplicationUser", "User")
                         .WithMany()

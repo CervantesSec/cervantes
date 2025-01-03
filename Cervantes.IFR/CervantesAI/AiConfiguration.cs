@@ -12,5 +12,7 @@ public class AiConfiguration: IAiConfiguration
     public string Location { get; set; }
     public string ProjectId { get; set; }
     
+    public TextEmbedding TextEmbedding { get; set; }
+    
 
 }

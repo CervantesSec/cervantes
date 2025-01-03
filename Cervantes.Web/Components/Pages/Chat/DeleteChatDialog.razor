@@ -1,0 +1,26 @@
+@using Cervantes.CORE
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@inject IStringLocalizer<Resource> localizer
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@attribute [HasPermission(Permissions.ClientsDelete)]
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Chat" /> @localizer["deleteChat"]: @chat.Title</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm Model="@chat" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
+            <MudText>@localizer["deleteMessageIntro"] @chat.Title ?</MudText>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="@Color.Secondary" OnClick="Submit">@localizer["delete"]</MudButton>
+    </DialogActions>
+</MudDialog>

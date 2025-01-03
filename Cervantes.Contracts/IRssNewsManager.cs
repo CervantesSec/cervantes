@@ -2,7 +2,7 @@ using Cervantes.CORE.Entities;
 
 namespace Cervantes.Contracts;
 
-public interface IChatManager: IGenericManager<Chat>
+public interface IRssNewsManager: IGenericManager<RssNews>
 {
     
 }

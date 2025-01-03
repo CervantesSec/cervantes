@@ -1880,4 +1880,31 @@
     <data name="typeMessage" xml:space="preserve">
         <value>Type your message</value>
     </data>
+    <data name="title" xml:space="preserve">
+        <value>Title</value>
+    </data>
+    <data name="close" xml:space="preserve">
+        <value>Close</value>
+    </data>
+    <data name="selectDocument" xml:space="preserve">
+        <value>Select Document</value>
+    </data>
+    <data name="you" xml:space="preserve">
+        <value>You</value>
+    </data>
+    <data name="chatCreated" xml:space="preserve">
+        <value>Chat created successfully!</value>
+    </data>
+    <data name="chatCreatedError" xml:space="preserve">
+        <value>An error occurred creating the chat!</value>
+    </data>
+    <data name="chatDeleted" xml:space="preserve">
+        <value>Chat deleted successfully!</value>
+    </data>
+    <data name="chatDeletedError" xml:space="preserve">
+        <value>An error occurred deleting the chat!</value>
+    </data>
+    <data name="deleteChat" xml:space="preserve">
+        <value>Delete Chat</value>
+    </data>
 </root>

@@ -8,6 +8,7 @@ using Cervantes.CORE.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Document = System.Reflection.Metadata.Document;
+using Pgvector;
 
 namespace Cervantes.DAL;
 
@@ -123,24 +124,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     
     public DbSet<WSTG> WSTG { get; set; }
     public DbSet<MASTG> MASTG { get; set; }
+    public DbSet<Chat> Chats { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder){
         base.OnModelCreating(modelBuilder);
+        modelBuilder.HasPostgresExtension("vector");
         modelBuilder.Entity<Log>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
-        modelBuilder.Entity<ChatMessage>(entity =>
-        {
-            entity.HasOne(d => d.FromUser)
-                .WithMany(p => p.ChatMessagesFromUsers)
-                .HasForeignKey(d => d.FromUserId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-            entity.HasOne(d => d.ToUser)
-                .WithMany(p => p.ChatMessagesToUsers)
-                .HasForeignKey(d => d.ToUserId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
     }
     
     public DbSet<Report> Reports { get; set; }
@@ -157,4 +149,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     
     public DbSet<ReportComponents> ReportComponents { get; set; }
     public DbSet<ReportParts> ReportParts { get; set; }
+    
+    public DbSet<RssSource> RssSource { get; set; }
+    public DbSet<RssNews> RssNews { get; set; }
 }

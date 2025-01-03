@@ -1868,4 +1868,28 @@
     <data name="typeMessage" xml:space="preserve">
         <value>Escreva a sua mensagem</value>
     </data>
+    <data name="title" xml:space="preserve">
+        <value>Título</value>
+    </data>
+    <data name="selectDocument" xml:space="preserve">
+        <value>Selecionar Documento</value>
+    </data>
+    <data name="you" xml:space="preserve">
+        <value>Tu</value>
+    </data>
+    <data name="chatCreated" xml:space="preserve">
+        <value>Conversa criada com sucesso!</value>
+    </data>
+    <data name="chatCreatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao criar a conversa!</value>
+    </data>
+    <data name="chatDeleted" xml:space="preserve">
+        <value>Conversa eliminada com sucesso!</value>
+    </data>
+    <data name="chatDeletedError" xml:space="preserve">
+        <value>Ocorreu um erro ao eliminar o conversa!</value>
+    </data>
+    <data name="deleteChat" xml:space="preserve">
+        <value>Eliminar Conversa</value>
+    </data>
 </root>
