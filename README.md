@@ -76,7 +76,7 @@ Remember, the security of your application is paramount. Always use strong, uniq
 ### Requirements
 
 - [.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-- [PostgreSQL](https://www.postgresql.org/)
+- [PostgresSQL](https://www.postgresql.org/)
 - [Atlassian Jira Server](https://www.atlassian.com/es/software/jira) (Optional only if you want to use Jira Integration)
 
 #### How to run it locally
@@ -104,7 +104,7 @@ The database connection string is used to connect your application to your datab
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=myServerAddress;Database=myDataBase;Username=myUsername;Password=myPassword"
-  },
+  }
 }
 ```
 
@@ -136,7 +136,7 @@ Please note that this is a basic installation guide and the actual process might
 
 Here are some things you could do to become a contributor:
 
-- **★ Star this project on Github ★**
+- **★ Star this project on GitHub ★**
 - Suggest new features or ideas
 - Improve the code of the platform components
 - Report security issues
@@ -153,4 +153,30 @@ Please report Security issues via our [disclosure policy](https://github.com/Cer
 
 ## How to report bugs
 
-If you have bugs to report please use the [issues](https://github.com/CervantesSec/cervantes/issues) tab on Github to submit the details.
+If you have bugs to report please use the [issues](https://github.com/CervantesSec/cervantes/issues) tab on GitHub to submit the details.
+
+## License
+
+
+This project is licensed under the GNU Affero General Public License (AGPL-3.0), except for specific components that remain licensed under the Apache License 2.0.
+
+[![AGPL](https://img.shields.io/badge/license-AGPL--3.0-green)](https://www.gnu.org/licenses/agpl-3.0.html)
+[![Apache](https://img.shields.io/badge/license-Apache--2.0-green)](https://www.apache.org/licenses/LICENSE-2.0.html)
+
+### Summary:
+
+AGPL-3.0 applies to the majority of the project.
+
+Apache License 2.0 applies to the components listed in the NOTICE file.
+
+For more details, see the full LICENSE and NOTICE files included in this repository.
+
+## Copyright Notice
+
+Copyright (C) 2025 Ruben Mesquida Gomila
+
+OWASP Cervantes and all contributions are protected under their respective licenses. For more information on license terms, visit:
+
+- https://www.gnu.org/licenses/agpl-3.0.html
+
+- https://www.apache.org/licenses/LICENSE-2.0.html
