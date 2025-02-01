@@ -276,7 +276,15 @@ public class VulnController: ControllerBase
                 vuln.ProofOfConcept = Sanitizer.Sanitize(model.ProofOfConcept);
                 vuln.Impact = Sanitizer.Sanitize(model.Impact);
                 vuln.CVSS3 = model.CVSS3;
-                vuln.CVSSVector = model.CVSSVector;
+                if (string.IsNullOrEmpty(model.CVSSVector))
+                {
+                    vuln.CVSSVector = string.Empty;
+
+                }
+                else
+                {
+                    vuln.CVSSVector = model.CVSSVector;
+                }
                 vuln.OWASPImpact = model.OWASPImpact;
                 vuln.OWASPLikehood = model.OWASPLikehood;
                 vuln.OWASPRisk = model.OWASPRisk;
@@ -396,7 +404,15 @@ public class VulnController: ControllerBase
                 vuln.ProofOfConcept = Sanitizer.Sanitize(model.ProofOfConcept);
                 vuln.Impact = Sanitizer.Sanitize(model.Impact);
                 vuln.CVSS3 = model.CVSS3;
-                vuln.CVSSVector = model.CVSSVector;
+                if (string.IsNullOrEmpty(model.CVSSVector))
+                {
+                    vuln.CVSSVector = string.Empty;
+
+                }
+                else
+                {
+                    vuln.CVSSVector = model.CVSSVector;
+                }
                 vuln.OWASPImpact = model.OWASPImpact;
                 vuln.OWASPLikehood = model.OWASPLikehood;
                 vuln.OWASPRisk = model.OWASPRisk;

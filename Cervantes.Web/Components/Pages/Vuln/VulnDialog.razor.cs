@@ -210,16 +210,9 @@ public partial class VulnDialog: ComponentBase
         model.cve = vuln.cve;
         model.ProofOfConcept = vuln.ProofOfConcept;
         model.Impact = vuln.Impact;
-        if (string.IsNullOrEmpty(model.CVSSVector))
-        {
-	        model.CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H";
-	        model.CVSS3 = 10;
-        }
-        else
-        {
 	        model.CVSS3 = vuln.CVSS3;
 	        model.CVSSVector = vuln.CVSSVector;
-        }
+        
         
         model.Remediation = vuln.Remediation;
         model.RemediationComplexity = vuln.RemediationComplexity;

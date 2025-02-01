@@ -131,8 +131,8 @@ public partial class CreateVulnDialog: ComponentBase
         Targets = TargetController.GetTargets().ToList();
         model.ProjectId = Guid.Empty;
         model.VulnCategoryId = Guid.Empty;
-        model.CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H";
-        model.CVSS3 = 10;
+        //model.CVSSVector = "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H";
+        //model.CVSS3 = 10;
         model.OWASPVector = "(SL:1/M:1/O:0/S:2/ED:1/EE:1/A:1/ID:1/LC:2/LI:1/LAV:1/LAC:1/FD:1/RD:1/NC:2/PV:3)";
         model.OWASPImpact = String.Empty;
         model.OWASPLikehood = String.Empty;

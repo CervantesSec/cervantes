@@ -143,15 +143,20 @@ public partial class CVSSCalculator: ComponentBase
             SelectedScore = 10;
             CalculateBaseScore();
         }*/
-        var metrics = ParseCvssVector(Vector);
-        SelectedAttackVector = metrics.AttackVector;
-        SelectedAttackComplexity = metrics.AttackComplexity;
-        SelectedPrivilegesRequired = metrics.PrivilegesRequired;
-        SelectedUserInteraction = metrics.UserInteraction;
-        SelectedScope = metrics.Scope;
-        SelectedConfidentiality = metrics.Confidentiality;
-        SelectedIntegrity = metrics.Integrity;
-        SelectedAvailability = metrics.Availability;
+        Console.WriteLine(Vector);
+        if (!string.IsNullOrEmpty(Vector))
+        {
+            var metrics = ParseCvssVector(Vector);
+            SelectedAttackVector = metrics.AttackVector;
+            SelectedAttackComplexity = metrics.AttackComplexity;
+            SelectedPrivilegesRequired = metrics.PrivilegesRequired;
+            SelectedUserInteraction = metrics.UserInteraction;
+            SelectedScope = metrics.Scope;
+            SelectedConfidentiality = metrics.Confidentiality;
+            SelectedIntegrity = metrics.Integrity;
+            SelectedAvailability = metrics.Availability;
+        }
+        
         //CalculateBaseScore();
     }
 

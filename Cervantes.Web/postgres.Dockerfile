@@ -1,12 +1,13 @@
-FROM postgres:alpine
+FROM pgvector/pgvector:pg17
 
 # set env variable in order for a non-interactive update process
 ENV DEBIAN_FRONTEND=noninteractive
 
 # update packages
-RUN apk update && apk upgrade
+RUN apt update
+RUN apt upgrade -y
 # create new user with lower privileges
-RUN adduser -D cervantes -G postgres
+RUN useradd -m -g postgres cervantes
 # change permissions of particular directories
 RUN chown -R cervantes /var/lib/postgresql /var/run/postgresql
 
