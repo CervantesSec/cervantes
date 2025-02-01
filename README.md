@@ -32,7 +32,7 @@ Cervantes is an [OWASP Foundation](https://owasp.org/www-project-cervantes/) Pro
 * Team Collaboration
 * Checklists
 * OWASP Compliance Reports
-* BuiltIn dashboards and analytics
+* Built-in dashboards and analytics
 * Manage your clients and Offensive Security projects
 * One click reports creation
 * And more
