@@ -89,7 +89,6 @@ if (builder.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
             options.ClientId = builder.Configuration.GetSection("OpenIdConnect:ClientId")?.Value;
             options.ClientSecret = builder.Configuration.GetSection("OpenIdConnect:ClientSecret")?.Value;
             options.CallbackPath = new PathString("/Account/ExternalLogin");
-            options.SignedOutCallbackPath = new PathString("/Account/Logout");
             options.ResponseType = OpenIdConnectResponseType.Code;
             options.SkipUnrecognizedRequests = true;
             options.GetClaimsFromUserInfoEndpoint = true;
