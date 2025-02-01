@@ -70,9 +70,10 @@ public partial class ReportComponents: ComponentBase
         model = reportController.Components().ToList();
     }
     
-    private async Task OpenDialogCreate(DialogOptionsEx options)
+    private async Task OpenDialogCreate(DialogOptionsEx options, string type)
     {
-        IMudExDialogReference<CreateReportComponentDialog>? dlgReference = await DialogEx.ShowEx<CreateReportComponentDialog>("Simple Dialog", options);
+        var parameters = new DialogParameters { ["type"]=type };
+        IMudExDialogReference<CreateReportComponentDialog>? dlgReference = await DialogEx.ShowEx<CreateReportComponentDialog>("Simple Dialog", parameters, options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)

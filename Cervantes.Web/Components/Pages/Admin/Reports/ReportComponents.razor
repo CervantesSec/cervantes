@@ -66,7 +66,7 @@
                         <MudStack Row="true">
                             @if (userAth.HasPermission(Permissions.ReportComponentsAdd))
                             {
-                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx,"cover"))">@localizer["create"]</MudButton>
                             }
 
                             @if(userAth.HasPermission(Permissions.ReportComponentsDelete))
@@ -124,7 +124,7 @@
                              Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                     <ToolBarContent>
                         <MudStack Row="true">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx,"header"))">@localizer["create"]</MudButton>
                             <MudButton Href="/reports/templates"
                                        Variant="Variant.Filled"
                                        StartIcon="@Icons.Material.Filled.FileCopy"
@@ -184,7 +184,7 @@
                              Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                     <ToolBarContent>
                         <MudStack Row="true">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx,"footer"))">@localizer["create"]</MudButton>
                             <MudButton Href="/reports/templates"
                                        Variant="Variant.Filled"
                                        StartIcon="@Icons.Material.Filled.FileCopy"
@@ -244,7 +244,7 @@
                              Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                     <ToolBarContent>
                         <MudStack Row="true">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx,"body"))">@localizer["create"]</MudButton>
                             <MudButton Href="/reports/templates"
                                        Variant="Variant.Filled"
                                        StartIcon="@Icons.Material.Filled.FileCopy"

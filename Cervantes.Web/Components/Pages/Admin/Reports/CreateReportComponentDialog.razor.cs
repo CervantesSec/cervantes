@@ -1,4 +1,5 @@
 using BlazorMonaco.Editor;
+using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
 using Cervantes.Web.Components.Shared;
@@ -10,6 +11,7 @@ using Microsoft.SemanticKernel;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
 using TinyMCE.Blazor;
+using Task = System.Threading.Tasks.Task;
 
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
@@ -17,7 +19,8 @@ namespace Cervantes.Web.Components.Pages.Admin.Reports;
 public partial class CreateReportComponentDialog: ComponentBase
 {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
- 
+    [Parameter] public string type { get; set; }
+
     void Cancel() => MudDialog.Cancel();
      
     [Inject] ISnackbar Snackbar { get; set; }
@@ -86,7 +89,21 @@ public partial class CreateReportComponentDialog: ComponentBase
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
+        switch (type)
+        {
+            case "cover":
+                model.ComponentType = ReportPartType.Cover;
+                break;
+            case "header":
+                model.ComponentType = ReportPartType.Header;
+                break;
+            case "footer":
+                model.ComponentType = ReportPartType.Footer;
+                break;
+            case "body":
+                model.ComponentType = ReportPartType.Body;
+                break;
+        }
         aiEnabled = _aiService.IsEnabled();
     }
     private async Task Submit()
