@@ -127,7 +127,6 @@ public partial class CreateClientDialog: ComponentBase
                 .NotEmpty()
                 .Length(1,100);
 	        RuleFor(x => x.Url)
-		        .NotEmpty()
 		        .Length(1,100);
 	        RuleFor(x => x.ContactName)
 		        .Length(1,100);
