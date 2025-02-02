@@ -42,7 +42,7 @@
 		@if (userAth.HasPermission(Permissions.UsersDelete))
 		{
 
-			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(user, medium))">@localizer["delete"]</MudChip>
+			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(medium))">@localizer["delete"]</MudChip>
 		}
 		
 		            </MudStack>
@@ -183,7 +183,8 @@
 				
 
 							</div>
-							<MudList  T="string" Dense="true">
+							<MudList T="string" Dense="true">
+								<MudListItem T="string" Text="@roleUsr" Icon="@Icons.Material.Filled.Badge"/>
 								<MudListItem T="string" Text="@user.Email" Icon="@Icons.Material.Filled.Email"/>
 								<MudListItem T="string" Text="@user.Position" Icon="@Icons.Material.Filled.Person2"/>
 								<MudListItem T="string" Text="@user.PhoneNumber" Icon="@Icons.Material.Filled.ContactPhone"/>

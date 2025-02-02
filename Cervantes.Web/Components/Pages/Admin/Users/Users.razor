@@ -51,7 +51,7 @@
 <MudGrid>
     <MudItem xs="12" sm="12" md="12">
 
-        <MudDataGrid T="ApplicationUser" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+        <MudDataGrid T="UserViewModel" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
@@ -79,7 +79,7 @@
                 </MudTextField>
             </ToolBarContent>
             <Columns>
-                <SelectColumn T="ApplicationUser"/>
+                <SelectColumn T="UserViewModel"/>
 
                 <PropertyColumn Property="x => x.FullName" Title="@localizer["name"]">
                     <CellTemplate Context="cellContext">
@@ -101,6 +101,7 @@
                 </PropertyColumn>
 
                 <PropertyColumn Property="x => x.Email" Title="@localizer["email"]"/>
+                <PropertyColumn Property="x => x.Role" Title="@localizer["role"]"/>
                 <PropertyColumn Property="x => x.Position" Title="@localizer["position"]"/>
                 <PropertyColumn Property="x => x.ExternalLogin" Title="@localizer["userType"]">
                     <CellTemplate Context="cellContext">
@@ -145,7 +146,7 @@
 
             </Columns>
             <PagerContent>
-                <MudDataGridPager T="ApplicationUser"/>
+                <MudDataGridPager T="UserViewModel"/>
             </PagerContent>
         </MudDataGrid>
 

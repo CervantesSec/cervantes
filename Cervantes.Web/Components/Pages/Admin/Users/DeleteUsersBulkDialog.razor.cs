@@ -1,4 +1,5 @@
 using Cervantes.CORE.Entities;
+using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -16,7 +17,7 @@ public partial class DeleteUsersBulkDialog : ComponentBase
 
     MudForm form;
     
-    [Parameter] public List<ApplicationUser> users { get; set; }
+    [Parameter] public List<UserViewModel> users { get; set; }
     [Inject] private UserController _UserController { get; set; }
 
     private async Task Submit()

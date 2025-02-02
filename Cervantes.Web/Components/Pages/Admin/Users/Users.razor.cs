@@ -15,8 +15,9 @@ namespace Cervantes.Web.Components.Pages.Admin.Users;
 
 public partial class Users: ComponentBase
 {
-    private List<ApplicationUser> model = new List<ApplicationUser>();
-    private List<ApplicationUser> seleUsers = new List<ApplicationUser>();
+    private List<ApplicationUser> users = new List<ApplicationUser>();
+    private List<UserViewModel> model = new List<UserViewModel>();
+    private List<UserViewModel> seleUsers = new List<UserViewModel>();
 
     private List<BreadcrumbItem> _items;
     private string searchString = "";
@@ -63,15 +64,33 @@ public partial class Users: ComponentBase
     protected async Task Update()
     {
         
+        users.RemoveAll(item => true);
+        users = _UserController.Get().ToList();
         model.RemoveAll(item => true);
-        model = _UserController.Get().ToList();
+        foreach (var item in users)
+        {
+            var rl = await _UserController.GetRole(item.Id);
+            var user = new UserViewModel()
+            {
+                Id = item.Id,
+                FullName = item.FullName,
+                Email = item.Email,
+                TwoFactorEnabled = item.TwoFactorEnabled,
+                Position = item.Position,
+                LockoutEnd = item.LockoutEnd,
+                Role = rl,
+                ExternalLogin = item.ExternalLogin,
+                Avatar = item.Avatar
+            };
+            model.Add(user);
+        }
 
     }
 
 
     
     
-    private Func<ApplicationUser, bool> _quickFilter => element =>
+    private Func<UserViewModel, bool> _quickFilter => element =>
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
@@ -95,9 +114,9 @@ public partial class Users: ComponentBase
     }
     
     
-    async Task RowClicked(DataGridRowClickEventArgs<ApplicationUser> args)
+    async Task RowClicked(DataGridRowClickEventArgs<UserViewModel> args)
     {
-        var parameters = new DialogParameters { ["user"]=args.Item };
+        var parameters = new DialogParameters { ["userSelected"]=args.Item };
         IMudExDialogReference<UserDialog>? dlgReference = await DialogEx.ShowEx<UserDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
@@ -157,7 +176,7 @@ public partial class Users: ComponentBase
         }
     }
     
-    void SelectedItemsChanged(HashSet<ApplicationUser> items)
+    void SelectedItemsChanged(HashSet<UserViewModel> items)
     {
         
         seleUsers = items.ToList();

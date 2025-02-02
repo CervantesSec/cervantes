@@ -18,7 +18,7 @@ public partial class DeleteUserDialog: ComponentBase
 
     MudForm form;
     
-    [Parameter] public ApplicationUser user { get; set; } = new ApplicationUser();
+    [Parameter] public UserViewModel user { get; set; } = new UserViewModel();
 	 [Inject] private UserController _UserController { get; set; }
 
     private async Task Submit()

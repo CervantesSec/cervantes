@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
+using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Components.Pages.Projects;
 using Cervantes.Web.Controllers;
 using FluentValidation;
@@ -15,7 +16,8 @@ namespace Cervantes.Web.Components.Pages.Admin.Users;
 
 public partial class UserDialog: ComponentBase
 {
-    [Parameter] public CORE.Entities.ApplicationUser user { get; set; } = new CORE.Entities.ApplicationUser();
+    [Parameter] public UserViewModel userSelected { get; set; } 
+    private ApplicationUser user = new ApplicationUser();
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
@@ -78,15 +80,18 @@ public partial class UserDialog: ComponentBase
             };
     private UserEditViewModel model { get; set; } = new UserEditViewModel();
     ClaimsPrincipal userAth;
+    private string roleUsr;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+        user = _UserController.GetUser(userSelected.Id);
+        roleUsr = await _UserController.GetRole(user.Id);
     }
     
-    async Task DeleteDialog(CORE.Entities.ApplicationUser user,DialogOptions options)
+    async Task DeleteDialog(DialogOptions options)
     {
-        var parameters = new DialogParameters { ["user"]=user };
+        var parameters = new DialogParameters { ["user"]=userSelected };
 
         var dialog =  Dialog.Show<DeleteUserDialog>("Edit", parameters,options);
         var result = await dialog.Result;
@@ -145,7 +150,7 @@ public partial class UserDialog: ComponentBase
             }
             //var user2 =  _UserController.GetUser(user.Id);
             //var rolUser = await _userManager.GetRolesAsync(user2);
-            model.Role = await _UserController.GetRole(user.Id);
+            model.Role = roleUsr;
         }
         MudDialog.StateHasChanged();
     }
