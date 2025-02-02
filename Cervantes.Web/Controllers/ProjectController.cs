@@ -163,6 +163,12 @@ public class ProjectController : ControllerBase
 
                 await projectManager.AddAsync(project);
                 await projectManager.Context.SaveChangesAsync();
+                await projectUserManager.AddAsync(new ProjectUser
+                {
+                    ProjectId = project.Id,
+                    UserId = aspNetUserId
+                });
+                await projectUserManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Project created successfully. User: {0}",
                     aspNetUserId);
                 return Ok();
