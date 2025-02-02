@@ -298,36 +298,35 @@ public class ProjectController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var result = projectUserManager.GetAll()
-                    .Where(x => x.UserId == model.MemberId && x.ProjectId == model.ProjectId);
-
-                if (result.FirstOrDefault() == null)
+                foreach (var item in model.MemberId)
                 {
-                    var user = new ProjectUser
+                    var result = projectUserManager.GetAll()
+                        .Where(x => x.UserId == item && x.ProjectId == model.ProjectId);
+
+                    if (result.FirstOrDefault() == null)
                     {
-                        ProjectId = model.ProjectId,
-                        UserId = model.MemberId
-                    };
-                    await projectUserManager.AddAsync(user);
-                    await projectUserManager.Context.SaveChangesAsync();
+                        var user = new ProjectUser
+                        {
+                            ProjectId = model.ProjectId,
+                            UserId = item
+                        };
+                        await projectUserManager.AddAsync(user);
+                        await projectUserManager.Context.SaveChangesAsync();
 
 
-                    _logger.LogInformation("Project member added successfully. User: {0}",
-                        aspNetUserId);
+                        _logger.LogInformation("Project member added successfully. User: {0}",
+                            aspNetUserId);
 
-                    if (emailService.IsEnabled())
-                    {
-                        BackgroundJob.Enqueue(
-                            () => emailService.SendAsignedProject(model.MemberId, model.ProjectId));
+                        if (emailService.IsEnabled())
+                        {
+                            BackgroundJob.Enqueue(
+                                () => emailService.SendAsignedProject(item, model.ProjectId));
+                        }
+                        
                     }
-
-
-                    return Ok();
                 }
-                else
-                {
-                    return Ok("UserExists");
-                }
+                
+                return Ok();
             }
 
             _logger.LogError("An error ocurred adding project member. User: {0}",

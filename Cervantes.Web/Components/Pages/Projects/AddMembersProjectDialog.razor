@@ -1,4 +1,5 @@
 @using Cervantes.CORE
+@using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
 @using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
@@ -10,11 +11,10 @@
         <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" data-mce-placeholder="Description...">
         
             <MudForm Model="@member" @ref="@form" method="dialog" Validation="@(memberValidator.ValidateValue)" ValidationDelay="0">
-                <MudSelect Placeholder="@localizer["user"]" @bind-Value="member.MemberId" For="@(() => member.MemberId)" Label="@localizer["user"]" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                    <MudSelectItem Value="Guid.Empty.ToString()" Disabled="true">@localizer["selectMembers"]</MudSelectItem>
+                <MudSelect T="ApplicationUser" MultiSelection="true" Placeholder="@localizer["user"]" @bind-SelectedValues="_members" Label="@localizer["user"]" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
                     @foreach (var user in users)
                     {
-                        <MudSelectItem Value="@user.Id.ToString()">@user.FullName</MudSelectItem>
+                        <MudSelectItem Value="@user">@user.FullName</MudSelectItem>
                     }
                 </MudSelect>
             </MudForm>

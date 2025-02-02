@@ -26,6 +26,7 @@ public partial class AddMembersProjectDialog: ComponentBase
     [Parameter] public Guid project { get; set; }
     [Inject] private UserController _userController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
+    private IEnumerable<ApplicationUser> _members = new HashSet<ApplicationUser>();
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -52,13 +53,19 @@ public partial class AddMembersProjectDialog: ComponentBase
             return result.Errors.Select(e => e.ErrorMessage);
         };
     }
-
+    
     private async Task Submit()
     {
         await form.Validate();
 
         if (form.IsValid)
         {
+            HashSet<string> members = new HashSet<string>();
+            foreach (var item in _members)
+            {
+                members.Add(item.Id);
+            }
+            member.MemberId = members;
             member.ProjectId = project;
 
 
