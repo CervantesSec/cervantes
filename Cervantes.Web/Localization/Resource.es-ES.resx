@@ -1977,4 +1977,25 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="deleteChat" xml:space="preserve">
         <value>Eliminar Chat</value>
     </data>
+    <data name="businessImpact" xml:space="preserve">
+        <value>Impacto de Negocio</value>
+    </data>
+    <data name="minimalImpact" xml:space="preserve">
+        <value>Impacto Mínimo</value>
+    </data>
+    <data name="lowImpact" xml:space="preserve">
+        <value>Impacto Bajo</value>
+    </data>
+    <data name="moderateImpact" xml:space="preserve">
+        <value>Impacto Moderado</value>
+    </data>
+    <data name="highImpact" xml:space="preserve">
+        <value>Impacto Alto</value>
+    </data>
+    <data name="veryHighImpact" xml:space="preserve">
+        <value>Impacto Muy Alto</value>
+    </data>
+    <data name="noImpact" xml:space="preserve">
+        <value>Sin Impacto</value>
+    </data>
 </root>

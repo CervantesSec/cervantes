@@ -175,4 +175,33 @@ public partial class CreateProjectDialog: ComponentBase
 	    model.FindingsId = pro.FindingsId;
 	    StateHasChanged();
     }
+    
+    private int selectedVal = 0;
+    private int? activeVal;
+
+    private void HandleHoveredValueChanged(int? val) => activeVal = val;
+
+    private string BusinessImpactLabelText => (activeVal ?? model.BusinessImpact) switch
+    {
+	    1 => @localizer["minimalImpact"],
+	    2 => @localizer["lowImpact"],
+	    3 => @localizer["moderateImpact"],
+	    4 => @localizer["highImpact"],
+	    5 => @localizer["veryHighImpact"],
+	    _ => @localizer["noImpact"],
+    };
+    
+    
+    private Color GetRatingColor()
+    {
+	    return (activeVal ?? model.BusinessImpact) switch
+	    {
+		    1 => Color.Success,
+		    2 => Color.Info,
+		    3 => Color.Warning,
+		    4 => Color.Secondary,
+		    5 => Color.Error,
+		    _ => Color.Default
+	    };
+    }
 }

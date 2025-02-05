@@ -80,7 +80,12 @@
 						<MudSelectItem Value="@cli.Id">@cli.Name</MudSelectItem>
 					}
 				</MudSelect>
-				
+				<label class="mud-input-label mud-input-label-text ">@localizer["businessImpact"]</label>
+				<MudStack Row="true" AlignItems="AlignItems.Center">
+					<MudRating @bind-SelectedValue="model.BusinessImpact" HoveredValueChanged="HandleHoveredValueChanged" FullIcon="@Icons.Material.Filled.Circle" EmptyIcon="@Icons.Material.Filled.Circle" FullIconColor="@GetRatingColor()" EmptyIconColor="Color.Default"/>
+					<MudText Typo="Typo.body1">@BusinessImpactLabelText</MudText>
+				</MudStack>
+					
 				<MudSelect  @bind-Value="model.Status" For="@(() => model.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 					@foreach (ProjectStatus item in Enum.GetValues(typeof(ProjectStatus)))
 					{

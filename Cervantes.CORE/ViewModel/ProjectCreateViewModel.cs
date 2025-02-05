@@ -56,5 +56,6 @@ public class ProjectCreateViewModel
     public Score Score { get; set; }
     
     public string FindingsId { get; set; }
+    public int BusinessImpact { get; set; }
 
 }

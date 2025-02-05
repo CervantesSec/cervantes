@@ -159,7 +159,7 @@ public class ProjectController : ControllerBase
                 project.Score = model.Score;
                 project.FindingsId = sanitizer.Sanitize(model.FindingsId);
                 project.ExecutiveSummary = "";
-
+                project.BusinessImpact = model.BusinessImpact;
 
                 await projectManager.AddAsync(project);
                 await projectManager.Context.SaveChangesAsync();
@@ -208,6 +208,7 @@ public class ProjectController : ControllerBase
                     project.ProjectType = model.ProjectType;
                     project.Score = model.Score;
                     project.FindingsId = sanitizer.Sanitize(model.FindingsId);
+                    project.BusinessImpact = model.BusinessImpact;
                 }
                 else
                 {

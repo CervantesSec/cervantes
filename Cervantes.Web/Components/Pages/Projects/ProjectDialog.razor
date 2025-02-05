@@ -95,7 +95,11 @@
                         <MudSelectItem Value="@cli.Id">@cli.Name</MudSelectItem>
                     }
                 </MudSelect>
-
+                <label class="mud-input-label mud-input-label-text ">@localizer["businessImpact"]</label>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudRating @bind-SelectedValue="model.BusinessImpact" HoveredValueChanged="HandleHoveredValueChanged" FullIcon="@Icons.Material.Filled.Circle" EmptyIcon="@Icons.Material.Filled.Circle" FullIconColor="@GetRatingColor()" EmptyIconColor="Color.Default"/>
+                    <MudText Typo="Typo.body1">@BusinessImpactLabelText</MudText>
+                </MudStack>
                 <MudSelect @bind-Value="model.Status" For="@(() => model.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
                     @foreach (ProjectStatus item in Enum.GetValues(typeof(ProjectStatus)))
                     {
@@ -150,11 +154,36 @@ else
                         </div>
                         <MudList T="string" Dense="true">
                             <MudListItem T="string" Text="@project.Client.Name" Icon="@Icons.Material.Filled.BusinessCenter"/>
+                            @switch (project.BusinessImpact)
+                            {
+                                case 0:
+                                    <MudListItem T="string" Text="@localizer["noImpact"]" Icon="@Icons.Material.Filled.Circle"/>
+                                    break;
+                                case 1:
+                                    <MudListItem T="string" Text="@localizer["minimalImpact"]" Icon="@Icons.Material.Filled.Circle"/>
+                                    break;
+                                case 2:
+                                    <MudListItem T="string" Text="@localizer["lowImpact"]" Icon="@Icons.Material.Filled.Circle"/>
+                                    break;
+                                case 3:
+                                    <MudListItem T="string" Text="@localizer["moderateImpact"]" Icon="@Icons.Material.Filled.Circle"/>
+                                    break;
+                                case 4:
+                                    <MudListItem T="string" Text="@localizer["highImpact"]" Icon="@Icons.Material.Filled.Circle"/>
+                                    break;
+                                case 5:
+                                    <MudListItem T="string" Text="@localizer["veryHighImpact"]" Icon="@Icons.Material.Filled.Circle"/>
+                                    break;
+                                default:
+                                    <MudListItem T="string" Text="@localizer["noImpact"]" Icon="@Icons.Material.Filled.Circle"/>
+                                    break;
+                            }
                             <MudListItem T="string" Text="@project.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
                             <MudListItem T="string" Text="@project.ProjectType.ToString()" Icon="@Icons.Material.Filled.Category"/>
                             <MudListItem T="string" Text="@project.Status.ToString()" Icon="@Icons.Material.Filled.AddTask"/>
                             <MudListItem T="string" Text="@project.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
                             <MudListItem T="string" Text="@project.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth"/>
+                            
                         </MudList>
                     </MudCardContent>
                 </MudCard>

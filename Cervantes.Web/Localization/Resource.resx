@@ -1907,4 +1907,25 @@
     <data name="deleteChat" xml:space="preserve">
         <value>Delete Chat</value>
     </data>
+    <data name="businessImpact" xml:space="preserve">
+        <value>Business Impact</value>
+    </data>
+    <data name="minimalImpact" xml:space="preserve">
+        <value>Minimal Impact</value>
+    </data>
+    <data name="lowImpact" xml:space="preserve">
+        <value>Low Impact</value>
+    </data>
+    <data name="moderateImpact" xml:space="preserve">
+        <value>Moderate Impact</value>
+    </data>
+    <data name="highImpact" xml:space="preserve">
+        <value>High Impact</value>
+    </data>
+    <data name="veryHighImpact" xml:space="preserve">
+        <value>Very High Impact</value>
+    </data>
+    <data name="noImpact" xml:space="preserve">
+        <value>No Impact</value>
+    </data>
 </root>

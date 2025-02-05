@@ -85,4 +85,6 @@ public class ProjectViewModel
     public List<Client> Clients { get; set; }
     public DateTime? dateStart = DateTime.Today;
     public DateTime? dateEnd = DateTime.Today;
+    public int BusinessImpact { get; set; }
+
 }

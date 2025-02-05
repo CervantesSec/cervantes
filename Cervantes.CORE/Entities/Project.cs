@@ -62,6 +62,9 @@ public class Project
     /// Client ID
     /// </summary>
     public Guid ClientId { get; set; }
+    
+    [Range(0, 5, ErrorMessage = "Value must be between 0 and 5.")]
+    public int BusinessImpact { get; set; }
 
     /// <summary>
     /// Is project a template
