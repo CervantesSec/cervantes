@@ -889,7 +889,8 @@ public class BackupController : ControllerBase
         try
         {
             string startPath = env.WebRootPath + "/" + "Attachments";
-            string zipPath = env.WebRootPath + "/" + @"result" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".zip";
+            var zipTmpDir = Directory.CreateTempSubdirectory();
+            string zipPath = zipTmpDir.FullName + "/" + @"result" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".zip";
 
             ZipFile.CreateFromDirectory(startPath, zipPath);
 
@@ -902,7 +903,7 @@ public class BackupController : ControllerBase
 
             _logger.LogInformation("Attachments backup made successfully. User: {0}",
                 aspNetUserId);
-            System.IO.File.Delete(zipPath);
+            Directory.Delete(zipTmpDir.FullName, true);
             return result;
         }
         catch (Exception ex)
