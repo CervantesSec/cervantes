@@ -1099,8 +1099,6 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                         new Document(new Body()).Save(mainPart);
                                     }
                                     
-                                    
-
                                     // Parse the HTML code to extract the header, footer, and cover
                                     var htmlDoc = new HtmlAgilityPack.HtmlDocument();
                                     htmlDoc.LoadHtml(report.HtmlCode);
@@ -1109,7 +1107,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     var coverHtml =
                                         htmlDoc.DocumentNode.SelectSingleNode("//cover")
                                             ?.InnerHtml; // Assuming the cover is in a <cover> tag
-
+                                    
                                     // Create a HeaderPart, FooterPart, and a Body for the cover
                                     HeaderPart headerPart = mainPart.AddNewPart<HeaderPart>();
                                     FooterPart footerPart = mainPart.AddNewPart<FooterPart>();
@@ -1118,8 +1116,17 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                     // Convert the header, footer, and cover HTML to OpenXML elements
                                     HtmlToOpenXml.HtmlConverter converter = new HtmlToOpenXml.HtmlConverter(mainPart);
 
-                                    bool hasCover = !string.IsNullOrEmpty(coverHtml);
-
+                                    // check if the report has a cover page
+                                    bool hasCover;
+                                    if (!string.IsNullOrWhiteSpace(coverHtml))
+                                    {
+                                        hasCover = true;
+                                    }
+                                    else
+                                    {
+                                        hasCover = false;
+                                    }
+                                    
                                     // Add cover page if it exists
                                     if (hasCover)
                                     {
