@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -20,7 +21,7 @@ public partial class ClientDialog: ComponentBase
     [Parameter] public CORE.Entities.Client client { get; set; } = new CORE.Entities.Client();
     private long maxFileSize = 1024 * 1024 * 5;
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
@@ -167,7 +168,7 @@ public partial class ClientDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["client"]=client };
 
-        var dialog =  Dialog.Show<DeleteClientDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteClientDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -295,7 +296,7 @@ public partial class ClientDialog: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["projects"]=selectedProjects };
 
-                var dialog =  Dialog.Show<DeleteProjectBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteProjectBulkDialog>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -316,7 +317,7 @@ public partial class ClientDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["project"]=args.Item };
 
-        var dialog =  Dialog.Show<ProjectDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<ProjectDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -335,7 +336,7 @@ public partial class ClientDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["vuln"]=args.Item };
 
-        var dialog =  Dialog.Show<VulnDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<VulnDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)

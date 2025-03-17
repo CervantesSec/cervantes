@@ -28,7 +28,7 @@ public partial class AddTargetDialog: ComponentBase
         {"toolbar_mode", "sliding"},
         {"contextmenu", "link image imagetools table"}
     };
-      [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+      [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     void Cancel() => MudDialog.Cancel();
     MudForm form;

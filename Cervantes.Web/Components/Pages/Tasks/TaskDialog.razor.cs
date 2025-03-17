@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -19,7 +20,7 @@ public partial class TaskDialog: ComponentBase
 {
       [Parameter] public CORE.Entities.Task task { get; set; } = new CORE.Entities.Task();
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
@@ -87,7 +88,7 @@ public partial class TaskDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["task"]=task };
 
-        var dialog =  Dialog.Show<DeleteTaskDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteTaskDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -239,7 +240,7 @@ public partial class TaskDialog: ComponentBase
     private async Task OpenCreateAttachment(CORE.Entities.Task task,DialogOptions options)
     {
         var parameters = new DialogParameters { ["task"]=task };
-        var dialog = Dialog.Show<AddTaskAttachmentDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<AddTaskAttachmentDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -252,7 +253,7 @@ public partial class TaskDialog: ComponentBase
     private async Task OpenCreateNote(CORE.Entities.Task task,DialogOptions options)
     {
         var parameters = new DialogParameters { ["task"]=task };
-        var dialog = Dialog.Show<AddTaskNoteDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<AddTaskNoteDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -265,7 +266,7 @@ public partial class TaskDialog: ComponentBase
     private async Task OpenAddTarget(CORE.Entities.Task task,DialogOptions options)
     {
         var parameters = new DialogParameters { ["task"]=task };
-        var dialog = Dialog.Show<AddTaskTargetDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<AddTaskTargetDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -281,7 +282,7 @@ public partial class TaskDialog: ComponentBase
         {
             var parameters = new DialogParameters { ["target"]=args.Item };
 
-            var dialog =  Dialog.Show<DeleteTaskTargetDialog>("Edit", parameters, maxWidth);
+            var dialog =  await Dialog.ShowEx<DeleteTaskTargetDialog>("Edit", parameters, maxWidth);
             var result = await dialog.Result;
 
             if (!result.Canceled)
@@ -297,7 +298,7 @@ public partial class TaskDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
 
-        var dialog =  Dialog.Show<TaskNoteDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<TaskNoteDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -311,7 +312,7 @@ public partial class TaskDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["attachment"]=args.Item };
 
-        var dialog =  Dialog.Show<TaskAttachmentDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<TaskAttachmentDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -328,7 +329,7 @@ public partial class TaskDialog: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
 
-                var dialog =  Dialog.Show<DeleteTaskTargetBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteTaskTargetBulkDialog>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -353,7 +354,7 @@ public partial class TaskDialog: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
 
-                var dialog =  Dialog.Show<DeleteTaskNoteBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteTaskNoteBulkDialog>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -385,7 +386,7 @@ public partial class TaskDialog: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["attachments"]=seleAttachments };
 
-                var dialog =  Dialog.Show<DeleteTaskAttachmentBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteTaskAttachmentBulkDialog>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

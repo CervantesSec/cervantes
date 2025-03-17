@@ -7,6 +7,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -61,7 +62,7 @@ public partial class ProjectNoteDialog: ComponentBase
                 }}
             };
     
-      [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+      [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
       DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
       DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
     void Cancel() => MudDialog.Cancel();
@@ -113,7 +114,7 @@ public partial class ProjectNoteDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["note"] = note };
 
-        var dialog = Dialog.Show<DeleteProjectNoteDialog>("Edit", parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteProjectNoteDialog>("Edit", parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

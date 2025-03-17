@@ -24,9 +24,9 @@
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <MudThemeProvider Theme="CervantesTheme.Theme" @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
+<MudPopoverProvider />
 <MudDialogProvider/>
 <MudSnackbarProvider/>
-<MudPopoverProvider />
 
 <AuthorizeView>
     <Authorized>

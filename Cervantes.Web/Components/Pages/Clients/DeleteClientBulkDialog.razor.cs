@@ -6,7 +6,7 @@ namespace Cervantes.Web.Components.Pages.Clients;
 
 public partial class DeleteClientBulkDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

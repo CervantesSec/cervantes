@@ -4,6 +4,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
@@ -15,7 +16,7 @@ public partial class TaskNoteDialog: ComponentBase
 
     [Parameter] public CORE.Entities.TaskNote note { get; set; } = new CORE.Entities.TaskNote();
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private TaskNoteEditViewModel model = new TaskNoteEditViewModel();
     void Cancel() => MudDialog.Cancel();
@@ -126,7 +127,7 @@ public partial class TaskNoteDialog: ComponentBase
     private async Task DeleteTaskNoteDialog(CORE.Entities.TaskNote note,DialogOptions options)
     {
         var parameters = new DialogParameters { ["note"]=note };
-        var dialog = Dialog.Show<DeleteTaskNoteDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteTaskNoteDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

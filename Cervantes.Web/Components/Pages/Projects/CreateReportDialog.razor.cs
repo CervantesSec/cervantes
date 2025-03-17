@@ -56,7 +56,7 @@ public partial class CreateReportDialog: ComponentBase
                 }}
             };
 	
-         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+         [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  [Parameter] public Guid project { get; set; }
      void Cancel() => MudDialog.Cancel();
      

@@ -55,7 +55,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                     new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
                 }}
             };
-	[CascadingParameter] MudDialogInstance MudDialog { get; set; }
+	[CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
      void Cancel() => MudDialog.Cancel();
      

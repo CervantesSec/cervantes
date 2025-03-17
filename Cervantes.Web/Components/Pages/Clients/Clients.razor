@@ -13,7 +13,6 @@
 @inject NavigationManager navigationManager
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
-@inject IMudExDialogService DialogEx
 @inject AuthenticationStateProvider authenticationStateProvider
 @attribute [HasPermission(Permissions.ClientsRead)]
 
@@ -46,7 +45,7 @@
                 <MudStack Row="true">
                     @if (user.HasPermission(Permissions.ClientsAdd))
                     {
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="OpenDialogCreate">@localizer["create"]</MudButton>
                     }
                     @if (user.HasPermission(Permissions.ClientsDelete))
                     {
@@ -79,7 +78,7 @@
                             }
                             else
                             {
-                                    <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Small"/>
+                                <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Small"/>
                             }
                             <MudStack Justify="Justify.Center" Spacing="0">
                                 <MudText Typo="Typo.body1">@context.Item.Name</MudText>
@@ -101,6 +100,12 @@
                 </PropertyColumn>
                 <PropertyColumn Property="x => x.ContactPhone" Title="@localizer["contactPhone"]"/>
             </Columns>
+            <NoRecordsContent>
+                <MudStack Spacing="3" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.LibraryBooks" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
+                </MudStack>
+            </NoRecordsContent>
             <PagerContent>
                 <MudDataGridPager T="Client"/>
             </PagerContent>

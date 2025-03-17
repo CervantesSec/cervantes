@@ -12,7 +12,6 @@
 @using global::AuthPermissions.AspNetCore
 @using global::AuthPermissions.BaseCode.PermissionsCode
 @using MudBlazor.Extensions.Core
-@inject IMudExDialogService DialogEx
 @inject AuthenticationStateProvider authenticationStateProvider
 @attribute [HasPermission(Permissions.ReportTemplatesRead)]
 
@@ -114,6 +113,12 @@
                         *@
                 <PropertyColumn Property="x => x.CreatedDate" Title="@localizer["createdDate"]"/>
             </Columns>
+            <NoRecordsContent>
+                <MudStack Spacing="3" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.LibraryBooks" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
+                </MudStack>
+            </NoRecordsContent>
             <PagerContent>
                 <MudDataGridPager T="ReportTemplate"/>
             </PagerContent>

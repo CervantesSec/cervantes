@@ -13,7 +13,7 @@ namespace Cervantes.Web.Components.Pages.Vuln;
 public partial class AddVulnTarget: ComponentBase
 {
     [Parameter] public CORE.Entities.Vuln vuln { get; set; } = new CORE.Entities.Vuln();
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     [Inject] ISnackbar Snackbar { get; set; }
     [Inject] private VulnController _VulnController { get; set; }
     [Inject] private TargetController _TargetController { get; set; }

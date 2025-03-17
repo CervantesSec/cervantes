@@ -125,7 +125,7 @@ public partial class ProjectTemplates : ComponentBase
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
 
-        IMudExDialogReference<CreateProjectDialog>? dlgReference = await DialogEx.ShowEx<CreateProjectDialog>("Simple Dialog", options);
+        IMudExDialogReference<CreateProjectDialog>? dlgReference = await DialogService.ShowEx<CreateProjectDialog>("Simple Dialog", options);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -140,7 +140,7 @@ public partial class ProjectTemplates : ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<Project> args)
     {
         var parameters = new DialogParameters { ["project"]=args.Item };
-        IMudExDialogReference<ProjectDialog>? dlgReference = await DialogEx.ShowEx<ProjectDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<ProjectDialog>? dlgReference = await DialogService.ShowEx<ProjectDialog>("Simple Dialog", parameters, maxWidthEx);
 
         var result = await dlgReference.Result;
 

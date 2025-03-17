@@ -79,7 +79,7 @@ public partial class Targets: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Target> args)
     {
         var parameters = new DialogParameters { ["target"]=args.Item };
-        IMudExDialogReference<TargetDialog>? dlgReference = await DialogEx.ShowEx<TargetDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<TargetDialog>? dlgReference = await DialogService.ShowEx<TargetDialog>("Simple Dialog", parameters, maxWidthEx);
         
         var result = await dlgReference.Result;
 
@@ -154,7 +154,7 @@ public partial class Targets: ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-        IMudExDialogReference<CreateTargetDialog>? dlgReference = await DialogEx.ShowEx<CreateTargetDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<CreateTargetDialog>? dlgReference = await DialogService.ShowEx<CreateTargetDialog>("Simple Dialog", parameters, maxWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;

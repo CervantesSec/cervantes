@@ -4,6 +4,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
@@ -12,7 +13,7 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
 {
     [Parameter] public CORE.Entities.KnowledgeBaseCategories category { get; set; } 
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
@@ -92,7 +93,7 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["category"]=item };
 
-        var dialog =  Dialog.Show<DeleteKnowledgeCategoryDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteKnowledgeCategoryDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

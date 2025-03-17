@@ -8,7 +8,6 @@
 @using Microsoft.Extensions.Localization
 @using MudBlazor.Extensions.Core
 @inject IDialogService Dialog
-@inject IMudExDialogService DialogEx
 @inject IStringLocalizer<Resource> localizer
 @inject IJSRuntime JS
 @rendermode InteractiveServer
@@ -104,27 +103,27 @@
                         <CellTemplate>
                             @if (!string.IsNullOrEmpty(@context.Item.AsignedUserId))
                             {
-                                    <MudStack Row="true">
+                                <MudStack Row="true">
 
-                        @if (@context.Item.AsignedUser.Avatar != null)
-                        {
-                            <MudImage Src="@context.Item.AsignedUser.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
-                        }
-                        else
-                        {
-                            <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.AsignedUser.FullName[0]</MudAvatar>
-                        }
-                        <MudStack Justify="Justify.Center" Spacing="0">
-                            <MudText Typo="Typo.body1">@context.Item.AsignedUser.FullName</MudText>
-                        </MudStack>
-                        </MudStack>
-                        }
-                        else
-                        {
-                            <MudStack Row="true" Justify="Justify.FlexStart">
-                                <MudButton Variant="Variant.Outlined" OnClick="@((e) => AssignToMe(@context.Item.Id))">@localizer["assignToMe"]</MudButton>
+                                    @if (@context.Item.AsignedUser.Avatar != null)
+                                    {
+                                        <MudImage Src="@context.Item.AsignedUser.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+                                    }
+                                    else
+                                    {
+                                        <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.AsignedUser.FullName[0]</MudAvatar>
+                                    }
+                                    <MudStack Justify="Justify.Center" Spacing="0">
+                                        <MudText Typo="Typo.body1">@context.Item.AsignedUser.FullName</MudText>
+                                    </MudStack>
+                                </MudStack>
+                            }
+                            else
+                            {
+                                <MudStack Row="true" Justify="Justify.FlexStart">
+                                    <MudButton Variant="Variant.Outlined" OnClick="@((e) => AssignToMe(@context.Item.Id))">@localizer["assignToMe"]</MudButton>
 
-                            </MudStack>
+                                </MudStack>
                             
                             }
                         </CellTemplate>
@@ -177,6 +176,12 @@
                     </PropertyColumn>
 
                 </Columns>
+                <NoRecordsContent>
+                    <MudStack Spacing="3" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                        <MudIcon Icon="@Icons.Material.Filled.LibraryBooks" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
+                        <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
+                    </MudStack>
+                </NoRecordsContent>
                 <PagerContent>
                     <MudDataGridPager T="CORE.Entities.Task"/>
                 </PagerContent>

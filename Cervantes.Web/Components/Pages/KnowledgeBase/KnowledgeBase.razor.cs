@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.SemanticKernel;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
@@ -123,7 +124,7 @@ public partial class KnowledgeBase: ComponentBase
     
     private async Task OpenDialogCategory(DialogOptions options)
     {
-        var dialog = Dialog.Show<KnowledgeCategoryDialog>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<KnowledgeCategoryDialog>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
         await Update();
@@ -133,7 +134,7 @@ public partial class KnowledgeBase: ComponentBase
     
     private async Task OpenDialogPage(DialogOptions options)
     {
-        var dialog = Dialog.Show<CreateKnowledgePageDialog>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<CreateKnowledgePageDialog>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -202,7 +203,7 @@ public partial class KnowledgeBase: ComponentBase
     {
         var parameters = new DialogParameters { ["category"]=Page };
 
-        var dialog =  Dialog.Show<DeleteKnowledgePageDialog>(@localizer["deleteTarget"], parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<DeleteKnowledgePageDialog>(@localizer["deleteTarget"], parameters, maxWidth);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -216,7 +217,7 @@ public partial class KnowledgeBase: ComponentBase
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
 
-        var dialog = Dialog.Show<AiDialog>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)

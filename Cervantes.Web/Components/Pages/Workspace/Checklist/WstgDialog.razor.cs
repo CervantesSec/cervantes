@@ -13,7 +13,7 @@ namespace Cervantes.Web.Components.Pages.Workspace.Checklist;
 
 public partial class WstgDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

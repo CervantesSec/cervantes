@@ -1913,4 +1913,7 @@
     <data name="noImpact" xml:space="preserve">
         <value>Sem Impacto </value>
     </data>
+    <data name="noData" xml:space="preserve">
+        <value>Não há Dados</value>
+    </data>
 </root>

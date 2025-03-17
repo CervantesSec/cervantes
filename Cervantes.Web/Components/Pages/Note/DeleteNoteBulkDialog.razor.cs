@@ -6,7 +6,7 @@ namespace Cervantes.Web.Components.Pages.Note;
 
 public partial class DeleteNoteBulkDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

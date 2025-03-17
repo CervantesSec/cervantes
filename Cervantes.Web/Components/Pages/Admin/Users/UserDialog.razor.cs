@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -18,7 +19,7 @@ public partial class UserDialog: ComponentBase
 {
     [Parameter] public UserViewModel userSelected { get; set; } 
     private ApplicationUser user = new ApplicationUser();
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
@@ -93,7 +94,7 @@ public partial class UserDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["user"]=userSelected };
 
-        var dialog =  Dialog.Show<DeleteUserDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteUserDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

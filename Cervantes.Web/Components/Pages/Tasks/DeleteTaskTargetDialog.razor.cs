@@ -10,7 +10,7 @@ namespace Cervantes.Web.Components.Pages.Tasks;
 
 public partial class DeleteTaskTargetDialog: ComponentBase
 {
-	[CascadingParameter] MudDialogInstance MudDialog { get; set; }
+	[CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
 	void Cancel() => MudDialog.Cancel();
      

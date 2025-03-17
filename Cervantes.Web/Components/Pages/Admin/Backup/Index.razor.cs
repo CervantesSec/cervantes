@@ -3,6 +3,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
 
 namespace Cervantes.Web.Components.Pages.Admin.Backup;
 
@@ -82,7 +83,7 @@ private ClaimsPrincipal userAth;
     private async Task RestoreData(DialogOptions options)
     {
         
-        var dialog = Dialog.Show<RestoreData>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<RestoreData>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
  
@@ -92,7 +93,7 @@ private ClaimsPrincipal userAth;
     private async Task RestoreAttachments(DialogOptions options)
     {
         
-        var dialog = Dialog.Show<RestoreAttachments>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<RestoreAttachments>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
  

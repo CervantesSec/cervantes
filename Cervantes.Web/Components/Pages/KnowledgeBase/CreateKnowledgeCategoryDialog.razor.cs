@@ -9,7 +9,7 @@ namespace Cervantes.Web.Components.Pages.KnowledgeBase;
 
 public partial class CreateKnowledgeCategoryDialog: ComponentBase
 {
-     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+     [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
      void Cancel() => MudDialog.Cancel();
 

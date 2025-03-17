@@ -91,7 +91,7 @@ public partial class Tasks: ComponentBase
     {
         
         var parameters = new DialogParameters { ["project"]=project };
-        IMudExDialogReference<CreateTaskDialog>? dlgReference = await DialogEx.ShowEx<CreateTaskDialog>("Simple Dialog", options);
+        IMudExDialogReference<CreateTaskDialog>? dlgReference = await Dialog.ShowEx<CreateTaskDialog>("Simple Dialog", options);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -125,9 +125,9 @@ public partial class Tasks: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Task> args)
     {
         var parameters = new DialogParameters { ["task"]=args.Item};
-        IMudExDialogReference<TaskDialog>? dlgReference = await DialogEx.ShowEx<TaskDialog>("Simple Dialog",parameters, maxWidthEx);
+        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowEx<TaskDialog>("Simple Dialog",parameters, maxWidthEx);
 
-        //var dialog =  Dialog.Show<TaskDialog>(args.Item.Name, parameters,maxWidth);
+        //var dialog =  await Dialog.ShowEx<TaskDialog>(args.Item.Name, parameters,maxWidth);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -161,7 +161,7 @@ public partial class Tasks: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["tasks"]=seleTasks };
 
-                var dialog =  Dialog.Show<DeleteTaskBulkDialog>("Edit", parameters,mediumWidth);
+                var dialog =  await Dialog.ShowEx<DeleteTaskBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

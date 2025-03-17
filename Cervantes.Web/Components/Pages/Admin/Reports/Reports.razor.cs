@@ -78,7 +78,7 @@ public partial class Reports: ComponentBase
     DialogOptions fullScreen = new DialogOptions() { FullScreen = true, CloseButton = true };
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        IMudExDialogReference<CreateReport>? dlgReference = await DialogEx.ShowEx<CreateReport>("Simple Dialog", options);
+        IMudExDialogReference<CreateReport>? dlgReference = await Dialog.ShowEx<CreateReport>("Simple Dialog", options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -95,7 +95,7 @@ public partial class Reports: ComponentBase
     {
         var parameters = new DialogParameters { ["report"]=report };
 
-        var dialog =  Dialog.Show<DeleteReportDialog>("Delete", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteReportDialog>("Delete", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -109,7 +109,7 @@ public partial class Reports: ComponentBase
     {
         var parameters = new DialogParameters { ["report"]=report };
 
-        var dialog =  Dialog.Show<EditDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<EditDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -136,7 +136,7 @@ public partial class Reports: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<ReportTemplate> args)
     {
         var parameters = new DialogParameters { ["report"]=args.Item };
-        IMudExDialogReference<ReportDialog>? dlgReference = await DialogEx.ShowEx<ReportDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<ReportDialog>? dlgReference = await Dialog.ShowEx<ReportDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -153,7 +153,7 @@ public partial class Reports: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["reports"]=seleReports };
 
-                var dialog =  Dialog.Show<DeleteReportBulkDialog>("Edit", parameters,mediumWidth);
+                var dialog =  await Dialog.ShowEx<DeleteReportBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

@@ -77,7 +77,7 @@ public partial class Vaults: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Vault> args)
     {
         var parameters = new DialogParameters { ["vault"]=args.Item };
-        IMudExDialogReference<VaultDialog>? dlgReference = await DialogEx.ShowEx<VaultDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<VaultDialog>? dlgReference = await DialogService.ShowEx<VaultDialog>("Simple Dialog", parameters, maxWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -139,7 +139,7 @@ public partial class Vaults: ComponentBase
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-        IMudExDialogReference<CreateVaultDialog>? dlgReference = await DialogEx.ShowEx<CreateVaultDialog>("Simple Dialog", parameters, options);
+        IMudExDialogReference<CreateVaultDialog>? dlgReference = await DialogService.ShowEx<CreateVaultDialog>("Simple Dialog", parameters, options);
 
         // wait modal to close
         var result = await dlgReference.Result;

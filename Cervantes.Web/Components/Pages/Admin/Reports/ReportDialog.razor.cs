@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using Microsoft.SemanticKernel;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -21,7 +22,7 @@ public partial class ReportDialog : ComponentBase
 {
     [Parameter] public CORE.Entities.ReportTemplate report { get; set; } = new CORE.Entities.ReportTemplate();
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
@@ -131,7 +132,7 @@ public partial class ReportDialog : ComponentBase
     {
         var parameters = new DialogParameters { ["report"] = report };
 
-        var dialog = Dialog.Show<DeleteReportDialog>("Edit", parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteReportDialog>("Edit", parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

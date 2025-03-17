@@ -57,7 +57,7 @@ public partial class AddVulnNote: ComponentBase
                     new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
                 }}
             };
-      [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+      [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     void Cancel() => MudDialog.Cancel();
     MudForm form;

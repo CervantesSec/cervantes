@@ -142,7 +142,7 @@ public partial class Checklists: ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-        IMudExDialogReference<CreateChecklistDialog>? dlgReference = await DialogEx.ShowEx<CreateChecklistDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<CreateChecklistDialog>? dlgReference = await DialogService.ShowEx<CreateChecklistDialog>("Simple Dialog", parameters, maxWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -192,7 +192,7 @@ public partial class Checklists: ComponentBase
         if (args.Item.Type == ChecklistType.OWASPWSTG)
         {
             var parameters = new DialogParameters {["project"]=project, ["checklist"]=args.Item };
-            IMudExDialogReference<WstgDialog>? dlgReference = await DialogEx.ShowEx<WstgDialog>("Simple Dialog", parameters, maxWidthEx);
+            IMudExDialogReference<WstgDialog>? dlgReference = await DialogService.ShowEx<WstgDialog>("Simple Dialog", parameters, maxWidthEx);
 
             var result = await dlgReference.Result;
 
@@ -205,7 +205,7 @@ public partial class Checklists: ComponentBase
         else
         {
             var parameters = new DialogParameters { ["project"]=project,["checklist"]=args.Item };
-            IMudExDialogReference<MastgDialog>? dlgReference = await DialogEx.ShowEx<MastgDialog>("Simple Dialog", parameters, maxWidthEx);
+            IMudExDialogReference<MastgDialog>? dlgReference = await DialogService.ShowEx<MastgDialog>("Simple Dialog", parameters, maxWidthEx);
 
             var result = await dlgReference.Result;
 

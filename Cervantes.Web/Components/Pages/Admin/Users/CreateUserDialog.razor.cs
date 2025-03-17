@@ -64,7 +64,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 }}
             };
 	
-         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+         [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
      void Cancel() => MudDialog.Cancel();
      

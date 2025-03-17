@@ -4,6 +4,7 @@ using Cervantes.Web.Components.Pages.Tasks;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -14,7 +15,7 @@ public partial class VulnNoteDialog: ComponentBase
 
     [Parameter] public CORE.Entities.VulnNote note { get; set; }
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private VulnNoteEditViewModel model = new VulnNoteEditViewModel();
     void Cancel() => MudDialog.Cancel();
@@ -126,7 +127,7 @@ public partial class VulnNoteDialog: ComponentBase
     private async Task DeleteVulnNoteDialog(CORE.Entities.VulnNote note,DialogOptions options)
     {
         var parameters = new DialogParameters { ["note"]=note };
-        var dialog = Dialog.Show<DeleteVulnNote>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteVulnNote>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

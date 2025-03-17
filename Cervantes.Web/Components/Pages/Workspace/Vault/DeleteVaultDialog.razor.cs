@@ -6,7 +6,7 @@ namespace Cervantes.Web.Components.Pages.Workspace.Vault;
 
 public partial class DeleteVaultDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

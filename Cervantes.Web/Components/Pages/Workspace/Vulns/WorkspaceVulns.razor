@@ -17,7 +17,6 @@
 @using global::AuthPermissions.AspNetCore
 @using global::AuthPermissions.BaseCode.PermissionsCode
 @using MudBlazor.Extensions.Core
-@inject IMudExDialogService DialogEx
 @inject AuthenticationStateProvider authenticationStateProvider
 @attribute [HasPermission(Permissions.VulnsRead)]
 
@@ -110,11 +109,11 @@
                         <MudStack Row="true">
                             @if (@context.Item.User.Avatar != null)
                             {
-                            <MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+                                <MudImage Src="@context.Item.User.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
                             }
                             else
                             {
-                            <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
+                                <MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.User.FullName[0]</MudAvatar>
                             }
                             <MudStack Justify="Justify.Center" Spacing="0">
                                 <MudText Typo="Typo.body1">@context.Item.User.FullName</MudText>
@@ -199,6 +198,12 @@
                 </PropertyColumn>
                 
             </Columns>
+            <NoRecordsContent>
+                <MudStack Spacing="3" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.LibraryBooks" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
+                </MudStack>
+            </NoRecordsContent>
             <PagerContent>
                 <MudDataGridPager T="Vuln"/>
             </PagerContent>

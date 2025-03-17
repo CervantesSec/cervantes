@@ -8,7 +8,7 @@ namespace Cervantes.Web.Components.Pages.Projects;
 
 public partial class DeleteProjectMemberBulkDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

@@ -3,6 +3,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -13,7 +14,7 @@ public partial class VulnAttachmentDialog: ComponentBase
 
     [Parameter] public CORE.Entities.VulnAttachment attachment { get; set; }
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     void Cancel() => MudDialog.Cancel();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
@@ -32,7 +33,7 @@ public partial class VulnAttachmentDialog: ComponentBase
     private async Task DeleteVulnAttachment(CORE.Entities.VulnAttachment attachment,DialogOptions options)
     {
         var parameters = new DialogParameters { ["attachment"]=attachment };
-        var dialog = Dialog.Show<DeleteVulnAttachment>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteVulnAttachment>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

@@ -7,6 +7,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using NLog.Targets;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
@@ -124,7 +125,7 @@ public partial class Chat: ComponentBase
     {
         var parameters = new DialogParameters { ["chat"]=chat };
 
-        var dialog =  Dialog.Show<DeleteChatDialog>("Edit", parameters,mediumWidth);
+        var dialog =  await Dialog.ShowEx<DeleteChatDialog>("Edit", parameters,mediumWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)

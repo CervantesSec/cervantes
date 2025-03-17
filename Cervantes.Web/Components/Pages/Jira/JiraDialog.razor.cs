@@ -8,7 +8,7 @@ namespace Cervantes.Web.Components.Pages.Jira;
 
 public partial class JiraDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     [Parameter] public CORE.Entities.Jira jira { get; set; } = new CORE.Entities.Jira();
 
     void Cancel() => MudDialog.Cancel();

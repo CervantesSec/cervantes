@@ -6,7 +6,7 @@ namespace Cervantes.Web.Components.Pages.KnowledgeBase;
 
 public partial class DeleteKnowledgePageDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

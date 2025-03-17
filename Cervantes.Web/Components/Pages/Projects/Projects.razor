@@ -22,7 +22,6 @@
 @using global::AuthPermissions.AspNetCore
 @using global::AuthPermissions.BaseCode.PermissionsCode
 @using MudBlazor.Extensions.Core
-@inject IMudExDialogService DialogEx
 @inject AuthenticationStateProvider authenticationStateProvider
 @attribute [HasPermission(Permissions.ProjectsRead)]
 
@@ -106,7 +105,7 @@
                             }
                             else
                             {
-                                    <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Small"/>
+                                <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Small"/>
                             }
                             <MudStack Justify="Justify.Center" Spacing="0">
                                 <MudText Typo="Typo.body1">@context.Item.Client.Name</MudText>
@@ -197,6 +196,12 @@
     
     
             </Columns>
+            <NoRecordsContent>
+                <MudStack Spacing="3" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.LibraryBooks" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
+                </MudStack>
+            </NoRecordsContent>
             <PagerContent>
                 <MudDataGridPager T="Project"/>
             </PagerContent>
@@ -206,171 +211,5 @@
     
     
 </MudGrid>
-    
 
-    @*<PageTitle>@localizer["projects"] | Cervantes</PageTitle>
-    <SectionContent SectionName="appbar">
-        <MudText Typo="Typo.h5">
-            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Folder"></MudIcon>
-
-            @localizer["projects"]
-
-        </MudText>
-    </SectionContent>
-    <SectionContent SectionName="top-bar">
-        <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudBadge Content="@model.Count(x => x.Template == false)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
-
-                    <MudButton Href="/projects"
-
-                               StartIcon="@Icons.Material.Filled.Folder"
-                               Color="Color.Primary">
-                        @localizer["projects"]
-                    </MudButton>
-                </MudBadge>
-                <MudBadge Content="@model.Count(x => x.Template == true)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
-
-                    <MudButton Href="/projects/templates"
-
-                               StartIcon="@Icons.Material.Filled.FolderCopy"
-                               Color="Color.Transparent">
-                        @localizer["templates"]
-                    </MudButton>
-                </MudBadge>
-        </MudStack>
-    </SectionContent>
-
-    <SectionContent SectionName="breadcrumbs">
-        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-    </SectionContent>
-    
-    <MudGrid>
-    
-        
-    <MudItem xs="12" sm="12" md="12">
-
-            <MudDataGrid T="Project" Items="@model.Where(x => x.Template == false && x.ClientId == user.ClientId)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
-                         Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
-                <ToolBarContent>
-                    <MudSpacer/>
-                    <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
-                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
-                    </MudTextField>
-                </ToolBarContent>
-                <Columns>
-                    <SelectColumn T="Project"/>
-        
-                    <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
-                    <PropertyColumn Property="x => x.Client.Name" Title="@localizer["client"]">
-                        <CellTemplate>
-                            <MudStack Row="true">
-                                @if (@context.Item.Client.ImagePath != null)
-                                {
-                                    <MudImage Src="@context.Item.Client.ImagePath" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
-                                }
-                                else
-                                {
-                                    <MudAvatar Color="Color.Primary" Variant="Variant.Filled">
-                                        <MudIcon Color="Color.Dark" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Small"/>
-                                    </MudAvatar>
-                                }
-                                <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudText Typo="Typo.body1">@context.Item.Client.Name</MudText>
-                                </MudStack>
-                            </MudStack>
-        
-                        </CellTemplate>
-                    </PropertyColumn>
-        
-                    <PropertyColumn Property="x => x.Language" Title="@localizer["language"]">
-                        <CellTemplate>
-                            @switch (@context.Item.Language)
-                            {
-                                case Language.English:
-                                    <CountryFlag Country="Country.US" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-                                    break;
-                                case Language.Español:
-                                    <CountryFlag Country="Country.ES" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-        
-                                    break;
-                                case Language.Português:
-                                    <CountryFlag Country="Country.PT" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-                                    <CountryFlag Country="Country.BR" Size="FlagSize.Normal" IsRounded="true"></CountryFlag>
-
-                                    break;
-                            }
-        
-                        </CellTemplate>
-                    </PropertyColumn>
-                    <PropertyColumn Property="x => x.ProjectType" Title="@localizer["type"]">
-                        <CellTemplate>
-                            @switch (@context.Item.ProjectType)
-                            {
-                                case ProjectType.BlackBox:
-                                    <MudChip Color="Color.Dark" Icon="@Icons.Material.Filled.CheckBoxOutlineBlank">@localizer["blackbox"]</MudChip>
-                                    break;
-                                case ProjectType.GrayBox:
-                                    <MudChip Color="Color.Default" Icon="@Icons.Material.Filled.Inbox">@localizer["graybox"]</MudChip>
-                                    break;
-                                case ProjectType.WhiteBox:
-                                    <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.CheckBox">@localizer["whitebox"]</MudChip>
-                                    break;
-                            }
-        
-                        </CellTemplate>
-        
-                    </PropertyColumn>
-                    <PropertyColumn Property="x => x.Status" Title="@localizer["status"]">
-                        <CellTemplate>
-                            @switch (@context.Item.Status)
-                            {
-                                case ProjectStatus.Active:
-                                    <MudChip Color="Color.Success" Icon="@Icons.Material.Filled.PlayArrow">@localizer["active"]</MudChip>
-                                    break;
-                                case ProjectStatus.Waiting:
-                                    <MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.HourglassEmpty">@localizer["waiting"]</MudChip>
-                                    break;
-                                case ProjectStatus.Archived:
-                                    <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Archive">@localizer["archived"]</MudChip>
-                                    break;
-                            }
-        
-                        </CellTemplate>
-        
-                    </PropertyColumn>
-                    <PropertyColumn Property="x => x.StartDate" Title="@localizer["startDate"]">
-                        <CellTemplate>
-                            <MudStack Row="true">
-                                <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
-                                <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudText Typo="Typo.body1">@context.Item.StartDate.ToShortDateString()</MudText>
-                                </MudStack>
-                            </MudStack>
-        
-                        </CellTemplate>
-                    </PropertyColumn>
-                    <PropertyColumn Property="x => x.EndDate" Title="@localizer["endDate"]">
-                        <CellTemplate>
-                            <MudStack Row="true">
-                                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small"/>
-                                <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudText Typo="Typo.body1">@context.Item.EndDate.ToShortDateString()</MudText>
-                                </MudStack>
-                            </MudStack>
-        
-                        </CellTemplate>
-                    </PropertyColumn>
-        
-        
-                </Columns>
-                <PagerContent>
-                    <MudDataGridPager T="Project"/>
-                </PagerContent>
-            </MudDataGrid>
-     
-
-    </MudItem>
-        
-        
-    </MudGrid>*@
     

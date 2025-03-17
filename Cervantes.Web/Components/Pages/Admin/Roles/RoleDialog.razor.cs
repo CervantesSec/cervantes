@@ -5,6 +5,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Admin.Roles;
@@ -12,7 +13,7 @@ namespace Cervantes.Web.Components.Pages.Admin.Roles;
 public partial class RoleDialog : ComponentBase
 {
     [Parameter] public RolesViewModel role { get; set; } 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
@@ -37,7 +38,7 @@ public partial class RoleDialog : ComponentBase
     {
         var parameters = new DialogParameters { ["role"]=roles };
 
-        var dialog =  Dialog.Show<DeleteRoleDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteRoleDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

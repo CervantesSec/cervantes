@@ -92,7 +92,7 @@ public partial class Roles : ComponentBase
     
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        IMudExDialogReference<CreateRole>? dlgReference = await DialogEx.ShowEx<CreateRole>("Simple Dialog", options);
+        IMudExDialogReference<CreateRole>? dlgReference = await Dialog.ShowEx<CreateRole>("Simple Dialog", options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -107,7 +107,7 @@ public partial class Roles : ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<RolesViewModel> args)
     {
         var parameters = new DialogParameters { ["role"]=args.Item };
-        IMudExDialogReference<RoleDialog>? dlgReference = await DialogEx.ShowEx<RoleDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<RoleDialog>? dlgReference = await Dialog.ShowEx<RoleDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -124,7 +124,7 @@ public partial class Roles : ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["roles"]=seleUsers };
 
-                var dialog =  Dialog.Show<DeleteRoleBulkDialog>("Edit", parameters,mediumWidth);
+                var dialog =  await Dialog.ShowEx<DeleteRoleBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

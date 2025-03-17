@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Microsoft.SemanticKernel;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 using TinyMCE.Blazor;
 using Task = System.Threading.Tasks.Task;
@@ -18,7 +19,7 @@ namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
 public partial class CreateReportComponentDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     [Parameter] public string type { get; set; }
 
     void Cancel() => MudDialog.Cancel();
@@ -152,7 +153,7 @@ public partial class CreateReportComponentDialog: ComponentBase
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
 
-        var dialog = Dialog.Show<AiDialog>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)

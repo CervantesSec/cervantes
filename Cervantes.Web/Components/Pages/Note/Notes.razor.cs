@@ -61,7 +61,7 @@ public partial class Notes: ComponentBase
     
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        IMudExDialogReference<CreateNoteDialog>? dlgReference = await DialogEx.ShowEx<CreateNoteDialog>("Simple Dialog", options);
+        IMudExDialogReference<CreateNoteDialog>? dlgReference = await Dialog.ShowEx<CreateNoteDialog>("Simple Dialog", options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -88,7 +88,7 @@ public partial class Notes: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Note> args)
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
-        IMudExDialogReference<NoteDialog>? dlgReference = await DialogEx.ShowEx<NoteDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<NoteDialog>? dlgReference = await Dialog.ShowEx<NoteDialog>("Simple Dialog", parameters, maxWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -129,7 +129,7 @@ public partial class Notes: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
 
-                var dialog =  Dialog.Show<DeleteNoteBulkDialog>("Edit", parameters,mediumWidth);
+                var dialog =  await Dialog.ShowEx<DeleteNoteBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

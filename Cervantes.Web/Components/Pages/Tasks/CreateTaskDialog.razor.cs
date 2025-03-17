@@ -67,7 +67,7 @@ public partial class CreateTaskDialog: ComponentBase
                 }}
             };
 	
-         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+         [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
      void Cancel() => MudDialog.Cancel();
      

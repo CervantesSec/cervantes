@@ -63,7 +63,7 @@ public partial class CreateVulnDialog: ComponentBase
                     new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
                 }}
             };
-         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+         [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 		[Parameter] public Guid project { get; set; }
      void Cancel() => MudDialog.Cancel();
      

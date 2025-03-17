@@ -13,7 +13,7 @@ public partial class ImportDialog: ComponentBase
 {
     private long maxFileSize = 1024 * 1024 * 5;
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     void Cancel() => MudDialog.Cancel();
     MudForm form;

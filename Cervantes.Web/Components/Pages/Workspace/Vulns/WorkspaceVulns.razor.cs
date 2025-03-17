@@ -79,7 +79,7 @@ public partial class WorkspaceVulns: ComponentBase
 
         var parameters = new DialogParameters { ["project"]=Project.Id };
 
-        IMudExDialogReference<CreateVulnDialog>? dlgReference = await DialogEx.ShowEx<CreateVulnDialog>("Simple Dialog", parameters, options);
+        IMudExDialogReference<CreateVulnDialog>? dlgReference = await DialogService.ShowEx<CreateVulnDialog>("Simple Dialog", parameters, options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -178,7 +178,7 @@ public partial class WorkspaceVulns: ComponentBase
     {
         var parameters = new DialogParameters { ["vuln"]=args.Item };
 
-        IMudExDialogReference<VulnDialog>? dlgReference = await DialogEx.ShowEx<VulnDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<VulnDialog>? dlgReference = await DialogService.ShowEx<VulnDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)

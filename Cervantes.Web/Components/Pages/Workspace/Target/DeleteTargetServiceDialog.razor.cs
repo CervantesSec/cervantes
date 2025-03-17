@@ -6,7 +6,7 @@ namespace Cervantes.Web.Components.Pages.Workspace.Target;
 
 public partial class DeleteTargetServiceDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

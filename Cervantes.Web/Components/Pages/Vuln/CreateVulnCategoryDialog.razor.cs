@@ -10,7 +10,7 @@ namespace Cervantes.Web.Components.Pages.Vuln;
 public partial class CreateVulnCategoryDialog: ComponentBase
 {
     [Inject] private VulnController _VulnController { get; set; }
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     void Cancel() => MudDialog.Cancel();
     MudForm form;
     VulnCategoryModelFluentValidator vulnValidator = new VulnCategoryModelFluentValidator();

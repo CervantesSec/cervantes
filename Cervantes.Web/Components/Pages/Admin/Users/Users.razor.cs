@@ -102,7 +102,7 @@ public partial class Users: ComponentBase
     
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        IMudExDialogReference<CreateUserDialog>? dlgReference = await DialogEx.ShowEx<CreateUserDialog>("Simple Dialog", options);
+        IMudExDialogReference<CreateUserDialog>? dlgReference = await Dialog.ShowEx<CreateUserDialog>("Simple Dialog", options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -117,7 +117,7 @@ public partial class Users: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<UserViewModel> args)
     {
         var parameters = new DialogParameters { ["userSelected"]=args.Item };
-        IMudExDialogReference<UserDialog>? dlgReference = await DialogEx.ShowEx<UserDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<UserDialog>? dlgReference = await Dialog.ShowEx<UserDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -164,7 +164,7 @@ public partial class Users: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["users"]=seleUsers };
 
-                var dialog =  Dialog.Show<DeleteUsersBulkDialog>("Edit", parameters,mediumWidth);
+                var dialog =  await Dialog.ShowEx<DeleteUsersBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

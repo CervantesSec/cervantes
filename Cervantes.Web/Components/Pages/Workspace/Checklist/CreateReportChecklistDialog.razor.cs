@@ -56,7 +56,7 @@ public partial class CreateReportChecklistDialog: ComponentBase
                 }}
             };
 	
-         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+         [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  [Parameter] public Guid project { get; set; }
  [Parameter] public string checklistType { get; set; }
  [Parameter] public Guid checklistId { get; set; }

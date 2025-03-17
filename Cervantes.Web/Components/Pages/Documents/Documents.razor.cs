@@ -79,7 +79,7 @@ public partial class Documents: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Document> args)
     {
         var parameters = new DialogParameters { ["document"]=args.Item};
-        IMudExDialogReference<DocumentDialog>? dlgReference = await DialogEx.ShowEx<DocumentDialog>("Simple Dialog", parameters,maxWidthEx);
+        IMudExDialogReference<DocumentDialog>? dlgReference = await Dialog.ShowEx<DocumentDialog>("Simple Dialog", parameters,maxWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -123,7 +123,7 @@ public partial class Documents: ComponentBase
     
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        IMudExDialogReference<DocumentCreateDialog>? dlgReference = await DialogEx.ShowEx<DocumentCreateDialog>("Simple Dialog", options);
+        IMudExDialogReference<DocumentCreateDialog>? dlgReference = await Dialog.ShowEx<DocumentCreateDialog>("Simple Dialog", options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -141,7 +141,7 @@ public partial class Documents: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["documents"]=seleDocs };
 
-                var dialog =  Dialog.Show<DocumentDeleteBulkDialog>("Edit", parameters,mediumWidth);
+                var dialog =  await Dialog.ShowEx<DocumentDeleteBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

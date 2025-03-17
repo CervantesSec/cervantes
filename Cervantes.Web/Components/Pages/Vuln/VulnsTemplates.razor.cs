@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
@@ -95,9 +96,9 @@ private async Task Update()
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
 
-        var dialog = DialogService.Show<CreateVulnDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<CreateVulnDialog>? dlgReference = await DialogService.ShowEx<CreateVulnDialog>("Simple Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();

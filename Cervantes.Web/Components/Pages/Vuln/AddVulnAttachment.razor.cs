@@ -29,7 +29,7 @@ public partial class AddVulnAttachment: ComponentBase
         {"contextmenu", "link image imagetools table"}
     };
     private IBrowserFile file { get; set; }
-      [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+      [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     void Cancel() => MudDialog.Cancel();
     MudForm form;

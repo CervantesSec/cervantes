@@ -7,6 +7,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Documents;
@@ -16,7 +17,7 @@ public partial class DocumentDialog: ComponentBase
     [Inject] private DocumentController _DocumentController { get; set; }
 
     private bool editMode = false;
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     void Cancel() => MudDialog.Cancel();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
@@ -84,7 +85,7 @@ public partial class DocumentDialog: ComponentBase
     private async Task DeleteDocument(CORE.Entities.Document document,DialogOptions options)
     {
         var parameters = new DialogParameters { ["document"]=document };
-        var dialog = Dialog.Show<DocumentDeleteDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<DocumentDeleteDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

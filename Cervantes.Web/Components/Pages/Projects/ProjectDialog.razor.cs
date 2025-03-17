@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using Microsoft.SemanticKernel;
 using MudBlazor;
+using MudBlazor.Extensions;
 using AiDialog = Cervantes.Web.Components.Shared.AiDialog;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
@@ -24,7 +25,7 @@ public partial class ProjectDialog : ComponentBase
 {
     [Parameter] public CORE.Entities.Project project { get; set; } = new CORE.Entities.Project();
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     [CascadingParameter] bool _isDarkMode { get; set; }
 
     private bool editMode = false;
@@ -187,7 +188,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["project"] = project };
 
-        var dialog = Dialog.Show<DeleteProjectDialog>("Edit", parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteProjectDialog>("Edit", parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -292,7 +293,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenProjectMembersDialog(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        var dialog = Dialog.Show<AddMembersProjectDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowAsync<AddMembersProjectDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -308,7 +309,7 @@ protected override async Task OnInitializedAsync()
         {
             var parameters = new DialogParameters { ["user"] = args.Item };
 
-            var dialog = Dialog.Show<DeleteProjectMemberDialog>("Edit", parameters, maxWidth);
+            var dialog = await Dialog.ShowEx<DeleteProjectMemberDialog>("Edit", parameters, maxWidth);
             var result = await dialog.Result;
 
             if (!result.Canceled)
@@ -332,7 +333,7 @@ protected override async Task OnInitializedAsync()
             case 0:
                 var parameters = new DialogParameters { ["users"] = seleMembers };
 
-                var dialog = Dialog.Show<DeleteProjectMemberBulkDialog>("Edit", parameters, maxWidth);
+                var dialog = await Dialog.ShowEx<DeleteProjectMemberBulkDialog>("Edit", parameters, maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -352,7 +353,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogTaskCreate(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        var dialog = Dialog.Show<CreateTaskDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<CreateTaskDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -366,7 +367,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["task"] = args.Item };
 
-        var dialog = Dialog.Show<TaskDialog>(args.Item.Name, parameters, maxWidth);
+        var dialog = await Dialog.ShowEx<TaskDialog>(args.Item.Name, parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -405,7 +406,7 @@ protected override async Task OnInitializedAsync()
             case 0:
                 var parameters = new DialogParameters { ["tasks"] = seleTasks };
 
-                var dialog = Dialog.Show<DeleteTaskBulkDialog>("Edit", parameters, maxWidth);
+                var dialog = await Dialog.ShowEx<DeleteTaskBulkDialog>("Edit", parameters, maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -462,7 +463,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogVulnCreate(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        var dialog = Dialog.Show<CreateVulnDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<CreateVulnDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -476,7 +477,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["vuln"] = args.Item };
 
-        var dialog = Dialog.Show<VulnDialog>(args.Item.Name, parameters, maxWidth);
+        var dialog = await Dialog.ShowEx<VulnDialog>(args.Item.Name, parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -498,7 +499,7 @@ protected override async Task OnInitializedAsync()
             case 0:
                 var parameters = new DialogParameters { ["vulns"] = seleVulns };
 
-                var dialog = Dialog.Show<DeleteVulnBulkDialog>("Edit", parameters, maxWidth);
+                var dialog = await Dialog.ShowEx<DeleteVulnBulkDialog>("Edit", parameters, maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -514,7 +515,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogImport(DialogOptions options)
     {
 
-        var dialog = Dialog.Show<ImportVulnDialog>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<ImportVulnDialog>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -532,7 +533,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["target"]=args.Item };
 
-        var dialog =  Dialog.Show<TargetDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<TargetDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -592,7 +593,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
 
-        var dialog = Dialog.Show<ImportDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<ImportDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -606,7 +607,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
 
-        var dialog = Dialog.Show<CreateTargetDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<CreateTargetDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -624,7 +625,7 @@ protected override async Task OnInitializedAsync()
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
 
-                var dialog =  Dialog.Show<DeleteTargetBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteTargetBulkDialog>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -649,7 +650,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
 
-        var dialog =  Dialog.Show<ProjectNoteDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<ProjectNoteDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -678,7 +679,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
 
-        var dialog = Dialog.Show<CreateProjectNoteDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<CreateProjectNoteDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -696,7 +697,7 @@ protected override async Task OnInitializedAsync()
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
 
-                var dialog =  Dialog.Show<DeleteProjectNoteBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteProjectNoteBulkDialog>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -722,7 +723,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["attachment"]=args.Item };
 
-        var dialog =  Dialog.Show<ProjectAttachmentDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<ProjectAttachmentDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -749,7 +750,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
 
-        var dialog = Dialog.Show<AddProjectAttachmentDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<AddProjectAttachmentDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -767,7 +768,7 @@ protected override async Task OnInitializedAsync()
             case 0:
                 var parameters = new DialogParameters { ["attachments"]=seleAttachments };
 
-                var dialog =  Dialog.Show<DeleteProjectAttachmentBulk>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteProjectAttachmentBulk>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -792,7 +793,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["report"]=args.Item };
 
-        var dialog =  Dialog.Show<ReportDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<ReportDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -825,7 +826,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
 
-        var dialog = Dialog.Show<CreateReportDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<CreateReportDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -843,7 +844,7 @@ protected override async Task OnInitializedAsync()
             case 0:
                 var parameters = new DialogParameters { ["reports"]=seleReports };
 
-                var dialog =  Dialog.Show<DeleteReportBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteReportBulkDialog>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)
@@ -868,7 +869,7 @@ protected override async Task OnInitializedAsync()
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
 
-        var dialog = Dialog.Show<AiDialog>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -883,7 +884,7 @@ protected override async Task OnInitializedAsync()
     {
         var parameters = new DialogParameters { ["project"]=project };
 
-        var dialog = Dialog.Show<ExecutiveAiDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<ExecutiveAiDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)

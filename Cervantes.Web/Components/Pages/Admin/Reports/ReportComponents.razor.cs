@@ -73,7 +73,7 @@ public partial class ReportComponents: ComponentBase
     private async Task OpenDialogCreate(DialogOptionsEx options, string type)
     {
         var parameters = new DialogParameters { ["type"]=type };
-        IMudExDialogReference<CreateReportComponentDialog>? dlgReference = await DialogEx.ShowEx<CreateReportComponentDialog>("Simple Dialog", parameters, options);
+        IMudExDialogReference<CreateReportComponentDialog>? dlgReference = await Dialog.ShowEx<CreateReportComponentDialog>("Simple Dialog", parameters, maxWidthEx);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -101,7 +101,7 @@ public partial class ReportComponents: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.ReportComponents> args)
     {
         var parameters = new DialogParameters { ["component"]=args.Item };
-        IMudExDialogReference<ReportComponentsDialog>? dlgReference = await DialogEx.ShowEx<ReportComponentsDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<ReportComponentsDialog>? dlgReference = await Dialog.ShowEx<ReportComponentsDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -118,7 +118,7 @@ public partial class ReportComponents: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["components"]=seleComponents };
 
-                var dialog =  Dialog.Show<DeleteReportComponentBulkDialog>("Edit", parameters,mediumWidth);
+                var dialog =   await Dialog.ShowAsync<DeleteReportComponentBulkDialog>("Edit", parameters,mediumWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

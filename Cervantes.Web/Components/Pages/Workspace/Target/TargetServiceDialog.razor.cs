@@ -5,6 +5,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Target;
@@ -14,7 +15,7 @@ public partial class TargetServiceDialog: ComponentBase
     [Parameter] public CORE.Entities.TargetServices service { get; set; }
     public TargetServiceEditViewModel model { get; set; }
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
@@ -105,7 +106,7 @@ public partial class TargetServiceDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["service"]=service };
 
-        var dialog =  Dialog.Show<DeleteTargetServiceDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteTargetServiceDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

@@ -5,6 +5,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -17,7 +18,7 @@ public partial class TargetDialog: ComponentBase
     private List<TargetServices> Services = new List<TargetServices>();  
     private List<TargetServices> seleServices = new List<TargetServices>();  
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private bool editMode = false;
     void Cancel() => MudDialog.Cancel();
@@ -95,7 +96,7 @@ public partial class TargetDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["target"]=target };
 
-        var dialog =  Dialog.Show<DeleteTargetDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteTargetDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -169,7 +170,7 @@ public partial class TargetDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["service"]=args.Item };
 
-        var dialog =  Dialog.Show<TargetServiceDialog>("Edit", parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<TargetServiceDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -233,7 +234,7 @@ public partial class TargetDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["target"]=target.Id };
 
-        var dialog = Dialog.Show<CreateTargetServiceDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<CreateTargetServiceDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -251,7 +252,7 @@ public partial class TargetDialog: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["services"]=seleServices };
 
-                var dialog =  Dialog.Show<DeleteTargetServiceBulkDialog>("Edit", parameters,maxWidth);
+                var dialog =  await Dialog.ShowEx<DeleteTargetServiceBulkDialog>("Edit", parameters,maxWidth);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

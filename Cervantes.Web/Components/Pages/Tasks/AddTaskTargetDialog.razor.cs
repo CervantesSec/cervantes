@@ -17,7 +17,7 @@ namespace Cervantes.Web.Components.Pages.Tasks;
 public partial class AddTaskTargetDialog : ComponentBase
 {
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     void Cancel() => MudDialog.Cancel();
     MudForm form;

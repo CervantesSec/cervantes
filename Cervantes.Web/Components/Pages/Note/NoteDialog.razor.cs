@@ -5,6 +5,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Note;
@@ -14,7 +15,7 @@ public partial class NoteDialog: ComponentBase
     [Inject] private NoteController _NoteController { get; set; }
     [Parameter] public CORE.Entities.Note note { get; set; }
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private NoteEditViewModel model = new NoteEditViewModel();
     void Cancel() => MudDialog.Cancel();
@@ -143,7 +144,7 @@ public partial class NoteDialog: ComponentBase
     private async Task DeleteNoteDialog(CORE.Entities.Note note,DialogOptions options)
     {
         var parameters = new DialogParameters { ["note"]=note };
-        var dialog = Dialog.Show<DeleteNoteDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteNoteDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

@@ -26,7 +26,7 @@ public partial class EditDialog: ComponentBase
 		{"contextmenu", "link image imagetools table"}
 	};
 	
-         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+         [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
      void Cancel() => MudDialog.Cancel();
      

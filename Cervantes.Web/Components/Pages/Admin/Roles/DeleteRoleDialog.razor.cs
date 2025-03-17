@@ -7,7 +7,7 @@ namespace Cervantes.Web.Components.Pages.Admin.Roles;
 
 public partial class DeleteRoleDialog : ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

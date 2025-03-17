@@ -63,7 +63,7 @@ public partial class CreateNoteDialog: ComponentBase
                 }}
             };
 	
-         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+         [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
      void Cancel() => MudDialog.Cancel();
      private static IBrowserFile file;

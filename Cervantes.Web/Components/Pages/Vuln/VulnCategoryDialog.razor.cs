@@ -5,6 +5,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
@@ -14,7 +15,7 @@ public partial class VulnCategoryDialog: ComponentBase
      [Inject] private VulnController _vulnController { get; set; }
     [Parameter] public CORE.Entities.VulnCategory category { get; set; }
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private VulnCategoryEdit model = new VulnCategoryEdit();
     void Cancel() => MudDialog.Cancel();
@@ -73,7 +74,7 @@ public partial class VulnCategoryDialog: ComponentBase
     private async Task DeleteVulnCategoryDialog(CORE.Entities.VulnCategory category,DialogOptions options)
     {
         var parameters = new DialogParameters { ["category"]=category };
-        var dialog = Dialog.Show<DeleteVulnCategoryDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteVulnCategoryDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

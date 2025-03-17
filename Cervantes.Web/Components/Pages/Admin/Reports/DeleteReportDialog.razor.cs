@@ -11,7 +11,7 @@ namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
 public partial class DeleteReportDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
     void Cancel() => MudDialog.Cancel();
      

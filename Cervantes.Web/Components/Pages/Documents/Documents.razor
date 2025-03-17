@@ -10,7 +10,6 @@
 @using MudBlazor.Extensions.Core
 @using Color = MudBlazor.Color
 @inject IStringLocalizer<Resource> localizer
-@inject IMudExDialogService DialogEx
 @inject AuthenticationStateProvider authenticationStateProvider
 @attribute [HasPermission(Permissions.DocumentsRead)]
 
@@ -89,6 +88,12 @@
                 </PropertyColumn>
                 <PropertyColumn Property="x => x.CreatedDate.ToShortDateString()" Title="@localizer["createdDate"]"/>
             </Columns>
+            <NoRecordsContent>
+                <MudStack Spacing="3" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.LibraryBooks" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
+                </MudStack>
+            </NoRecordsContent>
             <PagerContent>
                 <MudDataGridPager T="CORE.Entities.Document"/>
             </PagerContent>

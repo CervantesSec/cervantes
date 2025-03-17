@@ -4,13 +4,14 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
 
 public partial class KnowledgeCategoryDialog: ComponentBase
 {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     [Inject] ISnackbar Snackbar { get; set; }
     [Inject] private KnowledgeBaseController _KnowledgeBaseController { get; set; }
     private string searchString = "";
@@ -35,7 +36,7 @@ public partial class KnowledgeCategoryDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["category"]=args.Item };
 
-        var dialog =  Dialog.Show<EditKnowledgeCategoryDialog>(@localizer["deleteTarget"], parameters, maxWidth);
+        var dialog =  await Dialog.ShowEx<EditKnowledgeCategoryDialog>(@localizer["deleteTarget"], parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -59,7 +60,7 @@ public partial class KnowledgeCategoryDialog: ComponentBase
     async Task AddCategory(DialogOptions options)
     {
 
-        var dialog =  Dialog.Show<CreateKnowledgeCategoryDialog>("Edit", options);
+        var dialog =  await Dialog.ShowEx<CreateKnowledgeCategoryDialog>("Edit", options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

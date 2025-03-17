@@ -8,13 +8,14 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.SemanticKernel;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
 public partial class ReportComponentsDialog: ComponentBase
 {
-     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+     [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     [Parameter] public CORE.Entities.ReportComponents component { get; set; }
     void Cancel() => MudDialog.Cancel();
      
@@ -151,7 +152,7 @@ public partial class ReportComponentsDialog: ComponentBase
     {
         var parameters = new DialogParameters { ["component"]=component };
 
-        var dialog =  Dialog.Show<DeleteReportComponentDialog>("Edit", parameters,options);
+        var dialog =  await Dialog.ShowEx<DeleteReportComponentDialog>("Edit", parameters,options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -164,7 +165,7 @@ public partial class ReportComponentsDialog: ComponentBase
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
 
-        var dialog = Dialog.Show<AiDialog>("Custom Options Dialog", options);
+        var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)

@@ -1998,4 +1998,7 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="noImpact" xml:space="preserve">
         <value>Sin Impacto</value>
     </data>
+    <data name="noData" xml:space="preserve">
+        <value>No hay Datos</value>
+    </data>
 </root>

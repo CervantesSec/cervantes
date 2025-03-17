@@ -6,6 +6,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Vault;
@@ -15,7 +16,7 @@ public partial class VaultDialog: ComponentBase
     [Inject] private VaultController _VaultController { get; set; }
     [Parameter] public CORE.Entities.Vault vault { get; set; } 
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private VaultEditViewModel model = new VaultEditViewModel();
     void Cancel() => MudDialog.Cancel();
@@ -145,7 +146,7 @@ public partial class VaultDialog: ComponentBase
     private async Task DeleteVaultDialog(CORE.Entities.Vault item,DialogOptions options)
     {
         var parameters = new DialogParameters { ["vault"]=item };
-        var dialog = Dialog.Show<DeleteVaultDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteVaultDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

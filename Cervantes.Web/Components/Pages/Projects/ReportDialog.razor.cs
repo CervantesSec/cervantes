@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Microsoft.SemanticKernel;
 using MudBlazor;
+using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -24,7 +25,7 @@ public partial class ReportDialog: ComponentBase
     [Inject] private UserController _UserController { get; set; }
     [Parameter] public CORE.Entities.Report report { get; set; }
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     void Cancel() => MudDialog.Cancel();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
@@ -123,7 +124,7 @@ public partial class ReportDialog: ComponentBase
     private async Task DeleteReport(CORE.Entities.Report report ,DialogOptions options)
     {
         var parameters = new DialogParameters { ["report"]=report };
-        var dialog = Dialog.Show<DeleteReportDialog>(@localizer["addMember"], parameters, options);
+        var dialog = await Dialog.ShowEx<DeleteReportDialog>(@localizer["addMember"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -137,7 +138,7 @@ public partial class ReportDialog: ComponentBase
     {
 
         var parameters = new DialogParameters { ["report"]=report };
-        var dialog = Dialog.Show<DownloadReportDialog>(@localizer["addMember"], parameters, maxWidth);
+        var dialog = await Dialog.ShowEx<DownloadReportDialog>(@localizer["addMember"], parameters, maxWidth);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -198,7 +199,7 @@ public partial class ReportDialog: ComponentBase
             {
                 //var parameters = new DialogParameters { ["project"]=SelectedProject };
 
-                var dialog = Dialog.Show<AiDialog>("Custom Options Dialog", options);
+                var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
                 // wait modal to close
                 var result = await dialog.Result;
                 if (!result.Canceled)
