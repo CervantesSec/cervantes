@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AngleSharp" Version="1.1.2" />
+        <PackageReference Include="AngleSharp" Version="1.2.0" />
         <PackageReference Include="AuthPermissions.AspNetCore" Version="8.0.0" />
         <PackageReference Include="Blazor-ApexCharts" Version="5.1.0" />
         <PackageReference Include="Blazor.Flags" Version="1.0.0.1" />
@@ -25,7 +25,7 @@
         <PackageReference Include="Hangfire.PostgreSql" Version="1.20.10" />
         <PackageReference Include="Heron.MudCalendar" Version="3.0.0" />
         <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
-        <PackageReference Include="HtmlToOpenXml.dll" Version="3.2.2" />
+        <PackageReference Include="HtmlToOpenXml.dll" Version="3.2.3" />
         <PackageReference Include="Markdig" Version="0.40.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.14" />
         <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.2.0" />
