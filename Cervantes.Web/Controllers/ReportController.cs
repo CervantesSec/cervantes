@@ -1190,6 +1190,44 @@ public static string ReplaceTableRowWithFor(string htmlContent)
                                         await converter.ParseFooter(footerHtml);
                                     }
                                     
+                                    //get images from body and checks if there's any img without style width
+                                    var htmlDoc3 = new HtmlDocument();
+                                    htmlDoc3.LoadHtml(updatedHtmlCode);
+
+                                    var images = htmlDoc3.DocumentNode.SelectNodes("//img");
+                                    if (images != null)
+                                    {
+                                        foreach (var img in images)
+                                        {
+                                            var style = img.GetAttributeValue("style", "");
+                                            var styleDict = style.Split(';')
+                                                .Where(s => !string.IsNullOrWhiteSpace(s))
+                                                .Select(s => s.Split(':'))
+                                                .Where(p => p.Length == 2)
+                                                .ToDictionary(
+                                                    p => p[0].Trim().ToLower(),
+                                                    p => p[1].Trim(),
+                                                    StringComparer.OrdinalIgnoreCase);
+
+                                            // Asegurar width:100% si no está definido
+                                            if (!styleDict.ContainsKey("width"))
+                                                styleDict["width"] = "100%";
+
+                                            // Asegurar height:auto para mantener proporciones
+                                            if (!styleDict.ContainsKey("height"))
+                                                styleDict["height"] = "auto";
+
+                                            // Asegurar max-width:100% para responsividad
+                                            /*if (!styleDict.ContainsKey("max-width"))
+                                                styleDict["max-width"] = "100%";*/
+
+                                            // Reconstruir el atributo style
+                                            img.SetAttributeValue("style", 
+                                                string.Join("; ", styleDict.Select(kv => $"{kv.Key}: {kv.Value}")));
+                                        }
+                                    }
+
+                                    updatedHtmlCode = htmlDoc3.DocumentNode.OuterHtml;
                                     await converter.ParseBody(updatedHtmlCode);
 
                                     mainPart.Document.Save();
