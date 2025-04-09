@@ -70,7 +70,7 @@
         }
         @if (user.HasPermission(Permissions.VulnsRead))
         {
-            <MudNavLink Icon="@Icons.Material.Filled.BugReport" Href="@($"/workspace/{project}/vulns")" Match="NavLinkMatch.All">@localizer["vulnerabilities"]</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.BugReport" Href="@($"/workspace/{project}/vulns")" Match="NavLinkMatch.All">@localizer["vulns"]</MudNavLink>
 
         }
         @if (user.HasPermission(Permissions.VaultRead))
