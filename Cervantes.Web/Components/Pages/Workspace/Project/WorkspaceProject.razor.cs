@@ -445,7 +445,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogVulnCreate(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        var dialog = await Dialog.ShowEx<CreateTaskDialog>("Custom Options Dialog", parameters, options);
+        var dialog = await Dialog.ShowEx<CreateVulnDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
