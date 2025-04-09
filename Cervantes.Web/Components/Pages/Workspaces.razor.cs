@@ -5,6 +5,8 @@ using Cervantes.Web.Components.Pages.Projects;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages;
@@ -42,7 +44,7 @@ public partial class Workspaces: ComponentBase
     {
         var parameters = new DialogParameters { ["project"]=project };
 
-        var dialog =  DialogService.Show<ProjectDialog>(@localizer["delete"], parameters,options);
+        var dialog =  await DialogService.ShowEx<ProjectDialog>(@localizer["delete"], parameters,maxWidthEx);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -51,12 +53,28 @@ public partial class Workspaces: ComponentBase
             StateHasChanged();
         }
     }
-    
+    DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.CenterRight,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     async Task Client(Client client,DialogOptions options)
     {
         var parameters = new DialogParameters { ["client"]=client };
 
-        var dialog =  DialogService.Show<ClientDialog>(@localizer["delete"], parameters,options);
+        var dialog =  await DialogService.ShowEx<ClientDialog>(@localizer["delete"], parameters,maxWidthEx);
         var result = await dialog.Result;
 
         if (!result.Canceled)

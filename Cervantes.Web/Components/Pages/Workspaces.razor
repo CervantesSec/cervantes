@@ -95,7 +95,15 @@
                             </MudTooltip>
 
                             <MudTooltip Text="@localizer["client"]" Placement="Placement.End">
-                                <MudIconButton Icon="@Icons.Material.Filled.BusinessCenter" Color="Color.Default" OnClick="@((e) => Client(@pro.Client, maxWidth))"/>
+                                
+                                <MudButton Variant="Variant.Text" Icon="@Icons.Material.Filled.BusinessCenter" Color="Color.Default" OnClick="@((e) => Client(@pro.Client, maxWidth))">
+                                    <MudStack Row="true">
+                                        <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.BusinessCenter">
+
+                                        </MudIcon> @pro.Client.Name
+                                    </MudStack>
+                                    
+                                </MudButton>
                             </MudTooltip>
                             
                         </MudCardActions>
