@@ -17,12 +17,13 @@
         <PackageReference Include="BlazorMonaco" Version="3.3.0" />
         <PackageReference Include="BouncyCastle.Cryptography" Version="2.5.1" />
         <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="8.0.0" />
+        <PackageReference Include="CodeHollow.FeedReader" Version="1.2.6" />
         <PackageReference Include="FluentValidation" Version="11.11.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
         <PackageReference Include="Hangfire" Version="1.8.18" />
         <PackageReference Include="Hangfire.AspNetCore" Version="1.8.18" />
         <PackageReference Include="Hangfire.Core" Version="1.8.18" />
-        <PackageReference Include="Hangfire.PostgreSql" Version="1.20.10" />
+        <PackageReference Include="Hangfire.PostgreSql" Version="1.20.12" />
         <PackageReference Include="Heron.MudCalendar" Version="3.0.0" />
         <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
         <PackageReference Include="HtmlToOpenXml.dll" Version="3.2.3" />
@@ -43,8 +44,8 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MudBlazor" Version="8.3.0" />
-        <PackageReference Include="MudBlazor.Extensions" Version="8.2.1" />
+        <PackageReference Include="MudBlazor" Version="8.5.1" />
+        <PackageReference Include="MudBlazor.Extensions" Version="8.5.0" />
         <PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="2.0.6" />
         <PackageReference Include="NLog" Version="5.4.0" />
         <PackageReference Include="NLog.Appsettings.Standard" Version="2.1.0" />
@@ -54,7 +55,7 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
         <PackageReference Include="PreMailer.Net" Version="2.6.0" />
         <PackageReference Include="Scriban" Version="6.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.0" />
         <PackageReference Include="TinyMCE.Blazor" Version="2.0.0" />
     </ItemGroup>
 
