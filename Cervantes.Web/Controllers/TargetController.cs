@@ -117,6 +117,7 @@ public class TargetController : ControllerBase
                 target.Id = Guid.NewGuid();
                 target.Name = sanitizer.Sanitize(model.Name);
                 target.Description = sanitizer.Sanitize(model.Description);
+                target.Type = model.Type;
                 target.ProjectId = model.ProjectId;
                 target.UserId = aspNetUserId;
 
