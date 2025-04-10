@@ -382,6 +382,7 @@ public class TaskController: ControllerBase
         }
     }
     
+    [NonAction]
     public async Task<IActionResult> AssignToMe([FromBody] TaskAssignToMeViewModel task)
     {
         try

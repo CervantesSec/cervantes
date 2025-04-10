@@ -987,9 +987,10 @@ public class ReportController : ControllerBase
                 aspNetUserId);
             throw;
         }
-    }
+    } 
     
-public static string ReplaceTableRowWithFor(string htmlContent)
+    [NonAction] 
+private static string ReplaceTableRowWithFor(string htmlContent)
 {
     string pattern = @"<table[^>]*>.*?<tbody>\s*(.*?)\s*</tbody>.*?</table>";
     
@@ -1466,7 +1467,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
     }
     
     [HttpPost]
-    [Route("Template")]
+    [Route("Import")]
     [HasPermission(Permissions.ReportTemplatesRead)]
     public async Task<ReportImportResultViewModel> Import([FromBody] ReportImportViewModel model)
     {
@@ -1512,6 +1513,7 @@ public static string ReplaceTableRowWithFor(string htmlContent)
         }
     }
    
+    [NonAction]
     private static string StreamToBase64(System.IO.Stream stream) {
         var memoryStream = new System.IO.MemoryStream();
         stream.CopyTo(memoryStream);

@@ -37,11 +37,11 @@ public class UserController: ControllerBase
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private string link;
-private IFileCheck fileCheck;
-private IEmailService emailService;
-private IAuthRolesAdminService authRolesAdminService;
-private IAuthUsersAdminService authUsersAdminService;
-private Sanitizer sanitizer;
+    private IFileCheck fileCheck;
+    private IEmailService emailService;
+    private IAuthRolesAdminService authRolesAdminService;
+    private IAuthUsersAdminService authUsersAdminService;
+    private Sanitizer sanitizer;
     /// <summary>
     /// UserController Constructor
     /// </summary>
