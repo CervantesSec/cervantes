@@ -56,6 +56,7 @@ using Microsoft.AspNetCore.Authentication;
 using RunMethodsSequentially;
 using IndividualAccountUserLookup = Cervantes.Web.AuthPermissions.IndividualAccountUserLookup;
 using SyncIndividualAccountUsers = Cervantes.Web.AuthPermissions.SyncIndividualAccountUsers;
+using Task = System.Threading.Tasks.Task;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,10 +98,41 @@ if (builder.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
         });
 }
 
-builder.Services.ConfigureApplicationCookie(options =>
+/*builder.Services.ConfigureApplicationCookie(options =>
 {
     //this will cause all the logged-in users to have their claims periodically updated
     options.Events.OnValidatePrincipal = PeriodicCookieEvent.PeriodicRefreshUsersClaims;
+});*/
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnValidatePrincipal = PeriodicCookieEvent.PeriodicRefreshUsersClaims;
+    options.Events.OnRedirectToLogin = context =>
+    {
+        // Check if the request is for the API
+        if (context.Request.Path.StartsWithSegments("/api"))
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        }
+
+        // For non-API requests, continue with the redirect
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
+
+    // Also handle other redirects
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api"))
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        }
+
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
 });
 
 builder.Services.AddAuthorization();
@@ -242,6 +274,7 @@ builder.Services.AddScoped<IChatManager, ChatManager>();
 builder.Services.AddScoped<IChatMessageManager, ChatMessageManager>();
 builder.Services.AddScoped<IRssNewsManager, RssNewsManager>();
 builder.Services.AddScoped<IRssSourceManager, RssSourceManager>();
+builder.Services.AddScoped<IRssCategoryManager, RssCategoryManager>();
 
 builder.Services.AddScoped<Sanitizer>();
 builder.Services.AddScoped<ClientsController>();
@@ -264,9 +297,32 @@ builder.Services.AddScoped<VaultController>();
 builder.Services.AddScoped<SearchController>();
 builder.Services.AddScoped<JiraController>();
 builder.Services.AddScoped<ChatController>();
+builder.Services.AddScoped<RssController>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cervantes API", Version = "v1" });
+    c.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "basic",
+        In = ParameterLocation.Header,
+        Description = "Enter your username and password as Base64 encoded value in the format 'username:password'."
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Basic"
+                }
+            },
+            new string[] { }
+        }
+    });
 });
 
 var app = builder.Build();
@@ -274,6 +330,7 @@ app.Use(MudExWebApp.MudExMiddleware);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
     app.UseSwagger();
     app.UseSwaggerUI(options =>
@@ -299,6 +356,7 @@ var localizationOptions = new RequestLocalizationOptions()
 
 app.UseRequestLocalization(localizationOptions);
 app.UseRouting();
+app.UseBasicAuthForApi();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
