@@ -348,7 +348,7 @@ else
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-var supportedCultures = new[] { "en-US", "es-ES","pt-PT" };
+var supportedCultures = new[] { "en-US", "es-ES","pt-PT", "tr-TR" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture(supportedCultures[0])
     .AddSupportedCultures(supportedCultures)
