@@ -15,6 +15,12 @@
                     <MudText Typo="Typo.body2">@localizer["english"]</MudText>
                 </MudStack>
                 break;
+            case "tr-TR":
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIcon>
+                    <MudText Typo="Typo.body2">@localizer["turkish"]</MudText>
+                </MudStack>
+                break;
             case "es-ES":
                 <MudStack Row="true" AlignItems="AlignItems.Center">
                     <MudIcon Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIcon>
@@ -32,6 +38,7 @@
     </ActivatorContent>
     <ChildContent>
         <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[0]))">@localizer["english"]</MudMenuItem>
+        <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[3]))">@localizer["turkish"]</MudMenuItem>
         <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[1]))">@localizer["spanish"]</MudMenuItem>
         <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[2]))">@localizer["portuguese"]</MudMenuItem>
 
