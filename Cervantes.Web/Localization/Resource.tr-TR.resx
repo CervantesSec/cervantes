@@ -1,0 +1,1963 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+            <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+            <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+            <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+            <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="calendar" xml:space="preserve">
+        <value>Takvim</value>
+    </data>
+    <data name="back" xml:space="preserve">
+        <value>Geri</value>
+    </data>
+    <data name="home" xml:space="preserve">
+        <value>Ana Sayfa</value>
+    </data>
+    <data name="profile" xml:space="preserve">
+        <value>Profil</value>
+    </data>
+    <data name="notes" xml:space="preserve">
+        <value>Notlar</value>
+    </data>
+    <data name="signout" xml:space="preserve">
+        <value>Oturumu Kapat</value>
+    </data>
+    <data name="workspaces" xml:space="preserve">
+        <value>Çalışma Alanlarım</value>
+    </data>
+    <data name="projects" xml:space="preserve">
+        <value>Projeler</value>
+    </data>
+    <data name="clients" xml:space="preserve">
+        <value>Müşteriler</value>
+    </data>
+    <data name="documents" xml:space="preserve">
+        <value>Belgeler</value>
+    </data>
+    <data name="tasks" xml:space="preserve">
+        <value>Görevler</value>
+    </data>
+    <data name="vulns" xml:space="preserve">
+        <value>Güvenlik Açıkları</value>
+    </data>
+    <data name="organization" xml:space="preserve">
+        <value>Organizasyon</value>
+    </data>
+    <data name="reportTemplates" xml:space="preserve">
+        <value>Rapor Şablonları</value>
+    </data>
+    <data name="users" xml:space="preserve">
+        <value>Kullanıcılar</value>
+    </data>
+    <data name="completed" xml:space="preserve">
+        <value>Tamamlandı</value>
+    </data>
+    <data name="create" xml:space="preserve">
+        <value>Oluştur</value>
+    </data>
+    <data name="name" xml:space="preserve">
+        <value>Ad</value>
+    </data>
+    <data name="client" xml:space="preserve">
+        <value>Müşteri</value>
+    </data>
+    <data name="language" xml:space="preserve">
+        <value>Dil</value>
+    </data>
+    <data name="type" xml:space="preserve">
+        <value>Tür</value>
+    </data>
+    <data name="status" xml:space="preserve">
+        <value>Durum</value>
+    </data>
+    <data name="startDate" xml:space="preserve">
+        <value>Başlangıç Tarihi</value>
+    </data>
+    <data name="endDate" xml:space="preserve">
+        <value>Bitiş Tarihi</value>
+    </data>
+    <data name="options" xml:space="preserve">
+        <value>Seçenekler</value>
+    </data>
+    <data name="english" xml:space="preserve">
+        <value>İngilizce</value>
+    </data>
+    <data name="español" xml:space="preserve">
+        <value>İspanyolca</value>
+    </data>
+    <data name="turkish" xml:space="preserve">
+        <value>Türkçe</value>
+    </data>
+    <data name="active" xml:space="preserve">
+        <value>Aktif</value>
+    </data>
+    <data name="archived" xml:space="preserve">
+        <value>Arşivlendi</value>
+    </data>
+    <data name="waiting" xml:space="preserve">
+        <value>Beklemede</value>
+    </data>
+    <data name="blackbox" xml:space="preserve">
+        <value>Kara Kutu</value>
+    </data>
+    <data name="graybox" xml:space="preserve">
+        <value>Gri Kutu</value>
+    </data>
+    <data name="whitebox" xml:space="preserve">
+        <value>Beyaz Kutu</value>
+    </data>
+    <data name="search" xml:space="preserve">
+        <value>Ara</value>
+    </data>
+    <data name="createProject" xml:space="preserve">
+        <value>Proje Oluştur</value>
+    </data>
+    <data name="template" xml:space="preserve">
+        <value>Şablon</value>
+    </data>
+    <data name="findingsId" xml:space="preserve">
+        <value>Bulgu Kimliği</value>
+    </data>
+    <data name="selectClient" xml:space="preserve">
+        <value>Müşteri Seç</value>
+    </data>
+    <data name="score" xml:space="preserve">
+        <value>Puan</value>
+    </data>
+    <data name="cancel" xml:space="preserve">
+        <value>İptal</value>
+    </data>
+    <data name="projectCreated" xml:space="preserve">
+        <value>Proje başarıyla oluşturuldu!</value>
+    </data>
+    <data name="projectCreatedError" xml:space="preserve">
+        <value>Proje oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="add" xml:space="preserve">
+        <value>Ekle</value>
+    </data>
+    <data name="noFiles" xml:space="preserve">
+        <value>Dosya yok</value>
+    </data>
+    <data name="uploadFile" xml:space="preserve">
+        <value>Dosya Yükle</value>
+    </data>
+    <data name="addAttachment" xml:space="preserve">
+        <value>Ek başarıyla eklendi!</value>
+    </data>
+    <data name="addAttachmentError" xml:space="preserve">
+        <value>Ek eklenirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteAttachment" xml:space="preserve">
+        <value>Eki Sil</value>
+    </data>
+    <data name="delete" xml:space="preserve">
+        <value>Sil</value>
+    </data>
+    <data name="attachmentDeleted" xml:space="preserve">
+        <value>Ek başarıyla silindi!</value>
+    </data>
+    <data name="attachmentDeletedError" xml:space="preserve">
+        <value>Ek silinirken bir hata oluştu!</value>
+    </data>
+    <data name="targetCreated" xml:space="preserve">
+        <value>Hedef başarıyla oluşturuldu!</value>
+    </data>
+    <data name="targetCreatedError" xml:space="preserve">
+        <value>Hedef oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="deleteClient" xml:space="preserve">
+        <value>Müşteriyi Sil</value>
+    </data>
+    <data name="projectDeleted" xml:space="preserve">
+        <value>Proje başarıyla silindi!</value>
+    </data>
+    <data name="projectDeletedError" xml:space="preserve">
+        <value>Proje silinirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteMember" xml:space="preserve">
+        <value>Üyeyi Sil</value>
+    </data>
+    <data name="memberDeleted" xml:space="preserve">
+        <value>Üye başarıyla silindi!</value>
+    </data>
+    <data name="memberDeletedError" xml:space="preserve">
+        <value>Üye silinirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteNote" xml:space="preserve">
+        <value>Notu Sil</value>
+    </data>
+    <data name="deletedNote" xml:space="preserve">
+        <value>Not başarıyla silindi!</value>
+    </data>
+    <data name="deletedNoteError" xml:space="preserve">
+        <value>Not silinirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteTarget" xml:space="preserve">
+        <value>Hedefi Sil</value>
+    </data>
+    <data name="deletedTarget" xml:space="preserve">
+        <value>Hedef başarıyla silindi!</value>
+    </data>
+    <data name="deletedTargetError" xml:space="preserve">
+        <value>Hedef silinirken bir hata oluştu!</value>
+    </data>
+    <data name="contactEmail" xml:space="preserve">
+        <value>İletişim E-postası</value>
+    </data>
+    <data name="contactName" xml:space="preserve">
+        <value>İletişim Adı</value>
+    </data>
+    <data name="contactPhone" xml:space="preserve">
+        <value>İletişim Telefonu</value>
+    </data>
+    <data name="description" xml:space="preserve">
+        <value>Açıklama</value>
+    </data>
+    <data name="projectInformation" xml:space="preserve">
+        <value>Proje Bilgileri</value>
+    </data>
+    <data name="projectName" xml:space="preserve">
+        <value>Proje Adı</value>
+    </data>
+    <data name="createdBy" xml:space="preserve">
+        <value>Oluşturan</value>
+    </data>
+    <data name="projectDescription" xml:space="preserve">
+        <value>Proje Açıklaması</value>
+    </data>
+    <data name="addMember" xml:space="preserve">
+        <value>Üye Ekle</value>
+    </data>
+    <data name="members" xml:space="preserve">
+        <value>Üyeler</value>
+    </data>
+    <data name="deleteMessageIntro" xml:space="preserve">
+        <value>... silmek istediğinizden emin misiniz?</value>
+    </data>
+    <data name="targets" xml:space="preserve">
+        <value>Hedefler</value>
+    </data>
+    <data name="addTarget" xml:space="preserve">
+        <value>Hedef Ekle</value>
+    </data>
+    <data name="assignedTo" xml:space="preserve">
+        <value>Atanan Kişi</value>
+    </data>
+    <data name="risk" xml:space="preserve">
+        <value>Risk</value>
+    </data>
+    <data name="category" xml:space="preserve">
+        <value>Kategori</value>
+    </data>
+    <data name="attachments" xml:space="preserve">
+        <value>Ekler</value>
+    </data>
+    <data name="file" xml:space="preserve">
+        <value>Dosya</value>
+    </data>
+    <data name="uploadedBy" xml:space="preserve">
+        <value>Yükleyen</value>
+    </data>
+    <data name="reports" xml:space="preserve">
+        <value>Raporlar</value>
+    </data>
+    <data name="generateReport" xml:space="preserve">
+        <value>Rapor Oluştur</value>
+    </data>
+    <data name="addAttachmentBtn" xml:space="preserve">
+        <value>Ek Ekle</value>
+    </data>
+    <data name="addNoteBtn" xml:space="preserve">
+        <value>Not Ekle</value>
+    </data>
+    <data name="creationDate" xml:space="preserve">
+        <value>Oluşturma Tarihi</value>
+    </data>
+    <data name="editProject" xml:space="preserve">
+        <value>Projeyi Düzenle</value>
+    </data>
+    <data name="edit" xml:space="preserve">
+        <value>Düzenle</value>
+    </data>
+    <data name="projectEdited" xml:space="preserve">
+        <value>Proje başarıyla düzenlendi!</value>
+    </data>
+    <data name="projectEditedError" xml:space="preserve">
+        <value>Proje düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="projectDetails" xml:space="preserve">
+        <value>Proje Detayları</value>
+    </data>
+    <data name="user" xml:space="preserve">
+        <value>Kullanıcı</value>
+    </data>
+    <data name="selectMembers" xml:space="preserve">
+        <value>Üye Seç</value>
+    </data>
+    <data name="userAdded" xml:space="preserve">
+        <value>Kullanıcı başarıyla eklendi!</value>
+    </data>
+    <data name="userAddedError" xml:space="preserve">
+        <value>Kullanıcı eklenirken bir hata oluştu!</value>
+    </data>
+    <data name="userExists" xml:space="preserve">
+        <value>Kullanıcı zaten mevcut!</value>
+    </data>
+    <data name="noteAdded" xml:space="preserve">
+        <value>Not başarıyla eklendi!</value>
+    </data>
+    <data name="noteAddedError" xml:space="preserve">
+        <value>Not eklenirken bir hata oluştu!</value>
+    </data>
+    <data name="editClient" xml:space="preserve">
+        <value>Müşteriyi Düzenle</value>
+    </data>
+    <data name="deleteLogo" xml:space="preserve">
+        <value>Logoyu Sil</value>
+    </data>
+    <data name="clientEdited" xml:space="preserve">
+        <value>Müşteri başarıyla düzenlendi!</value>
+    </data>
+    <data name="clientEditedError" xml:space="preserve">
+        <value>Müşteri düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="logoDeleted" xml:space="preserve">
+        <value>Logo başarıyla silindi!</value>
+    </data>
+    <data name="logoDeletedError" xml:space="preserve">
+        <value>Logo silinirken bir hata oluştu!</value>
+    </data>
+    <data name="createClient" xml:space="preserve">
+        <value>Müşteri Oluştur</value>
+    </data>
+    <data name="clientCreated" xml:space="preserve">
+        <value>Müşteri başarıyla oluşturuldu!</value>
+    </data>
+    <data name="clientCreatedError" xml:space="preserve">
+        <value>Müşteri oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="clientDeleted" xml:space="preserve">
+        <value>Müşteri başarıyla silindi!</value>
+    </data>
+    <data name="clientDeletedError" xml:space="preserve">
+        <value>Müşteri silinirken bir hata oluştu!</value>
+    </data>
+    <data name="details" xml:space="preserve">
+        <value>Detaylar</value>
+    </data>
+    <data name="information" xml:space="preserve">
+        <value>Bilgi</value>
+    </data>
+    <data name="position" xml:space="preserve">
+        <value>Pozisyon</value>
+    </data>
+    <data name="locked" xml:space="preserve">
+        <value>Kilitli</value>
+    </data>
+    <data name="darkMode" xml:space="preserve">
+        <value>Karanlık Mod</value>
+    </data>
+    <data name="mfaEnabled" xml:space="preserve">
+        <value>2FA Etkin</value>
+    </data>
+    <data name="deleteUser" xml:space="preserve">
+        <value>Kullanıcıyı Sil</value>
+    </data>
+    <data name="userDeleted" xml:space="preserve">
+        <value>Kullanıcı başarıyla silindi!</value>
+    </data>
+    <data name="userDeletedError" xml:space="preserve">
+        <value>Kullanıcı silinirken bir hata oluştu!</value>
+    </data>
+    <data name="createUser" xml:space="preserve">
+        <value>Kullanıcı Oluştur</value>
+    </data>
+    <data name="phone" xml:space="preserve">
+        <value>Telefon</value>
+    </data>
+    <data name="password" xml:space="preserve">
+        <value>Şifre</value>
+    </data>
+    <data name="role" xml:space="preserve">
+        <value>Rol</value>
+    </data>
+    <data name="selectRole" xml:space="preserve">
+        <value>Rol Seç</value>
+    </data>
+    <data name="editUser" xml:space="preserve">
+        <value>Kullanıcıyı Düzenle</value>
+    </data>
+    <data name="recentProjects" xml:space="preserve">
+        <value>Son Projeler</value>
+    </data>
+    <data name="recentClients" xml:space="preserve">
+        <value>Son Müşteriler</value>
+    </data>
+    <data name="recentVulns" xml:space="preserve">
+        <value>Son Güvenlik Açıkları</value>
+    </data>
+    <data name="recentDocuments" xml:space="preserve">
+        <value>Son Belgeler</value>
+    </data>
+    <data name="projectStatus" xml:space="preserve">
+        <value>Projelerin Durumu</value>
+    </data>
+    <data name="vulnStatus" xml:space="preserve">
+        <value>Güvenlik Açıklarının Durumu</value>
+    </data>
+    <data name="vulnSeverity" xml:space="preserve">
+        <value>Güvenlik Açıklarının Önem Derecesi</value>
+    </data>
+    <data name="tasksStatus" xml:space="preserve">
+        <value>Görevlerin Durumu</value>
+    </data>
+    <data name="low" xml:space="preserve">
+        <value>Düşük</value>
+    </data>
+    <data name="medium" xml:space="preserve">
+        <value>Orta</value>
+    </data>
+    <data name="high" xml:space="preserve">
+        <value>Yüksek</value>
+    </data>
+    <data name="critical" xml:space="preserve">
+        <value>Kritik</value>
+    </data>
+    <data name="open" xml:space="preserve">
+        <value>Açık</value>
+    </data>
+    <data name="resolved" xml:space="preserve">
+        <value>Çözüldü</value>
+    </data>
+    <data name="outOfScope" xml:space="preserve">
+        <value>Kapsam Dışı</value>
+    </data>
+    <data name="accepted" xml:space="preserve">
+        <value>Kabul Edildi</value>
+    </data>
+    <data name="confirmed" xml:space="preserve">
+        <value>Doğrulandı</value>
+    </data>
+    <data name="invalid" xml:space="preserve">
+        <value>Geçersiz</value>
+    </data>
+    <data name="backlog" xml:space="preserve">
+        <value>Bekleyen İşler</value>
+    </data>
+    <data name="info" xml:space="preserve">
+        <value>Bilgi</value>
+    </data>
+    <data name="done" xml:space="preserve">
+        <value>Bitti</value>
+    </data>
+    <data name="toDo" xml:space="preserve">
+        <value>Yapılacak</value>
+    </data>
+    <data name="inProgress" xml:space="preserve">
+        <value>Devam Ediyor</value>
+    </data>
+    <data name="blocked" xml:space="preserve">
+        <value>Engellendi</value>
+    </data>
+    <data name="passwordUppercaseMessage" xml:space="preserve">
+        <value>Şifre en az bir büyük harf içermelidir</value>
+    </data>
+    <data name="passwordNumberMessage" xml:space="preserve">
+        <value>Şifre en az bir rakam içermelidir</value>
+    </data>
+    <data name="passwordSpecialMessage" xml:space="preserve">
+        <value>Şifre en az bir özel karakter içermelidir (!? *.)</value>
+    </data>
+    <data name="passwordLowercaseMessage" xml:space="preserve">
+        <value>Şifre en az bir küçük harf içermelidir</value>
+    </data>
+    <data name="passwordLengthMessage" xml:space="preserve">
+        <value>Şifre en az 8 karakter uzunluğunda olmalıdır</value>
+    </data>
+    <data name="newPassword" xml:space="preserve">
+        <value>Yeni Şifre</value>
+    </data>
+    <data name="userEdited" xml:space="preserve">
+        <value>Kullanıcı başarıyla düzenlendi!</value>
+    </data>
+    <data name="userEditedError" xml:space="preserve">
+        <value>Kullanıcı düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="loginDescription" xml:space="preserve">
+        <value>Kimlik bilgilerinizle oturum açın</value>
+    </data>
+    <data name="signin" xml:space="preserve">
+        <value>Oturum Aç</value>
+    </data>
+    <data name="email" xml:space="preserve">
+        <value>E-posta</value>
+    </data>
+    <data name="forgotPassword" xml:space="preserve">
+        <value>Şifrenizi mi unuttunuz?</value>
+    </data>
+    <data name="rememberMe" xml:space="preserve">
+        <value>Beni Hatırla</value>
+    </data>
+    <data name="login" xml:space="preserve">
+        <value>Oturum Aç</value>
+    </data>
+    <data name="orgSaved" xml:space="preserve">
+        <value>Organizasyon başarıyla kaydedildi!</value>
+    </data>
+    <data name="orgSavedError" xml:space="preserve">
+        <value>Organizasyon kaydedilirken bir hata oluştu!</value>
+    </data>
+    <data name="createReportTemplate" xml:space="preserve">
+        <value>Şablon Oluştur</value>
+    </data>
+    <data name="reportTemplateCreated" xml:space="preserve">
+        <value>Rapor şablonu başarıyla oluşturuldu!</value>
+    </data>
+    <data name="reportTemplateCreatedError" xml:space="preserve">
+        <value>Rapor şablonu oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="reportTemplate" xml:space="preserve">
+        <value>Rapor Şablonu</value>
+    </data>
+    <data name="download" xml:space="preserve">
+        <value>İndir</value>
+    </data>
+    <data name="createdDate" xml:space="preserve">
+        <value>Oluşturma Tarihi</value>
+    </data>
+    <data name="backup" xml:space="preserve">
+        <value>Yedekleme</value>
+    </data>
+    <data name="restore" xml:space="preserve">
+        <value>Geri Yükle</value>
+    </data>
+    <data name="save" xml:space="preserve">
+        <value>Kaydet</value>
+    </data>
+    <data name="data" xml:space="preserve">
+        <value>Veri</value>
+    </data>
+    <data name="backupAttachmentsMessage" xml:space="preserve">
+        <value>Tüm eklerin (Resimler, Raporlar,...) yedeğini alın</value>
+    </data>
+    <data name="backupDataMessage" xml:space="preserve">
+        <value>Tüm verilerin (Projeler, Güvenlik Açıkları, Müşteriler,...) yedeğini alın</value>
+    </data>
+    <data name="backupError" xml:space="preserve">
+        <value>Yedekleme yapılırken bir hata oluştu!</value>
+    </data>
+    <data name="backupSuccessfull" xml:space="preserve">
+        <value>Yedekleme başarıyla yapıldı!</value>
+    </data>
+    <data name="restoreAttachmentsMessage" xml:space="preserve">
+        <value>Tüm ekleri (Resimler, Raporlar, ...) geri yükleyin</value>
+    </data>
+    <data name="restoreDataMessage" xml:space="preserve">
+        <value>Tüm verileri (Projeler, Güvenlik Açıkları, Müşteriler, ...) geri yükleyin</value>
+    </data>
+    <data name="export" xml:space="preserve">
+        <value>Dışa Aktar</value>
+    </data>
+    <data name="exportCSV" xml:space="preserve">
+        <value>CSV olarak dışa aktar</value>
+    </data>
+    <data name="exportPDF" xml:space="preserve">
+        <value>PDF olarak dışa aktar</value>
+    </data>
+    <data name="exportError" xml:space="preserve">
+        <value>Dışa aktarılırken bir hata oluştu!</value>
+    </data>
+    <data name="pdfExportSuccessful" xml:space="preserve">
+        <value>PDF başarıyla dışa aktarıldı!</value>
+    </data>
+    <data name="pdfExportError" xml:space="preserve">
+        <value>PDF dışa aktarılırken bir hata oluştu!</value>
+    </data>
+    <data name="noVulnsToExport" xml:space="preserve">
+        <value>Dışa aktarılacak güvenlik açıkları yok!</value>
+    </data>
+    <data name="selectVulnsForExport" xml:space="preserve">
+        <value>Lütfen PDF olarak dışa aktarılacak güvenlik açıklarını seçin!</value>
+    </data>
+    <data name="noPDFGenerated" xml:space="preserve">
+        <value>PDF oluşturulamadı. Güvenlik açıklarının proje ile ilişkili olduğundan emin olun.</value>
+    </data>
+    <data name="noTemplatesAvailable" xml:space="preserve">
+        <value>Rapor şablonları mevcut değil!</value>
+    </data>
+    <data name="vulnsWithoutProject" xml:space="preserve">
+        <value>Proje olmayan güvenlik açıkları PDF olarak dışa aktarılamaz!</value>
+    </data>
+    <data name="project" xml:space="preserve">
+        <value>Proje</value>
+    </data>
+    <data name="checklist" xml:space="preserve">
+        <value>Kontrol Listesi</value>
+    </data>
+    <data name="dataVault" xml:space="preserve">
+        <value>Veri Kasası</value>
+    </data>
+    <data name="filter" xml:space="preserve">
+        <value>Filtrele</value>
+    </data>
+    <data name="createTask" xml:space="preserve">
+        <value>Görev Oluştur</value>
+    </data>
+    <data name="target" xml:space="preserve">
+        <value>Hedef</value>
+    </data>
+    <data name="selectTarget" xml:space="preserve">
+        <value>Hedef Seç</value>
+    </data>
+    <data name="editTask" xml:space="preserve">
+        <value>Görevi Düzenle</value>
+    </data>
+    <data name="deleteTask" xml:space="preserve">
+        <value>Görevi Sil</value>
+    </data>
+    <data name="taskCreated" xml:space="preserve">
+        <value>Görev başarıyla oluşturuldu!</value>
+    </data>
+    <data name="taskCreatedError" xml:space="preserve">
+        <value>Görev oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="taskUpdated" xml:space="preserve">
+        <value>Görev başarıyla güncellendi!</value>
+    </data>
+    <data name="taskUpdatedError" xml:space="preserve">
+        <value>Görev güncellenirken bir hata oluştu!</value>
+    </data>
+    <data name="taskDeleted" xml:space="preserve">
+        <value>Görev başarıyla silindi!</value>
+    </data>
+    <data name="taskDeletedError" xml:space="preserve">
+        <value>Görev silinirken bir hata oluştu!</value>
+    </data>
+    <data name="selectUser" xml:space="preserve">
+        <value>Kullanıcı Seç</value>
+    </data>
+    <data name="taskDetails" xml:space="preserve">
+        <value>Görev Detayları</value>
+    </data>
+    <data name="taskDescription" xml:space="preserve">
+        <value>Görev Açıklaması</value>
+    </data>
+    <data name="targetAdded" xml:space="preserve">
+        <value>Hedef başarıyla eklendi!</value>
+    </data>
+    <data name="targetExists" xml:space="preserve">
+        <value>Hedef zaten mevcut!</value>
+    </data>
+    <data name="targetAddedError" xml:space="preserve">
+        <value>Hedef eklenirken bir hata oluştu!</value>
+    </data>
+    <data name="targetDeleted" xml:space="preserve">
+        <value>Hedef başarıyla silindi!</value>
+    </data>
+    <data name="targetDeletedError" xml:space="preserve">
+        <value>Hedef silinirken bir hata oluştu!</value>
+    </data>
+    <data name="noteDeleted" xml:space="preserve">
+        <value>Not başarıyla silindi!</value>
+    </data>
+    <data name="noteDeletedError" xml:space="preserve">
+        <value>Not silinirken bir hata oluştu!</value>
+    </data>
+    <data name="editNote" xml:space="preserve">
+        <value>Notu Düzenle</value>
+    </data>
+    <data name="noteEditedError" xml:space="preserve">
+        <value>Not düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="noteEdited" xml:space="preserve">
+        <value>Not başarıyla düzenlendi!</value>
+    </data>
+    <data name="attachmentAdded" xml:space="preserve">
+        <value>Ek başarıyla eklendi!</value>
+    </data>
+    <data name="import" xml:space="preserve">
+        <value>İçe Aktar</value>
+    </data>
+    <data name="editTarget" xml:space="preserve">
+        <value>Hedefi Düzenle</value>
+    </data>
+    <data name="targetEdited" xml:space="preserve">
+        <value>Hedef başarıyla düzenlendi!</value>
+    </data>
+    <data name="targetEditedError" xml:space="preserve">
+        <value>Hedef düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="targetImport" xml:space="preserve">
+        <value>Hedefleri İçe Aktar</value>
+    </data>
+    <data name="executiveSummary" xml:space="preserve">
+        <value>Yönetici Özeti</value>
+    </data>
+    <data name="targetImported" xml:space="preserve">
+        <value>Hedefler başarıyla içe aktarıldı!</value>
+    </data>
+    <data name="targetImportedError" xml:space="preserve">
+        <value>Hedefler içe aktarılırken bir hata oluştu!</value>
+    </data>
+    <data name="createChecklist" xml:space="preserve">
+        <value>Kontrol Listesi Oluştur</value>
+    </data>
+    <data name="notStarted" xml:space="preserve">
+        <value>Başlamadı</value>
+    </data>
+    <data name="pass" xml:space="preserve">
+        <value>Geçti</value>
+    </data>
+    <data name="issues" xml:space="preserve">
+        <value>Sorunlar</value>
+    </data>
+    <data name="platform" xml:space="preserve">
+        <value>Platform</value>
+    </data>
+    <data name="deletedChecklist" xml:space="preserve">
+        <value>Kontrol listesi başarıyla silindi!</value>
+    </data>
+    <data name="deletedChecklistError" xml:space="preserve">
+        <value>Kontrol listesi silinirken bir hata oluştu!</value>
+    </data>
+    <data name="checklistReport" xml:space="preserve">
+        <value>Kontrol listesi raporu başarıyla oluşturuldu!</value>
+    </data>
+    <data name="checklistReportError" xml:space="preserve">
+        <value>Kontrol listesi raporu oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="checklistEdited" xml:space="preserve">
+        <value>Kontrol listesi başarıyla düzenlendi!</value>
+    </data>
+    <data name="checklistEditedError" xml:space="preserve">
+        <value>Kontrol listesi düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="owaspVulnerabilityFactors" xml:space="preserve">
+        <value>Güvenlik açığı faktörleri</value>
+    </data>
+    <data name="owaspThreatAgentFactors" xml:space="preserve">
+        <value>Tehdit ajanı faktörleri</value>
+    </data>
+    <data name="owaspBusinessImpactFactors" xml:space="preserve">
+        <value>İş etkisi faktörleri</value>
+    </data>
+    <data name="skillLevel" xml:space="preserve">
+        <value>Beceri Seviyesi</value>
+    </data>
+    <data name="noTechnicalSkills" xml:space="preserve">
+        <value>Teknik Beceri Yok</value>
+    </data>
+    <data name="securityPenetrationSkills" xml:space="preserve">
+        <value>Sızma testi becerileri</value>
+    </data>
+    <data name="someTechnicalSkills" xml:space="preserve">
+        <value>Bazı teknik beceriler</value>
+    </data>
+    <data name="advancedComputerUser" xml:space="preserve">
+        <value>Gelişmiş bilgisayar kullanıcısı</value>
+    </data>
+    <data name="motive" xml:space="preserve">
+        <value>Güdü</value>
+    </data>
+    <data name="lowReward" xml:space="preserve">
+        <value>Düşük veya hiç ödül yok</value>
+    </data>
+    <data name="possibleReward" xml:space="preserve">
+        <value>Olası ödül</value>
+    </data>
+    <data name="highReward" xml:space="preserve">
+        <value>Yüksek ödül</value>
+    </data>
+    <data name="fullAccess" xml:space="preserve">
+        <value>Tam erişim veya maliyetli kaynaklar gerektirir</value>
+    </data>
+    <data name="specialAccess" xml:space="preserve">
+        <value>Özel erişim veya kaynaklar gerekli</value>
+    </data>
+    <data name="someAccess" xml:space="preserve">
+        <value>Bazı erişim veya kaynaklar gerekli</value>
+    </data>
+    <data name="noAccess" xml:space="preserve">
+        <value>Erişim veya kaynak gerektirmez</value>
+    </data>
+    <data name="size" xml:space="preserve">
+        <value>Boyut</value>
+    </data>
+    <data name="owaspTechnicalImpactFactors" xml:space="preserve">
+        <value>Teknik etki faktörleri</value>
+    </data>
+    <data name="partners" xml:space="preserve">
+        <value>Ortaklar</value>
+    </data>
+    <data name="authenticatedUsers" xml:space="preserve">
+        <value>Kimliği doğrulanmış kullanıcılar</value>
+    </data>
+    <data name="anonymousUsers" xml:space="preserve">
+        <value>Anonim İnternet kullanıcıları</value>
+    </data>
+    <data name="intranetUsers" xml:space="preserve">
+        <value>İntranet kullanıcıları</value>
+    </data>
+    <data name="developerUsers" xml:space="preserve">
+        <value>Geliştiriciler, sistem yöneticileri</value>
+    </data>
+    <data name="opportunity" xml:space="preserve">
+        <value>Fırsat</value>
+    </data>
+    <data name="lossConfidentiality" xml:space="preserve">
+        <value>Gizlilik kaybı</value>
+    </data>
+    <data name="allDataDisclosed" xml:space="preserve">
+        <value>Tüm veriler ifşa edildi</value>
+    </data>
+    <data name="extensiveCriticalDataDisclosed" xml:space="preserve">
+        <value>Çok sayıda kritik veri ifşa edildi</value>
+    </data>
+    <data name="extensiveNonSensitiveDataDisclosed" xml:space="preserve">
+        <value>Çok sayıda hassas olmayan veri ifşa edildi</value>
+    </data>
+    <data name="minimalNonSensitiveDataDisclosed" xml:space="preserve">
+        <value>Minimum düzeyde hassas olmayan veri ifşa edildi</value>
+    </data>
+    <data name="lossIntegrity" xml:space="preserve">
+        <value>Bütünlük kaybı</value>
+    </data>
+    <data name="minimalCriticalDataDisclosed" xml:space="preserve">
+        <value>Minimum düzeyde kritik veri ifşa edildi</value>
+    </data>
+    <data name="minimalSlightlyCorrupt" xml:space="preserve">
+        <value>Minimum düzeyde veri hafifçe bozuldu</value>
+    </data>
+    <data name="minimalSeriouslyCorrupt" xml:space="preserve">
+        <value>Minimum düzeyde veri ciddi şekilde bozuldu</value>
+    </data>
+    <data name="extensiveSlightlyCorrupt" xml:space="preserve">
+        <value>Geniş çaplı veri hafifçe bozuldu</value>
+    </data>
+    <data name="extensiveSeriouslyCorrupt" xml:space="preserve">
+        <value>Geniş çaplı veri ciddi şekilde bozuldu</value>
+    </data>
+    <data name="allCorrupt" xml:space="preserve">
+        <value>Tüm veriler tamamen bozuldu</value>
+    </data>
+    <data name="lossAvailability" xml:space="preserve">
+        <value>Erişilebilirlik kaybı</value>
+    </data>
+    <data name="minimalSecondaryServices" xml:space="preserve">
+        <value>İkincil hizmetlerde minimum kesinti</value>
+    </data>
+    <data name="minimalPrimaryServices" xml:space="preserve">
+        <value>Birincil hizmetlerde minimum kesinti</value>
+    </data>
+    <data name="extensiveSecondaryServices" xml:space="preserve">
+        <value>Geniş çaplı ikincil hizmetler kesintiye uğradı</value>
+    </data>
+    <data name="extensivePrimaryServices" xml:space="preserve">
+        <value>Geniş çaplı birincil hizmetler kesintiye uğradı</value>
+    </data>
+    <data name="allServicesLost" xml:space="preserve">
+        <value>Tüm hizmetlerin tamamen kaybı</value>
+    </data>
+    <data name="fullyTraceable" xml:space="preserve">
+        <value>Tamamen izlenebilir</value>
+    </data>
+    <data name="possiblyTraceable" xml:space="preserve">
+        <value>Muhtemelen izlenebilir</value>
+    </data>
+    <data name="completelyAnonymous" xml:space="preserve">
+        <value>Tamamen anonim</value>
+    </data>
+    <data name="easeDiscovery" xml:space="preserve">
+        <value>Keşif kolaylığı</value>
+    </data>
+    <data name="easeExploit" xml:space="preserve">
+        <value>Sömürü kolaylığı</value>
+    </data>
+    <data name="awareness" xml:space="preserve">
+        <value>Farkındalık</value>
+    </data>
+    <data name="intrusionDetection" xml:space="preserve">
+        <value>Saldırı tespiti</value>
+    </data>
+    <data name="easy" xml:space="preserve">
+        <value>Kolay</value>
+    </data>
+    <data name="difficult" xml:space="preserve">
+        <value>Zor</value>
+    </data>
+    <data name="practicallyImpossible" xml:space="preserve">
+        <value>Pratik olarak imkansız</value>
+    </data>
+    <data name="automatedTools" xml:space="preserve">
+        <value>Otomatik araçlarda mevcut</value>
+    </data>
+    <data name="theoretical" xml:space="preserve">
+        <value>Teorik</value>
+    </data>
+    <data name="financialDamage" xml:space="preserve">
+        <value>Mali zarar</value>
+    </data>
+    <data name="unknown" xml:space="preserve">
+        <value>Bilinmiyor</value>
+    </data>
+    <data name="hidden" xml:space="preserve">
+        <value>Gizli</value>
+    </data>
+    <data name="obvious" xml:space="preserve">
+        <value>Açık</value>
+    </data>
+    <data name="publicKnowledge" xml:space="preserve">
+        <value>Kamu bilgisi</value>
+    </data>
+    <data name="notLogged" xml:space="preserve">
+        <value>Kaydedilmedi</value>
+    </data>
+    <data name="loggedNoReview" xml:space="preserve">
+        <value>Kaydedildi, incelenmedi</value>
+    </data>
+    <data name="loggedReviewed" xml:space="preserve">
+        <value>Kaydedildi ve incelendi</value>
+    </data>
+    <data name="activeDetection" xml:space="preserve">
+        <value>Uygulamada aktif tespit</value>
+    </data>
+    <data name="bankruptcy" xml:space="preserve">
+        <value>İflas</value>
+    </data>
+    <data name="brandDamage" xml:space="preserve">
+        <value>Marka zararı</value>
+    </data>
+    <data name="minimalDamage" xml:space="preserve">
+        <value>Minimum zarar</value>
+    </data>
+    <data name="lossGoodwill" xml:space="preserve">
+        <value>İtibar kaybı</value>
+    </data>
+    <data name="lossMajorAccounts" xml:space="preserve">
+        <value>Önemli hesapların kaybı</value>
+    </data>
+    <data name="minorViolation" xml:space="preserve">
+        <value>Küçük ihlal</value>
+    </data>
+    <data name="clearViolation" xml:space="preserve">
+        <value>Açık ihlal</value>
+    </data>
+    <data name="highViolation" xml:space="preserve">
+        <value>Yüksek profilli ihlal</value>
+    </data>
+    <data name="oneIndividual" xml:space="preserve">
+        <value>Bir birey</value>
+    </data>
+    <data name="hundredsPeople" xml:space="preserve">
+        <value>Yüzlerce kişi</value>
+    </data>
+    <data name="thousandsPeople" xml:space="preserve">
+        <value>Binlerce kişi</value>
+    </data>
+    <data name="milionsPeople" xml:space="preserve">
+        <value>Milyonlarca kişi</value>
+    </data>
+    <data name="significantEffectProfit" xml:space="preserve">
+        <value>Yıllık kâr üzerinde önemli etki</value>
+    </data>
+    <data name="minorEffectProfit" xml:space="preserve">
+        <value>Yıllık kâr üzerinde küçük etki</value>
+    </data>
+    <data name="costFixVuln" xml:space="preserve">
+        <value>Güvenlik açığını düzeltme maliyetinden daha az</value>
+    </data>
+    <data name="likelihoodScore" xml:space="preserve">
+        <value>Olasılık Puanı</value>
+    </data>
+    <data name="impactScore" xml:space="preserve">
+        <value>Etki Puanı</value>
+    </data>
+    <data name="local" xml:space="preserve">
+        <value>Yerel</value>
+    </data>
+    <data name="physical" xml:space="preserve">
+        <value>Fiziksel</value>
+    </data>
+    <data name="adjacent" xml:space="preserve">
+        <value>Bitişik</value>
+    </data>
+    <data name="network" xml:space="preserve">
+        <value>Ağ</value>
+    </data>
+    <data name="attackVector" xml:space="preserve">
+        <value>Saldırı Vektörü</value>
+    </data>
+    <data name="attackComplexity" xml:space="preserve">
+        <value>Saldırı Karmaşıklığı</value>
+    </data>
+    <data name="none" xml:space="preserve">
+        <value>Hiçbiri</value>
+    </data>
+    <data name="required" xml:space="preserve">
+        <value>Gerekli</value>
+    </data>
+    <data name="changed" xml:space="preserve">
+        <value>Değiştirildi</value>
+    </data>
+    <data name="unchanged" xml:space="preserve">
+        <value>Değiştirilmedi</value>
+    </data>
+    <data name="privilegesRequired" xml:space="preserve">
+        <value>Gerekli Ayrıcalıklar</value>
+    </data>
+    <data name="userInteraction" xml:space="preserve">
+        <value>Kullanıcı Etkileşimi</value>
+    </data>
+    <data name="scope" xml:space="preserve">
+        <value>Kapsam</value>
+    </data>
+    <data name="confidentiality" xml:space="preserve">
+        <value>Gizlilik</value>
+    </data>
+    <data name="integrity" xml:space="preserve">
+        <value>Bütünlük</value>
+    </data>
+    <data name="availability" xml:space="preserve">
+        <value>Erişilebilirlik</value>
+    </data>
+    <data name="createVuln" xml:space="preserve">
+        <value>Güvenlik Açığı Oluştur</value>
+    </data>
+    <data name="exploitation" xml:space="preserve">
+        <value>Sömürü</value>
+    </data>
+    <data name="remediation" xml:space="preserve">
+        <value>Düzeltme</value>
+    </data>
+    <data name="impact" xml:space="preserve">
+        <value>Etki</value>
+    </data>
+    <data name="poc" xml:space="preserve">
+        <value>Kavram Kanıtı</value>
+    </data>
+    <data name="complexity" xml:space="preserve">
+        <value>Karmaşıklık</value>
+    </data>
+    <data name="priority" xml:space="preserve">
+        <value>Öncelik</value>
+    </data>
+    <data name="selectVulnCategory" xml:space="preserve">
+        <value>Kategori Seç</value>
+    </data>
+    <data name="selectProject" xml:space="preserve">
+        <value>Proje Seç</value>
+    </data>
+    <data name="vulnCategory" xml:space="preserve">
+        <value>Güvenlik Açığı Kategorisi</value>
+    </data>
+    <data name="loadVuln" xml:space="preserve">
+        <value>Güvenlik Açığı Şablonunu Yükle</value>
+    </data>
+    <data name="selectVuln" xml:space="preserve">
+        <value>Güvenlik Açığı Seç</value>
+    </data>
+    <data name="all" xml:space="preserve">
+        <value>Tümü</value>
+    </data>
+    <data name="yes" xml:space="preserve">
+        <value>Evet</value>
+    </data>
+    <data name="vulnCreated" xml:space="preserve">
+        <value>Güvenlik açığı başarıyla oluşturuldu!</value>
+    </data>
+    <data name="vulnCreatedError" xml:space="preserve">
+        <value>Güvenlik açığı eklenirken bir hata oluştu!</value>
+    </data>
+    <data name="editVuln" xml:space="preserve">
+        <value>Güvenlik Açığını Düzenle</value>
+    </data>
+    <data name="deletedVuln" xml:space="preserve">
+        <value>Güvenlik açığı başarıyla silindi!</value>
+    </data>
+    <data name="deletedVulnError" xml:space="preserve">
+        <value>Güvenlik açığı silinirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteVuln" xml:space="preserve">
+        <value>Güvenlik Açığını Sil</value>
+    </data>
+    <data name="advancedFilters" xml:space="preserve">
+        <value>Gelişmiş Filtreler</value>
+    </data>
+    <data name="modifiedDate" xml:space="preserve">
+        <value>Değiştirme Tarihi</value>
+    </data>
+    <data name="searchCVE" xml:space="preserve">
+        <value>CVE Ara</value>
+    </data>
+    <data name="searchCVELoadError" xml:space="preserve">
+        <value>Bu CVE hatalı veya mevcut değil!</value>
+    </data>
+    <data name="detailsVuln" xml:space="preserve">
+        <value>Güvenlik Açığı Detayları</value>
+    </data>
+    <data name="noProject" xml:space="preserve">
+        <value>Proje Yok</value>
+    </data>
+    <data name="lossAccountability" xml:space="preserve">
+        <value>Hesap verebilirlik kaybı</value>
+    </data>
+    <data name="remediationComplexity" xml:space="preserve">
+        <value>Düzeltme Karmaşıklığı</value>
+    </data>
+    <data name="remediationPriority" xml:space="preserve">
+        <value>Düzeltme Önceliği</value>
+    </data>
+    <data name="noStatus" xml:space="preserve">
+        <value>Durum Yok</value>
+    </data>
+    <data name="templates" xml:space="preserve">
+        <value>Şablonlar</value>
+    </data>
+    <data name="vulnImport" xml:space="preserve">
+        <value>Güvenlik Açıklarını İçe Aktar</value>
+    </data>
+    <data name="messageVulnImport1" xml:space="preserve">
+        <value>Güvenlik açıklarınızı bir CSV dosyasından içe aktarın veya diğer araçlardan içe aktarın</value>
+    </data>
+    <data name="here" xml:space="preserve">
+        <value>buradan</value>
+    </data>
+    <data name="messageVulnImport2" xml:space="preserve">
+        <value>CSV şablonunu indirin</value>
+    </data>
+    <data name="noFileSelected" xml:space="preserve">
+        <value>Dosya seçilmedi!</value>
+    </data>
+    <data name="vulnImported" xml:space="preserve">
+        <value>Güvenlik açıkları başarıyla içe aktarıldı!</value>
+    </data>
+    <data name="taskEdited" xml:space="preserve">
+        <value>Görev başarıyla düzenlendi!</value>
+    </data>
+    <data name="taskEditedError" xml:space="preserve">
+        <value>Görev düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="vulnImportedError" xml:space="preserve">
+        <value>Güvenlik açıkları içe aktarılırken bir hata oluştu!</value>
+    </data>
+    <data name="executiveSummarySaved" xml:space="preserve">
+        <value>Yönetici özeti başarıyla kaydedildi!</value>
+    </data>
+    <data name="executiveSummarySavedError" xml:space="preserve">
+        <value>Yönetici özeti kaydedilirken bir hata oluştu!</value>
+    </data>
+    <data name="noRolePermission" xml:space="preserve">
+        <value>Bu sayfayı görüntülemek için yeterli izniniz yok!</value>
+    </data>
+    <data name="exportSuccessfull" xml:space="preserve">
+        <value>Dosya başarıyla dışa aktarıldı!</value>
+    </data>
+    
+    <data name="clear" xml:space="preserve">
+        <value>Temizle</value>
+    </data>
+    <data name="list" xml:space="preserve">
+        <value>Liste</value>
+    </data>
+    <data name="level" xml:space="preserve">
+        <value>Seviye</value>
+    </data>
+    <data name="message" xml:space="preserve">
+        <value>Mesaj</value>
+    </data>
+    <data name="exception" xml:space="preserve">
+        <value>İstisna</value>
+    </data>
+    <data name="logsDeleted" xml:space="preserve">
+        <value>Loglar başarıyla silindi!</value>
+    </data>
+    <data name="changePassword" xml:space="preserve">
+        <value>Şifre Değiştir</value>
+    </data>
+    <data name="newRole" xml:space="preserve">
+        <value>Yeni Rol</value>
+    </data>
+    <data name="reportTemplateDeleted" xml:space="preserve">
+        <value>Rapor şablonu başarıyla silindi!</value>
+    </data>
+    <data name="reportTemplateDeletedError" xml:space="preserve">
+        <value>Rapor şablonu silinirken bir hata oluştu!</value>
+    </data>
+    <data name="reportTemplateEdited" xml:space="preserve">
+        <value>Rapor şablonu başarıyla düzenlendi!</value>
+    </data>
+    <data name="reportTemplateEditedError" xml:space="preserve">
+        <value>Rapor şablonu düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="knowledgeBase" xml:space="preserve">
+        <value>Bilgi Bankası</value>
+    </data>
+    <data name="categories" xml:space="preserve">
+        <value>Kategoriler</value>
+    </data>
+    <data name="addCategory" xml:space="preserve">
+        <value>Kategori Ekle</value>
+    </data>
+    <data name="order" xml:space="preserve">
+        <value>Sıra</value>
+    </data>
+    <data name="createCategory" xml:space="preserve">
+        <value>Kategori Oluştur</value>
+    </data>
+    <data name="on" xml:space="preserve">
+        <value>tarihinde</value>
+    </data>
+    <data name="lastUpdated" xml:space="preserve">
+        <value>Son güncelleyen</value>
+    </data>
+    <data name="recentTasks" xml:space="preserve">
+        <value>Son Görevler</value>
+    </data>
+    <data name="createDocument" xml:space="preserve">
+        <value>Belge Oluştur</value>
+    </data>
+    <data name="documentCreated" xml:space="preserve">
+        <value>Belge başarıyla oluşturuldu!</value>
+    </data>
+    <data name="documentCreatedError" xml:space="preserve">
+        <value>Belge oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="actions" xml:space="preserve">
+        <value>Eylemler</value>
+    </data>
+    <data name="recentTargets" xml:space="preserve">
+        <value>Son Hedefler</value>
+    </data>
+    <data name="myTasks" xml:space="preserve">
+        <value>Görevlerim</value>
+    </data>
+    <data name="myTasksStatus" xml:space="preserve">
+        <value>Görevlerimin Durumu</value>
+    </data>
+    <data name="jobs" xml:space="preserve">
+        <value>İşler</value>
+    </data>
+    <data name="twoFactor" xml:space="preserve">
+        <value>İki Faktörlü Kimlik Doğrulama</value>
+    </data>
+    <data name="personalData" xml:space="preserve">
+        <value>Kişisel Veriler</value>
+    </data>
+    <data name="addNote" xml:space="preserve">
+        <value>Not Ekle</value>
+    </data>
+    <data name="value" xml:space="preserve">
+        <value>Değer</value>
+    </data>
+    <data name="createVault" xml:space="preserve">
+        <value>Veri Kasası Oluştur</value>
+    </data>
+    <data name="vaultCreated" xml:space="preserve">
+        <value>Veri kasası başarıyla oluşturuldu!</value>
+    </data>
+    <data name="vaultCreatedError" xml:space="preserve">
+        <value>Veri kasası eklenirken bir hata oluştu!</value>
+    </data>
+    <data name="vaultEdited" xml:space="preserve">
+        <value>Veri kasası başarıyla düzenlendi!</value>
+    </data>
+    <data name="vaultEditedError" xml:space="preserve">
+        <value>Veri kasası düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="vaultDeletedError" xml:space="preserve">
+        <value>Veri kasası silinirken bir hata oluştu!</value>
+    </data>
+    <data name="vaultDeleted" xml:space="preserve">
+        <value>Veri kasası başarıyla silindi!</value>
+    </data>
+    <data name="deleteVault" xml:space="preserve">
+        <value>Veri Kasasını Sil</value>
+    </data>
+    <data name="createNote" xml:space="preserve">
+        <value>Not Oluştur</value>
+    </data>
+    <data name="createReport" xml:space="preserve">
+        <value>Rapor Oluştur</value>
+    </data>
+    <data name="selectReportTemplate" xml:space="preserve">
+        <value>Rapor Şablonu Seç</value>
+    </data>
+    <data name="version" xml:space="preserve">
+        <value>Sürüm</value>
+    </data>
+    <data name="reportCreated" xml:space="preserve">
+        <value>Rapor başarıyla oluşturuldu!</value>
+    </data>
+    <data name="reportCreatedError" xml:space="preserve">
+        <value>Rapor oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="deleteReport" xml:space="preserve">
+        <value>Raporu Sil</value>
+    </data>
+    <data name="reportDeleted" xml:space="preserve">
+        <value>Rapor başarıyla silindi!</value>
+    </data>
+    <data name="reportDeletedError" xml:space="preserve">
+        <value>Rapor silinirken bir hata oluştu!</value>
+    </data>
+    <data name="personalDataMessage" xml:space="preserve">
+        <value>Hesabınız, bize sağladığınız kişisel verileri içerir. Bu sayfa, bu verileri indirmenize veya silmenize olanak tanır.</value>
+    </data>
+    <data name="personalDataMessageDelete" xml:space="preserve">
+        <value>Bu verilerin silinmesi hesabınızı kalıcı olarak kaldıracaktır ve bu geri alınamaz.</value>
+    </data>
+    <data name="port" xml:space="preserve">
+        <value>Port</value>
+    </data>
+    <data name="addService" xml:space="preserve">
+        <value>Hizmet Ekle</value>
+    </data>
+    <data name="note" xml:space="preserve">
+        <value>Not</value>
+    </data>
+    <data name="serviceAdded" xml:space="preserve">
+        <value>Hizmet başarıyla eklendi!</value>
+    </data>
+    <data name="serviceAddedError" xml:space="preserve">
+        <value>Hizmet eklenirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteService" xml:space="preserve">
+        <value>Hizmeti Sil</value>
+    </data>
+    <data name="deletedService" xml:space="preserve">
+        <value>Hizmet başarıyla silindi!</value>
+    </data>
+    <data name="deletedServiceError" xml:space="preserve">
+        <value>Hizmet silinirken bir hata oluştu!</value>
+    </data>
+    <data name="oldPassword" xml:space="preserve">
+        <value>Eski Şifre</value>
+    </data>
+    <data name="authenticatorIntro" xml:space="preserve">
+        <value>Bir kimlik doğrulama uygulaması kullanmak için şu adımları izleyin:</value>
+    </data>
+    <data name="verificationCode" xml:space="preserve">
+        <value>Doğrulama Kodu</value>
+    </data>
+    <data name="authenticator1" xml:space="preserve">
+        <value>Microsoft Authenticator gibi iki faktörlü bir kimlik doğrulama uygulamasını indirin:</value>
+    </data>
+    <data name="and" xml:space="preserve">
+        <value>ve</value>
+    </data>
+    <data name="or" xml:space="preserve">
+        <value>veya</value>
+    </data>
+    <data name="for" xml:space="preserve">
+        <value>için</value>
+    </data>
+    <data name="authenticator2" xml:space="preserve">
+        <value>QR kodunu tarayın veya bu anahtarı girin.</value>
+    </data>
+    <data name="authenticator3" xml:space="preserve">
+        <value>İki faktörlü kimlik doğrulama uygulamanıza sağlanan anahtarı girin. Boşluklar ve büyük/küçük harf kullanımı önemli değildir.</value>
+    </data>
+    <data name="authenticator4" xml:space="preserve">
+        <value>QR kodunu taradıktan veya yukarıdaki anahtarı girdikten sonra, iki faktörlü kimlik doğrulama uygulamanız size benzersiz bir kod sağlayacaktır. Bu kodu aşağıdaki onay kutusuna girin.</value>
+    </data>
+    <data name="verify" xml:space="preserve">
+        <value>Doğrula</value>
+    </data>
+    <data name="profileEdited" xml:space="preserve">
+        <value>Profil başarıyla düzenlendi!</value>
+    </data>
+    <data name="profileEditedError" xml:space="preserve">
+        <value>Profil düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="avatarUploaded" xml:space="preserve">
+        <value>Avatar başarıyla yüklendi!</value>
+    </data>
+    <data name="avatarUploadedError" xml:space="preserve">
+        <value>Avatar yüklenirken bir hata oluştu!</value>
+    </data>
+    <data name="sameEmail" xml:space="preserve">
+        <value>Aynı e-postayı girdiniz!</value>
+    </data>
+    <data name="emailChanged" xml:space="preserve">
+        <value>E-posta başarıyla değiştirildi!</value>
+    </data>
+    <data name="passwordChanged" xml:space="preserve">
+        <value>Şifre başarıyla değiştirildi!</value>
+    </data>
+    <data name="passwordChangedError" xml:space="preserve">
+        <value>Şifre değiştirilirken bir hata oluştu!</value>
+    </data>
+    <data name="code" xml:space="preserve">
+        <value>Kod</value>
+    </data>
+    <data name="rememberMachine" xml:space="preserve">
+        <value>Bu cihazı hatırla</value>
+    </data>
+    <data name="loginRecovery2" xml:space="preserve">
+        <value>bir kurtarma koduyla oturum açın</value>
+    </data>
+    <data name="loginRecovery1" xml:space="preserve">
+        <value>Kimlik doğrulama cihazınıza erişiminiz yok mu? Şunu yapabilirsiniz:</value>
+    </data>
+    <data name="loginProtected" xml:space="preserve">
+        <value>Oturum açma işleminiz bir kimlik doğrulama uygulaması ile korunmaktadır. Aşağıya kimlik doğrulama kodunuzu girin.</value>
+    </data>
+    <data name="recoverCodeVerification" xml:space="preserve">
+        <value>Kurtarma kodu doğrulaması</value>
+    </data>
+    <data name="recoverCodeMessage" xml:space="preserve">
+        <value>Bir kurtarma koduyla oturum açmayı talep ettiniz. Bu oturum açma işlemi, oturum açarken bir kimlik doğrulama uygulaması kodu sağlayana veya iki faktörlü kimlik doğrulamayı devre dışı bırakıp tekrar oturum açana kadar hatırlanmayacaktır.</value>
+    </data>
+    <data name="recoveryCode" xml:space="preserve">
+        <value>Kurtarma Kodu</value>
+    </data>
+    <data name="accountLocked" xml:space="preserve">
+        <value>Bu hesap kilitlendi. Lütfen daha sonra tekrar deneyin.</value>
+    </data>
+    <data name="invalidCode" xml:space="preserve">
+        <value>Geçersiz kimlik doğrulama kodu.</value>
+    </data>
+    <data name="recoverCodeInvalid" xml:space="preserve">
+        <value>Geçersiz bir kurtarma kodu girildi.</value>
+    </data>
+    <data name="invalidLogin" xml:space="preserve">
+        <value>Geçersiz oturum açma denemesi.</value>
+    </data>
+    <data name="disable2fa" xml:space="preserve">
+        <value>İki faktörlü kimlik doğrulamayı (2FA) devre dışı bırak</value>
+    </data>
+    <data name="resetAuthenticator" xml:space="preserve">
+        <value>Kimlik doğrulayıcıyı sıfırla</value>
+    </data>
+    <data name="codesSafe" xml:space="preserve">
+        <value>Bu kodları güvenli bir yerde saklayın.</value>
+    </data>
+    <data name="disable2faAction" xml:space="preserve">
+        <value>Bu eylem yalnızca iki faktörlü kimlik doğrulamayı (2FA) devre dışı bırakır.</value>
+    </data>
+    <data name="disable2faAction2" xml:space="preserve">
+        <value>2FA'yı devre dışı bırakmak, kimlik doğrulama uygulamalarında kullanılan anahtarları değiştirmez. Bir kimlik doğrulama uygulamasında kullanılan anahtarı değiştirmek isterseniz, kimlik doğrulayıcı anahtarlarınızı sıfırlamalısınız.</value>
+    </data>
+    <data name="disabled2faError" xml:space="preserve">
+        <value>2FA devre dışı bırakılırken beklenmeyen bir hata oluştu.</value>
+    </data>
+    <data name="disabled2fa" xml:space="preserve">
+        <value>İki faktörlü kimlik doğrulama devre dışı bırakıldı. Bir kimlik doğrulama uygulaması yapılandırdığınızda tekrar etkinleştirebilirsiniz.</value>
+    </data>
+    <data name="resetAuthenticatorAction" xml:space="preserve">
+        <value>Kimlik doğrulayıcı anahtarınızı sıfırlarsanız, kimlik doğrulama uygulamanız yeniden yapılandırılana kadar çalışmayı durduracaktır.</value>
+    </data>
+    <data name="resetAuthenticatorAction1" xml:space="preserve">
+        <value>Bu işlem, kimlik doğrulama uygulamanızı doğrulayana kadar 2FA'yı devre dışı bırakır. Kimlik doğrulama uygulaması yapılandırmanızı tamamlamazsanız, hesabınıza erişimi kaybedebilirsiniz.</value>
+    </data>
+    <data name="resetedAuthenticator" xml:space="preserve">
+        <value>Kimlik doğrulama uygulaması anahtarınız sıfırlandı. Kimlik doğrulama uygulamanızı yeni anahtarı kullanarak yapılandırmanız gerekecektir.</value>
+    </data>
+    <data name="twoFactorSetted" xml:space="preserve">
+        <value>Kimlik doğrulama uygulamanız doğrulandı.</value>
+    </data>
+    <data name="twoFactorSetError" xml:space="preserve">
+        <value>Hata: Doğrulama kodu geçersiz.</value>
+    </data>
+    <data name="noResults" xml:space="preserve">
+        <value>Sonuç Yok</value>
+    </data>
+    <data name="results" xml:space="preserve">
+        <value>Sonuçlar</value>
+    </data>
+    <data name="restoreData" xml:space="preserve">
+        <value>Verileri Geri Yükle</value>
+    </data>
+    <data name="restoreAttachments" xml:space="preserve">
+        <value>Ekleri Geri Yükle</value>
+    </data>
+    <data name="createJira" xml:space="preserve">
+        <value>Jira Oluştur</value>
+    </data>
+    <data name="comments" xml:space="preserve">
+        <value>Yorumlar</value>
+    </data>
+    <data name="key" xml:space="preserve">
+        <value>Anahtar</value>
+    </data>
+    <data name="dueDate" xml:space="preserve">
+        <value>Bitiş Tarihi</value>
+    </data>
+    <data name="component" xml:space="preserve">
+        <value>Bileşen</value>
+    </data>
+    <data name="updatedDate" xml:space="preserve">
+        <value>Güncelleme Tarihi</value>
+    </data>
+    <data name="securityLevel" xml:space="preserve">
+        <value>Güvenlik Seviyesi</value>
+    </data>
+    <data name="labels" xml:space="preserve">
+        <value>Etiketler</value>
+    </data>
+    <data name="resolutionDate" xml:space="preserve">
+        <value>Çözüm Tarihi</value>
+    </data>
+    <data name="assignee" xml:space="preserve">
+        <value>Atanan Kişi</value>
+    </data>
+    <data name="noAssignee" xml:space="preserve">
+        <value>Atanan Kişi Yok</value>
+    </data>
+    <data name="noDueDate" xml:space="preserve">
+        <value>Bitiş Tarihi Yok</value>
+    </data>
+    <data name="noResolutionDate" xml:space="preserve">
+        <value>Çözüm Tarihi Yok</value>
+    </data>
+    <data name="addComment" xml:space="preserve">
+        <value>Yorum Ekle</value>
+    </data>
+    <data name="jiraCreated" xml:space="preserve">
+        <value>Jira Oluşturuldu</value>
+    </data>
+    <data name="addedComment" xml:space="preserve">
+        <value>Yorum başarıyla eklendi!</value>
+    </data>
+    <data name="addedCommentError" xml:space="preserve">
+        <value>Yorum eklenirken bir hata oluştu!</value>
+    </data>
+    <data name="jiraUpdated" xml:space="preserve">
+        <value>Jira başarıyla güncellendi!</value>
+    </data>
+    <data name="jiraUpdatedError" xml:space="preserve">
+        <value>Jira güncellenirken bir hata oluştu!</value>
+    </data>
+    <data name="jiraDeleted" xml:space="preserve">
+        <value>Jira başarıyla silindi!</value>
+    </data>
+    <data name="jiraCreatedError" xml:space="preserve">
+        <value>Jira oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="jiraDeletedError" xml:space="preserve">
+        <value>Jira silinirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteJira" xml:space="preserve">
+        <value>Jira'yı Sil</value>
+    </data>
+    <data name="pageCreated" xml:space="preserve">
+        <value>Sayfa başarıyla oluşturuldu!</value>
+    </data>
+    <data name="pageCreatedError" xml:space="preserve">
+        <value>Sayfa oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="categoryCreated" xml:space="preserve">
+        <value>Kategori başarıyla oluşturuldu!</value>
+    </data>
+    <data name="categoryCreatedError" xml:space="preserve">
+        <value>Kategori oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="checklistCreated" xml:space="preserve">
+        <value>Kontrol listesi başarıyla oluşturuldu!</value>
+    </data>
+    <data name="checklistCreatedError" xml:space="preserve">
+        <value>Kontrol listesi oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="deleteCategory" xml:space="preserve">
+        <value>Kategoriyi Sil</value>
+    </data>
+    <data name="deletedCategory" xml:space="preserve">
+        <value>Kategori başarıyla silindi!</value>
+    </data>
+    <data name="deletedCategoryError" xml:space="preserve">
+        <value>Kategori silinirken bir hata oluştu!</value>
+    </data>
+    <data name="general" xml:space="preserve">
+        <value>Genel</value>
+    </data>
+    <data name="categoryEdited" xml:space="preserve">
+        <value>Kategori başarıyla düzenlendi!</value>
+    </data>
+    <data name="categoryEditedError" xml:space="preserve">
+        <value>Kategori düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="components" xml:space="preserve">
+        <value>Bileşenler</value>
+    </data>
+    <data name="createComponent" xml:space="preserve">
+        <value>Bileşen Oluştur</value>
+    </data>
+    <data name="reportComponentEdited" xml:space="preserve">
+        <value>Rapor bileşeni başarıyla düzenlendi!</value>
+    </data>
+    <data name="reportComponentEditedError" xml:space="preserve">
+        <value>Rapor bileşeni düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="reportComponentDeleted" xml:space="preserve">
+        <value>Rapor bileşeni başarıyla silindi!</value>
+    </data>
+    <data name="reportComponentDeletedError" xml:space="preserve">
+        <value>Rapor bileşeni silinirken bir hata oluştu!</value>
+    </data>
+    <data name="reportComponentCreated" xml:space="preserve">
+        <value>Rapor bileşeni başarıyla oluşturuldu!</value>
+    </data>
+    <data name="reportComponentCreatedError" xml:space="preserve">
+        <value>Rapor bileşeni oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="deleteComponent" xml:space="preserve">
+        <value>Bileşeni Sil</value>
+    </data>
+    <data name="report" xml:space="preserve">
+        <value>Rapor</value>
+    </data>
+    <data name="reportEdited" xml:space="preserve">
+        <value>Rapor başarıyla düzenlendi!</value>
+    </data>
+    <data name="reportEditedError" xml:space="preserve">
+        <value>Rapor düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="reportDownloaded" xml:space="preserve">
+        <value>Rapor başarıyla indirildi!</value>
+    </data>
+    <data name="reportDownloadedError" xml:space="preserve">
+        <value>Rapor indirilirken bir hata oluştu!</value>
+    </data>
+    <data name="downloadReport" xml:space="preserve">
+        <value>Raporu İndir</value>
+    </data>
+    <data name="reportParts" xml:space="preserve">
+        <value>Rapor Bölümleri</value>
+    </data>
+    <data name="selectCategory" xml:space="preserve">
+        <value>Kategori Seç</value>
+    </data>
+    <data name="pageEdited" xml:space="preserve">
+        <value>Sayfa başarıyla düzenlendi!</value>
+    </data>
+    <data name="pageEditedError" xml:space="preserve">
+        <value>Sayfa düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="pageDeleted" xml:space="preserve">
+        <value>Sayfa başarıyla silindi!</value>
+    </data>
+    <data name="pageDeletedError" xml:space="preserve">
+        <value>Sayfa silinirken bir hata oluştu!</value>
+    </data>
+    <data name="createPage" xml:space="preserve">
+        <value>Sayfa Oluştur</value>
+    </data>
+    <data name="goWorkspace" xml:space="preserve">
+        <value>Çalışma Alanına Git</value>
+    </data>
+    <data name="confirmPassword" xml:space="preserve">
+        <value>Şifreyi Onayla</value>
+    </data>
+    <data name="noInProject" xml:space="preserve">
+        <value>Bu projede değilsiniz!</value>
+    </data>
+    <data name="deleteDocument" xml:space="preserve">
+        <value>Belgeyi Sil</value>
+    </data>
+    <data name="generating" xml:space="preserve">
+        <value>Oluşturuluyor...</value>
+    </data>
+    <data name="aiGenerate" xml:space="preserve">
+        <value>Yapay Zeka ile Oluştur</value>
+    </data>
+    <data name="result" xml:space="preserve">
+        <value>Sonuç</value>
+    </data>
+    <data name="categoryDeleted" xml:space="preserve">
+        <value>Kategori başarıyla silindi!</value>
+    </data>
+    <data name="serviceEdited" xml:space="preserve">
+        <value>Hizmet başarıyla düzenlendi!</value>
+    </data>
+    <data name="serviceEditedError" xml:space="preserve">
+        <value>Hizmet düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="documentDeleted" xml:space="preserve">
+        <value>Belge başarıyla silindi!</value>
+    </data>
+    <data name="documentDeletedError" xml:space="preserve">
+        <value>Belge silinirken bir hata oluştu!</value>
+    </data>
+    <data name="documentEdited" xml:space="preserve">
+        <value>Belge başarıyla düzenlendi!</value>
+    </data>
+    <data name="documentEditedError" xml:space="preserve">
+        <value>Belge düzenlenirken bir hata oluştu!</value>
+    </data>
+    <data name="vuln" xml:space="preserve">
+        <value>Güvenlik Açığı</value>
+    </data>
+    <data name="cover" xml:space="preserve">
+        <value>Kapak</value>
+    </data>
+    <data name="body" xml:space="preserve">
+        <value>Gövde</value>
+    </data>
+    <data name="header" xml:space="preserve">
+        <value>Üst Bilgi</value>
+    </data>
+    <data name="footer" xml:space="preserve">
+        <value>Alt Bilgi</value>
+    </data>
+    <data name="deleteChecklist" xml:space="preserve">
+        <value>Kontrol Listesini Sil</value>
+    </data>
+    <data name="noCategory" xml:space="preserve">
+        <value>Kategori Yok</value>
+    </data>
+    <data name="days" xml:space="preserve">
+        <value>gün</value>
+    </data>
+    <data name="daysLeft" xml:space="preserve">
+        <value>Kalan Gün: </value>
+    </data>
+    <data name="outOfTime" xml:space="preserve">
+        <value>Süre Doldu:</value>
+    </data>
+    <data name="restoreAttachmentsError" xml:space="preserve">
+        <value>Ekler geri yüklenirken bir hata oluştu!</value>
+    </data>
+    <data name="restoreDataError" xml:space="preserve">
+        <value>Veriler geri yüklenirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteProject" xml:space="preserve">
+        <value>Projeyi Sil</value>
+    </data>
+    <data name="restoredData" xml:space="preserve">
+        <value>Veriler başarıyla geri yüklendi!</value>
+    </data>
+    <data name="restoredAttachments" xml:space="preserve">
+        <value>Ekler başarıyla geri yüklendi!</value>
+    </data>
+    <data name="deletedAvatar" xml:space="preserve">
+        <value>Avatar başarıyla silindi!</value>
+    </data>
+    <data name="deletedAvatarError" xml:space="preserve">
+        <value>Avatar silinirken bir hata oluştu!</value>
+    </data>
+    <data name="workspace" xml:space="preserve">
+        <value>Çalışma Alanı</value>
+    </data>
+    <data name="portuguese" xml:space="preserve">
+        <value>Portekizce</value>
+    </data>
+    <data name="spanish" xml:space="preserve">
+        <value>İspanyolca</value>
+    </data>
+    <data name="welcomeUser" xml:space="preserve">
+        <value>Tekrar hoş geldiniz</value>
+    </data>
+    <data name="lightTheme" xml:space="preserve">
+        <value>Açık Tema</value>
+    </data>
+    <data name="darkTheme" xml:space="preserve">
+        <value>Koyu Tema</value>
+    </data>
+    <data name="advancedCss" xml:space="preserve">
+        <value>Gelişmiş CSS</value>
+    </data>
+    <data name="updateStyle" xml:space="preserve">
+        <value>CSS Stilini Güncelle</value>
+    </data>
+    <data name="warnings" xml:space="preserve">
+        <value>Uyarılar</value>
+    </data>
+    <data name="assignToMe" xml:space="preserve">
+        <value>Bana Ata</value>
+    </data>
+    <data name="cvssAcHigh" xml:space="preserve">
+        <value>Kötü: Bir saldırının başarısı, saldırganın kontrolü dışındaki koşullara bağlıdır. Yani, başarılı bir saldırı isteğe bağlı olarak gerçekleştirilemez, ancak başarılı bir saldırı beklenebilmesi için saldırganın belirli bir hedefe karşı hazırlık veya yürütme için ölçülebilir bir çaba harcamasını gerektirir. Başarılı bir saldırı, saldırganların aşağıdaki koşullardan birini veya her ikisini aşmasına bağlıdır: saldırgan hedef hakkında özel bilgi toplamalıdır; veya saldırgan, istismarın güvenilirliğini artırmak için hedef ortamını hazırlamalıdır.</value>
+    </data>
+    <data name="cvssAcLow" xml:space="preserve">
+        <value>En Kötü: Özel erişim koşulları veya hafifletici durumlar yoktur. Bir saldırgan, savunmasız bir hedefe karşı tekrarlanabilir istismar başarısı bekleyebilir.</value>
+    </data>
+    <data name="cvssAHigh" xml:space="preserve">
+        <value>En Kötü: Tam bir erişilebilirlik kaybı meydana gelir, bu da saldırganın etkilenen kapsamdaki kaynaklara erişimi tamamen engellemesine neden olur; bu kayıp sürekli (saldırgan saldırıyı sürdürdüğü sürece) veya kalıcıdır (saldırı sona erdikten sonra bile durum devam eder). Alternatif olarak, saldırganın belirli bir erişilebilirliği engelleme yeteneği vardır, ancak erişilebilirlik kaybı etkilenen kapsam için doğrudan ve ciddi bir etki sunar (örneğin, saldırgan mevcut bağlantıları kesemez, ancak yeni bağlantıları engelleyebilir; saldırgan, başarılı bir saldırının her örneğinde yalnızca küçük bir miktar bellek sızdıran bir güvenlik açığını tekrar tekrar istismar edebilir, ancak tekrarlanan istismardan sonra bir hizmetin tamamen kullanılamaz hale gelmesine neden olur).</value>
+    </data>
+    <data name="cvssALow" xml:space="preserve">
+        <value>Kötü: Kaynakların erişilebilirliğinde performans düşüşü veya kesintiler vardır. Saldırgan, güvenlik açığının tekrarlanan istismarı yoluyla bile meşru kullanıcılara hizmeti tamamen reddetme yeteneğine sahip değildir. Etkilenen kapsamdaki kaynaklar her zaman kısmen kullanılabilir veya yalnızca zamanın bir kısmında tamamen kullanılabilir, ancak genel olarak etkilenen kapsam üzerinde doğrudan ve ciddi bir etki yoktur.</value>
+    </data>
+    <data name="cvssANone" xml:space="preserve">
+        <value>İyi: Etkilenen kapsam içinde erişilebilirlik üzerinde hiçbir etkisi yoktur.</value>
+    </data>
+    <data name="cvssAvAdjacent" xml:space="preserve">
+        <value>En Kötü: Bitişik ağ erişimi ile istismar edilebilir bir güvenlik açığı, savunmasız yetkilendirme kapsamının ağ yığınına bağlı olduğu ve saldırganın savunmasız sisteme giden yolunun veri bağlantı katmanında olduğu anlamına gelir. Bazı örnekler yerel IP alt ağı, Bluetooth, IEEE 802.11 ve yerel Ethernet segmentidir.</value>
+    </data>
+    <data name="cvssAvLocal" xml:space="preserve">
+        <value>Kötü: Yerel erişimle istismar edilebilir bir güvenlik açığı, savunmasız yetkilendirme kapsamının ağ yığınına bağlı olmadığı ve saldırganın savunmasız yetkilendirme kapsamına giden yolunun okuma/yazma/yürütme yetenekleri aracılığıyla olduğu anlamına gelir. Saldırganın savunmasız yetkilendirme kapsamıyla etkileşim kurmak için gerekli Ayrıcalıklara sahip olması durumunda, yerel olarak bağlanabilir; aksi takdirde, bir kullanıcıya bir istismar teslim edebilir ve Kullanıcı Etkileşimine güvenebilir.</value>
+    </data>
+    <data name="cvssAvNetwork" xml:space="preserve">
+        <value>En Kötü: Ağ erişimi ile istismar edilebilir bir güvenlik açığı, savunmasız yetkilendirme kapsamının ağ yığınına bağlı olduğu ve saldırganın savunmasız sisteme giden yolunun ağ katmanında olduğu anlamına gelir. Bu tür bir güvenlik açığı genellikle 'uzaktan istismar edilebilir' olarak adlandırılır.</value>
+    </data>
+    <data name="cvssAvPhysical" xml:space="preserve">
+        <value>Kötü: Fiziksel erişimle istismar edilebilir bir güvenlik açığı, savunmasız bir yetkilendirme kapsamına fiziksel olarak dokunma veya manipüle etme yeteneği gerektirir. Fiziksel etkileşim kısa (kötü niyetli saldırı) veya kalıcı olabilir.</value>
+    </data>
+    <data name="cvssCHigh" xml:space="preserve">
+        <value>En Kötü: Tam bir bilgi ifşası meydana gelir, bu da etkilenen kapsamdaki tüm kaynakların saldırgana ifşa edilmesine neden olur. Alternatif olarak, yalnızca bazı kısıtlı bilgilere erişim elde edilir, ancak ifşa edilen bilgiler etkilenen kapsam için doğrudan ve ciddi bir etki sunar (örneğin, saldırgan yönetici şifresini okuyabilir veya bellekteki özel anahtarlar saldırgana ifşa edilir).</value>
+    </data>
+    <data name="cvssCLow" xml:space="preserve">
+        <value>Kötü: Bilgi ifşası veya erişim kontrollerinin atlatılması meydana gelir. Bazı kısıtlı bilgilere erişim elde edilir, ancak saldırganın ne elde edildiği üzerinde kontrolü yoktur veya kaybın kapsamı sınırlıdır. Bilgi ifşasının etkilenen kapsam üzerinde doğrudan ve ciddi bir etkisi yoktur.</value>
+    </data>
+    <data name="cvssCNone" xml:space="preserve">
+        <value>İyi: Etkilenen kapsam içinde gizlilik üzerinde hiçbir etkisi yoktur.</value>
+    </data>
+    <data name="cvssIHigh" xml:space="preserve">
+        <value>En Kötü: Sistem bütünlüğünün tam bir tehlikeye atılması söz konusudur. Sistem korumasının tamamen kaybı vardır, bu da tüm sistemin tehlikeye girmesiyle sonuçlanır. Saldırgan, hedef sistemdeki herhangi bir dosyayı değiştirebilir.</value>
+    </data>
+    <data name="cvssILow" xml:space="preserve">
+        <value>Kötü: Veri değişikliği mümkündür, ancak saldırganın bir değişikliğin nihai sonucu üzerinde kontrolü yoktur veya değişikliğin kapsamı kısıtlıdır. Veri değişikliğinin etkilenen kapsam üzerinde doğrudan ve ciddi bir etkisi yoktur.</value>
+    </data>
+    <data name="cvssINone" xml:space="preserve">
+        <value>İyi: Etkilenen kapsam içinde bütünlük üzerinde hiçbir etkisi yoktur.</value>
+    </data>
+    <data name="cvssPrHigh" xml:space="preserve">
+        <value>Kötü: Saldırgan, bileşen kaynakları üzerinde önemli kontrol sağlayan ayrıcalıklarla kimliği doğrulanmıştır. Bu başlangıç ayrıcalıklarıyla bir saldırgan, Gizlilik, Bütünlük veya Erişilebilirlik'ten bir veya daha fazlasına Tam etki yaratabilir. Alternatif olarak, Yüksek ayrıcalıklara sahip bir saldırgan, hassas kaynaklara Kısmi etki yaratma yeteneğine sahip olabilir.</value>
+    </data>
+    <data name="cvssPrLow" xml:space="preserve">
+        <value>En Kötü: Saldırgan, temel düşük etkili yetenekler sağlayan ayrıcalıklarla kimliği doğrulanmıştır. Bu başlangıç ayrıcalıklarıyla bir saldırgan, Gizlilik, Bütünlük veya Erişilebilirlik'ten bir veya daha fazlasına Kısmi etki yaratabilir. Alternatif olarak, Düşük ayrıcalıklara sahip bir saldırgan, yalnızca hassas olmayan kaynaklara etki yaratma yeteneğine sahip olabilir.</value>
+    </data>
+    <data name="cvssPrNone" xml:space="preserve">
+        <value>En Kötü: Saldırganın ayrıcalıkları yoktur veya kimliği doğrulanmamıştır.</value>
+    </data>
+    <data name="cvssSChanged" xml:space="preserve">
+        <value>En Kötü: Saldırgan, savunmasız yetkilendirme kapsamına saldırır ve çevresi üzerinde bir etkisi olur. Bu, başka bir kapsama doğrudan bir etkiye neden olur. Etki Puanı değiştirilen kapsama göre belirlenir.</value>
+    </data>
+    <data name="cvssSUnchanged" xml:space="preserve">
+        <value>Kötü: Saldırgan, savunmasız yetkilendirme kapsamı tarafından gerçekleştirilen eylemleri yetkilendiren ortama saldırır ve etkiler. Etki Puanı orijinal yetkilendirme otoritesine göre belirlenir.</value>
+    </data>
+    <data name="cvssUiNone" xml:space="preserve">
+        <value>En Kötü: Savunmasız sistem, herhangi bir kullanıcının etkileşimi olmadan istismar edilebilir.</value>
+    </data>
+    <data name="cvssUiRequired" xml:space="preserve">
+        <value>Kötü: Bu güvenlik açığının başarılı bir şekilde istismar edilmesi, bir kullanıcının istismar içermeyen bir senaryoda beklenebilecek veya beklenmeyebilecek bir veya daha fazla eylemde bulunmasını veya görünüşte güvenilir bir kaynak tarafından sağlanan içeriği içeren bir senaryoyu gerektirir.</value>
+    </data>
+    <data name="taskAssigned" xml:space="preserve">
+        <value>Görev başarıyla atandı!</value>
+    </data>
+    <data name="taskAssignedError" xml:space="preserve">
+        <value>Görev atanırken bir hata oluştu!</value>
+    </data>
+    <data name="external" xml:space="preserve">
+        <value>Harici</value>
+    </data>
+    <data name="userType" xml:space="preserve">
+        <value>Kullanıcı Türü</value>
+    </data>
+    <data name="roles" xml:space="preserve">
+        <value>Roller</value>
+    </data>
+    <data name="permissions" xml:space="preserve">
+        <value>İzinler</value>
+    </data>
+    <data name="createRole" xml:space="preserve">
+        <value>Rol Oluştur</value>
+    </data>
+    <data name="deleteRole" xml:space="preserve">
+        <value>Rolü Sil</value>
+    </data>
+    <data name="roleCreated" xml:space="preserve">
+        <value>Rol başarıyla oluşturuldu!</value>
+    </data>
+    <data name="roleCreatedError" xml:space="preserve">
+        <value>Rol oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="roleDeleted" xml:space="preserve">
+        <value>Rol başarıyla silindi!</value>
+    </data>
+    <data name="roleDeletedError" xml:space="preserve">
+        <value>Rol silinirken bir hata oluştu!</value>
+    </data>
+    <data name="roleEdited" xml:space="preserve">
+        <value>Rol başarıyla değiştirildi!</value>
+    </data>
+    <data name="roleEditedError" xml:space="preserve">
+        <value>Rol değiştirilirken bir hata oluştu!</value>
+    </data>
+    <data name="permission" xml:space="preserve">
+        <value>İzin</value>
+    </data>
+    <data name="aiAssistant" xml:space="preserve">
+        <value>Yapay Zeka Asistanı</value>
+    </data>
+    <data name="yourConversations" xml:space="preserve">
+        <value>Konuşmalarınız</value>
+    </data>
+    <data name="startConversation" xml:space="preserve">
+        <value>Aşağıya bir mesaj göndererek bir konuşma başlatın.</value>
+    </data>
+    <data name="newChat" xml:space="preserve">
+        <value>Yeni Sohbet</value>
+    </data>
+    <data name="chat" xml:space="preserve">
+        <value>Sohbet</value>
+    </data>
+    <data name="typeMessage" xml:space="preserve">
+        <value>Mesajınızı yazın</value>
+    </data>
+    <data name="title" xml:space="preserve">
+        <value>Başlık</value>
+    </data>
+    <data name="close" xml:space="preserve">
+        <value>Kapat</value>
+    </data>
+    <data name="selectDocument" xml:space="preserve">
+        <value>Belge Seç</value>
+    </data>
+    <data name="you" xml:space="preserve">
+        <value>Siz</value>
+    </data>
+    <data name="chatCreated" xml:space="preserve">
+        <value>Sohbet başarıyla oluşturuldu!</value>
+    </data>
+    <data name="chatCreatedError" xml:space="preserve">
+        <value>Sohbet oluşturulurken bir hata oluştu!</value>
+    </data>
+    <data name="chatDeleted" xml:space="preserve">
+        <value>Sohbet başarıyla silindi!</value>
+    </data>
+    <data name="chatDeletedError" xml:space="preserve">
+        <value>Sohbet silinirken bir hata oluştu!</value>
+    </data>
+    <data name="deleteChat" xml:space="preserve">
+        <value>Sohbeti Sil</value>
+    </data>
+    <data name="businessImpact" xml:space="preserve">
+        <value>İş Etkisi</value>
+    </data>
+    <data name="minimalImpact" xml:space="preserve">
+        <value>Minimum Etki</value>
+    </data>
+    <data name="lowImpact" xml:space="preserve">
+        <value>Düşük Etki</value>
+    </data>
+    <data name="moderateImpact" xml:space="preserve">
+        <value>Orta Etki</value>
+    </data>
+    <data name="highImpact" xml:space="preserve">
+        <value>Yüksek Etki</value>
+    </data>
+    <data name="veryHighImpact" xml:space="preserve">
+        <value>Çok Yüksek Etki</value>
+    </data>
+    <data name="noImpact" xml:space="preserve">
+        <value>Etki Yok</value>
+    </data>
+    <data name="noData" xml:space="preserve">
+        <value>Veri Yok</value>
+    </data>
+</root>
