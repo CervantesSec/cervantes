@@ -18,6 +18,15 @@
         "doc",
         "translation"
       ]
+    },
+    {
+      "login": "abutcher",
+      "name": "abutcher",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47003?v=4",
+      "profile": "https://github.com/abutcher",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
