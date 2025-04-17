@@ -37,6 +37,15 @@
         "translation",
         "code"
       ]
+    },
+    {
+      "login": "jstangle",
+      "name": "jstangle",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22149955?v=4",
+      "profile": "https://gitlab.com/jstangle",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
