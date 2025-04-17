@@ -1,6 +1,6 @@
 ![Cervantes logo](https://raw.githubusercontent.com/CervantesSecurity/.github/main/profile/logo-horizontal2.png)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![GITHUB](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/CervantesSec)
@@ -170,9 +170,12 @@ If you have bugs to report please use the [issues](https://github.com/CervantesS
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/abutcher"><img src="https://avatars.githubusercontent.com/u/47003?v=4?s=100" width="100px;" alt="abutcher"/><br /><sub><b>abutcher</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/commits?author=abutcher" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/samogod"><img src="https://avatars.githubusercontent.com/u/81412659?v=4?s=100" width="100px;" alt="samet g."/><br /><sub><b>samet g.</b></sub></a><br /><a href="#translation-samogod" title="Translation">🌍</a> <a href="https://github.com/CervantesSec/cervantes/commits?author=samogod" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/EmiliaChovancova"><img src="https://avatars.githubusercontent.com/u/44211508?v=4?s=100" width="100px;" alt="EmiliaChovancova"/><br /><sub><b>EmiliaChovancova</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/issues?q=author%3AEmiliaChovancova" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jstangle"><img src="https://avatars.githubusercontent.com/u/44211508?v=4?s=100" width="100px;" alt="jstangle"/><br /><sub><b>jstangle</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/issues?q=author%3Ajstangle" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jstangle"><img src="https://avatars.githubusercontent.com/u/22149955?v=4?s=100" width="100px;" alt="jstangle"/><br /><sub><b>jstangle</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/issues?q=author%3Ajstangle" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Th34t0m1c"><img src="https://avatars.githubusercontent.com/u/161956075?v=4?s=100" width="100px;" alt="Th34t0m1c"/><br /><sub><b>Th34t0m1c</b></sub></a><br /><a href="#translation-Th34t0m1c" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/gomezander"><img src="https://avatars.githubusercontent.com/u/105321735?v=4?s=100" width="100px;" alt="Ander Gómez"/><br /><sub><b>Ander Gómez</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/commits?author=gomezander" title="Documentation">📖</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jpostolk"><img src="https://avatars.githubusercontent.com/u/115724129?v=4?s=100" width="100px;" alt="jpostolk"/><br /><sub><b>jpostolk</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/issues?q=author%3Ajpostolk" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
