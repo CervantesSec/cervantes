@@ -1,0 +1,29 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "mesquidar",
+      "name": "Ruben Mesquida",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16049893?v=4",
+      "profile": "https://github.com/mesquidar",
+      "contributions": [
+        "business",
+        "code",
+        "doc",
+        "translation"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "cervantes",
+  "projectOwner": "CervantesSec"
+}
