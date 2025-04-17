@@ -37,6 +37,15 @@
         "translation",
         "code"
       ]
+    },
+    {
+      "login": "EmiliaChovancova",
+      "name": "EmiliaChovancova",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44211508?v=4",
+      "profile": "https://github.com/EmiliaChovancova",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
