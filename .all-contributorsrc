@@ -73,6 +73,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jpostolk",
+      "name": "jpostolk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/115724129?v=4",
+      "profile": "https://github.com/jpostolk",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
