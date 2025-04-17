@@ -1,4 +1,7 @@
 ![Cervantes logo](https://raw.githubusercontent.com/CervantesSecurity/.github/main/profile/logo-horizontal2.png)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![GITHUB](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/CervantesSec)
 [![TWITTER](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/Cervantes_Sec)
@@ -158,6 +161,20 @@ If you have bugs to report please use the [issues](https://github.com/CervantesS
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mesquidar"><img src="https://avatars.githubusercontent.com/u/16049893?v=4?s=100" width="100px;" alt="Ruben Mesquida"/><br /><sub><b>Ruben Mesquida</b></sub></a><br /><a href="#business-mesquidar" title="Business development">💼</a> <a href="https://github.com/CervantesSec/cervantes/commits?author=mesquidar" title="Code">💻</a> <a href="https://github.com/CervantesSec/cervantes/commits?author=mesquidar" title="Documentation">📖</a> <a href="#translation-mesquidar" title="Translation">🌍</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
