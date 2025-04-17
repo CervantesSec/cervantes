@@ -559,6 +559,11 @@ else
                                 {
                                     <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(maxWidth))">@localizer["import"]</MudButton>
                                 }
+
+                                @if (userAth.HasPermission(Permissions.VulnsExport))
+                                {
+                                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.FileDownload" Color="Color.Primary" OnClick="@((e) => ExportVulns(0))">@localizer["export"]</MudButton>
+                                }
                                 
                                 @if(userAth.HasPermission(Permissions.VulnsDelete))
                                 {
