@@ -64,6 +64,15 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "gomezander",
+      "name": "Ander Gómez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/105321735?v=4",
+      "profile": "https://github.com/gomezander",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
