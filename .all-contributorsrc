@@ -27,6 +27,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "samogod",
+      "name": "samet g.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81412659?v=4",
+      "profile": "https://github.com/samogod",
+      "contributions": [
+        "translation",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
