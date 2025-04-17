@@ -155,6 +155,17 @@ Please report Security issues via our [disclosure policy](https://github.com/Cer
 
 If you have bugs to report please use the [issues](https://github.com/CervantesSec/cervantes/issues) tab on GitHub to submit the details.
 
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## License
 
 
