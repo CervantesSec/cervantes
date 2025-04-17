@@ -1,6 +1,6 @@
 ![Cervantes logo](https://raw.githubusercontent.com/CervantesSecurity/.github/main/profile/logo-horizontal2.png)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![GITHUB](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/CervantesSec)
@@ -169,6 +169,7 @@ If you have bugs to report please use the [issues](https://github.com/CervantesS
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mesquidar"><img src="https://avatars.githubusercontent.com/u/16049893?v=4?s=100" width="100px;" alt="Ruben Mesquida"/><br /><sub><b>Ruben Mesquida</b></sub></a><br /><a href="#business-mesquidar" title="Business development">💼</a> <a href="https://github.com/CervantesSec/cervantes/commits?author=mesquidar" title="Code">💻</a> <a href="https://github.com/CervantesSec/cervantes/commits?author=mesquidar" title="Documentation">📖</a> <a href="#translation-mesquidar" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/abutcher"><img src="https://avatars.githubusercontent.com/u/47003?v=4?s=100" width="100px;" alt="abutcher"/><br /><sub><b>abutcher</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/commits?author=abutcher" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/samogod"><img src="https://avatars.githubusercontent.com/u/81412659?v=4?s=100" width="100px;" alt="samet g."/><br /><sub><b>samet g.</b></sub></a><br /><a href="#translation-samogod" title="Translation">🌍</a> <a href="https://github.com/CervantesSec/cervantes/commits?author=samogod" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/EmiliaChovancova"><img src="https://avatars.githubusercontent.com/u/44211508?v=4?s=100" width="100px;" alt="EmiliaChovancova"/><br /><sub><b>EmiliaChovancova</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/issues?q=author%3AEmiliaChovancova" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
