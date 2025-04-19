@@ -92,6 +92,8 @@ public enum Permissions: ushort
     VulnsAdd = 84,
     [Display(GroupName = "Vulns", Name = "Import New Vulns", Description = "Used in User.UserHasThisPermission in page")]
     VulnsImport = 85,
+    [Display(GroupName = "Vulns", Name = "Export Vulns", Description = "Used in User.UserHasThisPermission in page")]
+    VulnsExport = 86,
     
     [Display(GroupName = "Vuln Categories", Name = "View/Read Vuln Categories", Description = "Can read and view vulnerability categories")]
     VulnCategoriesRead = 91,

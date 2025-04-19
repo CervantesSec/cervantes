@@ -81,6 +81,16 @@
                     {
                         <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
                     }
+                    @if(userAth.HasPermission(Permissions.VulnsExport))
+                    {
+                        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                            <MudButton StartIcon="@Icons.Material.Filled.FileDownload">@localizer["export"]</MudButton>
+                            <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                <MudMenuItem OnClick="@((e) => Export(0))">@localizer["exportCSV"]</MudMenuItem>
+                                <MudMenuItem OnClick="@((e) => ExportPDF())">@localizer["exportPDF"]</MudMenuItem>
+                            </MudMenu>
+                        </MudButtonGroup>
+                    }
 
                     @if (userAth.HasPermission(Permissions.VulnsDelete))
                     {
