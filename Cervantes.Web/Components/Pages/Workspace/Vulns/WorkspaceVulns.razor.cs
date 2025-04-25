@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
+using Cervantes.IFR.Export;
 using Cervantes.Web.Components.Pages.Vuln;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
@@ -23,6 +25,7 @@ public partial class WorkspaceVulns: ComponentBase
     private string searchString = "";
     [Inject] private VulnController VulnController { get; set; }
     DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+    [Inject] private IExportToCsv ExportToCsv { get; set; }
 
     DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
     {
@@ -127,28 +130,41 @@ public partial class WorkspaceVulns: ComponentBase
         switch (id)
         {
             case 0:
-                /*var records = model.Select(e => new IFR.Export.ProjectExport()
+                List<VulnExport> test = new List<VulnExport>();
+                foreach (var e in seleVulns)
                 {
-                    Name = e.Name,
-                    Description = e.Description,
-                    Client = e.Client.Name,
-                    CreatedUser = e.User.FullName,
-                    StartDate = e.StartDate.ToShortDateString(),
-                    EndDate = e.EndDate.ToShortDateString(),
-                    Template = e.Template,
-                    Status = e.Status.ToString(),
-                    ProjectType = e.ProjectType.ToString(),
-                    Language = e.Language.ToString(),
-                    Score = e.Score.ToString(),
-                    FindingsId = e.FindingsId.ToString(),
-                    ExecutiveSummary = e.ExecutiveSummary
-                    
- 
-                }).ToList();
-                var file = ExportToCsv.ExportProjects(records);
+                    VulnExport vuln = new VulnExport();
+                    vuln.Name = e.Name ?? "No Name";
+                    vuln.Description = e.Description ?? "No Description";
+                    vuln.CreatedUser = e.User.FullName ?? "No User";
+                    vuln.CreatedDate = e.CreatedDate.ToShortDateString() ?? "No Date";
+                    vuln.ModifiedDate = e.ModifiedDate.ToShortDateString() ?? "No Date";
+                    vuln.Template = e.Template;
+                    vuln.Status = e.Status.ToString();
+                    vuln.Language = e.Language.ToString();
+                    vuln.cve = e.cve ?? "No CVE";
+                    vuln.CVSS3 = e.CVSS3;
+                    vuln.CVSSVector = e.CVSSVector ?? "No Vector";
+                    vuln.Impact = e.Impact ?? "No Impact";
+                    vuln.JiraCreated = e.JiraCreated;
+                    vuln.ProofOfConcept = e.ProofOfConcept ?? "No Proof";
+                    vuln.Remediation = e.Remediation ?? "No Remediation";
+                    vuln.RemediationComplexity = e.RemediationComplexity.ToString() ?? "No Complexity";
+                    vuln.RemediationPriority = e.RemediationPriority.ToString() ?? "No Priority";
+                    vuln.Risk = e.Risk.ToString() ?? "No Risk";
+                    vuln.OWASPImpact = e.OWASPImpact?.ToString() ?? "No Impact";
+                    vuln.OWASPLikehood = e.OWASPLikehood?.ToString() ?? "No Likehood";
+                    vuln.OWASPRisk = e.OWASPRisk?.ToString() ?? "No Risk";
+                    vuln.OWASPVector = e.OWASPVector?.ToString() ?? "No Vector";
+                    vuln.VulnCategory = e.VulnCategory?.Name ?? "No Category";
+                    vuln.Project = e.Project?.Name ?? "No Project";
+                    test.Add(vuln);
+                }
+                
+                var file = ExportToCsv.ExportVulns(test);
                 await JS.InvokeVoidAsync("downloadFile", file);
                 Snackbar.Add(@localizer["exportSuccessfull"], Severity.Success);
-                ExportToCsv.DeleteFile(file);*/
+                ExportToCsv.DeleteFile(file);
                 break;
         }
     }

@@ -559,24 +559,25 @@ else
                                 {
                                     <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(maxWidth))">@localizer["import"]</MudButton>
                                 }
-
-                                @if (userAth.HasPermission(Permissions.VulnsExport))
-                                {
-                                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.FileDownload" Color="Color.Primary" OnClick="@((e) => ExportVulns(0))">@localizer["export"]</MudButton>
-                                }
                                 
-                                @if(userAth.HasPermission(Permissions.VulnsDelete))
-                                {
                                     @if (seleVulns.Count() != 0)
                                     {
                                         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
                                             <MudButton>@localizer["actions"]</MudButton>
                                             <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                                <MudMenuItem OnClick="@((e) => BtnActionsVulns(0))">@localizer["delete"]</MudMenuItem>
+                                                @if (userAth.HasPermission(Permissions.VulnsDelete))
+                                                {
+                                                    <MudMenuItem OnClick="@((e) => BtnActionsVulns(0))">@localizer["delete"]</MudMenuItem>
+                                                }
+                                                @if (userAth.HasPermission(Permissions.VulnsExport))
+                                                {
+                                                    <MudMenuItem OnClick="@((e) => ExportVulns(0))">@localizer["exportCSV"]</MudMenuItem>
+                                                }
                                             </MudMenu>
+                                            
                                         </MudButtonGroup>
                                     }
-                                }
+                                
                             }
                     </MudStack>
                     <MudSpacer/>

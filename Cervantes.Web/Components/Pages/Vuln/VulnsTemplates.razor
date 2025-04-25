@@ -67,7 +67,7 @@
 
 <MudGrid>
     <MudItem xs="12" sm="12" md="12">
-        <MudDataGrid T="Vuln" Items="@model.Where(x => x.Template == false)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+        <MudDataGrid T="Vuln" Items="@model.Where(x => x.Template == true)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
@@ -79,19 +79,22 @@
                     {
                     <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
                     }
-                    @if(userAth.HasPermission(Permissions.VulnsExport))
-                    {
-                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.FileDownload" Color="Color.Primary" OnClick="@((e) => Export(0))">@localizer["export"]</MudButton>
-                    }
 
-                    @if (userAth.HasPermission(Permissions.VulnsDelete))
-                    {
+                 
                     @if (seleVulns.Count() != 0)
                     {
                     <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
                         <MudButton>@localizer["actions"]</MudButton>
                         <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                            <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteVuln"]</MudMenuItem>
+                            @if (userAth.HasPermission(Permissions.VulnsDelete))
+                            {
+                                <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteVuln"]</MudMenuItem>
+                            }
+                            @if (userAth.HasPermission(Permissions.VulnsExport))
+                            {
+                                <MudMenuItem OnClick="@((e) => Export(0))">@localizer["exportCSV"]</MudMenuItem>
+                            }
+                            
                             @if (jiraEnabled)
                             {
                             <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["createJira"]</MudMenuItem>
@@ -102,7 +105,7 @@
                         </MudMenu>
                     </MudButtonGroup>
                     }
-                    }
+                    
 
                 </MudStack>
                 <MudSpacer/>

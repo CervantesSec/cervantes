@@ -30,6 +30,7 @@ public partial class CreateVulnDialog: ComponentBase
                 {"noneditable_noneditable_class", "mceNonEditable"},
                 {"toolbar_mode", "sliding"},
                 {"contextmenu", "link image imagetools table"},
+                {"content_style","img { width: 100%; height: auto; }"},
                 {"textpattern_patterns", new object[] {
                     new {start = "#", format = "h1"},
                     new {start = "##", format = "h2"},

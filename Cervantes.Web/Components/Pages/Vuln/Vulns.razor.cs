@@ -149,7 +149,7 @@ private async Task Update()
         {
             case 0:
                 List<VulnExport> test = new List<VulnExport>();
-                foreach (var e in model)
+                foreach (var e in seleVulns)
                 {
                     VulnExport vuln = new VulnExport();
                     vuln.Name = e.Name ?? "No Name";

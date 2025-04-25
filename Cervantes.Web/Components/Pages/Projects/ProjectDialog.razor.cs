@@ -428,12 +428,38 @@ protected override async Task OnInitializedAsync()
         switch (id)
         {
             case 0:
-                var records = projects.Select(e => new IFR.Export.ClientExport
+                List<VulnExport> test = new List<VulnExport>();
+                foreach (var e in seleVulns)
                 {
-                    Name = e.Name,
-                    Description = e.Description,
-                }).ToList();
-                var file = ExportToCsv.ExportClients(records);
+                    VulnExport vuln = new VulnExport();
+                    vuln.Name = e.Name ?? "No Name";
+                    vuln.Description = e.Description ?? "No Description";
+                    vuln.CreatedUser = e.User.FullName ?? "No User";
+                    vuln.CreatedDate = e.CreatedDate.ToShortDateString() ?? "No Date";
+                    vuln.ModifiedDate = e.ModifiedDate.ToShortDateString() ?? "No Date";
+                    vuln.Template = e.Template;
+                    vuln.Status = e.Status.ToString();
+                    vuln.Language = e.Language.ToString();
+                    vuln.cve = e.cve ?? "No CVE";
+                    vuln.CVSS3 = e.CVSS3;
+                    vuln.CVSSVector = e.CVSSVector ?? "No Vector";
+                    vuln.Impact = e.Impact ?? "No Impact";
+                    vuln.JiraCreated = e.JiraCreated;
+                    vuln.ProofOfConcept = e.ProofOfConcept ?? "No Proof";
+                    vuln.Remediation = e.Remediation ?? "No Remediation";
+                    vuln.RemediationComplexity = e.RemediationComplexity.ToString() ?? "No Complexity";
+                    vuln.RemediationPriority = e.RemediationPriority.ToString() ?? "No Priority";
+                    vuln.Risk = e.Risk.ToString() ?? "No Risk";
+                    vuln.OWASPImpact = e.OWASPImpact?.ToString() ?? "No Impact";
+                    vuln.OWASPLikehood = e.OWASPLikehood?.ToString() ?? "No Likehood";
+                    vuln.OWASPRisk = e.OWASPRisk?.ToString() ?? "No Risk";
+                    vuln.OWASPVector = e.OWASPVector?.ToString() ?? "No Vector";
+                    vuln.VulnCategory = e.VulnCategory?.Name ?? "No Category";
+                    vuln.Project = e.Project?.Name ?? "No Project";
+                    test.Add(vuln);
+                }
+                
+                var file = ExportToCsv.ExportVulns(test);
                 await JS.InvokeVoidAsync("downloadFile", file);
                 Snackbar.Add(@localizer["exportSuccessfull"], Severity.Success);
                 ExportToCsv.DeleteFile(file);

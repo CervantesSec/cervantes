@@ -109,7 +109,6 @@ public partial class ClientDialog: ComponentBase
                 .NotEmpty()
                 .Length(1,100);
             RuleFor(x => x.Url)
-                .NotEmpty()
                 .Length(0,100);
             RuleFor(x => x.ContactName)
                 .Length(0,100);

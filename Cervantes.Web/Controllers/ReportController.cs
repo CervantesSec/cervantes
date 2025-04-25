@@ -587,13 +587,8 @@ public class ReportController : ControllerBase
             if (ModelState.IsValid)
             {
                 var pro = projectManager.GetById(model.ProjectId);
-                var vul = model.SelectedVulnerabilityIds != null && model.SelectedVulnerabilityIds.Any() 
-                    ? vulnManager.GetAll()
-                        .Where(x => x.ProjectId == model.ProjectId && model.SelectedVulnerabilityIds.Contains(x.Id) && x.Template == false)
-                        .Select(y => y.Id).ToList()
-                    : vulnManager.GetAll()
-                        .Where(x => x.ProjectId == model.ProjectId && x.Template == false)
-                        .Select(y => y.Id).ToList();
+                var vul = vulnManager.GetAll().Where(x => x.ProjectId == model.ProjectId && x.Template == false)
+                    .Select(y => y.Id).ToList();
                 //var template = reportTemplateManager.GetById(model.ReportTemplateId);
                 var userInPro = projectUserManager.VerifyUser(pro.Id, aspNetUserId);
                 if (userInPro == null)
@@ -618,11 +613,8 @@ public class ReportController : ControllerBase
                 var Organization = organizationManager.GetAll().First();
                 var Client = clientManager.GetById(pro.ClientId);
                 var Project = pro;
-                var Vulns = model.SelectedVulnerabilityIds != null && model.SelectedVulnerabilityIds.Any() 
-                    ? vulnManager.GetAll()
-                        .Where(x => x.ProjectId == model.ProjectId && model.SelectedVulnerabilityIds.Contains(x.Id) && x.Template == false).ToList()
-                    : vulnManager.GetAll()
-                        .Where(x => x.ProjectId == model.ProjectId && x.Template == false).ToList();
+                var Vulns = vulnManager.GetAll()
+                    .Where(x => x.ProjectId == model.ProjectId && x.Template == false).ToList();
                 var Targets = targetManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
                 var Users = projectUserManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
                 var Reports = reportManager.GetAll().Where(x => x.ProjectId == model.ProjectId && x.ReportType == ReportType.General).ToList();

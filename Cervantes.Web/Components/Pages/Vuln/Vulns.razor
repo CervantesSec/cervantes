@@ -81,26 +81,20 @@
                     {
                         <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
                     }
-                    @if(userAth.HasPermission(Permissions.VulnsExport))
-                    {
-                        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                            <MudButton StartIcon="@Icons.Material.Filled.FileDownload">@localizer["export"]</MudButton>
-                            <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                <MudMenuItem OnClick="@((e) => Export(0))">@localizer["exportCSV"]</MudMenuItem>
-                                <MudMenuItem OnClick="@((e) => ExportPDF())">@localizer["exportPDF"]</MudMenuItem>
-                            </MudMenu>
-                        </MudButtonGroup>
-                    }
-
-                    @if (userAth.HasPermission(Permissions.VulnsDelete))
-                    {
                         @if (seleVulns.Count() != 0)
                         {
                             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
                                 <MudButton>@localizer["actions"]</MudButton>
                                 <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                @if (userAth.HasPermission(Permissions.VulnsDelete))
+                                {
                                     <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteVuln"]</MudMenuItem>
-                                    @if (jiraEnabled)
+                                }
+                                @if (userAth.HasPermission(Permissions.VulnsExport))
+                                {
+                                    <MudMenuItem OnClick="@((e) => Export(0))">@localizer["exportCSV"]</MudMenuItem>
+                                }
+                                @if (jiraEnabled)
                                     {
                                         <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["createJira"]</MudMenuItem>
                                         <MudMenuItem OnClick="@((e) => BtnActions(2))">@localizer["deleteJira"]</MudMenuItem>
@@ -110,7 +104,7 @@
                                 </MudMenu>
                             </MudButtonGroup>
                         }
-                    }
+                    
                     
 
                 </MudStack>

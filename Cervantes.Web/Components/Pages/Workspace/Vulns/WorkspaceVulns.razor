@@ -18,6 +18,8 @@
 @using global::AuthPermissions.BaseCode.PermissionsCode
 @using MudBlazor.Extensions.Core
 @inject AuthenticationStateProvider authenticationStateProvider
+@inject IJSRuntime JS
+
 @attribute [HasPermission(Permissions.VulnsRead)]
 
 <PageTitle>@localizer["vulns"] | Cervantes</PageTitle>
@@ -59,23 +61,24 @@
                     {
                         <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
                     }
-                    @if(userAth.HasPermission(Permissions.VulnsExport))
-                    {
-                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.FileDownload" Color="Color.Primary" OnClick="@((e) => Export(0))">@localizer["export"]</MudButton>
-                    }
-                    
-                    @if (userAth.HasPermission(Permissions.VulnsDelete))
-                    {
+   
                         @if (seleVulns.Count() != 0)
                         {
                             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
                                 <MudButton>@localizer["actions"]</MudButton>
                                 <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                    @if (userAth.HasPermission(Permissions.VulnsDelete))
+                                    {
+                                        <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteVuln"]</MudMenuItem>
+                                    }
+                                    @if (userAth.HasPermission(Permissions.VulnsExport))
+                                    {
+                                        <MudMenuItem OnClick="@((e) => Export(0))">@localizer["exportCSV"]</MudMenuItem>
+                                    }
                                 </MudMenu>
                             </MudButtonGroup>
                         }
-                    }
+                    
                     
                 </MudStack>
                 <MudSpacer/>
