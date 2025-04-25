@@ -1931,4 +1931,10 @@
     <data name="noData" xml:space="preserve">
         <value>No Data</value>
     </data>
+    <data name="exportCSV" xml:space="preserve">
+        <value>Export CSV</value>
+    </data>
+    <data name="exportError" xml:space="preserve">
+        <value>An error occurred exporting the CSV file!</value>
+    </data>
 </root>

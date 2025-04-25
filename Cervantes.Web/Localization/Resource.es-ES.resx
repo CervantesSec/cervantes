@@ -2001,4 +2001,10 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="noData" xml:space="preserve">
         <value>No hay Datos</value>
     </data>
+    <data name="exportCSV" xml:space="preserve">
+        <value>Exportar CSV</value>
+    </data>
+    <data name="exportError" xml:space="preserve">
+        <value>Se ha producido un error al guardar el exportar el CSV!</value>
+    </data>
 </root>
