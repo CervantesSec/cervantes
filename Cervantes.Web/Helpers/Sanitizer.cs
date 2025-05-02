@@ -25,21 +25,20 @@ public class Sanitizer
     public string Sanitize(string html)
     {
         if (string.IsNullOrEmpty(html))
-            return String.Empty;
-
-        //html = ProcessCodeSamples(html);
-        string sanitized = _sanitizer.Sanitize(html);
-        bool isMalicious = html != sanitized;
-
-        if (IsHtmlCode(sanitized))
+            return string.Empty;
+    
+        // Decode first to handle any pre-encoded content
+        string decodedHtml = html;
+        string previousDecoded;
+        do 
         {
-            if (isMalicious && !IsHtmlEncoded(sanitized))
-            {
-                return HttpUtility.HtmlEncode(sanitized);
-            }
-            return sanitized;
-        }
-
+            previousDecoded = decodedHtml;
+            decodedHtml = HttpUtility.HtmlDecode(previousDecoded);
+        } while (decodedHtml != previousDecoded);
+    
+        // Sanitize the decoded input
+        string sanitized = _sanitizer.Sanitize(decodedHtml);
+        
         return sanitized;
     }
 
