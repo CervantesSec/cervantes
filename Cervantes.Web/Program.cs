@@ -297,7 +297,7 @@ builder.Services.AddScoped<VaultController>();
 builder.Services.AddScoped<SearchController>();
 builder.Services.AddScoped<JiraController>();
 builder.Services.AddScoped<ChatController>();
-builder.Services.AddScoped<RssController>();
+//builder.Services.AddScoped<RssController>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cervantes API", Version = "v1" });
