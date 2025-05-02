@@ -63,7 +63,7 @@ public class RssController : ControllerBase
         }
     }
     
-    [HttpPost]
+    /*[HttpPost]
     [Route("Sources")]
     [HasPermission(Permissions.RssSourcesAdd)]
     public async Task<IActionResult> AddSource([FromBody] RssSourceAddViewModel model)
@@ -153,7 +153,7 @@ public class RssController : ControllerBase
                 aspNetUserId);
             throw;
         }
-    }
+    }*/
     
     [HttpDelete]
     [Route("Sources/{id}")]
@@ -210,7 +210,7 @@ public class RssController : ControllerBase
         }
     }
     
-    [HttpPost]
+    /*[HttpPost]
     [Route("Categories")]
     [HasPermission(Permissions.RssCategoriesAdd)]
     public async Task<IActionResult> AddCategory([FromBody] RssCategoryAddViewModel model)
@@ -239,9 +239,9 @@ public class RssController : ControllerBase
                 aspNetUserId);
             throw;
         }
-    }
+    }*/
     
-    [HttpPut]
+    /*[HttpPut]
     [Route("Categories")]
     [HasPermission(Permissions.RssCategoriesEdit)]
     public async Task<IActionResult> EditCategory([FromBody] RssCategoryEditViewModel model)
@@ -277,7 +277,7 @@ public class RssController : ControllerBase
                 aspNetUserId);
             throw;
         }
-    }
+    }*/
     
     [HttpDelete]
     [Route("Categories/{id}")]
