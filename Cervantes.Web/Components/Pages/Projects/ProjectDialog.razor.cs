@@ -419,6 +419,23 @@ protected override async Task OnInitializedAsync()
         }
     }
 
+    private async Task AssignToMe(Guid id)
+    {
+        var model = new TaskAssignToMeViewModel();
+        model.TaskId = id;
+        model.UserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        var response = await _TaskController.AssignToMe(model);
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        {
+            Snackbar.Add(@localizer["taskAssigned"], Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add(@localizer["taskAssignedError"], Severity.Error);
+        }
+        
+    }
+    
     #endregion
 
     #region Vulns

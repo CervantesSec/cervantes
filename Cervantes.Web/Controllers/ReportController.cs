@@ -879,8 +879,14 @@ public class ReportController : ControllerBase
                 }
                 
                 var TasksList = new List<Dictionary<string, string>>();
+                
                 foreach (var tas in Tasks)
                 {
+                    string asigned = null;
+                    if (tas.AsignedUser == null)
+                    {
+                        asigned = "";
+                    }
                     TargetList.Add(new Dictionary<string, string>
                     {
                         {"TaskName", tas.Name},
@@ -888,7 +894,7 @@ public class ReportController : ControllerBase
                         {"TaskStatus", tas.Status.ToString()},
                         {"TaskStartDate", tas.StartDate.ToString("dd/MM/yyyy")},
                         {"TaskEndDate", tas.EndDate.ToString("dd/MM/yyyy")},
-                        {"TaskAssignedTo", tas.AsignedUser.FullName},
+                        {"TaskAssignedTo", asigned},
                         {"TaskCreatedBy", tas.CreatedUser.FullName},
                     });
                 }

@@ -18,6 +18,7 @@
 @using global::AuthPermissions.BaseCode.PermissionsCode
 @inject AuthenticationStateProvider authenticationStateProvider
 @attribute [HasPermission(Permissions.ProjectsRead)]
+@inject IHttpContextAccessor _accessor
 
 <PageTitle>@localizer["project"] | Cervantes</PageTitle>
 	<SectionContent SectionName="appbar">
@@ -280,24 +281,35 @@
 						<Columns>
 							<SelectColumn T="CORE.Entities.Task"/>
 							<PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
-							<PropertyColumn Property="x => x.AsignedUser.FullName" Title="@localizer["assignedTo"]">
+							<TemplateColumn Title="@localizer["assignedTo"]">
 								<CellTemplate>
-									<MudStack Row="true">
-										@if (@context.Item.AsignedUser.Avatar != null)
-										{
-											<MudImage Src="@context.Item.AsignedUser.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
-										}
-										else
-										{
-											<MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.AsignedUser.FullName[0]</MudAvatar>
-										}
-										<MudStack Justify="Justify.Center" Spacing="0">
-											<MudText Typo="Typo.body1">@context.Item.AsignedUser.FullName</MudText>
-										</MudStack>
-									</MudStack>
+									@if (!string.IsNullOrEmpty(@context.Item.AsignedUserId))
+									{
+										<MudStack Row="true">
 
+											@if (@context.Item.AsignedUser.Avatar != null)
+											{
+												<MudImage Src="@context.Item.AsignedUser.Avatar" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
+											}
+											else
+											{
+												<MudAvatar Color="Color.Primary" Size="Size.Small">@context.Item.AsignedUser.FullName[0]</MudAvatar>
+											}
+											<MudStack Justify="Justify.Center" Spacing="0">
+												<MudText Typo="Typo.body1">@context.Item.AsignedUser.FullName</MudText>
+											</MudStack>
+										</MudStack>
+									}
+									else
+									{
+										<MudStack Row="true" Justify="Justify.FlexStart">
+											<MudButton Variant="Variant.Outlined" OnClick="@((e) => AssignToMe(@context.Item.Id))">@localizer["assignToMe"]</MudButton>
+
+										</MudStack>
+                            
+									}
 								</CellTemplate>
-							</PropertyColumn>
+							</TemplateColumn>
 							<PropertyColumn Property="x => x.Status" Title="@localizer["status"]">
 								<CellTemplate>
 									@switch (@context.Item.Status)
