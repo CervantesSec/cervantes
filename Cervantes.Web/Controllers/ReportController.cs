@@ -1121,7 +1121,7 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                     Body body = mainPart.Document.Body;
 
                                     // Convert the header, footer, and cover HTML to OpenXML elements
-                                    HtmlToOpenXml.HtmlConverter converter = new HtmlToOpenXml.HtmlConverter(mainPart);
+                                    HtmlToOpenXml.HtmlConverter converter = new HtmlToOpenXml.HtmlConverter(mainPart){ ContinueNumbering = false };
 
                                     // check if the report has a cover page
                                     bool hasCover;
