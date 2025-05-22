@@ -3,6 +3,7 @@ using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.Export;
 using Cervantes.Web.Components.Pages.Projects;
+using Cervantes.Web.Components.Pages.Workspace.Target;
 using Cervantes.Web.Controllers;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FluentValidation;
@@ -280,9 +281,11 @@ public partial class TaskDialog: ComponentBase
     {
         if (inProject)
         {
-            var parameters = new DialogParameters { ["target"]=args.Item };
+            
+            var item = _targetController.GetTargets().FirstOrDefault(x => x.Id == args.Item.TargetId);
+            var parameters = new DialogParameters { ["target"]=item };
 
-            var dialog =  await Dialog.ShowEx<DeleteTaskTargetDialog>("Edit", parameters, maxWidth);
+            var dialog =  await Dialog.ShowEx<TargetDialog>("Edit", parameters, maxWidth);
             var result = await dialog.Result;
 
             if (!result.Canceled)
