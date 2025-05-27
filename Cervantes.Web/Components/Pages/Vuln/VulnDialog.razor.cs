@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
 using Severity = MudBlazor.Severity;
@@ -163,6 +164,23 @@ public partial class VulnDialog: ComponentBase
         aiEnabled = _aiService.IsEnabled();
         await base.OnInitializedAsync();
         StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Always try to highlight after render, not just on first render
+        try
+        {
+            // Small delay to ensure DOM is ready
+            await Task.Delay(100);
+            await JS.InvokeVoidAsync("initializePrism");
+        }
+        catch (Exception ex)
+        {
+            // Log the error for debugging
+            Console.WriteLine($"Prism initialization error: {ex.Message}");
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
     
 

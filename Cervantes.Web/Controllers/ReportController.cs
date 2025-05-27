@@ -625,11 +625,20 @@ public class ReportController : ControllerBase
                 var Vaults = vaultManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
                 var reportParts = reportsPartsManager.GetAll().Where(x => x.TemplateId == model.ReportTemplateId)
                     .OrderBy(x => x.Order).Include(x => x.Component).ToList();
+                // Read Prism CSS for inlining (contains all necessary styles)
+                var prismCssPath = System.IO.Path.Combine(env.WebRootPath, "lib", "prism", "prism-report.css");
+                string prismCss = "";
+                if (System.IO.File.Exists(prismCssPath))
+                {
+                    prismCss = await System.IO.File.ReadAllTextAsync(prismCssPath);
+                }
+                
                 string source = @"<!DOCTYPE HTML>
                 <html lang='en' xmlns='http://www.w3.org/1999/xhtml'>
                 <head>
                     <meta charset='utf-8'/>
                     <title></title>
+                    <style>" + prismCss + @"</style>
                 </head>
                 <body>
                     <header>

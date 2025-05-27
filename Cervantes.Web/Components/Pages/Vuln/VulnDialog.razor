@@ -22,6 +22,26 @@
     }
 </style>
 
+<script>
+	window.initializePrism = () => {
+		if (typeof Prism !== 'undefined') {
+			console.log('Highlighting code blocks...');
+			// Force highlighting of all code blocks
+			Prism.highlightAll();
+			
+			// Also try manual highlighting for elements with language classes
+			const codeBlocks = document.querySelectorAll('pre[class*="language-"], code[class*="language-"]');
+			console.log('Found code blocks:', codeBlocks.length);
+			
+			codeBlocks.forEach((block, index) => {
+				Prism.highlightElement(block);
+			});
+		} else {
+			console.error('Prism is not available');
+		}
+	};
+</script>
+
 	<MudDialog Class="mud-ex-dialog-initial">
 		<TitleContent>
 			<MudStack Row="true" Spacing="1">
