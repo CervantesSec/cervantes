@@ -9,6 +9,15 @@ public class Sanitizer
     private readonly HtmlSanitizer _sanitizer;
     private static readonly Regex _htmlEntityRegex = new Regex(@"&(?:#\d+|#x[a-fA-F0-9]+|[a-zA-Z]+);", RegexOptions.Compiled);
     private static readonly Regex _htmlTagRegex = new Regex(@"</?[a-zA-Z]+(?:\s+[a-zA-Z]+(?:\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)*\s*/?>", RegexOptions.Compiled);
+    
+    // Regex to match pre/code blocks with their content
+    private static readonly Regex _codeBlockRegex = new Regex(
+        @"<pre([^>]*)><code([^>]*)>(.*?)</code></pre>",
+        RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+    
+    private static readonly Regex _preBlockRegex = new Regex(
+        @"<pre([^>]*)>(.*?)</pre>",
+        RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
     public Sanitizer()
     {
@@ -17,17 +26,52 @@ public class Sanitizer
             KeepChildNodes = true
         };
         _sanitizer.AllowedAttributes.Add("class");
+        _sanitizer.AllowedAttributes.Add("tabindex");
+        _sanitizer.AllowedAttributes.Add("data-language");
+        _sanitizer.AllowedAttributes.Add("style");
         _sanitizer.AllowedSchemes.Add("data");
         _sanitizer.AllowedTags.Add("pre");
         _sanitizer.AllowedTags.Add("code");
+        
+        // Allow data attributes
+        foreach (var attr in new[] { "data-line", "data-language", "data-prismjs-copy", "data-src" })
+        {
+            _sanitizer.AllowedAttributes.Add(attr);
+        }
     }
 
     public string Sanitize(string html)
     {
         if (string.IsNullOrEmpty(html))
             return string.Empty;
-    
-        // Decode first to handle any pre-encoded content
+
+        // Step 1: Extract and protect code blocks before any processing
+        var codeBlocks = new Dictionary<string, string>();
+        var placeholderIndex = 0;
+        
+        // Replace code blocks with placeholders
+        html = _codeBlockRegex.Replace(html, match =>
+        {
+            var placeholder = $"___CODE_BLOCK_{placeholderIndex}___";
+            codeBlocks[placeholder] = match.Value;
+            placeholderIndex++;
+            return placeholder;
+        });
+        
+        // Also handle standalone pre blocks
+        html = _preBlockRegex.Replace(html, match =>
+        {
+            // Skip if this pre block was already handled as part of a pre/code pair
+            if (match.Value.Contains("<code"))
+                return match.Value;
+                
+            var placeholder = $"___PRE_BLOCK_{placeholderIndex}___";
+            codeBlocks[placeholder] = match.Value;
+            placeholderIndex++;
+            return placeholder;
+        });
+
+        // Step 2: Decode the non-code content
         string decodedHtml = html;
         string previousDecoded;
         do 
@@ -35,9 +79,15 @@ public class Sanitizer
             previousDecoded = decodedHtml;
             decodedHtml = HttpUtility.HtmlDecode(previousDecoded);
         } while (decodedHtml != previousDecoded);
-    
-        // Sanitize the decoded input
+
+        // Step 3: Sanitize the content (without code blocks)
         string sanitized = _sanitizer.Sanitize(decodedHtml);
+        
+        // Step 4: Restore the protected code blocks
+        foreach (var kvp in codeBlocks)
+        {
+            sanitized = sanitized.Replace(kvp.Key, kvp.Value);
+        }
         
         return sanitized;
     }
