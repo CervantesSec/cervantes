@@ -7,6 +7,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Vault;
@@ -73,6 +75,23 @@ public partial class VaultDialog: ComponentBase
                 }}
             };
             ClaimsPrincipal userAth;
+            DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+            {
+                MaximizeButton = true,
+                CloseButton = true,
+                FullHeight = true,
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                MaxHeight = MaxHeight.False,
+                FullWidth = true,
+                DragMode = MudDialogDragMode.Simple,
+                Animations = new[] { AnimationType.SlideIn },
+                Position = DialogPosition.Center,
+                DisableSizeMarginY = true,
+                DisablePositionMargin = true,
+                BackdropClick = false,
+                Resizeable = true,
+            };
             protected override async Task OnInitializedAsync()
             {
                 await base.OnInitializedAsync();
@@ -146,8 +165,9 @@ public partial class VaultDialog: ComponentBase
     private async Task DeleteVaultDialog(CORE.Entities.Vault item,DialogOptions options)
     {
         var parameters = new DialogParameters { ["vault"]=item };
-        var dialog = await Dialog.ShowEx<DeleteVaultDialog>(@localizer["addMember"], parameters, options);
-        var result = await dialog.Result;
+        IMudExDialogReference<DeleteVaultDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVaultDialog>("Simple Dialog", parameters, centerWidthEx);
+
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

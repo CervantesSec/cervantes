@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 
 namespace Cervantes.Web.Components.Pages.Admin.Backup;
 
@@ -13,6 +15,23 @@ public partial class Index: ComponentBase
 [Inject] private BackupController _BackupController { get; set; }
 
 private ClaimsPrincipal userAth;
+DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+{
+    MaximizeButton = true,
+    CloseButton = true,
+    FullHeight = true,
+    CloseOnEscapeKey = true,
+    MaxWidth = MaxWidth.Medium,
+    MaxHeight = MaxHeight.False,
+    FullWidth = true,
+    DragMode = MudDialogDragMode.Simple,
+    Animations = new[] { AnimationType.SlideIn },
+    Position = DialogPosition.Center,
+    DisableSizeMarginY = true,
+    DisablePositionMargin = true,
+    BackdropClick = false,
+    Resizeable = true,
+};
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -82,20 +101,20 @@ private ClaimsPrincipal userAth;
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
     private async Task RestoreData(DialogOptions options)
     {
-        
-        var dialog = await Dialog.ShowEx<RestoreData>("Custom Options Dialog", options);
+        IMudExDialogReference<RestoreData>? dlgReference = await Dialog.ShowExAsync<RestoreData>("Simple Dialog", centerWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
  
         
     }
     
     private async Task RestoreAttachments(DialogOptions options)
     {
-        
-        var dialog = await Dialog.ShowEx<RestoreAttachments>("Custom Options Dialog", options);
+        IMudExDialogReference<RestoreAttachments>? dlgReference = await Dialog.ShowExAsync<RestoreAttachments>("Simple Dialog", centerWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
  
         
     }

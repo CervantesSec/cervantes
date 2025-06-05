@@ -5,6 +5,8 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -24,7 +26,23 @@ public partial class VulnNoteDialog: ComponentBase
     [Inject] ISnackbar Snackbar { get; set; }
     MudForm form;
     private bool editMode = false;
-
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
                 {"menubar", "file edit view insert format tools table help"},
@@ -127,8 +145,9 @@ public partial class VulnNoteDialog: ComponentBase
     private async Task DeleteVulnNoteDialog(CORE.Entities.VulnNote note,DialogOptions options)
     {
         var parameters = new DialogParameters { ["note"]=note };
-        var dialog = await Dialog.ShowEx<DeleteVulnNote>(@localizer["addMember"], parameters, options);
-        var result = await dialog.Result;
+        IMudExDialogReference<DeleteVulnNote>? dlgReference = await Dialog.ShowExAsync<DeleteVulnNote>("Simple Dialog", parameters, centerWidthEx);
+
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

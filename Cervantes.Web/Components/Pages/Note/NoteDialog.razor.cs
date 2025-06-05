@@ -6,6 +6,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Note;
@@ -25,7 +27,23 @@ public partial class NoteDialog: ComponentBase
     MudForm form;
     private bool editMode = false;
     NoteModelFluentValidator noteValidator = new NoteModelFluentValidator();
-
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
  private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
                 {"menubar", "file edit view insert format tools table help"},
@@ -144,8 +162,8 @@ public partial class NoteDialog: ComponentBase
     private async Task DeleteNoteDialog(CORE.Entities.Note note,DialogOptions options)
     {
         var parameters = new DialogParameters { ["note"]=note };
-        var dialog = await Dialog.ShowEx<DeleteNoteDialog>(@localizer["addMember"], parameters, options);
-        var result = await dialog.Result;
+        IMudExDialogReference<DeleteNoteDialog>? dlgReference = await Dialog.ShowExAsync<DeleteNoteDialog>("Simple Dialog", parameters, centerWidthEx);
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

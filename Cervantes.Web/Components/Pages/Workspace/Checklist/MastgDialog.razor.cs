@@ -8,6 +8,9 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Checklist;
@@ -29,6 +32,23 @@ public partial class MastgDialog: ComponentBase
     MastgViewModel model = new MastgViewModel();
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
     ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -318,8 +338,9 @@ public partial class MastgDialog: ComponentBase
     private async Task GenerateReport()
     {
         var parameters = new DialogParameters { ["checklistType"]=checklist.Type.ToString(),["checklistId"]=checklist.Id,["project"]=project };
-        var dialog2 =  DialogService.Show<CreateReportChecklistDialog>(@localizer["delete"],parameters,maxWidth);
-        var result2 = await dialog2.Result;
+        IMudExDialogReference<CreateReportChecklistDialog>? dlgReference = await DialogService.ShowExAsync<CreateReportChecklistDialog>("Simple Dialog", parameters, centerWidthEx);
+
+        var result2 = await dlgReference.Result;
 
         if (!result2.Canceled)
         {
@@ -334,16 +355,18 @@ public partial class MastgDialog: ComponentBase
         switch (list.Type)
         {
             case ChecklistType.OWASPWSTG:
-                var dialog =  DialogService.Show<DeleteChecklistDialog>(@localizer["delete"], parameters,options);
-                var result = await dialog.Result;
+                IMudExDialogReference<DeleteChecklistDialog>? dlgReference = await DialogService.ShowExAsync<DeleteChecklistDialog>("Simple Dialog", parameters, centerWidthEx);
+
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
                     MudDialog.Close(DialogResult.Ok(true));                }
                 break;
             case ChecklistType.OWASPMASVS:
-                var dialog2 =  DialogService.Show<DeleteChecklistDialog>(@localizer["delete"], parameters,options);
-                var result2 = await dialog2.Result;
+                IMudExDialogReference<DeleteChecklistDialog>? dlgReference2 = await DialogService.ShowExAsync<DeleteChecklistDialog>("Simple Dialog", parameters, centerWidthEx);
+
+                var result2 = await dlgReference2.Result;
 
                 if (!result2.Canceled)
                 {

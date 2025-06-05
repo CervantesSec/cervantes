@@ -6,6 +6,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -81,6 +83,23 @@ public partial class TargetDialog: ComponentBase
             };
     private bool inProject = false;
     private ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -95,9 +114,9 @@ public partial class TargetDialog: ComponentBase
     async Task DeleteDialog(CORE.Entities.Target target,DialogOptions options)
     {
         var parameters = new DialogParameters { ["target"]=target };
+        IMudExDialogReference<DeleteTargetDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTargetDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<DeleteTargetDialog>("Edit", parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -169,9 +188,9 @@ public partial class TargetDialog: ComponentBase
       async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.TargetServices> args)
     {
         var parameters = new DialogParameters { ["service"]=args.Item };
+        IMudExDialogReference<TargetServiceDialog>? dlgReference = await Dialog.ShowExAsync<TargetServiceDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<TargetServiceDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -233,10 +252,10 @@ public partial class TargetDialog: ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["target"]=target.Id };
+        IMudExDialogReference<CreateTargetServiceDialog>? dlgReference = await Dialog.ShowExAsync<CreateTargetServiceDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<CreateTargetServiceDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             Services = _TargetController.GetServices(target.Id).ToList();
@@ -251,9 +270,9 @@ public partial class TargetDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["services"]=seleServices };
+                IMudExDialogReference<DeleteTargetServiceBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTargetServiceBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteTargetServiceBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

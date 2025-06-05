@@ -13,6 +13,8 @@ using Microsoft.JSInterop;
 using Microsoft.SemanticKernel;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -94,6 +96,23 @@ public partial class ReportDialog : ComponentBase
     };
 
     private ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -131,9 +150,9 @@ public partial class ReportDialog : ComponentBase
     async Task DeleteDialog(CORE.Entities.ReportTemplate report, DialogOptions options)
     {
         var parameters = new DialogParameters { ["report"] = report };
+        IMudExDialogReference<DeleteReportDialog>? dlgReference = await Dialog.ShowExAsync<DeleteReportDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<DeleteReportDialog>("Edit", parameters, options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

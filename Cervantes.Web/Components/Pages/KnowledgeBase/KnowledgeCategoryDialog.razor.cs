@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
@@ -19,6 +21,23 @@ public partial class KnowledgeCategoryDialog: ComponentBase
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
     private ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -35,9 +54,9 @@ public partial class KnowledgeCategoryDialog: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.KnowledgeBaseCategories> args)
     {
         var parameters = new DialogParameters { ["category"]=args.Item };
+        IMudExDialogReference<EditKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<EditKnowledgeCategoryDialog>("Simple Dialog", centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<EditKnowledgeCategoryDialog>(@localizer["deleteTarget"], parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -60,8 +79,9 @@ public partial class KnowledgeCategoryDialog: ComponentBase
     async Task AddCategory(DialogOptions options)
     {
 
-        var dialog =  await Dialog.ShowEx<CreateKnowledgeCategoryDialog>("Edit", options);
-        var result = await dialog.Result;
+        IMudExDialogReference<CreateKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<CreateKnowledgeCategoryDialog>("Simple Dialog", centerWidthEx);
+
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

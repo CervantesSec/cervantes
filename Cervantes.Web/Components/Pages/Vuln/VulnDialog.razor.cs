@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -126,6 +128,23 @@ public partial class VulnDialog: ComponentBase
     [Inject] private IAiService _aiService { get; set; }
     private bool aiEnabled = false;
     private ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -189,9 +208,9 @@ public partial class VulnDialog: ComponentBase
         if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
         {
             var parameters = new DialogParameters { ["vuln"]=vuln };
+            IMudExDialogReference<DeleteVulnDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnDialog>("Simple Dialog", parameters, centerWidthEx);
 
-            var dialog =  await Dialog.ShowEx<DeleteVulnDialog>("Edit", parameters,options);
-            var result = await dialog.Result;
+            var result = await dlgReference.Result;
 
             if (!result.Canceled)
             {
@@ -431,9 +450,9 @@ public partial class VulnDialog: ComponentBase
         if (inProject)
         {
             var parameters = new DialogParameters { ["target"]=args.Item };
+            IMudExDialogReference<DeleteVulnTarget>? dlgReference = await Dialog.ShowExAsync<DeleteVulnTarget>("Simple Dialog", parameters, centerWidthEx);
 
-            var dialog =  await Dialog.ShowEx<DeleteVulnTarget>(@localizer["deleteTarget"], parameters, medium);
-            var result = await dialog.Result;
+            var result = await dlgReference.Result;
 
             if (!result.Canceled)
             {
@@ -447,9 +466,9 @@ public partial class VulnDialog: ComponentBase
     async Task OpenDialogAddTarget(DialogOptions options)
     {
         var parameters = new DialogParameters { ["vuln"]=vuln };
+        IMudExDialogReference<AddVulnTarget>? dlgReference = await Dialog.ShowExAsync<AddVulnTarget>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<AddVulnTarget>(@localizer["addTarget"], parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -472,9 +491,9 @@ public partial class VulnDialog: ComponentBase
     async Task RowClickedNotes(DataGridRowClickEventArgs<CORE.Entities.VulnNote> args)
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
+        IMudExDialogReference<VulnNoteDialog>? dlgReference = await Dialog.ShowExAsync<VulnNoteDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<VulnNoteDialog>(@localizer["deleteNote"], parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -486,9 +505,9 @@ public partial class VulnDialog: ComponentBase
     async Task OpenDialogAddNote(DialogOptions options)
     {
         var parameters = new DialogParameters { ["vuln"]=vuln.Id };
+        IMudExDialogReference<AddVulnNote>? dlgReference = await Dialog.ShowExAsync<AddVulnNote>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<AddVulnNote>(@localizer["addNoteBtn"], parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -511,9 +530,9 @@ public partial class VulnDialog: ComponentBase
     async Task RowClickedAttachments(DataGridRowClickEventArgs<CORE.Entities.VulnAttachment> args)
     {
         var parameters = new DialogParameters { ["attachment"]=args.Item };
+        IMudExDialogReference<VulnAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<VulnAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<VulnAttachmentDialog>(@localizer["addAttachment"], parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -525,9 +544,9 @@ public partial class VulnDialog: ComponentBase
     async Task OpenDialogAddAttachment(DialogOptions options)
     {
         var parameters = new DialogParameters { ["vuln"]=vuln.Id };
+        IMudExDialogReference<AddVulnAttachment>? dlgReference = await Dialog.ShowExAsync<AddVulnAttachment>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<AddVulnAttachment>(@localizer["deleteAttachment"], parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -559,9 +578,9 @@ public partial class VulnDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
+                IMudExDialogReference<DeleteVulnTargetBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnTargetBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteVulnTargetBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -577,9 +596,9 @@ public partial class VulnDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
+                IMudExDialogReference<DeleteVulnNoteBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnNoteBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteVulnNoteBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -595,9 +614,9 @@ public partial class VulnDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["attachments"]=seleAttachments };
+                IMudExDialogReference<DeleteVulnAttachmentBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnAttachmentBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteVulnAttachmentBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -677,13 +696,13 @@ public partial class VulnDialog: ComponentBase
     private async Task OpenAiDialog(DialogOptions options)
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
+        IMudExDialogReference<AiDialog>? dlgReference = await Dialog.ShowExAsync<AiDialog>("Simple Dialog", centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
-            var data = await dialog.GetReturnValueAsync<VulnAiModel>();
+            var data = await dlgReference.GetReturnValueAsync<VulnAiModel>();
             model.Name = data.Name;
             model.Language = data.Language;
             model.Description = data.Description;

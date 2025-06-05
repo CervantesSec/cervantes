@@ -2,12 +2,15 @@ using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Components.Pages.Tasks;
+using Cervantes.Web.Components.Pages.Workspace.Target;
 using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Documents;
@@ -76,6 +79,23 @@ public partial class DocumentDialog: ComponentBase
     [CascadingParameter] bool _isDarkMode { get; set; }
     [Parameter] public CORE.Entities.Document document { get; set; } = new CORE.Entities.Document();
     private ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -85,8 +105,9 @@ public partial class DocumentDialog: ComponentBase
     private async Task DeleteDocument(CORE.Entities.Document document,DialogOptions options)
     {
         var parameters = new DialogParameters { ["document"]=document };
-        var dialog = await Dialog.ShowEx<DocumentDeleteDialog>(@localizer["addMember"], parameters, options);
-        var result = await dialog.Result;
+        IMudExDialogReference<DocumentDeleteDialog>? dlgReference = await Dialog.ShowExAsync<DocumentDeleteDialog>("Simple Dialog", parameters, centerWidthEx);
+
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

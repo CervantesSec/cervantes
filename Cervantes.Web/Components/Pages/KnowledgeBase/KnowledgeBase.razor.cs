@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.SemanticKernel;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
@@ -30,7 +32,23 @@ public partial class KnowledgeBase: ComponentBase
     private KnowledgePageEditViewModel model = new KnowledgePageEditViewModel();
     MudForm form;
     [CascadingParameter] bool _isDarkMode { get; set; }
-
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
                 {"menubar", "file edit view insert format tools table help"},
@@ -124,9 +142,10 @@ public partial class KnowledgeBase: ComponentBase
     
     private async Task OpenDialogCategory(DialogOptions options)
     {
-        var dialog = await Dialog.ShowEx<KnowledgeCategoryDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<KnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<KnowledgeCategoryDialog>("Simple Dialog", centerWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         await Update();
         StateHasChanged();
         
@@ -134,9 +153,10 @@ public partial class KnowledgeBase: ComponentBase
     
     private async Task OpenDialogPage(DialogOptions options)
     {
-        var dialog = await Dialog.ShowEx<CreateKnowledgePageDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<CreateKnowledgePageDialog>? dlgReference = await Dialog.ShowExAsync<CreateKnowledgePageDialog>("Simple Dialog", centerWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -202,10 +222,10 @@ public partial class KnowledgeBase: ComponentBase
     private async Task OpenDeleteDialog()
     {
         var parameters = new DialogParameters { ["category"]=Page };
+        IMudExDialogReference<DeleteKnowledgePageDialog>? dlgReference = await Dialog.ShowExAsync<DeleteKnowledgePageDialog>("Simple Dialog",parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<DeleteKnowledgePageDialog>(@localizer["deleteTarget"], parameters, maxWidth);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -216,13 +236,13 @@ public partial class KnowledgeBase: ComponentBase
     private async Task OpenAiDialog(DialogOptions options)
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
+        IMudExDialogReference<AiDialog>? dlgReference = await Dialog.ShowExAsync<AiDialog>("Simple Dialog",centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
-            var data = await dialog.GetReturnValueAsync<FunctionResult>();
+            var data = await dlgReference.GetReturnValueAsync<FunctionResult>();
             model.Content = model.Content + data;
             StateHasChanged();
         }

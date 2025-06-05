@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -82,6 +84,23 @@ public partial class UserDialog: ComponentBase
     private UserEditViewModel model { get; set; } = new UserEditViewModel();
     ClaimsPrincipal userAth;
     private string roleUsr;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -93,9 +112,9 @@ public partial class UserDialog: ComponentBase
     async Task DeleteDialog(DialogOptions options)
     {
         var parameters = new DialogParameters { ["user"]=userSelected };
+        IMudExDialogReference<DeleteUserDialog>? dlgReference = await Dialog.ShowExAsync<DeleteUserDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<DeleteUserDialog>("Edit", parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -93,6 +95,23 @@ public partial class ClientDialog: ComponentBase
             };
      
      ClaimsPrincipal user;
+     DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+     {
+         MaximizeButton = true,
+         CloseButton = true,
+         FullHeight = true,
+         CloseOnEscapeKey = true,
+         MaxWidth = MaxWidth.Medium,
+         MaxHeight = MaxHeight.False,
+         FullWidth = true,
+         DragMode = MudDialogDragMode.Simple,
+         Animations = new[] { AnimationType.SlideIn },
+         Position = DialogPosition.Center,
+         DisableSizeMarginY = true,
+         DisablePositionMargin = true,
+         BackdropClick = false,
+         Resizeable = true,
+     };
     protected override async Task OnInitializedAsync()
     {
         user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -166,9 +185,9 @@ public partial class ClientDialog: ComponentBase
     async Task DeleteDialog(CORE.Entities.Client client,DialogOptions options)
     {
         var parameters = new DialogParameters { ["client"]=client };
+        IMudExDialogReference<DeleteClientDialog>? dlgReference = await Dialog.ShowExAsync<DeleteClientDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<DeleteClientDialog>("Edit", parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -315,9 +334,9 @@ public partial class ClientDialog: ComponentBase
     async Task RowClickedProject(DataGridRowClickEventArgs<Project> args)
     {
         var parameters = new DialogParameters { ["project"]=args.Item };
+        IMudExDialogReference<ProjectDialog>? dlgReference = await Dialog.ShowExAsync<ProjectDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<ProjectDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -334,9 +353,9 @@ public partial class ClientDialog: ComponentBase
     async Task RowClickedVuln(DataGridRowClickEventArgs<CORE.Entities.Vuln> args)
     {
         var parameters = new DialogParameters { ["vuln"]=args.Item };
+        IMudExDialogReference<VulnDialog>? dlgReference = await Dialog.ShowExAsync<VulnDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<VulnDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

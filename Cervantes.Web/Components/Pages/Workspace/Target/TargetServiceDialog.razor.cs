@@ -6,6 +6,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Target;
@@ -75,6 +77,23 @@ public partial class TargetServiceDialog: ComponentBase
             [Inject] private ProjectController _ProjectController { get; set; }
 
             private ClaimsPrincipal userAth;
+            DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+            {
+                MaximizeButton = true,
+                CloseButton = true,
+                FullHeight = true,
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                MaxHeight = MaxHeight.False,
+                FullWidth = true,
+                DragMode = MudDialogDragMode.Simple,
+                Animations = new[] { AnimationType.SlideIn },
+                Position = DialogPosition.Center,
+                DisableSizeMarginY = true,
+                DisablePositionMargin = true,
+                BackdropClick = false,
+                Resizeable = true,
+            };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -105,9 +124,9 @@ public partial class TargetServiceDialog: ComponentBase
     async Task DeleteDialog(DialogOptions options)
     {
         var parameters = new DialogParameters { ["service"]=service };
+        IMudExDialogReference<DeleteTargetServiceDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTargetServiceDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<DeleteTargetServiceDialog>("Edit", parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

@@ -32,6 +32,7 @@ public partial class Vulns : ComponentBase
     private string selectedRisk = "All";
     private string selectedLanguage = "All";
     [Inject] private JiraController _jiraController { get; set; }
+    private HashSet<Guid> openDialogs = new HashSet<Guid>();
 
     [Parameter] public Guid vuln { get; set; }
     [Inject] private VulnController VulnController { get; set; }
@@ -208,14 +209,31 @@ private async Task Update()
     
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Vuln> args)
     {
-        var parameters = new DialogParameters { ["vuln"]=args.Item };
-        IMudExDialogReference<VulnDialog>? dlgReference = await DialogService.ShowEx<VulnDialog>("Simple Dialog", parameters, maxWidthEx);
-        var result = await dlgReference.Result;
-
-        if (!result.Canceled)
+        // Check if dialog is already open for this vulnerability
+        if (openDialogs.Contains(args.Item.Id))
         {
-            await Update();
-            StateHasChanged();
+            return;
+        }
+        
+        // Add to tracking set
+        openDialogs.Add(args.Item.Id);
+        
+        try
+        {
+            var parameters = new DialogParameters { ["vuln"]=args.Item };
+            IMudExDialogReference<VulnDialog>? dlgReference = await DialogService.ShowEx<VulnDialog>("Simple Dialog", parameters, maxWidthEx);
+            var result = await dlgReference.Result;
+
+            if (!result.Canceled)
+            {
+                await Update();
+                StateHasChanged();
+            }
+        }
+        finally
+        {
+            // Remove from tracking set when dialog is closed
+            openDialogs.Remove(args.Item.Id);
         }
     }
     

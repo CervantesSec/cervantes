@@ -18,6 +18,8 @@ using Microsoft.JSInterop;
 using Microsoft.SemanticKernel;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -129,6 +131,24 @@ private List<BreadcrumbItem> _items;
 private bool aiEnabled = false;
 private const string aiSVG = @"<svg width=""24"" height=""24"" xmlns=""http://www.w3.org/2000/svg"" fill-rule=""evenodd"" clip-rule=""evenodd""><path d=""M24 11.374c0 4.55-3.783 6.96-7.146 6.796-.151 1.448.061 2.642.384 3.641l-3.72 1.189c-.338-1.129-.993-3.822-2.752-5.279-2.728.802-4.969-.646-5.784-2.627-2.833.046-4.982-1.836-4.982-4.553 0-4.199 4.604-9.541 11.99-9.541 7.532 0 12.01 5.377 12.01 10.374zm-21.992-1.069c-.145 2.352 2.179 3.07 4.44 2.826.336 2.429 2.806 3.279 4.652 2.396 1.551.74 2.747 2.37 3.729 4.967l.002.006.111-.036c-.219-1.579-.09-3.324.36-4.528 3.907.686 6.849-1.153 6.69-4.828-.166-3.829-3.657-8.011-9.843-8.109-6.302-.041-9.957 4.255-10.141 7.306zm8.165-2.484c-.692-.314-1.173-1.012-1.173-1.821 0-1.104.896-2 2-2s2 .896 2 2c0 .26-.05.509-.141.738 1.215.911 2.405 1.855 3.6 2.794.424-.333.96-.532 1.541-.532 1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5c-1.171 0-2.155-.807-2.426-1.895-1.201.098-2.404.173-3.606.254-.17.933-.987 1.641-1.968 1.641-1.104 0-2-.896-2-2 0-1.033.784-1.884 1.79-1.989.12-.731.252-1.46.383-2.19zm2.059-.246c-.296.232-.66.383-1.057.417l-.363 2.18c.504.224.898.651 1.079 1.177l3.648-.289c.047-.267.137-.519.262-.749l-3.569-2.736z""/></svg>";
 private ClaimsPrincipal userAth;
+DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+{
+    MaximizeButton = true,
+    CloseButton = true,
+    FullHeight = true,
+    CloseOnEscapeKey = true,
+    MaxWidth = MaxWidth.Medium,
+    MaxHeight = MaxHeight.False,
+    FullWidth = true,
+    DragMode = MudDialogDragMode.Simple,
+    Animations = new[] { AnimationType.SlideIn },
+    Position = DialogPosition.CenterRight,
+    DisableSizeMarginY = true,
+    DisablePositionMargin = true,
+    BackdropClick = false,
+    Resizeable = true,
+};
+
     #region Dialog
 protected override async Task OnInitializedAsync()
     {
@@ -279,8 +299,9 @@ protected override async Task OnInitializedAsync()
     private async Task OpenProjectMembersDialog(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        var dialog = await Dialog.ShowEx<AddMembersProjectDialog>(@localizer["addMember"], parameters, options);
-        var result = await dialog.Result;
+        IMudExDialogReference<AddMembersProjectDialog>? dlgReference = await Dialog.ShowExAsync<AddMembersProjectDialog>("Simple Dialog", parameters, centerWidthEx);
+
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -292,9 +313,9 @@ protected override async Task OnInitializedAsync()
     async Task OpenProjectDeleteMembersDialog(DataGridRowClickEventArgs<ProjectUser> args)
     {
         var parameters = new DialogParameters { ["user"] = args.Item };
+        IMudExDialogReference<DeleteProjectMemberDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<DeleteProjectMemberDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -314,9 +335,9 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["users"] = seleMembers };
+                IMudExDialogReference<DeleteProjectMemberBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog = await Dialog.ShowEx<DeleteProjectMemberBulkDialog>("Edit", parameters, maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -335,9 +356,10 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogTaskCreate(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        var dialog = await Dialog.ShowEx<CreateTaskDialog>("Custom Options Dialog", parameters, options);
+        IMudExDialogReference<CreateTaskDialog>? dlgReference = await Dialog.ShowExAsync<CreateTaskDialog>("Simple Dialog", parameters, centerWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             Tasks = _TaskController.GetByProject(project).ToList();
@@ -348,9 +370,9 @@ protected override async Task OnInitializedAsync()
     async Task RowClickedTask(DataGridRowClickEventArgs<CORE.Entities.Task> args)
     {
         var parameters = new DialogParameters { ["task"] = args.Item };
+        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowExAsync<TaskDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<TaskDialog>(args.Item.Name, parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -387,9 +409,9 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["tasks"] = seleTasks };
+                IMudExDialogReference<DeleteTaskBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog = await Dialog.ShowEx<DeleteTaskBulkDialog>("Edit", parameters, maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -486,9 +508,10 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogVulnCreate(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        var dialog = await Dialog.ShowEx<CreateVulnDialog>("Custom Options Dialog", parameters, options);
+        IMudExDialogReference<CreateVulnDialog>? dlgReference = await Dialog.ShowExAsync<CreateVulnDialog>("Simple Dialog", parameters, centerWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             
@@ -500,9 +523,9 @@ protected override async Task OnInitializedAsync()
     async Task RowClickedVuln(DataGridRowClickEventArgs<CORE.Entities.Vuln> args)
     {
         var parameters = new DialogParameters { ["vuln"] = args.Item };
+        IMudExDialogReference<VulnDialog>? dlgReference = await Dialog.ShowExAsync<VulnDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<VulnDialog>(args.Item.Name, parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -522,9 +545,9 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["vulns"] = seleVulns };
+                IMudExDialogReference<DeleteVulnBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog = await Dialog.ShowEx<DeleteVulnBulkDialog>("Edit", parameters, maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -539,9 +562,10 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogImport(DialogOptions options)
     {
 
-        var dialog = await Dialog.ShowEx<ImportVulnDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<ImportVulnDialog>? dlgReference = await Dialog.ShowExAsync<ImportVulnDialog>("Simple Dialog", centerWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             vulns = _VulnController.GetByProject(project).ToList();            
@@ -556,9 +580,9 @@ protected override async Task OnInitializedAsync()
          async Task RowClickedTarget(DataGridRowClickEventArgs<CORE.Entities.Target> args)
     {
         var parameters = new DialogParameters { ["target"]=args.Item };
+        IMudExDialogReference<TargetDialog>? dlgReference = await Dialog.ShowExAsync<TargetDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<TargetDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -616,10 +640,10 @@ protected override async Task OnInitializedAsync()
     private async Task OpenImportTargetDialog(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
+        IMudExDialogReference<ImportDialog>? dlgReference = await Dialog.ShowExAsync<ImportDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<ImportDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             Targets = _TargetController.GetByProjectId(project).ToList();
@@ -630,10 +654,10 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogTargetCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
+        IMudExDialogReference<CreateTargetDialog>? dlgReference = await Dialog.ShowExAsync<CreateTargetDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<CreateTargetDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             Targets = _TargetController.GetByProjectId(project).ToList();
@@ -648,9 +672,9 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
+                IMudExDialogReference<DeleteTargetBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTargetBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteTargetBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -673,9 +697,9 @@ protected override async Task OnInitializedAsync()
      async Task RowClickedNote(DataGridRowClickEventArgs<CORE.Entities.ProjectNote> args)
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
+        IMudExDialogReference<ProjectNoteDialog>? dlgReference = await Dialog.ShowExAsync<ProjectNoteDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<ProjectNoteDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -702,10 +726,10 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogNotesCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
+        IMudExDialogReference<CreateProjectNoteDialog>? dlgReference = await Dialog.ShowExAsync<CreateProjectNoteDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<CreateProjectNoteDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             Notes = _projectController.GetNotes(project).ToList();
@@ -720,9 +744,9 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
+                IMudExDialogReference<DeleteProjectNoteBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectNoteBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteProjectNoteBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -746,9 +770,9 @@ protected override async Task OnInitializedAsync()
       async Task RowClickedAttachment(DataGridRowClickEventArgs<CORE.Entities.ProjectAttachment> args)
     {
         var parameters = new DialogParameters { ["attachment"]=args.Item };
+        IMudExDialogReference<ProjectAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<ProjectAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<ProjectAttachmentDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -773,10 +797,10 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogAttachmentCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
+        IMudExDialogReference<AddProjectAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<AddProjectAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<AddProjectAttachmentDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             Attachments = _projectController.GetAttachments(project).ToList();
@@ -791,9 +815,9 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["attachments"]=seleAttachments };
+                IMudExDialogReference<DeleteProjectAttachmentBulk>? dlgReference = await Dialog.ShowExAsync<DeleteProjectAttachmentBulk>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteProjectAttachmentBulk>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -816,9 +840,9 @@ protected override async Task OnInitializedAsync()
  async Task RowClickedReports(DataGridRowClickEventArgs<CORE.Entities.Report> args)
     {
         var parameters = new DialogParameters { ["report"]=args.Item };
+        IMudExDialogReference<ReportDialog>? dlgReference = await Dialog.ShowExAsync<ReportDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<ReportDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -849,10 +873,10 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogReportCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
+        IMudExDialogReference<CreateReportDialog>? dlgReference = await Dialog.ShowExAsync<CreateReportDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<CreateReportDialog>("Custom Options Dialog", parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             Reports = _ReportController.GetByProject(project).ToList();
@@ -867,9 +891,9 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["reports"]=seleReports };
+                IMudExDialogReference<DeleteReportBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteReportBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteReportBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -908,13 +932,13 @@ protected override async Task OnInitializedAsync()
     private async Task OpenExecutiveAiDialog(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=pro };
+        IMudExDialogReference<ExecutiveAiDialog>? dlgReference = await Dialog.ShowExAsync<ExecutiveAiDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<ExecutiveAiDialog>("Custom Options Dialog",parameters, options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
-            var data = await dialog.GetReturnValueAsync<string>();
+            var data = await dlgReference.GetReturnValueAsync<string>();
             executive.ExecutiveSummary = executive.ExecutiveSummary + data;
             StateHasChanged();
         }

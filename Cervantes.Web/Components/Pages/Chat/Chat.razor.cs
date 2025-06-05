@@ -8,6 +8,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using NLog.Targets;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
@@ -33,7 +35,23 @@ public partial class Chat: ComponentBase
     CreateChatModelFluentValidator createChatModelFluentValidator = new CreateChatModelFluentValidator();
     MudForm form;
     DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
-
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         _items = new List<BreadcrumbItem>
@@ -124,9 +142,9 @@ public partial class Chat: ComponentBase
     private async Task  DeleteChat(ChatViewModel chat)
     {
         var parameters = new DialogParameters { ["chat"]=chat };
+        IMudExDialogReference<DeleteChatDialog>? dlgReference = await Dialog.ShowExAsync<DeleteChatDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<DeleteChatDialog>("Edit", parameters,mediumWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -68,6 +70,23 @@ public partial class TaskDialog: ComponentBase
     };
     private bool inProject = false;
     private ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -88,9 +107,9 @@ public partial class TaskDialog: ComponentBase
     async Task DeleteTaskDialog(CORE.Entities.Task task,DialogOptions options)
     {
         var parameters = new DialogParameters { ["task"]=task };
+        IMudExDialogReference<DeleteTaskDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<DeleteTaskDialog>("Edit", parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -241,8 +260,9 @@ public partial class TaskDialog: ComponentBase
     private async Task OpenCreateAttachment(CORE.Entities.Task task,DialogOptions options)
     {
         var parameters = new DialogParameters { ["task"]=task };
-        var dialog = await Dialog.ShowEx<AddTaskAttachmentDialog>(@localizer["addMember"], parameters, options);
-        var result = await dialog.Result;
+        IMudExDialogReference<AddTaskAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<AddTaskAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
+
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -254,8 +274,9 @@ public partial class TaskDialog: ComponentBase
     private async Task OpenCreateNote(CORE.Entities.Task task,DialogOptions options)
     {
         var parameters = new DialogParameters { ["task"]=task };
-        var dialog = await Dialog.ShowEx<AddTaskNoteDialog>(@localizer["addMember"], parameters, options);
-        var result = await dialog.Result;
+        IMudExDialogReference<AddTaskNoteDialog>? dlgReference = await Dialog.ShowExAsync<AddTaskNoteDialog>("Simple Dialog", parameters, centerWidthEx);
+
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -267,8 +288,9 @@ public partial class TaskDialog: ComponentBase
     private async Task OpenAddTarget(CORE.Entities.Task task,DialogOptions options)
     {
         var parameters = new DialogParameters { ["task"]=task };
-        var dialog = await Dialog.ShowEx<AddTaskTargetDialog>(@localizer["addMember"], parameters, options);
-        var result = await dialog.Result;
+        IMudExDialogReference<AddTaskTargetDialog>? dlgReference = await Dialog.ShowExAsync<AddTaskTargetDialog>("Simple Dialog", parameters, centerWidthEx);
+
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -284,9 +306,9 @@ public partial class TaskDialog: ComponentBase
             
             var item = _targetController.GetTargets().FirstOrDefault(x => x.Id == args.Item.TargetId);
             var parameters = new DialogParameters { ["target"]=item };
+            IMudExDialogReference<TargetDialog>? dlgReference = await Dialog.ShowExAsync<TargetDialog>("Simple Dialog", parameters, centerWidthEx);
 
-            var dialog =  await Dialog.ShowEx<TargetDialog>("Edit", parameters, maxWidth);
-            var result = await dialog.Result;
+            var result = await dlgReference.Result;
 
             if (!result.Canceled)
             {
@@ -300,9 +322,9 @@ public partial class TaskDialog: ComponentBase
     private async Task RowClickedNote(DataGridRowClickEventArgs<TaskNote> args)
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
+        IMudExDialogReference<TaskNoteDialog>? dlgReference = await Dialog.ShowExAsync<TaskNoteDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<TaskNoteDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -314,9 +336,9 @@ public partial class TaskDialog: ComponentBase
     private async Task RowClickedAttachment(DataGridRowClickEventArgs<TaskAttachment> args)
     {
         var parameters = new DialogParameters { ["attachment"]=args.Item };
+        IMudExDialogReference<TaskAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<TaskAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  await Dialog.ShowEx<TaskAttachmentDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -331,9 +353,9 @@ public partial class TaskDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
+                IMudExDialogReference<DeleteTaskTargetBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskTargetBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteTaskTargetBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -356,9 +378,9 @@ public partial class TaskDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
+                IMudExDialogReference<DeleteTaskNoteBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskNoteBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteTaskNoteBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -388,9 +410,9 @@ public partial class TaskDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["attachments"]=seleAttachments };
+                IMudExDialogReference<DeleteTaskAttachmentBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskAttachmentBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteTaskAttachmentBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

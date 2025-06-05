@@ -3,11 +3,14 @@ using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
+using Cervantes.Web.Components.Pages.Documents;
 using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -79,6 +82,23 @@ public partial class ProjectNoteDialog: ComponentBase
     NoteModelFluentValidator noteValidator = new NoteModelFluentValidator();
     private bool inProject = false;
     private ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -113,9 +133,9 @@ public partial class ProjectNoteDialog: ComponentBase
     async Task DeleteDialog(CORE.Entities.ProjectNote note, DialogOptions options)
     {
         var parameters = new DialogParameters { ["note"] = note };
+        IMudExDialogReference<DeleteProjectNoteDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectNoteDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog = await Dialog.ShowEx<DeleteProjectNoteDialog>("Edit", parameters, options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
