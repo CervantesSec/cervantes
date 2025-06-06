@@ -5,7 +5,7 @@
 @inject IStringLocalizer<Resource> localizer
 @attribute [HasPermission(Permissions.AIServiceUsage)]
 
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Class="mud-ex-dialog-initial" DisableSidePadding="true">
         <TitleContent>
             <MudText Typo="Typo.h4">
                 <MudIcon Icon="@aiSVG"/> @localizer["aiGenerate"]

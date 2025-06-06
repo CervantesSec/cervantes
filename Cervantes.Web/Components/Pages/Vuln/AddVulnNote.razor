@@ -6,7 +6,7 @@
 @inject IStringLocalizer<Resource> localizer
 @attribute [HasPermission(Permissions.VulnNotesAdd)]
 
-<MudDialog>
+<MudDialog Class="mud-ex-dialog-initial">
     <DialogContent>
         <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" data-mce-placeholder="Description...">
             <MudForm Model="@note" @ref="@form" method="dialog" Validation="@(noteValidator.ValidateValue)" ValidationDelay="0">

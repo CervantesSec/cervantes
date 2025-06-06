@@ -8,7 +8,7 @@
 @attribute [HasPermission(Permissions.TargetsAdd)]
 
 
-<MudDialog>
+<MudDialog Class="mud-ex-dialog-initial">
     <DialogContent>
         <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" >
             <MudForm Model="@target" @ref="@form" method="dialog" Validation="@(targetValidator.ValidateValue)" ValidationDelay="0">
