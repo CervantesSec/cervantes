@@ -13,6 +13,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TaskStatus = Cervantes.CORE.Entities.TaskStatus;
 
 namespace Cervantes.Web.Controllers;
 [ApiController]
@@ -179,8 +180,11 @@ public class TaskController: ControllerBase
                 {
                     task.ProjectId = null;
                 }
-                
                 task.Status = model.Status;
+                if (model.Status == TaskStatus.Done)
+                {
+                    task.ClosedDate = DateTime.Today.ToUniversalTime();
+                }
                 task.AsignedUserId = model.AsignedUserId;
                 task.CreatedUserId = model.CreatedUserId;
                 
@@ -248,6 +252,10 @@ public class TaskController: ControllerBase
                     result.Status = task.Status;
                     result.StartDate = task.StartDate.ToUniversalTime();
                     result.EndDate = task.EndDate.ToUniversalTime();
+                    if (task.Status == TaskStatus.Done)
+                    {
+                        result.ClosedDate = DateTime.Today.ToUniversalTime();
+                    }
                     result.Template = false;
                     if (task.ProjectId != null)
                     {

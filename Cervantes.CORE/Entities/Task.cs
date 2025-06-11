@@ -63,7 +63,8 @@ public class Task
     /// Task End Date
     /// </summary>
     public DateTime EndDate { get; set; }
-
+    public DateTime? ClosedDate { get; set; }
+    
     /// <summary>
     /// Task Name
     /// </summary>
