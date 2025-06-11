@@ -101,6 +101,23 @@ public partial class UserDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -112,7 +129,7 @@ public partial class UserDialog: ComponentBase
     async Task DeleteDialog(DialogOptions options)
     {
         var parameters = new DialogParameters { ["user"]=userSelected };
-        IMudExDialogReference<DeleteUserDialog>? dlgReference = await Dialog.ShowExAsync<DeleteUserDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteUserDialog>? dlgReference = await Dialog.ShowExAsync<DeleteUserDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

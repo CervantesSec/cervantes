@@ -44,7 +44,23 @@ public partial class Targets: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
@@ -140,10 +156,9 @@ public partial class Targets: ComponentBase
     private async Task OpenImportDialog(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-
-        var dialog = DialogService.Show<ImportDialog>("Custom Options Dialog", parameters, mediumWidth);
+        IMudExDialogReference<ImportDialog>? dlgReference = await DialogService.ShowExAsync<ImportDialog>("Simple Dialog", parameters, middleWidthEx);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -154,7 +169,7 @@ public partial class Targets: ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-        IMudExDialogReference<CreateTargetDialog>? dlgReference = await DialogService.ShowEx<CreateTargetDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<CreateTargetDialog>? dlgReference = await DialogService.ShowExAsync<CreateTargetDialog>("Simple Dialog", parameters, maxWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -172,9 +187,9 @@ public partial class Targets: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
+                IMudExDialogReference<DeleteTargetBulkDialog>? dlgReference = await DialogService.ShowExAsync<DeleteTargetBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  DialogService.Show<DeleteTargetBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

@@ -24,10 +24,8 @@
 
 <MudDialog Class="mud-ex-dialog-initial" DisableSidePadding="true">
 	<TitleContent>
-		            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
-
+<MudStack Row="true">
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Category"/> @category.Name</MudText>
-		<MudSpacer/>
 		@if (userAth.HasPermission(Permissions.KnowledgeBaseCategoryEdit))
 		{
 			@if (editMode)
@@ -44,8 +42,7 @@
 		{
 			<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(@category, medium))"></MudIconButton>
 		}
-
-		            </MudItem>
+</MudStack>
 	</TitleContent>
 	<DialogContent>
 		@if (editMode)
@@ -99,16 +96,5 @@
 		}
 		
 	</DialogContent>
-	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if (userAth.HasPermission(Permissions.KnowledgeBaseCategoryEdit))
-		{
-			@if (editMode)
-			{
-				<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
-			}
-		}
-		
-	</DialogActions>
 </MudDialog>
 		</MudContainer>

@@ -6,6 +6,7 @@
 @using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @using MudBlazor.Extensions.Core
+@using TaskStatus = Cervantes.CORE.Entities.TaskStatus
 @inject IDialogService Dialog
 @inject IStringLocalizer<Resource> localizer
 @inject IJSRuntime JS
@@ -179,14 +180,31 @@
                                                     @{
                                                         var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
                                                     }
-                                                    @if (@Math.Truncate(totalDays) < 0)
+                                                    @if (@context.Status == TaskStatus.Done)
                                                     {
-                                                        <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        if (@Math.Truncate(totalDays) < 0)
+                                                        {
+                                                        
+                                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @localizer["days"]</MudChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        }   
                                                     }
                                                     else
                                                     {
-                                                        <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        @if (@Math.Truncate(totalDays) < 0)
+                                                        {
+                                                        
+                                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        }
                                                     }
+                                                   
                                                 </MudStack>
 
 

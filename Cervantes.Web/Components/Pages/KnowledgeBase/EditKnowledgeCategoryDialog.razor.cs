@@ -5,6 +5,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
@@ -25,6 +27,23 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
     MudForm form;
     KnowledgeFluentValidator knowledgeValidator = new KnowledgeFluentValidator();
     private ClaimsPrincipal userAth;
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -92,9 +111,9 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
     async Task DeleteDialog(CORE.Entities.KnowledgeBaseCategories item,DialogOptions options)
     {
         var parameters = new DialogParameters { ["category"]=item };
+        IMudExDialogReference<DeleteKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<DeleteKnowledgeCategoryDialog>("Simple Dialog", middleWidthEx);
 
-        var dialog =  await Dialog.ShowEx<DeleteKnowledgeCategoryDialog>("Edit", parameters,options);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

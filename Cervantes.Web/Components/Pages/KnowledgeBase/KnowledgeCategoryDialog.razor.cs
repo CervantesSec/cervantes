@@ -38,6 +38,23 @@ public partial class KnowledgeCategoryDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -54,7 +71,7 @@ public partial class KnowledgeCategoryDialog: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.KnowledgeBaseCategories> args)
     {
         var parameters = new DialogParameters { ["category"]=args.Item };
-        IMudExDialogReference<EditKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<EditKnowledgeCategoryDialog>("Simple Dialog", centerWidthEx);
+        IMudExDialogReference<EditKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<EditKnowledgeCategoryDialog>("Simple Dialog",parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -79,7 +96,7 @@ public partial class KnowledgeCategoryDialog: ComponentBase
     async Task AddCategory(DialogOptions options)
     {
 
-        IMudExDialogReference<CreateKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<CreateKnowledgeCategoryDialog>("Simple Dialog", centerWidthEx);
+        IMudExDialogReference<CreateKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<CreateKnowledgeCategoryDialog>("Simple Dialog", middleWidthEx);
 
         var result = await dlgReference.Result;
 

@@ -92,6 +92,23 @@ public partial class VaultDialog: ComponentBase
                 BackdropClick = false,
                 Resizeable = true,
             };
+            DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+            {
+                MaximizeButton = true,
+                CloseButton = true,
+                FullHeight = false,
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                MaxHeight = MaxHeight.False,
+                FullWidth = true,
+                DragMode = MudDialogDragMode.Simple,
+                Animations = new[] { AnimationType.SlideIn },
+                Position = DialogPosition.Center,
+                DisableSizeMarginY = true,
+                DisablePositionMargin = true,
+                BackdropClick = false,
+                Resizeable = true,
+            };
             protected override async Task OnInitializedAsync()
             {
                 await base.OnInitializedAsync();
@@ -165,7 +182,7 @@ public partial class VaultDialog: ComponentBase
     private async Task DeleteVaultDialog(CORE.Entities.Vault item,DialogOptions options)
     {
         var parameters = new DialogParameters { ["vault"]=item };
-        IMudExDialogReference<DeleteVaultDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVaultDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteVaultDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVaultDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

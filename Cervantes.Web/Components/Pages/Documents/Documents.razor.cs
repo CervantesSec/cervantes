@@ -75,7 +75,23 @@ public partial class Documents: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-    
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Document> args)
     {
         var parameters = new DialogParameters { ["document"]=args.Item};
@@ -140,9 +156,9 @@ public partial class Documents: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["documents"]=seleDocs };
+                IMudExDialogReference<DocumentDeleteBulkDialog>? dlgReference = await Dialog.ShowExAsync<DocumentDeleteBulkDialog>("Simple Dialog",parameters, middleWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DocumentDeleteBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

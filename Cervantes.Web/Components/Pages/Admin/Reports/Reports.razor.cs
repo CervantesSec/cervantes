@@ -40,7 +40,23 @@ public partial class Reports: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
@@ -136,7 +152,7 @@ public partial class Reports: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<ReportTemplate> args)
     {
         var parameters = new DialogParameters { ["report"]=args.Item };
-        IMudExDialogReference<ReportDialog>? dlgReference = await Dialog.ShowEx<ReportDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<ReportDialog>? dlgReference = await Dialog.ShowExAsync<ReportDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -152,9 +168,9 @@ public partial class Reports: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["reports"]=seleReports };
+                IMudExDialogReference<DeleteReportBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteReportBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteReportBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

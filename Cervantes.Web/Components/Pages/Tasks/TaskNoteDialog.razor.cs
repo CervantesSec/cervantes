@@ -94,6 +94,23 @@ public partial class TaskNoteDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -146,7 +163,7 @@ public partial class TaskNoteDialog: ComponentBase
     private async Task DeleteTaskNoteDialog(CORE.Entities.TaskNote note,DialogOptions options)
     {
         var parameters = new DialogParameters { ["note"]=note };
-        IMudExDialogReference<DeleteTaskNoteDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskNoteDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteTaskNoteDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskNoteDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

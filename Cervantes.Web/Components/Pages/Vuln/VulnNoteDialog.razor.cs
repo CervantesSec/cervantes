@@ -43,6 +43,23 @@ public partial class VulnNoteDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
                 {"menubar", "file edit view insert format tools table help"},
@@ -145,7 +162,7 @@ public partial class VulnNoteDialog: ComponentBase
     private async Task DeleteVulnNoteDialog(CORE.Entities.VulnNote note,DialogOptions options)
     {
         var parameters = new DialogParameters { ["note"]=note };
-        IMudExDialogReference<DeleteVulnNote>? dlgReference = await Dialog.ShowExAsync<DeleteVulnNote>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteVulnNote>? dlgReference = await Dialog.ShowExAsync<DeleteVulnNote>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

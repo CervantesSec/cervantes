@@ -43,7 +43,23 @@ public partial class Users: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
@@ -102,7 +118,7 @@ public partial class Users: ComponentBase
     
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        IMudExDialogReference<CreateUserDialog>? dlgReference = await Dialog.ShowEx<CreateUserDialog>("Simple Dialog", options);
+        IMudExDialogReference<CreateUserDialog>? dlgReference = await Dialog.ShowExAsync<CreateUserDialog>("Simple Dialog", options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -117,7 +133,7 @@ public partial class Users: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<UserViewModel> args)
     {
         var parameters = new DialogParameters { ["userSelected"]=args.Item };
-        IMudExDialogReference<UserDialog>? dlgReference = await Dialog.ShowEx<UserDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<UserDialog>? dlgReference = await Dialog.ShowExAsync<UserDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -163,9 +179,9 @@ public partial class Users: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["users"]=seleUsers };
+                IMudExDialogReference<DeleteUsersBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteUsersBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteUsersBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

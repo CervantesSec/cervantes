@@ -41,7 +41,23 @@ public partial class Vaults: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
@@ -139,7 +155,7 @@ public partial class Vaults: ComponentBase
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-        IMudExDialogReference<CreateVaultDialog>? dlgReference = await DialogService.ShowEx<CreateVaultDialog>("Simple Dialog", parameters, options);
+        IMudExDialogReference<CreateVaultDialog>? dlgReference = await DialogService.ShowExAsync<CreateVaultDialog>("Simple Dialog", parameters, options);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -157,9 +173,9 @@ public partial class Vaults: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["vaults"]=seleVaults };
+                IMudExDialogReference<DeleteVaultBulkDialog>? dlgReference = await DialogService.ShowExAsync<DeleteVaultBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  DialogService.Show<DeleteVaultBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

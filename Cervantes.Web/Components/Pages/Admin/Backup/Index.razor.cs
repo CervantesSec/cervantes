@@ -32,6 +32,23 @@ DialogOptionsEx centerWidthEx = new DialogOptionsEx()
     BackdropClick = false,
     Resizeable = true,
 };
+DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+{
+    MaximizeButton = true,
+    CloseButton = true,
+    FullHeight = false,
+    CloseOnEscapeKey = true,
+    MaxWidth = MaxWidth.Medium,
+    MaxHeight = MaxHeight.False,
+    FullWidth = true,
+    DragMode = MudDialogDragMode.Simple,
+    Animations = new[] { AnimationType.SlideIn },
+    Position = DialogPosition.Center,
+    DisableSizeMarginY = true,
+    DisablePositionMargin = true,
+    BackdropClick = false,
+    Resizeable = true,
+};
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -101,7 +118,7 @@ DialogOptionsEx centerWidthEx = new DialogOptionsEx()
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
     private async Task RestoreData(DialogOptions options)
     {
-        IMudExDialogReference<RestoreData>? dlgReference = await Dialog.ShowExAsync<RestoreData>("Simple Dialog", centerWidthEx);
+        IMudExDialogReference<RestoreData>? dlgReference = await Dialog.ShowExAsync<RestoreData>("Simple Dialog", middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -111,7 +128,7 @@ DialogOptionsEx centerWidthEx = new DialogOptionsEx()
     
     private async Task RestoreAttachments(DialogOptions options)
     {
-        IMudExDialogReference<RestoreAttachments>? dlgReference = await Dialog.ShowExAsync<RestoreAttachments>("Simple Dialog", centerWidthEx);
+        IMudExDialogReference<RestoreAttachments>? dlgReference = await Dialog.ShowExAsync<RestoreAttachments>("Simple Dialog", middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;

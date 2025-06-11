@@ -96,6 +96,23 @@ public partial class DocumentDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -105,7 +122,7 @@ public partial class DocumentDialog: ComponentBase
     private async Task DeleteDocument(CORE.Entities.Document document,DialogOptions options)
     {
         var parameters = new DialogParameters { ["document"]=document };
-        IMudExDialogReference<DocumentDeleteDialog>? dlgReference = await Dialog.ShowExAsync<DocumentDeleteDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DocumentDeleteDialog>? dlgReference = await Dialog.ShowExAsync<DocumentDeleteDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

@@ -40,6 +40,23 @@ public partial class VulnAttachmentDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -52,7 +69,7 @@ public partial class VulnAttachmentDialog: ComponentBase
     private async Task DeleteVulnAttachment(CORE.Entities.VulnAttachment attachment,DialogOptions options)
     {
         var parameters = new DialogParameters { ["attachment"]=attachment };
-        IMudExDialogReference<DeleteVulnAttachment>? dlgReference = await Dialog.ShowExAsync<DeleteVulnAttachment>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteVulnAttachment>? dlgReference = await Dialog.ShowExAsync<DeleteVulnAttachment>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

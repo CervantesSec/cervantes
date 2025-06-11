@@ -40,6 +40,23 @@ public partial class Clients: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     [Parameter] public Guid clientId { get; set; }
 
     [Inject] private ClientsController _clientsController { get; set; }
@@ -150,9 +167,9 @@ public partial class Clients: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["clients"]=seleClients };
+                IMudExDialogReference<DeleteClientBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteClientBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteClientBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

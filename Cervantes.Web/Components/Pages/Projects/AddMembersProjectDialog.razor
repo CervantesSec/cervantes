@@ -7,9 +7,12 @@
 @attribute [HasPermission(Permissions.ProjectMembersAdd)]
 
 <MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Person" /> @localizer["addMember"]</MudText>
+    </TitleContent>
     <DialogContent>
         <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" data-mce-placeholder="Description...">
-        
+
             <MudForm Model="@member" @ref="@form" method="dialog" Validation="@(memberValidator.ValidateValue)" ValidationDelay="0">
                 <MudSelect T="ApplicationUser" MultiSelection="true" Placeholder="@localizer["user"]" @bind-SelectedValues="_members" Label="@localizer["user"]" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
                     @foreach (var user in users)

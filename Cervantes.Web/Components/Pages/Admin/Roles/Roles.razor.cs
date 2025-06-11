@@ -40,7 +40,23 @@ public partial class Roles : ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-    
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private ClaimsPrincipal userAth;
     
     protected override async Task OnInitializedAsync()
@@ -107,7 +123,7 @@ public partial class Roles : ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<RolesViewModel> args)
     {
         var parameters = new DialogParameters { ["role"]=args.Item };
-        IMudExDialogReference<RoleDialog>? dlgReference = await Dialog.ShowEx<RoleDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<RoleDialog>? dlgReference = await Dialog.ShowEx<RoleDialog>("Simple Dialog", parameters, middleWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -123,9 +139,9 @@ public partial class Roles : ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["roles"]=seleUsers };
+                IMudExDialogReference<DeleteRoleBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteRoleBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteRoleBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

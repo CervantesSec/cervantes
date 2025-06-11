@@ -112,6 +112,23 @@ public partial class ClientDialog: ComponentBase
          BackdropClick = false,
          Resizeable = true,
      };
+     DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+     {
+         MaximizeButton = true,
+         CloseButton = true,
+         FullHeight = false,
+         CloseOnEscapeKey = true,
+         MaxWidth = MaxWidth.Medium,
+         MaxHeight = MaxHeight.False,
+         FullWidth = true,
+         DragMode = MudDialogDragMode.Simple,
+         Animations = new[] { AnimationType.SlideIn },
+         Position = DialogPosition.Center,
+         DisableSizeMarginY = true,
+         DisablePositionMargin = true,
+         BackdropClick = false,
+         Resizeable = true,
+     };
     protected override async Task OnInitializedAsync()
     {
         user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -185,7 +202,7 @@ public partial class ClientDialog: ComponentBase
     async Task DeleteDialog(CORE.Entities.Client client,DialogOptions options)
     {
         var parameters = new DialogParameters { ["client"]=client };
-        IMudExDialogReference<DeleteClientDialog>? dlgReference = await Dialog.ShowExAsync<DeleteClientDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteClientDialog>? dlgReference = await Dialog.ShowExAsync<DeleteClientDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -313,9 +330,9 @@ public partial class ClientDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["projects"]=selectedProjects };
+                IMudExDialogReference<DeleteProjectBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteProjectBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

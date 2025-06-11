@@ -40,6 +40,23 @@ public partial class TaskAttachmentDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -53,7 +70,7 @@ public partial class TaskAttachmentDialog: ComponentBase
     private async Task DeleteTaskAttachment(CORE.Entities.TaskAttachment attachment,DialogOptions options)
     {
         var parameters = new DialogParameters { ["attachment"]=attachment };
-        IMudExDialogReference<DeleteTaskAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteTaskAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskAttachmentDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

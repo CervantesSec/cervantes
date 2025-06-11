@@ -49,6 +49,23 @@ public partial class Tasks: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     [Inject] private TaskController _taskController { get; set; }
     [Inject] private UserController _userController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
@@ -126,7 +143,7 @@ public partial class Tasks: ComponentBase
     private async Task OpenDialogCreate(Guid project,DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=Project.Id };
-        IMudExDialogReference<CreateTaskDialog>? dlgReference = await Dialog.ShowEx<CreateTaskDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<CreateTaskDialog>? dlgReference = await Dialog.ShowExAsync<CreateTaskDialog>("Simple Dialog", parameters, maxWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -169,7 +186,7 @@ public partial class Tasks: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Task> args)
     {
         var parameters = new DialogParameters { ["task"]=args.Item};
-        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowEx<TaskDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowExAsync<TaskDialog>("Simple Dialog", parameters, maxWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -235,9 +252,9 @@ public partial class Tasks: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["tasks"]=seleTasks };
+                IMudExDialogReference<DeleteTaskBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteTaskBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

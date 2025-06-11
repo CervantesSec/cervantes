@@ -40,7 +40,23 @@ public partial class Notes: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
@@ -129,7 +145,7 @@ public partial class Notes: ComponentBase
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
 
-                var dialog =  await Dialog.ShowEx<DeleteNoteBulkDialog>("Edit", parameters,mediumWidth);
+                var dialog =  await Dialog.ShowEx<DeleteNoteBulkDialog>("Edit", parameters,middleWidthEx);
                 var result = await dialog.Result;
 
                 if (!result.Canceled)

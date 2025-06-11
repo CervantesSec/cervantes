@@ -49,6 +49,23 @@ public partial class MastgDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -338,7 +355,7 @@ public partial class MastgDialog: ComponentBase
     private async Task GenerateReport()
     {
         var parameters = new DialogParameters { ["checklistType"]=checklist.Type.ToString(),["checklistId"]=checklist.Id,["project"]=project };
-        IMudExDialogReference<CreateReportChecklistDialog>? dlgReference = await DialogService.ShowExAsync<CreateReportChecklistDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<CreateReportChecklistDialog>? dlgReference = await DialogService.ShowExAsync<CreateReportChecklistDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result2 = await dlgReference.Result;
 
@@ -355,7 +372,7 @@ public partial class MastgDialog: ComponentBase
         switch (list.Type)
         {
             case ChecklistType.OWASPWSTG:
-                IMudExDialogReference<DeleteChecklistDialog>? dlgReference = await DialogService.ShowExAsync<DeleteChecklistDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteChecklistDialog>? dlgReference = await DialogService.ShowExAsync<DeleteChecklistDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -364,7 +381,7 @@ public partial class MastgDialog: ComponentBase
                     MudDialog.Close(DialogResult.Ok(true));                }
                 break;
             case ChecklistType.OWASPMASVS:
-                IMudExDialogReference<DeleteChecklistDialog>? dlgReference2 = await DialogService.ShowExAsync<DeleteChecklistDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteChecklistDialog>? dlgReference2 = await DialogService.ShowExAsync<DeleteChecklistDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result2 = await dlgReference2.Result;
 

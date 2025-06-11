@@ -44,7 +44,23 @@ public partial class WorkspaceVulns: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
@@ -82,7 +98,7 @@ public partial class WorkspaceVulns: ComponentBase
 
         var parameters = new DialogParameters { ["project"]=Project.Id };
 
-        IMudExDialogReference<CreateVulnDialog>? dlgReference = await DialogService.ShowEx<CreateVulnDialog>("Simple Dialog", parameters, options);
+        IMudExDialogReference<CreateVulnDialog>? dlgReference = await DialogService.ShowExAsync<CreateVulnDialog>("Simple Dialog", parameters, options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -95,10 +111,10 @@ public partial class WorkspaceVulns: ComponentBase
     
     private async Task OpenDialogImport(DialogOptions options)
     {
+        IMudExDialogReference<ImportVulnDialog>? dlgReference = await DialogService.ShowExAsync<ImportVulnDialog>("Simple Dialog", middleWidthEx);
 
-        var dialog = DialogService.Show<ImportVulnDialog>("Custom Options Dialog", mediumWidth);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
@@ -112,9 +128,9 @@ public partial class WorkspaceVulns: ComponentBase
     async Task DeleteDialog(VulnViewModel vuln,DialogOptions options)
     {
         var parameters = new DialogParameters { ["vuln"]=vuln };
+        IMudExDialogReference<DeleteVulnDialog>? dlgReference = await DialogService.ShowExAsync<DeleteVulnDialog>("Simple Dialog",parameters, middleWidthEx);
 
-        var dialog =  DialogService.Show<DeleteVulnDialog>(@localizer["delete"], parameters,mediumWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {

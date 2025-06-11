@@ -2,6 +2,9 @@ using System.Security.Claims;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -14,6 +17,23 @@ public partial class VulnCategories : ComponentBase
     [Inject] private VulnController VulnController { get; set; }
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     private ClaimsPrincipal userAth;
+    DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = true,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -36,9 +56,10 @@ public partial class VulnCategories : ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
 
-        var dialog = DialogService.Show<CreateVulnCategoryDialog>("Custom Options Dialog", options);
+        IMudExDialogReference<CreateVulnCategoryDialog>? dlgReference = await DialogService.ShowExAsync<CreateVulnCategoryDialog>("Simple Dialog", centerWidthEx);
+
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();

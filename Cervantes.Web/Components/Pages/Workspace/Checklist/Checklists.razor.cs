@@ -47,7 +47,23 @@ public partial class Checklists: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
-
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
@@ -142,7 +158,7 @@ public partial class Checklists: ComponentBase
     private async Task OpenDialogCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-        IMudExDialogReference<CreateChecklistDialog>? dlgReference = await DialogService.ShowEx<CreateChecklistDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<CreateChecklistDialog>? dlgReference = await DialogService.ShowExAsync<CreateChecklistDialog>("Simple Dialog", parameters, maxWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -192,7 +208,7 @@ public partial class Checklists: ComponentBase
         if (args.Item.Type == ChecklistType.OWASPWSTG)
         {
             var parameters = new DialogParameters {["project"]=project, ["checklist"]=args.Item };
-            IMudExDialogReference<WstgDialog>? dlgReference = await DialogService.ShowEx<WstgDialog>("Simple Dialog", parameters, maxWidthEx);
+            IMudExDialogReference<WstgDialog>? dlgReference = await DialogService.ShowExAsync<WstgDialog>("Simple Dialog", parameters, maxWidthEx);
 
             var result = await dlgReference.Result;
 
@@ -205,7 +221,7 @@ public partial class Checklists: ComponentBase
         else
         {
             var parameters = new DialogParameters { ["project"]=project,["checklist"]=args.Item };
-            IMudExDialogReference<MastgDialog>? dlgReference = await DialogService.ShowEx<MastgDialog>("Simple Dialog", parameters, maxWidthEx);
+            IMudExDialogReference<MastgDialog>? dlgReference = await DialogService.ShowExAsync<MastgDialog>("Simple Dialog", parameters, maxWidthEx);
 
             var result = await dlgReference.Result;
 
@@ -224,9 +240,9 @@ public partial class Checklists: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["checklists"]=seleChecklists };
+                IMudExDialogReference<DeleteChecklistBulkDialog>? dlgReference = await DialogService.ShowExAsync<DeleteChecklistBulkDialog>("Simple Dialog", parameters, maxWidthEx);
 
-                var dialog =  DialogService.Show<DeleteChecklistBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

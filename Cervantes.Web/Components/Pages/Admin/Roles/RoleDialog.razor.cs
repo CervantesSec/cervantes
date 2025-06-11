@@ -46,6 +46,23 @@ public partial class RoleDialog : ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -55,7 +72,7 @@ public partial class RoleDialog : ComponentBase
     async Task DeleteDialog(RolesViewModel roles,DialogOptions options)
     {
         var parameters = new DialogParameters { ["role"]=roles };
-        IMudExDialogReference<DeleteRoleDialog>? dlgReference = await Dialog.ShowExAsync<DeleteRoleDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteRoleDialog>? dlgReference = await Dialog.ShowExAsync<DeleteRoleDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

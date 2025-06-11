@@ -145,6 +145,23 @@ public partial class VulnDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -208,7 +225,7 @@ public partial class VulnDialog: ComponentBase
         if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
         {
             var parameters = new DialogParameters { ["vuln"]=vuln };
-            IMudExDialogReference<DeleteVulnDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnDialog>("Simple Dialog", parameters, centerWidthEx);
+            IMudExDialogReference<DeleteVulnDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnDialog>("Simple Dialog", parameters, middleWidthEx);
 
             var result = await dlgReference.Result;
 
@@ -450,7 +467,7 @@ public partial class VulnDialog: ComponentBase
         if (inProject)
         {
             var parameters = new DialogParameters { ["target"]=args.Item };
-            IMudExDialogReference<DeleteVulnTarget>? dlgReference = await Dialog.ShowExAsync<DeleteVulnTarget>("Simple Dialog", parameters, centerWidthEx);
+            IMudExDialogReference<DeleteVulnTarget>? dlgReference = await Dialog.ShowExAsync<DeleteVulnTarget>("Simple Dialog", parameters, middleWidthEx);
 
             var result = await dlgReference.Result;
 
@@ -466,7 +483,7 @@ public partial class VulnDialog: ComponentBase
     async Task OpenDialogAddTarget(DialogOptions options)
     {
         var parameters = new DialogParameters { ["vuln"]=vuln };
-        IMudExDialogReference<AddVulnTarget>? dlgReference = await Dialog.ShowExAsync<AddVulnTarget>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<AddVulnTarget>? dlgReference = await Dialog.ShowExAsync<AddVulnTarget>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -491,7 +508,7 @@ public partial class VulnDialog: ComponentBase
     async Task RowClickedNotes(DataGridRowClickEventArgs<CORE.Entities.VulnNote> args)
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
-        IMudExDialogReference<VulnNoteDialog>? dlgReference = await Dialog.ShowExAsync<VulnNoteDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<VulnNoteDialog>? dlgReference = await Dialog.ShowExAsync<VulnNoteDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -505,7 +522,7 @@ public partial class VulnDialog: ComponentBase
     async Task OpenDialogAddNote(DialogOptions options)
     {
         var parameters = new DialogParameters { ["vuln"]=vuln.Id };
-        IMudExDialogReference<AddVulnNote>? dlgReference = await Dialog.ShowExAsync<AddVulnNote>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<AddVulnNote>? dlgReference = await Dialog.ShowExAsync<AddVulnNote>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -530,7 +547,7 @@ public partial class VulnDialog: ComponentBase
     async Task RowClickedAttachments(DataGridRowClickEventArgs<CORE.Entities.VulnAttachment> args)
     {
         var parameters = new DialogParameters { ["attachment"]=args.Item };
-        IMudExDialogReference<VulnAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<VulnAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<VulnAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<VulnAttachmentDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -544,7 +561,7 @@ public partial class VulnDialog: ComponentBase
     async Task OpenDialogAddAttachment(DialogOptions options)
     {
         var parameters = new DialogParameters { ["vuln"]=vuln.Id };
-        IMudExDialogReference<AddVulnAttachment>? dlgReference = await Dialog.ShowExAsync<AddVulnAttachment>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<AddVulnAttachment>? dlgReference = await Dialog.ShowExAsync<AddVulnAttachment>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -578,7 +595,7 @@ public partial class VulnDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
-                IMudExDialogReference<DeleteVulnTargetBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnTargetBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteVulnTargetBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnTargetBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -596,7 +613,7 @@ public partial class VulnDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
-                IMudExDialogReference<DeleteVulnNoteBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnNoteBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteVulnNoteBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnNoteBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -614,7 +631,7 @@ public partial class VulnDialog: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["attachments"]=seleAttachments };
-                IMudExDialogReference<DeleteVulnAttachmentBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnAttachmentBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteVulnAttachmentBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnAttachmentBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -696,7 +713,7 @@ public partial class VulnDialog: ComponentBase
     private async Task OpenAiDialog(DialogOptions options)
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
-        IMudExDialogReference<AiDialog>? dlgReference = await Dialog.ShowExAsync<AiDialog>("Simple Dialog", centerWidthEx);
+        IMudExDialogReference<AiDialog>? dlgReference = await Dialog.ShowExAsync<AiDialog>("Simple Dialog", middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;

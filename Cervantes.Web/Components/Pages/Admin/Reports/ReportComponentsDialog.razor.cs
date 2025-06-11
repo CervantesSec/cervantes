@@ -102,6 +102,23 @@ public partial class ReportComponentsDialog: ComponentBase
         BackdropClick = false,
         Resizeable = true,
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -170,7 +187,7 @@ public partial class ReportComponentsDialog: ComponentBase
     async Task DeleteDialog(CORE.Entities.ReportComponents component,DialogOptions options)
     {
         var parameters = new DialogParameters { ["component"]=component };
-        IMudExDialogReference<DeleteReportComponentDialog>? dlgReference = await Dialog.ShowExAsync<DeleteReportComponentDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteReportComponentDialog>? dlgReference = await Dialog.ShowExAsync<DeleteReportComponentDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -183,7 +200,7 @@ public partial class ReportComponentsDialog: ComponentBase
     private async Task OpenAiDialog(DialogOptions options)
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
-        IMudExDialogReference<AiDialog>? dlgReference = await Dialog.ShowExAsync<AiDialog>("Simple Dialog", centerWidthEx);
+        IMudExDialogReference<AiDialog>? dlgReference = await Dialog.ShowExAsync<AiDialog>("Simple Dialog", middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;

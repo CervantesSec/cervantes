@@ -148,7 +148,23 @@ DialogOptionsEx centerWidthEx = new DialogOptionsEx()
     BackdropClick = false,
     Resizeable = true,
 };
-
+DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+{
+    MaximizeButton = true,
+    CloseButton = true,
+    FullHeight = false,
+    CloseOnEscapeKey = true,
+    MaxWidth = MaxWidth.Medium,
+    MaxHeight = MaxHeight.False,
+    FullWidth = true,
+    DragMode = MudDialogDragMode.Simple,
+    Animations = new[] { AnimationType.SlideIn },
+    Position = DialogPosition.Center,
+    DisableSizeMarginY = true,
+    DisablePositionMargin = true,
+    BackdropClick = false,
+    Resizeable = true,
+};
     #region Dialog
 protected override async Task OnInitializedAsync()
     {
@@ -299,7 +315,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenProjectMembersDialog(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        IMudExDialogReference<AddMembersProjectDialog>? dlgReference = await Dialog.ShowExAsync<AddMembersProjectDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<AddMembersProjectDialog>? dlgReference = await Dialog.ShowExAsync<AddMembersProjectDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -313,7 +329,7 @@ protected override async Task OnInitializedAsync()
     async Task OpenProjectDeleteMembersDialog(DataGridRowClickEventArgs<ProjectUser> args)
     {
         var parameters = new DialogParameters { ["user"] = args.Item };
-        IMudExDialogReference<DeleteProjectMemberDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<DeleteProjectMemberDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -335,7 +351,7 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["users"] = seleMembers };
-                IMudExDialogReference<DeleteProjectMemberBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteProjectMemberBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 

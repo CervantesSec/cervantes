@@ -148,6 +148,24 @@ DialogOptionsEx centerWidthEx = new DialogOptionsEx()
     BackdropClick = false,
     Resizeable = true,
 };
+
+DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+{
+    MaximizeButton = true,
+    CloseButton = true,
+    FullHeight = false,
+    CloseOnEscapeKey = true,
+    MaxWidth = MaxWidth.Medium,
+    MaxHeight = MaxHeight.False,
+    FullWidth = true,
+    DragMode = MudDialogDragMode.Simple,
+    Animations = new[] { AnimationType.SlideIn },
+    Position = DialogPosition.Center,
+    DisableSizeMarginY = true,
+    DisablePositionMargin = true,
+    BackdropClick = false,
+    Resizeable = true,
+};
     #region Dialog
 protected override async Task OnInitializedAsync()
     {
@@ -312,7 +330,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenProjectMembersDialog(Guid project, DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"] = project };
-        IMudExDialogReference<AddMembersProjectDialog>? dlgReference = await Dialog.ShowExAsync<AddMembersProjectDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<AddMembersProjectDialog>? dlgReference = await Dialog.ShowExAsync<AddMembersProjectDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -328,7 +346,7 @@ protected override async Task OnInitializedAsync()
         if (inProject)
         {
             var parameters = new DialogParameters { ["user"] = args.Item };
-            IMudExDialogReference<DeleteProjectMemberDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberDialog>("Simple Dialog", parameters, centerWidthEx);
+            IMudExDialogReference<DeleteProjectMemberDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberDialog>("Simple Dialog", parameters, middleWidthEx);
 
             var result = await dlgReference.Result;
 
@@ -352,7 +370,7 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["users"] = seleMembers };
-                IMudExDialogReference<DeleteProjectMemberBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteProjectMemberBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -387,7 +405,7 @@ protected override async Task OnInitializedAsync()
     async Task RowClickedTask(DataGridRowClickEventArgs<CORE.Entities.Task> args)
     {
         var parameters = new DialogParameters { ["task"] = args.Item };
-        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowExAsync<TaskDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowExAsync<TaskDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -426,7 +444,7 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["tasks"] = seleTasks };
-                IMudExDialogReference<DeleteTaskBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteTaskBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -541,7 +559,7 @@ protected override async Task OnInitializedAsync()
     async Task RowClickedVuln(DataGridRowClickEventArgs<CORE.Entities.Vuln> args)
     {
         var parameters = new DialogParameters { ["vuln"] = args.Item };
-        IMudExDialogReference<VulnDialog>? dlgReference = await Dialog.ShowExAsync<VulnDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<VulnDialog>? dlgReference = await Dialog.ShowExAsync<VulnDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -562,7 +580,7 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["vulns"] = seleVulns };
-                IMudExDialogReference<DeleteVulnBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteVulnBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteVulnBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -579,7 +597,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogImport(DialogOptions options)
     {
 
-        IMudExDialogReference<ImportVulnDialog>? dlgReference = await Dialog.ShowExAsync<ImportVulnDialog>("Simple Dialog", centerWidthEx);
+        IMudExDialogReference<ImportVulnDialog>? dlgReference = await Dialog.ShowExAsync<ImportVulnDialog>("Simple Dialog", middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -597,7 +615,7 @@ protected override async Task OnInitializedAsync()
          async Task RowClickedTarget(DataGridRowClickEventArgs<CORE.Entities.Target> args)
     {
         var parameters = new DialogParameters { ["target"]=args.Item };
-        IMudExDialogReference<TargetDialog>? dlgReference = await Dialog.ShowExAsync<TargetDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<TargetDialog>? dlgReference = await Dialog.ShowExAsync<TargetDialog>("Simple Dialog", parameters, middleWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -656,7 +674,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenImportTargetDialog(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
-        IMudExDialogReference<ImportDialog>? dlgReference = await Dialog.ShowExAsync<ImportDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<ImportDialog>? dlgReference = await Dialog.ShowExAsync<ImportDialog>("Simple Dialog", parameters, middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -670,7 +688,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogTargetCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
-        IMudExDialogReference<CreateTargetDialog>? dlgReference = await Dialog.ShowExAsync<CreateTargetDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<CreateTargetDialog>? dlgReference = await Dialog.ShowExAsync<CreateTargetDialog>("Simple Dialog", parameters, middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -688,7 +706,7 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["targets"]=seleTargets };
-                IMudExDialogReference<DeleteTargetBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTargetBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteTargetBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTargetBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -713,7 +731,7 @@ protected override async Task OnInitializedAsync()
      async Task RowClickedNote(DataGridRowClickEventArgs<CORE.Entities.ProjectNote> args)
     {
         var parameters = new DialogParameters { ["note"]=args.Item };
-        IMudExDialogReference<ProjectNoteDialog>? dlgReference = await Dialog.ShowExAsync<ProjectNoteDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<ProjectNoteDialog>? dlgReference = await Dialog.ShowExAsync<ProjectNoteDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -742,7 +760,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogNotesCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
-        IMudExDialogReference<CreateProjectNoteDialog>? dlgReference = await Dialog.ShowExAsync<CreateProjectNoteDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<CreateProjectNoteDialog>? dlgReference = await Dialog.ShowExAsync<CreateProjectNoteDialog>("Simple Dialog", parameters, middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -760,7 +778,7 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["notes"]=seleNotes };
-                IMudExDialogReference<DeleteProjectNoteBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectNoteBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteProjectNoteBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectNoteBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -786,7 +804,7 @@ protected override async Task OnInitializedAsync()
       async Task RowClickedAttachment(DataGridRowClickEventArgs<CORE.Entities.ProjectAttachment> args)
     {
         var parameters = new DialogParameters { ["attachment"]=args.Item };
-        IMudExDialogReference<ProjectAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<ProjectAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<ProjectAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<ProjectAttachmentDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -813,7 +831,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogAttachmentCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
-        IMudExDialogReference<AddProjectAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<AddProjectAttachmentDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<AddProjectAttachmentDialog>? dlgReference = await Dialog.ShowExAsync<AddProjectAttachmentDialog>("Simple Dialog", parameters, middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -831,7 +849,7 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["attachments"]=seleAttachments };
-                IMudExDialogReference<DeleteProjectAttachmentBulk>? dlgReference = await Dialog.ShowExAsync<DeleteProjectAttachmentBulk>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteProjectAttachmentBulk>? dlgReference = await Dialog.ShowExAsync<DeleteProjectAttachmentBulk>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
@@ -889,7 +907,7 @@ protected override async Task OnInitializedAsync()
     private async Task OpenDialogReportCreate(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project.Id };
-        IMudExDialogReference<CreateReportDialog>? dlgReference = await Dialog.ShowExAsync<CreateReportDialog>("Simple Dialog", parameters, centerWidthEx);
+        IMudExDialogReference<CreateReportDialog>? dlgReference = await Dialog.ShowExAsync<CreateReportDialog>("Simple Dialog", parameters, middleWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -907,7 +925,7 @@ protected override async Task OnInitializedAsync()
         {
             case 0:
                 var parameters = new DialogParameters { ["reports"]=seleReports };
-                IMudExDialogReference<DeleteReportBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteReportBulkDialog>("Simple Dialog", parameters, centerWidthEx);
+                IMudExDialogReference<DeleteReportBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteReportBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
                 var result = await dlgReference.Result;
 
