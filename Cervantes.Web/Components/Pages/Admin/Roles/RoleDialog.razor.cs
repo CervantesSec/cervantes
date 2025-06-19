@@ -112,12 +112,12 @@ public partial class RoleDialog : ComponentBase
             var response = await _UserController.EditRole(model);
             if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
             {
-                Snackbar.Add(localizer["userEdited"], Severity.Success);
+                Snackbar.Add(localizer["roleEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }
             else
             {
-                Snackbar.Add(localizer["userEditedError"], Severity.Error);
+                Snackbar.Add(localizer["roleEditedError"], Severity.Error);
                 StateHasChanged();
             }
             

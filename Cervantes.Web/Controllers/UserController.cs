@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using AuthPermissions.AdminCode;
 using AuthPermissions.AspNetCore;
+using AuthPermissions.BaseCode.DataLayer.Classes.SupportTypes;
 using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.Contracts;
 using Cervantes.CORE;
@@ -210,18 +211,40 @@ public class UserController: ControllerBase
         {
             if (ModelState.IsValid)
             {
-                await authRolesAdminService.UpdateRoleToPermissionsAsync(model.Name, model.Permissions, model.Description);
+                if (model.Permissions.Contains("Admin"))
+                {
+                    IEnumerable<string> permissionNames = new List<string>
+                    {
+                        "Admin","NotSet"
+                    };
+                    IEnumerable<string> permissionNames2 = Enum.GetValues<Permissions>()
+                        .Select(p => p.ToString()).Except(permissionNames);
+                    
+                    await authRolesAdminService.UpdateRoleToPermissionsAsync(
+                        model.Name, permissionNames2,
+                        model.Description,
+                        // Use a known valid role type to avoid NullReferenceException
+                        RoleTypes.Normal);
+                }
+                else
+                {
+                    await authRolesAdminService.UpdateRoleToPermissionsAsync(
+                        model.Name,
+                        model.Permissions,
+                        model.Description,
+                        // Use a known valid role type to avoid NullReferenceException
+                        RoleTypes.Normal);
+                }
+                
                 return Ok();
             }
-            return BadRequest();
+            return BadRequest("Invalid model state");
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred adding role. User: {0}",
-                aspNetUserId);
-            throw;
+            _logger.LogError(e, "An error occurred editing role. User: {0}", aspNetUserId);
+            return BadRequest("An error occurred while updating the role");
         }
-       
     }
     
     [HttpDelete]
