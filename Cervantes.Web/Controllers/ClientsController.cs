@@ -17,7 +17,7 @@ namespace Cervantes.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize (Roles = "Admin,SuperUser,User")]
+[Authorize]
 public class ClientsController : ControllerBase
 {
     private IClientManager clientManager = null;
