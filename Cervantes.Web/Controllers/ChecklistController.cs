@@ -204,7 +204,7 @@ public class ChecklistController : ControllerBase
                         await wstgManager.Context.SaveChangesAsync();
                         _logger.LogInformation("Checklist added successfully. User: {0}",
                             aspNetUserId);
-                        return Ok();
+                        return CreatedAtAction(nameof(GetWSTGById), new { checklistId = wstg.Id }, wstg);
                     case ChecklistType.OWASPMASVS:
                         MASTG mstg = new MASTG
                         {
@@ -219,7 +219,7 @@ public class ChecklistController : ControllerBase
                         await mastgManager.Context.SaveChangesAsync();
                         _logger.LogInformation("Checklist added successfully. User: {0}",
                             aspNetUserId);
-                        return Ok();
+                        return CreatedAtAction(nameof(GetMASTGById), new { checklistId = mstg.Id }, mstg);
                 }
             
                 
@@ -465,7 +465,7 @@ public class ChecklistController : ControllerBase
 
                    await wstgManager.Context.SaveChangesAsync();
                    _logger.LogInformation("User: {0} edited Checklist: {1}", aspNetUserId, result.Id);
-                   return Ok();
+                   return NoContent();
                }
 
                _logger.LogError("An error occurred editing a Checklist. User: {0}",
@@ -506,7 +506,7 @@ public class ChecklistController : ControllerBase
                 await wstgManager.Context.SaveChangesAsync();
                 _logger.LogInformation("WSTG Checklist deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
             _logger.LogError("An error occurred deleting a WSTG Checklist. User: {0}",
                 aspNetUserId);
@@ -541,11 +541,11 @@ public class ChecklistController : ControllerBase
                 await mastgManager.Context.SaveChangesAsync();
                 _logger.LogInformation("MASTG Checklist deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
             _logger.LogError("An error occurred deleting a MASTG Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NoContent();
         }
         catch (Exception e)
         {
@@ -811,7 +811,7 @@ public class ChecklistController : ControllerBase
 
                         await mastgManager.Context.SaveChangesAsync();
                    _logger.LogInformation("User: {0} edited MASTG Checklist: {1}", aspNetUserId, result.Id);
-                   return Ok();
+                   return NoContent();
                }
 
                _logger.LogError("An error occurred editing a MASTG Checklist. User: {0}",
@@ -983,7 +983,7 @@ public class ChecklistController : ControllerBase
                 reportManager.Context.SaveChanges();
                 _logger.LogInformation("Report MASVS generated successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetReportById), new { reportId = rep.Id }, rep.Id);
                
            }
            
@@ -1155,7 +1155,7 @@ public class ChecklistController : ControllerBase
 
                 _logger.LogInformation("Report generated successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetReportById), new { reportId = rep.Id }, rep);
                 }
                 
                 _logger.LogError("An error ocurred generating report. User: {0}",
@@ -1166,6 +1166,28 @@ public class ChecklistController : ControllerBase
             _logger.LogError("An error ocurred generating report. User: {0}",
                 aspNetUserId);
             return BadRequest();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred generating report. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
+
+    [NonAction]
+    public IActionResult GetReportById(Guid reportId)
+    {
+        try{
+            var report = reportManager.GetById(reportId);
+            if (report == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(report);
+            }
         }
         catch (Exception e)
         {

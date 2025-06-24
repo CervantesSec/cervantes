@@ -31,7 +31,7 @@ public partial class DeleteChecklistBulkDialog: ComponentBase
                 if (checklist.Type == ChecklistType.OWASPWSTG)
                 {
                     var response = await _ChecklistController.DeleteWstg(checklist.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                     {
                         Snackbar.Add(@localizer["deletedChecklist"], Severity.Success);
                     }
@@ -43,7 +43,7 @@ public partial class DeleteChecklistBulkDialog: ComponentBase
                 else
                 {
                     var response = await _ChecklistController.DeleteMastg(checklist.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                     {
                         Snackbar.Add(@localizer["deletedChecklist"], Severity.Success);
                     }

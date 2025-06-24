@@ -338,7 +338,7 @@ public partial class MastgDialog: ComponentBase
         {
             model.Id = checklist.Id;
             var response = await _checklistController.EditMastg(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["checklistEdited"], Severity.Success);
                 //MudDialog.Close(DialogResult.Ok(true));

@@ -43,8 +43,16 @@ public class AccountController : ControllerBase
     [Route("Logout")]
     public async Task<IActionResult> Logout()
     {
-        await _signInManager.SignOutAsync();
-        return Ok();
+        try
+        {
+            await _signInManager.SignOutAsync();
+            return NoContent();
+        }
+        catch
+        {
+            return Unauthorized();
+        }
+        
     }
     
 }

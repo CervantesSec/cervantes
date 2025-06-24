@@ -42,7 +42,7 @@ public partial class CreateChecklistDialog: ComponentBase
         {
 	        model.ProjectId = project;
 	        var response = await _ChecklistController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
 	        {
 		        Snackbar.Add(@localizer["checklistCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));
