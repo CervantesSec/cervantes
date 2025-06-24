@@ -102,7 +102,7 @@ public partial class CreateClientDialog: ComponentBase
 	        }
 	        
 	        var response =  await _clientsController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
 	        {
 		        Snackbar.Add(@localizer["clientCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

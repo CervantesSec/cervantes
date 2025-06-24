@@ -141,7 +141,7 @@ public class ClientsController : ControllerBase
                 await clientManager.AddAsync(client);
                 await clientManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Client added successfully. User: {0}",aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetById), new { clientId = client.Id }, client);
             }
             _logger.LogError("An error ocurred adding a client. User: {0}",
                 aspNetUserId);
@@ -172,7 +172,7 @@ public class ClientsController : ControllerBase
                     clientManager.Context.SaveChanges();
                     _logger.LogInformation("Client deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
@@ -214,7 +214,7 @@ public class ClientsController : ControllerBase
                 clientManager.Context.SaveChanges();
                 _logger.LogInformation("Client logo deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
             _logger.LogError("An error ocurred deleting client logo. User: {0}",
                 aspNetUserId);
@@ -275,7 +275,7 @@ public class ClientsController : ControllerBase
                     await clientManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Client edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {

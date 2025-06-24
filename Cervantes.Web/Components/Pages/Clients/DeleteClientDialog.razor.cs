@@ -29,7 +29,7 @@ public partial class DeleteClientDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _clientsController.Delete(client.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["clientDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

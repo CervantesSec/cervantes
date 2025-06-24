@@ -187,7 +187,7 @@ public partial class ClientDialog: ComponentBase
             }
 
             var response = await _clientsController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["clientEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
