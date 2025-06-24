@@ -26,7 +26,7 @@ public partial class DocumentDeleteDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _documentController.Delete(document.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["documentDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

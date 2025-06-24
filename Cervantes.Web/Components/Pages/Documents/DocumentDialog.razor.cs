@@ -140,7 +140,7 @@ public partial class DocumentDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _DocumentController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["documentEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

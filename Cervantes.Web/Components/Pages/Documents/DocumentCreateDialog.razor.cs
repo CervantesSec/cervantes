@@ -99,7 +99,7 @@ public partial class DocumentCreateDialog: ComponentBase
 		        file = null;
 
 		         var response =  await _DocumentController.Add(model);
-		        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+		        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
 		        {
 			        Snackbar.Add(@localizer["documentCreated"], Severity.Success);
 			        MudDialog.Close(DialogResult.Ok(true));

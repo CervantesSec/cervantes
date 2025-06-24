@@ -57,6 +57,24 @@ public class DocumentController : Controller
             
     }
     
+    [HttpGet]
+    [HasPermission(Permissions.DocumentsRead)]
+    public CORE.Entities.Document GetById(Guid documentId)
+    {
+        try
+        {
+            var model = docManager.GetById(documentId);
+            return model;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e,"An error ocurred getting Documents. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+            
+    }
+    
      [HttpPost]
      [HasPermission(Permissions.DocumentsAdd)]
     public async Task<IActionResult> Add([FromBody] DocumentCreateViewModel model)
@@ -98,7 +116,7 @@ public class DocumentController : Controller
                 await docManager.AddAsync(doc);
                 await docManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Document added successfully. User: {0}",aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetById), new { documentId = doc.Id }, doc);
             }
             _logger.LogError("An error ocurred adding a Document. User: {0}",
                 aspNetUserId);
@@ -131,7 +149,7 @@ public class DocumentController : Controller
                     docManager.Context.SaveChanges();
                     _logger.LogInformation("Document deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
@@ -173,7 +191,7 @@ public class DocumentController : Controller
                     await docManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Document edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {

@@ -28,7 +28,7 @@ public partial class DocumentDeleteBulkDialog: ComponentBase
             foreach (var docs in documents)
             {
                 var response = await _documentController.Delete(docs.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["documentDeleted"], Severity.Success);
                 }
