@@ -122,7 +122,7 @@ public partial class NoteDialog: ComponentBase
         {
 	   
             var response = await _NoteController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["noteEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

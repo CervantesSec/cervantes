@@ -88,7 +88,7 @@ public partial class CreateNoteDialog: ComponentBase
         {
 	   
 		        var response = await _noteController.Add(model);
-		        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+		        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
 		        {
 			        Snackbar.Add(@localizer["noteAdded"], Severity.Success);
 			        MudDialog.Close(DialogResult.Ok(true));

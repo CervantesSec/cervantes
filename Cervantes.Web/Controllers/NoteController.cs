@@ -50,7 +50,7 @@ public class NoteController : Controller
                 await noteManager.AddAsync(note);
                 await noteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Note added successfully. User: {0}",aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetById), new { noteId = note.Id }, note);
             }
             _logger.LogError("An error ocurred adding a Note. User: {0}",
                 aspNetUserId);
@@ -79,11 +79,11 @@ public class NoteController : Controller
                     note.Description = sanitizer.Sanitize(model.Description);
                     await noteManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Note edited successfully. User: {0}",aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 _logger.LogError("An error ocurred editing a Note. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound();
             }
             
             _logger.LogError("An error ocurred editing a Note. User: {0}",
@@ -114,9 +114,9 @@ public class NoteController : Controller
                         noteManager.Remove(note);
                         await noteManager.Context.SaveChangesAsync();
                         _logger.LogInformation("Note deleted successfully. User: {0}",aspNetUserId);
-                        return Ok();
+                        return NoContent();
                     }
-                    return BadRequest();
+                    return NotFound();
 
                 }
                 _logger.LogError("An error ocurred deleting a Note. User: {0}",
@@ -144,6 +144,24 @@ public class NoteController : Controller
         try
         {
             var model = noteManager.GetAll().Where(x => x.UserId == aspNetUserId).ToArray();
+        
+            return model;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e,"An error deleting getting notes. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
+    
+    [NonAction]
+    public CORE.Entities.Note GetById(Guid noteId)
+    {
+        try
+        {
+            var model = noteManager.GetById(noteId);
         
             return model;
         }
