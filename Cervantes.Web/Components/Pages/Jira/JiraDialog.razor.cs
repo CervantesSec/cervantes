@@ -83,7 +83,7 @@ public partial class JiraDialog: ComponentBase
     private async Task CreateJira()
     {
         var response = await _jiraController.Add(@vuln.Id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
         {
             Snackbar.Add(@localizer["jiraCreated"], Severity.Success);
             await UpdateJira();
@@ -99,7 +99,7 @@ public partial class JiraDialog: ComponentBase
     {
         
         var response = await _jiraController.DeleteIssue(@vuln.Id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
         {
             Snackbar.Add(@localizer["jiraDeleted"], Severity.Success);
             StateHasChanged();
@@ -134,7 +134,7 @@ public partial class JiraDialog: ComponentBase
             Comment = test
         };
         var response = await _jiraController.AddComment(jiraComment);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
         {
             Snackbar.Add(@localizer["addedComment"], Severity.Success);
             await UpdateJira();

@@ -92,6 +92,8 @@ public class JiraController : Controller
         
     }
     
+    
+    
     [HttpGet]
     [Route("Comments/{vulnId}")]
     [HasPermission(Permissions.JiraCommentsRead)]
@@ -135,7 +137,7 @@ public class JiraController : Controller
                 await vulnManager.Context.SaveChangesAsync();
                 
                 _logger.LogInformation("Jira added successfully. User: {0}",aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetJiraByVuln), new { vulnId = vuln.Id }, vuln);
             }
             _logger.LogError("An error ocurred adding a jira. User: {0}",
                 aspNetUserId);
@@ -174,7 +176,7 @@ public class JiraController : Controller
             vuln.JiraCreated = false;
             vulnManager.Context.SaveChanges();
             _logger.LogInformation("Jira {0} deleted successfully. User {1}", jira.JiraKey, aspNetUserId);
-            return Ok();
+            return NoContent();
 
         }
         catch (Exception e)
@@ -197,7 +199,7 @@ public class JiraController : Controller
             jiraService.UpdateIssue(jira.JiraKey);
             _logger.LogInformation("Jira {0} updated successfully. User {1}", jira.JiraKey, aspNetUserId);
 
-            return Ok();
+            return NoContent();
         }
         catch (Exception e)
         {
@@ -225,7 +227,7 @@ public class JiraController : Controller
             }
 
             _logger.LogInformation( "Jira comment added successfully on Vuln {0} User {1}", model.VulnId,aspNetUserId);
-            return Ok();
+            return Created();
         }
         catch (Exception e)
         {
