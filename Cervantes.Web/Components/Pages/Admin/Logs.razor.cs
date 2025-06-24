@@ -89,7 +89,7 @@ public partial class Logs: ComponentBase
     private async Task DeleteAll()
     {
         var response = await _logController.DeleteAll();
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
         {
             Snackbar.Add(@localizer["logsDeleted"], Severity.Success);
             await Update();

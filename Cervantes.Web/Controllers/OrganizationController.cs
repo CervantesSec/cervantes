@@ -114,7 +114,7 @@ public class OrganizationController: ControllerBase
                 aspNetUserId);
             await organizationManager.Context.SaveChangesAsync();
             
-            return Ok();
+            return NoContent();
         }
         return BadRequest();
         }
@@ -141,7 +141,7 @@ public class OrganizationController: ControllerBase
             org.ImagePath = null;
 
             await organizationManager.Context.SaveChangesAsync();
-            return Ok();
+            return NoContent();
         }
         catch (Exception e)
         {

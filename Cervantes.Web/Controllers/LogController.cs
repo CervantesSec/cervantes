@@ -50,7 +50,7 @@ public class LogController: ControllerBase
             }
             _logger.LogInformation("Logs deleted successfully");
             await logManager.Context.SaveChangesAsync();
-            return Ok();
+            return NoContent();
         }
         catch (Exception e)
         {

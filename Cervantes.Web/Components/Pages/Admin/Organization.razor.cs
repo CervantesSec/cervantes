@@ -142,7 +142,7 @@ public partial class Organization: ComponentBase
 	        
 	        
             var response = await _organizationController.Save(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["orgSaved"], Severity.Success);
                 await Update();
@@ -159,7 +159,7 @@ public partial class Organization: ComponentBase
     private async Task DeleteLogo(int id)
     {
         var response = await _organizationController.DeleteAvatar();
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
         {
             Snackbar.Add(@localizer["logoDeleted"], Severity.Success);
             model.ImagePath = null;
