@@ -226,6 +226,22 @@ public class VulnController: ControllerBase
         }
         
     }
+    
+    [NonAction]
+    public CORE.Entities.Vuln GetVulnById(Guid vulnId)
+    {
+        try
+        {
+            return vulnManager.GetById(vulnId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting vulns. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
 
     [HttpPost]
     [HasPermission(Permissions.VulnsAdd)]
@@ -351,7 +367,7 @@ public class VulnController: ControllerBase
   
                 _logger.LogInformation("Vuln added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetVulnById), new { vulnId = vuln.Id }, vuln);
             }
 
             _logger.LogError("An error ocurred adding a Vuln. User: {0}",
@@ -492,7 +508,7 @@ public class VulnController: ControllerBase
   
                 _logger.LogInformation("Vuln edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
                 }
                 
                 _logger.LogError("An error ocurred editing a Vuln. User: {0}",
@@ -574,7 +590,7 @@ public class VulnController: ControllerBase
                  await vulnManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
    
             _logger.LogError("An error ocurred deleting a Vuln. User: {0}",
@@ -627,6 +643,38 @@ public class VulnController: ControllerBase
         
     }
     
+    [NonAction]
+    public CORE.Entities.VulnNote GetVulnNoteById(Guid vulnNoteId)
+    {
+        try
+        {
+            return vulnNoteManager.GetById(vulnNoteId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting a Vuln attachments. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
+    
+    [NonAction]
+    public CORE.Entities.VulnAttachment GetVulnAttachmentById(Guid vulnAttachmentId)
+    {
+        try
+        {
+            return vulnAttachmentManager.GetById(vulnAttachmentId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting a Vuln attachments. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
+    
     [HttpPost]
     [Route("Note")]
     [HasPermission(Permissions.VulnNotesAdd)]
@@ -662,7 +710,7 @@ public class VulnController: ControllerBase
   
                 _logger.LogInformation("Vuln Note added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetVulnNoteById), new { vulnNoteId = model.VulnId }, model);
             }
 
             _logger.LogError("An error ocurred adding a Vuln Note. User: {0}",
@@ -705,7 +753,7 @@ public class VulnController: ControllerBase
                 await vulnNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Note deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
    
             _logger.LogError("An error ocurred deleting a Vuln Note. User: {0}",
@@ -750,7 +798,7 @@ public class VulnController: ControllerBase
                 await vulnNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Note edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
             return BadRequest();
         }
@@ -845,7 +893,7 @@ public class VulnController: ControllerBase
                 await vulnTargetManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Target deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
    
             _logger.LogError("An error ocurred deleting a Vuln Target. User: {0}",
@@ -931,7 +979,7 @@ public class VulnController: ControllerBase
                 await vulnAttachmentManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Attachment deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetVulnAttachmentById), new { vulnAttachmentId = attachment.Id }, attachment);
             }
             _logger.LogError("An error ocurred adding a Vuln Attachment. User: {0}",
                 aspNetUserId);
@@ -969,7 +1017,7 @@ public class VulnController: ControllerBase
                     await vulnAttachmentManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Vuln Attachment deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
             
                 System.IO.File.Delete(attachment.FilePath);
@@ -1053,24 +1101,24 @@ public class VulnController: ControllerBase
                                     file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
-                                return Ok();
+                                return NoContent();
                             case VulnImportType.Pwndoc:
                                 pwndocParser.Parse(model.Project, aspNetUserId,file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
-                                return Ok();
+                                return NoContent();
                             case VulnImportType.Burp:
                                 burpParser.Parse(model.Project, aspNetUserId,
                                     file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
-                                return Ok();
+                                return NoContent();
                             case VulnImportType.Nessus:
                                 nessusParser.Parse(model.Project, aspNetUserId,
                                     file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
-                                return Ok();
+                                return NoContent();
                         }
                     }
                     else
@@ -1082,24 +1130,24 @@ public class VulnController: ControllerBase
                                     file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
-                                return Ok();
+                                return NoContent();
                             case VulnImportType.Pwndoc:
                                 pwndocParser.Parse(null, aspNetUserId,file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
-                                return Ok();
+                                return NoContent();
                             case VulnImportType.Burp:
                                 burpParser.Parse(null, aspNetUserId,
                                     file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
-                                return Ok();
+                                return NoContent();
                             case VulnImportType.Nessus:
                                 nessusParser.Parse(null, aspNetUserId,
                                     file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
-                                return Ok();
+                                return NoContent();
                         }
                     }
                     
@@ -1140,7 +1188,7 @@ public class VulnController: ControllerBase
                 await vulnCategoryManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Category added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetCategoryById), new { categoryId = category.Id }, category);;
                 
             }
             _logger.LogError( "An error ocurred adding a Vuln Category. User: {0}",
@@ -1153,6 +1201,12 @@ public class VulnController: ControllerBase
                 aspNetUserId);
             return BadRequest();
         }
+    }
+
+    [NonAction]
+    public CORE.Entities.VulnCategory GetCategoryById(Guid categoryId)
+    {
+        return vulnCategoryManager.GetById(categoryId);
     }
     
     [HttpDelete]
@@ -1169,7 +1223,7 @@ public class VulnController: ControllerBase
                 await vulnCategoryManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Category deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
                 
             }
             _logger.LogError( "An error ocurred deleting a Vuln Category. User: {0}",
@@ -1203,7 +1257,7 @@ public class VulnController: ControllerBase
                 await vulnCategoryManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Category edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
                 
             }
             _logger.LogError( "An error ocurred editing a Vuln Category. User: {0}",

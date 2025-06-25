@@ -28,7 +28,7 @@ public partial class DeleteVulnAttachmentBulkDialog: ComponentBase
             foreach (var attachment in attachments)
             {
                 var response = await _VulnController.DeleteAttahcment(attachment.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")            
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")            
                 {
                     Snackbar.Add(@localizer["attachmentDeleted"], Severity.Success);
                 }

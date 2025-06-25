@@ -84,9 +84,9 @@ public partial class VulnCategories : ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.VulnCategory> args)
     {
         var parameters = new DialogParameters { ["category"]=args.Item };
+        IMudExDialogReference<VulnCategoryDialog>? dlgReference = await DialogService.ShowExAsync<VulnCategoryDialog>("Simple Dialog", parameters, centerWidthEx);
 
-        var dialog =  DialogService.Show<VulnCategoryDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
 
         if (!result.Canceled)
         {
@@ -101,9 +101,9 @@ public partial class VulnCategories : ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["categories"]=seleCats };
+                IMudExDialogReference<DeleteVulnCategoryBulkDialog>? dlgReference = await DialogService.ShowExAsync<DeleteVulnCategoryBulkDialog>("Simple Dialog", parameters, centerWidthEx);
 
-                var dialog =  DialogService.Show<DeleteVulnCategoryBulkDialog>("Edit", parameters,maxWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

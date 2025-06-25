@@ -108,7 +108,7 @@ public partial class CreateTargetDialog: ComponentBase
             target.ProjectId = project;
 
             var response = await _targetController.Add(target);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
             {
 
                 Snackbar.Add(@localizer["targetCreated"], Severity.Success);

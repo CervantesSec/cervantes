@@ -55,6 +55,12 @@ public class VaultController : ControllerBase
         return null;
     }
     
+    [NonAction]
+    public CORE.Entities.Vault GetByVaultId(Guid vaultId)
+    {
+        return vaultManager.GetById(vaultId);
+    }
+    
     [HttpPost]
     [HasPermission(Permissions.VaultAdd)]
     public async Task<IActionResult> Add([FromBody] VaultCreateViewModel model)
@@ -83,7 +89,7 @@ public class VaultController : ControllerBase
                 await vaultManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vault added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetByVaultId), new { vaultId = vault.Id }, vault);
             }
             else
             {
@@ -123,7 +129,7 @@ public class VaultController : ControllerBase
                 await vaultManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vault edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
             else
             {
@@ -160,7 +166,7 @@ public class VaultController : ControllerBase
                 await vaultManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vault deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
             else
             {

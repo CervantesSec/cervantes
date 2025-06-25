@@ -126,7 +126,7 @@ public partial class VulnNoteDialog: ComponentBase
         {
 
             var response = await _vulnController.EditNote(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
 
                 Snackbar.Add(@localizer["noteEdited"], Severity.Success);

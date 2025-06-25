@@ -30,7 +30,7 @@ public partial class DeleteTaskTargetDialog: ComponentBase
 		{
 
 			var response = await _taskController.DeleteTarget(target.Id);
-			if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+			if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
 			{
 				Snackbar.Add(@localizer["targetDeleted"], Severity.Success);
 				MudDialog.Close(DialogResult.Ok(true));

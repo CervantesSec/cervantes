@@ -70,13 +70,13 @@ public partial class AddMembersProjectDialog: ComponentBase
 
 
             var response = await _projectController.AddMember(member);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")            
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")            
             {
                     Snackbar.Add(@localizer["userAdded"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));
                 
             }
-            else if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkObjectResult")
+            else if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedObjectResult")
             {
                 Snackbar.Add(@localizer["userExists"], Severity.Info);
                 MudDialog.Close(DialogResult.Ok(true));

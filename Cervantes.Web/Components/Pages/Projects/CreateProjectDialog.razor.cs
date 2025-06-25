@@ -115,7 +115,7 @@ public partial class CreateProjectDialog: ComponentBase
 
 
 	        var response = await _projectController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
 	        {
 		        Snackbar.Add(@localizer["projectCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

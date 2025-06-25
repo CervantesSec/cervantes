@@ -26,7 +26,7 @@ public partial class DeleteReportDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _ReportController.DeleteReport(report.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["reportDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

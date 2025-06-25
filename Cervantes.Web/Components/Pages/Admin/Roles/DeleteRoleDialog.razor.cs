@@ -25,7 +25,7 @@ public partial class DeleteRoleDialog : ComponentBase
         if (form.IsValid)
         {
             var response = await _UserController.DeleteRole(role.Name);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["roleDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

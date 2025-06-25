@@ -27,7 +27,7 @@ public partial class DeleteTaskNoteDialog : ComponentBase
         {
 
             var response = await _taskController.DeleteNote(note.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["noteDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

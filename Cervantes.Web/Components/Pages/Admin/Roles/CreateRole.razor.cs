@@ -30,7 +30,7 @@ public partial class CreateRole : ComponentBase
         if (form.IsValid)
         {
 	        var response = await _UserController.AddRole(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
 	        {
 		        Snackbar.Add(@localizer["roleCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

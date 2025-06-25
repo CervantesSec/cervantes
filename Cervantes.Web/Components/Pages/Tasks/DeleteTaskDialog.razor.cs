@@ -29,7 +29,7 @@ public partial class DeleteTaskDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _taskController.Delete(task.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["taskDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -212,7 +212,7 @@ public class ReportController : ControllerBase
                     await reportManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Report edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred editing reports User: {0}",
@@ -250,8 +250,21 @@ public class ReportController : ControllerBase
             throw;
         }
     }
+    [NonAction]
+    public CORE.Entities.ReportTemplate GetReportTemplateById(Guid reportId)
+    {
+        try
+        {
+            return reportTemplateManager.GetById(reportId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting report templates. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
     
-
     [HttpPost]
     [Route("Template")]
     [HasPermission(Permissions.ReportTemplatesAdd)]
@@ -284,7 +297,7 @@ public class ReportController : ControllerBase
 
                 _logger.LogInformation("Report template added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetReportTemplateById), new { reportId = template.Id }, template);
             }
 
             _logger.LogError("An error ocurred adding report templates. User: {0}",
@@ -338,7 +351,7 @@ public class ReportController : ControllerBase
                     await reportTemplateManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Report template edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred editing report templates. User: {0}",
@@ -375,7 +388,7 @@ public class ReportController : ControllerBase
                     await reportTemplateManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Report template deletes successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred deleting report templates. User: {0}",
@@ -411,7 +424,7 @@ public class ReportController : ControllerBase
                     await reportTemplateManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Report deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred deleting report. User: {0}",
@@ -467,6 +480,21 @@ public class ReportController : ControllerBase
             throw;
         }
     }
+    
+    [NonAction]
+    public async Task<ReportComponents> GetComponentById(Guid componentId)
+    {
+        try
+        {
+            return reportComponentsManager.GetById(componentId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting report components. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
 
     [HttpPost]
     [Route("Components")]
@@ -493,7 +521,7 @@ public class ReportController : ControllerBase
 
                 _logger.LogInformation("Report Components added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetComponentById), new { componentId = comp.Id }, comp);
             }
 
             _logger.LogError("An error ocurred adding report Components. User: {0}",
@@ -532,12 +560,12 @@ public class ReportController : ControllerBase
 
                 _logger.LogInformation("Report Components edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
 
             _logger.LogError("An error ocurred editing report Components. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NotFound();
         }
         catch (Exception e)
         {
@@ -562,12 +590,12 @@ public class ReportController : ControllerBase
 
                 _logger.LogInformation("Report Components deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
 
             _logger.LogError("An error ocurred deleting report Components. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NotFound();
         }
         catch (Exception e)
         {
@@ -989,7 +1017,7 @@ public class ReportController : ControllerBase
 
                 _logger.LogInformation("Report generated successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetReportById), new { reportId = rep.Id }, rep);
             }
 
             _logger.LogError("An error ocurred generating report. User: {0}",
@@ -1003,6 +1031,21 @@ public class ReportController : ControllerBase
             throw;
         }
     } 
+    
+    [NonAction]
+    public async Task<Report> GetReportById(Guid componentId)
+    {
+        try
+        {
+            return reportManager.GetById(componentId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting report components. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
     
     [NonAction] 
 private static string ReplaceTableRowWithFor(string htmlContent)

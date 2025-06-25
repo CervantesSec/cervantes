@@ -209,7 +209,7 @@ protected override async Task OnInitializedAsync()
 
             executive.Project = project.Id;
             var response = await _projectController.ExecutiveSumamry(executive);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["executiveSummarySaved"], Severity.Success);
             }
@@ -276,7 +276,7 @@ protected override async Task OnInitializedAsync()
             model.StartDate = dateStart.Value;
             model.EndDate = dateEnd.Value;
             var response = await _projectController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["projectEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

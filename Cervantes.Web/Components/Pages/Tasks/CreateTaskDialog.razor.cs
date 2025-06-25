@@ -131,7 +131,7 @@ public partial class CreateTaskDialog: ComponentBase
 
 	        
 	        var response = await _taskController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
 	        {
 		        Snackbar.Add(@localizer["taskCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

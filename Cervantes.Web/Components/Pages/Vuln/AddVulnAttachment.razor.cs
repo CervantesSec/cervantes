@@ -86,7 +86,7 @@ public partial class AddVulnAttachment: ComponentBase
 
 
                 var response = await _VulnController.AddAttachment(attachment);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")            
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")            
                 {
 
                     Snackbar.Add(@localizer["addAttachment"], Severity.Success);

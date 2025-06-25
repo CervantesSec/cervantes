@@ -122,7 +122,7 @@ public partial class VaultDialog: ComponentBase
         {
 
             var response = await _VaultController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
 
                 Snackbar.Add(@localizer["vaultEdited"], Severity.Success);

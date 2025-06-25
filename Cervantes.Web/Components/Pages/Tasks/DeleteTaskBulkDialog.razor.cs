@@ -27,7 +27,7 @@ public partial class DeleteTaskBulkDialog: ComponentBase
             foreach (var task in tasks)
             {
                 var response = await _taskController.Delete(task.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["taskDeleted"], Severity.Success);
                 

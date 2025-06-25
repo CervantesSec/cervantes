@@ -151,7 +151,7 @@ public partial class ReportComponentsDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _reportController.EditComponent(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["reportComponentEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

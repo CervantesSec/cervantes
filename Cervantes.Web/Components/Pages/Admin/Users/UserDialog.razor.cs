@@ -211,7 +211,7 @@ public partial class UserDialog: ComponentBase
             }
 
             var response = await _UserController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(localizer["userEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

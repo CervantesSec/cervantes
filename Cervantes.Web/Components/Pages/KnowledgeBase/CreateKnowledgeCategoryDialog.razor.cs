@@ -36,7 +36,7 @@ public partial class CreateKnowledgeCategoryDialog: ComponentBase
         if (form.IsValid)
         {
             var response =  await _KnowledgeBaseController.AddCategory(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
             {
                 Snackbar.Add(@localizer["categoryCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

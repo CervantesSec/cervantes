@@ -29,7 +29,7 @@ public partial class DeleteProjectMemberBulkDialog: ComponentBase
             foreach (var user in users)
             {
                 var response = await _projectController.DeleteMember(user.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")            
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")            
                 {
                     Snackbar.Add(@localizer["memberDeleted"], Severity.Success);
                 }

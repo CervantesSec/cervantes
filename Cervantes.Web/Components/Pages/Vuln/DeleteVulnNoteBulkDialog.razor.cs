@@ -28,7 +28,7 @@ public partial class DeleteVulnNoteBulkDialog: ComponentBase
             foreach (var note in notes)
             {
                 var response = await _VulnController.DeleteVulnNote(note.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult") 
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult") 
                 {
                     Snackbar.Add(@localizer["deletedNote"], Severity.Success);
                 }

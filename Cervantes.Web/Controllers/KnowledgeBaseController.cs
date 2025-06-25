@@ -47,6 +47,12 @@ public class KnowledgeBaseController : Controller
         return model;
     }
     
+    [NonAction]
+    public CORE.Entities.KnowledgeBase GetPageById(Guid pageId)
+    {
+        return knowledgeBaseManager.GetById(pageId);
+    }
+    
      [HttpPost]
      [Route("Page")]
      [HasPermission(Permissions.KnowledgeBaseAdd)]
@@ -71,7 +77,7 @@ public class KnowledgeBaseController : Controller
                 await knowledgeBaseManager.AddAsync(page);
                 await knowledgeBaseManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Knowledge Page added successfully. User: {0}",aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetPageById), new { pageId = page.Id }, page);
             }
             _logger.LogError("An error ocurred adding a Knowledge Page. User: {0}",
                 aspNetUserId);
@@ -109,7 +115,7 @@ public class KnowledgeBaseController : Controller
                     await knowledgeBaseManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Knowledge Page edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
@@ -147,7 +153,7 @@ public class KnowledgeBaseController : Controller
                     knowledgeBaseManager.Context.SaveChanges();
                     _logger.LogInformation("Knowledge Page deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
@@ -190,6 +196,22 @@ public class KnowledgeBaseController : Controller
         
     }
     
+    [NonAction]
+    public CORE.Entities.KnowledgeBaseCategories GetCategoryById(Guid categoryId)
+    {
+        try
+        {
+            return knowledgeBaseCategoryManager.GetById(categoryId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e,"An error ocurred deleting Knowledge Page. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
+    
      [HttpPost]
      [Route("Category")]
      [HasPermission(Permissions.KnowledgeBaseCategoryAdd)]
@@ -211,7 +233,7 @@ public class KnowledgeBaseController : Controller
                 await knowledgeBaseCategoryManager.AddAsync(cat);
                 await knowledgeBaseCategoryManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Knowledge Category added successfully. User: {0}",aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetCategoryById), new { categoryId = cat.Id }, cat);
             }
             _logger.LogError("An error ocurred adding a Knowledge Category. User: {0}",
                 aspNetUserId);
@@ -254,7 +276,7 @@ public class KnowledgeBaseController : Controller
                     await knowledgeBaseCategoryManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Knowledge Category edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
@@ -292,7 +314,7 @@ public class KnowledgeBaseController : Controller
                     knowledgeBaseCategoryManager.Context.SaveChanges();
                     _logger.LogInformation("Knowledge Category deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {

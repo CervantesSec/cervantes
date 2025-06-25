@@ -94,7 +94,7 @@ public partial class CreateKnowledgePageDialog: ComponentBase
         if (form.IsValid)
         {
             var response =  await _KnowledgeBaseController.AddPage(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
             {
                 Snackbar.Add(@localizer["pageCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -25,7 +25,7 @@ public partial class DeleteTargetBulkDialog: ComponentBase
             foreach (var target in targets)
             {
                 var response = await _TargetController.Delete(target.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["deletedTarget"], Severity.Success);
                 }

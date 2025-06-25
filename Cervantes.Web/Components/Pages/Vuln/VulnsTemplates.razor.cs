@@ -236,7 +236,7 @@ private async Task Update()
                 foreach (var vuln in seleVulns)
                 {
                     var response = await _jiraController.Add(vuln.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                     {
                         Snackbar.Add(@localizer["jiraCreated"], Severity.Success);
                     }
@@ -250,7 +250,7 @@ private async Task Update()
                 foreach (var vuln in seleVulns)
                 {
                     var response = await _jiraController.DeleteIssue(vuln.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                     {
                         Snackbar.Add(@localizer["jiraDeleted"], Severity.Success);
                     }

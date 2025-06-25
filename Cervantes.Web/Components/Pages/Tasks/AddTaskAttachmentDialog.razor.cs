@@ -43,7 +43,7 @@ public partial class AddTaskAttachmentDialog: ComponentBase
             
                 model.TaskId = task.Id;
                 var response = await _taskController.AddAttachment(model);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
                 {
 
                     Snackbar.Add(@localizer["attachmentAdded"], Severity.Success);

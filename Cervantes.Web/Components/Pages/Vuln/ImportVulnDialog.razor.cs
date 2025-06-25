@@ -86,7 +86,7 @@ public partial class ImportVulnDialog: ComponentBase
                 }
 
                 var response = await _vulnController.Import(model);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
 
                     Snackbar.Add(@localizer["vulnImported"], Severity.Success);

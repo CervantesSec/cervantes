@@ -56,7 +56,7 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
         if (form.IsValid)
         {
             var response =  await _KnowledgeBaseController.EditCategory(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["categoryEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
@@ -111,7 +111,7 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
     async Task DeleteDialog(CORE.Entities.KnowledgeBaseCategories item,DialogOptions options)
     {
         var parameters = new DialogParameters { ["category"]=item };
-        IMudExDialogReference<DeleteKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<DeleteKnowledgeCategoryDialog>("Simple Dialog", middleWidthEx);
+        IMudExDialogReference<DeleteKnowledgeCategoryDialog>? dlgReference = await Dialog.ShowExAsync<DeleteKnowledgeCategoryDialog>("Simple Dialog", parameters, middleWidthEx);
 
         var result = await dlgReference.Result;
 

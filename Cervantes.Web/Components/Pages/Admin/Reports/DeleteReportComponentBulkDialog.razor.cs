@@ -26,7 +26,7 @@ public partial class DeleteReportComponentBulkDialog: ComponentBase
             foreach (var component in components)
             {
                 var response = await _reportController.DeleteComponent(component.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["reportComponentDeleted"], Severity.Success);
                 }

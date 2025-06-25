@@ -25,7 +25,7 @@ public partial class DeleteKnowledgePageDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _KnowledgeBaseController.DeletePage(category.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["pageDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

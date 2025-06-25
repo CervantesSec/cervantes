@@ -209,7 +209,7 @@ protected override async Task OnInitializedAsync()
 
             executive.Project = project;
             var response = await _projectController.ExecutiveSumamry(executive);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["executiveSummarySaved"], Severity.Success);
             }

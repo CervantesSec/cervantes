@@ -25,7 +25,7 @@ public partial class DeleteKnowledgeCategoryDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _KnowledgeBaseController.DeleteCategory(category.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["categoryDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

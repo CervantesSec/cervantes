@@ -74,7 +74,7 @@ public partial class VulnCategoryDialog: ComponentBase
         {
 
             var response = await _vulnController.EditCategory(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
 
                 Snackbar.Add(@localizer["categoryEdited"], Severity.Success);

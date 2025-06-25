@@ -25,7 +25,7 @@ public partial class DeleteTargetServiceBulkDialog: ComponentBase
             foreach (var service in services)
             {
                 var response = await _TargetController.DeleteService(service.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["deletedService"], Severity.Success);
                 }

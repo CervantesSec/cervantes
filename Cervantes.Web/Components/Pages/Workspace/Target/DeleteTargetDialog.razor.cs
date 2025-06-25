@@ -28,7 +28,7 @@ public partial class DeleteTargetDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _TargetController.Delete(target.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["deletedTarget"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

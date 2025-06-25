@@ -221,7 +221,7 @@ private async Task Update()
         try
         {
             var parameters = new DialogParameters { ["vuln"]=args.Item };
-            IMudExDialogReference<VulnDialog>? dlgReference = await DialogService.ShowEx<VulnDialog>("Simple Dialog", parameters, maxWidthEx);
+            IMudExDialogReference<VulnDialog>? dlgReference = await DialogService.ShowExAsync<VulnDialog>("Simple Dialog", parameters, maxWidthEx);
             var result = await dlgReference.Result;
 
             if (!result.Canceled)
@@ -243,9 +243,9 @@ private async Task Update()
         {
             case 0:
                 var parameters = new DialogParameters { ["vulns"]=seleVulns };
+                IMudExDialogReference<DeleteVulnBulkDialog>? dlgReference = await DialogService.ShowExAsync<DeleteVulnBulkDialog>("Simple Dialog", parameters, maxWidthEx);
 
-                var dialog =  DialogService.Show<DeleteVulnBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
@@ -257,7 +257,7 @@ private async Task Update()
                 foreach (var vuln in seleVulns)
                 {
                     var response = await _jiraController.Add(vuln.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                     {
                         Snackbar.Add(@localizer["jiraCreated"], Severity.Success);
                     }
@@ -271,7 +271,7 @@ private async Task Update()
                 foreach (var vuln in seleVulns)
                 {
                     var response = await _jiraController.DeleteIssue(vuln.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                     {
                         Snackbar.Add(@localizer["jiraDeleted"], Severity.Success);
                     }

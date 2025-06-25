@@ -27,7 +27,7 @@ public partial class DeleteVaultDialog: ComponentBase
         {
             
                 var response = await VaultController.Delete(vault.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["vaultDeleted"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));

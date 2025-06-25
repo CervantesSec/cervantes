@@ -26,7 +26,7 @@ public partial class DeleteVulnTarget: ComponentBase
         if (form.IsValid)
         {
             var response = await _VulnController.DeleteVulnTarget(target.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")  
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")  
             {
                 Snackbar.Add(@localizer["deletedTarget"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

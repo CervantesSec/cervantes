@@ -109,7 +109,7 @@ public partial class Tasks: ComponentBase
         model.TaskId = id;
         model.UserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         var response = await _taskController.AssignToMe(model);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
         {
             Snackbar.Add(@localizer["taskAssigned"], Severity.Success);
         }

@@ -26,7 +26,7 @@ public partial class DeleteVulnBulkDialog: ComponentBase
         foreach (var vuln in vulns)
         {
             var response = await _vulnController.DeleteVuln(vuln.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["deletedVuln"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

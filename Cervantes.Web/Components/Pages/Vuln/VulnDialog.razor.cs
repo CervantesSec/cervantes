@@ -344,7 +344,7 @@ public partial class VulnDialog: ComponentBase
             }
             
             var response = await _vulnController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["vulnCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

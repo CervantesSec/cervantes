@@ -27,7 +27,7 @@ public partial class DeleteRoleBulkDialog : ComponentBase
             foreach (var item in roles)
             {
                 var response = await _UserController.DeleteRole(item.Name);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["roleDeleted"], Severity.Success);
                 }

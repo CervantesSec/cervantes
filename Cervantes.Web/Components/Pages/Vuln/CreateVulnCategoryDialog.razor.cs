@@ -22,7 +22,7 @@ public partial class CreateVulnCategoryDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _VulnController.AddCategory(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
             {
                 Snackbar.Add(@localizer["categoryCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

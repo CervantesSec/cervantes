@@ -197,7 +197,7 @@ public partial class TaskDialog: ComponentBase
                 model.AsignedUserId = null;
             }	
             var response = await _taskController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["taskEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

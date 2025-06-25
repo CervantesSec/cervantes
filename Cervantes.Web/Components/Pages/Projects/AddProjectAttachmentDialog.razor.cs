@@ -115,7 +115,7 @@ public partial class AddProjectAttachmentDialog: ComponentBase
                 file = null;
 
                 var response = await _projectController.AddAttachment(attachment);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
                 {
 
                     Snackbar.Add(@localizer["addAttachment"], Severity.Success);

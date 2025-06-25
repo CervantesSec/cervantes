@@ -168,7 +168,7 @@ public partial class TargetDialog: ComponentBase
         {
             
             var response = await _TargetController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["targetEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

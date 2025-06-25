@@ -27,7 +27,7 @@ public partial class DeleteVulnNote: ComponentBase
         if (form.IsValid)
         {
             var response = await _VulnController.DeleteVulnNote(note.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult") 
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult") 
             {
                 Snackbar.Add(@localizer["deletedNote"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -27,7 +27,7 @@ public partial class DeleteTaskAttachmentDialog: ComponentBase
         {
 
             var response = await _taskController.DeleteAttachment(attachment.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["attachmentDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

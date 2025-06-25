@@ -26,7 +26,7 @@ public partial class DeleteProjectNoteDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await ProjectController.DeleteNote(note.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["deletedNote"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

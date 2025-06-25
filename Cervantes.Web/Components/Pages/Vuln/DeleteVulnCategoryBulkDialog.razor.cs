@@ -26,7 +26,7 @@ public partial class DeleteVulnCategoryBulkDialog: ComponentBase
             foreach (var cat in categories)
             {
                 var response = await _vulnController.DeleteCategory(cat.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["deletedCategory"], Severity.Success);
                 }

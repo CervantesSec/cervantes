@@ -26,7 +26,7 @@ public partial class DeleteProjectBulkDialog: ComponentBase
             foreach (var project in projects)
             {
                 var response = await _ProjectController.Delete(project.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["projectDeleted"], Severity.Success);
                 }

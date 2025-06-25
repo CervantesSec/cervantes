@@ -27,7 +27,7 @@ public partial class DeleteProjectNoteBulkDialog : ComponentBase
             foreach (var note in notes)
             {
                 var response = await ProjectController.DeleteNote(note.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["deletedNote"], Severity.Success);
                 }

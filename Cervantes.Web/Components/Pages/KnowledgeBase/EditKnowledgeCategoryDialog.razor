@@ -60,6 +60,10 @@
                    
 				        </MudStack>
 			        </MudForm>
+			        <MudStack Row="true" AlignItems="AlignItems.End">
+				        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+				        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Secondary" OnClick="Submit">@localizer["save"]</MudButton>
+			        </MudStack>
 				</MudContainer>
         	}
 		else

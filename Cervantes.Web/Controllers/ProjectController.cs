@@ -171,7 +171,7 @@ public class ProjectController : ControllerBase
                 await projectUserManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Project created successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetById), new { projectId = project.Id }, project);
             }
 
             _logger.LogError("An error ocurred adding project. User: {0}",
@@ -212,13 +212,13 @@ public class ProjectController : ControllerBase
                 }
                 else
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
 
                 await projectManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Project edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
 
             _logger.LogError("An error ocurred adding project. User: {0}",
@@ -249,13 +249,13 @@ public class ProjectController : ControllerBase
                 }
                 else
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
 
                 await projectManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Project deleted successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
 
             _logger.LogError("An error ocurred deleting project. User: {0}",
@@ -327,7 +327,7 @@ public class ProjectController : ControllerBase
                     }
                 }
                 
-                return Ok();
+                return Created();
             }
 
             _logger.LogError("An error ocurred adding project member. User: {0}",
@@ -358,12 +358,12 @@ public class ProjectController : ControllerBase
                     projectUserManager.Context.SaveChanges();
                     _logger.LogInformation("Project member deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred deleting project member. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound();
             }
 
             _logger.LogError("An error ocurred deleting project member. User: {0}",
@@ -423,7 +423,7 @@ public class ProjectController : ControllerBase
                 await projectNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Project note added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetNoteById),  new { noteId = note.Id }, note );
             }
 
             _logger.LogError("An error ocurred adding project notes. User: {0}",
@@ -433,6 +433,21 @@ public class ProjectController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding project notes. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
+    
+    [NonAction]
+    public async Task<ProjectNote> GetNoteById(Guid noteId)
+    {
+        try
+        {
+            return projectNoteManager.GetById(noteId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred editing project notes. User: {0}",
                 aspNetUserId);
             throw;
         }
@@ -462,7 +477,7 @@ public class ProjectController : ControllerBase
                 await projectNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Project Note edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
 
             _logger.LogError("An error ocurred editing project notes. User: {0}",
@@ -499,12 +514,12 @@ public class ProjectController : ControllerBase
                     await projectNoteManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Project note deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred deleting project notes. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound();
             }
 
             _logger.LogError("An error ocurred deleting project notes. User: {0}",
@@ -539,6 +554,21 @@ public class ProjectController : ControllerBase
         }
     }
 
+    [NonAction]
+    public async Task<ProjectAttachment> GetAttachmentById(Guid attachmentId)
+    {
+        try
+        {
+            return projectAttachmentManager.GetById(attachmentId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred editing project notes. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
+    
     [HttpPost]
     [Route("Attachment")]
     [HasPermission(Permissions.ProjectAttachmentsAdd)]
@@ -600,7 +630,7 @@ public class ProjectController : ControllerBase
 
                 _logger.LogInformation("Project attachment added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetAttachmentById), new { attachmentId = attachment.Id }, attachment);
             }
 
             _logger.LogError("An error ocurred adding project attachments. User: {0}",
@@ -637,7 +667,7 @@ public class ProjectController : ControllerBase
                     await projectAttachmentManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Project attachment deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 return BadRequest();
@@ -681,7 +711,7 @@ public class ProjectController : ControllerBase
                     await projectManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Project executive summary updated successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred adding project executive summary. User: {0}",

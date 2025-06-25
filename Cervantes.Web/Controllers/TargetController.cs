@@ -98,6 +98,21 @@ public class TargetController : ControllerBase
             throw;
         }
     }
+    
+    public CORE.Entities.Target GetTargetById(Guid targetId)
+    {
+        try
+        {
+            return targetManager.GetById(targetId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting project targets. User: {0}",
+                aspNetUserId);
+            throw;
+            throw;
+        }
+    }
 
     [HttpPost]
     [HasPermission(Permissions.TargetsAdd)]
@@ -125,7 +140,7 @@ public class TargetController : ControllerBase
                 await targetManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Target added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetTargetById),  new { targetId = target.Id }, target);
             }
 
             _logger.LogError("An error ocurred adding a Target. User: {0}",
@@ -163,12 +178,12 @@ public class TargetController : ControllerBase
                     await targetManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Target added successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred adding a Target. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound();
             }
 
             _logger.LogError("An error ocurred adding a Target. User: {0}",
@@ -218,7 +233,7 @@ public class TargetController : ControllerBase
                     await targetManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Target deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
@@ -422,6 +437,22 @@ public class TargetController : ControllerBase
         }
     }
 
+    [NonAction]
+    public CORE.Entities.TargetServices GetServiceById(Guid serviceId)
+    {
+        try
+        {
+
+            return targetServicesManager.GetById(serviceId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("An error ocurred geeting target services. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
+    
     [HttpPost]
     [Route("Service")]
     [HasPermission(Permissions.TargetsServicesAdd)]
@@ -443,7 +474,7 @@ public class TargetController : ControllerBase
                 await targetServicesManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Target added successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return CreatedAtAction(nameof(GetServiceById), new { serviceId = service.Id }, service);
             }
 
             _logger.LogError("An error ocurred adding a Target. User: {0}",
@@ -480,12 +511,12 @@ public class TargetController : ControllerBase
                     await targetServicesManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Target Service edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred editing a Target Service. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound();
             }
 
             _logger.LogError("An error ocurred editing a Target Service. User: {0}",
@@ -516,12 +547,12 @@ public class TargetController : ControllerBase
                     await targetManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Target Service deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error occurred deleting a Target Service. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound();
             }
             else
             {

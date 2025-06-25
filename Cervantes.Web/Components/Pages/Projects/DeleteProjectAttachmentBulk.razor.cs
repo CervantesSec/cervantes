@@ -29,7 +29,7 @@ public partial class DeleteProjectAttachmentBulk: ComponentBase
             foreach (var attachment in attachments)
             {
                 var response = await _ProjectController.DeleteAttahcment(attachment.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["attachmentDeleted"], Severity.Success);
                 }

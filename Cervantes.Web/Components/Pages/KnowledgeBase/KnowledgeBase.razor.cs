@@ -224,7 +224,7 @@ public partial class KnowledgeBase: ComponentBase
         if (form.IsValid)
         {
             var response =  await _KnowledgeBaseController.EditPage(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 editMode = false;
                 Snackbar.Add(@localizer["pageEdited"], Severity.Success);

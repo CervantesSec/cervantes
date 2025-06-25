@@ -24,7 +24,7 @@ public partial class DeleteVulnCategoryDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _vulnController.DeleteCategory(category.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["deletedCategory"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -13,6 +13,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ReverseMarkdown.Converters;
 using TaskStatus = Cervantes.CORE.Entities.TaskStatus;
 
 namespace Cervantes.Web.Controllers;
@@ -147,6 +148,21 @@ public class TaskController: ControllerBase
         
     }
    
+    [NonAction]
+    public CORE.Entities.Task GetTaskById(Guid taskId)
+    {
+        try
+        {
+            return taskManager.GetById(taskId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting project user tasks. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
     
     [HttpPost]
     [HasPermission(Permissions.TasksAdd)]
@@ -208,7 +224,7 @@ public class TaskController: ControllerBase
                     
                 }
                 
-                return Ok();
+                return CreatedAtAction(nameof(GetTaskById), new { taskId = task.Id }, task);
             }
             else
             {
@@ -268,13 +284,13 @@ public class TaskController: ControllerBase
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
                     _logger.LogError("An error occurred editing a Task. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return NotFound();
                 }
 
             }
@@ -319,11 +335,11 @@ public class TaskController: ControllerBase
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
 
             }
@@ -367,7 +383,7 @@ public class TaskController: ControllerBase
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task updated successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
@@ -413,7 +429,7 @@ public class TaskController: ControllerBase
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task updated successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
@@ -492,6 +508,21 @@ public class TaskController: ControllerBase
         
     }
 
+    [NonAction]
+    public TaskTargets GetTaskTargetById(Guid targetId)
+    {
+        try
+        {
+            return taskTargetManager.GetById(targetId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred getting Task attachments. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
     [HttpPost]
     [Route("Target")]
     [HasPermission(Permissions.TaskTargetsAdd)]
@@ -527,7 +558,7 @@ public class TaskController: ControllerBase
                     await taskTargetManager.AddAsync(target);
                     await taskTargetManager.Context.SaveChangesAsync();
 
-                    return Ok();
+                    return CreatedAtAction(nameof(GetTaskTargetById), new { targetId = model.TaskId }, model);
                 }
                 else
                 {
@@ -572,7 +603,7 @@ public class TaskController: ControllerBase
                     taskTargetManager.Remove(result);
                     await taskTargetManager.Context.SaveChangesAsync();
 
-                    return Ok();
+                    return NoContent();
                 }
 
                 return BadRequest();
@@ -586,6 +617,22 @@ public class TaskController: ControllerBase
                 aspNetUserId);
             return BadRequest();
         }
+    }
+    
+    [NonAction]
+    public TaskNote GetTaskNoteById(Guid noteId)
+    {
+        try
+        {
+            return taskNoteManager.GetById(noteId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred getting Task attachments. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
     }
     
     [HttpPost]
@@ -617,7 +664,7 @@ public class TaskController: ControllerBase
                     };
                 await taskNoteManager.AddAsync(note);
                 await taskNoteManager.Context.SaveChangesAsync();
-                return Ok();
+                return CreatedAtAction(nameof(GetTaskNoteById), new { noteId = note.TaskId }, note);
             }
             return BadRequest();
         }
@@ -656,7 +703,7 @@ public class TaskController: ControllerBase
                 await taskNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Task Note edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
             return BadRequest();
         }
@@ -697,7 +744,7 @@ public class TaskController: ControllerBase
                     taskNoteManager.Remove(result);
                     await taskNoteManager.Context.SaveChangesAsync();
 
-                    return Ok();
+                    return NoContent();
                 }
 
                 return BadRequest();
@@ -713,6 +760,22 @@ public class TaskController: ControllerBase
         }
     }
 
+    [NonAction]
+    public TaskAttachment GetTaskAttachmentById(Guid attachmentId)
+    {
+        try
+        {
+            return taskAttachmentManager.GetById(attachmentId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred getting Task attachments. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
+    
     [HttpPost]
     [Route("Attachments")]
     [HasPermission(Permissions.TaskAttachmentsAdd)]
@@ -786,7 +849,7 @@ public class TaskController: ControllerBase
                     await taskAttachmentManager.Context.SaveChangesAsync();
                     _logger.LogInformation("User: {0} added Task Attachment on Task: {1}",
                         aspNetUserId, model.TaskId);
-                    return Ok();
+                    return CreatedAtAction(nameof(GetTaskAttachmentById), new { attachmentId = attachment.TaskId }, attachment);
                 }
             }
 
@@ -831,7 +894,7 @@ public class TaskController: ControllerBase
                     taskAttachmentManager.Remove(result);
                     await taskTargetManager.Context.SaveChangesAsync();
 
-                    return Ok();
+                    return NoContent();
                 }
 
                 return BadRequest();

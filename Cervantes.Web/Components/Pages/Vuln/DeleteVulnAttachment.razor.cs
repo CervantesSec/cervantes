@@ -27,7 +27,7 @@ public partial class DeleteVulnAttachment: ComponentBase
         if (form.IsValid)
         {
             var response = await _VulnController.DeleteAttahcment(attachment.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")            
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")            
             {
                 Snackbar.Add(@localizer["attachmentDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

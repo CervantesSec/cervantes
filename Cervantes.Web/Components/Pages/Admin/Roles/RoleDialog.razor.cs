@@ -110,7 +110,7 @@ public partial class RoleDialog : ComponentBase
         {
 
             var response = await _UserController.EditRole(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(localizer["roleEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -100,7 +100,7 @@ public partial class AddVulnNote: ComponentBase
         {
             note.VulnId = vuln;
             var response = await _VulnController.AddVulnNote(note);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult") 
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult") 
             {
                 Snackbar.Add(@localizer["noteAdded"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

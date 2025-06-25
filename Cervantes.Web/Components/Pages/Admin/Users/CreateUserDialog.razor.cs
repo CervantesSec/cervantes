@@ -113,7 +113,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
 	        
 	        var response = await _UserController.Add(model);
 	        response2 = response.ToString();
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
 	        {
 		        Snackbar.Add("User created successfully!", Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

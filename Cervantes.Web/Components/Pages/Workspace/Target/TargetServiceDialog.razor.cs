@@ -126,7 +126,7 @@ public partial class TargetServiceDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _TargetController.EditService(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["serviceEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

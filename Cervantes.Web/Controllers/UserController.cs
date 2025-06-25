@@ -189,7 +189,7 @@ public class UserController: ControllerBase
             if (ModelState.IsValid)
             {
                 await authRolesAdminService.CreateRoleToPermissionsAsync(model.Name, model.Permissions, model.Description);
-                return Ok();
+                return Created();
             }
             return BadRequest();
         }
@@ -236,7 +236,7 @@ public class UserController: ControllerBase
                         RoleTypes.Normal);
                 }
                 
-                return Ok();
+                return NoContent();
             }
             return BadRequest("Invalid model state");
         }
@@ -259,7 +259,7 @@ public class UserController: ControllerBase
                 await authRolesAdminService.DeleteRoleAsync(roleName, true);
                     _logger.LogInformation("User deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
             }
             _logger.LogError("An error ocurred deleting a User. User: {0}",
                 aspNetUserId);
@@ -357,8 +357,8 @@ public class UserController: ControllerBase
                     BackgroundJob.Enqueue(
                         () => emailService.SendWelcome(user.Id,link));
                 }
-                
-                return Ok();
+
+                return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, user);
             }
             _logger.LogError("An error ocurred adding User filetype not admitted. User: {0}",
                 aspNetUserId);
@@ -447,7 +447,7 @@ public class UserController: ControllerBase
                 
                 _logger.LogInformation("User edited successfully. User: {0}",
                     aspNetUserId);
-                return Ok();
+                return NoContent();
             }
 
             _logger.LogError( "An error ocurred editing a User. User: {0}",
@@ -489,7 +489,7 @@ public class UserController: ControllerBase
                 
                     _logger.LogInformation("User edited successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
                 _logger.LogError( "An error ocurred editing a User. User: {0}",
                     aspNetUserId);
@@ -526,7 +526,7 @@ public class UserController: ControllerBase
                     await authUsersAdminService.DeleteUserAsync(user.Id);
                     _logger.LogInformation("User deleted successfully. User: {0}",
                         aspNetUserId);
-                    return Ok();
+                    return NoContent();
                 }
 
                 _logger.LogError("An error ocurred deleting a User. User: {0}",
@@ -559,7 +559,7 @@ public class UserController: ControllerBase
             user.Avatar = null;
 
             await usrManager.Context.SaveChangesAsync();
-            return Ok();
+            return NoContent();
         }
         catch (Exception e)
         {
@@ -608,7 +608,7 @@ public class UserController: ControllerBase
                   
                     user.Avatar = "Attachments/Users/" + unique;
                     await usrManager.Context.SaveChangesAsync();
-                    return Ok();
+                    return NoContent();
                 }
                 
                 _logger.LogError("An error ocurred uploading avatar. User: {0}",

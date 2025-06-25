@@ -187,7 +187,7 @@ public partial class ProjectNoteDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await ProjectController.EditNote(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["noteEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

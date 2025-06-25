@@ -23,7 +23,7 @@ public partial class DeleteTargetServiceDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _TargetController.DeleteService(service.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["deletedService"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

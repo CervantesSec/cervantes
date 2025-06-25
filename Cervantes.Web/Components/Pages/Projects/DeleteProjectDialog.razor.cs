@@ -29,7 +29,7 @@ public partial class DeleteProjectDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _projectController.Delete(project.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["projectDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

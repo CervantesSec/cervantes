@@ -27,7 +27,7 @@ public partial class DeleteVaultBulkDialog: ComponentBase
             foreach (var vault in vaults)
             {
                 var response = await VaultController.Delete(vault.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
                 {
                     Snackbar.Add(@localizer["vaultDeleted"], Severity.Success);
                 }

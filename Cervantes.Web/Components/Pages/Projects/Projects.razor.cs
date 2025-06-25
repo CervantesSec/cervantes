@@ -33,6 +33,23 @@ public partial class Projects: ComponentBase
     private List<CORE.Entities.Project> selectedProjects = new List<CORE.Entities.Project>();
     private ApplicationUser user;
     ClaimsPrincipal userAth;
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     protected override async Task OnInitializedAsync()
     {
     _items = new List<BreadcrumbItem>
@@ -191,9 +208,9 @@ public partial class Projects: ComponentBase
         {
             case 0:
                 var parameters = new DialogParameters { ["projects"]=selectedProjects };
+                IMudExDialogReference<DeleteProjectBulkDialog>? dlgReference = await DialogService.ShowEx<DeleteProjectBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =  DialogService.Show<DeleteProjectBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {
