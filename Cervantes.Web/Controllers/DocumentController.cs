@@ -57,8 +57,7 @@ public class DocumentController : Controller
             
     }
     
-    [HttpGet]
-    [HasPermission(Permissions.DocumentsRead)]
+    [NonAction]
     public CORE.Entities.Document GetById(Guid documentId)
     {
         try
