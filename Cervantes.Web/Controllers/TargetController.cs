@@ -99,6 +99,7 @@ public class TargetController : ControllerBase
         }
     }
     
+    [NonAction]
     public CORE.Entities.Target GetTargetById(Guid targetId)
     {
         try

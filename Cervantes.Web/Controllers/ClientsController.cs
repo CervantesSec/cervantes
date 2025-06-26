@@ -86,7 +86,6 @@ public class ClientsController : ControllerBase
     
     [HasPermission(Permissions.ClientsAdd)]
     [HttpPost]
-    [Authorize (Roles = "Admin,SuperUser")]
     public async Task<IActionResult> Add([FromBody] ClientCreateViewModel model)
     {
         try{
