@@ -19,12 +19,11 @@
 
     <MudDialog Class="mud-ex-dialog-initial" DisableSidePadding="true">
         <TitleContent>
-            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+            <MudStack Row="true">
 
                 <MudText Typo="Typo.h4">
                     <MudIcon Icon="@Icons.Custom.FileFormats.FilePdf"/> @report.Name
                 </MudText>
-                <MudSpacer/>
                 @if (inProject)
                 {
                     @if (userAth.HasPermission(Permissions.AIServiceUsage))
@@ -37,7 +36,7 @@
                     
                     @if (userAth.HasPermission(Permissions.ReportsDownload))
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download())"></MudIconButton>
+                        <MudChip T="string" Icon="@Icons.Material.Filled.Download" Color="Color.Default" aria-label="delete" OnClick="@((e) => Download())">@localizer["download"]</MudChip>
 
                     }
                     
@@ -45,19 +44,19 @@
                     {
                         @if (editMode)
                         {
-                            <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Success" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+                            <MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" aria-label="delete" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
 
                         }
                         else
                         {
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+                            <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" aria-label="delete" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
 
                         }
                     }
                     
                     @if(userAth.HasPermission(Permissions.ReportsDelete))
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteReport(report, medium))"></MudIconButton>
+                        <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" aria-label="delete" OnClick="@((e) => DeleteReport(report, medium))">@localizer["delete"]</MudChip>
                     }
                 }
                 
@@ -67,7 +66,7 @@
 
                 }*@
                 
-            </MudItem>
+            </MudStack>
         </TitleContent>
         <DialogContent>
             @if (editMode)

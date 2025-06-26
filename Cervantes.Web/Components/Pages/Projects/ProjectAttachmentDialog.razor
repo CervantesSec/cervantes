@@ -21,11 +21,10 @@
         z-index: 999999!important;
     }
 </style>
-		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
 <MudDialog Class="mud-ex-dialog-initial" DisableSidePadding="true">
 	<TitleContent>
-		            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+		<MudStack Row="true">
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @attachment.Name</MudText>
 		<MudSpacer/>
@@ -34,16 +33,16 @@
 		{
 			@if (userAth.HasPermission(Permissions.ProjectAttachmentsDownload))
 			{
-				<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download(@attachment.FilePath))" ></MudIconButton>
+				<MudChip T="string" Icon="@Icons.Material.Filled.Download" Color="Color.Primary" aria-label="delete" OnClick="@((e) => Download(@attachment.FilePath))" >@localizer["download"]</MudChip>
 			}
 			@if(userAth.HasPermission(Permissions.ProjectAttachmentsDelete))
 			{
-				<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteTaskAttachment(@attachment, medium))"></MudIconButton>
+				<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteTaskAttachment(@attachment, medium))">@localizer["delete"]</MudChip>
 			}
 
 		}
 		
-		            </MudItem>
+		            </MudStack>
 	</TitleContent>
 	<DialogContent>
 			<MudGrid>
@@ -81,4 +80,3 @@
 		<MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
 	</DialogActions>
 </MudDialog>
-		</MudContainer>

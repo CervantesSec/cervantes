@@ -15,36 +15,34 @@
         z-index: 999999!important;
     }
 </style>
-		<MudContainer Class="px-8" MaxWidth="MaxWidth.False" Style="overflow-y: scroll">
 
 <MudDialog Class="mud-ex-dialog-initial" DisableSidePadding="true">
 	<TitleContent>
-		            <MudItem Class="d-flex flex-wrap justify-space-around gap-1">
+		            <MudStack Row="true">
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Note"/> @note.Name</MudText>
-		<MudSpacer/>
 		@if (inProject)
 		{
 			@if (userAth.HasPermission(Permissions.ProjectNotesEdit))
 			{
 				@if (editMode)
 				{
-					<MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+					<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" aria-label="delete" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
 				}
 				else
 				{
-					<MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" aria-label="delete" OnClick="@((e) => EditMode())"></MudIconButton>
+					<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" aria-label="delete" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
 
 				}
 			}
 		
 			@if (userAth.HasPermission(Permissions.ProjectNotesDelete))
 			{
-				<MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" aria-label="delete" OnClick="@((e) => DeleteDialog(@note, medium))"></MudIconButton>
+				<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" aria-label="delete" OnClick="@((e) => DeleteDialog(@note, medium))">@localizer["delete"]</MudChip>
 			}
 		}
 
-		            </MudItem>
+		            </MudStack>
 	</TitleContent>
 	<DialogContent>
 		@if (editMode)
@@ -61,7 +59,14 @@
 				        </MudStack>
                     
 			        </MudForm>
-			        
+			        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+			        @if(userAth.HasPermission(Permissions.ProjectNotesEdit))
+			        {
+				        @if (!editMode)
+				        {
+					        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Warning" OnClick="@((e) => EditMode())">@localizer["edit"]</MudButton>
+				        }
+			        }
 				</MudContainer>
         	}
 		else
@@ -101,15 +106,5 @@
 		}
 		
 	</DialogContent>
-	<DialogActions>
-		<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-		@if(userAth.HasPermission(Permissions.ProjectNotesEdit))
-		{
-			@if (!editMode)
-			{
-				<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Warning" OnClick="@((e) => EditMode())">@localizer["edit"]</MudButton>
-			}
-		}
-	</DialogActions>
+
 </MudDialog>
-		</MudContainer>
