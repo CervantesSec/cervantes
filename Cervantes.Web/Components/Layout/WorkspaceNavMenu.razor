@@ -10,7 +10,7 @@
 @inject IJiraConfiguration JiraConfiguration
 @inject AuthenticationStateProvider authenticationStateProvider
 
-<MudNavMenu Bordered="true" Color="Color.Primary" Style="display: flex; flex-flow: column; height: inherit;">
+<MudNavMenu Rounded="true" Color="Color.Primary" Style="display: flex; flex-flow: column; height: inherit;">
     <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All">@localizer["home"]</MudNavLink>
     @if (user.HasPermission(Permissions.CalendarRead))
     {
@@ -135,3 +135,4 @@
         jiraEnabled = JiraConfiguration.Enabled;
     }
 }
+

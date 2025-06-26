@@ -1,0 +1,21 @@
+<MudBreadcrumbs Items="_items" Separator=">">
+    <ItemTemplate>
+        @if (context.Disabled)
+        {
+            @if (_isDarkMode)
+            {
+                <a href="@context.Href" style="color: white;"><MudIcon Icon="@context.Icon" Size="Size.Small" Style="color: white"></MudIcon> @context.Text </a>
+
+            }
+            else
+            {
+                <a href="@context.Href" style="color: var(--mud-palette-text-primary);"><MudIcon Icon="@context.Icon" Size="Size.Small" Color="Color.Dark"></MudIcon> @context.Text</a>
+
+            }
+        }
+        else
+        {
+            <a href="@context.Href" style="color: gray;"><MudIcon Icon="@context.Icon" Size="Size.Small"></MudIcon> @context.Text</a>
+        }
+    </ItemTemplate>
+</MudBreadcrumbs>

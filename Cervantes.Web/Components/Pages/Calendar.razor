@@ -8,21 +8,13 @@
 @attribute [HasPermission(Permissions.CalendarRead)]
 
     <PageTitle>@localizer["calendar"] | Cervantes</PageTitle>
-    <SectionContent SectionName="appbar">
-        <MudText Typo="Typo.h5">
-            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CalendarMonth"></MudIcon>
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
+</SectionContent>
+<SectionContent SectionName="top-bar">
+    
+</SectionContent>
 
-            @localizer["calendar"]
-
-        </MudText>
-    </SectionContent>
-    <SectionContent SectionName="top-bar">
-        
-    </SectionContent>
-
-    <SectionContent SectionName="breadcrumbs">
-        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-    </SectionContent>
     
         <MudGrid>
             

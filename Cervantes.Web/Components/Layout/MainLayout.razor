@@ -31,14 +31,18 @@
 <AuthorizeView>
     <Authorized>
         <MudLayout>
-            <MudAppBar Color="Color.Inherit" Elevation="0">
+            <MudAppBar Color="Color.Inherit" Elevation="0" Style="border-bottom: 1px solid var(--mud-palette-lines-default)">
+                <MudIconButton Icon="@Icons.Material.Filled.MenuOpen" Color="Color.Default" OnClick="@((e) => DrawerToggle())"></MudIconButton>
+
+                
+                
+                <MudDivider Vertical="true" DividerType="DividerType.Middle"></MudDivider>
+                
+
                 <SectionOutlet SectionName="appbar"/>
-                <MudDivider Vertical="true" DividerType="DividerType.Middle" FlexItem="true"></MudDivider>
-
-                <MudIconButton Class="mr-0" Icon="@Icons.Material.Rounded.Search" Color="Color.Inherit" Edge="Edge.End" OnClick="@(() => OpenSearchDialog())"/>
-
                 <MudSpacer/>
                 <MudStack Row="true">
+                    <MudIconButton Class="mr-0" Icon="@Icons.Material.Rounded.Search" OnClick="@(() => OpenSearchDialog())"/>
 
                     <MudDialog @bind-Visible="_searchDialogOpen" Options="_dialogOptions" Class="docs-gray-bg">
                         <DialogContent>
@@ -173,19 +177,29 @@
                             </DialogActions>
                         </DialogContent>
                     </MudDialog>
-                    <CultureSelector/>           
+                    <CultureSelector/>
                     <ThemeSwitch @bind-isDarkMode="@_isDarkMode"/>
+                    @*
                     <MudDivider Vertical="true" DividerType="DividerType.Middle" FlexItem="true"></MudDivider>
+                    *@
                     <UserMenu/>
 
                 </MudStack>
             </MudAppBar>
 
-            <MudDrawer Color="Color.Dark" Variant="DrawerVariant.Mini" @bind-Open="_drawerOpen" Elevation="2">
+            <MudDrawer  Variant="DrawerVariant.Mini" @bind-Open="_drawerOpen" Elevation="2">
                 <MudDrawerHeader LinkToIndex="true" Class="center-image">
                     @if (_drawerOpen)
                     {
-                    <MudImage Src="img/logo-horizontal.png" Fluid="true" Height="25" Width="200"></MudImage>
+                        @if (_isDarkMode)
+                        {
+                            <MudImage Src="img/logo-horizontal.png" Fluid="true" Height="25" Width="200"></MudImage>
+
+                        }else
+                        {
+                            <MudImage Src="img/logo-horizontal2.png" Fluid="true" Height="25" Width="200"></MudImage>
+
+                        }
                     }
                     else
                     {
@@ -208,35 +222,26 @@
                         <MudIconButton Size="Size.Small" Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/CervantesSec" Target="_blank"/>
                     </MudStack>
                     }
-                    <MudDivider/>
-                    @if (_drawerOpen)
-                    {
-                    <MudIconButton Icon="@Icons.Material.Filled.ArrowBackIos" Color="Color.Tertiary" OnClick="@((e) => DrawerToggle())"></MudIconButton>
-                    }
-                    else
-                    {
-                    <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos" Color="Color.Tertiary" OnClick="@((e) => DrawerToggle())"></MudIconButton>
-                    }
+                   
                 </MudStack>
 
             </MudDrawer>
             <MudMainContent>
-                <MudPaper Class="ma-0" Elevation="25">
-                    <MudToolBar>
-                        <SectionOutlet SectionName="top-bar"/>
-                        <MudSpacer/>
-                        <SectionOutlet SectionName="breadcrumbs"/>
-
-                    </MudToolBar>
-                </MudPaper>
+               
                 <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-2 pt-2">
-                    
+                    <MudStack>
+                    <MudPaper Class="ma-0" Elevation="25">
+                        <MudToolBar>
+                            <SectionOutlet SectionName="top-bar"/>
+                        </MudToolBar>
+                    </MudPaper>
                     @*<div style="padding-bottom:60px">
                                 @Body
                             </div>*@
-                    <CascadingValue Value=@_isDarkMode>
-                    @Body
+                    <CascadingValue Value="@_isDarkMode">
+                        @Body
                     </CascadingValue>
+                    </MudStack>
                 </MudContainer>
 
             </MudMainContent>

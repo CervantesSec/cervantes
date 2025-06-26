@@ -5,17 +5,11 @@
 
 @if (isDarkMode)
 {
-    <MudTooltip Text="@localizer["lightMode"]" Placement="Placement.Right">
-        <MudNavLink OnClick="ChangeTheme" Icon="@Icons.Material.Filled.LightMode">
-            @localizer["lightTheme"]
-        </MudNavLink>
-    </MudTooltip>
+    <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.LightMode">
+    </MudIconButton>
 }
 else
 {
-    <MudTooltip Text="@localizer["darkMode"]" Placement="Placement.Right">
-        <MudNavLink OnClick="ChangeTheme" Icon="@Icons.Material.Filled.DarkMode" IconColor="Color.Dark">
-            @localizer["darkTheme"]
-        </MudNavLink>
-    </MudTooltip>
-} 
+    <MudIconButton OnClick="ChangeTheme" Icon="@Icons.Material.Filled.DarkMode" IconColor="Color.Dark">
+    </MudIconButton>
+}

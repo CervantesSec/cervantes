@@ -61,3 +61,53 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+/* In your app.css or similar file */
+
+.mud-button {
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mud-button-filled {
+    box-shadow: none;
+}
+
+.mud-input {
+    border-radius: 0.5rem;
+}
+
+.mud-input-outlined {
+    border-radius: 0.5rem;
+}
+
+.mud-input-outlined-border {
+    border-width: 1px;
+}
+
+.mud-paper {
+    border-radius: 0.5rem;
+}
+
+.mud-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.mud-drawer {
+    border-right: 1px solid var(--mud-palette-lines-default);
+}
+
+.mud-table {
+    background-color: transparent;
+}
+
+.mud-dialog {
+    border-radius: 0.5rem;
+}
+
+/* Dark mode adjustments */
+.mud-theme-dark .mud-button-filled {
+    box-shadow: none;
+}
+

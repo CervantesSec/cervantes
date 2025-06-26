@@ -4,9 +4,12 @@
 @inject NavigationManager NavigationManager
 
 
-<MudMenu FullWidth="true" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Color="Color.Default">
+<MudMenu FullWidth="true" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
                             
     <ActivatorContent>
+        <MudIconButton Icon="@Icons.Material.Filled.Language" IconColor="Color.Tertiary" Size="Size.Medium"></MudIconButton>
+
+        @*
         @switch (Culture.Name)
         {
             case "en-US":
@@ -34,13 +37,14 @@
                 </MudStack>
                 break;
         }
-                            
+        *@
+
     </ActivatorContent>
     <ChildContent>
         <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[0]))">@localizer["english"]</MudMenuItem>
-        <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[3]))">@localizer["turkish"]</MudMenuItem>
         <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[1]))">@localizer["spanish"]</MudMenuItem>
         <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[2]))">@localizer["portuguese"]</MudMenuItem>
-
+        <MudMenuItem @onclick="@((e) => CultureSet(supportedCultures[3]))">@localizer["turkish"]</MudMenuItem>
     </ChildContent>
 </MudMenu>
+
