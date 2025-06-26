@@ -50,7 +50,7 @@ public partial class Tasks: ComponentBase
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),
-            new BreadcrumbItem(@localizer["tasks"],null ,icon: Icons.Material.Filled.Task),
+            new BreadcrumbItem(@localizer["tasks"],null ,disabled: true,icon: Icons.Material.Filled.Task),
         };
         
     }

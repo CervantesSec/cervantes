@@ -41,9 +41,9 @@ public partial class TasksKanban : ComponentBase
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),
-            new BreadcrumbItem(@localizer["tasks"], href: "/",icon: Icons.Material.Filled.Task),
+            new BreadcrumbItem(@localizer["tasks"], href: "/tasks",icon: Icons.Material.Filled.Task),
 
-            new BreadcrumbItem("Kanban",null ,icon: Icons.Material.Filled.ViewKanban),
+            new BreadcrumbItem("Kanban",null ,disabled: true,icon: Icons.Material.Filled.ViewKanban),
         };
         
     }

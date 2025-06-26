@@ -57,7 +57,7 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
         <PackageReference Include="PreMailer.Net" Version="2.6.0" />
         <PackageReference Include="Scriban" Version="6.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
         <PackageReference Include="TinyMCE.Blazor" Version="2.0.0" />
     </ItemGroup>
 

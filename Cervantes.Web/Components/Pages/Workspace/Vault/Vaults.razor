@@ -20,30 +20,9 @@
 @attribute [HasPermission(Permissions.VaultRead)]
 
 <PageTitle>@localizer["dataVault"] | Cervantes</PageTitle>
-    <SectionContent SectionName="appbar">
-        <MudText Typo="Typo.h5">
-            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Workspaces"></MudIcon>
-
-            @localizer["workspace"]
-
-        </MudText>
-
-    </SectionContent>
-    <SectionContent SectionName="top-bar">
-        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="0">
-            <MudText Typo="Typo.h5">
-                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Folder"/> @Project.Name
-            </MudText>
-            <MudDivider Vertical="true" DividerType="DividerType.Middle" FlexItem="true"></MudDivider>
-            <MudText Typo="Typo.h5">
-                @localizer["dataVault"]
-            </MudText>
-        </MudStack>
-    </SectionContent>
-
-    <SectionContent SectionName="breadcrumbs">
-        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-    </SectionContent>
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
+</SectionContent>
 <MudGrid>
     <MudItem xs="12" sm="12" md="12">
 

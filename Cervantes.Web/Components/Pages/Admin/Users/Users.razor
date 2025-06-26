@@ -17,37 +17,34 @@
 
 <PageTitle>@localizer["users"] | Cervantes</PageTitle>
 <SectionContent SectionName="appbar">
-    <MudText Typo="Typo.h5">
-        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Group"></MudIcon>
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
 
-        @localizer["users"]
-
-    </MudText>
-</SectionContent>
-<SectionContent SectionName="top-bar">
-    <MudStack Row="true" AlignItems="AlignItems.Center">
-
-                <MudButton Href="/users"
-
-                           StartIcon="@Icons.Material.Filled.Group"
-                           Color="Color.Primary">
-                    @localizer["users"]
-                </MudButton>
-
-                <MudButton Href="/roles"
-
-                           StartIcon="@Icons.Material.Filled.Badge"
-                           Color="Color.Transparent">
-                    @localizer["roles"]
-                </MudButton>
-
-    </MudStack>
 </SectionContent>
 
-<SectionContent SectionName="breadcrumbs">
-    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-</SectionContent>
 <MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                    <MudButton Href="/users"
+
+                               StartIcon="@Icons.Material.Filled.Group"
+                               Color="Color.Primary">
+                        @localizer["users"]
+                    </MudButton>
+
+                    <MudButton Href="/roles"
+
+                               StartIcon="@Icons.Material.Filled.Badge"
+                               Color="Color.Transparent">
+                        @localizer["roles"]
+                    </MudButton>
+
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
     <MudItem xs="12" sm="12" md="12">
 
         <MudDataGrid T="UserViewModel" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
@@ -70,7 +67,7 @@
                             </MudButtonGroup>
                         }
                     }
-                    
+
                 </MudStack>
                 <MudSpacer/>
                 <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"

@@ -24,43 +24,39 @@
 @attribute [HasPermission(Permissions.VulnCategoriesRead)]
 
 <PageTitle>@localizer["categories"] | Cervantes</PageTitle>
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
 
-    <SectionContent SectionName="appbar">
-        <MudText Typo="Typo.h5">
-            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.BugReport"></MudIcon>
+</SectionContent>
 
-            @localizer["vulns"]
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
 
-        </MudText>
-    </SectionContent>
-    <SectionContent SectionName="top-bar">
-        <MudStack Row="true" AlignItems="AlignItems.Center">
+                        <MudButton Href="/vulns"
 
-                <MudButton Href="/vulns"
+                                   StartIcon="@Icons.Material.Filled.BugReport"
+                                   Color="Color.Transparent">
+                            @localizer["vulns"]
+                        </MudButton>
 
-                           StartIcon="@Icons.Material.Filled.BugReport"
-                           Color="Color.Transparent">
-                    @localizer["vulns"]
-                </MudButton>
+                        <MudButton Href="/vulns/templates"
 
-                <MudButton Href="/vulns/templates"
-
-                           StartIcon="@Icons.Material.Outlined.BugReport"
-                           Color="Color.Transparent">
-                    @localizer["templates"]
-                </MudButton>
-            <MudButton Href="/vulns/categories"
-                       StartIcon="@Icons.Material.Filled.Category"
-                       Color="Color.Primary">
-                @localizer["categories"]
-            </MudButton>
-        </MudStack>
-    </SectionContent>
-
-    <SectionContent SectionName="breadcrumbs">
-        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-    </SectionContent>
-    <MudGrid>
+                                   StartIcon="@Icons.Material.Outlined.BugReport"
+                                   Color="Color.Transparent">
+                            @localizer["templates"]
+                        </MudButton>
+                    <MudButton Href="/vulns/categories"
+                               StartIcon="@Icons.Material.Filled.Category"
+                               Color="Color.Primary">
+                        @localizer["categories"]
+                    </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
         <MudItem xs="12" sm="12" md="12">
             <MudDataGrid T="CORE.Entities.VulnCategory" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
                          Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">

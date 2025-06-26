@@ -27,42 +27,39 @@
 
 <PageTitle>@localizer["projects"] | Cervantes</PageTitle>
 
-    <SectionContent SectionName="appbar">
-        <MudText Typo="Typo.h5">
-            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Folder"></MudIcon>
+<SectionContent SectionName="appbar">
+    
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
+    
+</SectionContent>
 
-            @localizer["projects"]
-
-        </MudText>
-    </SectionContent>
-    <SectionContent SectionName="top-bar">
-        <MudStack Row="true" AlignItems="AlignItems.Center">
-            <MudBadge Content="@model.Count(x => x.Template == false)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
-
-                <MudButton Href="/projects"
-
-                           StartIcon="@Icons.Material.Filled.Folder"
-                           Color="Color.Primary">
-                    @localizer["projects"]
-                </MudButton>
-            </MudBadge>
-            <MudBadge Content="@model.Count(x => x.Template == true)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
-
-            <MudButton Href="/projects/templates"
-
-                       StartIcon="@Icons.Material.Filled.FolderCopy"
-                       Color="Color.Transparent">
-                @localizer["templates"]
-            </MudButton>
-            </MudBadge>
-        </MudStack>
-    </SectionContent>
-
-    <SectionContent SectionName="breadcrumbs">
-        <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-    </SectionContent>
 <MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudBadge Content="@model.Count(x => x.Template == false)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
 
+                        <MudButton Href="/projects"
+
+                                   StartIcon="@Icons.Material.Filled.Folder"
+                                   Color="Color.Primary">
+                            @localizer["projects"]
+                        </MudButton>
+                    </MudBadge>
+                    <MudBadge Content="@model.Count(x => x.Template == true)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
+
+                        <MudButton Href="/projects/templates"
+
+                                   StartIcon="@Icons.Material.Filled.FolderCopy"
+                                   Color="Color.Transparent">
+                            @localizer["templates"]
+                        </MudButton>
+                    </MudBadge>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
     
 <MudItem xs="12" sm="12" md="12">
     

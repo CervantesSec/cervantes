@@ -19,16 +19,15 @@
 
 
 <PageTitle>@localizer["tasks"] | Cervantes</PageTitle>
-    <SectionContent SectionName="appbar">
-        <MudText Typo="Typo.h5">
-            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Task"></MudIcon>
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
 
-            @localizer["tasks"]
-
-        </MudText>
-    </SectionContent>
-    <SectionContent SectionName="top-bar">
-        <MudStack Row="true" AlignItems="AlignItems.Center">
+</SectionContent>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
 
                     <MudButton Href="/tasks"
 
@@ -43,15 +42,10 @@
                                Color="Color.Transparent">
                         @localizer["kanban"]
                     </MudButton>
-        </MudStack>
-    </SectionContent>
-
-<SectionContent SectionName="breadcrumbs">
-    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-</SectionContent>
-
-<MudGrid>
-
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
 <MudItem xs="12" sm="12" md="12">
 
             <MudDataGrid T="CORE.Entities.Task" Items="@tasks.Where(x => x.Template == false)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"

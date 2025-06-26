@@ -15,21 +15,8 @@
 
         <PageTitle>@localizer["organization"] | Cervantes</PageTitle>
         <SectionContent SectionName="appbar">
-            <MudText Typo="Typo.h5">
-                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.AssignmentInd"></MudIcon>
+            <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
 
-                @localizer["organization"]
-
-            </MudText>
-        </SectionContent>
-        <SectionContent SectionName="top-bar">
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-            
-            </MudStack>
-        </SectionContent>
-
-        <SectionContent SectionName="breadcrumbs">
-            <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
         </SectionContent>
         <MudGrid>
             <MudItem xs="12" sm="12" md="12">

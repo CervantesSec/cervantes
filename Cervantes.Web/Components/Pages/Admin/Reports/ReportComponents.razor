@@ -18,42 +18,38 @@
 
 <PageTitle>@localizer["components"] | Cervantes</PageTitle>
 <SectionContent SectionName="appbar">
-    <MudText Typo="Typo.h5">
-        <MudIcon Size="Size.Small" Icon="@Icons.Custom.FileFormats.FilePdf"></MudIcon>
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
 
-        @localizer["components"]
-
-    </MudText>
-</SectionContent>
-<SectionContent SectionName="top-bar">
-    <MudStack Row="true" AlignItems="AlignItems.Center">
-
-        <MudButton Href="/reports/templates"
-
-                   StartIcon="@Icons.Custom.FileFormats.FilePdf"
-                   Color="Color.Transparent">
-            @localizer["templates"]
-        </MudButton>
-        <MudButton Href="/reports/components"
-
-                   StartIcon="@Icons.Material.Filled.SpaceDashboard"
-                   Color="Color.Primary">
-            @localizer["components"]
-        </MudButton>
-        <MudButton Href="/reports/import"
-
-                   StartIcon="@Icons.Material.Filled.UploadFile"
-                   Color="Color.Transparent">
-            @localizer["import"]
-        </MudButton>
-    </MudStack>
-</SectionContent>
-
-<SectionContent SectionName="breadcrumbs">
-    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
 </SectionContent>
 
 <MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                    <MudButton Href="/reports/templates"
+
+                               StartIcon="@Icons.Custom.FileFormats.FilePdf"
+                               Color="Color.Transparent">
+                        @localizer["templates"]
+                    </MudButton>
+                    <MudButton Href="/reports/components"
+
+                               StartIcon="@Icons.Material.Filled.SpaceDashboard"
+                               Color="Color.Primary">
+                        @localizer["components"]
+                    </MudButton>
+                    <MudButton Href="/reports/import"
+
+                               StartIcon="@Icons.Material.Filled.UploadFile"
+                               Color="Color.Transparent">
+                        @localizer["import"]
+                    </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
     <MudItem xs="12" sm="12" md="12">
 
         <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
@@ -65,10 +61,10 @@
                         <MudStack Row="true">
                             @if (userAth.HasPermission(Permissions.ReportComponentsAdd))
                             {
-                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx,"cover"))">@localizer["create"]</MudButton>
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx, "cover"))">@localizer["create"]</MudButton>
                             }
 
-                            @if(userAth.HasPermission(Permissions.ReportComponentsDelete))
+                            @if (userAth.HasPermission(Permissions.ReportComponentsDelete))
                             {
                                 @if (seleComponents.Count() != 0)
                                 {
@@ -129,7 +125,7 @@
                              Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                     <ToolBarContent>
                         <MudStack Row="true">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx,"header"))">@localizer["create"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx, "header"))">@localizer["create"]</MudButton>
                             <MudButton Href="/reports/templates"
                                        Variant="Variant.Filled"
                                        StartIcon="@Icons.Material.Filled.FileCopy"
@@ -195,7 +191,7 @@
                              Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                     <ToolBarContent>
                         <MudStack Row="true">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx,"footer"))">@localizer["create"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx, "footer"))">@localizer["create"]</MudButton>
                             <MudButton Href="/reports/templates"
                                        Variant="Variant.Filled"
                                        StartIcon="@Icons.Material.Filled.FileCopy"
@@ -261,7 +257,7 @@
                              Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                     <ToolBarContent>
                         <MudStack Row="true">
-                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx,"body"))">@localizer["create"]</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx, "body"))">@localizer["create"]</MudButton>
                             <MudButton Href="/reports/templates"
                                        Variant="Variant.Filled"
                                        StartIcon="@Icons.Material.Filled.FileCopy"

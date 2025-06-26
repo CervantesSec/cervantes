@@ -27,65 +27,61 @@
 
 <PageTitle>@localizer["vulns"] | Cervantes</PageTitle>
 
-    <SectionContent SectionName="appbar">
-        <MudText Typo="Typo.h5">
-            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.BugReport"></MudIcon>
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
 
-            @localizer["vulns"]
-
-        </MudText>
-    </SectionContent>
-    <SectionContent SectionName="top-bar">
-        <MudStack Row="true" AlignItems="AlignItems.Center">
-            <MudBadge Content="@model.Count(x => x.Template == false)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
-
-                <MudButton Href="/vulns"
-
-                           StartIcon="@Icons.Material.Filled.BugReport"
-                           Color="Color.Primary">
-                    @localizer["vulns"]
-                </MudButton>
-            </MudBadge>
-            <MudBadge Content="@model.Count(x => x.Template == true)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
-
-                <MudButton Href="/vulns/templates"
-
-                           StartIcon="@Icons.Material.Outlined.BugReport"
-                           Color="Color.Transparent">
-                    @localizer["templates"]
-                </MudButton>
-            </MudBadge>
-            <MudButton Href="/vulns/categories"
-                       StartIcon="@Icons.Material.Filled.Category"
-                       Color="Color.Transparent">
-                @localizer["categories"]
-            </MudButton>
-        </MudStack>
-    </SectionContent>
-
-<SectionContent SectionName="breadcrumbs">
-    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
 </SectionContent>
 
 <MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudBadge Content="@model.Count(x => x.Template == false)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
+
+                        <MudButton Href="/vulns"
+
+                                   StartIcon="@Icons.Material.Filled.BugReport"
+                                   Color="Color.Primary">
+                            @localizer["vulns"]
+                        </MudButton>
+                    </MudBadge>
+                    <MudBadge Content="@model.Count(x => x.Template == true)" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
+
+                        <MudButton Href="/vulns/templates"
+
+                                   StartIcon="@Icons.Material.Outlined.BugReport"
+                                   Color="Color.Transparent">
+                            @localizer["templates"]
+                        </MudButton>
+                    </MudBadge>
+                    <MudButton Href="/vulns/categories"
+                               StartIcon="@Icons.Material.Filled.Category"
+                               Color="Color.Transparent">
+                        @localizer["categories"]
+                    </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
     <MudItem xs="12" sm="12" md="12">
         <MudDataGrid T="Vuln" Items="@model.Where(x => x.Template == false)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
-                    @if(userAth.HasPermission(Permissions.VulnsAdd))
+                    @if (userAth.HasPermission(Permissions.VulnsAdd))
                     {
                         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                     }
-                    @if(userAth.HasPermission(Permissions.VulnsImport))
+                    @if (userAth.HasPermission(Permissions.VulnsImport))
                     {
                         <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
                     }
-                        @if (seleVulns.Count() != 0)
-                        {
-                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                                <MudButton>@localizer["actions"]</MudButton>
-                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                    @if (seleVulns.Count() != 0)
+                    {
+                        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                            <MudButton>@localizer["actions"]</MudButton>
+                            <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
                                 @if (userAth.HasPermission(Permissions.VulnsDelete))
                                 {
                                     <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["deleteVuln"]</MudMenuItem>
@@ -95,17 +91,17 @@
                                     <MudMenuItem OnClick="@((e) => Export(0))">@localizer["exportCSV"]</MudMenuItem>
                                 }
                                 @if (jiraEnabled)
-                                    {
-                                        <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["createJira"]</MudMenuItem>
-                                        <MudMenuItem OnClick="@((e) => BtnActions(2))">@localizer["deleteJira"]</MudMenuItem>
+                                {
+                                    <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["createJira"]</MudMenuItem>
+                                    <MudMenuItem OnClick="@((e) => BtnActions(2))">@localizer["deleteJira"]</MudMenuItem>
 
-                                    }
+                                }
 
-                                </MudMenu>
-                            </MudButtonGroup>
-                        }
-                    
-                    
+                            </MudMenu>
+                        </MudButtonGroup>
+                    }
+
+
 
                 </MudStack>
                 <MudSpacer/>
