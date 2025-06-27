@@ -117,6 +117,24 @@ public class ProjectController : ControllerBase
         }
     }
 
+    [HasPermission(Permissions.ProjectsRead)]
+    [HttpGet]
+    [Route("{projectName}")]
+    public IEnumerable<CORE.Entities.Project> GetByName(string projectName)
+    {
+        try
+        {
+            return projectManager.GetAll().Where(x => x.Name.Contains(projectName));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e,"An error ocurred getting a project. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
+    
     [HttpGet]
     [Route("Client/{id}")]
     [HasPermission(Permissions.ProjectsRead)]
@@ -135,6 +153,24 @@ public class ProjectController : ControllerBase
         }
     }
 
+    [HttpGet]
+    [Route("Client/{clientName}")]
+    [HasPermission(Permissions.ProjectsRead)]
+    public IEnumerable<CORE.Entities.Project> GetByClientName(string clientName)
+    {
+        try
+        {
+            IEnumerable<CORE.Entities.Project> model = projectManager.GetAll().Where(x => x.Client.Name.Contains(clientName)).ToArray();
+            return model;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred getting client projects. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+    }
+    
     [HttpPost]
     [HasPermission(Permissions.ProjectsAdd)]
     public async Task<IActionResult> Add([FromBody] ProjectCreateViewModel model)

@@ -84,6 +84,24 @@ public class ClientsController : ControllerBase
         
     }
     
+    [HasPermission(Permissions.ClientsRead)]
+    [HttpGet]
+    [Route("{clientName}")]
+    public IEnumerable<CORE.Entities.Client> GetByName(string clientName)
+    {
+        try
+        {
+            return clientManager.GetAll().Where(x => x.Name.Contains(clientName));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e,"An error ocurred getting a client. User: {0}",
+                aspNetUserId);
+            throw;
+        }
+        
+    }
+    
     [HasPermission(Permissions.ClientsAdd)]
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] ClientCreateViewModel model)
