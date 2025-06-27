@@ -97,7 +97,7 @@ public partial class Clients: ComponentBase
     };
     private async Task OpenDialogCreate()
     {
-        IMudExDialogReference<CreateClientDialog>? dlgReference = await Dialog.ShowEx<CreateClientDialog>("Simple Dialog", maxWidthEx);
+        IMudExDialogReference<CreateClientDialog>? dlgReference = await Dialog.ShowExAsync<CreateClientDialog>("Simple Dialog", maxWidthEx);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -113,7 +113,7 @@ public partial class Clients: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<Client> args)
     {
         var parameters = new DialogParameters { ["client"]=args.Item };
-        IMudExDialogReference<ClientDialog>? dlgReference = await Dialog.ShowEx<ClientDialog>("Simple Dialog",parameters, maxWidthEx);
+        IMudExDialogReference<ClientDialog>? dlgReference = await Dialog.ShowExAsync<ClientDialog>("Simple Dialog",parameters, maxWidthEx);
 
         var result = await dlgReference.Result;
 
@@ -124,19 +124,6 @@ public partial class Clients: ComponentBase
         }
     }
     
-    async Task OpenClientDialog(Client args)
-    {
-        var parameters = new DialogParameters { ["client"]=args };
-
-        var dialog =  await Dialog.ShowEx<ClientDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
-
-        if (!result.Canceled)
-        {
-            await Update();
-            StateHasChanged();
-        }
-    }
     
     /*private async Task Export(int id)
     {

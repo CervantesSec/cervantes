@@ -947,21 +947,6 @@ protected override async Task OnInitializedAsync()
 
     #endregion
     
-    private async Task OpenAiDialog(DialogOptions options)
-    {
-        //var parameters = new DialogParameters { ["project"]=SelectedProject };
-
-        var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
-        // wait modal to close
-        var result = await dialog.Result;
-        if (!result.Canceled)
-        {
-            var data = await dialog.GetReturnValueAsync<FunctionResult>();
-            executive.ExecutiveSummary = executive.ExecutiveSummary + data;
-            StateHasChanged();
-        }
-        
-    }
     private async Task OpenExecutiveAiDialog(DialogOptions options)
     {
         var parameters = new DialogParameters { ["project"]=project };

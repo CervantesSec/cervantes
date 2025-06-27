@@ -932,13 +932,13 @@ protected override async Task OnInitializedAsync()
     private async Task OpenAiDialog(DialogOptions options)
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
+        IMudExDialogReference<Cervantes.Web.Components.Shared.AiDialog>? dlgReference = await Dialog.ShowExAsync<Cervantes.Web.Components.Shared.AiDialog>("Simple Dialog", middleWidthEx);
 
-        var dialog = await Dialog.ShowEx<Cervantes.Web.Components.Shared.AiDialog>("Custom Options Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
-            var data = await dialog.GetReturnValueAsync<FunctionResult>();
+            var data = await dlgReference.GetReturnValueAsync<FunctionResult>();
             executive.ExecutiveSummary = executive.ExecutiveSummary + data;
             StateHasChanged();
         }

@@ -131,7 +131,7 @@ public partial class TasksKanban : ComponentBase
     private async Task OpenDialogCreate(Guid project,DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=project };
-        IMudExDialogReference<CreateTaskDialog>? dlgReference = await Dialog.ShowEx<CreateTaskDialog>("Simple Dialog", options);
+        IMudExDialogReference<CreateTaskDialog>? dlgReference = await Dialog.ShowExAsync<CreateTaskDialog>("Simple Dialog", options);
 
         // wait modal to close
         var result = await dlgReference.Result;
@@ -149,7 +149,7 @@ public partial class TasksKanban : ComponentBase
     {
         var parameters = new DialogParameters { ["task"]=task};
 
-        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowEx<TaskDialog>("Simple Dialog",parameters, options);
+        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowExAsync<TaskDialog>("Simple Dialog",parameters, options);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)

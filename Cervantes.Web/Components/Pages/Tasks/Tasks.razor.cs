@@ -125,7 +125,7 @@ public partial class Tasks: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Task> args)
     {
         var parameters = new DialogParameters { ["task"]=args.Item};
-        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowEx<TaskDialog>("Simple Dialog",parameters, maxWidthEx);
+        IMudExDialogReference<TaskDialog>? dlgReference = await Dialog.ShowExAsync<TaskDialog>("Simple Dialog",parameters, maxWidthEx);
 
         //var dialog =  await Dialog.ShowEx<TaskDialog>(args.Item.Name, parameters,maxWidth);
         var result = await dlgReference.Result;
@@ -153,16 +153,32 @@ public partial class Tasks: ComponentBase
             return true;
         return false;
     };
-    
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private async Task BtnActions(int id)
     {
         switch (id)
         {
             case 0:
                 var parameters = new DialogParameters { ["tasks"]=seleTasks };
+                IMudExDialogReference<DeleteTaskBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteTaskBulkDialog>("Simple Dialog",parameters, middleWidthEx);
 
-                var dialog =  await Dialog.ShowEx<DeleteTaskBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

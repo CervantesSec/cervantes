@@ -73,7 +73,7 @@ public partial class ReportComponents: ComponentBase
     private async Task OpenDialogCreate(DialogOptionsEx options, string type)
     {
         var parameters = new DialogParameters { ["type"]=type };
-        IMudExDialogReference<CreateReportComponentDialog>? dlgReference = await Dialog.ShowEx<CreateReportComponentDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<CreateReportComponentDialog>? dlgReference = await Dialog.ShowExAsync<CreateReportComponentDialog>("Simple Dialog", parameters, maxWidthEx);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -101,7 +101,7 @@ public partial class ReportComponents: ComponentBase
     async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.ReportComponents> args)
     {
         var parameters = new DialogParameters { ["component"]=args.Item };
-        IMudExDialogReference<ReportComponentsDialog>? dlgReference = await Dialog.ShowEx<ReportComponentsDialog>("Simple Dialog", parameters, maxWidthEx);
+        IMudExDialogReference<ReportComponentsDialog>? dlgReference = await Dialog.ShowExAsync<ReportComponentsDialog>("Simple Dialog", parameters, maxWidthEx);
         var result = await dlgReference.Result;
 
         if (!result.Canceled)
@@ -110,16 +110,32 @@ public partial class ReportComponents: ComponentBase
             StateHasChanged();
         }
     }
-    
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     private async Task BtnActions(int id)
     {
         switch (id)
         {
             case 0:
                 var parameters = new DialogParameters { ["components"]=seleComponents };
+                IMudExDialogReference<DeleteReportComponentBulkDialog>? dlgReference = await Dialog.ShowExAsync<DeleteReportComponentBulkDialog>("Simple Dialog", parameters, middleWidthEx);
 
-                var dialog =   await Dialog.ShowAsync<DeleteReportComponentBulkDialog>("Edit", parameters,mediumWidth);
-                var result = await dialog.Result;
+                var result = await dlgReference.Result;
 
                 if (!result.Canceled)
                 {

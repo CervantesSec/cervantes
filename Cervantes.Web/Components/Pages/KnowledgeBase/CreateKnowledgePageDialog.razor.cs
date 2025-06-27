@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.SemanticKernel;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.Core;
+using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -77,6 +79,23 @@ public partial class CreateKnowledgePageDialog: ComponentBase
             new {start = "i) ", cmd = "InsertOrderedList", value = "lower-roman"}
         }}
     };
+    DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Medium,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
     [Inject] private IAiService _aiService { get; set; }
     private bool aiEnabled = false;
     protected override async Task OnInitializedAsync()
@@ -135,13 +154,13 @@ public partial class CreateKnowledgePageDialog: ComponentBase
     private async Task OpenAiDialog(DialogOptions options)
     {
         //var parameters = new DialogParameters { ["project"]=SelectedProject };
+        IMudExDialogReference<AiDialog>? dlgReference = await Dialog.ShowExAsync<AiDialog>("Simple Dialog", middleWidthEx);
 
-        var dialog = await Dialog.ShowEx<AiDialog>("Custom Options Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
-            var data = await dialog.GetReturnValueAsync<FunctionResult>();
+            var data = await dlgReference.GetReturnValueAsync<FunctionResult>();
             model.Content = model.Content + data;
             StateHasChanged();
         }

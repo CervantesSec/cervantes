@@ -94,7 +94,7 @@ public partial class Reports: ComponentBase
     DialogOptions fullScreen = new DialogOptions() { FullScreen = true, CloseButton = true };
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
-        IMudExDialogReference<CreateReport>? dlgReference = await Dialog.ShowEx<CreateReport>("Simple Dialog", options);
+        IMudExDialogReference<CreateReport>? dlgReference = await Dialog.ShowExAsync<CreateReport>("Simple Dialog", options);
         // wait modal to close
         var result = await dlgReference.Result;
         if (!result.Canceled)
@@ -121,33 +121,6 @@ public partial class Reports: ComponentBase
         }
     }
     
-    async Task EditDialog(ReportTemplateViewModel report,DialogOptions options)
-    {
-        var parameters = new DialogParameters { ["report"]=report };
-
-        var dialog =  await Dialog.ShowEx<EditDialog>("Edit", parameters,options);
-        var result = await dialog.Result;
-
-        if (!result.Canceled)
-        {
-            await Update();
-            StateHasChanged();
-        }
-    }
-
-    
-    private async Task Export(int id)
-    {
-        switch (id)
-        {
-            case 0:
-                /*var file = ExportToCsv.ExportLogs(model);
-                await JS.InvokeVoidAsync("downloadFile", file);
-                Snackbar.Add(@localizer["exportSuccessfull"], Severity.Success);
-                ExportToCsv.DeleteFile(file);*/
-                break;
-        }
-    }
     
     async Task RowClicked(DataGridRowClickEventArgs<ReportTemplate> args)
     {
