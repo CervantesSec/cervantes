@@ -55,6 +55,23 @@ DialogOptionsEx maxWidthEx = new DialogOptionsEx()
     BackdropClick = false,
     Resizeable = true,
 };
+DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
+{
+    MaximizeButton = true,
+    CloseButton = true,
+    FullHeight = false,
+    CloseOnEscapeKey = true,
+    MaxWidth = MaxWidth.Medium,
+    MaxHeight = MaxHeight.False,
+    FullWidth = true,
+    DragMode = MudDialogDragMode.Simple,
+    Animations = new[] { AnimationType.SlideIn },
+    Position = DialogPosition.Center,
+    DisableSizeMarginY = true,
+    DisablePositionMargin = true,
+    BackdropClick = false,
+    Resizeable = true,
+};
 private ClaimsPrincipal userAth;
     protected override async Task OnInitializedAsync()
     {
@@ -109,10 +126,10 @@ private async Task Update()
     
     private async Task OpenDialogImport(DialogOptions options)
     {
+        IMudExDialogReference<ImportVulnDialog>? dlgReference = await DialogService.ShowExAsync<ImportVulnDialog>("Simple Dialog", middleWidthEx);
 
-        var dialog = DialogService.Show<ImportVulnDialog>("Custom Options Dialog", options);
         // wait modal to close
-        var result = await dialog.Result;
+        var result = await dlgReference.Result;
         if (!result.Canceled)
         {
             await Update();
