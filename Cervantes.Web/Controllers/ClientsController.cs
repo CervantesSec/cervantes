@@ -86,7 +86,7 @@ public class ClientsController : ControllerBase
     
     [HasPermission(Permissions.ClientsRead)]
     [HttpGet]
-    [Route("{clientName}")]
+    [Route("Name/{clientName}")]
     public IEnumerable<CORE.Entities.Client> GetByName(string clientName)
     {
         try

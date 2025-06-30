@@ -119,7 +119,7 @@ public class ProjectController : ControllerBase
 
     [HasPermission(Permissions.ProjectsRead)]
     [HttpGet]
-    [Route("{projectName}")]
+    [Route("Name/{projectName}")]
     public IEnumerable<CORE.Entities.Project> GetByName(string projectName)
     {
         try
