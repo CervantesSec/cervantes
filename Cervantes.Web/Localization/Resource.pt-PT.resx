@@ -1922,4 +1922,13 @@
     <data name="exportError" xml:space="preserve">
         <value>Se ha producida un error al exportar CSV</value>
     </data>
+    <data name="français" xml:space="preserve">
+        <value>Francês</value>
+    </data>
+    <data name="french" xml:space="preserve">
+        <value>Francês</value>
+    </data>
+    <data name="exportPDF" xml:space="preserve">
+        <value>Exportar PDF</value>
+    </data>
 </root>

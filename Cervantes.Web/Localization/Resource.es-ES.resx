@@ -2007,4 +2007,13 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="exportError" xml:space="preserve">
         <value>Se ha producido un error al guardar el exportar el CSV!</value>
     </data>
+    <data name="français" xml:space="preserve">
+        <value>Francés</value>
+    </data>
+    <data name="french" xml:space="preserve">
+        <value>Francés</value>
+    </data>
+    <data name="exportPDF" xml:space="preserve">
+        <value>Exportar PDF</value>
+    </data>
 </root>

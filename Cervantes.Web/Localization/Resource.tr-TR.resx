@@ -1960,4 +1960,10 @@
     <data name="noData" xml:space="preserve">
         <value>Veri Yok</value>
     </data>
+    <data name="français" xml:space="preserve">
+        <value>Fransızca</value>
+    </data>
+    <data name="french" xml:space="preserve">
+        <value>Fransızca</value>
+    </data>
 </root>

@@ -8,6 +8,6 @@ public class ClientCreateViewModel
     public string ContactName { get; set; }
     public string ContactEmail { get; set; }
     public string ContactPhone { get; set; }
-    public string FileName { get; set; }
-    public byte[] FileContent { get; set; }
+    public string? FileName { get; set; }
+    public byte[]? FileContent { get; set; }
 }

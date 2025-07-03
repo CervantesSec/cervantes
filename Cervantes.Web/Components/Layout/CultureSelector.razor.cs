@@ -13,6 +13,10 @@ namespace Cervantes.Web.Components.Layout
             new CultureInfo("es-ES"),
             new CultureInfo("pt-PT"),
             new CultureInfo("tr-TR"),
+            new CultureInfo("fr-FR"),
+            new CultureInfo("de-DE"),
+            new CultureInfo("it-IT"),
+            new CultureInfo("cs-CZ"),
         };
 
         protected async override Task OnInitializedAsync()
