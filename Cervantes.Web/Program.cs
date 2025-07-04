@@ -12,18 +12,9 @@ using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.DAL;
 using Cervantes.IFR;
-using Cervantes.IFR.CervantesAI;
-using Cervantes.IFR.Email;
-using Cervantes.IFR.Export;
-using Cervantes.IFR.File;
-using Cervantes.IFR.Jira;
-using Cervantes.IFR.Parsers.Burp;
-using Cervantes.IFR.Parsers.CSV;
-using Cervantes.IFR.Parsers.Nessus;
-using Cervantes.IFR.Parsers.Nmap;
-using Cervantes.IFR.Parsers.Pwndoc;
 using Cervantes.Server.Helpers;
 using Cervantes.Web.AuthPermissions;
+using Cervantes.Web.Extensions;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -220,84 +211,18 @@ builder.Services.AddBlazoredLocalStorage();
 
 //builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
-builder.Services.AddScoped<IUserManager, UserManager>();
-builder.Services.AddScoped<IRoleManager, RoleManager>();
-builder.Services.AddScoped<IClientManager, ClientManager>();
-builder.Services.AddScoped<IProjectManager, ProjectManager>();
-builder.Services.AddScoped<IOrganizationManager, OrganizationManager>();
-builder.Services.AddScoped<IProjectUserManager, ProjectUserManager>();
-builder.Services.AddScoped<IProjectNoteManager, ProjectNoteManager>();
-builder.Services.AddScoped<IProjectAttachmentManager, ProjectAttachmentManager>();
-builder.Services.AddScoped<ITargetManager, TargetManager>();
-builder.Services.AddScoped<ITargetServicesManager, TargetServicesManager>();
-builder.Services.AddScoped<ITaskManager, TaskManager>();
-builder.Services.AddScoped<ITaskNoteManager, TaskNoteManager>();
-builder.Services.AddScoped<ITaskTargetManager, TaskTargetManager>();
-builder.Services.AddScoped<ITaskAttachmentManager, TaskAttachmentManager>();
-builder.Services.AddScoped<IVulnManager, VulnManager>();
-builder.Services.AddScoped<IVulnCategoryManager, VulnCategoryManager>();
-builder.Services.AddScoped<IVulnNoteManager, VulnNoteManager>();
-builder.Services.AddScoped<IVulnAttachmentManager, VulnAttachmentManager>();
-builder.Services.AddScoped<IVulnTargetManager, VulnTargetManager>();
-builder.Services.AddScoped<IDocumentManager, DocumentManager>();
-builder.Services.AddScoped<INoteManager, NoteManager>();
-builder.Services.AddScoped<ILogManager, Cervantes.Application.LogManager>();
-builder.Services.AddScoped<IReportManager, ReportManager>();
-builder.Services.AddScoped<IReportTemplateManager, ReportTemplateManager>();
-builder.Services.AddScoped<IVaultManager, VaultManager>();
-builder.Services.AddScoped<INmapParser, NmapParser>();
-builder.Services.AddSingleton<IEmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddSingleton<IJiraConfiguration>(builder.Configuration.GetSection("JiraConfiguration").Get<JiraConfiguration>());
-builder.Services.AddScoped<IFileCheck, FileCheck>();
-builder.Services.AddScoped<IJIraService, JiraService>();
-builder.Services.AddScoped<IJiraManager, JiraManager>();
-builder.Services.AddScoped<IJiraCommentManager, JiraCommentManager>();
-builder.Services.AddScoped<ICsvParser, CsvParser>();
-builder.Services.AddScoped<IPwndocParser, PwndocParser>();
-builder.Services.AddScoped<IWSTGManager, WSTGManager>();
-builder.Services.AddScoped<IMASTGManager, MASTGManager>();
-builder.Services.AddScoped<IBurpParser, BurpParser>();
-builder.Services.AddScoped<INessusParser, NessusParser>();
-builder.Services.AddScoped<ICweManager, CweManager>();
-builder.Services.AddScoped<IVulnCweManager, VulnCweManager>();
-builder.Services.AddTransient<IChatManager, ChatManager>();
-builder.Services.AddSingleton<IExportToCsv,ExportToCsv>();
-builder.Services.AddScoped<IKnowledgeBaseManager, KnowledgeBaseManager>();
-builder.Services.AddScoped<IKnowledgeBaseCategoryManager, KnowledgeBaseCategoryManager>();
-builder.Services.AddTransient<IKnowledgeBaseTagManager, KnowledgeBaseTagManager>();
-builder.Services.AddScoped<IReportComponentsManager, ReportComponentsManager>();
-builder.Services.AddScoped<IReportsPartsManager, ReportPartsManager>();
-builder.Services.AddSingleton<IAiConfiguration>(builder.Configuration.GetSection("AIConfiguration").Get<AiConfiguration>());
-builder.Services.AddScoped<IAiService, AiService>();
-builder.Services.AddScoped<IChatManager, ChatManager>();
-builder.Services.AddScoped<IChatMessageManager, ChatMessageManager>();
-builder.Services.AddScoped<IRssNewsManager, RssNewsManager>();
-builder.Services.AddScoped<IRssSourceManager, RssSourceManager>();
-builder.Services.AddScoped<IRssCategoryManager, RssCategoryManager>();
 
-builder.Services.AddScoped<Sanitizer>();
-builder.Services.AddScoped<ClientsController>();
-builder.Services.AddScoped<ProjectController>();
-builder.Services.AddScoped<VulnController>();
-builder.Services.AddScoped<UserController>();
-builder.Services.AddScoped<OrganizationController>();
-builder.Services.AddScoped<ReportController>();
-builder.Services.AddScoped<BackupController>();
-builder.Services.AddScoped<DocumentController>();
-builder.Services.AddScoped<LogController>();
-builder.Services.AddScoped<NoteController>();
-builder.Services.AddScoped<TargetController>();
-builder.Services.AddScoped<TaskController>();
-builder.Services.AddScoped<WorkspacesController>();
-builder.Services.AddScoped<ChecklistController>();
-builder.Services.AddScoped<KnowledgeBaseController>();
-builder.Services.AddScoped<CalendarController>();
-builder.Services.AddScoped<VaultController>();
-builder.Services.AddScoped<SearchController>();
-builder.Services.AddScoped<JiraController>();
-builder.Services.AddScoped<ChatController>();
-//builder.Services.AddScoped<RssController>();
+// Register all managers
+builder.Services.AddCervantesManagers();
+
+// Register all vulnerability parsers
+builder.Services.AddVulnerabilityParsers();
+
+// Register all external services
+builder.Services.AddExternalServices(builder.Configuration);
+// Register all controllers
+builder.Services.AddCervantesControllers();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cervantes API", Version = "v1" });
