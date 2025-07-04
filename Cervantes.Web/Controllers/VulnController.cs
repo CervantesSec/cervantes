@@ -8,10 +8,21 @@ using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.File;
 using Cervantes.IFR.Jira;
+using Cervantes.IFR.Parsers.Acunetix;
+using Cervantes.IFR.Parsers.Bandit;
 using Cervantes.IFR.Parsers.Burp;
 using Cervantes.IFR.Parsers.CSV;
+using Cervantes.IFR.Parsers.DependencyCheck;
+using Cervantes.IFR.Parsers.Masscan;
 using Cervantes.IFR.Parsers.Nessus;
+using Cervantes.IFR.Parsers.Nikto;
+using Cervantes.IFR.Parsers.Nuclei;
+using Cervantes.IFR.Parsers.OpenVAS;
+using Cervantes.IFR.Parsers.Prowler;
 using Cervantes.IFR.Parsers.Pwndoc;
+using Cervantes.IFR.Parsers.Qualys;
+using Cervantes.IFR.Parsers.Trivy;
+using Cervantes.IFR.Parsers.Zap;
 using Cervantes.Server.Helpers;
 using Cervantes.Web.Helpers;
 using Ganss.Xss;
@@ -41,6 +52,17 @@ public class VulnController: ControllerBase
     private IPwndocParser pwndocParser = null;
     private IBurpParser burpParser = null;
     private INessusParser nessusParser = null;
+    private IZapParser zapParser = null;
+    private IOpenVASParser openvasParser = null;
+    private IQualysParser qualysParser = null;
+    private INucleiParser nucleiParser = null;
+    private IAcunetixParser acunetixParser = null;
+    private INiktoParser niktoParser = null;
+    private IProwlerParser prowlerParser = null;
+    private ITrivyParser trivyParser = null;
+    private IBanditParser banditParser = null;
+    private IMasscanParser masscanParser = null;
+    private IDependencyCheckParser dependencyCheckParser = null;
     private ICweManager cweManager = null;
     private IVulnCweManager vulnCweManager = null;
     private readonly ILogger<VulnController> _logger = null;
@@ -56,6 +78,10 @@ public class VulnController: ControllerBase
         IVulnAttachmentManager vulnAttachmentManager, IJIraService jiraService,
         IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IProjectAttachmentManager projectAttachmentManager,
         ICsvParser csvParser, IPwndocParser pwndocParser, IBurpParser burpParser, INessusParser nessusParser,
+        IZapParser zapParser, IOpenVASParser openvasParser, IQualysParser qualysParser,
+        INucleiParser nucleiParser, IAcunetixParser acunetixParser,
+        INiktoParser niktoParser, IProwlerParser prowlerParser, ITrivyParser trivyParser,
+        IBanditParser banditParser, IMasscanParser masscanParser, IDependencyCheckParser dependencyCheckParser,
         ICweManager cweManager, IVulnCweManager vulnCweManager, ILogger<VulnController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor,
         IFileCheck fileCheck, IProjectUserManager projectUserManager,Sanitizer Sanitizer)
     {
@@ -74,6 +100,17 @@ public class VulnController: ControllerBase
         this.pwndocParser = pwndocParser;
         this.burpParser = burpParser;
         this.nessusParser = nessusParser;
+        this.zapParser = zapParser;
+        this.openvasParser = openvasParser;
+        this.qualysParser = qualysParser;
+        this.nucleiParser = nucleiParser;
+        this.acunetixParser = acunetixParser;
+        this.niktoParser = niktoParser;
+        this.prowlerParser = prowlerParser;
+        this.trivyParser = trivyParser;
+        this.banditParser = banditParser;
+        this.masscanParser = masscanParser;
+        this.dependencyCheckParser = dependencyCheckParser;
         this.cweManager = cweManager;
         this.vulnCweManager = vulnCweManager;
         _logger = logger;
@@ -1119,6 +1156,72 @@ public class VulnController: ControllerBase
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
                                 return NoContent();
+                            case VulnImportType.Zap:
+                                zapParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.OpenVAS:
+                                openvasParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Qualys:
+                                qualysParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Nuclei:
+                                nucleiParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Acunetix:
+                                acunetixParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Nikto:
+                                niktoParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Prowler:
+                                prowlerParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Trivy:
+                                trivyParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Bandit:
+                                banditParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Masscan:
+                                masscanParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.DependencyCheck:
+                                dependencyCheckParser.Parse(model.Project, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
                         }
                     }
                     else
@@ -1144,6 +1247,72 @@ public class VulnController: ControllerBase
                                 return NoContent();
                             case VulnImportType.Nessus:
                                 nessusParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Zap:
+                                zapParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.OpenVAS:
+                                openvasParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Qualys:
+                                qualysParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Nuclei:
+                                nucleiParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Acunetix:
+                                acunetixParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Nikto:
+                                niktoParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Prowler:
+                                prowlerParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Trivy:
+                                trivyParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Bandit:
+                                banditParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.Masscan:
+                                masscanParser.Parse(null, aspNetUserId,
+                                    file);
+                                _logger.LogInformation("Vulns imported successfully. User: {0}",
+                                    aspNetUserId);
+                                return NoContent();
+                            case VulnImportType.DependencyCheck:
+                                dependencyCheckParser.Parse(null, aspNetUserId,
                                     file);
                                 _logger.LogInformation("Vulns imported successfully. User: {0}",
                                     aspNetUserId);
