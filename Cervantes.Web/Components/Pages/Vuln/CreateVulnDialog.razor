@@ -187,6 +187,19 @@
                             
                         </MudStack>
                     </MudTabPanel>
+                    @if (CustomFields?.Any() == true)
+                    {
+                        <MudTabPanel Text="@localizer["customFields"]" Icon="@Icons.Material.Filled.DynamicForm" Style="min-width: 260px;">
+                            <MudStack AlignItems="AlignItems.Stretch">
+                                @foreach (var customField in CustomFields.OrderBy(cf => cf.Order))
+                                {
+                                    <Cervantes.Web.Components.Shared.VulnCustomFieldRenderer 
+                                        Field="@customField" 
+                                        FieldChanged="@OnCustomFieldChanged" />
+                                }
+                            </MudStack>
+                        </MudTabPanel>
+                    }
                 </MudForm>
                 <MudStack Row="true" Justify="Justify.FlexEnd">
                     <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>

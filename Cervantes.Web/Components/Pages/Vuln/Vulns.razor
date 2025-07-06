@@ -248,6 +248,64 @@
                         </CellTemplate>
                     </PropertyColumn>
                 }
+                
+                @* Custom field columns *@
+                @foreach (var customField in VisibleCustomFields)
+                {
+                    <TemplateColumn Title="@customField.Label" SortBy="@(context => GetCustomFieldValue(context.Id, customField.Id))" Hideable="true">
+                        <CellTemplate Context="cellContext">
+                            @{
+                                var value = GetCustomFieldValue(cellContext.Item.Id, customField.Id);
+                            }
+                            @switch (customField.Type)
+                            {
+                                case VulnCustomFieldType.Boolean:
+                                    @if (bool.TryParse(value, out var boolValue))
+                                    {
+                                        @if (boolValue)
+                                        {
+                                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success"/>
+                                        }
+                                        else
+                                        {
+                                            <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error"/>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Remove" Color="Color.Default"/>
+                                    }
+                                    break;
+                                case VulnCustomFieldType.Date:
+                                    @if (DateTime.TryParse(value, out var dateValue))
+                                    {
+                                        <MudStack Row="true">
+                                            <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
+                                            <MudText Typo="Typo.body2">@dateValue.ToShortDateString()</MudText>
+                                        </MudStack>
+                                    }
+                                    else
+                                    {
+                                        <MudText Typo="Typo.body2">@value</MudText>
+                                    }
+                                    break;
+                                case VulnCustomFieldType.Number:
+                                    @if (double.TryParse(value, out var numberValue))
+                                    {
+                                        <MudText Typo="Typo.body2">@numberValue</MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText Typo="Typo.body2">@value</MudText>
+                                    }
+                                    break;
+                                default:
+                                    <MudText Typo="Typo.body2">@value</MudText>
+                                    break;
+                            }
+                        </CellTemplate>
+                    </TemplateColumn>
+                }
 
             </Columns>
             <NoRecordsContent>

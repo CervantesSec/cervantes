@@ -73,6 +73,7 @@ public class ReportController : ControllerBase
     private IReportComponentsManager reportComponentsManager;
     private IReportsPartsManager reportsPartsManager;
     private IVaultManager vaultManager;
+    private IVulnCustomFieldValueManager vulnCustomFieldValueManager;
     private Sanitizer sanitizer;
     private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
 
@@ -84,7 +85,7 @@ public class ReportController : ControllerBase
         ILogger<ReportController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager,
         IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck,Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager,
         IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, 
-        IVaultManager vaultManager, IJiraManager jiraManager,Sanitizer sanitizer)
+        IVaultManager vaultManager, IJiraManager jiraManager, IVulnCustomFieldValueManager vulnCustomFieldValueManager, Sanitizer sanitizer)
     {
         this.projectManager = projectManager;
         this.clientManager = clientManager;
@@ -109,6 +110,7 @@ public class ReportController : ControllerBase
         this.vaultManager = vaultManager;
         this._userManager = _userManager;
         this.jiraManager = jiraManager;
+        this.vulnCustomFieldValueManager = vulnCustomFieldValueManager;
         this.sanitizer = sanitizer;
     }
 
@@ -876,7 +878,8 @@ public class ReportController : ControllerBase
                         vulnJiraProject = jira.JiraProject;
                     }
 
-                    VulnsList.Add(new Dictionary<string, string>
+                    // Create base vulnerability data dictionary
+                    var vulnData = new Dictionary<string, string>
                     {
                         {"VulnName", vuln.Name},
                         {"VulnLanguage", vuln.Language.ToString()},
@@ -912,7 +915,29 @@ public class ReportController : ControllerBase
                         {"VulnTargets", targets},
                         {"VulnFindingId", vuln.FindingId},
                         {"VulnMitreTechniques", vuln.MitreTechniques}
-                    });
+                    };
+                    
+                    // Add custom field values
+                    try
+                    {
+                        var customFieldValues = vulnCustomFieldValueManager.GetAll()
+                            .Where(cfv => cfv.VulnId == vuln.Id)
+                            .Include(cfv => cfv.VulnCustomField)
+                            .ToList();
+                        foreach (var customFieldValue in customFieldValues)
+                        {
+                            // Use the custom field name as the key with proper format for templates
+                            var fieldKey = $"VulnCustom{customFieldValue.VulnCustomField.Name.Replace(" ", "_").Replace("-", "_")}";
+                            vulnData[fieldKey] = customFieldValue.Value ?? string.Empty;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log the error but don't fail the report generation
+                        _logger.LogWarning(ex, "Error loading custom field values for vulnerability {VulnId}", vuln.Id);
+                    }
+                    
+                    VulnsList.Add(vulnData);
                 }
                 
                 var TasksList = new List<Dictionary<string, string>>();

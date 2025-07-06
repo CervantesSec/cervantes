@@ -75,6 +75,7 @@ public static class ControllerServiceExtensions
     public static IServiceCollection AddSecurityControllers(this IServiceCollection services)
     {
         services.AddScoped<VulnController>();
+        services.AddScoped<VulnCustomFieldController>();
         services.AddScoped<VaultController>();
         
         return services;

@@ -337,7 +337,14 @@ public enum Permissions: ushort
     [Display(GroupName = "Rss Categories", Name = "Add RSS Categories", Description = "Can add new RSS Categories")]
     RssCategoriesAdd = 369,
     
-
+    [Display(GroupName = "Vuln Custom Fields", Name = "Read Vuln Custom Fields", Description = "Can read/view Custom Fields")]
+    VulnCustomFieldsRead = 380,
+    [Display(GroupName = "Vuln Custom Fields", Name = "Add Vuln Custom Fields", Description = "Can add new Custom Fields")]
+    VulnCustomFieldsAdd = 381,
+    [Display(GroupName = "Vuln Custom Fields", Name = "Edit Vuln Custom Fields", Description = "Can edit Custom Fields")]
+    VulnCustomFieldsEdit = 382,
+    [Display(GroupName = "Vuln Custom Fields", Name = "Delete Vuln Custom Fields", Description = "Can delete Custom Fields")]
+    VulnCustomFieldsDelete = 383,
     
     [Display(GroupName = "AI Service", Name = "Use AI Service", Description = "Can use the AI generation service")]
     AIServiceUsage = 60000,

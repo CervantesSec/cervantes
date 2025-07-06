@@ -81,7 +81,7 @@
 
     @if (user.HasPermission(Permissions.LogsRead) || user.HasPermission(Permissions.JobsRead) || user.HasPermission(Permissions.BackupRead) 
          || user.HasPermission(Permissions.OrganizationRead) || user.HasPermission(Permissions.ReportTemplatesRead) 
-         || user.HasPermission(Permissions.UsersRead) || user.HasPermission(Permissions.RolesRead))
+         || user.HasPermission(Permissions.UsersRead) || user.HasPermission(Permissions.RolesRead) || user.HasPermission(Permissions.VulnCustomFieldsRead))
     {
         <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin" @bind-Expanded=isAdminExpanded>
             @if(user.HasPermission(Permissions.LogsRead))
@@ -111,6 +111,10 @@
             @if(user.HasPermission(Permissions.RolesRead))
             {
             <MudNavLink Icon="@Icons.Material.Filled.Badge" Href="/roles">@localizer["roles"]</MudNavLink>
+            }
+            @if(user.HasPermission(Permissions.VulnCustomFieldsRead))
+            {
+                <MudNavLink Icon="@Icons.Material.Filled.DynamicForm" Href="/vuln/customfields">@localizer["customFields"]</MudNavLink>
             }
         </MudNavGroup>
     }

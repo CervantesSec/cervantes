@@ -25,6 +25,8 @@ public partial class Vulns : ComponentBase
     private List<VulnViewModel> model2 = new List<VulnViewModel>();
     private List<BreadcrumbItem> _items;
     private List<Project> Projects = new List<Project>();
+    private List<VulnCustomFieldViewModel> VisibleCustomFields = new List<VulnCustomFieldViewModel>();
+    private Dictionary<Guid, Dictionary<Guid, string>> VulnCustomFieldValues = new Dictionary<Guid, Dictionary<Guid, string>>();
     private string searchString = "";
     private string selectedTemplate = "All";
     private Guid selectedProject = Guid.Empty;
@@ -32,6 +34,7 @@ public partial class Vulns : ComponentBase
     private string selectedRisk = "All";
     private string selectedLanguage = "All";
     [Inject] private JiraController _jiraController { get; set; }
+    [Inject] private VulnCustomFieldController VulnCustomFieldController { get; set; }
     private HashSet<Guid> openDialogs = new HashSet<Guid>();
 
     [Parameter] public Guid vuln { get; set; }
@@ -110,9 +113,11 @@ private ClaimsPrincipal userAth;
 
 private async Task Update()
     {
-
         model = VulnController.GetVulns().ToList();
-}
+        
+        // Load visible custom fields and their values
+        await LoadCustomFieldsAndValues();
+    }
 
 
     private async Task OpenDialogCreate(DialogOptionsEx options)
@@ -220,6 +225,21 @@ private async Task Update()
             return true;
         if (element.ModifiedDate.ToString().Contains(searchString))
             return true;
+        
+        // Search in custom field values
+        if (VulnCustomFieldValues.TryGetValue(element.Id, out var customFieldValues))
+        {
+            foreach (var customField in VisibleCustomFields.Where(cf => cf.IsSearchable))
+            {
+                if (customFieldValues.TryGetValue(customField.Id, out var value) && 
+                    !string.IsNullOrEmpty(value) && 
+                    value.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+        }
+        
         return false;
     };
     
@@ -304,6 +324,56 @@ private async Task Update()
     {
         
         seleVulns = items.ToList();
+    }
+    
+    private async Task LoadCustomFieldsAndValues()
+    {
+        try
+        {
+            // Load visible custom fields
+            var customFields = VulnCustomFieldController.GetActive();
+            VisibleCustomFields = customFields.Where(cf => cf.IsVisible)
+                .OrderBy(cf => cf.Order)
+                .Select(cf => new VulnCustomFieldViewModel
+                {
+                    Id = cf.Id,
+                    Name = cf.Name,
+                    Label = cf.Label,
+                    Type = cf.Type,
+                    IsRequired = cf.IsRequired,
+                    IsUnique = cf.IsUnique,
+                    IsSearchable = cf.IsSearchable,
+                    IsVisible = cf.IsVisible,
+                    Order = cf.Order,
+                    Options = cf.Options,
+                    DefaultValue = cf.DefaultValue,
+                    Description = cf.Description,
+                    IsActive = cf.IsActive
+                }).ToList();
+            
+            // Load custom field values for all vulnerabilities
+            VulnCustomFieldValues.Clear();
+            foreach (var vuln in model)
+            {
+                var values = VulnCustomFieldController.GetValues(vuln.Id);
+                VulnCustomFieldValues[vuln.Id] = values.ToDictionary(v => v.VulnCustomFieldId, v => v.Value ?? string.Empty);
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log error but don't fail the page load
+            Console.WriteLine($"Error loading custom fields: {ex.Message}");
+        }
+    }
+    
+    private string GetCustomFieldValue(Guid vulnId, Guid customFieldId)
+    {
+        if (VulnCustomFieldValues.TryGetValue(vulnId, out var vulnFields) && 
+            vulnFields.TryGetValue(customFieldId, out var value))
+        {
+            return value;
+        }
+        return string.Empty;
     }
     
 }

@@ -42,6 +42,7 @@ public partial class VulnDialog: ComponentBase
     [Inject] private TargetController _targetController { get; set; }
     [Inject] private TaskController _taskController { get; set; }
     [Inject] private JiraController _jiraController { get; set; }
+    [Inject] private VulnCustomFieldController VulnCustomFieldController { get; set; }
     VulnModelFluentValidator vulnValidator = new VulnModelFluentValidator();
     private List<VulnCategory> Categories = new List<VulnCategory>();
     private List<Cwe> Cwes = new List<Cwe>();
@@ -55,6 +56,7 @@ public partial class VulnDialog: ComponentBase
     private List<VulnAttachment> VulnAttachments = new List<VulnAttachment>();
     private List<VulnAttachment> seleAttachments = new List<VulnAttachment>();
     private List<CORE.Entities.Vuln> VulnTemplates = new List<CORE.Entities.Vuln>();
+    private List<VulnCustomFieldValueViewModel> CustomFields = new List<VulnCustomFieldValueViewModel>();
     private Guid template;
     private CORE.Entities.Jira jira = new CORE.Entities.Jira();
     private List<CORE.Entities.JiraComments> JiraComments = new List<JiraComments>();
@@ -198,6 +200,10 @@ public partial class VulnDialog: ComponentBase
             inProject = false;
         }
         aiEnabled = _aiService.IsEnabled();
+        
+        // Load custom fields and their values for this vulnerability
+        await LoadCustomFields();
+        
         await base.OnInitializedAsync();
         StateHasChanged();
     }
@@ -237,7 +243,7 @@ public partial class VulnDialog: ComponentBase
         
     }
     
-    void EditMode()
+    async Task EditMode()
     {
         if (editMode)
         {
@@ -252,6 +258,9 @@ public partial class VulnDialog: ComponentBase
             Projects = _projectController.Get().Where(x => x.Template == false).ToList();
             Targets = _targetController.GetTargets().ToList();
             VulnTemplates =  _vulnController.GetTemplates().ToList();
+            
+            // Reload custom fields for edit mode
+            await LoadCustomFields();
              model.Id = vuln.Id;
         model.Name = vuln.Name;
         model.Template = vuln.Template;
@@ -341,6 +350,15 @@ public partial class VulnDialog: ComponentBase
             else
             {
                 model.ProjectId = null;
+            }
+            
+            // Add custom field values to the model
+            foreach (var customField in CustomFields)
+            {
+                if (!string.IsNullOrEmpty(customField.Value))
+                {
+                    model.CustomFieldValues[customField.CustomFieldId] = customField.Value;
+                }
             }
             
             var response = await _vulnController.Edit(model);
@@ -730,6 +748,48 @@ public partial class VulnDialog: ComponentBase
             StateHasChanged();
         }
         
+    }
+    
+    private async Task LoadCustomFields()
+    {
+        try
+        {
+            // Load active custom fields
+            var activeCustomFields = VulnCustomFieldController.GetActive();
+            
+            // Load existing values for this vulnerability
+            var existingValues = VulnCustomFieldController.GetValues(vuln.Id)
+                .ToDictionary(v => v.VulnCustomFieldId, v => v.Value ?? string.Empty);
+            
+            // Create ViewModels with existing values or defaults
+            CustomFields = activeCustomFields.Select(cf => new VulnCustomFieldValueViewModel
+            {
+                CustomFieldId = cf.Id,
+                Name = cf.Name,
+                Label = cf.Label,
+                Type = cf.Type,
+                IsRequired = cf.IsRequired,
+                IsUnique = cf.IsUnique,
+                Options = cf.Options,
+                DefaultValue = cf.DefaultValue,
+                Description = cf.Description,
+                Order = cf.Order,
+                Value = existingValues.TryGetValue(cf.Id, out var existingValue) 
+                    ? existingValue 
+                    : (cf.DefaultValue ?? string.Empty)
+            }).OrderBy(cf => cf.Order).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading custom fields: {ex.Message}", Severity.Error);
+        }
+    }
+    
+    private async Task OnCustomFieldChanged(VulnCustomFieldValueViewModel field)
+    {
+        // This method is called when a custom field value changes
+        // We could add validation here if needed
+        await Task.CompletedTask;
     }
     
 }

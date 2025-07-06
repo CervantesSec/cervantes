@@ -1962,4 +1962,121 @@
     <data name="turkish" xml:space="preserve">
         <value>Turečtina</value>
     </data>
+    <data name="customFields" xml:space="preserve">
+        <value>Vlastní Pole</value>
+    </data>
+    <data name="createCustomField" xml:space="preserve">
+        <value>Vytvořit Vlastní Pole</value>
+    </data>
+    <data name="editCustomField" xml:space="preserve">
+        <value>Upravit Vlastní Pole</value>
+    </data>
+    <data name="customFieldDetails" xml:space="preserve">
+        <value>Podrobnosti Vlastního Pole</value>
+    </data>
+    <data name="deleteCustomField" xml:space="preserve">
+        <value>Smazat Vlastní Pole</value>
+    </data>
+    <data name="customFieldCreated" xml:space="preserve">
+        <value>Vlastní pole bylo úspěšně vytvořeno</value>
+    </data>
+    <data name="customFieldUpdated" xml:space="preserve">
+        <value>Vlastní pole bylo úspěšně aktualizováno</value>
+    </data>
+    <data name="customFieldDeleted" xml:space="preserve">
+        <value>Vlastní pole bylo úspěšně smazáno</value>
+    </data>
+    <data name="customFieldNotFound" xml:space="preserve">
+        <value>Vlastní pole nebylo nalezeno</value>
+    </data>
+    <data name="customFieldNameExists" xml:space="preserve">
+        <value>Vlastní pole s tímto názvem již existuje</value>
+    </data>
+    <data name="label" xml:space="preserve">
+        <value>Štítek</value>
+    </data>
+    <data name="unique" xml:space="preserve">
+        <value>Jedinečné</value>
+    </data>
+    <data name="searchable" xml:space="preserve">
+        <value>Prohledávatelné</value>
+    </data>
+    <data name="visibleInTable" xml:space="preserve">
+        <value>Viditelné v Tabulce</value>
+    </data>
+    <data name="defaultValue" xml:space="preserve">
+        <value>Výchozí Hodnota</value>
+    </data>
+    <data name="fieldTypeInput" xml:space="preserve">
+        <value>Textový Vstup</value>
+    </data>
+    <data name="fieldTypeTextarea" xml:space="preserve">
+        <value>Textová Oblast</value>
+    </data>
+    <data name="fieldTypeSelect" xml:space="preserve">
+        <value>Seznam Výběru</value>
+    </data>
+    <data name="fieldTypeNumber" xml:space="preserve">
+        <value>Číslo</value>
+    </data>
+    <data name="fieldTypeDate" xml:space="preserve">
+        <value>Datum</value>
+    </data>
+    <data name="fieldTypeBoolean" xml:space="preserve">
+        <value>Boolean</value>
+    </data>
+    <data name="customFieldsTab" xml:space="preserve">
+        <value>Vlastní Pole</value>
+    </data>
+    <data name="customFieldHelp" xml:space="preserve">
+        <value>Vlastní pole vám umožňují přidat dodatečné informace k vašim zranitelnostem</value>
+    </data>
+    <data name="customFieldNameHelp" xml:space="preserve">
+        <value>Název používaný k identifikaci pole (alfanumerické, mezery a podtržítka povolena)</value>
+    </data>
+    <data name="customFieldLabelHelp" xml:space="preserve">
+        <value>Text zobrazený uživateli pro toto pole</value>
+    </data>
+    <data name="customFieldTypeHelp" xml:space="preserve">
+        <value>Typ dat, které toto pole může obsahovat</value>
+    </data>
+    <data name="customFieldOrderHelp" xml:space="preserve">
+        <value>Pořadí zobrazení tohoto pole (menší čísla se zobrazují dříve)</value>
+    </data>
+    <data name="customFieldOptionsHelp" xml:space="preserve">
+        <value>Možnosti pro pole výběru (jedna na řádek)</value>
+    </data>
+    <data name="customFieldOptionsPlaceholder" xml:space="preserve">
+        <value>Možnost 1&#xD;&#xA;Možnost 2&#xD;&#xA;Možnost 3</value>
+    </data>
+    <data name="customFieldRequiredHelp" xml:space="preserve">
+        <value>Pokud je aktivováno, toto pole musí být vyplněno při vytváření zranitelnosti</value>
+    </data>
+    <data name="customFieldUniqueHelp" xml:space="preserve">
+        <value>Pokud je aktivováno, každá zranitelnost musí mít jedinečnou hodnotu pro toto pole</value>
+    </data>
+    <data name="customFieldSearchableHelp" xml:space="preserve">
+        <value>Pokud je aktivováno, můžete vyhledávat zranitelnosti podle hodnoty tohoto pole</value>
+    </data>
+    <data name="customFieldVisibleHelp" xml:space="preserve">
+        <value>Pokud je aktivováno, toto pole se zobrazí jako sloupec v tabulkovém zobrazení zranitelností</value>
+    </data>
+    <data name="noCustomFields" xml:space="preserve">
+        <value>Žádná vlastní pole nejsou definována</value>
+    </data>
+    <data name="inactive" xml:space="preserve">
+        <value>Neaktivní</value>
+    </data>
+    <data name="customFieldInactiveWarning" xml:space="preserve">
+        <value>Toto vlastní pole je neaktivní a nebude se zobrazovat ve formulářích</value>
+    </data>
+    <data name="customFieldDeleteConfirm" xml:space="preserve">
+        <value>Jste si jisti, že chcete smazat toto vlastní pole? Tato akce také smaže všechny související hodnoty a nelze ji vrátit zpět.</value>
+    </data>
+    <data name="customFieldsManagement" xml:space="preserve">
+        <value>Správa Vlastních Polí</value>
+    </data>
+    <data name="customFieldValue" xml:space="preserve">
+        <value>Hodnota Vlastního Pole</value>
+    </data>
 </root>

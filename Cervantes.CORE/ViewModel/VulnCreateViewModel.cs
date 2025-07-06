@@ -98,4 +98,10 @@ public class VulnCreateViewModel
     public List<string> MitreValues { get; set; }
     public List<string> MitreTechniques { get; set; }
     public Language Language { get; set; }
+    
+    /// <summary>
+    /// Custom field values for this vulnerability
+    /// Key: CustomFieldId, Value: Field value as string
+    /// </summary>
+    public Dictionary<Guid, string> CustomFieldValues { get; set; } = new Dictionary<Guid, string>();
 }

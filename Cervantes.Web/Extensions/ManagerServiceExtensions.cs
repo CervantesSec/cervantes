@@ -65,6 +65,8 @@ public static class ManagerServiceExtensions
         services.AddScoped<ICweManager, CweManager>();
         services.AddScoped<IVulnCweManager, VulnCweManager>();
         services.AddScoped<IVaultManager, VaultManager>();
+        services.AddScoped<IVulnCustomFieldManager, VulnCustomFieldManager>();
+        services.AddScoped<IVulnCustomFieldValueManager, VulnCustomFieldValueManager>();
         
         return services;
     }

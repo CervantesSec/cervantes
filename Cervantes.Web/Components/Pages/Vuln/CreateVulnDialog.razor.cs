@@ -81,6 +81,7 @@ public partial class CreateVulnDialog: ComponentBase
     private List<Project> Projects = new List<Project>();
     private List<Target> Targets = new List<Target>();
     private List<CORE.Entities.Vuln> VulnTemplates = new List<CORE.Entities.Vuln>();
+    private List<VulnCustomFieldValueViewModel> CustomFields = new List<VulnCustomFieldValueViewModel>();
 
     private Guid template;
     private Guid SelectedTemplate
@@ -98,6 +99,7 @@ public partial class CreateVulnDialog: ComponentBase
     private IEnumerable<int> SelectedCwes { get; set; } = new HashSet<int>();
     private IEnumerable<Guid> SelectedTargets { get; set; } = new HashSet<Guid>();
     [Inject] private VulnController VulnController { get; set; }
+    [Inject] private VulnCustomFieldController VulnCustomFieldController { get; set; }
     [Inject] private ProjectController ProjectController { get; set; }
     [Inject] private TargetController TargetController { get; set; }
 	[Inject] private IAiService _aiService { get; set; }
@@ -146,6 +148,10 @@ public partial class CreateVulnDialog: ComponentBase
 
         }
         aiEnabled = _aiService.IsEnabled();
+        
+        // Load custom fields
+        await LoadCustomFields();
+        
         await base.OnInitializedAsync();
 	
     }
@@ -185,6 +191,15 @@ public partial class CreateVulnDialog: ComponentBase
             else
             {
 	            model.ProjectId = null;
+            }
+            
+            // Add custom field values to the model
+            foreach (var customField in CustomFields)
+            {
+                if (!string.IsNullOrEmpty(customField.Value))
+                {
+                    model.CustomFieldValues[customField.CustomFieldId] = customField.Value;
+                }
             }
             
 	        var response = await VulnController.Add(model);
@@ -338,5 +353,40 @@ public partial class CreateVulnDialog: ComponentBase
 		    StateHasChanged();
 	    }
         
+    }
+    
+    private Task LoadCustomFields()
+    {
+        try
+        {
+            var customFields = VulnCustomFieldController.GetActive();
+            CustomFields = customFields.Select(cf => new VulnCustomFieldValueViewModel
+            {
+                CustomFieldId = cf.Id,
+                Name = cf.Name,
+                Label = cf.Label,
+                Type = cf.Type,
+                IsRequired = cf.IsRequired,
+                IsUnique = cf.IsUnique,
+                Options = cf.Options,
+                DefaultValue = cf.DefaultValue,
+                Description = cf.Description,
+                Order = cf.Order,
+                Value = cf.DefaultValue ?? string.Empty
+            }).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading custom fields: {ex.Message}", Severity.Error);
+        }
+        
+        return Task.CompletedTask;
+    }
+    
+    private async Task OnCustomFieldChanged(VulnCustomFieldValueViewModel field)
+    {
+        // This method is called when a custom field value changes
+        // We could add validation here if needed
+        await Task.CompletedTask;
     }
 }

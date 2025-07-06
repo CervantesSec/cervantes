@@ -65,6 +65,7 @@ public class VulnController: ControllerBase
     private IDependencyCheckParser dependencyCheckParser = null;
     private ICweManager cweManager = null;
     private IVulnCweManager vulnCweManager = null;
+    private IVulnCustomFieldValueManager vulnCustomFieldValueManager = null;
     private readonly ILogger<VulnController> _logger = null;
     private readonly IWebHostEnvironment env;
     private IHttpContextAccessor HttpContextAccessor;
@@ -82,7 +83,7 @@ public class VulnController: ControllerBase
         INucleiParser nucleiParser, IAcunetixParser acunetixParser,
         INiktoParser niktoParser, IProwlerParser prowlerParser, ITrivyParser trivyParser,
         IBanditParser banditParser, IMasscanParser masscanParser, IDependencyCheckParser dependencyCheckParser,
-        ICweManager cweManager, IVulnCweManager vulnCweManager, ILogger<VulnController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor,
+        ICweManager cweManager, IVulnCweManager vulnCweManager, IVulnCustomFieldValueManager vulnCustomFieldValueManager, ILogger<VulnController> logger, IWebHostEnvironment env,IHttpContextAccessor HttpContextAccessor,
         IFileCheck fileCheck, IProjectUserManager projectUserManager,Sanitizer Sanitizer)
     {
         this.vulnManager = vulnManager;
@@ -113,6 +114,7 @@ public class VulnController: ControllerBase
         this.dependencyCheckParser = dependencyCheckParser;
         this.cweManager = cweManager;
         this.vulnCweManager = vulnCweManager;
+        this.vulnCustomFieldValueManager = vulnCustomFieldValueManager;
         _logger = logger;
         this.env = env;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -401,6 +403,27 @@ public class VulnController: ControllerBase
                         await vulnTargetManager.Context.SaveChangesAsync();
                     }
                 }
+                
+                // Process custom field values
+                if (model.CustomFieldValues != null && model.CustomFieldValues.Any())
+                {
+                    // Create custom field values using basic GenericManager methods
+                    foreach (var kvp in model.CustomFieldValues)
+                    {
+                        var customFieldValue = new VulnCustomFieldValue
+                        {
+                            Id = Guid.NewGuid(),
+                            VulnId = vuln.Id,
+                            VulnCustomFieldId = kvp.Key,
+                            Value = kvp.Value,
+                            CreatedDate = DateTime.UtcNow,
+                            ModifiedDate = DateTime.UtcNow,
+                            UserId = aspNetUserId
+                        };
+                        await vulnCustomFieldValueManager.AddAsync(customFieldValue);
+                    }
+                    await vulnCustomFieldValueManager.Context.SaveChangesAsync();
+                }
   
                 _logger.LogInformation("Vuln added successfully. User: {0}",
                     aspNetUserId);
@@ -541,6 +564,36 @@ public class VulnController: ControllerBase
                     }
                     await vulnTargetManager.Context.SaveChangesAsync();
 
+                }
+
+                // Handle custom field values
+                if (model.CustomFieldValues != null && model.CustomFieldValues.Any())
+                {
+                    // Remove existing custom field values for this vulnerability
+                    var existingValues = vulnCustomFieldValueManager.GetAll().Where(x => x.VulnId == vuln.Id);
+                    foreach (var existingValue in existingValues)
+                    {
+                        vulnCustomFieldValueManager.Remove(existingValue);
+                    }
+                    await vulnCustomFieldValueManager.Context.SaveChangesAsync();
+
+                    // Add new custom field values
+                    foreach (var customFieldValue in model.CustomFieldValues)
+                    {
+                        if (!string.IsNullOrEmpty(customFieldValue.Value))
+                        {
+                            var vulnCustomFieldValue = new VulnCustomFieldValue
+                            {
+                                Id = Guid.NewGuid(),
+                                VulnId = vuln.Id,
+                                VulnCustomFieldId = customFieldValue.Key,
+                                Value = Sanitizer.Sanitize(customFieldValue.Value),
+                                UserId = aspNetUserId
+                            };
+                            await vulnCustomFieldValueManager.AddAsync(vulnCustomFieldValue);
+                        }
+                    }
+                    await vulnCustomFieldValueManager.Context.SaveChangesAsync();
                 }
   
                 _logger.LogInformation("Vuln edited successfully. User: {0}",

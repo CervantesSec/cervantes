@@ -149,4 +149,10 @@ public class Vuln
     
     public List<VulnCwe> VulnCwes { get; set; }
     public List<VulnTargets> VulnTargets { get; set; }
+    
+    /// <summary>
+    /// Custom field values for this vulnerability
+    /// </summary>
+    [JsonIgnore]
+    public virtual ICollection<VulnCustomFieldValue> CustomFieldValues { get; set; } = new List<VulnCustomFieldValue>();
 }

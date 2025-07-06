@@ -1962,4 +1962,121 @@
     <data name="turkish" xml:space="preserve">
         <value>Türkisch</value>
     </data>
+    <data name="customFields" xml:space="preserve">
+        <value>Benutzerdefinierte Felder</value>
+    </data>
+    <data name="createCustomField" xml:space="preserve">
+        <value>Benutzerdefiniertes Feld erstellen</value>
+    </data>
+    <data name="editCustomField" xml:space="preserve">
+        <value>Benutzerdefiniertes Feld bearbeiten</value>
+    </data>
+    <data name="customFieldDetails" xml:space="preserve">
+        <value>Details des benutzerdefinierten Felds</value>
+    </data>
+    <data name="deleteCustomField" xml:space="preserve">
+        <value>Benutzerdefiniertes Feld löschen</value>
+    </data>
+    <data name="customFieldCreated" xml:space="preserve">
+        <value>Benutzerdefiniertes Feld erfolgreich erstellt</value>
+    </data>
+    <data name="customFieldUpdated" xml:space="preserve">
+        <value>Benutzerdefiniertes Feld erfolgreich aktualisiert</value>
+    </data>
+    <data name="customFieldDeleted" xml:space="preserve">
+        <value>Benutzerdefiniertes Feld erfolgreich gelöscht</value>
+    </data>
+    <data name="customFieldNotFound" xml:space="preserve">
+        <value>Benutzerdefiniertes Feld nicht gefunden</value>
+    </data>
+    <data name="customFieldNameExists" xml:space="preserve">
+        <value>Ein benutzerdefiniertes Feld mit diesem Namen existiert bereits</value>
+    </data>
+    <data name="label" xml:space="preserve">
+        <value>Bezeichnung</value>
+    </data>
+    <data name="unique" xml:space="preserve">
+        <value>Eindeutig</value>
+    </data>
+    <data name="searchable" xml:space="preserve">
+        <value>Durchsuchbar</value>
+    </data>
+    <data name="visibleInTable" xml:space="preserve">
+        <value>Sichtbar in Tabelle</value>
+    </data>
+    <data name="defaultValue" xml:space="preserve">
+        <value>Standardwert</value>
+    </data>
+    <data name="fieldTypeInput" xml:space="preserve">
+        <value>Texteingabe</value>
+    </data>
+    <data name="fieldTypeTextarea" xml:space="preserve">
+        <value>Textbereich</value>
+    </data>
+    <data name="fieldTypeSelect" xml:space="preserve">
+        <value>Auswahlliste</value>
+    </data>
+    <data name="fieldTypeNumber" xml:space="preserve">
+        <value>Zahl</value>
+    </data>
+    <data name="fieldTypeDate" xml:space="preserve">
+        <value>Datum</value>
+    </data>
+    <data name="fieldTypeBoolean" xml:space="preserve">
+        <value>Boolean</value>
+    </data>
+    <data name="customFieldsTab" xml:space="preserve">
+        <value>Benutzerdefinierte Felder</value>
+    </data>
+    <data name="customFieldHelp" xml:space="preserve">
+        <value>Benutzerdefinierte Felder ermöglichen es Ihnen, zusätzliche Informationen zu Ihren Schwachstellen hinzuzufügen</value>
+    </data>
+    <data name="customFieldNameHelp" xml:space="preserve">
+        <value>Name zur Identifizierung des Felds (alphanumerisch, Leerzeichen und Unterstriche erlaubt)</value>
+    </data>
+    <data name="customFieldLabelHelp" xml:space="preserve">
+        <value>Text, der dem Benutzer für dieses Feld angezeigt wird</value>
+    </data>
+    <data name="customFieldTypeHelp" xml:space="preserve">
+        <value>Datentyp, den dieses Feld enthalten kann</value>
+    </data>
+    <data name="customFieldOrderHelp" xml:space="preserve">
+        <value>Anzeigereihenfolge dieses Felds (kleinere Zahlen erscheinen zuerst)</value>
+    </data>
+    <data name="customFieldOptionsHelp" xml:space="preserve">
+        <value>Optionen für Auswahlfelder (eine pro Zeile)</value>
+    </data>
+    <data name="customFieldOptionsPlaceholder" xml:space="preserve">
+        <value>Option 1&#xD;&#xA;Option 2&#xD;&#xA;Option 3</value>
+    </data>
+    <data name="customFieldRequiredHelp" xml:space="preserve">
+        <value>Wenn aktiviert, muss dieses Feld beim Erstellen einer Schwachstelle ausgefüllt werden</value>
+    </data>
+    <data name="customFieldUniqueHelp" xml:space="preserve">
+        <value>Wenn aktiviert, muss jede Schwachstelle einen eindeutigen Wert für dieses Feld haben</value>
+    </data>
+    <data name="customFieldSearchableHelp" xml:space="preserve">
+        <value>Wenn aktiviert, können Sie Schwachstellen nach dem Wert dieses Felds suchen</value>
+    </data>
+    <data name="customFieldVisibleHelp" xml:space="preserve">
+        <value>Wenn aktiviert, wird dieses Feld als Spalte in der Tabellenansicht der Schwachstellen angezeigt</value>
+    </data>
+    <data name="noCustomFields" xml:space="preserve">
+        <value>Keine benutzerdefinierten Felder definiert</value>
+    </data>
+    <data name="inactive" xml:space="preserve">
+        <value>Inaktiv</value>
+    </data>
+    <data name="customFieldInactiveWarning" xml:space="preserve">
+        <value>Dieses benutzerdefinierte Feld ist inaktiv und wird nicht in Formularen angezeigt</value>
+    </data>
+    <data name="customFieldDeleteConfirm" xml:space="preserve">
+        <value>Sind Sie sicher, dass Sie dieses benutzerdefinierte Feld löschen möchten? Diese Aktion löscht auch alle zugehörigen Werte und kann nicht rückgängig gemacht werden.</value>
+    </data>
+    <data name="customFieldsManagement" xml:space="preserve">
+        <value>Verwaltung benutzerdefinierter Felder</value>
+    </data>
+    <data name="customFieldValue" xml:space="preserve">
+        <value>Wert des benutzerdefinierten Felds</value>
+    </data>
 </root>

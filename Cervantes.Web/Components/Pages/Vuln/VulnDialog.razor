@@ -74,12 +74,12 @@
 									</MudSelect>
                 
 								</div>
-								<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+								<MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@(async (e) => await EditMode())">@localizer["details"]</MudChip>
 							</MudStack>
 						}
 						else
 						{
-							<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+							<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@(async (e) => await EditMode())">@localizer["edit"]</MudChip>
 						}
 					}
 					
@@ -229,6 +229,21 @@
 
                             </MudStack>
                         </MudTabPanel>
+                        
+                        @* Custom Fields Tab - Edit Mode *@
+                        @if (CustomFields.Any())
+                        {
+                            <MudTabPanel Text="@localizer["customFields"]" Icon="@Icons.Material.Filled.Extension" Style="min-width: 260px;">
+                                <MudStack AlignItems="AlignItems.Stretch">
+                                    @foreach (var customField in CustomFields)
+                                    {
+                                        <Cervantes.Web.Components.Shared.VulnCustomFieldRenderer 
+                                            Field="@customField"
+                                            FieldChanged="@OnCustomFieldChanged" />
+                                    }
+                                </MudStack>
+                            </MudTabPanel>
+                        }
                     </MudForm>
                 </MudTabs>
                 <MudStack Row="true" Justify="Justify.FlexEnd">
@@ -916,6 +931,60 @@
 								<MudDataGridPager T="VulnAttachment"/>
 							</PagerContent>
 						</MudDataGrid>
+					</MudTabPanel>
+				}
+				
+				@* Custom Fields Tab - View Mode *@
+				@if (CustomFields.Any(cf => !string.IsNullOrEmpty(cf.Value)))
+				{
+					<MudTabPanel Text="@localizer["customFields"]" Icon="@Icons.Material.Filled.Extension" Style="min-width: 260px;">
+						<MudGrid>
+							@foreach (var customField in CustomFields.Where(cf => !string.IsNullOrEmpty(cf.Value)))
+							{
+								<MudItem xs="12" sm="12" md="12">
+									<MudCard Elevation="25">
+										<MudCardHeader>
+											<CardHeaderContent>
+												<MudText>@customField.Label</MudText>
+											</CardHeaderContent>
+										</MudCardHeader>
+										<MudCardContent>
+											@switch (customField.Type)
+											{
+												case VulnCustomFieldType.Boolean:
+													@if (bool.TryParse(customField.Value, out var boolValue))
+													{
+														<MudIcon Icon="@(boolValue ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)" 
+														         Color="@(boolValue ? Color.Success : Color.Error)" />
+														<span class="ml-2">@(boolValue ? localizer["yes"] : localizer["no"])</span>
+													}
+													else
+													{
+														<span>@customField.Value</span>
+													}
+													break;
+												case VulnCustomFieldType.Date:
+													@if (DateTime.TryParse(customField.Value, out var dateValue))
+													{
+														<span>@dateValue.ToString("yyyy-MM-dd")</span>
+													}
+													else
+													{
+														<span>@customField.Value</span>
+													}
+													break;
+												case VulnCustomFieldType.Textarea:
+													@((MarkupString)customField.Value)
+													break;
+												default:
+													@customField.Value
+													break;
+											}
+										</MudCardContent>
+									</MudCard>
+								</MudItem>
+							}
+						</MudGrid>
 					</MudTabPanel>
 				}
 

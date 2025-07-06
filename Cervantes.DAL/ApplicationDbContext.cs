@@ -133,6 +133,40 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         modelBuilder.Entity<Log>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
+            
+        // Custom Field Configuration
+        modelBuilder.Entity<VulnCustomField>()
+            .HasIndex(e => e.Name)
+            .IsUnique()
+            .HasDatabaseName("IX_VulnCustomField_Name");
+            
+        modelBuilder.Entity<VulnCustomField>()
+            .Property(e => e.Name)
+            .IsRequired()
+            .HasMaxLength(100);
+            
+        modelBuilder.Entity<VulnCustomField>()
+            .Property(e => e.Label)
+            .IsRequired()
+            .HasMaxLength(200);
+            
+        // Custom Field Value Configuration
+        modelBuilder.Entity<VulnCustomFieldValue>()
+            .HasIndex(e => new { e.VulnId, e.VulnCustomFieldId })
+            .IsUnique()
+            .HasDatabaseName("IX_VulnCustomFieldValue_VulnId_CustomFieldId");
+            
+        modelBuilder.Entity<VulnCustomFieldValue>()
+            .HasOne(v => v.Vuln)
+            .WithMany(u => u.CustomFieldValues)
+            .HasForeignKey(v => v.VulnId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<VulnCustomFieldValue>()
+            .HasOne(v => v.VulnCustomField)
+            .WithMany(cf => cf.Values)
+            .HasForeignKey(v => v.VulnCustomFieldId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
     
     public DbSet<Report> Reports { get; set; }
@@ -152,4 +186,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     
     public DbSet<RssSource> RssSource { get; set; }
     public DbSet<RssNews> RssNews { get; set; }
+    
+    /// <summary>
+    /// Table for custom field definitions
+    /// </summary>
+    public DbSet<VulnCustomField> VulnCustomFields { get; set; }
+    
+    /// <summary>
+    /// Table for custom field values
+    /// </summary>
+    public DbSet<VulnCustomFieldValue> VulnCustomFieldValues { get; set; }
 }

@@ -1,0 +1,38 @@
+@using Cervantes.CORE
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Cervantes.Web.Controllers
+@using global::AuthPermissions.AspNetCore
+@using Microsoft.AspNetCore.Mvc
+@inject IStringLocalizer<Resource> localizer
+@inject ISnackbar Snackbar
+@attribute [HasPermission(Permissions.VulnCustomFieldsDelete)]
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudText Typo="Typo.h4">
+            <MudIcon Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error"/>
+            @localizer["delete"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudStack>
+            <MudAlert Severity="MudBlazor.Severity.Warning">
+                <MudText>@localizer["deleteCustomFieldWarning"]</MudText>
+            </MudAlert>
+            <MudText>
+                @localizer["confirmDeleteCustomField"]: <strong>@customField.Name (@customField.Label)</strong>
+            </MudText>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Color="Color.Error" 
+                   StartIcon="@Icons.Material.Filled.Delete" 
+                   Variant="Variant.Filled" 
+                   OnClick="Submit">
+            @localizer["delete"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>

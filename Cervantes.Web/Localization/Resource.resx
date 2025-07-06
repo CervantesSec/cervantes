@@ -1967,4 +1967,111 @@
     <data name="turkish" xml:space="preserve">
         <value>Turkish</value>
     </data>
+    <data name="customFields" xml:space="preserve">
+        <value>Custom Fields</value>
+    </data>
+    <data name="customField" xml:space="preserve">
+        <value>Custom Field</value>
+    </data>
+    <data name="createCustomField" xml:space="preserve">
+        <value>Create Custom Field</value>
+    </data>
+    <data name="editCustomField" xml:space="preserve">
+        <value>Edit Custom Field</value>
+    </data>
+    <data name="label" xml:space="preserve">
+        <value>Label</value>
+    </data>
+    <data name="unique" xml:space="preserve">
+        <value>Unique</value>
+    </data>
+    <data name="searchable" xml:space="preserve">
+        <value>Searchable</value>
+    </data>
+    <data name="visibleInTable" xml:space="preserve">
+        <value>Visible in Table</value>
+    </data>
+    <data name="defaultValue" xml:space="preserve">
+        <value>Default Value</value>
+    </data>
+    <data name="fieldTypeInput" xml:space="preserve">
+        <value>Text Input</value>
+    </data>
+    <data name="fieldTypeTextarea" xml:space="preserve">
+        <value>Text Area</value>
+    </data>
+    <data name="fieldTypeSelect" xml:space="preserve">
+        <value>Select List</value>
+    </data>
+    <data name="fieldTypeNumber" xml:space="preserve">
+        <value>Number</value>
+    </data>
+    <data name="fieldTypeDate" xml:space="preserve">
+        <value>Date</value>
+    </data>
+    <data name="fieldTypeBoolean" xml:space="preserve">
+        <value>Boolean</value>
+    </data>
+    <data name="customFieldNameHelp" xml:space="preserve">
+        <value>Alphanumeric characters, spaces, and underscores only</value>
+    </data>
+    <data name="customFieldLabelHelp" xml:space="preserve">
+        <value>Display name for the field</value>
+    </data>
+    <data name="customFieldOrderHelp" xml:space="preserve">
+        <value>Display order in forms</value>
+    </data>
+    <data name="customFieldOptionsHelp" xml:space="preserve">
+        <value>One option per line for select fields</value>
+    </data>
+    <data name="customFieldOptionsPlaceholder" xml:space="preserve">
+        <value>Option 1
+Option 2
+Option 3</value>
+    </data>
+    <data name="customFieldCreated" xml:space="preserve">
+        <value>Custom field created successfully</value>
+    </data>
+    <data name="customFieldCreateError" xml:space="preserve">
+        <value>Error creating custom field</value>
+    </data>
+    <data name="customFieldUpdated" xml:space="preserve">
+        <value>Custom field updated successfully</value>
+    </data>
+    <data name="customFieldUpdateError" xml:space="preserve">
+        <value>Error updating custom field</value>
+    </data>
+    <data name="customFieldDeleted" xml:space="preserve">
+        <value>Custom field deleted successfully</value>
+    </data>
+    <data name="customFieldDeleteError" xml:space="preserve">
+        <value>Error deleting custom field</value>
+    </data>
+    <data name="customFieldsDeleted" xml:space="preserve">
+        <value>custom fields deleted successfully</value>
+    </data>
+    <data name="customFieldsDeleteError" xml:space="preserve">
+        <value>custom fields failed to delete</value>
+    </data>
+    <data name="deleteCustomFieldWarning" xml:space="preserve">
+        <value>This action will permanently delete the custom field and all its values. This cannot be undone.</value>
+    </data>
+    <data name="deleteCustomFieldsWarning" xml:space="preserve">
+        <value>This action will permanently delete the selected custom fields and all their values. This cannot be undone.</value>
+    </data>
+    <data name="confirmDeleteCustomField" xml:space="preserve">
+        <value>Are you sure you want to delete this custom field</value>
+    </data>
+    <data name="confirmDeleteCustomFields" xml:space="preserve">
+        <value>Are you sure you want to delete these custom fields</value>
+    </data>
+    <data name="selectOption" xml:space="preserve">
+        <value>Select an option</value>
+    </data>
+    <data name="unsupportedFieldType" xml:space="preserve">
+        <value>Unsupported field type</value>
+    </data>
+    <data name="items" xml:space="preserve">
+        <value>items</value>
+    </data>
 </root>

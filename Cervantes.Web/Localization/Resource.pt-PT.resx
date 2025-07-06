@@ -1931,4 +1931,121 @@
     <data name="exportPDF" xml:space="preserve">
         <value>Exportar PDF</value>
     </data>
+    <data name="customFields" xml:space="preserve">
+        <value>Campos Personalizados</value>
+    </data>
+    <data name="createCustomField" xml:space="preserve">
+        <value>Criar Campo Personalizado</value>
+    </data>
+    <data name="editCustomField" xml:space="preserve">
+        <value>Editar Campo Personalizado</value>
+    </data>
+    <data name="customFieldDetails" xml:space="preserve">
+        <value>Detalhes do Campo Personalizado</value>
+    </data>
+    <data name="deleteCustomField" xml:space="preserve">
+        <value>Eliminar Campo Personalizado</value>
+    </data>
+    <data name="customFieldCreated" xml:space="preserve">
+        <value>Campo personalizado criado com sucesso</value>
+    </data>
+    <data name="customFieldUpdated" xml:space="preserve">
+        <value>Campo personalizado atualizado com sucesso</value>
+    </data>
+    <data name="customFieldDeleted" xml:space="preserve">
+        <value>Campo personalizado eliminado com sucesso</value>
+    </data>
+    <data name="customFieldNotFound" xml:space="preserve">
+        <value>Campo personalizado não encontrado</value>
+    </data>
+    <data name="customFieldNameExists" xml:space="preserve">
+        <value>Já existe um campo personalizado com este nome</value>
+    </data>
+    <data name="label" xml:space="preserve">
+        <value>Etiqueta</value>
+    </data>
+    <data name="unique" xml:space="preserve">
+        <value>Único</value>
+    </data>
+    <data name="searchable" xml:space="preserve">
+        <value>Pesquisável</value>
+    </data>
+    <data name="visibleInTable" xml:space="preserve">
+        <value>Visível na Tabela</value>
+    </data>
+    <data name="defaultValue" xml:space="preserve">
+        <value>Valor Padrão</value>
+    </data>
+    <data name="fieldTypeInput" xml:space="preserve">
+        <value>Entrada de Texto</value>
+    </data>
+    <data name="fieldTypeTextarea" xml:space="preserve">
+        <value>Área de Texto</value>
+    </data>
+    <data name="fieldTypeSelect" xml:space="preserve">
+        <value>Lista de Seleção</value>
+    </data>
+    <data name="fieldTypeNumber" xml:space="preserve">
+        <value>Número</value>
+    </data>
+    <data name="fieldTypeDate" xml:space="preserve">
+        <value>Data</value>
+    </data>
+    <data name="fieldTypeBoolean" xml:space="preserve">
+        <value>Booleano</value>
+    </data>
+    <data name="customFieldsTab" xml:space="preserve">
+        <value>Campos Personalizados</value>
+    </data>
+    <data name="customFieldHelp" xml:space="preserve">
+        <value>Os campos personalizados permitem adicionar informações adicionais às suas vulnerabilidades</value>
+    </data>
+    <data name="customFieldNameHelp" xml:space="preserve">
+        <value>Nome usado para identificar o campo (alfanumérico, espaços e underscores permitidos)</value>
+    </data>
+    <data name="customFieldLabelHelp" xml:space="preserve">
+        <value>Texto exibido ao utilizador para este campo</value>
+    </data>
+    <data name="customFieldTypeHelp" xml:space="preserve">
+        <value>Tipo de dados que este campo pode conter</value>
+    </data>
+    <data name="customFieldOrderHelp" xml:space="preserve">
+        <value>Ordem de exibição deste campo (números menores aparecem primeiro)</value>
+    </data>
+    <data name="customFieldOptionsHelp" xml:space="preserve">
+        <value>Opções para campos de seleção (uma por linha)</value>
+    </data>
+    <data name="customFieldOptionsPlaceholder" xml:space="preserve">
+        <value>Opção 1&#xD;&#xA;Opção 2&#xD;&#xA;Opção 3</value>
+    </data>
+    <data name="customFieldRequiredHelp" xml:space="preserve">
+        <value>Se ativado, este campo deve ser preenchido ao criar uma vulnerabilidade</value>
+    </data>
+    <data name="customFieldUniqueHelp" xml:space="preserve">
+        <value>Se ativado, cada vulnerabilidade deve ter um valor único para este campo</value>
+    </data>
+    <data name="customFieldSearchableHelp" xml:space="preserve">
+        <value>Se ativado, pode pesquisar vulnerabilidades pelo valor deste campo</value>
+    </data>
+    <data name="customFieldVisibleHelp" xml:space="preserve">
+        <value>Se ativado, este campo aparecerá como coluna na vista de tabela das vulnerabilidades</value>
+    </data>
+    <data name="noCustomFields" xml:space="preserve">
+        <value>Nenhum campo personalizado definido</value>
+    </data>
+    <data name="inactive" xml:space="preserve">
+        <value>Inativo</value>
+    </data>
+    <data name="customFieldInactiveWarning" xml:space="preserve">
+        <value>Este campo personalizado está inativo e não será exibido nos formulários</value>
+    </data>
+    <data name="customFieldDeleteConfirm" xml:space="preserve">
+        <value>Tem certeza de que deseja eliminar este campo personalizado? Esta ação também eliminará todos os valores associados e não pode ser desfeita.</value>
+    </data>
+    <data name="customFieldsManagement" xml:space="preserve">
+        <value>Gestão de Campos Personalizados</value>
+    </data>
+    <data name="customFieldValue" xml:space="preserve">
+        <value>Valor do Campo Personalizado</value>
+    </data>
 </root>

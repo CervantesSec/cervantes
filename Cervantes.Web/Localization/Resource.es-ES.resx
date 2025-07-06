@@ -2016,4 +2016,111 @@ Una vez que hayas escaneado el código QR o ingresado la clave anterior, tu apli
     <data name="exportPDF" xml:space="preserve">
         <value>Exportar PDF</value>
     </data>
+    <data name="customFields" xml:space="preserve">
+        <value>Campos Personalizados</value>
+    </data>
+    <data name="customField" xml:space="preserve">
+        <value>Campo Personalizado</value>
+    </data>
+    <data name="createCustomField" xml:space="preserve">
+        <value>Crear Campo Personalizado</value>
+    </data>
+    <data name="editCustomField" xml:space="preserve">
+        <value>Editar Campo Personalizado</value>
+    </data>
+    <data name="label" xml:space="preserve">
+        <value>Etiqueta</value>
+    </data>
+    <data name="unique" xml:space="preserve">
+        <value>Único</value>
+    </data>
+    <data name="searchable" xml:space="preserve">
+        <value>Buscable</value>
+    </data>
+    <data name="visibleInTable" xml:space="preserve">
+        <value>Visible en Tabla</value>
+    </data>
+    <data name="defaultValue" xml:space="preserve">
+        <value>Valor por Defecto</value>
+    </data>
+    <data name="fieldTypeInput" xml:space="preserve">
+        <value>Entrada de Texto</value>
+    </data>
+    <data name="fieldTypeTextarea" xml:space="preserve">
+        <value>Área de Texto</value>
+    </data>
+    <data name="fieldTypeSelect" xml:space="preserve">
+        <value>Lista Desplegable</value>
+    </data>
+    <data name="fieldTypeNumber" xml:space="preserve">
+        <value>Número</value>
+    </data>
+    <data name="fieldTypeDate" xml:space="preserve">
+        <value>Fecha</value>
+    </data>
+    <data name="fieldTypeBoolean" xml:space="preserve">
+        <value>Booleano</value>
+    </data>
+    <data name="customFieldNameHelp" xml:space="preserve">
+        <value>Solo caracteres alfanuméricos, espacios y guiones bajos</value>
+    </data>
+    <data name="customFieldLabelHelp" xml:space="preserve">
+        <value>Nombre visible para el campo</value>
+    </data>
+    <data name="customFieldOrderHelp" xml:space="preserve">
+        <value>Orden de visualización en formularios</value>
+    </data>
+    <data name="customFieldOptionsHelp" xml:space="preserve">
+        <value>Una opción por línea para campos de selección</value>
+    </data>
+    <data name="customFieldOptionsPlaceholder" xml:space="preserve">
+        <value>Opción 1
+Opción 2
+Opción 3</value>
+    </data>
+    <data name="customFieldCreated" xml:space="preserve">
+        <value>Campo personalizado creado correctamente</value>
+    </data>
+    <data name="customFieldCreateError" xml:space="preserve">
+        <value>Error al crear el campo personalizado</value>
+    </data>
+    <data name="customFieldUpdated" xml:space="preserve">
+        <value>Campo personalizado actualizado correctamente</value>
+    </data>
+    <data name="customFieldUpdateError" xml:space="preserve">
+        <value>Error al actualizar el campo personalizado</value>
+    </data>
+    <data name="customFieldDeleted" xml:space="preserve">
+        <value>Campo personalizado eliminado correctamente</value>
+    </data>
+    <data name="customFieldDeleteError" xml:space="preserve">
+        <value>Error al eliminar el campo personalizado</value>
+    </data>
+    <data name="customFieldsDeleted" xml:space="preserve">
+        <value>campos personalizados eliminados correctamente</value>
+    </data>
+    <data name="customFieldsDeleteError" xml:space="preserve">
+        <value>campos personalizados no se pudieron eliminar</value>
+    </data>
+    <data name="deleteCustomFieldWarning" xml:space="preserve">
+        <value>Esta acción eliminará permanentemente el campo personalizado y todos sus valores. No se puede deshacer.</value>
+    </data>
+    <data name="deleteCustomFieldsWarning" xml:space="preserve">
+        <value>Esta acción eliminará permanentemente los campos personalizados seleccionados y todos sus valores. No se puede deshacer.</value>
+    </data>
+    <data name="confirmDeleteCustomField" xml:space="preserve">
+        <value>¿Está seguro de que desea eliminar este campo personalizado</value>
+    </data>
+    <data name="confirmDeleteCustomFields" xml:space="preserve">
+        <value>¿Está seguro de que desea eliminar estos campos personalizados</value>
+    </data>
+    <data name="selectOption" xml:space="preserve">
+        <value>Seleccionar una opción</value>
+    </data>
+    <data name="unsupportedFieldType" xml:space="preserve">
+        <value>Tipo de campo no soportado</value>
+    </data>
+    <data name="items" xml:space="preserve">
+        <value>elementos</value>
+    </data>
 </root>
