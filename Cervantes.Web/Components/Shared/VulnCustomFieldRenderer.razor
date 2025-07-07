@@ -1,0 +1,139 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using Cervantes.Web.Localization
+@inject IStringLocalizer<Resource> localizer
+
+@* Render custom field based on its type *@
+@switch (Field.Type)
+{
+    case VulnCustomFieldType.Input:
+        <MudTextField 
+            @bind-Value="@Field.Value" 
+            Label="@Field.Label" 
+            Required="@Field.IsRequired"
+            Placeholder="@Field.DefaultValue"
+            HelperText="@Field.Description"
+            Adornment="Adornment.Start" 
+            AdornmentIcon="@Icons.Material.Filled.TextFields"/>
+        break;
+        
+    case VulnCustomFieldType.Textarea:
+        <MudTextField 
+            @bind-Value="@Field.Value" 
+            Label="@Field.Label" 
+            Required="@Field.IsRequired"
+            Placeholder="@Field.DefaultValue"
+            HelperText="@Field.Description"
+            Lines="3"
+            Adornment="Adornment.Start" 
+            AdornmentIcon="@Icons.Material.Filled.Notes"/>
+        break;
+        
+    case VulnCustomFieldType.Select:
+        <MudSelect 
+            @bind-Value="@Field.Value" 
+            Label="@Field.Label" 
+            Required="@Field.IsRequired"
+            HelperText="@Field.Description"
+            AdornmentIcon="@Icons.Material.Filled.ArrowDropDown" 
+            Adornment="Adornment.Start">
+            @if (!Field.IsRequired && string.IsNullOrEmpty(Field.DefaultValue))
+            {
+                <MudSelectItem Value="@string.Empty">@localizer["selectOption"]</MudSelectItem>
+            }
+            @if (Field.OptionsArray != null)
+            {
+                @foreach (var option in Field.OptionsArray)
+                {
+                    <MudSelectItem Value="@option">@option</MudSelectItem>
+                }
+            }
+        </MudSelect>
+        break;
+        
+    case VulnCustomFieldType.Number:
+        <MudNumericField 
+            @bind-Value="@NumberValue" 
+            Label="@Field.Label" 
+            Required="@Field.IsRequired"
+            HelperText="@Field.Description"
+            Adornment="Adornment.Start" 
+            AdornmentIcon="@Icons.Material.Filled.Numbers"
+            Culture="@CultureInfo.InvariantCulture"/>
+        break;
+        
+    case VulnCustomFieldType.Date:
+        <MudDatePicker 
+            @bind-Date="@DateValue" 
+            Label="@Field.Label" 
+            Required="@Field.IsRequired"
+            HelperText="@Field.Description"
+            Adornment="Adornment.Start" 
+            AdornmentIcon="@Icons.Material.Filled.CalendarToday"/>
+        break;
+        
+    case VulnCustomFieldType.Boolean:
+        <MudSwitch 
+            @bind-Value="@BoolValue" 
+            Label="@Field.Label" 
+            Color="Color.Primary"
+            UncheckedColor="Color.Default"/>
+        @if (!string.IsNullOrEmpty(Field.Description))
+        {
+            <MudText Typo="Typo.caption" Class="mt-1">@Field.Description</MudText>
+        }
+        break;
+        
+    default:
+        <MudAlert Severity="Severity.Warning">
+            @localizer["unsupportedFieldType"]: @Field.Type
+        </MudAlert>
+        break;
+}
+
+@code {
+    [Parameter] public VulnCustomFieldValueViewModel Field { get; set; }
+    [Parameter] public EventCallback<VulnCustomFieldValueViewModel> FieldChanged { get; set; }
+
+    // Type-specific properties for proper binding
+    private double? NumberValue
+    {
+        get => double.TryParse(Field.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result) ? result : null;
+        set 
+        { 
+            Field.Value = value?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
+            FieldChanged.InvokeAsync(Field);
+        }
+    }
+
+    private DateTime? DateValue
+    {
+        get => DateTime.TryParse(Field.Value, out var result) ? result : null;
+        set 
+        { 
+            Field.Value = value?.ToString("yyyy-MM-dd") ?? string.Empty;
+            FieldChanged.InvokeAsync(Field);
+        }
+    }
+
+    private bool BoolValue
+    {
+        get => bool.TryParse(Field.Value, out var result) && result;
+        set 
+        { 
+            Field.Value = value.ToString().ToLower();
+            FieldChanged.InvokeAsync(Field);
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        // Set default value if field value is empty and default is provided
+        if (string.IsNullOrEmpty(Field.Value) && !string.IsNullOrEmpty(Field.DefaultValue))
+        {
+            Field.Value = Field.DefaultValue;
+        }
+    }
+}
