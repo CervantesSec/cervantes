@@ -3,6 +3,7 @@ using Cervantes.IFR.Email;
 using Cervantes.IFR.Export;
 using Cervantes.IFR.File;
 using Cervantes.IFR.Jira;
+using Cervantes.IFR.Ldap;
 
 namespace Cervantes.Web.Extensions;
 
@@ -27,6 +28,9 @@ public static class ExternalServiceExtensions
         
         // AI Services
         services.AddAiServices(configuration);
+        
+        // LDAP Services
+        services.AddLdapServices(configuration);
         
         // File and Export Services
         services.AddFileServices();
@@ -72,6 +76,28 @@ public static class ExternalServiceExtensions
     {
         services.AddSingleton<IAiConfiguration>(configuration.GetSection("AIConfiguration").Get<AiConfiguration>());
         services.AddScoped<IAiService, AiService>();
+        
+        return services;
+    }
+
+    /// <summary>
+    /// Registers LDAP authentication services
+    /// </summary>
+    /// <param name="services">The service collection</param>
+    /// <param name="configuration">The configuration</param>
+    /// <returns>The service collection for chaining</returns>
+    public static IServiceCollection AddLdapServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        var ldapConfig = configuration.GetSection("LdapConfiguration").Get<LdapConfiguration>();
+        
+        if (ldapConfig == null)
+        {
+            ldapConfig = new LdapConfiguration();
+            configuration.GetSection("LdapConfiguration").Bind(ldapConfig);
+        }
+        
+        services.AddSingleton<ILdapConfiguration>(ldapConfig);
+        services.AddScoped<ILdapService, LdapService>();
         
         return services;
     }

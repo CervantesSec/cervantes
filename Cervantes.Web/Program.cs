@@ -14,6 +14,7 @@ using Cervantes.DAL;
 using Cervantes.IFR;
 using Cervantes.Server.Helpers;
 using Cervantes.Web.AuthPermissions;
+using Cervantes.Web.Authentication;
 using Cervantes.Web.Extensions;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -87,6 +88,23 @@ if (builder.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
             options.ClaimActions.MapUniqueJsonKey(ClaimTypes.Name, "email");
             options.Scope.Add("email");
         });
+}
+
+// LDAP Authentication
+if (builder.Configuration.GetValue<bool>("LdapConfiguration:Enabled"))
+{
+    builder.Services.AddAuthentication()
+        .AddScheme<LdapAuthenticationOptions, LdapAuthenticationHandler>(
+            LdapDefaults.AuthenticationScheme,
+            LdapDefaults.DisplayName,
+            options =>
+            {
+                options.CallbackPath = new PathString("/Account/ExternalLogin");
+                options.SignInScheme = IdentityConstants.ExternalScheme;
+            });
+    
+    // Register the LDAP authentication handler as a service
+    builder.Services.AddScoped<LdapAuthenticationHandler>();
 }
 
 /*builder.Services.ConfigureApplicationCookie(options =>
@@ -220,6 +238,7 @@ builder.Services.AddVulnerabilityParsers();
 
 // Register all external services
 builder.Services.AddExternalServices(builder.Configuration);
+
 // Register all controllers
 builder.Services.AddCervantesControllers();
 

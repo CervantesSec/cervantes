@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Task = System.Threading.Tasks.Task;
 using Cervantes.Web.Components.Account;
 using Microsoft.AspNetCore.Components;
+using Cervantes.IFR.Ldap;
+using AuthPermissions.AdminCode;
 
 
 namespace Microsoft.AspNetCore.Routing;
@@ -48,6 +50,97 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
 
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return TypedResults.Challenge(properties, [provider]);
+        });
+
+        accountGroup.MapPost("/PerformLdapLogin", async (
+            HttpContext context,
+            [FromServices] SignInManager<ApplicationUser> signInManager,
+            [FromServices] UserManager<ApplicationUser> userManager,
+            [FromServices] ILdapService ldapService,
+            [FromServices] ILdapConfiguration ldapConfiguration,
+            [FromServices] IAuthUsersAdminService authUsersAdminService,
+            [FromServices] ILogger<Program> logger,
+            [FromForm] string username,
+            [FromForm] string password) =>
+        {
+            try
+            {
+                // Validate LDAP credentials
+                var isValid = await ldapService.ValidateUserAsync(username, password);
+                if (!isValid)
+                {
+                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Invalid%20LDAP%20credentials");
+                }
+
+                // Get user information from LDAP
+                var ldapUser = await ldapService.GetUserInfoAsync(username);
+                if (ldapUser == null)
+                {
+                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Could%20not%20retrieve%20user%20information%20from%20LDAP");
+                }
+
+                // Try to find existing user
+                var existingUser = await userManager.FindByNameAsync(username);
+                if (existingUser != null)
+                {
+                    // Mark as external and assign roles if needed
+                    if (!existingUser.ExternalLogin)
+                    {
+                        existingUser.ExternalLogin = true;
+                        await userManager.UpdateAsync(existingUser);
+                    }
+
+                    var authUser = await authUsersAdminService.FindAuthUserByUserIdAsync(existingUser.Id);
+                    if (authUser.Result == null || authUser.Result.UserRoles.Count == 0)
+                    {
+                        var roleToAssign = DetermineUserRole(ldapUser.Groups, ldapConfiguration);
+                        var roles = new List<string> { roleToAssign };
+                        await authUsersAdminService.AddNewUserAsync(existingUser.Id, existingUser.Email, existingUser.UserName, roles);
+                    }
+
+                    await signInManager.SignInAsync(existingUser, isPersistent: true);
+                    
+                    // Always redirect to home page to avoid redirection issues
+                    logger.LogInformation("LDAP Login successful for user {Username}, redirecting to home", username);
+                    return TypedResults.LocalRedirect("~/");
+                }
+
+                // Create new user
+                if (string.IsNullOrEmpty(ldapUser.Email))
+                {
+                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=No%20email%20address%20found%20in%20LDAP");
+                }
+
+                var user = new ApplicationUser
+                {
+                    UserName = username,
+                    Email = ldapUser.Email,
+                    FullName = ldapUser.DisplayName ?? username,
+                    EmailConfirmed = true,
+                    ExternalLogin = true
+                };
+
+                var createResult = await userManager.CreateAsync(user);
+                if (createResult.Succeeded)
+                {
+                    var roleToAssign = DetermineUserRole(ldapUser.Groups, ldapConfiguration);
+                    var roles = new List<string> { roleToAssign };
+                    await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, roles);
+
+                    await signInManager.SignInAsync(user, isPersistent: true);
+                    
+                    // Always redirect to home page to avoid redirection issues
+                    logger.LogInformation("LDAP Login successful for new user {Username}, redirecting to home", username);
+                    return TypedResults.LocalRedirect("~/");
+                }
+
+                return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Error%20creating%20user%20account");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error during LDAP login for user {Username}", username);
+                return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=An%20error%20occurred%20during%20authentication");
+            }
         });
 
         accountGroup.MapPost("/Logout", async (
@@ -119,5 +212,37 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
         });
 
         return accountGroup;
+    }
+
+    /// <summary>
+    /// Maps LDAP groups to AuthPermissions roles using configuration
+    /// </summary>
+    /// <param name="ldapGroups">List of LDAP groups the user belongs to</param>
+    /// <param name="ldapConfiguration">LDAP configuration with role mapping</param>
+    /// <returns>The role to assign, defaults to configured DefaultRole</returns>
+    private static string DetermineUserRole(IList<string>? ldapGroups, ILdapConfiguration ldapConfiguration)
+    {
+        if (ldapGroups == null || !ldapGroups.Any())
+        {
+            return ldapConfiguration.DefaultRole; // Default role from configuration
+        }
+
+        // Use configured group to role mapping
+        var groupRoleMapping = ldapConfiguration.GroupRoleMapping ?? new Dictionary<string, string>();
+
+        // Check if user belongs to any configured groups (case-insensitive)
+        foreach (var group in ldapGroups)
+        {
+            var mappedRole = groupRoleMapping.FirstOrDefault(kvp => 
+                string.Equals(kvp.Key, group, StringComparison.OrdinalIgnoreCase));
+            
+            if (!string.IsNullOrEmpty(mappedRole.Value))
+            {
+                return mappedRole.Value;
+            }
+        }
+
+        // Default to configured default role
+        return ldapConfiguration.DefaultRole;
     }
 }
