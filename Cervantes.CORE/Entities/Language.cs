@@ -8,5 +8,6 @@ public enum Language
     Français = 3,
     Deutsch = 4,
     Italiano = 5,
-    Čech = 6
+    Čech = 6,
+    Turkish = 7
 }

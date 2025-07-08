@@ -87,6 +87,21 @@ public class AiService : IAiService
                     case Language.Português:
                         prompt = PromptHelper.VulnPortuguese;
                         break;
+                    case Language.Turkish:
+                        prompt = PromptHelper.VulnTurkish;
+                        break;
+                    case Language.Français:
+                        prompt = PromptHelper.VulnFrench;
+                        break;
+                    case Language.Deutsch:
+                        prompt = PromptHelper.VulnGerman;
+                        break;
+                    case Language.Italiano:
+                        prompt = PromptHelper.VulnItalian;
+                        break;
+                    case Language.Čech:
+                        prompt = PromptHelper.VulnCzech;
+                        break;
                 }
 
                 result = await PromptExecution(prompt, _aiConfiguration.Type, name, builder);
@@ -260,6 +275,201 @@ public class AiService : IAiService
                             .Replace("{EndDate}", project.EndDate.ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members3)
                             .Replace("{Scope}", targets3).Replace("{Vulns}", vulns3);
+                        break;
+                    case Language.Turkish:
+                        string message4 = PromptHelper.ExecutiveTurkish;
+                        var membersList4 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                            .Select(x => x.User.FullName).ToList();
+                        string members4 = "";
+                        foreach (var mem in membersList4)
+                        {
+                            members4 += mem + ", ";
+                        }
+
+                        var targetsList4 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string targets4 = "";
+                        foreach (var tar in targetsList4)
+                        {
+                            targets4 += tar.Name + ", ";
+                        }
+
+                        var vulnsList4 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string vulns4 = "";
+                        foreach (var vul in vulnsList4)
+                        {
+                            var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                            var targetsVuln = "";
+                            foreach (var t in tar)
+                            {
+                                targetsVuln += t.Target.Name + ", ";
+                            }
+
+                            vulns4 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                      targetsVuln + ". ";
+                        }
+
+                        prompt = message4.Replace("{Client}", project.Client.Name)
+                            .Replace("{Project}", project.Name)
+                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members4)
+                            .Replace("{Scope}", targets4).Replace("{Vulns}", vulns4);
+                        break;
+                    case Language.Français:
+                        string message5 = PromptHelper.ExecutiveFrench;
+                        var membersList5 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                            .Select(x => x.User.FullName).ToList();
+                        string members5 = "";
+                        foreach (var mem in membersList5)
+                        {
+                            members5 += mem + ", ";
+                        }
+
+                        var targetsList5 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string targets5 = "";
+                        foreach (var tar in targetsList5)
+                        {
+                            targets5 += tar.Name + ", ";
+                        }
+
+                        var vulnsList5 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string vulns5 = "";
+                        foreach (var vul in vulnsList5)
+                        {
+                            var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                            var targetsVuln = "";
+                            foreach (var t in tar)
+                            {
+                                targetsVuln += t.Target.Name + ", ";
+                            }
+
+                            vulns5 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                      targetsVuln + ". ";
+                        }
+
+                        prompt = message5.Replace("{Client}", project.Client.Name)
+                            .Replace("{Project}", project.Name)
+                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members5)
+                            .Replace("{Scope}", targets5).Replace("{Vulns}", vulns5);
+                        break;
+                    case Language.Deutsch:
+                        string message6 = PromptHelper.ExecutiveGerman;
+                        var membersList6 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                            .Select(x => x.User.FullName).ToList();
+                        string members6 = "";
+                        foreach (var mem in membersList6)
+                        {
+                            members6 += mem + ", ";
+                        }
+
+                        var targetsList6 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string targets6 = "";
+                        foreach (var tar in targetsList6)
+                        {
+                            targets6 += tar.Name + ", ";
+                        }
+
+                        var vulnsList6 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string vulns6 = "";
+                        foreach (var vul in vulnsList6)
+                        {
+                            var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                            var targetsVuln = "";
+                            foreach (var t in tar)
+                            {
+                                targetsVuln += t.Target.Name + ", ";
+                            }
+
+                            vulns6 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                      targetsVuln + ". ";
+                        }
+
+                        prompt = message6.Replace("{Client}", project.Client.Name)
+                            .Replace("{Project}", project.Name)
+                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members6)
+                            .Replace("{Scope}", targets6).Replace("{Vulns}", vulns6);
+                        break;
+                    case Language.Italiano:
+                        string message7 = PromptHelper.ExecutiveItalian;
+                        var membersList7 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                            .Select(x => x.User.FullName).ToList();
+                        string members7 = "";
+                        foreach (var mem in membersList7)
+                        {
+                            members7 += mem + ", ";
+                        }
+
+                        var targetsList7 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string targets7 = "";
+                        foreach (var tar in targetsList7)
+                        {
+                            targets7 += tar.Name + ", ";
+                        }
+
+                        var vulnsList7 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string vulns7 = "";
+                        foreach (var vul in vulnsList7)
+                        {
+                            var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                            var targetsVuln = "";
+                            foreach (var t in tar)
+                            {
+                                targetsVuln += t.Target.Name + ", ";
+                            }
+
+                            vulns7 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                      targetsVuln + ". ";
+                        }
+
+                        prompt = message7.Replace("{Client}", project.Client.Name)
+                            .Replace("{Project}", project.Name)
+                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members7)
+                            .Replace("{Scope}", targets7).Replace("{Vulns}", vulns7);
+                        break;
+                    case Language.Čech:
+                        string message8 = PromptHelper.ExecutiveCzech;
+                        var membersList8 = projectUserManager.GetAll().Where(x => x.ProjectId == project.Id)
+                            .Select(x => x.User.FullName).ToList();
+                        string members8 = "";
+                        foreach (var mem in membersList8)
+                        {
+                            members8 += mem + ", ";
+                        }
+
+                        var targetsList8 = targetManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string targets8 = "";
+                        foreach (var tar in targetsList8)
+                        {
+                            targets8 += tar.Name + ", ";
+                        }
+
+                        var vulnsList8 = vulnManager.GetAll().Where(x => x.ProjectId == project.Id).ToList();
+                        string vulns8 = "";
+                        foreach (var vul in vulnsList8)
+                        {
+                            var tar = vulnTargetManager.GetAll().Where(X => X.VulnId == vul.Id).ToList();
+                            var targetsVuln = "";
+                            foreach (var t in tar)
+                            {
+                                targetsVuln += t.Target.Name + ", ";
+                            }
+
+                            vulns8 += vul.Name + ", Risk: " + vul.Risk.ToString() + " , Assets Affected:" +
+                                      targetsVuln + ". ";
+                        }
+
+                        prompt = message8.Replace("{Client}", project.Client.Name)
+                            .Replace("{Project}", project.Name)
+                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members8)
+                            .Replace("{Scope}", targets8).Replace("{Vulns}", vulns8);
                         break;
                 }
 
