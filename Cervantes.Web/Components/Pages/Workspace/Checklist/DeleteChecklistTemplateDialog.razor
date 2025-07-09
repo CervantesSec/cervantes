@@ -1,0 +1,61 @@
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@attribute [HasPermission(Permissions.ChecklistTemplatesDelete)]
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4">
+            <MudIcon Icon="@Icons.Material.Filled.Delete" Color="Color.Error" /> 
+            @localizer["deleteChecklistTemplate"]
+        </MudText>
+    </TitleContent>
+    
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.False">
+            <MudAlert Severity="Severity.Warning" Class="mb-4">
+                @localizer["deleteTemplateWarning"]
+            </MudAlert>
+            
+            @if (template != null)
+            {
+                <MudStack>
+                    <MudText Typo="Typo.body1">
+                        @localizer["confirmDeleteTemplate"]: <strong>@template.Name</strong>
+                    </MudText>
+                    
+                    @if (template.Categories?.Count > 0)
+                    {
+                        <MudText Typo="Typo.body2" Class="text-muted">
+                            @localizer["thisTemplateContains"]: @template.Categories.Count @localizer["categories"] 
+                            @localizer["and"] @template.Categories.Sum(c => c.Items?.Count ?? 0) @localizer["items"]
+                        </MudText>
+                    }
+                    
+                    <MudText Typo="Typo.body2" Color="Color.Error">
+                        <MudIcon Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                        @localizer["thisActionCannotBeUndone"]
+                    </MudText>
+                </MudStack>
+            }
+        </MudContainer>
+    </DialogContent>
+    
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="Submit" Class="ml-2">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                <MudText Class="ms-2">@localizer["deleting"]</MudText>
+            }
+            else
+            {
+                <MudText>@localizer["delete"]</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>

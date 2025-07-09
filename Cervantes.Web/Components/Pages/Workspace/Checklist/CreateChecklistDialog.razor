@@ -26,14 +26,14 @@
                     </MudSelect>
 
                     <MudSelect @bind-Value="model.Type" For="@(() => model.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Style" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                        <MudSelectItem Value="ChecklistType.OWASPWSTG">OWASP WSTG</MudSelectItem>
-                        <MudSelectItem Value="ChecklistType.OWASPMASVS">OWASP MSTG</MudSelectItem>
+                        <MudSelectItem Value="ChecklistType.OWASPWSTG">@localizer["owaspWstg"]</MudSelectItem>
+                        <MudSelectItem Value="ChecklistType.OWASPMASVS">@localizer["owaspMstg"]</MudSelectItem>
                     </MudSelect>
                     @if (model.Type == ChecklistType.OWASPMASVS)
                     {
                         <MudSelect @bind-Value="model.MobileAppPlatform" For="@(() => model.MobileAppPlatform)" Label="@localizer["platform"]" AdornmentIcon="@Icons.Material.Filled.MobileFriendly" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                            <MudSelectItem Value="MobileAppPlatform.Android">Android</MudSelectItem>
-                            <MudSelectItem Value="MobileAppPlatform.iOS">iOS</MudSelectItem>
+                            <MudSelectItem Value="MobileAppPlatform.Android">@localizer["android"]</MudSelectItem>
+                            <MudSelectItem Value="MobileAppPlatform.iOS">@localizer["ios"]</MudSelectItem>
                         </MudSelect>
                     }
                 </MudStack>

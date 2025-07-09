@@ -2072,6 +2072,297 @@ Option 3</value>
         <value>Unsupported field type</value>
     </data>
     <data name="items" xml:space="preserve">
-        <value>items</value>
+        <value>Items</value>
+    </data>
+    <data name="owaspWstg" xml:space="preserve">
+        <value>OWASP WSTG</value>
+    </data>
+    <data name="owaspMstg" xml:space="preserve">
+        <value>OWASP MSTG</value>
+    </data>
+    <data name="android" xml:space="preserve">
+        <value>Android</value>
+    </data>
+    <data name="ios" xml:space="preserve">
+        <value>iOS</value>
+    </data>
+    <data name="wstg" xml:space="preserve">
+        <value>WSTG</value>
+    </data>
+    <data name="mastg" xml:space="preserve">
+        <value>MASTG</value>
+    </data>
+    <data name="categoryName" xml:space="preserve">
+        <value>Category Name</value>
+    </data>
+    <data name="categoryDescription" xml:space="preserve">
+        <value>Category Description</value>
+    </data>
+    <data name="addItem" xml:space="preserve">
+        <value>Add Item</value>
+    </data>
+    <data name="legacyChecklist" xml:space="preserve">
+        <value>Legacy Checklist</value>
+    </data>
+    <data name="checklistTemplates" xml:space="preserve">
+        <value>Checklist Templates</value>
+    </data>
+    <data name="testProcedure" xml:space="preserve">
+        <value>Test Procedure</value>
+    </data>
+    <data name="passCriteria" xml:space="preserve">
+        <value>Pass Criteria</value>
+    </data>
+    <data name="references" xml:space="preserve">
+        <value>References</value>
+    </data>
+    <data name="objectives" xml:space="preserve">
+        <value>Objectives</value>
+    </data>
+    <data name="viewChecklistTemplate" xml:space="preserve">
+        <value>View Checklist Template</value>
+    </data>
+    <data name="createChecklistTemplate" xml:space="preserve">
+        <value>Create Checklist Template</value>
+    </data>
+    <data name="noItemsInCategory" xml:space="preserve">
+        <value>No items in this category</value>
+    </data>
+    <data name="noCategoriesInTemplate" xml:space="preserve">
+        <value>No categories in this template</value>
+    </data>
+    <data name="noLegacyChecklists" xml:space="preserve">
+        <value>No legacy checklists found</value>
+    </data>
+    <data name="legacyChecklists" xml:space="preserve">
+        <value>Legacy Checklists</value>
+    </data>
+    <data name="deleteChecklistTemplates" xml:space="preserve">
+        <value>Delete Checklist Templates</value>
+    </data>
+    <data name="confirmDeleteTemplates" xml:space="preserve">
+        <value>Confirm Delete Templates</value>
+    </data>
+    <data name="thisActionCannotBeUndone" xml:space="preserve">
+        <value>This action cannot be undone</value>
+    </data>
+    <data name="templatesToDelete" xml:space="preserve">
+        <value>Templates to Delete</value>
+    </data>
+    <data name="systemTemplatesCannotBeDeleted" xml:space="preserve">
+        <value>System templates cannot be deleted</value>
+    </data>
+    <data name="confirmDeleteCustomChecklist" xml:space="preserve">
+        <value>Are you sure you want to delete this custom checklist?</value>
+    </data>
+    <data name="confirmDeleteMultipleCustomChecklists" xml:space="preserve">
+        <value>Are you sure you want to delete the selected custom checklists?</value>
+    </data>
+    <data name="confirmDeleteTemplate" xml:space="preserve">
+        <value>Are you sure you want to delete this template?</value>
+    </data>
+    <data name="createCustomChecklist" xml:space="preserve">
+        <value>Create Custom Checklist</value>
+    </data>
+    <data name="custom" xml:space="preserve">
+        <value>Custom</value>
+    </data>
+    <data name="customChecklists" xml:space="preserve">
+        <value>Custom Checklists</value>
+    </data>
+    <data name="deleteAll" xml:space="preserve">
+        <value>Delete All</value>
+    </data>
+    <data name="deleteChecklistTemplate" xml:space="preserve">
+        <value>Delete Checklist Template</value>
+    </data>
+    <data name="deleteCustomChecklist" xml:space="preserve">
+        <value>Delete Custom Checklist</value>
+    </data>
+    <data name="deleteSelectedCustomChecklists" xml:space="preserve">
+        <value>Delete Selected Custom Checklists</value>
+    </data>
+    <data name="deleteTemplateWarning" xml:space="preserve">
+        <value>This will permanently delete the template and all its data. This action cannot be undone.</value>
+    </data>
+    <data name="deleteTemplatesWarning" xml:space="preserve">
+        <value>This will permanently delete the selected templates and all their data. This action cannot be undone.</value>
+    </data>
+    <data name="deleting" xml:space="preserve">
+        <value>Deleting...</value>
+    </data>
+    <data name="executeChecklist" xml:space="preserve">
+        <value>Execute Checklist</value>
+    </data>
+    <data name="execution" xml:space="preserve">
+        <value>Execution</value>
+    </data>
+    <data name="executionDetails" xml:space="preserve">
+        <value>Execution Details</value>
+    </data>
+    <data name="fail" xml:space="preserve">
+        <value>Fail</value>
+    </data>
+    <data name="featureNotImplemented" xml:space="preserve">
+        <value>Feature not implemented</value>
+    </data>
+    <data name="item" xml:space="preserve">
+        <value>Item</value>
+    </data>
+    <data name="no" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="noExecutionsFound" xml:space="preserve">
+        <value>No executions found</value>
+    </data>
+    <data name="notTested" xml:space="preserve">
+        <value>Not Tested</value>
+    </data>
+    <data name="openChecklist" xml:space="preserve">
+        <value>Open Checklist</value>
+    </data>
+    <data name="processing" xml:space="preserve">
+        <value>Processing...</value>
+    </data>
+    <data name="progress" xml:space="preserve">
+        <value>Progress</value>
+    </data>
+    <data name="selectedItemsCount" xml:space="preserve">
+        <value>Selected Items</value>
+    </data>
+    <data name="severity" xml:space="preserve">
+        <value>Severity</value>
+    </data>
+    <data name="system" xml:space="preserve">
+        <value>System</value>
+    </data>
+    <data name="templatePreview" xml:space="preserve">
+        <value>Template Preview</value>
+    </data>
+    <data name="testedDate" xml:space="preserve">
+        <value>Tested Date</value>
+    </data>
+    <data name="thisTemplateContains" xml:space="preserve">
+        <value>This template contains</value>
+    </data>
+    <data name="totalItems" xml:space="preserve">
+        <value>Total Items</value>
+    </data>
+    <data name="view" xml:space="preserve">
+        <value>View</value>
+    </data>
+    <data name="viewChecklistItem" xml:space="preserve">
+        <value>View Checklist Item</value>
+    </data>
+    <data name="actions" xml:space="preserve">
+        <value>Actions</value>
+    </data>
+    <data name="actualTimeMinutes" xml:space="preserve">
+        <value>Actual Time (Minutes)</value>
+    </data>
+    <data name="associatedVulnerability" xml:space="preserve">
+        <value>Associated Vulnerability</value>
+    </data>
+    <data name="checklistItem" xml:space="preserve">
+        <value>Checklist Item</value>
+    </data>
+    <data name="difficultyRating" xml:space="preserve">
+        <value>Difficulty Rating</value>
+    </data>
+    <data name="easy" xml:space="preserve">
+        <value>Easy</value>
+    </data>
+    <data name="editChecklistNote" xml:space="preserve">
+        <value>You can edit the checklist name and notes. Template and target cannot be changed.</value>
+    </data>
+    <data name="editExecution" xml:space="preserve">
+        <value>Edit Execution</value>
+    </data>
+    <data name="enterEvidenceLinksOrDescription" xml:space="preserve">
+        <value>Enter evidence links or description</value>
+    </data>
+    <data name="enterNotesAboutExecution" xml:space="preserve">
+        <value>Enter notes about the execution</value>
+    </data>
+    <data name="errorLoadingChecklistDetails" xml:space="preserve">
+        <value>Error loading checklist details</value>
+    </data>
+    <data name="errorLoadingVulnerabilities" xml:space="preserve">
+        <value>Error loading vulnerabilities</value>
+    </data>
+    <data name="errorUpdatingExecution" xml:space="preserve">
+        <value>Error updating execution</value>
+    </data>
+    <data name="errorUpdatingExecutionStatus" xml:space="preserve">
+        <value>Error updating execution status</value>
+    </data>
+    <data name="estimatedTimeMinutes" xml:space="preserve">
+        <value>Estimated Time (Minutes)</value>
+    </data>
+    <data name="evidence" xml:space="preserve">
+        <value>Evidence</value>
+    </data>
+    <data name="executionStatusUpdated" xml:space="preserve">
+        <value>Execution status updated successfully</value>
+    </data>
+    <data name="executionUpdatedSuccessfully" xml:space="preserve">
+        <value>Execution updated successfully</value>
+    </data>
+    <data name="hard" xml:space="preserve">
+        <value>Hard</value>
+    </data>
+    <data name="noCategoriesInTemplate" xml:space="preserve">
+        <value>No categories in template</value>
+    </data>
+    <data name="noExecutionsFound" xml:space="preserve">
+        <value>No executions found</value>
+    </data>
+    <data name="noItemsInCategory" xml:space="preserve">
+        <value>No items in category</value>
+    </data>
+    <data name="noNotes" xml:space="preserve">
+        <value>No notes</value>
+    </data>
+    <data name="noTarget" xml:space="preserve">
+        <value>No target</value>
+    </data>
+    <data name="noVulnerability" xml:space="preserve">
+        <value>No vulnerability</value>
+    </data>
+    <data name="notApplicable" xml:space="preserve">
+        <value>Not Applicable</value>
+    </data>
+    <data name="notStarted" xml:space="preserve">
+        <value>Not Started</value>
+    </data>
+    <data name="notTested" xml:space="preserve">
+        <value>Not Tested</value>
+    </data>
+    <data name="onHold" xml:space="preserve">
+        <value>On Hold</value>
+    </data>
+    <data name="order" xml:space="preserve">
+        <value>Order</value>
+    </data>
+    <data name="passed" xml:space="preserve">
+        <value>Passed</value>
+    </data>
+    <data name="progress" xml:space="preserve">
+        <value>Progress</value>
+    </data>
+    <data name="required" xml:space="preserve">
+        <value>Required</value>
+    </data>
+    <data name="severity" xml:space="preserve">
+        <value>Severity</value>
+    </data>
+    <data name="testedBy" xml:space="preserve">
+        <value>Tested By</value>
+    </data>
+    <data name="veryEasy" xml:space="preserve">
+        <value>Very Easy</value>
+    </data>
+    <data name="veryHard" xml:space="preserve">
+        <value>Very Hard</value>
     </data>
 </root>

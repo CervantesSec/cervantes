@@ -58,7 +58,7 @@
         }
         @if (user.HasPermission(Permissions.ChecklistsRead))
         {
-            <MudNavLink Icon="@Icons.Material.Filled.Checklist" Href="@($"/workspace/{project}/checklist")" Match="NavLinkMatch.All">@localizer["checklist"]</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.Checklist" Href="@($"/workspace/{project}/checklists")" Match="NavLinkMatch.All">@localizer["customChecklists"]</MudNavLink>
         }
         @if (user.HasPermission(Permissions.TargetsRead))
         {

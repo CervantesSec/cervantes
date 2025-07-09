@@ -1,0 +1,100 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4">
+            <MudIcon Icon="@Icons.Material.Filled.Assignment" /> 
+            @localizer["viewChecklistItem"]
+        </MudText>
+    </TitleContent>
+    
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.False">
+            @if (item != null)
+            {
+                <MudStack>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["code"]:</MudText>
+                            <MudText>@item.Code</MudText>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["order"]:</MudText>
+                            <MudText>@item.Order</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["name"]:</MudText>
+                            <MudText>@item.Name</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["description"]:</MudText>
+                            <MudText>@(item.Description ?? localizer["noDescription"])</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["objectives"]:</MudText>
+                            <MudText>@(item.Objectives ?? localizer["noObjectives"])</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["testProcedure"]:</MudText>
+                            <MudText Style="white-space: pre-wrap;">@(item.TestProcedure ?? localizer["noTestProcedure"])</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["passCriteria"]:</MudText>
+                            <MudText>@(item.PassCriteria ?? localizer["noPassCriteria"])</MudText>
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["severity"]:</MudText>
+                            @{
+                                var severityColor = item.Severity switch
+                                {
+                                    1 => Color.Success,
+                                    2 => Color.Warning,
+                                    3 => Color.Error,
+                                    4 => Color.Dark,
+                                    _ => Color.Default
+                                };
+                                var severityText = item.Severity switch
+                                {
+                                    1 => localizer["low"],
+                                    2 => localizer["medium"],
+                                    3 => localizer["high"],
+                                    4 => localizer["critical"],
+                                    _ => localizer["unknown"]
+                                };
+                            }
+                            <MudChip T="string" Color="severityColor">@severityText</MudChip>
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["required"]:</MudText>
+                            @if (item.IsRequired)
+                            {
+                                <MudChip T="string" Color="Color.Success" StartIcon="@Icons.Material.Filled.CheckCircle">@localizer["yes"]</MudChip>
+                            }
+                            else
+                            {
+                                <MudChip T="string" Color="Color.Default" StartIcon="@Icons.Material.Filled.RadioButtonUnchecked">@localizer["no"]</MudChip>
+                            }
+                        </MudItem>
+                        <MudItem xs="4">
+                            <!-- Spacer -->
+                        </MudItem>
+                        @if (!string.IsNullOrEmpty(item.References))
+                        {
+                            <MudItem xs="12">
+                                <MudText Typo="Typo.subtitle1" Class="fw-bold">@localizer["references"]:</MudText>
+                                <MudText>@item.References</MudText>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudStack>
+            }
+        </MudContainer>
+    </DialogContent>
+    
+    <DialogActions>
+        <MudButton OnClick="Close">@localizer["close"]</MudButton>
+    </DialogActions>
+</MudDialog>

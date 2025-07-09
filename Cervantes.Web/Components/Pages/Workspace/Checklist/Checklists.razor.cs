@@ -6,6 +6,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Components.Pages.Workspace.Target;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
@@ -22,13 +23,14 @@ public partial class Checklists: ComponentBase
 
        [Parameter] public Guid project { get; set; }
     
-        private List<ChecklistViewModel> model = new List<ChecklistViewModel>();
+        // Legacy checklists (WSTG/MASTG)
+        private List<ChecklistViewModel> legacyModel = new List<ChecklistViewModel>();
         private List<ChecklistViewModel> seleChecklists = new List<ChecklistViewModel>();
+        private string legacySearchString = "";
 
         private CORE.Entities.Project Project = new CORE.Entities.Project();
         private List<BreadcrumbItem> _items;
-    private string searchString = "";
-    DialogOptions mediumWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+    DialogOptionsEx mediumWidth = new DialogOptionsEx() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
     DialogOptionsEx maxWidthEx = new DialogOptionsEx() 
     {
@@ -80,18 +82,24 @@ public partial class Checklists: ComponentBase
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),
             new BreadcrumbItem("Workspace", href: "/workspaces",icon: Icons.Material.Filled.Workspaces),
             new BreadcrumbItem(Project.Name, href: "/workspace/"+project,icon: Icons.Material.Filled.Folder),
-            new BreadcrumbItem(@localizer["checklist"], href: null, disabled: true, icon: Icons.Material.Filled.Checklist)
+            new BreadcrumbItem(@localizer["legacyChecklists"], href: null, disabled: true, icon: Icons.Material.Filled.Security)
         };
         await base.OnInitializedAsync();
     }
 
     private async Task Update()
     {
-        model.RemoveAll(item => true);
+        await UpdateLegacyChecklists();
+    }
+
+    private async Task UpdateLegacyChecklists()
+    {
+        legacyModel.RemoveAll(item => true);
         var wstg = _checklistController.GetWSTG(project);
         var mstg = _checklistController.GetMSTG(project);
         Project = new CORE.Entities.Project();
         Project = _ProjectController.GetById(project);
+        
         foreach (var item in wstg)
         {
             var itemWstg  = new ChecklistViewModel
@@ -103,7 +111,7 @@ public partial class Checklists: ComponentBase
                 Type = ChecklistType.OWASPWSTG,
             };
             
-            model.Add(itemWstg);
+            legacyModel.Add(itemWstg);
         }
         
         foreach (var item in mstg)
@@ -118,33 +126,36 @@ public partial class Checklists: ComponentBase
                 Platform = item.MobilePlatform,
             };
             
-            model.Add(itemMstg);
+            legacyModel.Add(itemMstg);
         }
     }
 
+
     
     
-    private Func<ChecklistViewModel, bool> _quickFilter => element =>
+    // Legacy checklist filter
+    private Func<ChecklistViewModel, bool> _legacyQuickFilter => element =>
     {
-        if (string.IsNullOrWhiteSpace(searchString))
+        if (string.IsNullOrWhiteSpace(legacySearchString))
             return true;
-        if (element.Target.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Target.Contains(legacySearchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.CreatedDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.CreatedDate.ToString().Contains(legacySearchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.Type.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Type.ToString().Contains(legacySearchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.User.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.User.Contains(legacySearchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     };
+
     
-    DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
-    private async Task OpenImportDialog(DialogOptions options)
+    DialogOptionsEx maxWidth = new DialogOptionsEx() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+    private async Task OpenImportDialog(DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=project };
 
-        var dialog = DialogService.Show<ImportDialog>("Custom Options Dialog", parameters, mediumWidth);
+        IMudExDialogReference<ImportDialog>? dialog = await DialogService.ShowExAsync<ImportDialog>("Custom Options Dialog", parameters, mediumWidth);
         // wait modal to close
         var result = await dialog.Result;
         if (!result.Canceled)
@@ -155,7 +166,7 @@ public partial class Checklists: ComponentBase
         
     }
     
-    private async Task OpenDialogCreate(DialogOptions options)
+    private async Task OpenDialogCreate(DialogOptionsEx options)
     {
         var parameters = new DialogParameters { ["project"]=project };
         IMudExDialogReference<CreateChecklistDialog>? dlgReference = await DialogService.ShowExAsync<CreateChecklistDialog>("Simple Dialog", parameters, maxWidthEx);
@@ -253,10 +264,22 @@ public partial class Checklists: ComponentBase
         }
     }
     
-    void SelectedItemsChanged(HashSet<ChecklistViewModel> items)
+    void SelectedLegacyItemsChanged(HashSet<ChecklistViewModel> items)
     {
-        
         seleChecklists = items.ToList();
+    }
+
+
+    private void OpenChecklistExecution(ChecklistViewModel checklist)
+    {
+        if (checklist.Type == ChecklistType.OWASPWSTG)
+        {
+            navigationManager.NavigateTo($"/workspace/{project}/wstg/{checklist.Id}");
+        }
+        else
+        {
+            navigationManager.NavigateTo($"/workspace/{project}/mastg/{checklist.Id}");
+        }
     }
 
 }

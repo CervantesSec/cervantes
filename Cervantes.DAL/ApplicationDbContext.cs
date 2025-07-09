@@ -124,6 +124,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     
     public DbSet<WSTG> WSTG { get; set; }
     public DbSet<MASTG> MASTG { get; set; }
+    
+    /// <summary>
+    /// Custom Checklist System Tables
+    /// </summary>
+    public DbSet<ChecklistTemplate> ChecklistTemplates { get; set; }
+    public DbSet<ChecklistCategory> ChecklistCategories { get; set; }
+    public DbSet<ChecklistItem> ChecklistItems { get; set; }
+    public DbSet<Checklist> Checklists { get; set; }
+    public DbSet<ChecklistExecution> ChecklistExecutions { get; set; }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
 
@@ -167,6 +176,79 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             .WithMany(cf => cf.Values)
             .HasForeignKey(v => v.VulnCustomFieldId)
             .OnDelete(DeleteBehavior.Cascade);
+            
+        // Checklist System Configuration
+        modelBuilder.Entity<ChecklistTemplate>()
+            .HasOne(ct => ct.User)
+            .WithMany()
+            .HasForeignKey(ct => ct.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        modelBuilder.Entity<ChecklistTemplate>()
+            .HasOne(ct => ct.Organization)
+            .WithMany()
+            .HasForeignKey(ct => ct.OrganizationId)
+            .OnDelete(DeleteBehavior.SetNull);
+            
+        modelBuilder.Entity<ChecklistCategory>()
+            .HasOne(cc => cc.ChecklistTemplate)
+            .WithMany(ct => ct.Categories)
+            .HasForeignKey(cc => cc.ChecklistTemplateId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<ChecklistItem>()
+            .HasOne(ci => ci.ChecklistCategory)
+            .WithMany(cc => cc.Items)
+            .HasForeignKey(ci => ci.ChecklistCategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<Checklist>()
+            .HasOne(c => c.ChecklistTemplate)
+            .WithMany(ct => ct.Checklists)
+            .HasForeignKey(c => c.ChecklistTemplateId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        modelBuilder.Entity<Checklist>()
+            .HasOne(c => c.Project)
+            .WithMany()
+            .HasForeignKey(c => c.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<Checklist>()
+            .HasOne(c => c.Target)
+            .WithMany()
+            .HasForeignKey(c => c.TargetId)
+            .OnDelete(DeleteBehavior.SetNull);
+            
+        modelBuilder.Entity<Checklist>()
+            .HasOne(c => c.User)
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        modelBuilder.Entity<ChecklistExecution>()
+            .HasOne(ce => ce.Checklist)
+            .WithMany(c => c.Executions)
+            .HasForeignKey(ce => ce.ChecklistId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<ChecklistExecution>()
+            .HasOne(ce => ce.ChecklistItem)
+            .WithMany(ci => ci.Executions)
+            .HasForeignKey(ce => ce.ChecklistItemId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        modelBuilder.Entity<ChecklistExecution>()
+            .HasOne(ce => ce.TestedByUser)
+            .WithMany()
+            .HasForeignKey(ce => ce.TestedByUserId)
+            .OnDelete(DeleteBehavior.SetNull);
+            
+        modelBuilder.Entity<ChecklistExecution>()
+            .HasOne(ce => ce.Vulnerability)
+            .WithMany()
+            .HasForeignKey(ce => ce.VulnId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
     
     public DbSet<Report> Reports { get; set; }

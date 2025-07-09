@@ -52,4 +52,13 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="ChecklistMigration\wstg.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Include="ChecklistMigration\mastg.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

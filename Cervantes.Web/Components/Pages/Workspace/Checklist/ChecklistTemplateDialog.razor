@@ -1,0 +1,310 @@
+@rendermode InteractiveServer
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using FluentValidation
+@using Microsoft.EntityFrameworkCore
+@using Severity = MudBlazor.Severity
+@using Variant = MudBlazor.Variant
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ChecklistTemplatesRead)]
+
+<style>
+    .tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudStack Row="true" Spacing="1">
+            <MudText Typo="Typo.h4">
+                <MudIcon Icon="@Icons.Material.Filled.Checklist" /> 
+                @template.Name
+            </MudText>
+            @if (userAth.HasPermission(Permissions.ChecklistTemplatesEdit))
+            {
+                @if (editMode)
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+                }
+                else
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+                }
+            }
+            @if (userAth.HasPermission(Permissions.ChecklistTemplatesDelete))
+            {
+                <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(template, medium))">@localizer["delete"]</MudChip>
+            }
+        </MudStack>
+    </TitleContent>
+    
+    <DialogContent>
+        @if (editMode)
+        {
+            <MudContainer Style="overflow-y: scroll;">
+                <MudForm Model="@model" @ref="@form" Validation="@(templateValidator.ValidateValue)" ValidationDelay="0">
+                    <MudStack AlignItems="AlignItems.Stretch">
+                        <MudTextField @bind-Value="model.Name"
+                                      For="@(() => model.Name)"
+                                      Immediate="true"
+                                      Label="@localizer["name"]" 
+                                      Adornment="Adornment.Start" 
+                                      AdornmentIcon="@Icons.Material.Filled.Checklist"/>
+                        
+                        <MudTextField @bind-Value="model.Version"
+                                      For="@(() => model.Version)"
+                                      Immediate="true"
+                                      Label="@localizer["version"]" 
+                                      Adornment="Adornment.Start" 
+                                      AdornmentIcon="@Icons.Material.Filled.Numbers"/>
+                        
+                        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" 
+                                               Conf="@editorConf" 
+                                               @bind-Value="model.Description" 
+                                               data-mce-placeholder="Description"/>
+                    </MudStack>
+                </MudForm>
+                
+                <!-- Categories and Items Editor -->
+                <MudPaper Class="pa-4 ma-2" Elevation="2">
+                    <MudStack>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                            <MudText Typo="Typo.h6">@localizer["categories"]</MudText>
+                            <MudButton StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Small" OnClick="AddCategory">
+                                @localizer["addCategory"]
+                            </MudButton>
+                        </MudStack>
+                        
+                        @if (model.Categories != null && model.Categories.Any())
+                        {
+                            @for (int catIndex = 0; catIndex < model.Categories.Count; catIndex++)
+                            {
+                                var categoryIndex = catIndex;
+                                var category = model.Categories[categoryIndex];
+                                
+                                <MudCard Class="ma-2" Elevation="1">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudStack Row="true" Spacing="2">
+                                                <MudTextField @bind-Value="category.Name" Label="@localizer["name"]" Style="flex: 1" />
+                                                <MudNumericField @bind-Value="category.Order" Label="@localizer["order"]" Style="width: 100px" />
+                                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => RemoveCategory(categoryIndex))" />
+                                            </MudStack>
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        <MudTextField @bind-Value="category.Description" Label="@localizer["description"]" Lines="2" />
+                                        
+                                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mt-4">
+                                            <MudText Typo="Typo.subtitle1">@localizer["items"]</MudText>
+                                            <MudButton StartIcon="@Icons.Material.Filled.Add" Color="Color.Secondary" Size="Size.Small" OnClick="@(() => AddItem(categoryIndex))">
+                                                @localizer["addItem"]
+                                            </MudButton>
+                                        </MudStack>
+                                        
+                                        @if (category.Items != null && category.Items.Any())
+                                        {
+                                            @for (int itemIndex = 0; itemIndex < category.Items.Count; itemIndex++)
+                                            {
+                                                var itemIdx = itemIndex;
+                                                var item = category.Items[itemIdx];
+                                                
+                                                <MudCard Class="ma-2" Elevation="0" Style="border: 1px solid #e0e0e0;">
+                                                    <MudCardContent>
+                                                        <MudStack Row="true" Spacing="2">
+                                                            <MudTextField @bind-Value="item.Code" Label="@localizer["code"]" Style="width: 120px" />
+                                                            <MudTextField @bind-Value="item.Name" Label="@localizer["name"]" Style="flex: 1" />
+                                                            <MudNumericField @bind-Value="item.Order" Label="@localizer["order"]" Style="width: 80px" />
+                                                            <MudSelect @bind-Value="item.Severity" Label="@localizer["severity"]" Style="width: 120px">
+                                                                <MudSelectItem Value="1">@localizer["low"]</MudSelectItem>
+                                                                <MudSelectItem Value="2">@localizer["medium"]</MudSelectItem>
+                                                                <MudSelectItem Value="3">@localizer["high"]</MudSelectItem>
+                                                                <MudSelectItem Value="4">@localizer["critical"]</MudSelectItem>
+                                                            </MudSelect>
+                                                            <MudSwitch @bind-Value="item.IsRequired" Label="@localizer["required"]" Color="Color.Primary"/>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => RemoveItem(categoryIndex, itemIdx))" />
+                                                        </MudStack>
+                                                        
+                                                        <MudStack Spacing="2" Class="mt-2">
+                                                            <MudTextField @bind-Value="item.Description" Label="@localizer["description"]" Lines="2" />
+                                                            <MudTextField @bind-Value="item.Objectives" Label="@localizer["objectives"]" Lines="3" />
+                                                            <MudTextField @bind-Value="item.TestProcedure" Label="@localizer["testProcedure"]" Lines="3" />
+                                                            <MudTextField @bind-Value="item.PassCriteria" Label="@localizer["passCriteria"]" Lines="2" />
+                                                            <MudTextField @bind-Value="item.References" Label="@localizer["references"]" Lines="2" />
+                                                        </MudStack>
+                                                    </MudCardContent>
+                                                </MudCard>
+                                            }
+                                        }
+                                    </MudCardContent>
+                                </MudCard>
+                            }
+                        }
+                        else
+                        {
+                            <MudAlert Severity="Severity.Info">@localizer["noCategoriesInTemplate"]</MudAlert>
+                        }
+                    </MudStack>
+                </MudPaper>
+                
+                <MudStack Row="true" Justify="Justify.FlexEnd">
+                    <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+                    @if (userAth.HasPermission(Permissions.ChecklistTemplatesEdit))
+                    {
+                        @if (editMode)
+                        {
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
+                        }
+                    }
+                </MudStack>
+            </MudContainer>
+        }
+        else
+        {
+            <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+                <MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details">
+                    <MudGrid>
+                        <MudItem xs="12" sm="4" md="3">
+                            <MudCard Elevation="25">
+                                <MudCardContent>
+                                    <div class="d-flex justify-center mb-4">
+                                        <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Checklist" Size="Size.Large" />
+                                    </div>
+                                    <MudList T="string" Dense="true">
+                                        <MudListItem T="string" Text="@template.Name" Icon="@Icons.Material.Filled.Checklist" />
+                                        <MudListItem T="string" Text="@template.Version" Icon="@Icons.Material.Filled.Numbers" />
+                                        @if (template.IsSystemTemplate)
+                                        {
+                                            <MudListItem T="string" Text="@localizer["system"]" Icon="@Icons.Material.Filled.AdminPanelSettings" />
+                                        }
+                                        else
+                                        {
+                                            <MudListItem T="string" Text="@localizer["custom"]" Icon="@Icons.Material.Filled.Person" />
+                                        }
+                                        <MudListItem T="string" Text="@(template.User?.FullName ?? localizer["system"])" Icon="@Icons.Material.Filled.Person" />
+                                        <MudListItem T="string" Text="@template.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth" />
+                                    </MudList>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                        <MudItem xs="12" sm="8" md="9">
+                            <MudCard Elevation="25">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText>@localizer["description"]</MudText>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent>
+                                    @((MarkupString)template.Description)
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </MudTabPanel>
+                
+                <MudTabPanel Text="@localizer["categories"]" Icon="@Icons.Material.Filled.Category" BadgeData="@(template.Categories?.Count ?? 0)" BadgeColor="Color.Primary" Style="width: 260px">
+                    <MudItem xs="12" sm="12" md="12">
+                        @if (template.Categories != null && template.Categories.Any())
+                        {
+                            @foreach (var category in template.Categories.OrderBy(c => c.Order))
+                            {
+                                <MudCard Class="mb-4" Elevation="25">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText Typo="Typo.h6">@category.Name</MudText>
+                                            @if (!string.IsNullOrEmpty(category.Description))
+                                            {
+                                                <MudText Typo="Typo.body2" Class="text-muted">@category.Description</MudText>
+                                            }
+                                        </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">
+                                                @localizer["order"]: @category.Order
+                                            </MudChip>
+                                        </CardHeaderActions>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        <MudText Typo="Typo.subtitle2" Class="mb-2">
+                                            @localizer["items"] (@category.Items?.Count)
+                                        </MudText>
+                                        
+                                        @if (category.Items != null && category.Items.Any())
+                                        {
+                                            <MudDataGrid T="ChecklistItem" Items="@category.Items.OrderBy(i => i.Order)" Dense="true" 
+                                                         Hover="true" ReadOnly="true" Height="400px" Filterable="true" Hideable="true" RowClick="@ViewItem">
+                                                <Columns>
+                                                    <PropertyColumn Property="x => x.Order" Title="@localizer["order"]" />
+                                                    <PropertyColumn Property="x => x.Code" Title="@localizer["code"]" />
+                                                    <PropertyColumn Property="x => x.Name" Title="@localizer["name"]" />
+                                                    <PropertyColumn Property="x => x.Description" Title="@localizer["description"]" />
+                                                    <PropertyColumn Property="x => x.Objectives" Title="@localizer["objectives"]" />
+                                                    <PropertyColumn Property="x => x.TestProcedure" Title="@localizer["testProcedure"]" />
+                                                    <PropertyColumn Property="x => x.PassCriteria" Title="@localizer["passCriteria"]" />
+                                                    <PropertyColumn Property="x => x.References" Title="@localizer["references"]" />
+                                                    <TemplateColumn Title="@localizer["severity"]">
+                                                        <CellTemplate>
+                                                            @{
+                                                                var severityColor = context.Item.Severity switch
+                                                                {
+                                                                    1 => Color.Success,
+                                                                    2 => Color.Warning,
+                                                                    3 => Color.Error,
+                                                                    4 => Color.Dark,
+                                                                    _ => Color.Default
+                                                                };
+                                                                var severityText = context.Item.Severity switch
+                                                                {
+                                                                    1 => localizer["low"],
+                                                                    2 => localizer["medium"],
+                                                                    3 => localizer["high"],
+                                                                    4 => localizer["critical"],
+                                                                    _ => localizer["unknown"]
+                                                                };
+                                                            }
+                                                            <MudChip Color="severityColor" Size="Size.Small">@severityText</MudChip>
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+                                                    <TemplateColumn Title="@localizer["required"]">
+                                                        <CellTemplate>
+                                                            @if (context.Item.IsRequired)
+                                                            {
+                                                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <MudIcon Icon="@Icons.Material.Filled.RadioButtonUnchecked" Color="Color.Default" Size="Size.Small" />
+                                                            }
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+                                                </Columns>
+                                            </MudDataGrid>
+                                        }
+                                        else
+                                        {
+                                            <MudAlert Severity="Severity.Info">@localizer["noItemsInCategory"]</MudAlert>
+                                        }
+                                    </MudCardContent>
+                                </MudCard>
+                            }
+                        }
+                        else
+                        {
+                            <MudAlert Severity="Severity.Info">@localizer["noCategoriesInTemplate"]</MudAlert>
+                        }
+                    </MudItem>
+                </MudTabPanel>
+            </MudTabs>
+        }
+    </DialogContent>
+    
+    <DialogActions>
+    </DialogActions>
+</MudDialog>

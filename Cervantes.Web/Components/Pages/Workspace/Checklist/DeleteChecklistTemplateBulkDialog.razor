@@ -1,0 +1,84 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@attribute [HasPermission(Permissions.ChecklistTemplatesDelete)]
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4">
+            <MudIcon Icon="@Icons.Material.Filled.Delete" Color="Color.Error" /> 
+            @localizer["deleteChecklistTemplates"]
+        </MudText>
+    </TitleContent>
+    
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.False">
+            <MudAlert Severity="Severity.Warning" Class="mb-4">
+                @localizer["deleteTemplatesWarning"]
+            </MudAlert>
+            
+            @if (templates != null && templates.Any())
+            {
+                <MudStack>
+                    <MudText Typo="Typo.body1">
+                        @localizer["confirmDeleteTemplates"]: <strong>@templates.Count</strong> @localizer["templates"]
+                    </MudText>
+                    
+                    <MudText Typo="Typo.body2" Color="Color.Error">
+                        <MudIcon Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                        @localizer["thisActionCannotBeUndone"]
+                    </MudText>
+                    
+                    <MudDivider Class="my-3" />
+                    
+                    <MudText Typo="Typo.subtitle2">@localizer["templatesToDelete"]:</MudText>
+                    <MudList T="string" Dense="true" Class="mx-n4">
+                        @foreach (var template in templates.Where(t => !t.IsSystemTemplate))
+                        {
+                            <MudListItem T="string">
+                                <div class="d-flex align-center">
+                                    <MudIcon Icon="@Icons.Material.Filled.LibraryBooks" Size="Size.Small" Class="mr-3" />
+                                    <div>
+                                        <MudText Typo="Typo.body2">@template.Name</MudText>
+                                        @if (!string.IsNullOrEmpty(template.Description))
+                                        {
+                                            <MudText Typo="Typo.caption" Class="text-muted">@template.Description</MudText>
+                                        }
+                                    </div>
+                                </div>
+                            </MudListItem>
+                        }
+                    </MudList>
+                    
+                    @{
+                        var systemTemplates = templates.Where(t => t.IsSystemTemplate).ToList();
+                    }
+                    @if (systemTemplates.Any())
+                    {
+                        <MudAlert Severity="Severity.Info" Class="mt-3">
+                            @localizer["systemTemplatesCannotBeDeleted"]: @systemTemplates.Count @localizer["templates"]
+                        </MudAlert>
+                    }
+                </MudStack>
+            }
+        </MudContainer>
+    </DialogContent>
+    
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="Submit" Class="ml-2">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                <MudText Class="ms-2">@localizer["deleting"]</MudText>
+            }
+            else
+            {
+                <MudText>@localizer["delete"]</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>

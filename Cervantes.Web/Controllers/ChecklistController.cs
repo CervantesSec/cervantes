@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Web;
 using AuthPermissions.AspNetCore;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
@@ -19,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using Scriban;
 using Scriban.Runtime;
+using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Controllers;
 
@@ -44,11 +46,17 @@ public class ChecklistController : ControllerBase
     private IReportTemplateManager reportTemplateManager = null;
     private Sanitizer Sanitizer;
     
+    // Custom Checklist System Managers
+    private readonly IChecklistTemplateManager _checklistTemplateManager;
+    private readonly IChecklistManager _checklistManager;
+    private readonly IChecklistExecutionManager _checklistExecutionManager;
+    
     public ChecklistController(IProjectManager projectManager, 
         IProjectUserManager projectUserManager, ITargetManager targetManager, ILogger<ChecklistController> logger, IWSTGManager wstgManager,
         IMASTGManager mastgManager,IWebHostEnvironment env, IOrganizationManager organizationManager, IClientManager clientManager,IHttpContextAccessor HttpContextAccessor,
         IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, IReportManager 
-            reportManager, IReportTemplateManager reportTemplateManager,Sanitizer Sanitizer)
+            reportManager, IReportTemplateManager reportTemplateManager,Sanitizer Sanitizer,
+        IChecklistTemplateManager checklistTemplateManager, IChecklistManager checklistManager, IChecklistExecutionManager checklistExecutionManager)
     {
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
@@ -65,6 +73,9 @@ public class ChecklistController : ControllerBase
         this.reportManager = reportManager;
         this.reportTemplateManager = reportTemplateManager;
         this.Sanitizer = Sanitizer;
+        _checklistTemplateManager = checklistTemplateManager;
+        _checklistManager = checklistManager;
+        _checklistExecutionManager = checklistExecutionManager;
     }
     
     [HttpGet]
@@ -1196,4 +1207,682 @@ public class ChecklistController : ControllerBase
             throw;
         }
     }
+
+    #region Custom Checklist Templates
+
+    [HttpGet]
+    [Route("Templates")]
+    [HasPermission(Permissions.ChecklistTemplatesRead)]
+    public async Task<ActionResult<IEnumerable<ChecklistTemplate>>> GetCustomTemplates()
+    {
+        try
+        {
+            // Solo cargar datos básicos para la lista - sin categories/items para mejor rendimiento
+            var templates = await _checklistTemplateManager.GetAll()
+                .Include(ct => ct.User)
+                .Include(ct => ct.Organization)
+                .Where(t => t.IsActive)
+                .OrderBy(t => t.Name)
+                .ToListAsync();
+
+            return Ok(templates);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting checklist templates");
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpGet]
+    [Route("Templates/{id}")]
+    [HasPermission(Permissions.ChecklistTemplatesRead)]
+    public async Task<ActionResult<ChecklistTemplate>> GetCustomTemplate(Guid id)
+    {
+        try
+        {
+            var template = await _checklistTemplateManager.GetAll()
+                .Include(ct => ct.Categories)
+                    .ThenInclude(c => c.Items)
+                .Include(ct => ct.User)
+                .Include(ct => ct.Organization)
+                .FirstOrDefaultAsync(ct => ct.Id == id);
+            
+            if (template == null)
+                return NotFound();
+
+            return Ok(template);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting checklist template {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPost]
+    [Route("Templates")]
+    [HasPermission(Permissions.ChecklistTemplatesAdd)]
+    public async Task<ActionResult<ChecklistTemplate>> CreateCustomTemplate([FromBody] ChecklistTemplateCreateViewModel model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var template = new ChecklistTemplate
+            {
+                Id = Guid.NewGuid(),
+                Name = model.Name,
+                Description = model.Description,
+                Version = model.Version,
+                OrganizationId = model.OrganizationId,
+                UserId = aspNetUserId,
+                IsSystemTemplate = false,
+                IsActive = true,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow
+            };
+
+            // Add categories and items
+            foreach (var categoryModel in model.Categories)
+            {
+                var category = new ChecklistCategory
+                {
+                    Id = Guid.NewGuid(),
+                    Name = categoryModel.Name,
+                    Description = categoryModel.Description,
+                    Order = categoryModel.Order,
+                    ChecklistTemplateId = template.Id
+                };
+
+                foreach (var itemModel in categoryModel.Items)
+                {
+                    var item = new ChecklistItem
+                    {
+                        Id = Guid.NewGuid(),
+                        Code = itemModel.Code,
+                        Name = itemModel.Name,
+                        Description = itemModel.Description,
+                        Objectives = itemModel.Objectives,
+                        TestProcedure = itemModel.TestProcedure,
+                        PassCriteria = itemModel.PassCriteria,
+                        Order = itemModel.Order,
+                        IsRequired = itemModel.IsRequired,
+                        Severity = itemModel.Severity,
+                        References = itemModel.References,
+                        ChecklistCategoryId = category.Id
+                    };
+
+                    category.Items.Add(item);
+                }
+
+                template.Categories.Add(category);
+            }
+
+            var createdTemplate = _checklistTemplateManager.Add(template);
+            await _checklistTemplateManager.Context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetCustomTemplate), new { id = createdTemplate.Id }, createdTemplate);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating checklist template");
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPut]
+    [Route("Templates/{id}")]
+    [HasPermission(Permissions.ChecklistTemplatesEdit)]
+    public async Task<ActionResult<ChecklistTemplate>> UpdateCustomTemplate(Guid id, [FromBody] ChecklistTemplateCreateViewModel model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var template = await _checklistTemplateManager.GetAll()
+                .Include(ct => ct.Categories)
+                    .ThenInclude(c => c.Items)
+                .FirstOrDefaultAsync(ct => ct.Id == id);
+            
+            if (template == null)
+                return NotFound();
+
+            // Check if user can edit this template
+            if (template.IsSystemTemplate)
+                return Forbid("Cannot edit system templates");
+
+            if (template.UserId != aspNetUserId && !User.HasPermission(Permissions.Admin))
+                return Forbid("Cannot edit templates created by other users");
+
+            // Update basic template info
+            template.Name = model.Name;
+            template.Description = model.Description;
+            template.Version = model.Version;
+            template.ModifiedDate = DateTime.UtcNow;
+
+            // Clear existing categories and items (the cascade delete in the DB will handle the deletion)
+            template.Categories?.Clear();
+            if (template.Categories == null)
+            {
+                template.Categories = new List<ChecklistCategory>();
+            }
+
+            // Add new categories and items
+            foreach (var categoryModel in model.Categories)
+            {
+                var category = new ChecklistCategory
+                {
+                    Id = Guid.NewGuid(),
+                    Name = categoryModel.Name,
+                    Description = categoryModel.Description,
+                    Order = categoryModel.Order,
+                    ChecklistTemplateId = template.Id,
+                    Items = new List<ChecklistItem>()
+                };
+
+                foreach (var itemModel in categoryModel.Items)
+                {
+                    var item = new ChecklistItem
+                    {
+                        Id = Guid.NewGuid(),
+                        Code = itemModel.Code,
+                        Name = itemModel.Name,
+                        Description = itemModel.Description,
+                        Objectives = itemModel.Objectives,
+                        TestProcedure = itemModel.TestProcedure,
+                        PassCriteria = itemModel.PassCriteria,
+                        Order = itemModel.Order,
+                        IsRequired = itemModel.IsRequired,
+                        Severity = itemModel.Severity,
+                        References = itemModel.References,
+                        ChecklistCategoryId = category.Id
+                    };
+
+                    category.Items.Add(item);
+                }
+
+                template.Categories.Add(category);
+            }
+
+            var updatedTemplate = _checklistTemplateManager.Update(template);
+            await _checklistTemplateManager.Context.SaveChangesAsync();
+            return Ok(updatedTemplate);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating checklist template {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpDelete]
+    [Route("Templates/{id}")]
+    [HasPermission(Permissions.ChecklistTemplatesDelete)]
+    public async Task<ActionResult> DeleteCustomTemplate(Guid id)
+    {
+        try
+        {
+            var template = _checklistTemplateManager.GetById(id);
+            if (template == null)
+                return NotFound();
+
+            if (template.IsSystemTemplate)
+                return Forbid("Cannot delete system templates");
+
+            if (template.UserId != aspNetUserId && !User.HasPermission(Permissions.Admin))
+                return Forbid("Cannot delete templates created by other users");
+
+            _checklistTemplateManager.Remove(template);
+            await _checklistTemplateManager.Context.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting checklist template {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    #endregion
+
+    #region Custom Checklists
+
+    [HttpGet]
+    [Route("Custom/Project/{projectId}")]
+    [HasPermission(Permissions.ChecklistsRead)]
+    public async Task<ActionResult<IEnumerable<Checklist>>> GetCustomChecklistsByProject(Guid projectId)
+    {
+        try
+        {
+            var user = projectUserManager.VerifyUser(projectId, aspNetUserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var checklists = await _checklistManager.GetByProject(projectId)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            return Ok(checklists);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting checklists for project {ProjectId}", projectId);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpGet]
+    [Route("Custom/{id}")]
+    [HasPermission(Permissions.ChecklistsRead)]
+    public async Task<ActionResult<Checklist>> GetCustomChecklist(Guid id)
+    {
+        try
+        {
+            var checklist = _checklistManager.GetById(id);
+            if (checklist == null)
+                return NotFound();
+
+            var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(checklist);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting checklist {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpGet]
+    [Route("Custom/{id}/Details")]
+    [HasPermission(Permissions.ChecklistsRead)]
+    public async Task<ActionResult<Checklist>> GetCustomChecklistWithDetails(Guid id)
+    {
+        try
+        {
+            var checklist = await _checklistManager.GetAll()
+                .Include(c => c.ChecklistTemplate)
+                    .ThenInclude(ct => ct.Categories)
+                        .ThenInclude(cat => cat.Items)
+                .Include(c => c.Executions)
+                    .ThenInclude(e => e.ChecklistItem)
+                        .ThenInclude(i => i.ChecklistCategory)
+                .Include(c => c.Target)
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (checklist == null)
+                return NotFound();
+
+            var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(checklist);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting checklist details {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPost]
+    [Route("Custom")]
+    [HasPermission(Permissions.ChecklistsAdd)]
+    public async Task<ActionResult<Checklist>> CreateCustomChecklist([FromBody] ChecklistCreateViewModelNew model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Verify user has access to the project
+            var project = projectManager.GetById(model.ProjectId);
+            if (project == null)
+                return NotFound("Project not found");
+
+            var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var checklist = new Checklist
+            {
+                Id = Guid.NewGuid(),
+                Name = model.Name,
+                ChecklistTemplateId = model.ChecklistTemplateId,
+                ProjectId = model.ProjectId,
+                TargetId = model.TargetId,
+                UserId = aspNetUserId,
+                Status = ChecklistStatus.NotStarted,
+                Notes = model.Notes,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow
+            };
+
+            var createdChecklist = _checklistManager.Add(checklist);
+            await _checklistManager.Context.SaveChangesAsync();
+            
+            // Create initial executions for all items in the template
+            await CreateInitialExecutions(createdChecklist);
+            
+            return CreatedAtAction(nameof(GetCustomChecklist), new { id = createdChecklist.Id }, createdChecklist);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating checklist");
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPut]
+    [Route("Custom/{id}")]
+    [HasPermission(Permissions.ChecklistsEdit)]
+    public async Task<ActionResult<Checklist>> UpdateCustomChecklist(Guid id, [FromBody] ChecklistUpdateViewModel model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var checklist = _checklistManager.GetById(id);
+            if (checklist == null)
+                return NotFound();
+
+            var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            checklist.Name = model.Name;
+            checklist.Notes = model.Notes;
+            checklist.Status = model.Status;
+            checklist.ModifiedDate = DateTime.UtcNow;
+
+            var updatedChecklist = _checklistManager.Update(checklist);
+            await _checklistManager.Context.SaveChangesAsync();
+            return Ok(updatedChecklist);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating checklist {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpDelete]
+    [Route("Custom/{id}")]
+    [HasPermission(Permissions.ChecklistsDelete)]
+    public async Task<ActionResult> DeleteCustomChecklist(Guid id)
+    {
+        try
+        {
+            var checklist = _checklistManager.GetById(id);
+            if (checklist == null)
+                return NotFound();
+
+            var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            _checklistManager.Remove(checklist);
+            await _checklistManager.Context.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting checklist {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    #endregion
+
+    #region Custom Checklist Executions
+
+    [HttpGet]
+    [Route("Custom/{checklistId}/Executions")]
+    [HasPermission(Permissions.ChecklistsRead)]
+    public async Task<ActionResult<IEnumerable<ChecklistExecution>>> GetCustomExecutions(Guid checklistId)
+    {
+        try
+        {
+            var checklist = _checklistManager.GetById(checklistId);
+            if (checklist == null)
+                return NotFound();
+
+            var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var executions = await _checklistExecutionManager.GetByChecklist(checklistId)
+                .OrderBy(e => e.ChecklistItem.ChecklistCategory.Order)
+                .ThenBy(e => e.ChecklistItem.Order)
+                .ToListAsync();
+
+            return Ok(executions);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting executions for checklist {ChecklistId}", checklistId);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPut]
+    [Route("Custom/Executions/{id}")]
+    [HasPermission(Permissions.ChecklistsEdit)]
+    public async Task<ActionResult<ChecklistExecution>> UpdateCustomExecution(Guid id, [FromBody] ChecklistExecutionUpdateViewModel model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var execution = _checklistExecutionManager.GetById(id);
+            if (execution == null)
+                return NotFound();
+
+            var checklist = _checklistManager.GetById(execution.ChecklistId);
+            if (checklist == null)
+                return NotFound();
+
+            var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            execution.Status = model.Status;
+            execution.Notes = model.Notes;
+            execution.Evidence = model.Evidence;
+            execution.EstimatedTimeMinutes = model.EstimatedTimeMinutes;
+            execution.ActualTimeMinutes = model.ActualTimeMinutes;
+            execution.DifficultyRating = model.DifficultyRating;
+            execution.VulnId = model.VulnId;
+            execution.TestedByUserId = aspNetUserId;
+            execution.TestedDate = DateTime.UtcNow;
+
+            var updatedExecution = _checklistExecutionManager.Update(execution);
+            await _checklistExecutionManager.Context.SaveChangesAsync();
+            return Ok(updatedExecution);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating execution {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPut]
+    [Route("Custom/Executions/Bulk")]
+    [HasPermission(Permissions.ChecklistsEdit)]
+    public async Task<ActionResult> BulkUpdateCustomExecutions([FromBody] ChecklistExecutionBulkUpdateViewModel model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var count = await _checklistExecutionManager.BulkUpdateStatus(model.ExecutionIds, model.Status);
+            return Ok(new { UpdatedCount = count });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error bulk updating executions");
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPost]
+    [Route("Custom/{checklistId}/Items/{itemId}/Executions")]
+    [HasPermission(Permissions.ChecklistsEdit)]
+    public async Task<ActionResult<ChecklistExecution>> CreateExecution(Guid checklistId, Guid itemId, [FromBody] ChecklistExecutionUpdateViewModel model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var checklist = _checklistManager.GetById(checklistId);
+            if (checklist == null)
+                return NotFound("Checklist not found");
+
+            var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
+            if (user == null)
+                return BadRequest("User does not have access to this project");
+
+            // Check if execution already exists
+            var existingExecution = _checklistExecutionManager.GetAll()
+                .FirstOrDefault(e => e.ChecklistId == checklistId && e.ChecklistItemId == itemId);
+            
+            if (existingExecution != null)
+                return BadRequest("Execution already exists for this checklist item");
+
+            var execution = new ChecklistExecution
+            {
+                Id = Guid.NewGuid(),
+                ChecklistId = checklistId,
+                ChecklistItemId = itemId,
+                Status = model.Status,
+                Notes = model.Notes,
+                Evidence = model.Evidence,
+                EstimatedTimeMinutes = model.EstimatedTimeMinutes,
+                ActualTimeMinutes = model.ActualTimeMinutes,
+                DifficultyRating = model.DifficultyRating,
+                VulnId = model.VulnId,
+                TestedDate = DateTime.UtcNow
+            };
+
+            var createdExecution = _checklistExecutionManager.Add(execution);
+            await _checklistExecutionManager.Context.SaveChangesAsync();
+            
+            return CreatedAtAction(nameof(GetCustomExecutions), new { checklistId }, createdExecution);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating execution for checklist {ChecklistId} item {ItemId}", checklistId, itemId);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPut]
+    [Route("Executions/{id}")]
+    [HasPermission(Permissions.ChecklistsEdit)]
+    public async Task<ActionResult<ChecklistExecution>> UpdateExecution(Guid id, [FromBody] ChecklistExecutionUpdateViewModel model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var execution = _checklistExecutionManager.GetById(id);
+            if (execution == null)
+                return NotFound();
+
+            var checklist = _checklistManager.GetById(execution.ChecklistId);
+            if (checklist == null)
+                return NotFound("Associated checklist not found");
+
+            var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
+            if (user == null)
+                return BadRequest("User does not have access to this project");
+
+            execution.Status = model.Status;
+            execution.Notes = model.Notes;
+            execution.Evidence = model.Evidence;
+            execution.EstimatedTimeMinutes = model.EstimatedTimeMinutes;
+            execution.ActualTimeMinutes = model.ActualTimeMinutes;
+            execution.DifficultyRating = model.DifficultyRating;
+            execution.VulnId = model.VulnId;
+            execution.TestedDate = DateTime.UtcNow;
+
+            var updatedExecution = _checklistExecutionManager.Update(execution);
+            await _checklistExecutionManager.Context.SaveChangesAsync();
+            
+            return Ok(updatedExecution);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating execution {Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private async Task CreateInitialExecutions(Checklist checklist)
+    {
+        var template = _checklistTemplateManager.GetAll()
+            .Where(ct => ct.Id == checklist.ChecklistTemplateId)
+            .Include(ct => ct.Categories)
+                .ThenInclude(c => c.Items)
+            .FirstOrDefault();
+
+        if (template == null) return;
+
+        var executions = new List<ChecklistExecution>();
+
+        foreach (var category in template.Categories)
+        {
+            foreach (var item in category.Items)
+            {
+                executions.Add(new ChecklistExecution
+                {
+                    Id = Guid.NewGuid(),
+                    ChecklistId = checklist.Id,
+                    ChecklistItemId = item.Id,
+                    Status = ChecklistItemStatus.NotTested
+                });
+            }
+        }
+
+        foreach (var execution in executions)
+        {
+            _checklistExecutionManager.Add(execution);
+        }
+        
+        await _checklistExecutionManager.Context.SaveChangesAsync();
+    }
+
+    #endregion
 }

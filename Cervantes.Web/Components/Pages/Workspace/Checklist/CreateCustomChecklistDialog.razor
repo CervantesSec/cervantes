@@ -1,0 +1,110 @@
+@using Cervantes.CORE
+@using Cervantes.CORE.ViewModel
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using FluentValidation
+@using Microsoft.Extensions.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@attribute [HasPermission(Permissions.ChecklistsAdd)]
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudText Typo="Typo.h4">
+            <MudIcon Icon="@Icons.Material.Filled.Checklist" /> 
+            @localizer["createChecklist"]
+        </MudText>
+    </TitleContent>
+    
+    <DialogContent>
+        <MudContainer>
+            <MudForm Model="@model" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
+                <MudStack>
+                    <MudTextField @bind-Value="model.Name" For="@(() => model.Name)" 
+                                  Label="@localizer["name"]" Required="true" />
+                    
+                    <MudSelect Value="model.ChecklistTemplateId" For="@(() => model.ChecklistTemplateId)"
+                               Label="@localizer["template"]" Required="true" 
+                               ValueChanged="@((Guid value) => OnTemplateChanged(value))">
+                        <MudSelectItem Value="@Guid.Empty" Disabled>@localizer["select"]</MudSelectItem>
+
+                        @if (templates != null)
+                        {
+                            @foreach (var template in templates)
+                            {
+                                <MudSelectItem Value="@template.Id">
+                                    @template.Name
+                                    @if (template.IsSystemTemplate)
+                                    {
+                                        <MudChip T="string" Color="Color.Info" Size="Size.Small" Class="ml-2">@localizer["system"]</MudChip>
+                                    }
+                                </MudSelectItem>
+                            }
+                        }
+                    </MudSelect>
+                    
+                    <MudSelect @bind-Value="model.TargetId" For="@(() => model.TargetId)" 
+                               Label="@localizer["target"]" Clearable="true">
+                        @if (targets != null)
+                        {
+                            @foreach (var target in targets)
+                            {
+                                <MudSelectItem Value="@((Guid?)target.Id)">@target.Name (@target.Type)</MudSelectItem>
+                            }
+                        }
+                    </MudSelect>
+                    
+                    <MudTextField @bind-Value="model.Notes" For="@(() => model.Notes)" 
+                                  Label="@localizer["notes"]" Lines="3" />
+                </MudStack>
+            </MudForm>
+            
+            @if (selectedTemplate != null)
+            {
+                <MudDivider Class="my-4" />
+                <MudText Typo="Typo.h6">@localizer["templatePreview"]</MudText>
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="8">
+                                <MudText Typo="Typo.subtitle1">@selectedTemplate.Name</MudText>
+                                <MudText Typo="Typo.body2" Class="text-muted">@selectedTemplate.Description</MudText>
+                            </MudItem>
+                            <MudItem xs="4" Class="text-right">
+                                @if (selectedTemplate.IsSystemTemplate)
+                                {
+                                    <MudChip T="string" Color="Color.Info" Size="Size.Small">@localizer["system"]</MudChip>
+                                }
+                                else
+                                {
+                                    <MudChip T="string" Color="Color.Primary" Size="Size.Small">@localizer["custom"]</MudChip>
+                                }
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudText Typo="Typo.caption">@localizer["categories"]: @(selectedTemplate.Categories?.Count ?? 0)</MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudText Typo="Typo.caption">@localizer["totalItems"]: @(selectedTemplate.Categories?.Sum(c => c.Items?.Count ?? 0) ?? 0)</MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            }
+        </MudContainer>
+    </DialogContent>
+    
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" Color="@Color.Primary" OnClick="Submit" Class="ml-2">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                <MudText Class="ms-2">@localizer["processing"]</MudText>
+            }
+            else
+            {
+                <MudText>@localizer["create"]</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>

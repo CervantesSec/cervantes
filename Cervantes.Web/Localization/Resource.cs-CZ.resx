@@ -1095,9 +1095,6 @@
     <data name="noStatus" xml:space="preserve">
         <value>Žádný stav</value>
     </data>
-    <data name="templates" xml:space="preserve">
-        <value>Šablony</value>
-    </data>
     <data name="vulnImport" xml:space="preserve">
         <value>Import zranitelností</value>
     </data>
@@ -1178,9 +1175,6 @@
     </data>
     <data name="categories" xml:space="preserve">
         <value>Kategorie</value>
-    </data>
-    <data name="addCategory" xml:space="preserve">
-        <value>Přidat kategorii</value>
     </data>
     <data name="order" xml:space="preserve">
         <value>Pořadí</value>
@@ -2078,5 +2072,185 @@
     </data>
     <data name="customFieldValue" xml:space="preserve">
         <value>Hodnota Vlastního Pole</value>
+    </data>
+    <data name="owaspWstg" xml:space="preserve">
+        <value>OWASP WSTG</value>
+    </data>
+    <data name="owaspMstg" xml:space="preserve">
+        <value>OWASP MSTG</value>
+    </data>
+    <data name="android" xml:space="preserve">
+        <value>Android</value>
+    </data>
+    <data name="ios" xml:space="preserve">
+        <value>iOS</value>
+    </data>
+    <data name="wstg" xml:space="preserve">
+        <value>WSTG</value>
+    </data>
+    <data name="mastg" xml:space="preserve">
+        <value>MASTG</value>
+    </data>
+    <data name="categoryName" xml:space="preserve">
+        <value>Název Kategorie</value>
+    </data>
+    <data name="categoryDescription" xml:space="preserve">
+        <value>Popis Kategorie</value>
+    </data>
+    <data name="addItem" xml:space="preserve">
+        <value>Přidat Položku</value>
+    </data>
+    <data name="legacyChecklist" xml:space="preserve">
+        <value>Zastaralý Checklist</value>
+    </data>
+    <data name="checklistTemplates" xml:space="preserve">
+        <value>Šablony Checklistů</value>
+    </data>
+    <data name="testProcedure" xml:space="preserve">
+        <value>Testovací Postup</value>
+    </data>
+    <data name="passCriteria" xml:space="preserve">
+        <value>Kritéria Úspěchu</value>
+    </data>
+    <data name="references" xml:space="preserve">
+        <value>Reference</value>
+    </data>
+    <data name="objectives" xml:space="preserve">
+        <value>Cíle</value>
+    </data>
+    <data name="viewChecklistTemplate" xml:space="preserve">
+        <value>Zobrazit Šablonu Checklistu</value>
+    </data>
+    <data name="createChecklistTemplate" xml:space="preserve">
+        <value>Vytvořit Šablonu Checklistu</value>
+    </data>
+    <data name="noItemsInCategory" xml:space="preserve">
+        <value>Žádné položky v této kategorii</value>
+    </data>
+    <data name="noCategoriesInTemplate" xml:space="preserve">
+        <value>Žádné kategorie v této šabloně</value>
+    </data>
+    <data name="noLegacyChecklists" xml:space="preserve">
+        <value>Žádné starší checklists nalezeny</value>
+    </data>
+    <data name="legacyChecklists" xml:space="preserve">
+        <value>Starší Checklists</value>
+    </data>
+    <data name="deleteChecklistTemplates" xml:space="preserve">
+        <value>Smazat Šablony Checklistu</value>
+    </data>
+    <data name="confirmDeleteTemplates" xml:space="preserve">
+        <value>Potvrdit Smazání Šablon</value>
+    </data>
+    <data name="thisActionCannotBeUndone" xml:space="preserve">
+        <value>Tuto akci nelze vrátit</value>
+    </data>
+    <data name="templatesToDelete" xml:space="preserve">
+        <value>Šablony ke Smazání</value>
+    </data>
+    <data name="systemTemplatesCannotBeDeleted" xml:space="preserve">
+        <value>Systémové šablony nelze smazat</value>
+    </data>
+    <data name="confirmDeleteCustomChecklist" xml:space="preserve">
+        <value>Jste si jisti, že chcete smazat tento vlastní kontrolní seznam?</value>
+    </data>
+    <data name="confirmDeleteMultipleCustomChecklists" xml:space="preserve">
+        <value>Jste si jisti, že chcete smazat vybrané vlastní kontrolní seznamy?</value>
+    </data>
+    <data name="confirmDeleteTemplate" xml:space="preserve">
+        <value>Jste si jisti, že chcete smazat tuto šablonu?</value>
+    </data>
+    <data name="createCustomChecklist" xml:space="preserve">
+        <value>Vytvořit vlastní kontrolní seznam</value>
+    </data>
+    <data name="custom" xml:space="preserve">
+        <value>Vlastní</value>
+    </data>
+    <data name="customChecklists" xml:space="preserve">
+        <value>Vlastní kontrolní seznamy</value>
+    </data>
+    <data name="deleteAll" xml:space="preserve">
+        <value>Smazat vše</value>
+    </data>
+    <data name="deleteChecklistTemplate" xml:space="preserve">
+        <value>Smazat šablonu kontrolního seznamu</value>
+    </data>
+    <data name="deleteCustomChecklist" xml:space="preserve">
+        <value>Smazat vlastní kontrolní seznam</value>
+    </data>
+    <data name="deleteSelectedCustomChecklists" xml:space="preserve">
+        <value>Smazat vybrané vlastní kontrolní seznamy</value>
+    </data>
+    <data name="deleteTemplateWarning" xml:space="preserve">
+        <value>Toto trvale smaže šablonu a všechna její data. Tuto akci nelze vrátit zpět.</value>
+    </data>
+    <data name="deleteTemplatesWarning" xml:space="preserve">
+        <value>Toto trvale smaže vybrané šablony a všechna jejich data. Tuto akci nelze vrátit zpět.</value>
+    </data>
+    <data name="deleting" xml:space="preserve">
+        <value>Mazání...</value>
+    </data>
+    <data name="executeChecklist" xml:space="preserve">
+        <value>Spustit kontrolní seznam</value>
+    </data>
+    <data name="execution" xml:space="preserve">
+        <value>Spuštění</value>
+    </data>
+    <data name="executionDetails" xml:space="preserve">
+        <value>Detaily spuštění</value>
+    </data>
+    <data name="fail" xml:space="preserve">
+        <value>Neúspěch</value>
+    </data>
+    <data name="featureNotImplemented" xml:space="preserve">
+        <value>Funkce není implementována</value>
+    </data>
+    <data name="item" xml:space="preserve">
+        <value>Položka</value>
+    </data>
+    <data name="no" xml:space="preserve">
+        <value>Ne</value>
+    </data>
+    <data name="noExecutionsFound" xml:space="preserve">
+        <value>Nenalezena žádná spuštění</value>
+    </data>
+    <data name="notTested" xml:space="preserve">
+        <value>Netestováno</value>
+    </data>
+    <data name="openChecklist" xml:space="preserve">
+        <value>Otevřít kontrolní seznam</value>
+    </data>
+    <data name="processing" xml:space="preserve">
+        <value>Zpracování...</value>
+    </data>
+    <data name="progress" xml:space="preserve">
+        <value>Pokrok</value>
+    </data>
+    <data name="selectedItemsCount" xml:space="preserve">
+        <value>Vybrané položky</value>
+    </data>
+    <data name="severity" xml:space="preserve">
+        <value>Závažnost</value>
+    </data>
+    <data name="system" xml:space="preserve">
+        <value>Systém</value>
+    </data>
+    <data name="templatePreview" xml:space="preserve">
+        <value>Náhled šablony</value>
+    </data>
+    <data name="testedDate" xml:space="preserve">
+        <value>Datum testování</value>
+    </data>
+    <data name="thisTemplateContains" xml:space="preserve">
+        <value>Tato šablona obsahuje</value>
+    </data>
+    <data name="totalItems" xml:space="preserve">
+        <value>Celkové položky</value>
+    </data>
+    <data name="view" xml:space="preserve">
+        <value>Zobrazit</value>
+    </data>
+    <data name="viewChecklistItem" xml:space="preserve">
+        <value>Zobrazit položku kontrolního seznamu</value>
     </data>
 </root>

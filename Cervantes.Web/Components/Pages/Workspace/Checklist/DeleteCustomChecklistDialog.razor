@@ -1,0 +1,49 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@attribute [HasPermission(Permissions.ChecklistsDelete)]
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Delete" style="margin-right: 3px;" />
+            @localizer["deleteCustomChecklist"]
+        </MudText>
+    </TitleContent>
+    
+    <DialogContent>
+        <MudContainer>
+            <MudAlert Severity="Severity.Warning" Class="mb-4">
+                @localizer["confirmDeleteCustomChecklist"]
+            </MudAlert>
+            
+            @if (checklist != null)
+            {
+                <MudStack>
+                    <MudText><strong>@localizer["name"]:</strong> @checklist.Name</MudText>
+                    <MudText><strong>@localizer["template"]:</strong> @(checklist.ChecklistTemplate?.Name ?? localizer["unknown"])</MudText>
+                    <MudText><strong>@localizer["target"]:</strong> @(checklist.Target?.Name ?? localizer["noTarget"])</MudText>
+                    <MudText><strong>@localizer["createdDate"]:</strong> @checklist.CreatedDate.ToShortDateString()</MudText>
+                </MudStack>
+            }
+        </MudContainer>
+    </DialogContent>
+    
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="Submit">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                <MudText Class="ms-2">@localizer["processing"]</MudText>
+            }
+            else
+            {
+                <MudText>@localizer["delete"]</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>

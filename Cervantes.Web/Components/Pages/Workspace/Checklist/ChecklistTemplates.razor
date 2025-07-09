@@ -1,4 +1,6 @@
-@page "/workspace/{project:guid}/checklists/legacy"
+@page "/workspace/{project:guid}/checklist/templates"
+@page "/workspace/{project:guid}/checklists/templates"
+
 @using Cervantes.CORE
 @using Cervantes.CORE.Entities
 @using Cervantes.CORE.ViewModel
@@ -12,15 +14,12 @@
 @using global::AuthPermissions.BaseCode.PermissionsCode
 @using Microsoft.Extensions.Localization
 @using MudBlazor.Extensions.Core
-@inject IDialogService DialogService
-@using TinyMCE.Blazor
 @inject IStringLocalizer<Resource> localizer
+@inject IDialogService DialogService
 @layout WorkspaceLayout
-@inject NavigationManager navigationManager
-@inject AuthenticationStateProvider authenticationStateProvider
-@attribute [HasPermission(Permissions.ChecklistsRead)]
+@attribute [HasPermission(Permissions.ChecklistTemplatesRead)]
 
-<PageTitle>@localizer["legacyChecklists"] | Cervantes</PageTitle>
+<PageTitle>@localizer["checklistTemplates"] | Cervantes</PageTitle>
 <SectionContent SectionName="appbar">
     <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
 </SectionContent>
@@ -39,13 +38,13 @@
 
                     <MudButton Href="@($"/workspace/{project}/checklists/templates")"
                                StartIcon="@Icons.Material.Outlined.Checklist"
-                               Color="Color.Transparent">
+                               Color="Color.Primary">
                         @localizer["templates"]
                     </MudButton>
                         
                     <MudButton Href="@($"/workspace/{project}/checklists/legacy")"
                                StartIcon="@Icons.Material.Outlined.Security"
-                               Color="Color.Primary">
+                               Color="Color.Transparent">
                         @localizer["legacyChecklist"]
                     </MudButton>
                 </MudStack>
@@ -53,19 +52,19 @@
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="12" md="12">
-        <!-- Legacy Checklists (WSTG/MASTG) -->
-        <MudDataGrid T="ChecklistViewModel" Items="@legacyModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_legacyQuickFilter"
-                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedLegacyItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+        <MudDataGrid T="ChecklistTemplate" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" 
+                     Virtualize="true" DragDropColumnReordering="true" RowsPerPage="10">
             <ToolBarContent>
                 <MudStack Row="true">
-                    @if (userAth.HasPermission(Permissions.ChecklistsAdd))
+                    @if (userAuth.HasPermission(Permissions.ChecklistTemplatesAdd))
                     {
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                     }
 
-                    @if (userAth.HasPermission(Permissions.ChecklistsDelete))
+                    @if (userAuth.HasPermission(Permissions.ChecklistTemplatesDelete))
                     {
-                        @if (seleChecklists.Count() != 0)
+                        @if (selectedTemplates.Count() != 0)
                         {
                             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
                                 <MudButton>@localizer["actions"]</MudButton>
@@ -77,42 +76,54 @@
                     }
                 </MudStack>
                 <MudSpacer/>
-                <MudTextField @bind-Value="legacySearchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
                               AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <Columns>
-                <SelectColumn T="ChecklistViewModel"></SelectColumn>
-                <PropertyColumn Property="x => x.Target" Title="@localizer["target"]"/>
+                <SelectColumn T="ChecklistTemplate"></SelectColumn>
+                <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                <PropertyColumn Property="x => x.Description" Title="@localizer["description"]"/>
+                <PropertyColumn Property="x => x.Version" Title="@localizer["version"]"/>
                 <TemplateColumn Title="@localizer["type"]">
                     <CellTemplate>
-                        @if (context.Item.Type == ChecklistType.OWASPWSTG)
+                        @if (context.Item.IsSystemTemplate)
                         {
-                            <MudChip Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Web">@localizer["wstg"]</MudChip>
+                            <MudChip Color="Color.Info" Size="Size.Small">@localizer["system"]</MudChip>
                         }
                         else
                         {
-                            <MudChip Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.PhoneAndroid">@localizer["mastg"]</MudChip>
+                            <MudChip Color="Color.Primary" Size="Size.Small">@localizer["custom"]</MudChip>
                         }
                     </CellTemplate>
                 </TemplateColumn>
                 <PropertyColumn Property="x => x.CreatedDate.ToShortDateString()" Title="@localizer["createdDate"]"/>
-                <PropertyColumn Property="x => x.User" Title="@localizer["createdBy"]"/>
-                <TemplateColumn CellClass="d-flex justify-end">
+                <TemplateColumn Title="@localizer["createdBy"]">
                     <CellTemplate>
-                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.PlayArrow" Color="Color.Primary"
-                                       OnClick="@((e) => OpenChecklistExecution(context.Item))"
-                                       Title="@localizer["openChecklist"]"/>
+                        @(context.Item.User?.FullName ?? localizer["system"])
                     </CellTemplate>
                 </TemplateColumn>
+                @*<TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        @if (userAuth.HasPermission(Permissions.ChecklistTemplatesEdit) && !context.Item.IsSystemTemplate)
+                        {
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Color="Color.Inherit" OnClick="@((e) => OpenDialogEdit(context.Item, maxWidth))"/>
+                        }
+                        @if (userAuth.HasPermission(Permissions.ChecklistTemplatesDelete) && !context.Item.IsSystemTemplate)
+                        {
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Inherit" OnClick="@((e) => OpenDialogDelete(context.Item, maxWidth))"/>
+                        }
+                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Visibility" Color="Color.Inherit" OnClick="@((e) => OpenDialogView(context.Item, maxWidthEx))"/>
+                    </CellTemplate>
+                </TemplateColumn>*@
             </Columns>
             <NoRecordsContent>
                 <MudStack Spacing="3" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                    <MudIcon Icon="@Icons.Material.Filled.Security" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
-                    <MudText Typo="Typo.subtitle1">@localizer["noLegacyChecklists"]</MudText>
+                    <MudIcon Icon="@Icons.Material.Filled.LibraryBooks" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
                 </MudStack>
             </NoRecordsContent>
             <PagerContent>
-                <MudDataGridPager T="ChecklistViewModel"/>
+                <MudDataGridPager T="ChecklistTemplate"/>
             </PagerContent>
         </MudDataGrid>
     </MudItem>

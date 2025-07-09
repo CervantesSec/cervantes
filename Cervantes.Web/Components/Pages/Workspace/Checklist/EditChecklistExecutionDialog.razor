@@ -1,0 +1,182 @@
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using FluentValidation
+@using Microsoft.EntityFrameworkCore
+@using Severity = MudBlazor.Severity
+@using Variant = MudBlazor.Variant
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+@attribute [HasPermission(Permissions.ChecklistsEdit)]
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudStack Row="true" Spacing="1">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" />
+            <MudText Typo="Typo.h5">@localizer["editExecution"]</MudText>
+        </MudStack>
+    </TitleContent>
+    
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 800px; overflow-y: auto;">
+            <MudForm Model="@model" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
+                <MudGrid>
+                    <!-- Item Information (Read-only) -->
+                    <MudItem xs="12">
+                        <MudCard Elevation="2" Class="mb-4">
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6">@localizer["checklistItem"]</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudStack>
+                                    <MudStack Row="true" AlignItems="AlignItems.Center">
+                                        <MudText Typo="Typo.subtitle2">@localizer["code"]:</MudText>
+                                        <MudChip T="string" Size="Size.Small" Color="Color.Primary">@execution.ChecklistItem?.Code</MudChip>
+                                    </MudStack>
+                                    <MudText Typo="Typo.body1"><strong>@localizer["name"]:</strong> @execution.ChecklistItem?.Name</MudText>
+                                    @if (!string.IsNullOrEmpty(execution.ChecklistItem?.Description))
+                                    {
+                                        <MudText Typo="Typo.body2" Class="text-muted">@execution.ChecklistItem?.Description</MudText>
+                                    }
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+
+                    <!-- Status -->
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="ChecklistItemStatus" @bind-Value="model.Status" For="@(() => model.Status)"
+                                   Label="@localizer["status"]" Required="true" Variant="Variant.Outlined">
+                            <MudSelectItem Value="ChecklistItemStatus.NotTested">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.HelpOutline" Color="Color.Default" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["notTested"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                            <MudSelectItem Value="ChecklistItemStatus.InProgress">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Schedule" Color="Color.Info" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["inProgress"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                            <MudSelectItem Value="ChecklistItemStatus.Passed">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["passed"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                            <MudSelectItem Value="ChecklistItemStatus.Failed">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["failed"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                            <MudSelectItem Value="ChecklistItemStatus.NotApplicable">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Block" Color="Color.Secondary" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["notApplicable"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <!-- Difficulty Rating -->
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="int?" @bind-Value="model.DifficultyRating" For="@(() => model.DifficultyRating)"
+                                   Label="@localizer["difficultyRating"]" Variant="Variant.Outlined" Clearable="true">
+                            <MudSelectItem Value="@((int?)1)">1 - @localizer["veryEasy"]</MudSelectItem>
+                            <MudSelectItem Value="@((int?)2)">2 - @localizer["easy"]</MudSelectItem>
+                            <MudSelectItem Value="@((int?)3)">3 - @localizer["medium"]</MudSelectItem>
+                            <MudSelectItem Value="@((int?)4)">4 - @localizer["hard"]</MudSelectItem>
+                            <MudSelectItem Value="@((int?)5)">5 - @localizer["veryHard"]</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <!-- Time Tracking -->
+                    <MudItem xs="12" md="6">
+                        <MudNumericField T="int?" @bind-Value="model.EstimatedTimeMinutes" For="@(() => model.EstimatedTimeMinutes)"
+                                         Label="@localizer["estimatedTimeMinutes"]" Variant="Variant.Outlined" 
+                                         Adornment="Adornment.End" AdornmentText="min" Min="0" />
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudNumericField T="int?" @bind-Value="model.ActualTimeMinutes" For="@(() => model.ActualTimeMinutes)"
+                                         Label="@localizer["actualTimeMinutes"]" Variant="Variant.Outlined"
+                                         Adornment="Adornment.End" AdornmentText="min" Min="0" />
+                    </MudItem>
+
+                    <!-- Notes -->
+                    <MudItem xs="12">
+                        <MudTextField T="string" @bind-Value="model.Notes" For="@(() => model.Notes)"
+                                      Label="@localizer["notes"]" Lines="4" Variant="Variant.Outlined"
+                                      Placeholder="@localizer["enterNotesAboutExecution"]" />
+                    </MudItem>
+
+                    <!-- Evidence -->
+                    <MudItem xs="12">
+                        <MudTextField T="string" @bind-Value="model.Evidence" For="@(() => model.Evidence)"
+                                      Label="@localizer["evidence"]" Lines="3" Variant="Variant.Outlined"
+                                      Placeholder="@localizer["enterEvidenceLinksOrDescription"]" />
+                    </MudItem>
+
+                    <!-- Associated Vulnerability -->
+                    <MudItem xs="12">
+                        <MudSelect T="Guid?" @bind-Value="model.VulnId" For="@(() => model.VulnId)"
+                                   Label="@localizer["associatedVulnerability"]" Variant="Variant.Outlined" Clearable="true">
+                            <MudSelectItem Value="@((Guid?)null)">@localizer["noVulnerability"]</MudSelectItem>
+                            @if (vulnerabilities != null)
+                            {
+                                @foreach (var vuln in vulnerabilities)
+                                {
+                                    <MudSelectItem Value="@((Guid?)vuln.Id)">
+                                        <div>
+                                            <MudText Typo="Typo.body1">@vuln.Name</MudText>
+                                            <MudText Typo="Typo.caption" Class="text-muted">@vuln.Risk - @vuln.Status</MudText>
+                                        </div>
+                                    </MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <!-- Execution Metadata -->
+                    <MudItem xs="12">
+                        <MudCard Elevation="1" Class="pa-3">
+                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                <MudStack>
+                                    <MudText Typo="Typo.caption">@localizer["testedBy"]: @(execution.TestedByUser?.FullName ?? localizer["unknown"])</MudText>
+                                    <MudText Typo="Typo.caption">@localizer["testedDate"]: @(execution.TestedDate?.ToString("yyyy-MM-dd HH:mm") ?? localizer["notTested"])</MudText>
+                                </MudStack>
+                                <MudChip T="string" Size="Size.Small" Color="GetStatusColor(execution.Status)">
+                                    @GetStatusText(execution.Status)
+                                </MudChip>
+                            </MudStack>
+                        </MudCard>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        </MudContainer>
+    </DialogContent>
+    
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Text">@localizer["cancel"]</MudButton>
+        <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@_processing">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                <MudText Class="ms-2">@localizer["processing"]</MudText>
+            }
+            else
+            {
+                <MudIcon Icon="@Icons.Material.Filled.Save" />
+                <MudText Class="ms-2">@localizer["save"]</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>

@@ -12,6 +12,7 @@ using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.DAL;
 using Cervantes.IFR;
+using Cervantes.IFR.ChecklistMigration;
 using Cervantes.Server.Helpers;
 using Cervantes.Web.AuthPermissions;
 using Cervantes.Web.Authentication;
@@ -335,7 +336,17 @@ using (var scope = app.Services.CreateScope())
         var env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
         var reportComponentsManager = serviceProvider.GetRequiredService<IReportComponentsManager>();
         var reportPartsManager = serviceProvider.GetRequiredService<IReportsPartsManager>();
+        var checklistMigrationService = serviceProvider.GetRequiredService<ChecklistMigrationService>();
         DataInitializer.SeedData(userManager, roleManager, vulnCategoryManager, organizationManager,reportTemplateManager,cweManager, env.WebRootPath+"/Resources/Data/cwe.xml", reportComponentsManager, reportPartsManager);
+        
+        // Initialize system checklist templates (WSTG/MASTG)
+        var systemUserId = userManager.Users.FirstOrDefault(u => u.Email == "admin@cervantes.local")?.Id;
+        if (!string.IsNullOrEmpty(systemUserId))
+        {
+            checklistMigrationService.InitializeSystemTemplates(systemUserId).Wait();
+        }
+        
+        //Check folders
         if (System.IO.Directory.Exists($"{env.WebRootPath}/Attachments/Clients") == false)
         {
             System.IO.Directory.CreateDirectory($"{env.WebRootPath}/Attachments/Clients");

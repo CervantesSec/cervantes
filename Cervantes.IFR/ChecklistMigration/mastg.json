@@ -1,0 +1,444 @@
+{
+    "categories": {
+        "MASVS-STORAGE": {
+            "id": "MASVS-STORAGE",
+            "tests": [
+                {
+                    "name": "Testing Local Storage for Sensitive Data",
+                    "id": "MASTG-TEST-0001",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-STORAGE/MASTG-TEST-0001/",
+                    "objectives": [
+                        "Determine whether sensitive data is stored outside of the app container or in non-secure storage mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing Logs for Sensitive Data",
+                    "id": "MASTG-TEST-0003",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-STORAGE/MASTG-TEST-0003/",
+                    "objectives": [
+                        "Determine whether sensitive data is written to application logs."
+                    ]
+                },
+                {
+                    "name": "Testing Backups for Sensitive Data",
+                    "id": "MASTG-TEST-0009",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-STORAGE/MASTG-TEST-0009/",
+                    "objectives": [
+                        "Determine whether sensitive data is included in backups."
+                    ]
+                },
+                {
+                    "name": "Testing Memory for Sensitive Data",
+                    "id": "MASTG-TEST-0011",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-STORAGE/MASTG-TEST-0011/",
+                    "objectives": [
+                        "Determine whether sensitive data is properly protected in memory."
+                    ]
+                },
+                {
+                    "name": "Testing Local Data Storage (iOS)",
+                    "id": "MASTG-TEST-0052",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0052/",
+                    "objectives": [
+                        "Test the local data storage implementation on iOS devices."
+                    ]
+                },
+                {
+                    "name": "Checking Logs for Sensitive Data (iOS)",
+                    "id": "MASTG-TEST-0053",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0053/",
+                    "objectives": [
+                        "Check iOS application logs for sensitive data exposure."
+                    ]
+                },
+                {
+                    "name": "Testing Backups for Sensitive Data (iOS)",
+                    "id": "MASTG-TEST-0058",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0058/",
+                    "objectives": [
+                        "Test iOS backup mechanisms for sensitive data exposure."
+                    ]
+                },
+                {
+                    "name": "Testing Memory for Sensitive Data (iOS)",
+                    "id": "MASTG-TEST-0060",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0060/",
+                    "objectives": [
+                        "Test iOS memory handling for sensitive data."
+                    ]
+                },
+                {
+                    "name": "Files Written to External Storage",
+                    "id": "MASTG-TEST-0200",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-STORAGE/MASTG-TEST-0200/",
+                    "objectives": [
+                        "Test for files written to external storage that may contain sensitive data."
+                    ]
+                },
+                {
+                    "name": "Sensitive Data Not Excluded From Backup (iOS)",
+                    "id": "MASTG-TEST-0215",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0215/",
+                    "objectives": [
+                        "Test whether sensitive data is properly excluded from iOS backups."
+                    ]
+                },
+                {
+                    "name": "Sensitive Data Not Excluded From Backup (Android)",
+                    "id": "MASTG-TEST-0216",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-STORAGE/MASTG-TEST-0216/",
+                    "objectives": [
+                        "Test whether sensitive data is properly excluded from Android backups."
+                    ]
+                }
+            ]
+        },
+        "MASVS-CRYPTO": {
+            "id": "MASVS-CRYPTO",
+            "tests": [
+                {
+                    "name": "Testing Symmetric Cryptography",
+                    "id": "MASTG-TEST-0013",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CRYPTO/MASTG-TEST-0013/",
+                    "objectives": [
+                        "Test that symmetric cryptography is implemented correctly."
+                    ]
+                },
+                {
+                    "name": "Testing Cryptographic Standard Algorithms Configuration",
+                    "id": "MASTG-TEST-0014",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CRYPTO/MASTG-TEST-0014/",
+                    "objectives": [
+                        "Test that cryptographic algorithms are configured according to standards."
+                    ]
+                },
+                {
+                    "name": "Testing Key Purposes",
+                    "id": "MASTG-TEST-0015",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CRYPTO/MASTG-TEST-0015/",
+                    "objectives": [
+                        "Test that cryptographic keys are used for their intended purposes."
+                    ]
+                },
+                {
+                    "name": "Testing Random Number Generation",
+                    "id": "MASTG-TEST-0016",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CRYPTO/MASTG-TEST-0016/",
+                    "objectives": [
+                        "Test that random number generation uses cryptographically secure methods."
+                    ]
+                },
+                {
+                    "name": "Verifying Cryptographic Algorithm Configuration (iOS)",
+                    "id": "MASTG-TEST-0061",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-CRYPTO/MASTG-TEST-0061/",
+                    "objectives": [
+                        "Verify cryptographic algorithm configuration on iOS platforms."
+                    ]
+                },
+                {
+                    "name": "Insecure Random API Usage",
+                    "id": "MASTG-TEST-0204",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CRYPTO/MASTG-TEST-0204/",
+                    "objectives": [
+                        "Test for insecure random API usage in the application."
+                    ]
+                },
+                {
+                    "name": "Inappropriate Key Sizes",
+                    "id": "MASTG-TEST-0208",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CRYPTO/MASTG-TEST-0208/",
+                    "objectives": [
+                        "Test for inappropriate cryptographic key sizes."
+                    ]
+                },
+                {
+                    "name": "Hardcoded Cryptographic Keys in Code",
+                    "id": "MASTG-TEST-0212",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CRYPTO/MASTG-TEST-0212/",
+                    "objectives": [
+                        "Test for hardcoded cryptographic keys in application code."
+                    ]
+                }
+            ]
+        },
+        "MASVS-AUTH": {
+            "id": "MASVS-AUTH",
+            "tests": [
+                {
+                    "name": "Testing Local Authentication",
+                    "id": "MASTG-TEST-0017",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-AUTH/MASTG-TEST-0017/",
+                    "objectives": [
+                        "Test the local authentication mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing Biometric Authentication",
+                    "id": "MASTG-TEST-0018",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-AUTH/MASTG-TEST-0018/",
+                    "objectives": [
+                        "Test biometric authentication implementation."
+                    ]
+                },
+                {
+                    "name": "Testing Session Management",
+                    "id": "MASTG-TEST-0019",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-AUTH/MASTG-TEST-0019/",
+                    "objectives": [
+                        "Test session management mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing OAuth 2.0 Flow",
+                    "id": "MASTG-TEST-0020",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-AUTH/MASTG-TEST-0020/",
+                    "objectives": [
+                        "Test OAuth 2.0 authentication flow implementation."
+                    ]
+                },
+                {
+                    "name": "Testing Local Authentication (iOS)",
+                    "id": "MASTG-TEST-0062",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-AUTH/MASTG-TEST-0062/",
+                    "objectives": [
+                        "Test iOS local authentication mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing Biometric Authentication (iOS)",
+                    "id": "MASTG-TEST-0063",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-AUTH/MASTG-TEST-0063/",
+                    "objectives": [
+                        "Test iOS biometric authentication implementation."
+                    ]
+                }
+            ]
+        },
+        "MASVS-NETWORK": {
+            "id": "MASVS-NETWORK",
+            "tests": [
+                {
+                    "name": "Testing Network Communication",
+                    "id": "MASTG-TEST-0021",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-NETWORK/MASTG-TEST-0021/",
+                    "objectives": [
+                        "Test network communication security."
+                    ]
+                },
+                {
+                    "name": "Testing Certificate Pinning",
+                    "id": "MASTG-TEST-0022",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-NETWORK/MASTG-TEST-0022/",
+                    "objectives": [
+                        "Test certificate pinning implementation."
+                    ]
+                },
+                {
+                    "name": "Testing Network Security Config",
+                    "id": "MASTG-TEST-0023",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-NETWORK/MASTG-TEST-0023/",
+                    "objectives": [
+                        "Test network security configuration."
+                    ]
+                },
+                {
+                    "name": "Testing Network Communication (iOS)",
+                    "id": "MASTG-TEST-0065",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-NETWORK/MASTG-TEST-0065/",
+                    "objectives": [
+                        "Test iOS network communication security."
+                    ]
+                },
+                {
+                    "name": "Testing Certificate Pinning (iOS)",
+                    "id": "MASTG-TEST-0066",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-NETWORK/MASTG-TEST-0066/",
+                    "objectives": [
+                        "Test iOS certificate pinning implementation."
+                    ]
+                }
+            ]
+        },
+        "MASVS-PLATFORM": {
+            "id": "MASVS-PLATFORM",
+            "tests": [
+                {
+                    "name": "Testing App Components",
+                    "id": "MASTG-TEST-0024",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-PLATFORM/MASTG-TEST-0024/",
+                    "objectives": [
+                        "Test application components for security issues."
+                    ]
+                },
+                {
+                    "name": "Testing App Permissions",
+                    "id": "MASTG-TEST-0025",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-PLATFORM/MASTG-TEST-0025/",
+                    "objectives": [
+                        "Test application permissions configuration."
+                    ]
+                },
+                {
+                    "name": "Testing Deep Links",
+                    "id": "MASTG-TEST-0026",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-PLATFORM/MASTG-TEST-0026/",
+                    "objectives": [
+                        "Test deep link handling security."
+                    ]
+                },
+                {
+                    "name": "Testing WebView Security",
+                    "id": "MASTG-TEST-0027",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-PLATFORM/MASTG-TEST-0027/",
+                    "objectives": [
+                        "Test WebView security implementation."
+                    ]
+                },
+                {
+                    "name": "Testing iOS App Permissions",
+                    "id": "MASTG-TEST-0067",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-PLATFORM/MASTG-TEST-0067/",
+                    "objectives": [
+                        "Test iOS application permissions."
+                    ]
+                },
+                {
+                    "name": "Testing iOS WebView Security",
+                    "id": "MASTG-TEST-0068",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-PLATFORM/MASTG-TEST-0068/",
+                    "objectives": [
+                        "Test iOS WebView security implementation."
+                    ]
+                }
+            ]
+        },
+        "MASVS-CODE": {
+            "id": "MASVS-CODE",
+            "tests": [
+                {
+                    "name": "Testing Code Quality",
+                    "id": "MASTG-TEST-0028",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CODE/MASTG-TEST-0028/",
+                    "objectives": [
+                        "Test application code quality and security."
+                    ]
+                },
+                {
+                    "name": "Testing Binary Protection",
+                    "id": "MASTG-TEST-0029",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CODE/MASTG-TEST-0029/",
+                    "objectives": [
+                        "Test binary protection mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing Anti-Debugging",
+                    "id": "MASTG-TEST-0030",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-CODE/MASTG-TEST-0030/",
+                    "objectives": [
+                        "Test anti-debugging mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing iOS Code Quality",
+                    "id": "MASTG-TEST-0069",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-CODE/MASTG-TEST-0069/",
+                    "objectives": [
+                        "Test iOS code quality and security."
+                    ]
+                },
+                {
+                    "name": "Testing iOS Binary Protection",
+                    "id": "MASTG-TEST-0070",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-CODE/MASTG-TEST-0070/",
+                    "objectives": [
+                        "Test iOS binary protection mechanisms."
+                    ]
+                }
+            ]
+        },
+        "MASVS-RESILIENCE": {
+            "id": "MASVS-RESILIENCE",
+            "tests": [
+                {
+                    "name": "Testing Root Detection",
+                    "id": "MASTG-TEST-0031",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-RESILIENCE/MASTG-TEST-0031/",
+                    "objectives": [
+                        "Test root detection mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing Anti-Tampering",
+                    "id": "MASTG-TEST-0032",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-RESILIENCE/MASTG-TEST-0032/",
+                    "objectives": [
+                        "Test anti-tampering mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing Obfuscation",
+                    "id": "MASTG-TEST-0033",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-RESILIENCE/MASTG-TEST-0033/",
+                    "objectives": [
+                        "Test code obfuscation mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing iOS Jailbreak Detection",
+                    "id": "MASTG-TEST-0071",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-RESILIENCE/MASTG-TEST-0071/",
+                    "objectives": [
+                        "Test iOS jailbreak detection mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing iOS Anti-Tampering",
+                    "id": "MASTG-TEST-0072",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-RESILIENCE/MASTG-TEST-0072/",
+                    "objectives": [
+                        "Test iOS anti-tampering mechanisms."
+                    ]
+                }
+            ]
+        },
+        "MASVS-PRIVACY": {
+            "id": "MASVS-PRIVACY",
+            "tests": [
+                {
+                    "name": "Testing Data Privacy",
+                    "id": "MASTG-TEST-0034",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-PRIVACY/MASTG-TEST-0034/",
+                    "objectives": [
+                        "Test data privacy mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing User Consent",
+                    "id": "MASTG-TEST-0035",
+                    "reference": "https://mas.owasp.org/MASTG/tests/android/MASVS-PRIVACY/MASTG-TEST-0035/",
+                    "objectives": [
+                        "Test user consent mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing iOS Data Privacy",
+                    "id": "MASTG-TEST-0073",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-PRIVACY/MASTG-TEST-0073/",
+                    "objectives": [
+                        "Test iOS data privacy mechanisms."
+                    ]
+                },
+                {
+                    "name": "Testing iOS User Consent",
+                    "id": "MASTG-TEST-0074",
+                    "reference": "https://mas.owasp.org/MASTG/tests/ios/MASVS-PRIVACY/MASTG-TEST-0074/",
+                    "objectives": [
+                        "Test iOS user consent mechanisms."
+                    ]
+                }
+            ]
+        }
+    }
+}

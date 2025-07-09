@@ -1,0 +1,436 @@
+@rendermode InteractiveServer
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using FluentValidation
+@using Microsoft.EntityFrameworkCore
+@using Severity = MudBlazor.Severity
+@using Variant = MudBlazor.Variant
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService Dialog
+@inject IJSRuntime JS
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ChecklistsRead)]
+
+<style>
+    .tox-tinymce-aux {
+        z-index: 999999!important;
+    }
+</style>
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudStack Row="true" Spacing="1">
+            <MudText Typo="Typo.h4">
+                <MudIcon Icon="@Icons.Material.Filled.Checklist" /> 
+                @checklist.Name
+            </MudText>
+            @if (userAth.HasPermission(Permissions.ChecklistsEdit))
+            {
+                @if (editMode)
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["details"]</MudChip>
+                }
+                else
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@((e) => EditMode())">@localizer["edit"]</MudChip>
+                }
+            }
+            @if (userAth.HasPermission(Permissions.ChecklistsDelete))
+            {
+                <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteDialog(checklist, medium))">@localizer["delete"]</MudChip>
+            }
+        </MudStack>
+    </TitleContent>
+    
+    <DialogContent>
+        @if (editMode)
+        {
+            <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll;">
+                <MudForm Model="@model" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
+                    <MudStack>
+                        <MudTextField @bind-Value="model.Name" For="@(() => model.Name)" 
+                                      Label="@localizer["name"]" Required="true" />
+                        
+                        <MudSelect T="ChecklistStatus" @bind-Value="model.Status" For="@(() => model.Status)"
+                                   Label="@localizer["status"]" Required="true">
+                            <MudSelectItem Value="ChecklistStatus.NotStarted">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Schedule" Color="Color.Default" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["notStarted"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                            <MudSelectItem Value="ChecklistStatus.InProgress">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.PlayArrow" Color="Color.Info" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["inProgress"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                            <MudSelectItem Value="ChecklistStatus.Completed">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["completed"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                            <MudSelectItem Value="ChecklistStatus.OnHold">
+                                <div style="display: flex; align-items: center;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Pause" Color="Color.Warning" Size="Size.Small" />
+                                    <MudText Class="ml-2">@localizer["onHold"]</MudText>
+                                </div>
+                            </MudSelectItem>
+                        </MudSelect>
+                        
+                        <MudTextField @bind-Value="model.Notes" For="@(() => model.Notes)" 
+                                      Label="@localizer["notes"]" Lines="3" />
+                        
+                        <MudAlert Severity="Severity.Info" Class="mt-4">
+                            @localizer["editChecklistNote"]
+                        </MudAlert>
+                    </MudStack>
+                </MudForm>
+                
+                <MudStack Row="true" Justify="Justify.FlexEnd" Class="mt-4">
+                    <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>
+                    @if (userAth.HasPermission(Permissions.ChecklistsEdit))
+                    {
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit" Disabled="@_processing">
+                            @if (_processing)
+                            {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                                <MudText Class="ms-2">@localizer["processing"]</MudText>
+                            }
+                            else
+                            {
+                                <MudText>@localizer["save"]</MudText>
+                            }
+                        </MudButton>
+                    }
+                </MudStack>
+            </MudContainer>
+        }
+        else
+        {
+            <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+                <MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details">
+                    <MudGrid>
+                        <MudItem xs="12" sm="4" md="3">
+                            <MudCard Elevation="25">
+                                <MudCardContent>
+                                    <div class="d-flex justify-center mb-4">
+                                        <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.Checklist" Size="Size.Large" />
+                                    </div>
+                                    <MudList T="string" Dense="true">
+                                        <MudListItem T="string" Text="@checklist.Name" Icon="@Icons.Material.Filled.Checklist" />
+                                        <MudListItem T="string" Text="@(checklist.ChecklistTemplate?.Name ?? localizer["unknown"])" Icon="@Icons.Material.Filled.FileCopy" />
+                                        <MudListItem T="string" Text="@(checklist.Target?.Name ?? localizer["noTarget"])" Icon="@Icons.Material.Filled.Adjust" />
+                                        <MudListItem T="string" Text="@(checklist.User?.FullName ?? localizer["unknown"])" Icon="@Icons.Material.Filled.Person" />
+                                        <MudListItem T="string" Text="@checklist.CreatedDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth" />
+                                    </MudList>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                        <MudItem xs="12" sm="8" md="9">
+                            <MudStack>
+                                <MudCard Elevation="25">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText>@localizer["status"]</MudText>
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        @{
+                                            var statusColor = checklist.Status switch
+                                            {
+                                                ChecklistStatus.NotStarted => Color.Default,
+                                                ChecklistStatus.InProgress => Color.Info,
+                                                ChecklistStatus.Completed => Color.Success,
+                                                ChecklistStatus.OnHold => Color.Warning,
+                                                _ => Color.Default
+                                            };
+                                            var statusText = checklist.Status switch
+                                            {
+                                                ChecklistStatus.NotStarted => localizer["notStarted"],
+                                                ChecklistStatus.InProgress => localizer["inProgress"],
+                                                ChecklistStatus.Completed => localizer["completed"],
+                                                ChecklistStatus.OnHold => localizer["onHold"],
+                                                _ => localizer["unknown"]
+                                            };
+                                        }
+                                        <MudChip T="string" Color="statusColor">@statusText</MudChip>
+                                    </MudCardContent>
+                                </MudCard>
+                                
+                                <MudCard Elevation="25">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText>@localizer["notes"]</MudText>
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        @((MarkupString)(checklist.Notes ?? localizer["noNotes"]))
+                                    </MudCardContent>
+                                </MudCard>
+                                
+                                @if (checklist.Executions != null && checklist.Executions.Any())
+                                {
+                                    <MudCard Elevation="25">
+                                        <MudCardHeader>
+                                            <CardHeaderContent>
+                                                <MudText>@localizer["progress"]</MudText>
+                                            </CardHeaderContent>
+                                        </MudCardHeader>
+                                        <MudCardContent>
+                                            <MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-2">
+                                                <MudProgressLinear Color="Color.Primary" Value="@(checklist.Executions.Count() > 0 ? (double)checklist.Executions.Count(e => e.Status == CORE.Entities.ChecklistItemStatus.Passed || e.Status == CORE.Entities.ChecklistItemStatus.Failed) / checklist.Executions.Count() * 100 : 0)" Size="Size.Medium" Class="flex-grow-1" />
+                                                <MudText Typo="Typo.body1">@checklist.Executions.Count(e => e.Status == CORE.Entities.ChecklistItemStatus.Passed || e.Status == CORE.Entities.ChecklistItemStatus.Failed)/@checklist.Executions.Count() (@Math.Round(checklist.Executions.Count() > 0 ? (double)checklist.Executions.Count(e => e.Status == CORE.Entities.ChecklistItemStatus.Passed || e.Status == CORE.Entities.ChecklistItemStatus.Failed) / checklist.Executions.Count() * 100 : 0, 1)%)</MudText>
+                                            </MudStack>
+                                        </MudCardContent>
+                                    </MudCard>
+                                }
+                            </MudStack>
+                        </MudItem>
+                    </MudGrid>
+                </MudTabPanel>
+                
+                <MudTabPanel Text="@localizer["categories"]" Icon="@Icons.Material.Filled.Category" BadgeData="@(checklist.ChecklistTemplate?.Categories?.Count ?? 0)" BadgeColor="Color.Primary" Style="width: 260px">
+                    <MudItem xs="12" sm="12" md="12">
+                        @if (checklist.ChecklistTemplate?.Categories != null && checklist.ChecklistTemplate.Categories.Any())
+                        {
+                            @foreach (var category in checklist.ChecklistTemplate.Categories.OrderBy(c => c.Order))
+                            {
+                                <MudCard Class="mb-4" Elevation="25">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText Typo="Typo.h6">@category.Name</MudText>
+                                            @if (!string.IsNullOrEmpty(category.Description))
+                                            {
+                                                <MudText Typo="Typo.body2" Class="text-muted">@category.Description</MudText>
+                                            }
+                                        </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">
+                                                @localizer["order"]: @category.Order
+                                            </MudChip>
+                                        </CardHeaderActions>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        <MudText Typo="Typo.subtitle2" Class="mb-2">
+                                            @localizer["items"] (@category.Items?.Count)
+                                        </MudText>
+                                        
+                                        @if (category.Items != null && category.Items.Any())
+                                        {
+                                            <MudDataGrid T="ChecklistItem" Items="@category.Items.OrderBy(i => i.Order)" Dense="true" 
+                                                         Hover="true" ReadOnly="true" Height="300px">
+                                                <Columns>
+                                                    <PropertyColumn Property="x => x.Order" Title="@localizer["order"]" />
+                                                    <PropertyColumn Property="x => x.Code" Title="@localizer["code"]" />
+                                                    <PropertyColumn Property="x => x.Name" Title="@localizer["name"]" />
+                                                    <TemplateColumn Title="@localizer["severity"]">
+                                                        <CellTemplate>
+                                                            @{
+                                                                var severityColor = context.Item.Severity switch
+                                                                {
+                                                                    1 => Color.Success,
+                                                                    2 => Color.Warning,
+                                                                    3 => Color.Error,
+                                                                    4 => Color.Dark,
+                                                                    _ => Color.Default
+                                                                };
+                                                                var severityText = context.Item.Severity switch
+                                                                {
+                                                                    1 => localizer["low"],
+                                                                    2 => localizer["medium"],
+                                                                    3 => localizer["high"],
+                                                                    4 => localizer["critical"],
+                                                                    _ => localizer["unknown"]
+                                                                };
+                                                            }
+                                                            <MudChip Color="severityColor" Size="Size.Small">@severityText</MudChip>
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+                                                    <TemplateColumn Title="@localizer["required"]">
+                                                        <CellTemplate>
+                                                            @if (context.Item.IsRequired)
+                                                            {
+                                                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <MudIcon Icon="@Icons.Material.Filled.RadioButtonUnchecked" Color="Color.Default" Size="Size.Small" />
+                                                            }
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+                                                    <TemplateColumn Title="@localizer["execution"]">
+                                                        <CellTemplate>
+                                                            @{
+                                                                var execution = checklist.Executions?.FirstOrDefault(e => e.ChecklistItemId == context.Item.Id);
+                                                                if (execution != null)
+                                                                {
+                                                                    var execStatusColor = execution.Status switch
+                                                                    {
+                                                                        CORE.Entities.ChecklistItemStatus.NotTested => Color.Default,
+                                                                        CORE.Entities.ChecklistItemStatus.Passed => Color.Success,
+                                                                        CORE.Entities.ChecklistItemStatus.Failed => Color.Error,
+                                                                        CORE.Entities.ChecklistItemStatus.InProgress => Color.Info,
+                                                                        CORE.Entities.ChecklistItemStatus.NotApplicable => Color.Secondary,
+                                                                        _ => Color.Default
+                                                                    };
+                                                                    var execStatusText = execution.Status switch
+                                                                    {
+                                                                        CORE.Entities.ChecklistItemStatus.NotTested => localizer["notTested"],
+                                                                        CORE.Entities.ChecklistItemStatus.Passed => localizer["passed"],
+                                                                        CORE.Entities.ChecklistItemStatus.Failed => localizer["failed"],
+                                                                        CORE.Entities.ChecklistItemStatus.InProgress => localizer["inProgress"],
+                                                                        CORE.Entities.ChecklistItemStatus.NotApplicable => localizer["notApplicable"],
+                                                                        _ => localizer["unknown"]
+                                                                    };
+                                                                    <MudChip T="string" Color="execStatusColor" Size="Size.Small">@execStatusText</MudChip>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <MudChip T="string" Color="Color.Default" Size="Size.Small">@localizer["notTested"]</MudChip>
+                                                                }
+                                                            }
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+                                                    <TemplateColumn  Title="@localizer["actions"]">
+                                                        <CellTemplate>
+                                                            @{
+                                                                var execution = checklist.Executions?.FirstOrDefault(e => e.ChecklistItemId == context.Item.Id);
+                                                            }
+                                                            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                                                                
+                                                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Visibility" 
+                                                                         Color="Color.Primary" OnClick="@((e) => ViewItem(context.Item))" />
+                                                            @if (userAth.HasPermission(Permissions.ChecklistsEdit))
+                                                            {
+                                                                <MudMenu Icon="@Icons.Material.Filled.PlayArrow" Size="Size.Small" Color="Color.Secondary">
+                                                                    <MudMenuItem OnClick="@(() => UpdateExecutionStatus(context.Item, ChecklistItemStatus.InProgress))">
+                                                                        <div style="display: flex; align-items: center;">
+                                                                            <MudIcon Icon="@Icons.Material.Filled.Schedule" Color="Color.Info" />
+                                                                            <MudText Class="ml-2">@localizer["inProgress"]</MudText>
+                                                                        </div>
+                                                                    </MudMenuItem>
+                                                                    <MudMenuItem OnClick="@(() => UpdateExecutionStatus(context.Item, ChecklistItemStatus.Passed))">
+                                                                        <div style="display: flex; align-items: center;">
+                                                                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" />
+                                                                            <MudText Class="ml-2">@localizer["passed"]</MudText>
+                                                                        </div>
+                                                                    </MudMenuItem>
+                                                                    <MudMenuItem OnClick="@(() => UpdateExecutionStatus(context.Item, ChecklistItemStatus.Failed))">
+                                                                        <div style="display: flex; align-items: center;">
+                                                                            <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" />
+                                                                            <MudText Class="ml-2">@localizer["failed"]</MudText>
+                                                                        </div>
+                                                                    </MudMenuItem>
+                                                                    <MudMenuItem OnClick="@(() => UpdateExecutionStatus(context.Item, ChecklistItemStatus.NotApplicable))">
+                                                                        <div style="display: flex; align-items: center;">
+                                                                            <MudIcon Icon="@Icons.Material.Filled.Block" Color="Color.Secondary" />
+                                                                            <MudText Class="ml-2">@localizer["notApplicable"]</MudText>
+                                                                        </div>
+                                                                    </MudMenuItem>
+                                                                    @if (execution != null)
+                                                                    {
+                                                                        <MudDivider />
+                                                                        <MudMenuItem OnClick="@(() => EditExecution(execution))">
+                                                                            <div style="display: flex; align-items: center;">
+                                                                                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" />
+                                                                                <MudText Class="ml-2">@localizer["edit"]</MudText>
+                                                                            </div>
+                                                                        </MudMenuItem>
+                                                                    }
+                                                                </MudMenu>
+                                                            }
+                                                            </MudStack>
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+                                                </Columns>
+                                            </MudDataGrid>
+                                        }
+                                        else
+                                        {
+                                            <MudAlert Severity="Severity.Info">@localizer["noItemsInCategory"]</MudAlert>
+                                        }
+                                    </MudCardContent>
+                                </MudCard>
+                            }
+                        }
+                        else
+                        {
+                            <MudAlert Severity="Severity.Info">@localizer["noCategoriesInTemplate"]</MudAlert>
+                        }
+                    </MudItem>
+                </MudTabPanel>
+                
+                <MudTabPanel Text="@localizer["executionDetails"]" Icon="@Icons.Material.Filled.PlaylistAddCheck" BadgeData="@(checklist.Executions?.Count ?? 0)" BadgeColor="Color.Primary" Style="width: 300px">
+                    <MudItem xs="12" sm="12" md="12">
+                        @if (checklist.Executions != null && checklist.Executions.Any())
+                        {
+                            <MudDataGrid T="ChecklistExecution" Items="@checklist.Executions.OrderBy(e => e.ChecklistItem?.ChecklistCategory?.Order ?? 0).ThenBy(e => e.ChecklistItem?.Order ?? 0)" 
+                                         Dense="true" Hover="true" ReadOnly="true" Height="400px">
+                                <Columns>
+                                    <TemplateColumn Title="@localizer["code"]">
+                                        <CellTemplate>
+                                            @(context.Item.ChecklistItem?.Code ?? string.Empty)
+                                        </CellTemplate>
+                                    </TemplateColumn>
+                                    <TemplateColumn Title="@localizer["name"]">
+                                        <CellTemplate>
+                                            @(context.Item.ChecklistItem?.Name ?? string.Empty)
+                                        </CellTemplate>
+                                    </TemplateColumn>
+                                    <TemplateColumn Title="@localizer["category"]">
+                                        <CellTemplate>
+                                            @(context.Item.ChecklistItem?.ChecklistCategory?.Name ?? string.Empty)
+                                        </CellTemplate>
+                                    </TemplateColumn>
+                                    <TemplateColumn Title="@localizer["status"]">
+                                        <CellTemplate>
+                                            @{
+                                                var execStatusColor = context.Item.Status switch
+                                                {
+                                                    CORE.Entities.ChecklistItemStatus.NotTested => Color.Default,
+                                                    CORE.Entities.ChecklistItemStatus.Passed => Color.Success,
+                                                    CORE.Entities.ChecklistItemStatus.Failed => Color.Error,
+                                                    CORE.Entities.ChecklistItemStatus.InProgress => Color.Info,
+                                                    CORE.Entities.ChecklistItemStatus.NotApplicable => Color.Secondary,
+                                                    _ => Color.Default
+                                                };
+                                                var execStatusText = context.Item.Status switch
+                                                {
+                                                    CORE.Entities.ChecklistItemStatus.NotTested => localizer["notTested"],
+                                                    CORE.Entities.ChecklistItemStatus.Passed => localizer["passed"],
+                                                    CORE.Entities.ChecklistItemStatus.Failed => localizer["failed"],
+                                                    CORE.Entities.ChecklistItemStatus.InProgress => localizer["inProgress"],
+                                                    CORE.Entities.ChecklistItemStatus.NotApplicable => localizer["notApplicable"],
+                                                    _ => localizer["unknown"]
+                                                };
+                                            }
+                                            <MudChip T="string" Color="execStatusColor" Size="Size.Small">@execStatusText</MudChip>
+                                        </CellTemplate>
+                                    </TemplateColumn>
+                                    <TemplateColumn Title="@localizer["testedDate"]">
+                                        <CellTemplate>
+                                            @(context.Item.TestedDate?.ToShortDateString() ?? localizer["notTested"])
+                                        </CellTemplate>
+                                    </TemplateColumn>
+                                </Columns>
+                            </MudDataGrid>
+                        }
+                        else
+                        {
+                            <MudAlert Severity="Severity.Info">@localizer["noExecutionsFound"]</MudAlert>
+                        }
+                    </MudItem>
+                </MudTabPanel>
+            </MudTabs>
+        }
+    </DialogContent>
+    
+    <DialogActions>
+    </DialogActions>
+</MudDialog>

@@ -1,0 +1,166 @@
+@page "/workspace/{project:guid}/checklists"
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using DialogOptions = MudBlazor.DialogOptions
+@using Task = System.Threading.Tasks.Task
+@using Variant = MudBlazor.Variant
+@using Cervantes.CORE.ViewModels
+@using Cervantes.Web.Components.Layout
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.Extensions.Localization
+@using MudBlazor.Extensions.Core
+@inject IStringLocalizer<Resource> localizer
+@inject IDialogService DialogService
+@inject NavigationManager navigationManager
+@layout WorkspaceLayout
+@attribute [HasPermission(Permissions.ChecklistsRead)]
+
+<PageTitle>@localizer["customChecklists"] | Cervantes</PageTitle>
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
+</SectionContent>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                        <MudButton Href="@($"/workspace/{project}/checklists")"
+                                   StartIcon="@Icons.Material.Filled.Checklist"
+                                   Color="Color.Primary">
+                            @localizer["checklist"]
+                        </MudButton>
+
+                        <MudButton Href="@($"/workspace/{project}/checklists/templates")"
+                                   StartIcon="@Icons.Material.Outlined.Checklist"
+                                   Color="Color.Transparent">
+                            @localizer["templates"]
+                        </MudButton>
+                        
+                        <MudButton Href="@($"/workspace/{project}/checklists/legacy")"
+                                   StartIcon="@Icons.Material.Outlined.Security"
+                                   Color="Color.Transparent">
+                            @localizer["legacyChecklist"]
+                        </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
+    
+    <MudItem xs="12" sm="12" md="12">
+        <MudDataGrid T="Checklist" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+            <ToolBarContent>
+                <MudStack Row="true">
+                    @if (userAuth.HasPermission(Permissions.ChecklistsAdd))
+                    {
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
+                    }
+
+                    @if (userAuth.HasPermission(Permissions.ChecklistsDelete))
+                    {
+                        @if (selectedChecklists.Count() != 0)
+                        {
+                            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                                <MudButton>@localizer["actions"]</MudButton>
+                                <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                                    <MudMenuItem OnClick="@((e) => BtnActions(0))">@localizer["delete"]</MudMenuItem>
+                                </MudMenu>
+                            </MudButtonGroup>
+                        }
+                    }
+                </MudStack>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <Columns>
+                <SelectColumn T="Checklist"></SelectColumn>
+                <PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+                <TemplateColumn Title="@localizer["template"]">
+                    <CellTemplate>
+                        @(context.Item.ChecklistTemplate?.Name ?? localizer["unknown"])
+                    </CellTemplate>
+                </TemplateColumn>
+                <TemplateColumn Title="@localizer["target"]">
+                    <CellTemplate>
+                        @(context.Item.Target?.Name ?? localizer["noTarget"])
+                    </CellTemplate>
+                </TemplateColumn>
+                <TemplateColumn Title="@localizer["status"]">
+                    <CellTemplate>
+                        @{
+                            var statusColor = context.Item.Status switch
+                            {
+                                ChecklistStatus.NotStarted => Color.Default,
+                                ChecklistStatus.InProgress => Color.Info,
+                                ChecklistStatus.Completed => Color.Success,
+                                ChecklistStatus.OnHold => Color.Warning,
+                                _ => Color.Default
+                            };
+                            var statusText = context.Item.Status switch
+                            {
+                                ChecklistStatus.NotStarted => localizer["notStarted"],
+                                ChecklistStatus.InProgress => localizer["inProgress"],
+                                ChecklistStatus.Completed => localizer["completed"],
+                                ChecklistStatus.OnHold => localizer["onHold"],
+                                _ => localizer["unknown"]
+                            };
+                        }
+                        <MudChip Color="statusColor" Size="Size.Small">@statusText</MudChip>
+                    </CellTemplate>
+                </TemplateColumn>
+                <TemplateColumn Title="@localizer["progress"]">
+                    <CellTemplate>
+                        @{
+                            var totalItems = context.Item.Executions?.Count ?? 0;
+                            var completedItems = context.Item.Executions?.Count(e => e.Status == ChecklistItemStatus.Passed || e.Status == ChecklistItemStatus.Failed) ?? 0;
+                            var progressPercentage = totalItems > 0 ? (double)completedItems / totalItems * 100 : 0;
+                        }
+                        <MudStack Row="true" AlignItems="AlignItems.Center">
+                            <MudProgressLinear Value="@progressPercentage" Size="Size.Small" Class="flex-grow-1"/>
+                            <MudText Typo="Typo.caption">@completedItems/@totalItems</MudText>
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
+                <PropertyColumn Property="x => x.CreatedDate.ToShortDateString()" Title="@localizer["createdDate"]"/>
+                <TemplateColumn Title="@localizer["createdBy"]">
+                    <CellTemplate>
+                        @(context.Item.User?.FullName ?? localizer["unknown"])
+                    </CellTemplate>
+                </TemplateColumn>
+                @*<TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        @if (userAuth.HasPermission(Permissions.ChecklistsEdit))
+                        {
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.PlayArrow" Color="Color.Primary"
+                                           OnClick="@((e) => OpenChecklistExecution(context.Item))" Title="@localizer["executeChecklist"]"/>
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Color="Color.Inherit"
+                                           OnClick="@((e) => OpenDialogEdit(context.Item, maxWidth))" Title="@localizer["edit"]"/>
+                        }
+                        @if (userAuth.HasPermission(Permissions.ChecklistsDelete))
+                        {
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Inherit"
+                                           OnClick="@((e) => OpenDialogDelete(context.Item, maxWidth))" Title="@localizer["delete"]"/>
+                        }
+                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Visibility" Color="Color.Inherit"
+                                       OnClick="@((e) => OpenDialogView(context.Item, maxWidthEx))" Title="@localizer["view"]"/>
+                    </CellTemplate>
+                </TemplateColumn>*@
+            </Columns>
+            <NoRecordsContent>
+                <MudStack Spacing="3" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.Checklist" Size="Size.Large" style="width: 50px; height: 50px"></MudIcon>
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
+                </MudStack>
+            </NoRecordsContent>
+            <PagerContent>
+                <MudDataGridPager T="Checklist"/>
+            </PagerContent>
+        </MudDataGrid>
+    </MudItem>
+</MudGrid>

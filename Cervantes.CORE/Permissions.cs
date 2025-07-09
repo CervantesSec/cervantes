@@ -316,6 +316,15 @@ public enum Permissions: ushort
     ChecklistsDelete = 353,
     [Display(GroupName = "Checklists", Name = "Add New Checklists", Description = "Can add new Checklists")]
     ChecklistsAdd = 354,
+    
+    [Display(GroupName = "Checklist Templates", Name = "View/Read Checklist Templates", Description = "Can read and view checklist templates")]
+    ChecklistTemplatesRead = 355,
+    [Display(GroupName = "Checklist Templates", Name = "Edit Checklist Templates", Description = "Can edit existing checklist templates")]
+    ChecklistTemplatesEdit = 356,
+    [Display(GroupName = "Checklist Templates", Name = "Delete Checklist Templates", Description = "Can delete existing checklist templates")]
+    ChecklistTemplatesDelete = 357,
+    [Display(GroupName = "Checklist Templates", Name = "Add New Checklist Templates", Description = "Can create new checklist templates")]
+    ChecklistTemplatesAdd = 358,
 
     
     [Display(GroupName = "Rss News", Name = "View/Read RSS News", Description = "Can read and view the RSS News")]

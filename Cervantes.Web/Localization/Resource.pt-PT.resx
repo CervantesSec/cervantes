@@ -56,9 +56,6 @@
     <data name="addAttachmentError" xml:space="preserve">
         <value>Ocorreu um erro ao adicionar o anexo!</value>
     </data>
-    <data name="addCategory" xml:space="preserve">
-        <value>Adicionar Categoria</value>
-    </data>
     <data name="addComment" xml:space="preserve">
         <value>Adicionar Comentário</value>
     </data>
@@ -559,9 +556,6 @@
     </data>
     <data name="theoretical" xml:space="preserve">
         <value>Teórico</value>
-    </data>
-    <data name="templates" xml:space="preserve">
-        <value>Modelos</value>
     </data>
     <data name="template" xml:space="preserve">
         <value>Modelo</value>
@@ -2047,5 +2041,185 @@
     </data>
     <data name="customFieldValue" xml:space="preserve">
         <value>Valor do Campo Personalizado</value>
+    </data>
+    <data name="owaspWstg" xml:space="preserve">
+        <value>OWASP WSTG</value>
+    </data>
+    <data name="owaspMstg" xml:space="preserve">
+        <value>OWASP MSTG</value>
+    </data>
+    <data name="android" xml:space="preserve">
+        <value>Android</value>
+    </data>
+    <data name="ios" xml:space="preserve">
+        <value>iOS</value>
+    </data>
+    <data name="wstg" xml:space="preserve">
+        <value>WSTG</value>
+    </data>
+    <data name="mastg" xml:space="preserve">
+        <value>MASTG</value>
+    </data>
+    <data name="categoryName" xml:space="preserve">
+        <value>Nome da Categoria</value>
+    </data>
+    <data name="categoryDescription" xml:space="preserve">
+        <value>Descrição da Categoria</value>
+    </data>
+    <data name="addItem" xml:space="preserve">
+        <value>Adicionar Item</value>
+    </data>
+    <data name="legacyChecklist" xml:space="preserve">
+        <value>Checklist Legado</value>
+    </data>
+    <data name="checklistTemplates" xml:space="preserve">
+        <value>Modelos de Checklist</value>
+    </data>
+    <data name="testProcedure" xml:space="preserve">
+        <value>Procedimento de Teste</value>
+    </data>
+    <data name="passCriteria" xml:space="preserve">
+        <value>Critérios de Aprovação</value>
+    </data>
+    <data name="references" xml:space="preserve">
+        <value>Referências</value>
+    </data>
+    <data name="objectives" xml:space="preserve">
+        <value>Objetivos</value>
+    </data>
+    <data name="viewChecklistTemplate" xml:space="preserve">
+        <value>Ver Modelo de Checklist</value>
+    </data>
+    <data name="createChecklistTemplate" xml:space="preserve">
+        <value>Criar Modelo de Checklist</value>
+    </data>
+    <data name="noItemsInCategory" xml:space="preserve">
+        <value>Nenhum item nesta categoria</value>
+    </data>
+    <data name="noCategoriesInTemplate" xml:space="preserve">
+        <value>Nenhuma categoria neste modelo</value>
+    </data>
+    <data name="noLegacyChecklists" xml:space="preserve">
+        <value>Nenhuma checklist herdada encontrada</value>
+    </data>
+    <data name="legacyChecklists" xml:space="preserve">
+        <value>Checklists Herdadas</value>
+    </data>
+    <data name="deleteChecklistTemplates" xml:space="preserve">
+        <value>Eliminar Modelos de Checklist</value>
+    </data>
+    <data name="confirmDeleteTemplates" xml:space="preserve">
+        <value>Confirmar Eliminação de Modelos</value>
+    </data>
+    <data name="thisActionCannotBeUndone" xml:space="preserve">
+        <value>Esta ação não pode ser desfeita</value>
+    </data>
+    <data name="templatesToDelete" xml:space="preserve">
+        <value>Modelos a Eliminar</value>
+    </data>
+    <data name="systemTemplatesCannotBeDeleted" xml:space="preserve">
+        <value>Os modelos do sistema não podem ser eliminados</value>
+    </data>
+    <data name="confirmDeleteCustomChecklist" xml:space="preserve">
+        <value>Tem a certeza de que deseja eliminar esta lista de verificação personalizada?</value>
+    </data>
+    <data name="confirmDeleteMultipleCustomChecklists" xml:space="preserve">
+        <value>Tem a certeza de que deseja eliminar as listas de verificação personalizadas selecionadas?</value>
+    </data>
+    <data name="confirmDeleteTemplate" xml:space="preserve">
+        <value>Tem a certeza de que deseja eliminar este modelo?</value>
+    </data>
+    <data name="createCustomChecklist" xml:space="preserve">
+        <value>Criar Lista de Verificação Personalizada</value>
+    </data>
+    <data name="custom" xml:space="preserve">
+        <value>Personalizado</value>
+    </data>
+    <data name="customChecklists" xml:space="preserve">
+        <value>Listas de Verificação Personalizadas</value>
+    </data>
+    <data name="deleteAll" xml:space="preserve">
+        <value>Eliminar Tudo</value>
+    </data>
+    <data name="deleteChecklistTemplate" xml:space="preserve">
+        <value>Eliminar Modelo de Lista de Verificação</value>
+    </data>
+    <data name="deleteCustomChecklist" xml:space="preserve">
+        <value>Eliminar Lista de Verificação Personalizada</value>
+    </data>
+    <data name="deleteSelectedCustomChecklists" xml:space="preserve">
+        <value>Eliminar Listas de Verificação Personalizadas Selecionadas</value>
+    </data>
+    <data name="deleteTemplateWarning" xml:space="preserve">
+        <value>Isto eliminará permanentemente o modelo e todos os seus dados. Esta ação não pode ser desfeita.</value>
+    </data>
+    <data name="deleteTemplatesWarning" xml:space="preserve">
+        <value>Isto eliminará permanentemente os modelos selecionados e todos os seus dados. Esta ação não pode ser desfeita.</value>
+    </data>
+    <data name="deleting" xml:space="preserve">
+        <value>A eliminar...</value>
+    </data>
+    <data name="executeChecklist" xml:space="preserve">
+        <value>Executar Lista de Verificação</value>
+    </data>
+    <data name="execution" xml:space="preserve">
+        <value>Execução</value>
+    </data>
+    <data name="executionDetails" xml:space="preserve">
+        <value>Detalhes da Execução</value>
+    </data>
+    <data name="fail" xml:space="preserve">
+        <value>Falha</value>
+    </data>
+    <data name="featureNotImplemented" xml:space="preserve">
+        <value>Funcionalidade não implementada</value>
+    </data>
+    <data name="item" xml:space="preserve">
+        <value>Item</value>
+    </data>
+    <data name="no" xml:space="preserve">
+        <value>Não</value>
+    </data>
+    <data name="noExecutionsFound" xml:space="preserve">
+        <value>Nenhuma execução encontrada</value>
+    </data>
+    <data name="notTested" xml:space="preserve">
+        <value>Não Testado</value>
+    </data>
+    <data name="openChecklist" xml:space="preserve">
+        <value>Abrir Lista de Verificação</value>
+    </data>
+    <data name="processing" xml:space="preserve">
+        <value>A processar...</value>
+    </data>
+    <data name="progress" xml:space="preserve">
+        <value>Progresso</value>
+    </data>
+    <data name="selectedItemsCount" xml:space="preserve">
+        <value>Itens Selecionados</value>
+    </data>
+    <data name="severity" xml:space="preserve">
+        <value>Gravidade</value>
+    </data>
+    <data name="system" xml:space="preserve">
+        <value>Sistema</value>
+    </data>
+    <data name="templatePreview" xml:space="preserve">
+        <value>Pré-visualização do Modelo</value>
+    </data>
+    <data name="testedDate" xml:space="preserve">
+        <value>Data de Teste</value>
+    </data>
+    <data name="thisTemplateContains" xml:space="preserve">
+        <value>Este modelo contém</value>
+    </data>
+    <data name="totalItems" xml:space="preserve">
+        <value>Total de Itens</value>
+    </data>
+    <data name="view" xml:space="preserve">
+        <value>Ver</value>
+    </data>
+    <data name="viewChecklistItem" xml:space="preserve">
+        <value>Ver Item da Lista de Verificação</value>
     </data>
 </root>

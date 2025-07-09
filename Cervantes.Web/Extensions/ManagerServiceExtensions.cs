@@ -1,5 +1,6 @@
 using Cervantes.Application;
 using Cervantes.Contracts;
+using Cervantes.IFR.ChecklistMigration;
 
 namespace Cervantes.Web.Extensions;
 
@@ -138,6 +139,14 @@ public static class ManagerServiceExtensions
         services.AddScoped<IJiraCommentManager, JiraCommentManager>();
         services.AddScoped<IWSTGManager, WSTGManager>();
         services.AddScoped<IMASTGManager, MASTGManager>();
+        
+        // Custom Checklist System Managers
+        services.AddScoped<IChecklistTemplateManager, ChecklistTemplateManager>();
+        services.AddScoped<IChecklistCategoryManager, ChecklistCategoryManager>();
+        services.AddScoped<IChecklistItemManager, ChecklistItemManager>();
+        services.AddScoped<IChecklistManager, ChecklistManager>();
+        services.AddScoped<IChecklistExecutionManager, ChecklistExecutionManager>();
+        services.AddScoped<ChecklistMigrationService>();
         services.AddScoped<IRssNewsManager, RssNewsManager>();
         services.AddScoped<IRssSourceManager, RssSourceManager>();
         services.AddScoped<IRssCategoryManager, RssCategoryManager>();
