@@ -177,6 +177,40 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             .HasForeignKey(v => v.VulnCustomFieldId)
             .OnDelete(DeleteBehavior.Cascade);
             
+        // Project Custom Field Configuration
+        modelBuilder.Entity<ProjectCustomField>()
+            .HasIndex(e => e.Name)
+            .IsUnique()
+            .HasDatabaseName("IX_ProjectCustomField_Name");
+            
+        modelBuilder.Entity<ProjectCustomField>()
+            .Property(e => e.Name)
+            .IsRequired()
+            .HasMaxLength(100);
+            
+        modelBuilder.Entity<ProjectCustomField>()
+            .Property(e => e.Label)
+            .IsRequired()
+            .HasMaxLength(200);
+            
+        // Project Custom Field Value Configuration
+        modelBuilder.Entity<ProjectCustomFieldValue>()
+            .HasIndex(e => new { e.ProjectId, e.ProjectCustomFieldId })
+            .IsUnique()
+            .HasDatabaseName("IX_ProjectCustomFieldValue_ProjectId_CustomFieldId");
+            
+        modelBuilder.Entity<ProjectCustomFieldValue>()
+            .HasOne(v => v.Project)
+            .WithMany(p => p.CustomFieldValues)
+            .HasForeignKey(v => v.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<ProjectCustomFieldValue>()
+            .HasOne(v => v.ProjectCustomField)
+            .WithMany(cf => cf.Values)
+            .HasForeignKey(v => v.ProjectCustomFieldId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
         // Checklist System Configuration
         modelBuilder.Entity<ChecklistTemplate>()
             .HasOne(ct => ct.User)
@@ -278,4 +312,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     /// Table for custom field values
     /// </summary>
     public DbSet<VulnCustomFieldValue> VulnCustomFieldValues { get; set; }
+    
+    /// <summary>
+    /// Table for project custom field definitions
+    /// </summary>
+    public DbSet<ProjectCustomField> ProjectCustomFields { get; set; }
+    
+    /// <summary>
+    /// Table for project custom field values
+    /// </summary>
+    public DbSet<ProjectCustomFieldValue> ProjectCustomFieldValues { get; set; }
 }

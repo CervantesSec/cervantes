@@ -355,6 +355,15 @@ public enum Permissions: ushort
     [Display(GroupName = "Vuln Custom Fields", Name = "Delete Vuln Custom Fields", Description = "Can delete Custom Fields")]
     VulnCustomFieldsDelete = 383,
     
+    [Display(GroupName = "Project Custom Fields", Name = "Read Project Custom Fields", Description = "Can read Custom Fields")]
+    ProjectCustomFieldsRead = 384,
+    [Display(GroupName = "Project Custom Fields", Name = "Add Project Custom Fields", Description = "Can add new Custom Fields")]
+    ProjectCustomFieldsAdd = 385,
+    [Display(GroupName = "Project Custom Fields", Name = "Edit Project Custom Fields", Description = "Can edit Custom Fields")]
+    ProjectCustomFieldsEdit = 386,
+    [Display(GroupName = "Project Custom Fields", Name = "Delete Project Custom Fields", Description = "Can delete Custom Fields")]
+    ProjectCustomFieldsDelete = 387,
+    
     [Display(GroupName = "AI Service", Name = "Use AI Service", Description = "Can use the AI generation service")]
     AIServiceUsage = 60000,
     [Display(GroupName = "AI Service", Name = "Use AI Service", Description = "Can use the AI chat service")]

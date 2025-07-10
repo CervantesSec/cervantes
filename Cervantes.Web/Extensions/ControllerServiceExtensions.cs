@@ -59,6 +59,7 @@ public static class ControllerServiceExtensions
     public static IServiceCollection AddProjectManagementControllers(this IServiceCollection services)
     {
         services.AddScoped<ProjectController>();
+        services.AddScoped<ProjectCustomFieldController>();
         services.AddScoped<TargetController>();
         services.AddScoped<TaskController>();
         services.AddScoped<WorkspacesController>();

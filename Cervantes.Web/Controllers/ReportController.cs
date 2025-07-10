@@ -74,6 +74,7 @@ public class ReportController : ControllerBase
     private IReportsPartsManager reportsPartsManager;
     private IVaultManager vaultManager;
     private IVulnCustomFieldValueManager vulnCustomFieldValueManager;
+    private IProjectCustomFieldValueManager projectCustomFieldValueManager;
     private Sanitizer sanitizer;
     private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
     private IChecklistManager checklistManager;
@@ -87,7 +88,8 @@ public class ReportController : ControllerBase
         ILogger<ReportController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager,
         IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck,Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager,
         IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, 
-        IVaultManager vaultManager, IJiraManager jiraManager, IVulnCustomFieldValueManager vulnCustomFieldValueManager, Sanitizer sanitizer,
+        IVaultManager vaultManager, IJiraManager jiraManager, IVulnCustomFieldValueManager vulnCustomFieldValueManager,
+        IProjectCustomFieldValueManager projectCustomFieldValueManager, Sanitizer sanitizer,
         IChecklistManager checklistManager, IChecklistExecutionManager checklistExecutionManager)
     {
         this.projectManager = projectManager;
@@ -114,6 +116,7 @@ public class ReportController : ControllerBase
         this._userManager = _userManager;
         this.jiraManager = jiraManager;
         this.vulnCustomFieldValueManager = vulnCustomFieldValueManager;
+        this.projectCustomFieldValueManager = projectCustomFieldValueManager;
         this.sanitizer = sanitizer;
         this.checklistManager = checklistManager;
         this.checklistExecutionManager = checklistExecutionManager;
@@ -1132,6 +1135,27 @@ public class ReportController : ControllerBase
                 scriptObject.Add("ProjectType", Project.ProjectType.ToString());
                 scriptObject.Add("ProjectScore", Project.Score);
                 scriptObject.Add("ProjectExecutiveSummary", Project.ExecutiveSummary);
+                
+                // Add project custom field values
+                try
+                {
+                    var projectCustomFieldValues = projectCustomFieldValueManager.GetAll()
+                        .Where(cfv => cfv.ProjectId == model.ProjectId)
+                        .Include(cfv => cfv.ProjectCustomField)
+                        .ToList();
+                    foreach (var customFieldValue in projectCustomFieldValues)
+                    {
+                        // Use the custom field name as the key with proper format for templates
+                        var fieldKey = $"ProjectCustom{customFieldValue.ProjectCustomField.Name.Replace(" ", "_").Replace("-", "_")}";
+                        scriptObject.Add(fieldKey, customFieldValue.Value ?? string.Empty);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the error but don't fail the report generation
+                    _logger.LogWarning(ex, "Error loading project custom field values for project {ProjectId}", model.ProjectId);
+                }
+                
                 scriptObject.Add("Targets", TargetList);
                 scriptObject.Add("Vulns", VulnsList);
                 scriptObject.Add("VulnCriticalCount", Vulns.Count(x => x.Risk == VulnRisk.Critical));

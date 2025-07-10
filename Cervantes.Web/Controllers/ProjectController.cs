@@ -38,6 +38,8 @@ public class ProjectController : ControllerBase
     private IVulnManager vulnManager = null;
     private IReportManager reportManager = null;
     private IReportTemplateManager reportTemplateManager = null;
+    private IProjectCustomFieldManager projectCustomFieldManager = null;
+    private IProjectCustomFieldValueManager projectCustomFieldValueManager = null;
     private readonly IWebHostEnvironment env;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
@@ -57,7 +59,8 @@ public class ProjectController : ControllerBase
         IProjectUserManager projectUserManager, IProjectNoteManager projectNoteManager, IEmailService emailService,
         IProjectAttachmentManager projectAttachmentManager, ITargetManager targetManager, ITaskManager taskManager,
         IUserManager userManager, IVulnManager vulnManager, IReportManager reportManager,
-        IReportTemplateManager reportTemplateManager,
+        IReportTemplateManager reportTemplateManager, IProjectCustomFieldManager projectCustomFieldManager,
+        IProjectCustomFieldValueManager projectCustomFieldValueManager,
         IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, ILogger<ProjectController> logger,
         IFileCheck fileCheck,Sanitizer sanitizer)
     {
@@ -72,6 +75,8 @@ public class ProjectController : ControllerBase
         this.vulnManager = vulnManager;
         this.reportManager = reportManager;
         this.reportTemplateManager = reportTemplateManager;
+        this.projectCustomFieldManager = projectCustomFieldManager;
+        this.projectCustomFieldValueManager = projectCustomFieldValueManager;
         this.env = env;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         _logger = logger;
@@ -205,6 +210,28 @@ public class ProjectController : ControllerBase
                     UserId = aspNetUserId
                 });
                 await projectUserManager.Context.SaveChangesAsync();
+                
+                // Process custom field values
+                if (model.CustomFieldValues != null && model.CustomFieldValues.Any())
+                {
+                    // Create custom field values using basic GenericManager methods
+                    foreach (var kvp in model.CustomFieldValues)
+                    {
+                        var customFieldValue = new ProjectCustomFieldValue
+                        {
+                            Id = Guid.NewGuid(),
+                            ProjectId = project.Id,
+                            ProjectCustomFieldId = kvp.Key,
+                            Value = sanitizer.Sanitize(kvp.Value),
+                            CreatedDate = DateTime.UtcNow,
+                            ModifiedDate = DateTime.UtcNow,
+                            UserId = aspNetUserId
+                        };
+                        await projectCustomFieldValueManager.AddAsync(customFieldValue);
+                    }
+                    await projectCustomFieldValueManager.Context.SaveChangesAsync();
+                }
+                
                 _logger.LogInformation("Project created successfully. User: {0}",
                     aspNetUserId);
                 return CreatedAtAction(nameof(GetById), new { projectId = project.Id }, project);
@@ -831,6 +858,72 @@ public class ProjectController : ControllerBase
             _logger.LogError(e, "An error ocurred adding verifying project user. User: {0}",
                 aspNetUserId);
             throw;
+        }
+    }
+
+    [HttpGet]
+    [Route("GetCustomFieldValues/{projectId}")]
+    public async Task<List<ProjectCustomFieldValue>> GetCustomFieldValues(Guid projectId)
+    {
+        try
+        {
+            return projectCustomFieldValueManager.GetAll()
+                .Where(v => v.ProjectId == projectId)
+                .ToList();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred getting project custom field values. User: {0}", aspNetUserId);
+            return new List<ProjectCustomFieldValue>();
+        }
+    }
+
+    [HttpPost]
+    [Route("UpdateCustomFieldValues/{projectId}")]
+    public async Task<IActionResult> UpdateCustomFieldValues(Guid projectId, [FromBody] Dictionary<Guid, string> customFieldValues)
+    {
+        try
+        {
+            // Get existing values
+            var existingValues = projectCustomFieldValueManager.GetAll()
+                .Where(v => v.ProjectId == projectId)
+                .ToList();
+
+            foreach (var kvp in customFieldValues)
+            {
+                var existingValue = existingValues.FirstOrDefault(v => v.ProjectCustomFieldId == kvp.Key);
+                
+                if (existingValue != null)
+                {
+                    // Update existing value
+                    existingValue.Value = sanitizer.Sanitize(kvp.Value);
+                    existingValue.ModifiedDate = DateTime.UtcNow;
+                    projectCustomFieldValueManager.Update(existingValue);
+                }
+                else
+                {
+                    // Create new value
+                    var newValue = new ProjectCustomFieldValue
+                    {
+                        Id = Guid.NewGuid(),
+                        ProjectId = projectId,
+                        ProjectCustomFieldId = kvp.Key,
+                        Value = sanitizer.Sanitize(kvp.Value),
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow,
+                        UserId = aspNetUserId
+                    };
+                    await projectCustomFieldValueManager.AddAsync(newValue);
+                }
+            }
+
+            await projectCustomFieldValueManager.Context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred updating project custom field values. User: {0}", aspNetUserId);
+            return BadRequest(new { message = "An error occurred updating custom field values" });
         }
     }
 }

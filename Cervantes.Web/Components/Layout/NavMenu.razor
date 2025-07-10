@@ -86,9 +86,9 @@
                 {
                 <MudNavLink Icon="@Icons.Material.Filled.Badge" Href="/roles">@localizer["roles"]</MudNavLink>
                 }
-                @if(user.HasPermission(Permissions.VulnCustomFieldsRead))
+                @if(user.HasPermission(Permissions.VulnCustomFieldsRead) || user.HasPermission(Permissions.ProjectCustomFieldsRead))
                 {
-                <MudNavLink Icon="@Icons.Material.Filled.DynamicForm" Href="/vuln/customfields">@localizer["customFields"]</MudNavLink>
+                    <MudNavLink Icon="@Icons.Material.Filled.DynamicForm" Href="/admin/customfields">@localizer["customFields"]</MudNavLink>
                 }
             </MudNavGroup>
         }

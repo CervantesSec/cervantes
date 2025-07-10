@@ -1,0 +1,33 @@
+@rendermode InteractiveServer
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Controllers
+@using Microsoft.Extensions.Localization
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using Task = System.Threading.Tasks.Task
+@attribute [HasPermission(Permissions.ProjectCustomFieldsDelete)]
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Delete" />
+            @localizer["delete"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer Style="max-height: 300px; overflow-y: scroll">
+            <MudText Typo="Typo.body1">
+                @localizer["areYouSureDelete"] "@customField.Name"?
+            </MudText>
+            <MudText Typo="Typo.body2" Color="Color.Warning">
+                @localizer["deleteWarning"]
+            </MudText>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="Delete">@localizer["delete"]</MudButton>
+    </DialogActions>
+</MudDialog>

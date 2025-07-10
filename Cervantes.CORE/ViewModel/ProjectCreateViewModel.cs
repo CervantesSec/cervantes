@@ -57,5 +57,10 @@ public class ProjectCreateViewModel
     
     public string? FindingsId { get; set; }
     public int BusinessImpact { get; set; }
+    
+    /// <summary>
+    /// Custom field values as key-value pairs (CustomFieldId -> Value)
+    /// </summary>
+    public Dictionary<Guid, string> CustomFieldValues { get; set; } = new Dictionary<Guid, string>();
 
 }

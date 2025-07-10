@@ -38,19 +38,6 @@ public partial class Logs: ComponentBase
         model.RemoveAll(item => true);
         model = _logController.GetAll().ToList();
     }
-    async Task RowClicked(DataGridRowClickEventArgs<Project> args)
-    {
-        /*var parameters = new DialogParameters { ["project"]=args.Item };
-
-        var dialog =  DialogService.Show<ProjectDialog>("Edit", parameters, maxWidth);
-        var result = await dialog.Result;
-
-        if (!result.Canceled)
-        {
-            await Update();
-            StateHasChanged();
-        }*/
-    }
     
     private Func<Log, bool> _quickFilter => element =>
     {

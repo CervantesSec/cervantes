@@ -93,4 +93,10 @@ public class Project
     
     public string FindingsId { get; set; }
     public string ExecutiveSummary { get; set; }
+    
+    /// <summary>
+    /// Collection of custom field values for this project
+    /// </summary>
+    [JsonIgnore]
+    public virtual ICollection<ProjectCustomFieldValue> CustomFieldValues { get; set; } = new List<ProjectCustomFieldValue>();
 }

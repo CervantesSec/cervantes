@@ -41,6 +41,7 @@ public partial class ProjectDialog : ComponentBase
     [Inject] private TaskController _TaskController { get; set; }
     [Inject] private TargetController _TargetController { get; set; }
     [Inject] private ReportController _ReportController { get; set; }
+    [Inject] private ProjectCustomFieldController _ProjectCustomFieldController { get; set; }
     ExecutiveSummaryViewModel executive = new ExecutiveSummaryViewModel();
 
 
@@ -80,6 +81,7 @@ private List<CORE.Entities.Project> projects = new List<CORE.Entities.Project>()
     private List<CORE.Entities.Vuln> seleVulns = new List<CORE.Entities.Vuln>();
     private List<CORE.Entities.Report> Reports = new List<CORE.Entities.Report>();
     private List<CORE.Entities.Report> seleReports = new List<CORE.Entities.Report>();
+    private List<ProjectCustomFieldValueViewModel> projectCustomFieldValues = new List<ProjectCustomFieldValueViewModel>();
     private bool inProject = false;
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
@@ -191,11 +193,69 @@ protected override async Task OnInitializedAsync()
 
         }
         aiEnabled = _aiService.IsEnabled();
+        await LoadProjectCustomFields();
         await base.OnInitializedAsync();
     }
 
     
 
+    #endregion
+    
+    #region CustomFields
+    
+    private async Task LoadProjectCustomFields()
+    {
+        try
+        {
+            var customFields = _ProjectCustomFieldController.Get().Where(cf => cf.IsActive).ToList();
+            var existingValues = await _projectController.GetCustomFieldValues(project.Id);
+            projectCustomFieldValues = new List<ProjectCustomFieldValueViewModel>();
+            
+            foreach (var customField in customFields.OrderBy(cf => cf.Order))
+            {
+                var existingValue = existingValues?.FirstOrDefault(v => v.ProjectCustomFieldId == customField.Id);
+                
+                projectCustomFieldValues.Add(new ProjectCustomFieldValueViewModel
+                {
+                    CustomFieldId = customField.Id,
+                    Name = customField.Name,
+                    Label = customField.Label,
+                    Type = customField.Type,
+                    IsRequired = customField.IsRequired,
+                    IsUnique = customField.IsUnique,
+                    Options = customField.Options,
+                    DefaultValue = customField.DefaultValue,
+                    Description = customField.Description,
+                    Order = customField.Order,
+                    Value = existingValue?.Value ?? customField.DefaultValue ?? string.Empty
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle error loading custom fields
+            Snackbar.Add($"Error loading custom fields: {ex.Message}", Severity.Error);
+        }
+    }
+    
+    private async Task SaveProjectCustomFields()
+    {
+        try
+        {
+            var customFieldData = projectCustomFieldValues.ToDictionary(
+                cf => cf.CustomFieldId, 
+                cf => cf.Value ?? string.Empty
+            );
+            
+            await _projectController.UpdateCustomFieldValues(project.Id, customFieldData);
+            Snackbar.Add("Custom fields saved successfully", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error saving custom fields: {ex.Message}", Severity.Error);
+        }
+    }
+    
     #endregion
     
     #region Project
@@ -278,6 +338,9 @@ protected override async Task OnInitializedAsync()
             var response = await _projectController.Edit(model);
             if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
+                // Save custom fields
+                await SaveProjectCustomFields();
+                
                 Snackbar.Add(@localizer["projectEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }

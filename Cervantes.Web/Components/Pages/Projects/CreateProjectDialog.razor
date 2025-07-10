@@ -46,69 +46,80 @@
         </MudItem>
 	</TitleContent>
 	<DialogContent>
-		
+		<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+			<MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Info" Style="min-width: 260px;">
+				<MudForm Model="@model" @ref="@form" Validation="@(projectValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+					<MudStack AlignItems="AlignItems.Stretch">
+						
+						<MudSwitch Color="Color.Primary" @bind-Value="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
 
-		<MudForm Model="@model" @ref="@form" Validation="@(projectValidator.ValidateValue)" ValidationDelay="0" method="dialog">
-
-			<MudStack AlignItems="AlignItems.Stretch">
-				
-				<MudSwitch Color="Color.Primary" @bind-Value="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
-
-				<MudTextField  @bind-Value="model.Name"
-				               For="@(() => model.Name)"
-				               Immediate="true"
-				               Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Folder"/>
-				
-				<MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-					@foreach (Language item in Enum.GetValues(typeof(Language)))
-					{
-						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
-					}
-				</MudSelect>
-				<MudTextField  @bind-Value="model.FindingsId"
-				               For="@(() => model.FindingsId)"
-				               Immediate="true"
-				               Label="@localizer["findingsId"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Widgets" Placeholder="FIN"/>
-				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
-				<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["startDate"]" @bind-date="dateStart" DisableToolbar="true" />
-				<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["endDate"]" @bind-date="dateEnd"  DisableToolbar="true" />
-				
-				<MudSelect Placeholder="Client" @bind-Value="model.ClientId" For="@(() => model.ClientId)" Label="@localizer["client"]" AdornmentIcon="@Icons.Material.Filled.BusinessCenter" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-					<MudSelectItem Value="Guid.Empty" Disabled="true">@localizer["selectClient"]</MudSelectItem>
-					@foreach (var cli in Clients)
-					{
-						<MudSelectItem Value="@cli.Id">@cli.Name</MudSelectItem>
-					}
-				</MudSelect>
-				<label class="mud-input-label mud-input-label-text ">@localizer["businessImpact"]</label>
-				<MudStack Row="true" AlignItems="AlignItems.Center">
-					<MudRating @bind-SelectedValue="model.BusinessImpact" HoveredValueChanged="HandleHoveredValueChanged" FullIcon="@Icons.Material.Filled.Circle" EmptyIcon="@Icons.Material.Filled.Circle" FullIconColor="@GetRatingColor()" EmptyIconColor="Color.Default"/>
-					<MudText Typo="Typo.body1">@BusinessImpactLabelText</MudText>
-				</MudStack>
-					
-				<MudSelect  @bind-Value="model.Status" For="@(() => model.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-					@foreach (ProjectStatus item in Enum.GetValues(typeof(ProjectStatus)))
-					{
-						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
-					}
-				</MudSelect>
-				<MudSelect  @bind-Value="model.ProjectType" For="@(() => model.ProjectType)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.FormatListNumbered" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-					@foreach (ProjectType item in Enum.GetValues(typeof(ProjectType)))
-					{
-						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
-					}
-				</MudSelect>
-				<MudSelect  @bind-Value="model.Score" For="@(() => model.Score)" Label="@localizer["score"]" AdornmentIcon="@Icons.Material.Filled.Polyline" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-					@foreach (Score item in Enum.GetValues(typeof(Score)))
-					{
-						<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
-					}
-				</MudSelect>
-				
-
-
-			</MudStack>
-		</MudForm>
+						<MudTextField  @bind-Value="model.Name"
+						               For="@(() => model.Name)"
+						               Immediate="true"
+						               Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Folder"/>
+						
+						<MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							@foreach (Language item in Enum.GetValues(typeof(Language)))
+							{
+								<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+							}
+						</MudSelect>
+						<MudTextField  @bind-Value="model.FindingsId"
+						               For="@(() => model.FindingsId)"
+						               Immediate="true"
+						               Label="@localizer["findingsId"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Widgets" Placeholder="FIN"/>
+						<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+						<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["startDate"]" @bind-date="dateStart" DisableToolbar="true" />
+						<MudDatePicker Adornment="Adornment.Start"  Label="@localizer["endDate"]" @bind-date="dateEnd"  DisableToolbar="true" />
+						
+						<MudSelect Placeholder="Client" @bind-Value="model.ClientId" For="@(() => model.ClientId)" Label="@localizer["client"]" AdornmentIcon="@Icons.Material.Filled.BusinessCenter" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							<MudSelectItem Value="Guid.Empty" Disabled="true">@localizer["selectClient"]</MudSelectItem>
+							@foreach (var cli in Clients)
+							{
+								<MudSelectItem Value="@cli.Id">@cli.Name</MudSelectItem>
+							}
+						</MudSelect>
+						<label class="mud-input-label mud-input-label-text ">@localizer["businessImpact"]</label>
+						<MudStack Row="true" AlignItems="AlignItems.Center">
+							<MudRating @bind-SelectedValue="model.BusinessImpact" HoveredValueChanged="HandleHoveredValueChanged" FullIcon="@Icons.Material.Filled.Circle" EmptyIcon="@Icons.Material.Filled.Circle" FullIconColor="@GetRatingColor()" EmptyIconColor="Color.Default"/>
+							<MudText Typo="Typo.body1">@BusinessImpactLabelText</MudText>
+						</MudStack>
+							
+						<MudSelect  @bind-Value="model.Status" For="@(() => model.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							@foreach (ProjectStatus item in Enum.GetValues(typeof(ProjectStatus)))
+							{
+								<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+							}
+						</MudSelect>
+						<MudSelect  @bind-Value="model.ProjectType" For="@(() => model.ProjectType)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.FormatListNumbered" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							@foreach (ProjectType item in Enum.GetValues(typeof(ProjectType)))
+							{
+								<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+							}
+						</MudSelect>
+						<MudSelect  @bind-Value="model.Score" For="@(() => model.Score)" Label="@localizer["score"]" AdornmentIcon="@Icons.Material.Filled.Polyline" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+							@foreach (Score item in Enum.GetValues(typeof(Score)))
+							{
+								<MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+							}
+						</MudSelect>
+					</MudStack>
+				</MudForm>
+			</MudTabPanel>
+			@if (CustomFields?.Any() == true)
+			{
+				<MudTabPanel Text="@localizer["customFields"]" Icon="@Icons.Material.Filled.DynamicForm" Style="min-width: 260px;">
+					<MudStack AlignItems="AlignItems.Stretch">
+						@foreach (var customField in CustomFields.OrderBy(cf => cf.Order))
+						{
+							<Cervantes.Web.Components.Shared.ProjectCustomFieldRenderer 
+								Field="@customField" 
+								FieldChanged="@OnCustomFieldChanged" />
+						}
+					</MudStack>
+				</MudTabPanel>
+			}
+		</MudTabs>
 		<MudStack Row="true" Justify="Justify.FlexEnd">
 			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
 			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Folder" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>

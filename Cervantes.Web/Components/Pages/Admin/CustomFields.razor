@@ -1,0 +1,209 @@
+@rendermode InteractiveServer
+@page "/admin/customfields"
+@using Microsoft.AspNetCore.Authorization
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using DialogOptions = MudBlazor.DialogOptions
+@using MudBlazor.Extensions
+@using MudBlazor.Extensions.Core
+@using MudBlazor.Extensions.Options
+@using Task = System.Threading.Tasks.Task
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Cervantes.Web.Controllers
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager navigationManager
+@inject IHttpContextAccessor _accessor
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@inject IJSRuntime JS
+@inject ISnackbar Snackbar
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.VulnCustomFieldsRead)]
+
+<PageTitle>@localizer["customFields"] | Cervantes</PageTitle>
+
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
+</SectionContent>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+            <MudTabs Elevation="25" Rounded="true" ApplyEffectsToContainer="true" PanelClass="mt-6">
+                <MudTabPanel Text="@localizer["vulns"]" Icon="@Icons.Material.Filled.BugReport" Style="min-width: 260px;">
+                    <MudDataGrid T="VulnCustomFieldViewModel" Items="@vulnModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_vulnQuickFilter"
+                                 Hideable="true" Hover="true" RowClick="@VulnRowClicked" MultiSelection="true" SelectedItemsChanged="@VulnSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                        <ToolBarContent>
+                            <MudStack Row="true">
+                            @if (userAuth.HasPermission(Permissions.VulnCustomFieldsAdd))
+                            {
+                                <MudButton Variant="Variant.Filled"
+                                           StartIcon="@Icons.Material.Filled.Add"
+                                           Color="Color.Primary"
+                                           OnClick="@((e) => OpenCreateVulnDialog(maxWidthEx))">
+                                    @localizer["create"]
+                                </MudButton>
+                            }
+                            @if (userAuth.HasPermission(Permissions.VulnCustomFieldsDelete))
+                            {
+                                @if (selectedVulnCustomFields.Count() != 0)
+                                {
+                                    <MudButton Variant="Variant.Filled"
+                                               StartIcon="@Icons.Material.Filled.Delete"
+                                               Color="Color.Error"
+                                               OnClick="@((e) => OpenDeleteVulnBulkDialog(maxWidthEx))">
+                                        @localizer["delete"] (@selectedVulnCustomFields.Count())
+                                    </MudButton>
+                                }
+                            }
+                            </MudStack>
+                            <MudSpacer />
+                            <MudTextField @bind-Value="vulnSearchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        </ToolBarContent>
+                        <Columns>
+                            <SelectColumn T="VulnCustomFieldViewModel" />
+                            <PropertyColumn Property="x => x.Name" Title="@localizer["name"]" />
+                            <PropertyColumn Property="x => x.Label" Title="@localizer["label"]" />
+                            <PropertyColumn Property="x => x.TypeDisplay" Title="@localizer["type"]" />
+                            <PropertyColumn Property="x => x.IsRequired" Title="@localizer["required"]">
+                                <CellTemplate>
+                                    @if (context.Item.IsRequired)
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                                    }
+                                </CellTemplate>
+                            </PropertyColumn>
+                            <PropertyColumn Property="x => x.IsVisible" Title="@localizer["visible"]">
+                                <CellTemplate>
+                                    @if (context.Item.IsVisible)
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                                    }
+                                </CellTemplate>
+                            </PropertyColumn>
+                            <PropertyColumn Property="x => x.Order" Title="@localizer["order"]" />
+                            <PropertyColumn Property="x => x.IsActive" Title="@localizer["active"]">
+                                <CellTemplate>
+                                    @if (context.Item.IsActive)
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                                    }
+                                </CellTemplate>
+                            </PropertyColumn>
+                        </Columns>
+                        <PagerContent>
+                            <MudDataGridPager T="VulnCustomFieldViewModel" />
+                        </PagerContent>
+                    </MudDataGrid>
+                </MudTabPanel>
+
+                <MudTabPanel Text="@localizer["projects"]" Icon="@Icons.Material.Filled.Folder" Style="min-width: 260px;">
+                    <MudDataGrid T="ProjectCustomFieldViewModel" Items="@projectModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_projectQuickFilter"
+                                 Hideable="true" Hover="true" RowClick="@ProjectRowClicked" MultiSelection="true" SelectedItemsChanged="@ProjectSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                        <ToolBarContent>
+                            <MudStack Row="true">
+                            @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsAdd))
+                            {
+                                <MudButton Variant="Variant.Filled"
+                                           StartIcon="@Icons.Material.Filled.Add"
+                                           Color="Color.Primary"
+                                           OnClick="@((e) => OpenCreateProjectDialog(maxWidthEx))">
+                                    @localizer["create"]
+                                </MudButton>
+                            }
+                            @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsDelete))
+                            {
+                                @if (selectedProjectCustomFields.Count() != 0)
+                                {
+                                    <MudButton Variant="Variant.Filled"
+                                               StartIcon="@Icons.Material.Filled.Delete"
+                                               Color="Color.Error"
+                                               OnClick="@((e) => OpenDeleteProjectBulkDialog(maxWidthEx))">
+                                        @localizer["delete"] (@selectedProjectCustomFields.Count())
+                                    </MudButton>
+                                }
+                            }
+                            </MudStack>
+                            <MudSpacer />
+                            <MudTextField @bind-Value="projectSearchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        </ToolBarContent>
+                        <Columns>
+                            <SelectColumn T="ProjectCustomFieldViewModel" />
+                            <PropertyColumn Property="x => x.Name" Title="@localizer["name"]" />
+                            <PropertyColumn Property="x => x.Label" Title="@localizer["label"]" />
+                            <PropertyColumn Property="x => x.TypeDisplay" Title="@localizer["type"]" />
+                            <PropertyColumn Property="x => x.IsRequired" Title="@localizer["required"]">
+                                <CellTemplate>
+                                    @if (context.Item.IsRequired)
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                                    }
+                                </CellTemplate>
+                            </PropertyColumn>
+                            <PropertyColumn Property="x => x.IsVisible" Title="@localizer["visible"]">
+                                <CellTemplate>
+                                    @if (context.Item.IsVisible)
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                                    }
+                                </CellTemplate>
+                            </PropertyColumn>
+                            <PropertyColumn Property="x => x.Order" Title="@localizer["order"]" />
+                            <PropertyColumn Property="x => x.IsActive" Title="@localizer["active"]">
+                                <CellTemplate>
+                                    @if (context.Item.IsActive)
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                                    }
+                                </CellTemplate>
+                            </PropertyColumn>
+                            <TemplateColumn CellClass="d-flex justify-end">
+                                <CellTemplate>
+                                    <MudStack Row="true">
+                                        @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsEdit))
+                                        {
+                                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@((e) => OpenEditProjectDialog(context.Item.Id, maxWidthEx))" />
+                                        }
+                                        @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsDelete))
+                                        {
+                                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" OnClick="@((e) => OpenDeleteProjectDialog(context.Item.Id, middleWidthEx))" />
+                                        }
+                                    </MudStack>
+                                </CellTemplate>
+                            </TemplateColumn>
+                        </Columns>
+                        <PagerContent>
+                            <MudDataGridPager T="ProjectCustomFieldViewModel" />
+                        </PagerContent>
+                    </MudDataGrid>
+                </MudTabPanel>
+            </MudTabs>
+    </MudItem>
+</MudGrid>

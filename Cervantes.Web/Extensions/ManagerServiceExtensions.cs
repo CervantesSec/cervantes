@@ -90,6 +90,8 @@ public static class ManagerServiceExtensions
         services.AddScoped<ITaskNoteManager, TaskNoteManager>();
         services.AddScoped<ITaskTargetManager, TaskTargetManager>();
         services.AddScoped<ITaskAttachmentManager, TaskAttachmentManager>();
+        services.AddScoped<IProjectCustomFieldManager, ProjectCustomFieldManager>();
+        services.AddScoped<IProjectCustomFieldValueManager, ProjectCustomFieldValueManager>();
         
         return services;
     }

@@ -78,10 +78,12 @@ public partial class CreateProjectDialog: ComponentBase
 	 
     ProjectCreateViewModel model = new ProjectCreateViewModel();
     private List<CORE.Entities.Client> Clients = new List<CORE.Entities.Client>();
+    private List<ProjectCustomFieldValueViewModel> CustomFields = new List<ProjectCustomFieldValueViewModel>();
     private DateTime? dateStart = DateTime.Today;
     private DateTime? dateEnd = DateTime.Today;
     [Inject] private ClientsController _clientsController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
+    [Inject] private ProjectCustomFieldController ProjectCustomFieldController { get; set; }
     private List<Project> ProjectTemplates = new List<Project>();
     private Guid template;
     private Guid SelectedTemplate
@@ -101,6 +103,7 @@ public partial class CreateProjectDialog: ComponentBase
 		model.ClientId = Guid.Empty;
 		var pro = ProjectTemplates = _projectController.Get().ToList();
 		ProjectTemplates = pro.Where(x => x.Template == true).ToList();
+		await LoadCustomFields();
 		StateHasChanged();
     }
 
@@ -112,7 +115,14 @@ public partial class CreateProjectDialog: ComponentBase
 
         if (form.IsValid)
         {
-
+            // Collect custom field values
+            foreach (var customField in CustomFields)
+            {
+                if (!string.IsNullOrEmpty(customField.Value))
+                {
+                    model.CustomFieldValues[customField.CustomFieldId] = customField.Value;
+                }
+            }
 
 	        var response = await _projectController.Add(model);
 	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
@@ -203,5 +213,38 @@ public partial class CreateProjectDialog: ComponentBase
 		    5 => Color.Error,
 		    _ => Color.Default
 	    };
+    }
+    
+    private Task LoadCustomFields()
+    {
+        try
+        {
+            var customFields = ProjectCustomFieldController.GetActive();
+            CustomFields = customFields.Select(cf => new ProjectCustomFieldValueViewModel
+            {
+                CustomFieldId = cf.Id,
+                Name = cf.Name,
+                Label = cf.Label,
+                Type = cf.Type,
+                IsRequired = cf.IsRequired,
+                IsUnique = cf.IsUnique,
+                Order = cf.Order,
+                Options = cf.Options,
+                DefaultValue = cf.DefaultValue,
+                Description = cf.Description,
+                Value = cf.DefaultValue ?? string.Empty
+            }).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading custom fields: {ex.Message}", Severity.Error);
+        }
+        return Task.CompletedTask;
+    }
+
+    private async Task OnCustomFieldChanged(ProjectCustomFieldValueViewModel field)
+    {
+        // Handle custom field value change if needed
+        StateHasChanged();
     }
 }

@@ -1,0 +1,125 @@
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using DialogOptions = MudBlazor.DialogOptions
+@using MudBlazor.Extensions
+@using MudBlazor.Extensions.Core
+@using MudBlazor.Extensions.Options
+@using Task = System.Threading.Tasks.Task
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@using Cervantes.Web.Controllers
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager navigationManager
+@inject IHttpContextAccessor _accessor
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@inject IJSRuntime JS
+@inject ISnackbar Snackbar
+@inject AuthenticationStateProvider authenticationStateProvider
+@attribute [HasPermission(Permissions.ProjectCustomFieldsRead)]
+
+<PageTitle>@localizer["customFields"] | Cervantes</PageTitle>
+
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
+</SectionContent>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudDataGrid T="ProjectCustomFieldViewModel" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+            <ToolBarContent>
+                <MudStack Row="true">
+                @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsAdd))
+                {
+                    <MudButton Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Filled.Add"
+                               Color="Color.Primary"
+                               OnClick="@((e) => OpenCreateDialog(maxWidthEx))">
+                        @localizer["create"]
+                    </MudButton>
+                }
+                @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsDelete))
+                {
+                    @if (selectedCustomFields.Count() != 0)
+                    {
+                        <MudButton Variant="Variant.Filled"
+                                   StartIcon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   OnClick="@((e) => OpenDeleteBulkDialog(maxWidthEx))">
+                            @localizer["delete"] (@selectedCustomFields.Count())
+                        </MudButton>
+                    }
+                }
+                </MudStack>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <Columns>
+                <SelectColumn T="ProjectCustomFieldViewModel" />
+                <PropertyColumn Property="x => x.Name" Title="@localizer["name"]" />
+                <PropertyColumn Property="x => x.Label" Title="@localizer["label"]" />
+                <PropertyColumn Property="x => x.TypeDisplay" Title="@localizer["type"]" />
+                <PropertyColumn Property="x => x.IsRequired" Title="@localizer["required"]">
+                    <CellTemplate>
+                        @if (context.Item.IsRequired)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                        }
+                        else
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                        }
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.IsVisible" Title="@localizer["visible"]">
+                    <CellTemplate>
+                        @if (context.Item.IsVisible)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                        }
+                        else
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                        }
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.Order" Title="@localizer["order"]" />
+                <PropertyColumn Property="x => x.IsActive" Title="@localizer["active"]">
+                    <CellTemplate>
+                        @if (context.Item.IsActive)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                        }
+                        else
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                        }
+                    </CellTemplate>
+                </PropertyColumn>
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudStack Row="true">
+                            @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsEdit))
+                            {
+                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@((e) => OpenEditDialog(context.Item.Id, maxWidthEx))" />
+                            }
+                            @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsDelete))
+                            {
+                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" OnClick="@((e) => OpenDeleteDialog(context.Item.Id, middleWidthEx))" />
+                            }
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="ProjectCustomFieldViewModel" />
+            </PagerContent>
+        </MudDataGrid>
+    </MudItem>
+</MudGrid>
