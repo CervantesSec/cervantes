@@ -126,7 +126,7 @@ public class TargetController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 
                 var target = new CORE.Entities.Target();
@@ -144,15 +144,21 @@ public class TargetController : ControllerBase
                 return CreatedAtAction(nameof(GetTargetById),  new { targetId = target.Id }, target);
             }
 
-            _logger.LogError("An error ocurred adding a Target. User: {0}",
+            _logger.LogError("Validation failed when adding a Target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding a Target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while creating the target. Please try again later.");
         }
     }
 
@@ -170,7 +176,7 @@ public class TargetController : ControllerBase
                     var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest();
+                        return BadRequest("Access denied: User does not have permission to access this project");
                     }
 
                     result.Name = sanitizer.Sanitize(model.Name);
@@ -187,15 +193,21 @@ public class TargetController : ControllerBase
                 return NotFound();
             }
 
-            _logger.LogError("An error ocurred adding a Target. User: {0}",
+            _logger.LogError("Validation failed when editing a Target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred adding a Target. User: {0}",
+            _logger.LogError(e, "An error ocurred editing a Target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the target. Please try again later.");
         }
     }
 
@@ -209,7 +221,7 @@ public class TargetController : ControllerBase
             targetManager.Context.SaveChanges();
             return Ok();
         }
-        return BadRequest();
+        return BadRequest("Invalid request");
     }*/
 
     [HttpDelete]
@@ -227,7 +239,7 @@ public class TargetController : ControllerBase
                     var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest();
+                        return BadRequest("Access denied: User does not have permission to access this project");
                     }
 
                     targetManager.Remove(result);
@@ -238,21 +250,27 @@ public class TargetController : ControllerBase
                 }
                 else
                 {
-                    return BadRequest();
+                    return NotFound($"Target with ID {targetId} not found");
                 }
             }
             else
             {
-                _logger.LogError("An error occurred deleting a Target. User: {0}",
+                _logger.LogError("Validation failed when deleting a Target. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred deleting a Target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the target. Please try again later.");
         }
     }
 
@@ -268,7 +286,7 @@ public class TargetController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.Project, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 var path = "";
                 var unique = "";
@@ -401,20 +419,26 @@ public class TargetController : ControllerBase
                     }
                 }
 
-                _logger.LogError("An error ocurred importing a csv filetype not admitted. User: {0}",
+                _logger.LogError("File content is required for import. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("File content is required");
             }
 
-            _logger.LogError("An error ocurred importing a csv filetype not admitted. User: {0}",
+            _logger.LogError("Validation failed when importing targets. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError("An error ocurred importing targets. User: {0}",
+            _logger.LogError(e, "An error ocurred importing targets. User: {0}",
                 aspNetUserId);
-            throw;
+            return StatusCode(500, "An error occurred while importing targets. Please try again later.");
         }
     }
 
@@ -478,15 +502,21 @@ public class TargetController : ControllerBase
                 return CreatedAtAction(nameof(GetServiceById), new { serviceId = service.Id }, service);
             }
 
-            _logger.LogError("An error ocurred adding a Target. User: {0}",
+            _logger.LogError("Validation failed when adding a Target Service. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred adding a Target. User: {0}",
+            _logger.LogError(e, "An error ocurred adding a Target Service. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while creating the target service. Please try again later.");
         }
     }
 
@@ -520,15 +550,21 @@ public class TargetController : ControllerBase
                 return NotFound();
             }
 
-            _logger.LogError("An error ocurred editing a Target Service. User: {0}",
+            _logger.LogError("Validation failed when editing a Target Service. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a Target Service. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the target service. Please try again later.");
         }
     }
 
@@ -557,16 +593,22 @@ public class TargetController : ControllerBase
             }
             else
             {
-                _logger.LogError("An error occurred deleting a Target Service. User: {0}",
+                _logger.LogError("Validation failed when deleting a Target Service. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred deleting a Target Service. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the target service. Please try again later.");
         }
     }
 }

@@ -34,7 +34,7 @@ public class AccountController : ControllerBase
         }
         else
         {
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 

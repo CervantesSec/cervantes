@@ -104,7 +104,7 @@ public class RssController : ControllerBase
             }
             _logger.LogError("An error ocurred adding report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -140,12 +140,12 @@ public class RssController : ControllerBase
 
                 _logger.LogError("An error ocurred editing report templates. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             _logger.LogError("An error ocurred editing report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -177,12 +177,12 @@ public class RssController : ControllerBase
 
                 _logger.LogError("An error ocurred deleting report templates. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             _logger.LogError("An error ocurred deleting report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -231,7 +231,7 @@ public class RssController : ControllerBase
             }
             _logger.LogError("An error ocurred adding report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -264,12 +264,12 @@ public class RssController : ControllerBase
 
                 _logger.LogError("An error ocurred editing report templates. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             _logger.LogError("An error ocurred editing report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -301,12 +301,12 @@ public class RssController : ControllerBase
 
                 _logger.LogError("An error ocurred deleting report templates. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             _logger.LogError("An error ocurred deleting report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {

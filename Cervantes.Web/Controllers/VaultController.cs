@@ -72,7 +72,7 @@ public class VaultController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 
                 
@@ -93,16 +93,22 @@ public class VaultController : ControllerBase
             }
             else
             {
-                _logger.LogError("An error ocurred adding a Vault. User: {0}",
+                _logger.LogError("Validation failed when adding a Vault. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding a Vault. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while creating the vault entry. Please try again later.");
         }
     }
     
@@ -117,7 +123,7 @@ public class VaultController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
 
                 var vault = vaultManager.GetById(model.Id);
@@ -133,16 +139,22 @@ public class VaultController : ControllerBase
             }
             else
             {
-                _logger.LogError("An error ocurred editing a Vault. User: {0}",
+                _logger.LogError("Validation failed when editing a Vault. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a Vault. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the vault entry. Please try again later.");
         }
     }
     
@@ -159,7 +171,7 @@ public class VaultController : ControllerBase
                 var user = projectUserManager.VerifyUser(vault.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 
                 vaultManager.Remove(vault);
@@ -170,16 +182,16 @@ public class VaultController : ControllerBase
             }
             else
             {
-                _logger.LogError("An error ocurred deleting a Vault. User: {0}",
+                _logger.LogError("Vault not found. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound($"Vault with ID {vaultId} not found");
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting a Vault. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the vault entry. Please try again later.");
         }
     }
     

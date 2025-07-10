@@ -295,7 +295,7 @@ public class VulnController: ControllerBase
                     var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("NotAllowed");
+                        return Forbid("You do not have permission to access this project");
                     }
                 }
                 
@@ -430,15 +430,21 @@ public class VulnController: ControllerBase
                 return CreatedAtAction(nameof(GetVulnById), new { vulnId = vuln.Id }, vuln);
             }
 
-            _logger.LogError("An error ocurred adding a Vuln. User: {0}",
+            _logger.LogError("Validation failed when adding a Vuln. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred adding a Vuln. User: {0}",
+            _logger.LogError(e, "An error occurred adding a Vuln. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while creating the vulnerability. Please try again later.");
         }
     }
     
@@ -455,7 +461,7 @@ public class VulnController: ControllerBase
                     var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("NotAllowed");
+                        return Forbid("You do not have permission to access this project");
                     }
                 }
 
@@ -601,20 +607,26 @@ public class VulnController: ControllerBase
                 return NoContent();
                 }
                 
-                _logger.LogError("An error ocurred editing a Vuln. User: {0}",
+                _logger.LogError("Vulnerability not found for editing. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound("Vulnerability not found");
             }
 
-            _logger.LogError("An error ocurred editing a Vuln. User: {0}",
+            _logger.LogError("Validation failed when editing a Vuln. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred editing a Vuln. User: {0}",
+            _logger.LogError(e, "An error occurred editing a Vuln. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the vulnerability. Please try again later.");
         }
     }
     
@@ -672,7 +684,7 @@ public class VulnController: ControllerBase
                     var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("NotAllowed");
+                        return Forbid("You do not have permission to access this project");
                     }
                 }
                 
@@ -685,13 +697,13 @@ public class VulnController: ControllerBase
    
             _logger.LogError("An error ocurred deleting a Vuln. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NotFound("Vulnerability not found or cannot be deleted");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting a Vuln. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the vulnerability. Please try again later.");
         }
     }
     
@@ -782,7 +794,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return Forbid("You do not have permission to access this project");
                         }
                     }
                 }
@@ -805,13 +817,19 @@ public class VulnController: ControllerBase
 
             _logger.LogError("An error ocurred adding a Vuln Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding a Vuln Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while adding the vulnerability note. Please try again later.");
         }
     }
     
@@ -834,7 +852,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return Forbid("You do not have permission to access this project");
                         }
                     }
                 }
@@ -848,13 +866,13 @@ public class VulnController: ControllerBase
    
             _logger.LogError("An error ocurred deleting a Vuln Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NotFound("Vulnerability note not found or cannot be deleted");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting a Vuln Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the vulnerability note. Please try again later.");
         }
     }
     
@@ -875,7 +893,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return Forbid("You do not have permission to access this project");
                         }
                     }
                 }
@@ -890,13 +908,19 @@ public class VulnController: ControllerBase
                     aspNetUserId);
                 return NoContent();
             }
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred editing a Vuln Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the vulnerability note. Please try again later.");
         }
     }
     
@@ -917,7 +941,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return Forbid("You do not have permission to access this project");
                         }
                     }
                 }
@@ -949,13 +973,19 @@ public class VulnController: ControllerBase
 
             _logger.LogError("An error ocurred adding a Vuln target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding a Vuln target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while adding the vulnerability target. Please try again later.");
         }
     }
     [HttpDelete]
@@ -975,7 +1005,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(tar.Vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return Forbid("You do not have permission to access this project");
                         }
                     }
                 
@@ -988,13 +1018,13 @@ public class VulnController: ControllerBase
    
             _logger.LogError("An error ocurred deleting a Vuln Target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NotFound("Vulnerability target not found or cannot be deleted");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting a Vuln Target. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the vulnerability target. Please try again later.");
         }
     }
     
@@ -1015,7 +1045,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return Forbid("You do not have permission to access this project");
                         }
                     }
                 }
@@ -1073,13 +1103,19 @@ public class VulnController: ControllerBase
             }
             _logger.LogError("An error ocurred adding a Vuln Attachment. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding a Vuln Attachment. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while adding the vulnerability attachment. Please try again later.");
         }
     }
     [HttpDelete]
@@ -1099,7 +1135,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(attachment.Vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return Forbid("You do not have permission to access this project");
                         }
                     }
                     
@@ -1111,20 +1147,26 @@ public class VulnController: ControllerBase
                 }
             
                 System.IO.File.Delete(attachment.FilePath);
-                _logger.LogError("An error ocurred adding a Vuln Attachment. User: {0}",
+                _logger.LogError("An error ocurred deleting a Vuln Attachment. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound("Vulnerability attachment not found or cannot be deleted");
             
             }
-            _logger.LogError("An error ocurred adding a Vuln Attachment. User: {0}",
+            _logger.LogError("An error ocurred deleting a Vuln Attachment. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"An error ocurred adding a Vuln Attachment. User: {0}",
+            _logger.LogError(e,"An error ocurred deleting a Vuln Attachment. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the vulnerability attachment. Please try again later.");
         }
         
     }
@@ -1143,7 +1185,7 @@ public class VulnController: ControllerBase
                     var user = projectUserManager.VerifyUser(model.Project.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("NotAllowed");
+                        return Forbid("You do not have permission to access this project");
                     }
                 }
                 
@@ -1378,17 +1420,23 @@ public class VulnController: ControllerBase
 
                 _logger.LogError("An error ocurred importing vulns. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("No file content provided or invalid import type");
             }
             _logger.LogError("An error ocurred importing vulns. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred importing vulns. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while importing vulnerabilities. Please try again later.");
         }
     }
     
@@ -1415,13 +1463,19 @@ public class VulnController: ControllerBase
             }
             _logger.LogError( "An error ocurred adding a Vuln Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding a Vuln Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while adding the vulnerability category. Please try again later.");
         }
     }
 
@@ -1450,13 +1504,13 @@ public class VulnController: ControllerBase
             }
             _logger.LogError( "An error ocurred deleting a Vuln Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NotFound("Vulnerability category not found or cannot be deleted");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting a Vuln Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the vulnerability category. Please try again later.");
         }
     }
     
@@ -1484,13 +1538,13 @@ public class VulnController: ControllerBase
             }
             _logger.LogError( "An error ocurred editing a Vuln Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NotFound("Vulnerability category not found or cannot be updated");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a Vuln Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the vulnerability category. Please try again later.");
         }
     }
     

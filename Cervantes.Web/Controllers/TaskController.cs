@@ -228,16 +228,22 @@ public class TaskController: ControllerBase
             }
             else
             {
-                _logger.LogError("An error ocurred adding a Task. User: {0}",
+                _logger.LogError("Validation failed when adding a Task. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
             }
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred adding a Task. User: {0}",
+            _logger.LogError(e, "An error occurred adding a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while creating the task. Please try again later.");
         }
     }
     
@@ -298,14 +304,14 @@ public class TaskController: ControllerBase
             {
                 _logger.LogError("An error occurred editing a Task. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred editing a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
                     
     }
@@ -347,14 +353,14 @@ public class TaskController: ControllerBase
             {
                 _logger.LogError("An error occurred deleting a Task. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred deleting a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 
@@ -387,7 +393,7 @@ public class TaskController: ControllerBase
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest("Invalid request");
                 }
 
             }
@@ -395,14 +401,14 @@ public class TaskController: ControllerBase
             {
                 _logger.LogError("An error occurred updating a Task. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred updating a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -433,7 +439,7 @@ public class TaskController: ControllerBase
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest("Invalid request");
                 }
 
             }
@@ -441,14 +447,14 @@ public class TaskController: ControllerBase
             {
                 _logger.LogError("An error occurred updating a Task. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred updating a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 
@@ -566,13 +572,13 @@ public class TaskController: ControllerBase
                 }
             }
 
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred adding target to a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -606,16 +612,16 @@ public class TaskController: ControllerBase
                     return NoContent();
                 }
 
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred deleting target from a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -666,13 +672,13 @@ public class TaskController: ControllerBase
                 await taskNoteManager.Context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetTaskNoteById), new { noteId = note.TaskId }, note);
             }
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred adding note to a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -705,13 +711,13 @@ public class TaskController: ControllerBase
                     aspNetUserId);
                 return NoContent();
             }
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred editing a Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -747,16 +753,16 @@ public class TaskController: ControllerBase
                     return NoContent();
                 }
 
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred adding target to a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 
@@ -853,13 +859,13 @@ public class TaskController: ControllerBase
                 }
             }
 
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred adding target to a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -897,16 +903,16 @@ public class TaskController: ControllerBase
                     return NoContent();
                 }
 
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred deleting target from a Task. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     

@@ -117,15 +117,21 @@ public class DocumentController : Controller
                 _logger.LogInformation("Document added successfully. User: {0}",aspNetUserId);
                 return CreatedAtAction(nameof(GetById), new { documentId = doc.Id }, doc);
             }
-            _logger.LogError("An error ocurred adding a Document. User: {0}",
+            _logger.LogError("Validation failed when adding a Document. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError("An error ocurred adding a Document. User: {0}",
+            _logger.LogError(e, "An error ocurred adding a Document. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while creating the document. Please try again later.");
         }
     }
     
@@ -152,21 +158,27 @@ public class DocumentController : Controller
                 }
                 else
                 {
-                    _logger.LogError("An error ocurred deleting Document. User: {0}",
+                    _logger.LogError("Document not found. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return NotFound($"Document with ID {docId} not found");
                 }
 
             }
-            _logger.LogError("An error ocurred deleting Document. User: {0}",
+            _logger.LogError("Validation failed when deleting Document. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError("An error ocurred deleting Document. User: {0}",
+            _logger.LogError(e, "An error ocurred deleting Document. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the document. Please try again later.");
         }
         
     }
@@ -194,20 +206,26 @@ public class DocumentController : Controller
                 }
                 else
                 {
-                    _logger.LogError("An error ocurred editing a Document. User: {0}",
+                    _logger.LogError("Document not found. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return NotFound($"Document with ID {model.Id} not found");
                 }
             }
-            _logger.LogError("An error ocurred editing a Document. User: {0}",
+            _logger.LogError("Validation failed when editing a Document. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a Document. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the document. Please try again later.");
         }
     }
     

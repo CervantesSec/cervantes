@@ -54,13 +54,13 @@ public class NoteController : Controller
             }
             _logger.LogError("An error ocurred adding a Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e,"An error ocurred adding a Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -88,13 +88,13 @@ public class NoteController : Controller
             
             _logger.LogError("An error ocurred editing a Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e,"An error editing adding a Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -121,18 +121,18 @@ public class NoteController : Controller
                 }
                 _logger.LogError("An error ocurred deleting a Note. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
             
             _logger.LogError("An error ocurred deleting a Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e,"An error deleting adding a Note. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 

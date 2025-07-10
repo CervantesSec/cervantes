@@ -127,7 +127,7 @@ public class VulnCustomFieldController : ControllerBase
 
             _logger.LogError("An error ocurred adding custom field. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -175,7 +175,7 @@ public class VulnCustomFieldController : ControllerBase
 
             _logger.LogError("An error ocurred editing custom field. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -212,7 +212,7 @@ public class VulnCustomFieldController : ControllerBase
 
             _logger.LogError("An error ocurred deleting custom field. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -280,7 +280,7 @@ public class VulnCustomFieldController : ControllerBase
 
             _logger.LogError("An error ocurred setting custom field values. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {

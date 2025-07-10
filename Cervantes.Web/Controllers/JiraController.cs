@@ -126,7 +126,7 @@ public class JiraController : Controller
                 if (result != null)
                 {
                     _logger.LogError("Jira already exists. User: {0}",aspNetUserId);
-                    return BadRequest();
+                    return BadRequest("Invalid request");
                 }
                 
                 
@@ -141,7 +141,7 @@ public class JiraController : Controller
             }
             _logger.LogError("An error ocurred adding a jira. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -150,7 +150,7 @@ public class JiraController : Controller
             vulnManager.Context.SaveChanges();
             _logger.LogError(e,"An error ocurred adding a jira. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 
@@ -166,7 +166,7 @@ public class JiraController : Controller
             {
                 _logger.LogError("An error ocurred deleting Jira Issue on Vuln {0} User {1}", vulnId,
                     User.FindFirstValue(ClaimTypes.Name));
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             jiraManager.Remove(jira);
@@ -184,7 +184,7 @@ public class JiraController : Controller
             _logger.LogError("An error ocurred deleting Jira Issue on Vuln {0} User {1}", vulnId,
                 User.FindFirstValue(ClaimTypes.Name));
 
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -205,7 +205,7 @@ public class JiraController : Controller
         {
             _logger.LogError(e, "An error ocurred updating Jira Issue on Vuln {0} User {1}", vulnId,
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -223,7 +223,7 @@ public class JiraController : Controller
             if (issue == false)
             {
                 _logger.LogError( "An error ocurred adding comment in Jira on Vuln {0} User {1}", model.VulnId,aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             _logger.LogInformation( "Jira comment added successfully on Vuln {0} User {1}", model.VulnId,aspNetUserId);
@@ -233,7 +233,7 @@ public class JiraController : Controller
         {
             _logger.LogError(e, "An error ocurred creating Jira comment on Vuln {0} User {1}", model.VulnId,
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
 
     }

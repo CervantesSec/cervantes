@@ -7806,6 +7806,195 @@ public class DataInitializer
 
             #endregion
             
+            #region Checklist Components
+            
+            // Checklist Overview Component
+            ReportComponents checklistOverviewComponent = new ReportComponents();
+            checklistOverviewComponent.Id = Guid.NewGuid();
+            checklistOverviewComponent.Name = "General - Checklist Overview";
+            checklistOverviewComponent.Language = Language.English;
+            checklistOverviewComponent.ComponentType = ReportPartType.Body;
+            checklistOverviewComponent.Created = DateTime.Now.ToUniversalTime();
+            checklistOverviewComponent.Updated = DateTime.Now.ToUniversalTime();
+            checklistOverviewComponent.ContentCss = "";
+            checklistOverviewComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Checklist Overview</span></h1>
+                <p>&nbsp;</p>
+                <p><span style=""color: rgb(0, 0, 0);"">The following section presents the results of the security testing checklists executed during the assessment. Each checklist provides a structured approach to evaluate specific security aspects of the target systems.</span></p>
+                <p>&nbsp;</p>
+                <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 50%;""><col style=""width: 50%;""></colgroup>
+                <tbody>
+                <tr>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Checklist Status</span></strong></td>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Count</span></strong></td>
+                </tr>
+                <tr>
+                <td style=""text-align: center; background-color: rgb(46, 125, 50);""><span style=""color: rgb(255, 255, 255);""><strong>Completed</strong></span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{ChecklistsCompletedCount}}</span></td>
+                </tr>
+                <tr>
+                <td style=""text-align: center; background-color: rgb(255, 193, 7);""><span style=""color: rgb(0, 0, 0);""><strong>In Progress</strong></span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{ChecklistsInProgressCount}}</span></td>
+                </tr>
+                <tr>
+                <td style=""text-align: center; background-color: rgb(158, 158, 158);""><span style=""color: rgb(255, 255, 255);""><strong>Not Started</strong></span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{ChecklistsNotStartedCount}}</span></td>
+                </tr>
+                <tr>
+                <td style=""text-align: center; background-color: rgb(255, 152, 0);""><span style=""color: rgb(0, 0, 0);""><strong>On Hold</strong></span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{ChecklistsOnHoldCount}}</span></td>
+                </tr>
+                <tr>
+                <td style=""text-align: center; background-color: rgb(244, 67, 54);""><span style=""color: rgb(255, 255, 255);""><strong>Cancelled</strong></span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{ChecklistsCancelledCount}}</span></td>
+                </tr>
+                </tbody>
+                </table>
+                <p>&nbsp;</p>
+                <p><span style=""color: rgb(0, 0, 0);"">Overall completion rate: <strong>{{ChecklistsCompletionRate}}%</strong></span></p>
+                <p>&nbsp;</p>";
+            reportComponentsManager.Add(checklistOverviewComponent);
+            reportComponentsManager.Context.SaveChanges();
+            
+            // Checklist Details Component
+            ReportComponents checklistDetailsComponent = new ReportComponents();
+            checklistDetailsComponent.Id = Guid.NewGuid();
+            checklistDetailsComponent.Name = "General - Checklist Details";
+            checklistDetailsComponent.Language = Language.English;
+            checklistDetailsComponent.ComponentType = ReportPartType.Body;
+            checklistDetailsComponent.Created = DateTime.Now.ToUniversalTime();
+            checklistDetailsComponent.Updated = DateTime.Now.ToUniversalTime();
+            checklistDetailsComponent.ContentCss = "";
+            checklistDetailsComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Checklist Execution Details</span></h1>
+                <p>&nbsp;</p>
+                <p>{{for checklist in Checklists}}</p>
+                <h2><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistName}}</span></h2>
+                <p>&nbsp;</p>
+                <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 25%;""><col style=""width: 25%;""><col style=""width: 25%;""><col style=""width: 25%;""></colgroup>
+                <tbody>
+                <tr>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Template</span></strong></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistTemplateName}}</span></td>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Status</span></strong></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistStatus}}</span></td>
+                </tr>
+                <tr>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Target</span></strong></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistTargetName}}</span></td>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Completion</span></strong></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistCompletionPercentage}}%</span></td>
+                </tr>
+                </tbody>
+                </table>
+                <p>&nbsp;</p>
+                <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 99.9183%;""></colgroup>
+                <tbody>
+                <tr>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Description</span></strong></td>
+                </tr>
+                <tr>
+                <td style=""text-align: justify;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistDescription}}</span></td>
+                </tr>
+                </tbody>
+                </table>
+                <p>&nbsp;</p>
+                <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 16.6667%;""><col style=""width: 16.6667%;""><col style=""width: 16.6667%;""><col style=""width: 16.6667%;""><col style=""width: 16.6667%;""><col style=""width: 16.6667%;""></colgroup>
+                <tbody>
+                <tr>
+                <td style=""background-color: rgb(46, 125, 50); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Passed</span></strong></td>
+                <td style=""background-color: rgb(244, 67, 54); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Failed</span></strong></td>
+                <td style=""background-color: rgb(158, 158, 158); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Not Applicable</span></strong></td>
+                <td style=""background-color: rgb(255, 193, 7); text-align: center;""><strong><span style=""color: rgb(0, 0, 0);"">In Progress</span></strong></td>
+                <td style=""background-color: rgb(96, 125, 139); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Not Tested</span></strong></td>
+                <td style=""background-color: rgb(255, 152, 0); text-align: center;""><strong><span style=""color: rgb(0, 0, 0);"">Needs Review</span></strong></td>
+                </tr>
+                <tr>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistPassedItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistFailedItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistNotApplicableItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistInProgressItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistNotTestedItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{checklist.ChecklistNeedsReviewItems}}</span></td>
+                </tr>
+                </tbody>
+                </table>
+                <p>&nbsp;</p>
+                <p>{{end}}</p>";
+            reportComponentsManager.Add(checklistDetailsComponent);
+            reportComponentsManager.Context.SaveChanges();
+            
+            // Checklist Categories Component
+            ReportComponents checklistCategoriesComponent = new ReportComponents();
+            checklistCategoriesComponent.Id = Guid.NewGuid();
+            checklistCategoriesComponent.Name = "General - Checklist Categories";
+            checklistCategoriesComponent.Language = Language.English;
+            checklistCategoriesComponent.ComponentType = ReportPartType.Body;
+            checklistCategoriesComponent.Created = DateTime.Now.ToUniversalTime();
+            checklistCategoriesComponent.Updated = DateTime.Now.ToUniversalTime();
+            checklistCategoriesComponent.ContentCss = "";
+            checklistCategoriesComponent.Content = @"<h1><span style=""color: rgb(0, 0, 0);"">Checklist Categories Analysis</span></h1>
+                <p>&nbsp;</p>
+                <p><span style=""color: rgb(0, 0, 0);"">The following section presents the results organized by checklist categories, providing a structured view of the testing coverage across different security domains.</span></p>
+                <p>&nbsp;</p>
+                <p>{{for category in ChecklistCategories}}</p>
+                <h2><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryName}}</span></h2>
+                <p>&nbsp;</p>
+                <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 25%;""><col style=""width: 25%;""><col style=""width: 25%;""><col style=""width: 25%;""></colgroup>
+                <tbody>
+                <tr>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Template</span></strong></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryTemplateName}}</span></td>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Completion</span></strong></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryCompletionPercentage}}%</span></td>
+                </tr>
+                <tr>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Order</span></strong></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryOrder}}</span></td>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Total Items</span></strong></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryTotalItems}}</span></td>
+                </tr>
+                </tbody>
+                </table>
+                <p>&nbsp;</p>
+                <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 99.9183%;""></colgroup>
+                <tbody>
+                <tr>
+                <td style=""background-color: rgb(0, 0, 0); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Description</span></strong></td>
+                </tr>
+                <tr>
+                <td style=""text-align: justify;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryDescription}}</span></td>
+                </tr>
+                </tbody>
+                </table>
+                <p>&nbsp;</p>
+                <table style=""border-collapse: collapse; width: 100%;"" border=""1""><colgroup><col style=""width: 14.2857%;""><col style=""width: 14.2857%;""><col style=""width: 14.2857%;""><col style=""width: 14.2857%;""><col style=""width: 14.2857%;""><col style=""width: 14.2857%;""><col style=""width: 14.2857%;""></colgroup>
+                <tbody>
+                <tr>
+                <td style=""background-color: rgb(46, 125, 50); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Passed</span></strong></td>
+                <td style=""background-color: rgb(244, 67, 54); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Failed</span></strong></td>
+                <td style=""background-color: rgb(158, 158, 158); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Not Applicable</span></strong></td>
+                <td style=""background-color: rgb(255, 193, 7); text-align: center;""><strong><span style=""color: rgb(0, 0, 0);"">In Progress</span></strong></td>
+                <td style=""background-color: rgb(96, 125, 139); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Not Tested</span></strong></td>
+                <td style=""background-color: rgb(255, 152, 0); text-align: center;""><strong><span style=""color: rgb(0, 0, 0);"">Needs Review</span></strong></td>
+                <td style=""background-color: rgb(121, 85, 72); text-align: center;""><strong><span style=""color: rgb(255, 255, 255);"">Skipped</span></strong></td>
+                </tr>
+                <tr>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryPassedItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryFailedItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryNotApplicableItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryInProgressItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryNotTestedItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategoryNeedsReviewItems}}</span></td>
+                <td style=""text-align: center;""><span style=""color: rgb(0, 0, 0);"">{{category.ChecklistCategorySkippedItems}}</span></td>
+                </tr>
+                </tbody>
+                </table>
+                <p>&nbsp;</p>
+                <p>{{end}}</p>";
+            reportComponentsManager.Add(checklistCategoriesComponent);
+            reportComponentsManager.Context.SaveChanges();
+            
+            #endregion
+            
         }
         
     }

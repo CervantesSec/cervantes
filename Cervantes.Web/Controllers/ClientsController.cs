@@ -160,15 +160,21 @@ public class ClientsController : ControllerBase
                 _logger.LogInformation("Client added successfully. User: {0}",aspNetUserId);
                 return CreatedAtAction(nameof(GetById), new { clientId = client.Id }, client);
             }
-            _logger.LogError("An error ocurred adding a client. User: {0}",
+            _logger.LogError("Validation failed when adding a client. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"An error ocurred adding a client. User: {0}",
+            _logger.LogError(e,"An error occurred adding a client. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while creating the client. Please try again later.");
         }
     }
     
@@ -193,21 +199,27 @@ public class ClientsController : ControllerBase
                 }
                 else
                 {
-                    _logger.LogError("An error ocurred deleting client. User: {0}",
+                    _logger.LogError("Client not found for deletion. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return NotFound($"Client with ID {clientId} not found");
                 }
 
             }
-            _logger.LogError("An error ocurred deleting client. User: {0}",
+            _logger.LogError("Validation failed when deleting client. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"An error ocurred deleting client. User: {0}",
+            _logger.LogError(e,"An error occurred deleting client. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the client. Please try again later.");
         }
         
     }
@@ -235,13 +247,13 @@ public class ClientsController : ControllerBase
             }
             _logger.LogError("An error ocurred deleting client logo. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting client logo. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -298,18 +310,18 @@ public class ClientsController : ControllerBase
                 {
                     _logger.LogError("An error ocurred editing a Client. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return BadRequest("Invalid request");
                 }
             }
             _logger.LogError("An error ocurred editing a Client. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a Client. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 }

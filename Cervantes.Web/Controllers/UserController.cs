@@ -191,13 +191,19 @@ public class UserController: ControllerBase
                 await authRolesAdminService.CreateRoleToPermissionsAsync(model.Name, model.Permissions, model.Description);
                 return Created();
             }
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred adding role. User: {0}",
+            _logger.LogError(e, "An error occurred adding role. User: {0}",
                 aspNetUserId);
-            throw;
+            return StatusCode(500, "An error occurred while creating the role. Please try again later.");
         }
        
     }
@@ -261,15 +267,21 @@ public class UserController: ControllerBase
                         aspNetUserId);
                     return NoContent();
             }
-            _logger.LogError("An error ocurred deleting a User. User: {0}",
+            _logger.LogError("Validation failed when deleting a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred deleting a User. User: {0}",
+            _logger.LogError(e, "An error occurred deleting a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the user. Please try again later.");
         }
     }
 
@@ -362,14 +374,14 @@ public class UserController: ControllerBase
             }
             _logger.LogError("An error ocurred adding User filetype not admitted. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             _logger.LogError(e, "An error ocurred adding a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         
     }
@@ -452,13 +464,13 @@ public class UserController: ControllerBase
 
             _logger.LogError( "An error ocurred editing a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -475,7 +487,7 @@ public class UserController: ControllerBase
                 {
                     if (user.Id != aspNetUserId)
                     {
-                        return BadRequest();
+                        return BadRequest("Invalid request");
 
                     }
                     //user.UserName = sanitizer.Sanitize(model.Email));
@@ -493,18 +505,18 @@ public class UserController: ControllerBase
                 }
                 _logger.LogError( "An error ocurred editing a User. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             _logger.LogError( "An error ocurred editing a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -531,17 +543,23 @@ public class UserController: ControllerBase
 
                 _logger.LogError("An error ocurred deleting a User. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
-            _logger.LogError("An error ocurred deleting a User. User: {0}",
+            _logger.LogError("Validation failed when deleting a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred deleting a User. User: {0}",
+            _logger.LogError(e, "An error occurred deleting a User. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the user. Please try again later.");
         }
     }
     
@@ -586,7 +604,7 @@ public class UserController: ControllerBase
                     var user = usrManager.GetByUserId(model.Id);
                     if (user.Id != aspNetUserId)
                     {
-                        return BadRequest();
+                        return BadRequest("Invalid request");
 
                     }
                     
@@ -613,18 +631,18 @@ public class UserController: ControllerBase
                 
                 _logger.LogError("An error ocurred uploading avatar. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
             _logger.LogError("An error ocurred uploading avatar User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             _logger.LogError(e, "An error ocurred uploading avatar. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         
     }

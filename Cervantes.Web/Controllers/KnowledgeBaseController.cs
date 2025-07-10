@@ -81,13 +81,13 @@ public class KnowledgeBaseController : Controller
             }
             _logger.LogError("An error ocurred adding a Knowledge Page. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError("An error ocurred adding a Knowledge Page. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -121,18 +121,18 @@ public class KnowledgeBaseController : Controller
                 {
                     _logger.LogError("An error ocurred editing a Knowledge Page. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return BadRequest("Invalid request");
                 }
             }
             _logger.LogError("An error ocurred editing a Knowledge Page. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a Knowledge Page. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 
@@ -159,20 +159,20 @@ public class KnowledgeBaseController : Controller
                 {
                     _logger.LogError("An error ocurred deleting Knowledge Page. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return BadRequest("Invalid request");
                 }
 
             }
 
             _logger.LogError("An error ocurred deleting Knowledge Page. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError("An error ocurred deleting Knowledge Page. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 
@@ -237,13 +237,13 @@ public class KnowledgeBaseController : Controller
             }
             _logger.LogError("An error ocurred adding a Knowledge Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e,"An error ocurred adding a Knowledge Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     [HttpPut]
@@ -282,18 +282,18 @@ public class KnowledgeBaseController : Controller
                 {
                     _logger.LogError("An error ocurred editing a Knowledge Category. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return BadRequest("Invalid request");
                 }
             }
             _logger.LogError("An error ocurred editing a Knowledge Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing a Knowledge Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
     
@@ -320,19 +320,19 @@ public class KnowledgeBaseController : Controller
                 {
                     _logger.LogError("An error ocurred deleting Knowledge Category. User: {0}",
                         aspNetUserId);
-                    return BadRequest();
+                    return BadRequest("Invalid request");
                 }
 
             }
             _logger.LogError("An error ocurred deleting Knowledge Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
             _logger.LogError(e,"An error ocurred deleting Knowledge Category. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         
     }

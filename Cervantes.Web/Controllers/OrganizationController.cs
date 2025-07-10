@@ -108,7 +108,7 @@ public class OrganizationController: ControllerBase
             {
                 _logger.LogError("An error ocurred saving organization. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
             _logger.LogInformation("Organization saved successfully. User: {0}",
                 aspNetUserId);
@@ -116,7 +116,7 @@ public class OrganizationController: ControllerBase
             
             return NoContent();
         }
-        return BadRequest();
+        return BadRequest("Invalid request");
         }
         catch (Exception e)
         {

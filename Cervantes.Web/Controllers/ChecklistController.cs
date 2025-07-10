@@ -197,7 +197,7 @@ public class ChecklistController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 
                 switch (model.Type)
@@ -237,13 +237,13 @@ public class ChecklistController : ControllerBase
             }
             _logger.LogError("An error occurred adding a Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(new { message = "Validation failed", errors = ModelState });
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred adding a Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while creating the checklist. Please try again later.");
         }
        
     }
@@ -265,7 +265,7 @@ public class ChecklistController : ControllerBase
                    var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                    if (user == null)
                    {
-                       return BadRequest();
+                       return BadRequest("Access denied: User does not have permission to access this project");
                    }
                    
                    result.Apit01Note = Sanitizer.Sanitize(model.Apit.Apit01Note);
@@ -481,18 +481,18 @@ public class ChecklistController : ControllerBase
 
                _logger.LogError("An error occurred editing a Checklist. User: {0}",
                    aspNetUserId);
-               return BadRequest();
+               return NotFound("Checklist not found or invalid ID");
             }
 
             _logger.LogError("An error occurred editing a Checklist. User: {0}",
                 aspNetUserId);;
-            return BadRequest();
+            return BadRequest(new { message = "Validation failed", errors = ModelState });
         }
         catch (Exception e)
         {
             _logger.LogError(e,"An error occurred editing a Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the checklist. Please try again later.");
         }
     }
     
@@ -510,7 +510,7 @@ public class ChecklistController : ControllerBase
                 var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 
                 wstgManager.Remove(result);
@@ -521,13 +521,13 @@ public class ChecklistController : ControllerBase
             }
             _logger.LogError("An error occurred deleting a WSTG Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return NotFound("WSTG Checklist not found or invalid ID");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "An error deleting adding a WSTG Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the WSTG checklist. Please try again later.");
         }
        
     }
@@ -545,7 +545,7 @@ public class ChecklistController : ControllerBase
                 var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 
                 mastgManager.Remove(result);
@@ -562,7 +562,7 @@ public class ChecklistController : ControllerBase
         {
             _logger.LogError(e, "An error deleting adding a MASTG Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while deleting the MASTG checklist. Please try again later.");
         }
        
     }
@@ -584,7 +584,7 @@ public class ChecklistController : ControllerBase
                    var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                    if (user == null)
                    {
-                       return BadRequest();
+                       return BadRequest("Access denied: User does not have permission to access this project");
                    }
                    
                    result.Storage1Note = Sanitizer.Sanitize(model.Storage.Storage1Note);
@@ -827,18 +827,18 @@ public class ChecklistController : ControllerBase
 
                _logger.LogError("An error occurred editing a MASTG Checklist. User: {0}",
                    aspNetUserId);
-               return BadRequest();
+               return NotFound("MASTG Checklist not found or invalid ID");
             }
 
             _logger.LogError("An error occurred editing a MASTG Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(new { message = "Validation failed", errors = ModelState });
         }
         catch (Exception e)
         {
             _logger.LogError(e,"An error occurred editing a MASTG Checklist. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while updating the MASTG checklist. Please try again later.");
         }
     }
     
@@ -857,7 +857,7 @@ public class ChecklistController : ControllerBase
                var user = projectUserManager.VerifyUser(mastg.ProjectId, aspNetUserId);
                if (user == null)
                {
-                   return BadRequest();
+                   return BadRequest("Access denied: User does not have permission to access this project");
                }
                var pro = projectManager.GetById(mastg.ProjectId);
 
@@ -998,14 +998,14 @@ public class ChecklistController : ControllerBase
                
            }
            
-           return BadRequest();
+           return NotFound("MASTG Checklist not found or invalid ID");
 
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred making backup data. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return StatusCode(500, "An error occurred while generating the MASTG report. Please try again later.");
         }
     }
     
@@ -1025,7 +1025,7 @@ public class ChecklistController : ControllerBase
                     var user = projectUserManager.VerifyUser(wstg.ProjectId, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest();
+                        return BadRequest("Access denied: User does not have permission to access this project");
                     }
                     
                     var pro = projectManager.GetById(model.ProjectId);
@@ -1171,12 +1171,12 @@ public class ChecklistController : ControllerBase
                 
                 _logger.LogError("An error ocurred generating report. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound("WSTG Checklist not found or invalid ID");
             }
 
             _logger.LogError("An error ocurred generating report. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(new { message = "Validation failed", errors = ModelState });
         }
         catch (Exception e)
         {
@@ -1459,7 +1459,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(projectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Access denied: User does not have permission to access this project");
             }
 
             var checklists = await _checklistManager.GetByProject(projectId)
@@ -1489,7 +1489,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Access denied: User does not have permission to access this project");
             }
 
             return Ok(checklist);
@@ -1525,7 +1525,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Access denied: User does not have permission to access this project");
             }
 
             return Ok(checklist);
@@ -1544,18 +1544,27 @@ public class ChecklistController : ControllerBase
     {
         try
         {
+            // Improved validation error response
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
+            }
 
             // Verify user has access to the project
             var project = projectManager.GetById(model.ProjectId);
             if (project == null)
-                return NotFound("Project not found");
+                return NotFound($"Project with ID {model.ProjectId} not found");
 
             var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Access denied: User does not have permission to access this project");
             }
 
             var checklist = new Checklist
@@ -1594,17 +1603,30 @@ public class ChecklistController : ControllerBase
     {
         try
         {
+            // Improved validation error response
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
+            }
+
+            // Business validation with descriptive messages
+            if (id != model.Id)
+                return BadRequest($"ID mismatch: URL ID ({id}) does not match model ID ({model.Id})");
 
             var checklist = _checklistManager.GetById(id);
             if (checklist == null)
-                return NotFound();
+                return NotFound($"Checklist with ID {id} not found");
 
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Access denied: User does not have permission to access this project");
             }
 
             checklist.Name = model.Name;
@@ -1619,7 +1641,7 @@ public class ChecklistController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error updating checklist {Id}", id);
-            return StatusCode(500, "Internal server error");
+            return StatusCode(500, "An error occurred while updating the checklist. Please try again later.");
         }
     }
 
@@ -1632,12 +1654,12 @@ public class ChecklistController : ControllerBase
         {
             var checklist = _checklistManager.GetById(id);
             if (checklist == null)
-                return NotFound();
+                return NotFound($"Checklist with ID {id} not found");
 
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Access denied: User does not have permission to delete this checklist");
             }
 
             _checklistManager.Remove(checklist);
@@ -1669,7 +1691,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Access denied: User does not have permission to access this project");
             }
 
             var executions = await _checklistExecutionManager.GetByChecklist(checklistId)
@@ -1707,7 +1729,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Access denied: User does not have permission to access this project");
             }
 
             execution.Status = model.Status;
@@ -1738,8 +1760,17 @@ public class ChecklistController : ControllerBase
     {
         try
         {
+            // Improved validation error response
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
+            }
 
             var count = await _checklistExecutionManager.BulkUpdateStatus(model.ExecutionIds, model.Status);
             return Ok(new { UpdatedCount = count });
@@ -1758,8 +1789,17 @@ public class ChecklistController : ControllerBase
     {
         try
         {
+            // Improved validation error response
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                return BadRequest(new { message = "Validation failed", errors });
+            }
 
             var checklist = _checklistManager.GetById(checklistId);
             if (checklist == null)

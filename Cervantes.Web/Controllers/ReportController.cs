@@ -76,6 +76,8 @@ public class ReportController : ControllerBase
     private IVulnCustomFieldValueManager vulnCustomFieldValueManager;
     private Sanitizer sanitizer;
     private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
+    private IChecklistManager checklistManager;
+    private IChecklistExecutionManager checklistExecutionManager;
 
     public ReportController(IProjectManager projectManager, IClientManager clientManager,
         IOrganizationManager organizationManager, IProjectUserManager projectUserManager,
@@ -85,7 +87,8 @@ public class ReportController : ControllerBase
         ILogger<ReportController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager,
         IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck,Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager,
         IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, 
-        IVaultManager vaultManager, IJiraManager jiraManager, IVulnCustomFieldValueManager vulnCustomFieldValueManager, Sanitizer sanitizer)
+        IVaultManager vaultManager, IJiraManager jiraManager, IVulnCustomFieldValueManager vulnCustomFieldValueManager, Sanitizer sanitizer,
+        IChecklistManager checklistManager, IChecklistExecutionManager checklistExecutionManager)
     {
         this.projectManager = projectManager;
         this.clientManager = clientManager;
@@ -112,6 +115,8 @@ public class ReportController : ControllerBase
         this.jiraManager = jiraManager;
         this.vulnCustomFieldValueManager = vulnCustomFieldValueManager;
         this.sanitizer = sanitizer;
+        this.checklistManager = checklistManager;
+        this.checklistExecutionManager = checklistExecutionManager;
     }
 
     [HttpGet]
@@ -202,7 +207,7 @@ public class ReportController : ControllerBase
                     var user = projectUserManager.VerifyUser(report.ProjectId, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest();
+                        return StatusCode(403, "Access denied. You don't have permission to edit reports in this project.");
                     }
 
                     report.Name = sanitizer.Sanitize(model.Name);
@@ -219,12 +224,12 @@ public class ReportController : ControllerBase
 
                 _logger.LogError("An error ocurred editing reports User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound("Report not found or has been deleted.");
             }
 
             _logger.LogError("An error ocurred editing reports User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         catch (Exception e)
         {
@@ -304,7 +309,7 @@ public class ReportController : ControllerBase
 
             _logger.LogError("An error ocurred adding report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         catch (Exception e)
         {
@@ -358,12 +363,12 @@ public class ReportController : ControllerBase
 
                 _logger.LogError("An error ocurred editing report templates. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound("Report template not found or has been deleted.");
             }
 
             _logger.LogError("An error ocurred editing report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         catch (Exception e)
         {
@@ -395,12 +400,12 @@ public class ReportController : ControllerBase
 
                 _logger.LogError("An error ocurred deleting report templates. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound("Report template not found or has been deleted.");
             }
 
             _logger.LogError("An error ocurred deleting report templates. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         catch (Exception e)
         {
@@ -431,12 +436,12 @@ public class ReportController : ControllerBase
 
                 _logger.LogError("An error ocurred deleting report. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return NotFound("Report not found or has been deleted.");
             }
 
             _logger.LogError("An error ocurred deleting report. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         catch (Exception e)
         {
@@ -528,7 +533,7 @@ public class ReportController : ControllerBase
 
             _logger.LogError("An error ocurred adding report Components. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         catch (Exception e)
         {
@@ -623,7 +628,7 @@ public class ReportController : ControllerBase
                 var userInPro = projectUserManager.VerifyUser(pro.Id, aspNetUserId);
                 if (userInPro == null)
                 {
-                    return BadRequest();
+                    return StatusCode(403, "Access denied. You don't have permission to generate reports for this project.");
                 }
 
                 Report rep = new Report
@@ -653,6 +658,11 @@ public class ReportController : ControllerBase
                 var VulnCwes = vulnCweManager.GetAll().Where(x => vul.Contains(x.VulnId)).Include(x => x.Cwe).ToList();
                 var Tasks = taskManager.GetAll().Where(x => x.ProjectId == model.ProjectId).Include(x => x.AsignedUser).Include(x => x.CreatedUser).ToList();
                 var Vaults = vaultManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
+                var Checklists = checklistManager.GetAll().Where(x => x.ProjectId == model.ProjectId)
+                    .Include(x => x.ChecklistTemplate)
+                    .Include(x => x.Target)
+                    .Include(x => x.User)
+                    .ToList();
                 var reportParts = reportsPartsManager.GetAll().Where(x => x.TemplateId == model.ReportTemplateId)
                     .OrderBy(x => x.Order).Include(x => x.Component).ToList();
                 // Read Prism CSS for inlining (contains all necessary styles)
@@ -976,6 +986,127 @@ public class ReportController : ControllerBase
                     });
                 }
                 
+                // Process Checklists data
+                var ChecklistsList = new List<Dictionary<string, string>>();
+                var ChecklistItemsList = new List<Dictionary<string, string>>();
+                var ChecklistCategoriesList = new List<Dictionary<string, string>>();
+                var checklistIds = Checklists.Select(c => c.Id).ToList();
+                var allExecutions = checklistExecutionManager.GetAll()
+                    .Where(x => checklistIds.Contains(x.ChecklistId))
+                    .Include(x => x.ChecklistItem)
+                    .Include(x => x.ChecklistItem.ChecklistCategory)
+                    .Include(x => x.TestedByUser)
+                    .ToList();
+                
+                foreach (var checklist in Checklists)
+                {
+                    var executions = allExecutions.Where(x => x.ChecklistId == checklist.Id).ToList();
+                    var completionPercentage = checklistManager.CalculateCompletionPercentage(checklist.Id);
+                    
+                    var passedCount = executions.Count(x => x.Status == ChecklistItemStatus.Passed);
+                    var failedCount = executions.Count(x => x.Status == ChecklistItemStatus.Failed);
+                    var notApplicableCount = executions.Count(x => x.Status == ChecklistItemStatus.NotApplicable);
+                    var inProgressCount = executions.Count(x => x.Status == ChecklistItemStatus.InProgress);
+                    var notTestedCount = executions.Count(x => x.Status == ChecklistItemStatus.NotTested);
+                    var needsReviewCount = executions.Count(x => x.Status == ChecklistItemStatus.NeedsReview);
+                    var skippedCount = executions.Count(x => x.Status == ChecklistItemStatus.Skipped);
+                    
+                    ChecklistsList.Add(new Dictionary<string, string>
+                    {
+                        {"ChecklistId", checklist.Id.ToString()},
+                        {"ChecklistName", checklist.Name},
+                        {"ChecklistDescription", checklist.Notes ?? ""},
+                        {"ChecklistTemplateName", checklist.ChecklistTemplate?.Name ?? ""},
+                        {"ChecklistStatus", checklist.Status.ToString()},
+                        {"ChecklistCompletionPercentage", completionPercentage.ToString("F1")},
+                        {"ChecklistStartDate", checklist.StartDate?.ToString("dd/MM/yyyy") ?? ""},
+                        {"ChecklistEndDate", checklist.CompletedDate?.ToString("dd/MM/yyyy") ?? ""},
+                        {"ChecklistCreatedDate", checklist.CreatedDate.ToString("dd/MM/yyyy")},
+                        {"ChecklistTargetName", checklist.Target?.Name ?? "All Targets"},
+                        {"ChecklistUserName", checklist.User?.FullName ?? ""},
+                        {"ChecklistTotalItems", executions.Count.ToString()},
+                        {"ChecklistPassedItems", passedCount.ToString()},
+                        {"ChecklistFailedItems", failedCount.ToString()},
+                        {"ChecklistNotApplicableItems", notApplicableCount.ToString()},
+                        {"ChecklistInProgressItems", inProgressCount.ToString()},
+                        {"ChecklistNotTestedItems", notTestedCount.ToString()},
+                        {"ChecklistNeedsReviewItems", needsReviewCount.ToString()},
+                        {"ChecklistSkippedItems", skippedCount.ToString()}
+                    });
+                    
+                    // Add individual checklist items
+                    foreach (var execution in executions)
+                    {
+                        ChecklistItemsList.Add(new Dictionary<string, string>
+                        {
+                            {"ChecklistItemId", execution.ChecklistItem.Id.ToString()},
+                            {"ChecklistItemChecklistId", checklist.Id.ToString()},
+                            {"ChecklistItemChecklistName", checklist.Name},
+                            {"ChecklistItemCategoryId", execution.ChecklistItem.ChecklistCategory.Id.ToString()},
+                            {"ChecklistItemCategoryName", execution.ChecklistItem.ChecklistCategory.Name},
+                            {"ChecklistItemCategoryDescription", execution.ChecklistItem.ChecklistCategory.Description ?? ""},
+                            {"ChecklistItemCategoryOrder", execution.ChecklistItem.ChecklistCategory.Order.ToString()},
+                            {"ChecklistItemCode", execution.ChecklistItem.Code ?? ""},
+                            {"ChecklistItemName", execution.ChecklistItem.Name},
+                            {"ChecklistItemDescription", execution.ChecklistItem.Description ?? ""},
+                            {"ChecklistItemObjectives", execution.ChecklistItem.Objectives ?? ""},
+                            {"ChecklistItemTestProcedure", execution.ChecklistItem.TestProcedure ?? ""},
+                            {"ChecklistItemPassCriteria", execution.ChecklistItem.PassCriteria ?? ""},
+                            {"ChecklistItemSeverity", execution.ChecklistItem.Severity.ToString()},
+                            {"ChecklistItemRequired", execution.ChecklistItem.IsRequired.ToString()},
+                            {"ChecklistItemOrder", execution.ChecklistItem.Order.ToString()},
+                            {"ChecklistItemStatus", execution.Status.ToString()},
+                            {"ChecklistItemTesterName", execution.TestedByUser?.FullName ?? ""},
+                            {"ChecklistItemTestedDate", execution.TestedDate?.ToString("dd/MM/yyyy HH:mm") ?? ""},
+                            {"ChecklistItemNotes", execution.Notes ?? ""},
+                            {"ChecklistItemEvidence", execution.Evidence ?? ""},
+                            {"ChecklistItemEstimatedTime", execution.EstimatedTimeMinutes?.ToString() ?? ""},
+                            {"ChecklistItemActualTime", execution.ActualTimeMinutes?.ToString() ?? ""},
+                            {"ChecklistItemDifficulty", execution.DifficultyRating?.ToString() ?? ""},
+                            {"ChecklistItemExternalReferences", execution.ChecklistItem.References ?? ""}
+                        });
+                    }
+                }
+                
+                // Process ChecklistCategories data - get unique categories from all checklist items
+                var allCategories = allExecutions.Select(e => e.ChecklistItem.ChecklistCategory)
+                    .Distinct()
+                    .OrderBy(c => c.Order)
+                    .ToList();
+                
+                foreach (var category in allCategories)
+                {
+                    var categoryExecutions = allExecutions.Where(e => e.ChecklistItem.ChecklistCategoryId == category.Id).ToList();
+                    var categoryPassedCount = categoryExecutions.Count(e => e.Status == ChecklistItemStatus.Passed);
+                    var categoryFailedCount = categoryExecutions.Count(e => e.Status == ChecklistItemStatus.Failed);
+                    var categoryNotApplicableCount = categoryExecutions.Count(e => e.Status == ChecklistItemStatus.NotApplicable);
+                    var categoryInProgressCount = categoryExecutions.Count(e => e.Status == ChecklistItemStatus.InProgress);
+                    var categoryNotTestedCount = categoryExecutions.Count(e => e.Status == ChecklistItemStatus.NotTested);
+                    var categoryNeedsReviewCount = categoryExecutions.Count(e => e.Status == ChecklistItemStatus.NeedsReview);
+                    var categorySkippedCount = categoryExecutions.Count(e => e.Status == ChecklistItemStatus.Skipped);
+                    var categoryCompletionPercentage = categoryExecutions.Count > 0 ? 
+                        ((decimal)(categoryPassedCount + categoryFailedCount + categoryNotApplicableCount) / categoryExecutions.Count * 100) : 0;
+                    
+                    ChecklistCategoriesList.Add(new Dictionary<string, string>
+                    {
+                        {"ChecklistCategoryId", category.Id.ToString()},
+                        {"ChecklistCategoryName", category.Name},
+                        {"ChecklistCategoryDescription", category.Description ?? ""},
+                        {"ChecklistCategoryOrder", category.Order.ToString()},
+                        {"ChecklistCategoryTemplateId", category.ChecklistTemplateId.ToString()},
+                        {"ChecklistCategoryTemplateName", category.ChecklistTemplate?.Name ?? ""},
+                        {"ChecklistCategoryTotalItems", categoryExecutions.Count.ToString()},
+                        {"ChecklistCategoryPassedItems", categoryPassedCount.ToString()},
+                        {"ChecklistCategoryFailedItems", categoryFailedCount.ToString()},
+                        {"ChecklistCategoryNotApplicableItems", categoryNotApplicableCount.ToString()},
+                        {"ChecklistCategoryInProgressItems", categoryInProgressCount.ToString()},
+                        {"ChecklistCategoryNotTestedItems", categoryNotTestedCount.ToString()},
+                        {"ChecklistCategoryNeedsReviewItems", categoryNeedsReviewCount.ToString()},
+                        {"ChecklistCategorySkippedItems", categorySkippedCount.ToString()},
+                        {"ChecklistCategoryCompletionPercentage", categoryCompletionPercentage.ToString("F1")}
+                    });
+                }
+                
                 var scriptObject = new ScriptObject();
                 scriptObject.Add("OrganizationName", Organization.Name);
                 scriptObject.Add("OrganizationEmail", Organization.ContactEmail);
@@ -1011,6 +1142,16 @@ public class ReportController : ControllerBase
                 scriptObject.Add("VulnTotalCount", Vulns.Count());
                 scriptObject.Add("Tasks", TasksList);
                 scriptObject.Add("Vaults", VaultsList);
+                scriptObject.Add("Checklists", ChecklistsList);
+                scriptObject.Add("ChecklistItems", ChecklistItemsList);
+                scriptObject.Add("ChecklistCategories", ChecklistCategoriesList);
+                scriptObject.Add("ChecklistsCompletionRate", Checklists.Count() > 0 ? Checklists.Average(c => (decimal)checklistManager.CalculateCompletionPercentage(c.Id)).ToString("F1") : "0.0");
+                scriptObject.Add("ChecklistsTotalCount", Checklists.Count());
+                scriptObject.Add("ChecklistsNotStartedCount", Checklists.Count(c => c.Status == ChecklistStatus.NotStarted));
+                scriptObject.Add("ChecklistsInProgressCount", Checklists.Count(c => c.Status == ChecklistStatus.InProgress));
+                scriptObject.Add("ChecklistsCompletedCount", Checklists.Count(c => c.Status == ChecklistStatus.Completed));
+                scriptObject.Add("ChecklistsOnHoldCount", Checklists.Count(c => c.Status == ChecklistStatus.OnHold));
+                scriptObject.Add("ChecklistsCancelledCount", Checklists.Count(c => c.Status == ChecklistStatus.Cancelled));
                 scriptObject.Add("TableOfContents", tocList);
                 scriptObject.Add("PageBreak", @"<div style=""page-break-after: always;""></div>");
                 scriptObject.Add("Today", DateTime.Now.ToShortDateString());
@@ -1047,7 +1188,7 @@ public class ReportController : ControllerBase
 
             _logger.LogError("An error ocurred generating report. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         catch (Exception e)
         {

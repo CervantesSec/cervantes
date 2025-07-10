@@ -955,7 +955,7 @@ public class BackupController : ControllerBase
         {
             _logger.LogError(ex, "An error ocurred restoring attachments. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
     }
 

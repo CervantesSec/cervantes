@@ -210,15 +210,21 @@ public class ProjectController : ControllerBase
                 return CreatedAtAction(nameof(GetById), new { projectId = project.Id }, project);
             }
 
-            _logger.LogError("An error ocurred adding project. User: {0}",
+            _logger.LogError("Validation failed when adding project. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred adding project. User: {0}",
+            _logger.LogError(e, "An error occurred adding project. User: {0}",
                 aspNetUserId);
-            throw;
+            return StatusCode(500, "An error occurred while creating the project. Please try again later.");
         }
     }
 
@@ -257,15 +263,21 @@ public class ProjectController : ControllerBase
                 return NoContent();
             }
 
-            _logger.LogError("An error ocurred adding project. User: {0}",
+            _logger.LogError("Validation failed when editing project. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred editing project. User: {0}",
+            _logger.LogError(e, "An error occurred editing project. User: {0}",
                 aspNetUserId);
-            throw;
+            return StatusCode(500, "An error occurred while updating the project. Please try again later.");
         }
     }
 
@@ -285,7 +297,7 @@ public class ProjectController : ControllerBase
                 }
                 else
                 {
-                    return NotFound();
+                    return NotFound($"Project with ID {projectId} not found");
                 }
 
                 await projectManager.Context.SaveChangesAsync();
@@ -294,15 +306,21 @@ public class ProjectController : ControllerBase
                 return NoContent();
             }
 
-            _logger.LogError("An error ocurred deleting project. User: {0}",
+            _logger.LogError("Validation failed when deleting project. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred deleting project. User: {0}",
+            _logger.LogError(e, "An error occurred deleting project. User: {0}",
                 aspNetUserId);
-            throw;
+            return StatusCode(500, "An error occurred while deleting the project. Please try again later.");
         }
     }
 
@@ -366,13 +384,19 @@ public class ProjectController : ControllerBase
                 return Created();
             }
 
-            _logger.LogError("An error ocurred adding project member. User: {0}",
+            _logger.LogError("Validation failed when adding project member. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred adding project member. User: {0}",
+            _logger.LogError(e, "An error occurred adding project member. User: {0}",
                 aspNetUserId);
             throw;
         }
@@ -402,13 +426,19 @@ public class ProjectController : ControllerBase
                 return NotFound();
             }
 
-            _logger.LogError("An error ocurred deleting project member. User: {0}",
+            _logger.LogError("Validation failed when deleting project member. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "An error ocurred deleting project member. User: {0}",
+            _logger.LogError(e, "An error occurred deleting project member. User: {0}",
                 aspNetUserId);
             throw;
         }
@@ -446,7 +476,7 @@ public class ProjectController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 var note = new CORE.Entities.ProjectNote();
                 note.Id = Guid.NewGuid();
@@ -464,7 +494,7 @@ public class ProjectController : ControllerBase
 
             _logger.LogError("An error ocurred adding project notes. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -501,7 +531,7 @@ public class ProjectController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 var note = projectNoteManager.GetById(model.Id);
                 note.Id = model.Id;
@@ -518,7 +548,7 @@ public class ProjectController : ControllerBase
 
             _logger.LogError("An error ocurred editing project notes. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -543,7 +573,7 @@ public class ProjectController : ControllerBase
                     var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest();
+                        return BadRequest("Invalid request");
                     }
 
                     projectNoteManager.Remove(result);
@@ -560,7 +590,7 @@ public class ProjectController : ControllerBase
 
             _logger.LogError("An error ocurred deleting project notes. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -617,7 +647,7 @@ public class ProjectController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Access denied: User does not have permission to access this project");
                 }
 
                 var path = "";
@@ -671,7 +701,7 @@ public class ProjectController : ControllerBase
 
             _logger.LogError("An error ocurred adding project attachments. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -696,7 +726,7 @@ public class ProjectController : ControllerBase
                     var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest();
+                        return BadRequest("Invalid request");
                     }
 
                     projectAttachmentManager.Remove(result);
@@ -706,12 +736,12 @@ public class ProjectController : ControllerBase
                     return NoContent();
                 }
 
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             _logger.LogError("An error ocurred deleting project attachments. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
@@ -740,7 +770,7 @@ public class ProjectController : ControllerBase
                     var user = projectUserManager.VerifyUser(project.Id, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest();
+                        return BadRequest("Invalid request");
                     }
 
                     project.ExecutiveSummary = sanitizer.Sanitize(model.ExecutiveSummary);
@@ -752,12 +782,12 @@ public class ProjectController : ControllerBase
 
                 _logger.LogError("An error ocurred adding project executive summary. User: {0}",
                     aspNetUserId);
-                return BadRequest();
+                return BadRequest("Invalid request");
             }
 
             _logger.LogError("An error ocurred adding project executive summary. User: {0}",
                 aspNetUserId);
-            return BadRequest();
+            return BadRequest("Invalid request");
         }
         catch (Exception e)
         {
