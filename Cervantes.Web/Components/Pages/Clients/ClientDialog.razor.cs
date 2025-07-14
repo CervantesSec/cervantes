@@ -15,6 +15,7 @@ using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Clients;
 
@@ -34,10 +35,12 @@ public partial class ClientDialog: ComponentBase
     [Inject] private ClientsController _clientsController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
     [Inject] private VulnController _VulnController { get; set; }
+    [Inject] private ClientCustomFieldController _ClientCustomFieldController { get; set; }
 
     private List<CORE.Entities.Project> projects = new List<CORE.Entities.Project>();
     private List<CORE.Entities.Vuln> vulns = new List<CORE.Entities.Vuln>();
     private List<CORE.Entities.Project> selectedProjects = new List<CORE.Entities.Project>();
+    private List<ClientCustomFieldValueViewModel> clientCustomFieldValues = new List<ClientCustomFieldValueViewModel>();
 
     [Inject ]private IExportToCsv ExportToCsv { get; set; }
 
@@ -95,6 +98,7 @@ public partial class ClientDialog: ComponentBase
             };
      
      ClaimsPrincipal user;
+    ClaimsPrincipal userAth;
      DialogOptionsEx centerWidthEx = new DialogOptionsEx() 
      {
          MaximizeButton = true,
@@ -132,9 +136,10 @@ public partial class ClientDialog: ComponentBase
     protected override async Task OnInitializedAsync()
     {
         user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         projects =  _projectController.GetByClientId(client.Id).ToList();
         vulns =  _VulnController.GetByClientId(client.Id).ToList();
-
+        await LoadClientCustomFields();
     }
 
     public class ClientModelFluentValidator : AbstractValidator<ClientEditViewModel>
@@ -189,6 +194,9 @@ public partial class ClientDialog: ComponentBase
             var response = await _clientsController.Edit(model);
             if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
+                // Save custom fields
+                await SaveClientCustomFields();
+                
                 Snackbar.Add(@localizer["clientEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }
@@ -380,6 +388,71 @@ public partial class ClientDialog: ComponentBase
             StateHasChanged();
         }
     }
+
+    #region Custom Fields
+
+    private async Task LoadClientCustomFields()
+    {
+        try
+        {
+            var customFields = _ClientCustomFieldController.Get().Where(cf => cf.IsActive).ToList();
+            var existingValues = client.CustomFieldValues.ToList();
+            clientCustomFieldValues = new List<ClientCustomFieldValueViewModel>();
+            
+            foreach (var customField in customFields.OrderBy(cf => cf.Order))
+            {
+                var existingValue = existingValues?.FirstOrDefault(v => v.ClientCustomFieldId == customField.Id);
+                
+                clientCustomFieldValues.Add(new ClientCustomFieldValueViewModel
+                {
+                    CustomFieldId = customField.Id,
+                    Name = customField.Name,
+                    Label = customField.Label,
+                    Type = customField.Type,
+                    IsRequired = customField.IsRequired,
+                    IsUnique = customField.IsUnique,
+                    Options = customField.Options,
+                    DefaultValue = customField.DefaultValue,
+                    Description = customField.Description,
+                    Order = customField.Order,
+                    Value = existingValue?.Value ?? customField.DefaultValue ?? string.Empty
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading custom fields: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task SaveClientCustomFields()
+    {
+        try
+        {
+            var customFieldData = clientCustomFieldValues.ToDictionary(
+                cf => cf.CustomFieldId, 
+                cf => cf.Value ?? string.Empty
+            );
+            
+            var result = await _clientsController.UpdateCustomFieldValues(client.Id, customFieldData);
+            if (result is not OkResult)
+            {
+                throw new Exception("Failed to update custom field values");
+            }
+            Snackbar.Add("Custom fields saved successfully", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error saving custom fields: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task OnCustomFieldChanged(ClientCustomFieldValueViewModel field)
+    {
+        StateHasChanged();
+    }
+
+    #endregion
 
     
 }

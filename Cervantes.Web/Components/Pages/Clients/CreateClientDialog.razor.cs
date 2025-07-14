@@ -11,6 +11,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components.Forms;
+using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Clients;
 
@@ -71,6 +72,7 @@ public partial class CreateClientDialog: ComponentBase
 
      [Inject] ISnackbar Snackbar { get; set; }
      [Inject] private ClientsController _clientsController { get; set; }
+     [Inject] private ClientCustomFieldController _ClientCustomFieldController { get; set; }
 
 
     MudForm form;
@@ -78,9 +80,15 @@ public partial class CreateClientDialog: ComponentBase
     ClientModelFluentValidator clientValidator = new ClientModelFluentValidator();
 	 
     ClientCreateViewModel model = new ClientCreateViewModel();
+    private List<ClientCustomFieldValueViewModel> CustomFields = new List<ClientCustomFieldValueViewModel>();
 
     
 	private long maxFileSize = 1024 * 1024 * 5;
+	
+	protected override async Task OnInitializedAsync()
+    {
+        await LoadCustomFields();
+    }
 	
 	 private async Task Submit()
     {
@@ -99,6 +107,15 @@ public partial class CreateClientDialog: ComponentBase
 		        model.FileContent = ms.ToArray();
 		        ms.Close();
 		        file = null;
+	        }
+	        
+	        // Collect custom field values
+	        foreach (var customField in CustomFields)
+	        {
+	            if (!string.IsNullOrEmpty(customField.Value))
+	            {
+	                model.CustomFieldValues[customField.CustomFieldId] = customField.Value;
+	            }
 	        }
 	        
 	        var response =  await _clientsController.Add(model);
@@ -146,6 +163,42 @@ public partial class CreateClientDialog: ComponentBase
                 return Array.Empty<string>();
             return result.Errors.Select(e => e.ErrorMessage);
         };
+    }
+    
+    private async Task LoadCustomFields()
+    {
+        try
+        {
+            var customFields = _ClientCustomFieldController.Get().Where(cf => cf.IsActive).ToList();
+            CustomFields = new List<ClientCustomFieldValueViewModel>();
+            
+            foreach (var customField in customFields.OrderBy(cf => cf.Order))
+            {
+                CustomFields.Add(new ClientCustomFieldValueViewModel
+                {
+                    CustomFieldId = customField.Id,
+                    Name = customField.Name,
+                    Label = customField.Label,
+                    Type = customField.Type,
+                    IsRequired = customField.IsRequired,
+                    IsUnique = customField.IsUnique,
+                    Options = customField.Options,
+                    DefaultValue = customField.DefaultValue,
+                    Description = customField.Description,
+                    Order = customField.Order,
+                    Value = customField.DefaultValue ?? string.Empty
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading custom fields: {ex.Message}", Severity.Error);
+        }
+    }
+    
+    private async Task OnCustomFieldChanged(ClientCustomFieldValueViewModel field)
+    {
+        StateHasChanged();
     }
     
 }

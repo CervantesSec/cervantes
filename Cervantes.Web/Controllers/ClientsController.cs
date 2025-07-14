@@ -12,6 +12,7 @@ using Cervantes.Web.Helpers;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Controllers;
 
@@ -23,6 +24,8 @@ public class ClientsController : ControllerBase
     private IClientManager clientManager = null;
     private IProjectManager projectManager = null;
     private IUserManager userManager = null;
+    private IClientCustomFieldManager clientCustomFieldManager = null;
+    private IClientCustomFieldValueManager clientCustomFieldValueManager = null;
     private readonly IWebHostEnvironment env;
     private readonly ILogger<ClientsController> _logger = null;
     private IHttpContextAccessor HttpContextAccessor;
@@ -35,11 +38,14 @@ public class ClientsController : ControllerBase
     /// </summary>
     public ClientsController(IClientManager clientManager, IUserManager userManager, IProjectManager projectManager,
         IWebHostEnvironment env, ILogger<ClientsController> logger,IHttpContextAccessor HttpContextAccessor, 
-        IFileCheck fileCheck, Sanitizer sanitizer)
+        IFileCheck fileCheck, Sanitizer sanitizer, IClientCustomFieldManager clientCustomFieldManager,
+        IClientCustomFieldValueManager clientCustomFieldValueManager)
     {
         this.clientManager = clientManager;
         this.projectManager = projectManager;
         this.userManager = userManager;
+        this.clientCustomFieldManager = clientCustomFieldManager;
+        this.clientCustomFieldValueManager = clientCustomFieldValueManager;
         this.env = env;
         _logger = logger;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -157,6 +163,30 @@ public class ClientsController : ControllerBase
 
                 await clientManager.AddAsync(client);
                 await clientManager.Context.SaveChangesAsync();
+                
+                // Add custom field values
+                if (model.CustomFieldValues != null && model.CustomFieldValues.Any())
+                {
+                    foreach (var kvp in model.CustomFieldValues)
+                    {
+                        if (!string.IsNullOrEmpty(kvp.Value))
+                        {
+                            var customFieldValue = new CORE.Entities.ClientCustomFieldValue
+                            {
+                                ClientId = client.Id,
+                                ClientCustomFieldId = kvp.Key,
+                                Value = sanitizer.Sanitize(kvp.Value),
+                                UserId = aspNetUserId,
+                                CreatedDate = DateTime.UtcNow,
+                                ModifiedDate = DateTime.UtcNow
+                            };
+                            
+                            await clientCustomFieldValueManager.AddAsync(customFieldValue);
+                        }
+                    }
+                    await clientCustomFieldValueManager.Context.SaveChangesAsync();
+                }
+                
                 _logger.LogInformation("Client added successfully. User: {0}",aspNetUserId);
                 return CreatedAtAction(nameof(GetById), new { clientId = client.Id }, client);
             }
@@ -322,6 +352,98 @@ public class ClientsController : ControllerBase
             _logger.LogError(e, "An error ocurred editing a Client. User: {0}",
                 aspNetUserId);
             return BadRequest("Invalid request");
+        }
+    }
+    
+    /// <summary>
+    /// Get Custom Field Values for a Client
+    /// </summary>
+    /// <param name="clientId">Client ID</param>
+    /// <returns>List of custom field values</returns>
+    [HttpGet("{clientId}/custom-fields")]
+    [HasPermission(Permissions.ClientCustomFieldsRead)]
+    public async Task<IActionResult> GetCustomFieldValues(Guid clientId)
+    {
+        try
+        {
+            var client = clientManager.GetById(clientId);
+            if (client == null)
+            {
+                return NotFound();
+            }
+            
+            var customFieldValues = clientCustomFieldValueManager.GetAll()
+                .Where(v => v.ClientId == clientId)
+                .Include(v => v.ClientCustomField)
+                .ToList();
+            
+            return Ok(customFieldValues);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting custom field values for client {ClientId}. User: {UserId}", 
+                clientId, aspNetUserId);
+            return BadRequest("Error retrieving custom field values");
+        }
+    }
+    
+    /// <summary>
+    /// Update Custom Field Values for a Client
+    /// </summary>
+    /// <param name="clientId">Client ID</param>
+    /// <param name="customFieldData">Dictionary of custom field values</param>
+    /// <returns>Success or error result</returns>
+    [HttpPut("{clientId}/custom-fields")]
+    [HasPermission(Permissions.ClientCustomFieldsEdit)]
+    public async Task<IActionResult> UpdateCustomFieldValues(Guid clientId, [FromBody] Dictionary<Guid, string> customFieldData)
+    {
+        try
+        {
+            var client = clientManager.GetById(clientId);
+            if (client == null)
+            {
+                return NotFound();
+            }
+            
+            // Remove existing custom field values
+            var existingValues = clientCustomFieldValueManager.GetAll()
+                .Where(v => v.ClientId == clientId)
+                .ToList();
+            
+            foreach (var existingValue in existingValues)
+            {
+                clientCustomFieldValueManager.Remove(existingValue);
+            }
+            
+            // Add new custom field values
+            foreach (var kvp in customFieldData)
+            {
+                if (!string.IsNullOrEmpty(kvp.Value))
+                {
+                    var newValue = new CORE.Entities.ClientCustomFieldValue
+                    {
+                        ClientId = clientId,
+                        ClientCustomFieldId = kvp.Key,
+                        Value = sanitizer.Sanitize(kvp.Value),
+                        UserId = aspNetUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow
+                    };
+                    
+                    await clientCustomFieldValueManager.AddAsync(newValue);
+                }
+            }
+            
+            await clientCustomFieldValueManager.Context.SaveChangesAsync();
+            _logger.LogInformation("Custom field values updated for client {ClientId}. User: {UserId}", 
+                clientId, aspNetUserId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating custom field values for client {ClientId}. User: {UserId}", 
+                clientId, aspNetUserId);
+            return BadRequest("Error updating custom field values");
         }
     }
 }

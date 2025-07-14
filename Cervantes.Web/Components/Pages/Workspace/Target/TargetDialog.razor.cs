@@ -2,12 +2,15 @@ using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
+using Cervantes.Contracts;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
 
@@ -29,11 +32,15 @@ public partial class TargetDialog: ComponentBase
     [Inject] ISnackbar Snackbar { get; set; }
     [Inject] private TargetController _TargetController { get; set; }
     [Inject] private ProjectController _ProjectController { get; set; }
+    [Inject] private TargetCustomFieldController _TargetCustomFieldController { get; set; }
 
     MudForm form;
 
     private TargetEditViewModel model = new TargetEditViewModel();
    private string searchString = "";
+   
+   // Custom fields
+   private List<TargetCustomFieldValueViewModel> targetCustomFieldValues = new List<TargetCustomFieldValueViewModel>();
     
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
@@ -125,6 +132,55 @@ public partial class TargetDialog: ComponentBase
         {
             inProject = await _ProjectController.VerifyUser(target.ProjectId.Value);
         }
+        await LoadCustomFields();
+    }
+    
+    private async Task LoadCustomFields()
+    {
+        try
+        {
+            var customFields = _TargetCustomFieldController.GetActive();
+            var customFieldValues = _TargetController.GetCustomFieldValuesByTargetId(target.Id);
+            
+            targetCustomFieldValues = customFields.Select(cf => {
+                var existingValue = customFieldValues.FirstOrDefault(cfv => cfv.TargetCustomFieldId == cf.Id);
+                return new TargetCustomFieldValueViewModel
+                {
+                    Id = existingValue?.Id ?? Guid.Empty,
+                    TargetId = target.Id,
+                    TargetCustomFieldId = cf.Id,
+                    Name = cf.Name,
+                    Label = cf.Label,
+                    Type = cf.Type,
+                    IsRequired = cf.IsRequired,
+                    IsUnique = cf.IsUnique,
+                    IsSearchable = cf.IsSearchable,
+                    IsVisible = cf.IsVisible,
+                    Order = cf.Order,
+                    Options = cf.Options,
+                    DefaultValue = cf.DefaultValue,
+                    Description = cf.Description,
+                    Value = existingValue?.Value ?? cf.DefaultValue ?? string.Empty
+                };
+            }).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading custom fields: {ex.Message}", Severity.Error);
+        }
+    }
+    
+    private async Task OnCustomFieldChanged(TargetCustomFieldValueViewModel field)
+    {
+        // Initialize CustomFieldValues dictionary if null
+        if (model.CustomFieldValues == null)
+        {
+            model.CustomFieldValues = new Dictionary<Guid, string>();
+        }
+        
+        // Update the model's custom field values
+        model.CustomFieldValues[field.TargetCustomFieldId] = field.Value;
+        await InvokeAsync(StateHasChanged);
     }
     
 
@@ -155,6 +211,18 @@ public partial class TargetDialog: ComponentBase
             model.Description = target.Description;
             model.ProjectId = target.ProjectId;
             model.Type = target.Type;
+            
+            // Initialize CustomFieldValues dictionary if null
+            if (model.CustomFieldValues == null)
+            {
+                model.CustomFieldValues = new Dictionary<Guid, string>();
+            }
+            
+            // Load custom field values into the model
+            foreach (var customField in targetCustomFieldValues)
+            {
+                model.CustomFieldValues[customField.TargetCustomFieldId] = customField.Value;
+            }
         }
         MudDialog.StateHasChanged();
     }
@@ -166,9 +234,8 @@ public partial class TargetDialog: ComponentBase
 
         if (form.IsValid)
         {
-            
             var response = await _TargetController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is Microsoft.AspNetCore.Mvc.NoContentResult)
             {
                 Snackbar.Add(@localizer["targetEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
@@ -177,7 +244,6 @@ public partial class TargetDialog: ComponentBase
             {
                 Snackbar.Add(@localizer["targetEditedError"], Severity.Error);
             }
-            
         }
     }
     

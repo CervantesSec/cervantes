@@ -3,6 +3,7 @@ using System;
 using Cervantes.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Pgvector;
@@ -12,9 +13,11 @@ using Pgvector;
 namespace Cervantes.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250714083523_AddedClientCustomFields")]
+    partial class AddedClientCustomFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2175,115 +2178,6 @@ namespace Cervantes.DAL.Migrations
                     b.ToTable("Targets");
                 });
 
-            modelBuilder.Entity("Cervantes.CORE.Entities.TargetCustomField", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DefaultValue")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsRequired")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsSearchable")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsUnique")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsVisible")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Label")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Options")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("IX_TargetCustomField_Name");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TargetCustomFields");
-                });
-
-            modelBuilder.Entity("Cervantes.CORE.Entities.TargetCustomFieldValue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("TargetCustomFieldId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TargetId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TargetCustomFieldId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("TargetId", "TargetCustomFieldId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_TargetCustomFieldValue_TargetId_CustomFieldId");
-
-                    b.ToTable("TargetCustomFieldValues");
-                });
-
             modelBuilder.Entity("Cervantes.CORE.Entities.TargetServices", b =>
                 {
                     b.Property<Guid>("Id")
@@ -4117,44 +4011,6 @@ namespace Cervantes.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Cervantes.CORE.Entities.TargetCustomField", b =>
-                {
-                    b.HasOne("Cervantes.CORE.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Cervantes.CORE.Entities.TargetCustomFieldValue", b =>
-                {
-                    b.HasOne("Cervantes.CORE.Entities.TargetCustomField", "TargetCustomField")
-                        .WithMany("Values")
-                        .HasForeignKey("TargetCustomFieldId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Cervantes.CORE.Entities.Target", "Target")
-                        .WithMany("CustomFieldValues")
-                        .HasForeignKey("TargetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Cervantes.CORE.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Target");
-
-                    b.Navigation("TargetCustomField");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Cervantes.CORE.Entities.TargetServices", b =>
                 {
                     b.HasOne("Cervantes.CORE.Entities.Target", "Target")
@@ -4551,16 +4407,6 @@ namespace Cervantes.DAL.Migrations
                 });
 
             modelBuilder.Entity("Cervantes.CORE.Entities.ProjectCustomField", b =>
-                {
-                    b.Navigation("Values");
-                });
-
-            modelBuilder.Entity("Cervantes.CORE.Entities.Target", b =>
-                {
-                    b.Navigation("CustomFieldValues");
-                });
-
-            modelBuilder.Entity("Cervantes.CORE.Entities.TargetCustomField", b =>
                 {
                     b.Navigation("Values");
                 });

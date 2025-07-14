@@ -364,6 +364,24 @@ public enum Permissions: ushort
     [Display(GroupName = "Project Custom Fields", Name = "Delete Project Custom Fields", Description = "Can delete Custom Fields")]
     ProjectCustomFieldsDelete = 387,
     
+    [Display(GroupName = "Client Custom Fields", Name = "Read Client Custom Fields", Description = "Can read Custom Fields")]
+    ClientCustomFieldsRead = 388,
+    [Display(GroupName = "Client Custom Fields", Name = "Add Client Custom Fields", Description = "Can add new Custom Fields")]
+    ClientCustomFieldsAdd = 389,
+    [Display(GroupName = "Client Custom Fields", Name = "Edit Client Custom Fields", Description = "Can edit Custom Fields")]
+    ClientCustomFieldsEdit = 390,
+    [Display(GroupName = "Client Custom Fields", Name = "Delete Client Custom Fields", Description = "Can delete Custom Fields")]
+    ClientCustomFieldsDelete = 391,
+    
+    [Display(GroupName = "Target Custom Fields", Name = "Read Target Custom Fields", Description = "Can read Custom Fields")]
+    TargetCustomFieldsRead = 392,
+    [Display(GroupName = "Target Custom Fields", Name = "Add Target Custom Fields", Description = "Can add new Custom Fields")]
+    TargetCustomFieldsAdd = 393,
+    [Display(GroupName = "Target Custom Fields", Name = "Edit Target Custom Fields", Description = "Can edit Custom Fields")]
+    TargetCustomFieldsEdit = 394,
+    [Display(GroupName = "Target Custom Fields", Name = "Delete Target Custom Fields", Description = "Can delete Custom Fields")]
+    TargetCustomFieldsDelete = 395,
+    
     [Display(GroupName = "AI Service", Name = "Use AI Service", Description = "Can use the AI generation service")]
     AIServiceUsage = 60000,
     [Display(GroupName = "AI Service", Name = "Use AI Service", Description = "Can use the AI chat service")]

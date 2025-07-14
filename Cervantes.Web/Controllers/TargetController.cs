@@ -32,6 +32,8 @@ public class TargetController : ControllerBase
     private IProjectUserManager projectUserManager = null;
     private IProjectAttachmentManager projectAttachmentManager = null;
     private INmapParser nmapParser = null;
+    private ITargetCustomFieldManager targetCustomFieldManager = null;
+    private ITargetCustomFieldValueManager targetCustomFieldValueManager = null;
     private readonly IWebHostEnvironment env;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
@@ -47,7 +49,8 @@ public class TargetController : ControllerBase
     public TargetController(ITargetManager targetManager, ITargetServicesManager targetServicesManager,
         IProjectManager projectManager, IProjectUserManager projectUserManager, ILogger<TargetController> logger,
         IProjectAttachmentManager projectAttachmentManager, INmapParser nmapParser, IWebHostEnvironment env,
-        IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck, Sanitizer sanitizer)
+        IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck, Sanitizer sanitizer,
+        ITargetCustomFieldManager targetCustomFieldManager, ITargetCustomFieldValueManager targetCustomFieldValueManager)
     {
         this.targetManager = targetManager;
         this.targetServicesManager = targetServicesManager;
@@ -60,6 +63,8 @@ public class TargetController : ControllerBase
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
         this.sanitizer = sanitizer;
+        this.targetCustomFieldManager = targetCustomFieldManager;
+        this.targetCustomFieldValueManager = targetCustomFieldValueManager;
     }
 
     [HttpGet]
@@ -139,6 +144,30 @@ public class TargetController : ControllerBase
 
                 await targetManager.AddAsync(target);
                 await targetManager.Context.SaveChangesAsync();
+                
+                // Add custom field values
+                if (model.CustomFieldValues != null && model.CustomFieldValues.Any())
+                {
+                    foreach (var kvp in model.CustomFieldValues)
+                    {
+                        if (!string.IsNullOrEmpty(kvp.Value))
+                        {
+                            var customFieldValue = new CORE.Entities.TargetCustomFieldValue
+                            {
+                                TargetId = target.Id,
+                                TargetCustomFieldId = kvp.Key,
+                                Value = sanitizer.Sanitize(kvp.Value),
+                                UserId = aspNetUserId,
+                                CreatedDate = DateTime.UtcNow,
+                                ModifiedDate = DateTime.UtcNow
+                            };
+                            
+                            await targetCustomFieldValueManager.AddAsync(customFieldValue);
+                        }
+                    }
+                    await targetCustomFieldValueManager.Context.SaveChangesAsync();
+                }
+                
                 _logger.LogInformation("Target added successfully. User: {0}",
                     aspNetUserId);
                 return CreatedAtAction(nameof(GetTargetById),  new { targetId = target.Id }, target);
@@ -183,7 +212,42 @@ public class TargetController : ControllerBase
                     result.Description = sanitizer.Sanitize(model.Description);
                     result.Type = model.Type;
                     await targetManager.Context.SaveChangesAsync();
-                    _logger.LogInformation("Target added successfully. User: {0}",
+                    
+                    // Update custom field values
+                    if (model.CustomFieldValues != null && model.CustomFieldValues.Any())
+                    {
+                        // Remove existing custom field values
+                        var existingValues = targetCustomFieldValueManager.GetAll()
+                            .Where(v => v.TargetId == result.Id)
+                            .ToList();
+                        
+                        foreach (var existingValue in existingValues)
+                        {
+                            targetCustomFieldValueManager.Remove(existingValue);
+                        }
+                        
+                        // Add new custom field values
+                        foreach (var kvp in model.CustomFieldValues)
+                        {
+                            if (!string.IsNullOrEmpty(kvp.Value))
+                            {
+                                var customFieldValue = new CORE.Entities.TargetCustomFieldValue
+                                {
+                                    TargetId = result.Id,
+                                    TargetCustomFieldId = kvp.Key,
+                                    Value = sanitizer.Sanitize(kvp.Value),
+                                    UserId = aspNetUserId,
+                                    CreatedDate = DateTime.UtcNow,
+                                    ModifiedDate = DateTime.UtcNow
+                                };
+                                
+                                await targetCustomFieldValueManager.AddAsync(customFieldValue);
+                            }
+                        }
+                        await targetCustomFieldValueManager.Context.SaveChangesAsync();
+                    }
+                    
+                    _logger.LogInformation("Target updated successfully. User: {0}",
                         aspNetUserId);
                     return NoContent();
                 }
@@ -609,6 +673,130 @@ public class TargetController : ControllerBase
             _logger.LogError(e, "An error occurred deleting a Target Service. User: {0}",
                 aspNetUserId);
             return StatusCode(500, "An error occurred while deleting the target service. Please try again later.");
+        }
+    }
+    
+    /// <summary>
+    /// Get Custom Field Values for a Target
+    /// </summary>
+    /// <param name="targetId">Target ID</param>
+    /// <returns>List of custom field values</returns>
+    [HttpGet("{targetId}/custom-fields")]
+    [HasPermission(Permissions.TargetCustomFieldsRead)]
+    public async Task<IActionResult> GetCustomFieldValues(Guid targetId)
+    {
+        try
+        {
+            var target = targetManager.GetById(targetId);
+            if (target == null)
+            {
+                return NotFound();
+            }
+            
+            var customFieldValues = targetCustomFieldValueManager.GetAll()
+                .Where(v => v.TargetId == targetId)
+                .Include(v => v.TargetCustomField)
+                .ToList();
+            
+            return Ok(customFieldValues);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting custom field values for target {TargetId}. User: {UserId}", 
+                targetId, aspNetUserId);
+            return BadRequest("Error retrieving custom field values");
+        }
+    }
+    
+    /// <summary>
+    /// Get Custom Field Values for a Target (Helper method for components)
+    /// </summary>
+    /// <param name="targetId">Target ID</param>
+    /// <returns>List of custom field values</returns>
+    public List<TargetCustomFieldValueViewModel> GetCustomFieldValuesByTargetId(Guid targetId)
+    {
+        var customFieldValues = targetCustomFieldValueManager.GetAll()
+            .Where(v => v.TargetId == targetId)
+            .Include(v => v.TargetCustomField)
+            .ToList();
+
+        return customFieldValues.Select(v => new TargetCustomFieldValueViewModel
+        {
+            Id = v.Id,
+            TargetId = v.TargetId,
+            TargetCustomFieldId = v.TargetCustomFieldId,
+            Value = v.Value,
+            Name = v.TargetCustomField.Name,
+            Label = v.TargetCustomField.Label,
+            Type = v.TargetCustomField.Type,
+            IsRequired = v.TargetCustomField.IsRequired,
+            IsUnique = v.TargetCustomField.IsUnique,
+            IsSearchable = v.TargetCustomField.IsSearchable,
+            IsVisible = v.TargetCustomField.IsVisible,
+            Order = v.TargetCustomField.Order,
+            Options = v.TargetCustomField.Options,
+            DefaultValue = v.TargetCustomField.DefaultValue,
+            Description = v.TargetCustomField.Description
+        }).ToList();
+    }
+    
+    /// <summary>
+    /// Update Custom Field Values for a Target
+    /// </summary>
+    /// <param name="targetId">Target ID</param>
+    /// <param name="customFieldData">Dictionary of custom field values</param>
+    /// <returns>Success or error result</returns>
+    [HttpPut("{targetId}/custom-fields")]
+    [HasPermission(Permissions.TargetCustomFieldsEdit)]
+    public async Task<IActionResult> UpdateCustomFieldValues(Guid targetId, [FromBody] Dictionary<Guid, string> customFieldData)
+    {
+        try
+        {
+            var target = targetManager.GetById(targetId);
+            if (target == null)
+            {
+                return NotFound();
+            }
+            
+            // Remove existing custom field values
+            var existingValues = targetCustomFieldValueManager.GetAll()
+                .Where(v => v.TargetId == targetId)
+                .ToList();
+            
+            foreach (var existingValue in existingValues)
+            {
+                targetCustomFieldValueManager.Remove(existingValue);
+            }
+            
+            // Add new custom field values
+            foreach (var kvp in customFieldData)
+            {
+                if (!string.IsNullOrEmpty(kvp.Value))
+                {
+                    var newValue = new CORE.Entities.TargetCustomFieldValue
+                    {
+                        TargetId = targetId,
+                        TargetCustomFieldId = kvp.Key,
+                        Value = sanitizer.Sanitize(kvp.Value),
+                        UserId = aspNetUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow
+                    };
+                    
+                    await targetCustomFieldValueManager.AddAsync(newValue);
+                }
+            }
+            
+            await targetCustomFieldValueManager.Context.SaveChangesAsync();
+            _logger.LogInformation("Custom field values updated for target {TargetId}. User: {UserId}", 
+                targetId, aspNetUserId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating custom field values for target {TargetId}. User: {UserId}", 
+                targetId, aspNetUserId);
+            return BadRequest("Error updating custom field values");
         }
     }
 }

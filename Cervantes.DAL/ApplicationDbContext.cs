@@ -211,6 +211,74 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             .HasForeignKey(v => v.ProjectCustomFieldId)
             .OnDelete(DeleteBehavior.Cascade);
             
+        // Client Custom Field Configuration
+        modelBuilder.Entity<ClientCustomField>()
+            .HasIndex(e => e.Name)
+            .IsUnique()
+            .HasDatabaseName("IX_ClientCustomField_Name");
+            
+        modelBuilder.Entity<ClientCustomField>()
+            .Property(e => e.Name)
+            .IsRequired()
+            .HasMaxLength(100);
+            
+        modelBuilder.Entity<ClientCustomField>()
+            .Property(e => e.Label)
+            .IsRequired()
+            .HasMaxLength(200);
+            
+        // Client Custom Field Value Configuration
+        modelBuilder.Entity<ClientCustomFieldValue>()
+            .HasIndex(e => new { e.ClientId, e.ClientCustomFieldId })
+            .IsUnique()
+            .HasDatabaseName("IX_ClientCustomFieldValue_ClientId_CustomFieldId");
+            
+        modelBuilder.Entity<ClientCustomFieldValue>()
+            .HasOne(v => v.Client)
+            .WithMany(c => c.CustomFieldValues)
+            .HasForeignKey(v => v.ClientId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<ClientCustomFieldValue>()
+            .HasOne(v => v.ClientCustomField)
+            .WithMany(cf => cf.Values)
+            .HasForeignKey(v => v.ClientCustomFieldId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        // Target Custom Field Configuration
+        modelBuilder.Entity<TargetCustomField>()
+            .HasIndex(e => e.Name)
+            .IsUnique()
+            .HasDatabaseName("IX_TargetCustomField_Name");
+            
+        modelBuilder.Entity<TargetCustomField>()
+            .Property(e => e.Name)
+            .IsRequired()
+            .HasMaxLength(100);
+            
+        modelBuilder.Entity<TargetCustomField>()
+            .Property(e => e.Label)
+            .IsRequired()
+            .HasMaxLength(200);
+            
+        // Target Custom Field Value Configuration
+        modelBuilder.Entity<TargetCustomFieldValue>()
+            .HasIndex(e => new { e.TargetId, e.TargetCustomFieldId })
+            .IsUnique()
+            .HasDatabaseName("IX_TargetCustomFieldValue_TargetId_CustomFieldId");
+            
+        modelBuilder.Entity<TargetCustomFieldValue>()
+            .HasOne(v => v.Target)
+            .WithMany(t => t.CustomFieldValues)
+            .HasForeignKey(v => v.TargetId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<TargetCustomFieldValue>()
+            .HasOne(v => v.TargetCustomField)
+            .WithMany(cf => cf.Values)
+            .HasForeignKey(v => v.TargetCustomFieldId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
         // Checklist System Configuration
         modelBuilder.Entity<ChecklistTemplate>()
             .HasOne(ct => ct.User)
@@ -322,4 +390,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     /// Table for project custom field values
     /// </summary>
     public DbSet<ProjectCustomFieldValue> ProjectCustomFieldValues { get; set; }
+    
+    /// <summary>
+    /// Table for client custom field definitions
+    /// </summary>
+    public DbSet<ClientCustomField> ClientCustomFields { get; set; }
+    
+    /// <summary>
+    /// Table for client custom field values
+    /// </summary>
+    public DbSet<ClientCustomFieldValue> ClientCustomFieldValues { get; set; }
+    
+    /// <summary>
+    /// Table for target custom field definitions
+    /// </summary>
+    public DbSet<TargetCustomField> TargetCustomFields { get; set; }
+    
+    /// <summary>
+    /// Table for target custom field values
+    /// </summary>
+    public DbSet<TargetCustomFieldValue> TargetCustomFieldValues { get; set; }
 }

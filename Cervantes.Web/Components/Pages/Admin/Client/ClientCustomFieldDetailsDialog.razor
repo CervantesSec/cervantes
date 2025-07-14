@@ -1,0 +1,123 @@
+@rendermode InteractiveServer
+@using Cervantes.CORE
+@using Task = System.Threading.Tasks.Task;
+@using FluentValidation;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@attribute [HasPermission(Permissions.ClientCustomFieldsEdit)]
+
+<MudDialog Class="mud-ex-dialog-initial">
+	<TitleContent>
+		<MudStack Row="true" Spacing="1">
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.DynamicForm"/> @localizer["editCustomField"]</MudText>
+		@if (userAth.HasPermission(Permissions.ClientCustomFieldsDelete))
+		{
+			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => Delete(customFieldSelected))">@localizer["delete"]</MudChip>
+		}
+		</MudStack>
+	</TitleContent>
+	<DialogContent>
+		<MudForm Model="@model" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0" method="dialog">
+			<MudStack AlignItems="AlignItems.Stretch">
+				<MudGrid>
+					<MudItem xs="12" md="6">
+						<MudTextField @bind-Value="model.Name" 
+									  For="@(() => model.Name)" 
+									  Label="@localizer["name"]" 
+									  Adornment="Adornment.Start" 
+									  AdornmentIcon="@Icons.Material.Filled.Label"/>
+					</MudItem>
+					<MudItem xs="12" md="6">
+						<MudTextField @bind-Value="model.Label" 
+									  For="@(() => model.Label)" 
+									  Label="@localizer["label"]" 
+									  Adornment="Adornment.Start" 
+									  AdornmentIcon="@Icons.Material.Filled.Title"/>
+					</MudItem>
+					
+					<MudItem xs="12" md="6">
+						<MudSelect @bind-Value="model.Type" 
+								   For="@(() => model.Type)" 
+								   Label="@localizer["type"]" 
+								   AdornmentIcon="@Icons.Material.Filled.Category" 
+								   Adornment="Adornment.Start">
+							@foreach (ClientCustomFieldType type in Enum.GetValues(typeof(ClientCustomFieldType)))
+							{
+								<MudSelectItem Value="@type">@GetFieldTypeDisplay(type)</MudSelectItem>
+							}
+						</MudSelect>
+					</MudItem>
+					
+					<MudItem xs="12" md="6">
+						<MudNumericField @bind-Value="model.Order" 
+										 For="@(() => model.Order)" 
+										 Label="@localizer["order"]" 
+										 Adornment="Adornment.Start" 
+										 AdornmentIcon="@Icons.Material.Filled.FormatListNumbered" 
+										 Min="0"/>
+					</MudItem>
+					
+					<MudItem xs="12">
+						<MudTextField @bind-Value="model.Description" 
+									  For="@(() => model.Description)" 
+									  Label="@localizer["description"]" 
+									  Lines="3" 
+									  Adornment="Adornment.Start" 
+									  AdornmentIcon="@Icons.Material.Filled.Description"/>
+					</MudItem>
+					
+					@if (model.Type == ClientCustomFieldType.Select)
+					{
+						<MudItem xs="12">
+							<MudTextField @bind-Value="model.Options" 
+										  For="@(() => model.Options)" 
+										  Label="@localizer["options"]" 
+										  Lines="3" 
+										  Adornment="Adornment.Start" 
+										  AdornmentIcon="@Icons.Material.Filled.List"
+										  HelperText="@localizer["optionsHelp"]"/>
+						</MudItem>
+					}
+					
+					<MudItem xs="12">
+						<MudTextField @bind-Value="model.DefaultValue" 
+									  For="@(() => model.DefaultValue)" 
+									  Label="@localizer["defaultValue"]" 
+									  Adornment="Adornment.Start" 
+									  AdornmentIcon="@Icons.Material.Filled.Edit"/>
+					</MudItem>
+					
+					<MudItem xs="12">
+						<MudStack Row="true" Spacing="4">
+							<MudSwitch @bind-Value="model.IsRequired" 
+									   Label="@localizer["required"]" 
+									   Color="Color.Primary"/>
+							<MudSwitch @bind-Value="model.IsUnique" 
+									   Label="@localizer["unique"]" 
+									   Color="Color.Primary"/>
+							<MudSwitch @bind-Value="model.IsSearchable" 
+									   Label="@localizer["searchable"]" 
+									   Color="Color.Primary"/>
+							<MudSwitch @bind-Value="model.IsVisible" 
+									   Label="@localizer["visible"]" 
+									   Color="Color.Primary"/>
+							<MudSwitch @bind-Value="model.IsActive" 
+									   Label="@localizer["active"]" 
+									   Color="Color.Primary"/>
+						</MudStack>
+					</MudItem>
+				</MudGrid>
+			</MudStack>
+		</MudForm>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="@(() => MudDialog.Cancel())">@localizer["cancel"]</MudButton>
+		<MudButton Color="Color.Primary" OnClick="@(() => Submit())">@localizer["update"]</MudButton>
+	</DialogActions>
+</MudDialog>

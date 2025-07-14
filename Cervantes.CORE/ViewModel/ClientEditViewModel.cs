@@ -40,5 +40,10 @@ public class ClientEditViewModel
     
           public string? FileName { get; set; }
           public byte[]? FileContent { get; set; }
+          
+          /// <summary>
+          /// Custom field values as key-value pairs (CustomFieldId -> Value)
+          /// </summary>
+          public Dictionary<Guid, string> CustomFieldValues { get; set; } = new Dictionary<Guid, string>();
 
 }

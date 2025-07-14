@@ -9,4 +9,5 @@ public class TargetCreateViewModel
     public TargetType Type { get; set; }
     public string UserId { get; set; }
     public Guid? ProjectId { get; set; }
+    public Dictionary<Guid, string> CustomFieldValues { get; set; } = new Dictionary<Guid, string>();
 }

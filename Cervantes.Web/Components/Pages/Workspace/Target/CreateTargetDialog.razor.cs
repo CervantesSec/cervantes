@@ -8,9 +8,12 @@ using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
+using Cervantes.Contracts;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using Microsoft.EntityFrameworkCore;
 using Severity = MudBlazor.Severity;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Target;
@@ -69,13 +72,59 @@ public partial class CreateTargetDialog: ComponentBase
     MudForm form;
     [Inject] ISnackbar Snackbar { get; set; }
     [Inject] TargetController _targetController { get; set; }
+    [Inject] TargetCustomFieldController _targetCustomFieldController { get; set; }
     TargetCreateViewModel target = new TargetCreateViewModel();
     [Parameter] public Guid project { get; set; }
+    
+    // Custom fields
+    private List<TargetCustomFieldValueViewModel> CustomFields { get; set; } = new List<TargetCustomFieldValueViewModel>();
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        await LoadCustomFields();
         StateHasChanged();
+    }
+    
+    private async System.Threading.Tasks.Task LoadCustomFields()
+    {
+        try
+        {
+            var customFields = _targetCustomFieldController.GetActive();
+            CustomFields = customFields.Select(cf => new TargetCustomFieldValueViewModel
+            {
+                TargetCustomFieldId = cf.Id,
+                Name = cf.Name,
+                Label = cf.Label,
+                Type = cf.Type,
+                IsRequired = cf.IsRequired,
+                IsUnique = cf.IsUnique,
+                IsSearchable = cf.IsSearchable,
+                IsVisible = cf.IsVisible,
+                Order = cf.Order,
+                Options = cf.Options,
+                DefaultValue = cf.DefaultValue,
+                Description = cf.Description,
+                Value = cf.DefaultValue ?? string.Empty
+            }).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading custom fields: {ex.Message}", Severity.Error);
+        }
+    }
+    
+    private async System.Threading.Tasks.Task OnCustomFieldChanged(TargetCustomFieldValueViewModel field)
+    {
+        // Initialize CustomFieldValues dictionary if null
+        if (target.CustomFieldValues == null)
+        {
+            target.CustomFieldValues = new Dictionary<Guid, string>();
+        }
+        
+        // Update the target's custom field values
+        target.CustomFieldValues[field.TargetCustomFieldId] = field.Value;
+        await InvokeAsync(StateHasChanged);
     }
     
     TargetModelFluentValidator targetValidator = new TargetModelFluentValidator();
@@ -89,7 +138,7 @@ public partial class CreateTargetDialog: ComponentBase
         }
 	    
 
-        public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
+        public Func<object, string, System.Threading.Tasks.Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
         {
             var result = await ValidateAsync(ValidationContext<TargetCreateViewModel>.CreateWithOptions((TargetCreateViewModel)model, x => x.IncludeProperties(propertyName)));
             if (result.IsValid)
@@ -104,13 +153,11 @@ public partial class CreateTargetDialog: ComponentBase
 
         if (form.IsValid)
         {
-
             target.ProjectId = project;
 
             var response = await _targetController.Add(target);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+            if (response is Microsoft.AspNetCore.Mvc.CreatedAtActionResult)
             {
-
                 Snackbar.Add(@localizer["targetCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }
@@ -118,7 +165,6 @@ public partial class CreateTargetDialog: ComponentBase
             {
                 Snackbar.Add(@localizer["targetCreatedError"], Severity.Error);
             }
-
         }
     }
 }

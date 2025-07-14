@@ -92,6 +92,10 @@ public static class ManagerServiceExtensions
         services.AddScoped<ITaskAttachmentManager, TaskAttachmentManager>();
         services.AddScoped<IProjectCustomFieldManager, ProjectCustomFieldManager>();
         services.AddScoped<IProjectCustomFieldValueManager, ProjectCustomFieldValueManager>();
+        services.AddScoped<IClientCustomFieldManager, ClientCustomFieldManager>();
+        services.AddScoped<IClientCustomFieldValueManager, ClientCustomFieldValueManager>();
+        services.AddScoped<ITargetCustomFieldManager, TargetCustomFieldManager>();
+        services.AddScoped<ITargetCustomFieldValueManager, TargetCustomFieldValueManager>();
         
         return services;
     }

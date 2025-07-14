@@ -11,28 +11,48 @@
         <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Adjust" /> @localizer["addTarget"]</MudText>
     </TitleContent>
     <DialogContent>
-        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" >
-            <MudForm Model="@target" @ref="@form" method="dialog" Validation="@(targetValidator.ValidateValue)" ValidationDelay="0">
-                <MudStack AlignItems="AlignItems.Stretch">
-                    <MudTextField @bind-Value="target.Name"
-                                  For="@(() => target.Name)"
-                                  Immediate="true"
-                                  Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Adjust"/>
-                    <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="target.Description" data-mce-placeholder="Description"/>
-                    <MudSelect @bind-Value="target.Type" For="@(() => target.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
-                        @foreach (TargetType item in Enum.GetValues(typeof(TargetType)))
-                        {
-                            <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudStack>
-
-            </MudForm>
-            <MudStack Row="true" Justify="Justify.FlexEnd">
-                <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="@Color.Primary" OnClick="Submit">@localizer["add"]</MudButton> 
-            </MudStack>
+        <MudContainer MaxWidth="MaxWidth.False" Style="max-height: 600px; overflow-y: scroll">
+            <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+                <MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details">
+                    <MudForm Model="@target" @ref="@form" method="dialog" Validation="@(targetValidator.ValidateValue)" ValidationDelay="0">
+                        <MudStack AlignItems="AlignItems.Stretch">
+                            <MudTextField @bind-Value="target.Name"
+                                          For="@(() => target.Name)"
+                                          Immediate="true"
+                                          Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Adjust"/>
+                            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="target.Description" data-mce-placeholder="Description"/>
+                            <MudSelect @bind-Value="target.Type" For="@(() => target.Type)" Label="@localizer["type"]" AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                @foreach (TargetType item in Enum.GetValues(typeof(TargetType)))
+                                {
+                                    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudStack>
+                    </MudForm>
+                </MudTabPanel>
+                
+                @* Custom Fields Tab *@
+                @if (CustomFields?.Any() == true)
+                {
+                    <MudTabPanel Text="@localizer["customFields"]" Icon="@Icons.Material.Filled.DynamicForm">
+                        <MudGrid>
+                            @foreach (var customField in CustomFields.OrderBy(x => x.Order))
+                            {
+                                <MudItem xs="12" md="6">
+                                    <Cervantes.Web.Components.Shared.TargetCustomFieldRenderer 
+                                        Field="@customField" 
+                                        FieldChanged="@OnCustomFieldChanged" />
+                                </MudItem>
+                            }
+                        </MudGrid>
+                    </MudTabPanel>
+                }
+            </MudTabs>
         </MudContainer>
+        <MudStack Row="true" Justify="Justify.FlexEnd">
+            <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton> 
+        </MudStack>
     </DialogContent>
     <DialogActions>
 

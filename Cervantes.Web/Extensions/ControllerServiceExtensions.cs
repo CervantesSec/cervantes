@@ -45,6 +45,7 @@ public static class ControllerServiceExtensions
     public static IServiceCollection AddCoreBusinessControllers(this IServiceCollection services)
     {
         services.AddScoped<ClientsController>();
+        services.AddScoped<ClientCustomFieldController>();
         services.AddScoped<UserController>();
         services.AddScoped<OrganizationController>();
         
@@ -61,6 +62,7 @@ public static class ControllerServiceExtensions
         services.AddScoped<ProjectController>();
         services.AddScoped<ProjectCustomFieldController>();
         services.AddScoped<TargetController>();
+        services.AddScoped<TargetCustomFieldController>();
         services.AddScoped<TaskController>();
         services.AddScoped<WorkspacesController>();
         services.AddScoped<ChecklistController>();

@@ -21,60 +21,81 @@
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.BusinessCenter" /> @localizer["createClient"]</MudText>
 	</TitleContent>
 	<DialogContent>
+		<MudContainer MaxWidth="MaxWidth.False" Style="max-height: 600px; overflow-y: scroll">
+			<MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+				<MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details">
+					<MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+						<MudStack AlignItems="AlignItems.Stretch">
+							<MudTextField @bind-Value="model.Name"
+							              For="@(() => model.Name)"
+							              Immediate="true"
+							              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.BusinessCenter"/>
+							<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 
-		<MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0" method="dialog">
+							<MudTextField @bind-Value="model.Url"
+							              For="@(() => model.Url)"
+							              Immediate="true"
+							              Label="URL" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Language"/>
 
-			<MudStack AlignItems="AlignItems.Stretch">
-				<MudTextField @bind-Value="model.Name"
-				              For="@(() => model.Name)"
-				              Immediate="true"
-				              Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.BusinessCenter"/>
-				<TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+							<MudTextField @bind-Value="model.ContactName"
+							              For="@(() => model.ContactName)"
+							              Immediate="true"
+							              Label="@localizer["contactName"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle"/>
 
+							<MudTextField @bind-Value="model.ContactEmail"
+							              For="@(() => model.ContactEmail)"
+							              Immediate="true"
+							              Label="@localizer["contactEmail"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email"/>
 
-				<MudTextField @bind-Value="model.Url"
-				              For="@(() => model.Url)"
-				              Immediate="true"
-				              Label="URL" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Language"/>
+							<MudTextField @bind-Value="model.ContactPhone"
+							              For="@(() => model.ContactPhone)"
+							              Immediate="true"
+							              Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ContactPhone"/>
+							
+							<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
+								<ActivatorContent >
+									<MudButton 
+										Variant="Variant.Filled"
+										Color="Color.Primary"
+										StartIcon="@Icons.Material.Filled.CloudUpload" >
+										@localizer["uploadFile"]
+									</MudButton>
+								</ActivatorContent>
+								<SelectedTemplate>
 
-				<MudTextField @bind-Value="model.ContactName"
-				              For="@(() => model.ContactName)"
-				              Immediate="true"
-				              Label="@localizer["contactName"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle"/>
+									@if (file != null)
+									{
+										<MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name </MudText>
 
-				<MudTextField @bind-Value="model.ContactEmail"
-				              For="@(() => model.ContactEmail)"
-				              Immediate="true"
-				              Label="@localizer["contactEmail"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email"/>
-
-				<MudTextField @bind-Value="model.ContactPhone"
-				              For="@(() => model.ContactPhone)"
-				              Immediate="true"
-				              Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ContactPhone"/>
-				<MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
-					<ActivatorContent >
-						<MudButton 
-							Variant="Variant.Filled"
-							Color="Color.Primary"
-							StartIcon="@Icons.Material.Filled.CloudUpload" >
-							@localizer["uploadFile"]
-						</MudButton>
-					</ActivatorContent>
-					<SelectedTemplate>
-
-						@if (file != null)
-						{
-							<MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name </MudText>
-
-						}
-						else
-						{
-							<MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"] </MudText>
-						}
-					</SelectedTemplate>
-				</MudFileUpload>
-			</MudStack>
-		</MudForm>
+									}
+									else
+									{
+										<MudText> <MudIcon Icon="@Icons.Material.Filled.Attachment"/> @localizer["noFiles"] </MudText>
+									}
+								</SelectedTemplate>
+							</MudFileUpload>
+						</MudStack>
+					</MudForm>
+				</MudTabPanel>
+				
+				@* Custom Fields Tab *@
+				@if (CustomFields?.Any() == true)
+				{
+					<MudTabPanel Text="@localizer["customFields"]" Icon="@Icons.Material.Filled.DynamicForm">
+						<MudGrid>
+							@foreach (var customField in CustomFields.OrderBy(x => x.Order))
+							{
+								<MudItem xs="12" md="6">
+									<Cervantes.Web.Components.Shared.ClientCustomFieldRenderer 
+										Field="@customField" 
+										FieldChanged="@OnCustomFieldChanged" />
+								</MudItem>
+							}
+						</MudGrid>
+					</MudTabPanel>
+				}
+			</MudTabs>
+		</MudContainer>
 		<MudStack Row="true" Justify="Justify.FlexEnd">
 			<MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
 			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Submit">@localizer["create"]</MudButton>

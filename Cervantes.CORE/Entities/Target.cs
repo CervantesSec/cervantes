@@ -56,4 +56,10 @@ public class Target
     /// Target Type
     /// </summary>
     public TargetType Type { get; set; }
+
+    /// <summary>
+    /// Custom field values for this target
+    /// </summary>
+    [JsonIgnore]
+    public virtual ICollection<TargetCustomFieldValue> CustomFieldValues { get; set; } = new List<TargetCustomFieldValue>();
 }

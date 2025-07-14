@@ -52,70 +52,91 @@
 		@if (editMode)
         	{
         		<MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll" Elevation="25">
-                    <MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
-                        <MudStack>
-				
-                            @if (client.ImagePath != "None")
-                            {
-                                <MudImage Src="@client.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="Client Logo" Elevation="25" Class="rounded-lg ma-4"/>
-                                <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
-                            }
-                            else
-                            {
-                                <MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
-                                    <ActivatorContent>
-                                        <MudButton HtmlTag="label"
-                                                   Variant="Variant.Filled"
-                                                   Color="Color.Primary"
-                                                   StartIcon="@Icons.Material.Filled.CloudUpload">
-                                            @localizer["uploadFile"]
-                                        </MudButton>
-                                    </ActivatorContent>
-                                    <SelectedTemplate>
+                    <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+                        <MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details">
+                            <MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
+                                <MudStack>
+                        
+                                    @if (client.ImagePath != "None")
+                                    {
+                                        <MudImage Src="@client.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="Client Logo" Elevation="25" Class="rounded-lg ma-4"/>
+                                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
+                                    }
+                                    else
+                                    {
+                                        <MudFileUpload T="IBrowserFile" @bind-Files="file" Accept=".jpg,.png,.gif,.jpeg,.tiff,.bmp">
+                                            <ActivatorContent>
+                                                <MudButton HtmlTag="label"
+                                                           Variant="Variant.Filled"
+                                                           Color="Color.Primary"
+                                                           StartIcon="@Icons.Material.Filled.CloudUpload">
+                                                    @localizer["uploadFile"]
+                                                </MudButton>
+                                            </ActivatorContent>
+                                            <SelectedTemplate>
 
-                                        @if (file != null)
-                                        {
-                                            <MudText><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name</MudText>
-                                
-                                        }
-                                        else
-                                        {
-                                            <MudText><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["noFiles"]</MudText>
-                                        }
-                                    </SelectedTemplate>
-                                </MudFileUpload>
-                            }
+                                                @if (file != null)
+                                                {
+                                                    <MudText><MudIcon Icon="@Icons.Material.Filled.Attachment"/> @file.Name</MudText>
+                                        
+                                                }
+                                                else
+                                                {
+                                                    <MudText><MudIcon Icon="@Icons.Material.Filled.Attachment" /> @localizer["noFiles"]</MudText>
+                                                }
+                                            </SelectedTemplate>
+                                        </MudFileUpload>
+                                    }
 
-                            <MudTextField @bind-Value="model.Name"
-                                          For="@(() => model.Name)"
-                                          Immediate="true"
-                                          Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Contacts"/>
+                                    <MudTextField @bind-Value="model.Name"
+                                                  For="@(() => model.Name)"
+                                                  Immediate="true"
+                                                  Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Contacts"/>
 
-                            <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description"/>
+                                    <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description"/>
 
 
-                            <MudTextField @bind-Value="model.Url"
-                                          For="@(() => model.Url)"
-                                          Immediate="true"
-                                          Label="URL" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Web"/>
+                                    <MudTextField @bind-Value="model.Url"
+                                                  For="@(() => model.Url)"
+                                                  Immediate="true"
+                                                  Label="URL" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Web"/>
 
-                            <MudTextField @bind-Value="model.ContactName"
-                                          For="@(() => model.ContactName)"
-                                          Immediate="true"
-                                          Label="@localizer["contactName"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle"/>
+                                    <MudTextField @bind-Value="model.ContactName"
+                                                  For="@(() => model.ContactName)"
+                                                  Immediate="true"
+                                                  Label="@localizer["contactName"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle"/>
 
-                            <MudTextField @bind-Value="model.ContactEmail"
-                                          For="@(() => model.ContactEmail)"
-                                          Immediate="true"
-                                          Label="@localizer["contactEmail"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email"/>
+                                    <MudTextField @bind-Value="model.ContactEmail"
+                                                  For="@(() => model.ContactEmail)"
+                                                  Immediate="true"
+                                                  Label="@localizer["contactEmail"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email"/>
 
-                            <MudTextField @bind-Value="model.ContactPhone"
-                                          For="@(() => model.ContactPhone)"
-                                          Immediate="true"
-                                          Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ContactPhone"/>
+                                    <MudTextField @bind-Value="model.ContactPhone"
+                                                  For="@(() => model.ContactPhone)"
+                                                  Immediate="true"
+                                                  Label="@localizer["contactPhone"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ContactPhone"/>
 
-                        </MudStack>
-                    </MudForm>
+                                </MudStack>
+                            </MudForm>
+                        </MudTabPanel>
+                        
+                        @* Custom Fields Tab - Editable in Edit Mode *@
+                        @if (userAth.HasPermission(Permissions.ClientCustomFieldsEdit) && clientCustomFieldValues?.Any() == true)
+                        {
+                            <MudTabPanel Text="@localizer["customFields"]" Icon="@Icons.Material.Filled.DynamicForm">
+                                <MudGrid>
+                                    @foreach (var customFieldValue in clientCustomFieldValues.OrderBy(x => x.Order))
+                                    {
+                                        <MudItem xs="12" md="6">
+                                            <Cervantes.Web.Components.Shared.ClientCustomFieldRenderer 
+                                                Field="@customFieldValue" 
+                                                FieldChanged="@OnCustomFieldChanged" />
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </MudTabPanel>
+                        }
+                    </MudTabs>
                     <MudStack Row="true" Justify="Justify.FlexEnd">
                         <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
                         @if(user.HasPermission(Permissions.ClientsEdit))
@@ -437,6 +458,24 @@
 					
 					
 				</MudTabPanel>
+				
+				@* Custom Fields Tab - Read Only in Details Mode *@
+				@if (userAth.HasPermission(Permissions.ClientCustomFieldsRead) && clientCustomFieldValues?.Any() == true)
+				{
+					<MudTabPanel Text="@localizer["customFields"]" Icon="@Icons.Material.Filled.DynamicForm">
+						<MudGrid>
+							@foreach (var customFieldValue in clientCustomFieldValues.OrderBy(x => x.Order))
+							{
+								<MudItem xs="12" md="6">
+									<Cervantes.Web.Components.Shared.ClientCustomFieldRenderer 
+										Field="@customFieldValue" 
+										FieldChanged="@OnCustomFieldChanged"
+										ReadOnly="true" />
+								</MudItem>
+							}
+						</MudGrid>
+					</MudTabPanel>
+				}
 			</MudTabs>
 
 		}

@@ -70,4 +70,10 @@ public class Client
     /// Client Image
     /// </summary>
     public string ImagePath { get; set; }
+
+    /// <summary>
+    /// Collection of custom field values for this client
+    /// </summary>
+    [JsonIgnore]
+    public virtual ICollection<ClientCustomFieldValue> CustomFieldValues { get; set; } = new List<ClientCustomFieldValue>();
 }

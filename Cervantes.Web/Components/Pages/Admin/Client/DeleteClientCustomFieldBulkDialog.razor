@@ -1,0 +1,41 @@
+@rendermode InteractiveServer
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Controllers
+@using Microsoft.Extensions.Localization
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using Task = System.Threading.Tasks.Task
+@attribute [HasPermission(Permissions.ClientCustomFieldsDelete)]
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Delete" />
+            @localizer["deleteBulk"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer Style="max-height: 300px; overflow-y: scroll">
+            <MudText Typo="Typo.body1">
+                @localizer["areYouSureDeleteBulk"] @customFields.Count @localizer["customFields"]?
+            </MudText>
+            <MudText Typo="Typo.body2" Color="Color.Warning">
+                @localizer["deleteWarning"]
+            </MudText>
+            <MudList T="string">
+                @foreach (var field in customFields)
+                {
+                    <MudListItem T="string">
+                        <MudText>@field.Name (@field.Label)</MudText>
+                    </MudListItem>
+                }
+            </MudList>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="DeleteBulk">@localizer["delete"]</MudButton>
+    </DialogActions>
+</MudDialog>
