@@ -386,6 +386,10 @@ public class TaskController: ControllerBase
                     }
                     
                     result.Status = task.Status;
+                    if (task.Status == TaskStatus.Done)
+                    {
+                        result.ClosedDate = DateTime.Today.ToUniversalTime();
+                    }
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task updated successfully. User: {0}",
                         aspNetUserId);

@@ -263,17 +263,34 @@
                                             }
 
                                             <MudSpacer/>
-                                            @{
-                                                var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
-                                            }
-                                            @if (@Math.Truncate(totalDays) < 0)
-                                            {
-                                                <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
-                                            }
-                                            else
-                                            {
-                                                <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
-                                            }
+                                            @if (@context.Status == CORE.Entities.TaskStatus.Done)
+                                                    { 
+                                                        
+                                                        var totalDaysDone = (@context.EndDate - @context.ClosedDate.Value.Date).TotalDays;
+
+                                                        if (@Math.Truncate(totalDaysDone) < 0)
+                                                        {
+                                                        
+                                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDaysDone) @localizer["days"]</MudChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Success">@localizer["daysLeft"] @Math.Truncate(totalDaysDone) @localizer["days"]</MudChip>
+                                                        }   
+                                                    }
+                                                    else
+                                                    {
+                                                        var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
+                                                        @if (@Math.Truncate(totalDays) < 0)
+                                                        {
+                                                        
+                                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Error">@localizer["outOfTime"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudChip T="string" Size="Size.Small" Icon="@Icons.Material.Filled.AccessTime" Color="Color.Primary">@localizer["daysLeft"] @Math.Truncate(totalDays) @localizer["days"]</MudChip>
+                                                        }
+                                                    }
                                         </MudStack>
 
 
