@@ -47,7 +47,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
                 var auditEntry = new AuditEntry(entry);
                 auditEntry.TableName = entry.Entity.GetType().Name;
 
-                if (_httpContextAccessor != null)
+                if (_httpContextAccessor.HttpContext != null)
                 {
                     auditEntry.IpAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
                     auditEntry.Browser = _httpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
