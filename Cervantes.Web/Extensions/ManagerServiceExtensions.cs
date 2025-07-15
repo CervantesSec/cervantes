@@ -114,6 +114,7 @@ public static class ManagerServiceExtensions
         services.AddScoped<IDocumentManager, DocumentManager>();
         services.AddScoped<INoteManager, NoteManager>();
         services.AddScoped<ILogManager, Cervantes.Application.LogManager>();
+        services.AddScoped<IAuditManager, AuditManager>();
         
         return services;
     }

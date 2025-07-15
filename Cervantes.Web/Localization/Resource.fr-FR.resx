@@ -2253,4 +2253,40 @@
     <data name="viewChecklistItem" xml:space="preserve">
         <value>Voir l'Élément de la Liste de Vérification</value>
     </data>
+    <data name="auditLogs" xml:space="preserve">
+        <value>Journaux d'Audit</value>
+    </data>
+    <data name="systemLogs" xml:space="preserve">
+        <value>Journaux du Système</value>
+    </data>
+    <data name="auditLog" xml:space="preserve">
+        <value>Journal d'Audit</value>
+    </data>
+    <data name="affectedColumns" xml:space="preserve">
+        <value>Colonnes Affectées</value>
+    </data>
+    <data name="primaryKey" xml:space="preserve">
+        <value>Clé Primaire</value>
+    </data>
+    <data name="oldValues" xml:space="preserve">
+        <value>Anciennes Valeurs</value>
+    </data>
+    <data name="newValues" xml:space="preserve">
+        <value>Nouvelles Valeurs</value>
+    </data>
+    <data name="eventType" xml:space="preserve">
+        <value>Type d'Événement</value>
+    </data>
+    <data name="table" xml:space="preserve">
+        <value>Table</value>
+    </data>
+    <data name="utc" xml:space="preserve">
+        <value>UTC</value>
+    </data>
+    <data name="date" xml:space="preserve">
+        <value>Date</value>
+    </data>
+    <data name="logsDeletedError" xml:space="preserve">
+        <value>Erreur lors de la suppression des journaux</value>
+    </data>
 </root>

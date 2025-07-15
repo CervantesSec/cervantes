@@ -86,7 +86,7 @@
         <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin" @bind-Expanded=isAdminExpanded>
             @if(user.HasPermission(Permissions.LogsRead))
             {
-            <MudNavLink Icon="@Icons.Material.Filled.ViewCompact" Href="/logs">Logs</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.ManageSearch" Href="/logs/audit">Logs</MudNavLink>
             }
             @if(user.HasPermission(Permissions.JobsRead))
             {

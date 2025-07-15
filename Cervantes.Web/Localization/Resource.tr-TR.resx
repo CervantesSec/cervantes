@@ -2257,4 +2257,40 @@
     <data name="viewChecklistItem" xml:space="preserve">
         <value>Kontrol Listesi Öğesi Görüntüle</value>
     </data>
+    <data name="auditLogs" xml:space="preserve">
+        <value>Denetim Günlükleri</value>
+    </data>
+    <data name="systemLogs" xml:space="preserve">
+        <value>Sistem Günlükleri</value>
+    </data>
+    <data name="auditLog" xml:space="preserve">
+        <value>Denetim Günlüğü</value>
+    </data>
+    <data name="affectedColumns" xml:space="preserve">
+        <value>Etkilenen Sütunlar</value>
+    </data>
+    <data name="primaryKey" xml:space="preserve">
+        <value>Birincil Anahtar</value>
+    </data>
+    <data name="oldValues" xml:space="preserve">
+        <value>Eski Değerler</value>
+    </data>
+    <data name="newValues" xml:space="preserve">
+        <value>Yeni Değerler</value>
+    </data>
+    <data name="eventType" xml:space="preserve">
+        <value>Olay Türü</value>
+    </data>
+    <data name="table" xml:space="preserve">
+        <value>Tablo</value>
+    </data>
+    <data name="utc" xml:space="preserve">
+        <value>UTC</value>
+    </data>
+    <data name="date" xml:space="preserve">
+        <value>Tarih</value>
+    </data>
+    <data name="logsDeletedError" xml:space="preserve">
+        <value>Günlükleri silme hatası</value>
+    </data>
 </root>

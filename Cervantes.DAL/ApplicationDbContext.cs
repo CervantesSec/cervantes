@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Document = System.Reflection.Metadata.Document;
@@ -14,9 +16,11 @@ namespace Cervantes.DAL;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,IHttpContextAccessor _httpContextAccessor)
         : base(options)
     {
+        this._httpContextAccessor = _httpContextAccessor;
     }
     /// <summary>
     /// Implemnt save async method
@@ -24,9 +28,82 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     /// <returns></returns>
     public Task<int> SaveChangesAsync()
     {
+        BeforeSaveChanges();
         return base.SaveChangesAsync();
     }
+    public override int SaveChanges()
+    {
+        BeforeSaveChanges();
+        return base.SaveChanges();
+    }
+    private void BeforeSaveChanges()
+        {
+            ChangeTracker.DetectChanges();
+            var auditEntries = new List<AuditEntry>();
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                    continue;
+                var auditEntry = new AuditEntry(entry);
+                auditEntry.TableName = entry.Entity.GetType().Name;
+
+                if (_httpContextAccessor != null)
+                {
+                    auditEntry.IpAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+                    auditEntry.Browser = _httpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+                }
+                
+                auditEntries.Add(auditEntry);
+                foreach (var property in entry.Properties)
+                {
+                    string propertyName = property.Metadata.Name;
+                    if (property.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                        continue;
+                    }
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            auditEntry.AuditType = AuditType.Add;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            if (auditEntry.UserId != null)
+                            {
+                                auditEntry.UserId = entry.Property("CreatedBy").CurrentValue != null ? entry.Property("CreatedBy").CurrentValue.ToString() : "Null";
+
+                            }
+                            break;
+                        case EntityState.Deleted:
+                            auditEntry.AuditType = AuditType.Delete;
+                            auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            //auditEntry.UserId = entry.Property("LastModified").CurrentValue != null ? entry.Property("LastModified").CurrentValue.ToString() : "Null";
+                            auditEntry.UserId = _httpContextAccessor.HttpContext?.User
+                                ?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                            break;
+                        case EntityState.Modified:
+                            if (property.IsModified)
+                            {
+                                auditEntry.ChangedColumns.Add(propertyName);
+                                auditEntry.AuditType = AuditType.Update;
+                                auditEntry.OldValues[propertyName] = property.OriginalValue;
+                                auditEntry.NewValues[propertyName] = property.CurrentValue;
+                                //auditEntry.UserId = entry.Property("LastModifiedBy").CurrentValue != null ? entry.Property("LastModifiedBy").CurrentValue.ToString() : "Null";
+                                auditEntry.UserId = _httpContextAccessor.HttpContext?.User
+                                    ?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                            }
+                            break;
+                    }
+                }
+            }
+            foreach (var auditEntry in auditEntries)
+            {
+                AuditLogs.Add(auditEntry.ToAudit());
+            }
+        }
     
+    public DbSet<Audit> AuditLogs { get; set; }
+
     //public DbSet<ApplicationUser> Users { get; set; }
 
     /// <summary>

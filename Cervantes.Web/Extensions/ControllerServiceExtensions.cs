@@ -95,6 +95,7 @@ public static class ControllerServiceExtensions
         services.AddScoped<DocumentController>();
         services.AddScoped<NoteController>();
         services.AddScoped<LogController>();
+        services.AddScoped<AuditController>();
         services.AddScoped<BackupController>();
         
         return services;

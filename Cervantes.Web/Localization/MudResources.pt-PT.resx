@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="MudDataGrid_AddFilter" xml:space="preserve">
+        <value>Adicionar Filtro</value>
+    </data>
+    <data name="MudDataGrid_Apply" xml:space="preserve">
+        <value>Aplicar</value>
+    </data>
+    <data name="MudDataGrid_Cancel" xml:space="preserve">
+        <value>Cancelar</value>
+    </data>
+    <data name="MudDataGrid_Clear" xml:space="preserve">
+        <value>Limpar</value>
+    </data>
+    <data name="MudDataGrid_CollapseAllGroups" xml:space="preserve">
+        <value>Recolher Todos os Grupos</value>
+    </data>
+    <data name="MudDataGrid_Column" xml:space="preserve">
+        <value>Coluna</value>
+    </data>
+    <data name="MudDataGrid_Columns" xml:space="preserve">
+        <value>Colunas</value>
+    </data>
+    <data name="MudDataGrid_Contains" xml:space="preserve">
+        <value>contém</value>
+    </data>
+    <data name="MudDataGrid_EndsWith" xml:space="preserve">
+        <value>termina com</value>
+    </data>
+    <data name="MudDataGrid_Equals" xml:space="preserve">
+        <value>é igual a</value>
+    </data>
+    <data name="MudDataGrid_ExpandAllGroups" xml:space="preserve">
+        <value>Expandir Todos os Grupos</value>
+    </data>
+    <data name="MudDataGrid_False" xml:space="preserve">
+        <value>Falso</value>
+    </data>
+    <data name="MudDataGrid_Filter" xml:space="preserve">
+        <value>Filtrar</value>
+    </data>
+    <data name="MudDataGrid_FilterValue" xml:space="preserve">
+        <value>Valor do filtro</value>
+    </data>
+    <data name="MudDataGrid_Group" xml:space="preserve">
+        <value>Agrupar</value>
+    </data>
+    <data name="MudDataGrid_Hide" xml:space="preserve">
+        <value>Ocultar</value>
+    </data>
+    <data name="MudDataGrid_HideAll" xml:space="preserve">
+        <value>Ocultar Tudo</value>
+    </data>
+    <data name="MudDataGrid_Is" xml:space="preserve">
+        <value>é</value>
+    </data>
+    <data name="MudDataGrid_IsAfter" xml:space="preserve">
+        <value>é após</value>
+    </data>
+    <data name="MudDataGrid_IsBefore" xml:space="preserve">
+        <value>é antes de</value>
+    </data>
+    <data name="MudDataGrid_IsEmpty" xml:space="preserve">
+        <value>está vazio</value>
+    </data>
+    <data name="MudDataGrid_IsNot" xml:space="preserve">
+        <value>não é</value>
+    </data>
+    <data name="MudDataGrid_IsNotEmpty" xml:space="preserve">
+        <value>não está vazio</value>
+    </data>
+    <data name="MudDataGrid_IsOnOrAfter" xml:space="preserve">
+        <value>é em ou após</value>
+    </data>
+    <data name="MudDataGrid_IsOnOrBefore" xml:space="preserve">
+        <value>é em ou antes de</value>
+    </data>
+    <data name="MudDataGrid_MoveDown" xml:space="preserve">
+        <value>Mover para Baixo</value>
+    </data>
+    <data name="MudDataGrid_MoveUp" xml:space="preserve">
+        <value>Mover para Cima</value>
+    </data>
+    <data name="MudDataGrid_NotContains" xml:space="preserve">
+        <value>não contém</value>
+    </data>
+    <data name="MudDataGrid_NotEquals" xml:space="preserve">
+        <value>não é igual a</value>
+    </data>
+    <data name="MudDataGrid_Operator" xml:space="preserve">
+        <value>Operador</value>
+    </data>
+    <data name="MudDataGrid_RefreshData" xml:space="preserve">
+        <value>Atualizar Dados</value>
+    </data>
+    <data name="MudDataGrid_Save" xml:space="preserve">
+        <value>Guardar</value>
+    </data>
+    <data name="MudDataGrid_ShowAll" xml:space="preserve">
+        <value>Mostrar Tudo</value>
+    </data>
+    <data name="MudDataGrid_Sort" xml:space="preserve">
+        <value>Ordenar</value>
+    </data>
+    <data name="MudDataGrid_StartsWith" xml:space="preserve">
+        <value>começa com</value>
+    </data>
+    <data name="MudDataGrid_True" xml:space="preserve">
+        <value>Verdadeiro</value>
+    </data>
+    <data name="MudDataGrid_Ungroup" xml:space="preserve">
+        <value>Desagrupar</value>
+    </data>
+    <data name="MudDataGrid_Unsort" xml:space="preserve">
+        <value>Desordenar</value>
+    </data>
+    <data name="MudDataGrid_Value" xml:space="preserve">
+        <value>Valor</value>
+    </data>
+    <data name="MudDataGridPager_RowsPerPage" xml:space="preserve">
+        <value>Linhas por página</value>
+    </data>
+    <data name="MudDataGrid_Loading" xml:space="preserve">
+        <value>A carregar...</value>
+    </data>
+    <data name="MudDataGridPager_AllItems" xml:space="preserve">
+        <value>Tudo</value>
+    </data>
+</root>

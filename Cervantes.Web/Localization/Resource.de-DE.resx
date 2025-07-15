@@ -2253,4 +2253,40 @@
     <data name="viewChecklistItem" xml:space="preserve">
         <value>Checklisten-Element anzeigen</value>
     </data>
+    <data name="auditLogs" xml:space="preserve">
+        <value>Audit-Protokolle</value>
+    </data>
+    <data name="systemLogs" xml:space="preserve">
+        <value>System-Protokolle</value>
+    </data>
+    <data name="auditLog" xml:space="preserve">
+        <value>Audit-Protokoll</value>
+    </data>
+    <data name="affectedColumns" xml:space="preserve">
+        <value>Betroffene Spalten</value>
+    </data>
+    <data name="primaryKey" xml:space="preserve">
+        <value>Primärschlüssel</value>
+    </data>
+    <data name="oldValues" xml:space="preserve">
+        <value>Alte Werte</value>
+    </data>
+    <data name="newValues" xml:space="preserve">
+        <value>Neue Werte</value>
+    </data>
+    <data name="eventType" xml:space="preserve">
+        <value>Ereignistyp</value>
+    </data>
+    <data name="table" xml:space="preserve">
+        <value>Tabelle</value>
+    </data>
+    <data name="utc" xml:space="preserve">
+        <value>UTC</value>
+    </data>
+    <data name="date" xml:space="preserve">
+        <value>Datum</value>
+    </data>
+    <data name="logsDeletedError" xml:space="preserve">
+        <value>Fehler beim Löschen der Protokolle</value>
+    </data>
 </root>

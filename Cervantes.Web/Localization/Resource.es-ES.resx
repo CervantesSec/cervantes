@@ -2384,14 +2384,8 @@ Opción 3</value>
     <data name="onHold" xml:space="preserve">
         <value>En Espera</value>
     </data>
-    <data name="order" xml:space="preserve">
-        <value>Orden</value>
-    </data>
     <data name="passed" xml:space="preserve">
         <value>Aprobado</value>
-    </data>
-    <data name="required" xml:space="preserve">
-        <value>Requerido</value>
     </data>
     <data name="testedBy" xml:space="preserve">
         <value>Probado Por</value>
@@ -2401,5 +2395,41 @@ Opción 3</value>
     </data>
     <data name="veryHard" xml:space="preserve">
         <value>Muy Difícil</value>
+    </data>
+    <data name="auditLogs" xml:space="preserve">
+        <value>Registros de Auditoría</value>
+    </data>
+    <data name="systemLogs" xml:space="preserve">
+        <value>Registros del Sistema</value>
+    </data>
+    <data name="auditLog" xml:space="preserve">
+        <value>Registro de Auditoría</value>
+    </data>
+    <data name="affectedColumns" xml:space="preserve">
+        <value>Columnas Afectadas</value>
+    </data>
+    <data name="primaryKey" xml:space="preserve">
+        <value>Clave Primaria</value>
+    </data>
+    <data name="oldValues" xml:space="preserve">
+        <value>Valores Antiguos</value>
+    </data>
+    <data name="newValues" xml:space="preserve">
+        <value>Valores Nuevos</value>
+    </data>
+    <data name="eventType" xml:space="preserve">
+        <value>Tipo de Evento</value>
+    </data>
+    <data name="table" xml:space="preserve">
+        <value>Tabla</value>
+    </data>
+    <data name="utc" xml:space="preserve">
+        <value>UTC</value>
+    </data>
+    <data name="date" xml:space="preserve">
+        <value>Fecha</value>
+    </data>
+    <data name="logsDeletedError" xml:space="preserve">
+        <value>Error al eliminar registros</value>
     </data>
 </root>

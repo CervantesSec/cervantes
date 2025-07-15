@@ -1,0 +1,157 @@
+@page "/logs/audit"
+@using System.Globalization
+@using Cervantes.CORE
+@using Cervantes.CORE.ViewModels
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.Extensions.Localization
+@using Color = MudBlazor.Color
+@using Size = MudBlazor.Size
+@inject IDialogService Dialog
+@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager navigationManager
+@inject IJSRuntime JS
+@inject ISnackbar Snackbar
+@attribute [HasPermission(Permissions.LogsRead)]
+@inject AuthenticationStateProvider authenticationStateProvider
+
+<PageTitle>Logs | Cervantes</PageTitle>
+<SectionContent SectionName="appbar">
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@_items" Separator=">" />
+
+</SectionContent>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                        <MudButton Href="/logs/audit"
+
+                                   StartIcon="@Icons.Material.Filled.ManageSearch"
+                                   Color="Color.Primary">
+                            @localizer["auditLogs"]
+                        </MudButton>
+
+                        <MudButton Href="/logs/system"
+
+                                   StartIcon="@Icons.Material.Filled.ScreenSearchDesktop"
+                                   Color="Color.Transparent">
+                            @localizer["systemLogs"]
+                        </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
+    
+    <MudItem xs="12" sm="12" md="12">
+        <MudDataGrid T="Audit" Items="@model.OrderByDescending(x => x.Id)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
+                     Hideable="true" MultiSelection="true" Virtualize="true" DragDropColumnReordering="true">
+            <ToolBarContent>
+                <MudStack Row="true">
+
+                </MudStack>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                </MudTextField>
+            </ToolBarContent>
+            <Columns>
+                <HierarchyColumn T="Audit"/>
+                <PropertyColumn Property="x => x.Id" Title="Id"/>
+                <PropertyColumn Property="x => x.UserId" Title="@localizer["user"]"/>
+
+                <PropertyColumn Property="x => x.Type" Title="@localizer["eventType"]"/>
+                <PropertyColumn Property="x => x.DateTime" Title="@localizer["date"]">
+                    <CellTemplate>
+                        <MudItem>
+                            <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Warning" Label="true" Color="Color.Surface">@localizer["local"] : @context.Item.DateTime.Value.ToLocalTime().ToString("G", CultureInfo.CurrentCulture)</MudChip>
+                        </MudItem>
+
+                        <MudItem>
+                            <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Warning" Label="true" Color="Color.Surface">@localizer["utc"] : @context.Item.DateTime.Value.ToUniversalTime().ToString("G", CultureInfo.CurrentCulture)</MudChip>
+                        </MudItem>
+
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.TableName" Title="@localizer["table"]"/>
+            </Columns>
+            <ChildRowContent>
+                <MudCard Elevation="0">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudAlert Severity="Severity.Info">@localizer["auditLog"] Id: @context.Item.Id</MudAlert>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <table class="mud-table-root">
+                            <tbody class="mud-table-body">
+                            @if (!string.IsNullOrEmpty(context.Item.AffectedColumns))
+                            {
+                                <tr class="mud-table-row" style="padding:10px!important">
+                                    <td>@localizer["affectedColumns"]</td>
+                                    <td>
+                                        <MudItem>
+                                            @foreach (var column in context.Item.AffectedColumns.Trim('[').Trim(']').Split(','))
+                                            {
+                                                <MudChip Label="true" Color="Color.Surface">@column.Replace('"', ' ').Trim()</MudChip>
+                                            }
+                                        </MudItem>
+                                    </td>
+                                </tr>
+                            }
+                            <tr class="mud-table-row">
+                                <td>@localizer["primaryKey"]</td>
+                                <td>
+                                    <MudItem>
+                                        <MudChip Label="true" Color="Color.Surface">@context.Item.PrimaryKey.Trim('{').Trim('}').Replace('"', ' ').Trim()</MudChip>
+                                    </MudItem>
+                                </td>
+                            </tr>
+
+                            @if (!string.IsNullOrEmpty(context.Item.OldValues))
+                            {
+                                <tr class="mud-table-row">
+                                    <td>@localizer["oldValues"]</td>
+                                    <td>
+
+                                        <MudItem>
+                                            @foreach (var value in context.Item.OldValues.Trim('{').Trim('}').Split(','))
+                                            {
+                                                <MudChip Label="true" Color="Color.Warning">@value.Replace('"', ' ').Trim()</MudChip>
+                                            }
+                                        </MudItem>
+                                    </td>
+                                </tr>
+                            }
+                            @if (!string.IsNullOrEmpty(context.Item.NewValues))
+                            {
+                                <tr class="mud-table-row">
+                                    <td>@localizer["newValues"]</td>
+                                    <td>
+
+                                        <MudItem>
+                                            @foreach (var value in context.Item.NewValues.Trim('{').Trim('}').Split(','))
+                                            {
+                                                <MudChip Label="true" Color="Color.Success">@value.Replace('"', ' ').Trim()</MudChip>
+                                            }
+                                        </MudItem>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+
+                    </MudCardContent>
+                </MudCard>
+            </ChildRowContent>
+            <PagerContent>
+                <MudDataGridPager T="Audit"/>
+            </PagerContent>
+        </MudDataGrid>
+    </MudItem>
+</MudGrid>

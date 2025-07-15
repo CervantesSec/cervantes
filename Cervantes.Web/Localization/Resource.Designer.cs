@@ -1383,12 +1383,6 @@ namespace Cervantes.Web.Localization {
             }
         }
         
-        internal static string notStarted {
-            get {
-                return ResourceManager.GetString("notStarted", resourceCulture);
-            }
-        }
-        
         internal static string pass {
             get {
                 return ResourceManager.GetString("pass", resourceCulture);
@@ -1737,12 +1731,6 @@ namespace Cervantes.Web.Localization {
             }
         }
         
-        internal static string easy {
-            get {
-                return ResourceManager.GetString("easy", resourceCulture);
-            }
-        }
-        
         internal static string difficult {
             get {
                 return ResourceManager.GetString("difficult", resourceCulture);
@@ -1964,13 +1952,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("none", resourceCulture);
             }
         }
-        
-        internal static string required {
-            get {
-                return ResourceManager.GetString("required", resourceCulture);
-            }
-        }
-        
+
         internal static string changed {
             get {
                 return ResourceManager.GetString("changed", resourceCulture);

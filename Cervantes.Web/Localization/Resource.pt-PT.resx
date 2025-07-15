@@ -2222,4 +2222,40 @@
     <data name="viewChecklistItem" xml:space="preserve">
         <value>Ver Item da Lista de Verificação</value>
     </data>
+    <data name="auditLogs" xml:space="preserve">
+        <value>Registos de Auditoria</value>
+    </data>
+    <data name="systemLogs" xml:space="preserve">
+        <value>Registos do Sistema</value>
+    </data>
+    <data name="auditLog" xml:space="preserve">
+        <value>Registo de Auditoria</value>
+    </data>
+    <data name="affectedColumns" xml:space="preserve">
+        <value>Colunas Afetadas</value>
+    </data>
+    <data name="primaryKey" xml:space="preserve">
+        <value>Chave Primária</value>
+    </data>
+    <data name="oldValues" xml:space="preserve">
+        <value>Valores Antigos</value>
+    </data>
+    <data name="newValues" xml:space="preserve">
+        <value>Valores Novos</value>
+    </data>
+    <data name="eventType" xml:space="preserve">
+        <value>Tipo de Evento</value>
+    </data>
+    <data name="table" xml:space="preserve">
+        <value>Tabela</value>
+    </data>
+    <data name="utc" xml:space="preserve">
+        <value>UTC</value>
+    </data>
+    <data name="date" xml:space="preserve">
+        <value>Data</value>
+    </data>
+    <data name="logsDeletedError" xml:space="preserve">
+        <value>Erro ao eliminar registos</value>
+    </data>
 </root>

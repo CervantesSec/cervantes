@@ -2258,4 +2258,40 @@
     <data name="viewChecklistItem" xml:space="preserve">
         <value>Visualizza Elemento Checklist</value>
     </data>
+    <data name="auditLogs" xml:space="preserve">
+        <value>Log di Audit</value>
+    </data>
+    <data name="systemLogs" xml:space="preserve">
+        <value>Log di Sistema</value>
+    </data>
+    <data name="auditLog" xml:space="preserve">
+        <value>Log di Audit</value>
+    </data>
+    <data name="affectedColumns" xml:space="preserve">
+        <value>Colonne Interessate</value>
+    </data>
+    <data name="primaryKey" xml:space="preserve">
+        <value>Chiave Primaria</value>
+    </data>
+    <data name="oldValues" xml:space="preserve">
+        <value>Valori Precedenti</value>
+    </data>
+    <data name="newValues" xml:space="preserve">
+        <value>Valori Nuovi</value>
+    </data>
+    <data name="eventType" xml:space="preserve">
+        <value>Tipo di Evento</value>
+    </data>
+    <data name="table" xml:space="preserve">
+        <value>Tabella</value>
+    </data>
+    <data name="utc" xml:space="preserve">
+        <value>UTC</value>
+    </data>
+    <data name="date" xml:space="preserve">
+        <value>Data</value>
+    </data>
+    <data name="logsDeletedError" xml:space="preserve">
+        <value>Errore durante l'eliminazione dei log</value>
+    </data>
 </root>

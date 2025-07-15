@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="MudDataGrid_AddFilter" xml:space="preserve">
+        <value>Filtre ekle</value>
+    </data>
+    <data name="MudDataGrid_Apply" xml:space="preserve">
+        <value>Uygula</value>
+    </data>
+    <data name="MudDataGrid_Cancel" xml:space="preserve">
+        <value>İptal</value>
+    </data>
+    <data name="MudDataGrid_Clear" xml:space="preserve">
+        <value>Temizle</value>
+    </data>
+    <data name="MudDataGrid_CollapseAllGroups" xml:space="preserve">
+        <value>Tüm grupları daralt</value>
+    </data>
+    <data name="MudDataGrid_Column" xml:space="preserve">
+        <value>Sütun</value>
+    </data>
+    <data name="MudDataGrid_Columns" xml:space="preserve">
+        <value>Sütunlar</value>
+    </data>
+    <data name="MudDataGrid_Contains" xml:space="preserve">
+        <value>içerir</value>
+    </data>
+    <data name="MudDataGrid_EndsWith" xml:space="preserve">
+        <value>ile biter</value>
+    </data>
+    <data name="MudDataGrid_Equals" xml:space="preserve">
+        <value>eşittir</value>
+    </data>
+    <data name="MudDataGrid_ExpandAllGroups" xml:space="preserve">
+        <value>Tüm grupları genişlet</value>
+    </data>
+    <data name="MudDataGrid_False" xml:space="preserve">
+        <value>Yanlış</value>
+    </data>
+    <data name="MudDataGrid_Filter" xml:space="preserve">
+        <value>Filtrele</value>
+    </data>
+    <data name="MudDataGrid_FilterValue" xml:space="preserve">
+        <value>Filtre değeri</value>
+    </data>
+    <data name="MudDataGrid_Group" xml:space="preserve">
+        <value>Grupla</value>
+    </data>
+    <data name="MudDataGrid_Hide" xml:space="preserve">
+        <value>Gizle</value>
+    </data>
+    <data name="MudDataGrid_HideAll" xml:space="preserve">
+        <value>Tümünü gizle</value>
+    </data>
+    <data name="MudDataGrid_Is" xml:space="preserve">
+        <value>eşittir</value>
+    </data>
+    <data name="MudDataGrid_IsAfter" xml:space="preserve">
+        <value>sonrasında</value>
+    </data>
+    <data name="MudDataGrid_IsBefore" xml:space="preserve">
+        <value>öncesinde</value>
+    </data>
+    <data name="MudDataGrid_IsEmpty" xml:space="preserve">
+        <value>boş</value>
+    </data>
+    <data name="MudDataGrid_IsNot" xml:space="preserve">
+        <value>eşit değil</value>
+    </data>
+    <data name="MudDataGrid_IsNotEmpty" xml:space="preserve">
+        <value>boş değil</value>
+    </data>
+    <data name="MudDataGrid_IsOnOrAfter" xml:space="preserve">
+        <value>tarihinde veya sonrasında</value>
+    </data>
+    <data name="MudDataGrid_IsOnOrBefore" xml:space="preserve">
+        <value>tarihinde veya öncesinde</value>
+    </data>
+    <data name="MudDataGrid_MoveDown" xml:space="preserve">
+        <value>Aşağı taşı</value>
+    </data>
+    <data name="MudDataGrid_MoveUp" xml:space="preserve">
+        <value>Yukarı taşı</value>
+    </data>
+    <data name="MudDataGrid_NotContains" xml:space="preserve">
+        <value>içermez</value>
+    </data>
+    <data name="MudDataGrid_NotEquals" xml:space="preserve">
+        <value>eşit değil</value>
+    </data>
+    <data name="MudDataGrid_Operator" xml:space="preserve">
+        <value>Operatör</value>
+    </data>
+    <data name="MudDataGrid_RefreshData" xml:space="preserve">
+        <value>Veriyi yenile</value>
+    </data>
+    <data name="MudDataGrid_Save" xml:space="preserve">
+        <value>Kaydet</value>
+    </data>
+    <data name="MudDataGrid_ShowAll" xml:space="preserve">
+        <value>Tümünü göster</value>
+    </data>
+    <data name="MudDataGrid_Sort" xml:space="preserve">
+        <value>Sırala</value>
+    </data>
+    <data name="MudDataGrid_StartsWith" xml:space="preserve">
+        <value>ile başlar</value>
+    </data>
+    <data name="MudDataGrid_True" xml:space="preserve">
+        <value>Doğru</value>
+    </data>
+    <data name="MudDataGrid_Ungroup" xml:space="preserve">
+        <value>Grubu çöz</value>
+    </data>
+    <data name="MudDataGrid_Unsort" xml:space="preserve">
+        <value>Sıralamayı kaldır</value>
+    </data>
+    <data name="MudDataGrid_Value" xml:space="preserve">
+        <value>Değer</value>
+    </data>
+    <data name="MudDataGridPager_RowsPerPage" xml:space="preserve">
+        <value>Sayfa başına satır</value>
+    </data>
+    <data name="MudDataGrid_Loading" xml:space="preserve">
+        <value>Yükleniyor...</value>
+    </data>
+    <data name="MudDataGridPager_AllItems" xml:space="preserve">
+        <value>Tümü</value>
+    </data>
+</root>

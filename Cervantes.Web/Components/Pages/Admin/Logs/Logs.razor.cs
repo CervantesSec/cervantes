@@ -10,7 +10,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
 
-namespace Cervantes.Web.Components.Pages.Admin;
+namespace Cervantes.Web.Components.Pages.Admin.Logs;
 
 public partial class Logs: ComponentBase
 {

@@ -2253,4 +2253,40 @@
     <data name="viewChecklistItem" xml:space="preserve">
         <value>Zobrazit položku kontrolního seznamu</value>
     </data>
+    <data name="auditLogs" xml:space="preserve">
+        <value>Audit protokoly</value>
+    </data>
+    <data name="systemLogs" xml:space="preserve">
+        <value>Systémové protokoly</value>
+    </data>
+    <data name="auditLog" xml:space="preserve">
+        <value>Audit protokol</value>
+    </data>
+    <data name="affectedColumns" xml:space="preserve">
+        <value>Ovlivněné sloupce</value>
+    </data>
+    <data name="primaryKey" xml:space="preserve">
+        <value>Primární klíč</value>
+    </data>
+    <data name="oldValues" xml:space="preserve">
+        <value>Staré hodnoty</value>
+    </data>
+    <data name="newValues" xml:space="preserve">
+        <value>Nové hodnoty</value>
+    </data>
+    <data name="eventType" xml:space="preserve">
+        <value>Typ události</value>
+    </data>
+    <data name="table" xml:space="preserve">
+        <value>Tabulka</value>
+    </data>
+    <data name="utc" xml:space="preserve">
+        <value>UTC</value>
+    </data>
+    <data name="date" xml:space="preserve">
+        <value>Datum</value>
+    </data>
+    <data name="logsDeletedError" xml:space="preserve">
+        <value>Chyba při mazání protokolů</value>
+    </data>
 </root>

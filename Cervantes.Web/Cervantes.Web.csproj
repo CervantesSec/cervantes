@@ -214,5 +214,20 @@
     <ItemGroup>
       <TypeScriptCompile Include="wwwroot\lib\tinymce\tinymce.d.ts" />
     </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Localization\MudResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>MudResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Localization\MudResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>MudResources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
     
 </Project>
