@@ -173,8 +173,17 @@
                                                     <MudSpacer/>
                                    
                                                     @if (@context.Status == TaskStatus.Done)
-                                                    {                                                        
-                                                        var totalDaysDone = (@context.EndDate - @context.ClosedDate.Value.Date).TotalDays;
+                                                    {
+                                                        double totalDaysDone;
+                                                        if (@context.ClosedDate.HasValue)
+                                                        {
+                                                            totalDaysDone = (@context.EndDate - @context.ClosedDate.Value.Date).TotalDays;
+                                                        }
+                                                        else
+                                                        {
+                                                            totalDaysDone = (@context.EndDate - DateTime.Now).TotalDays;
+                                                        }
+                                                        
 
                                                         if (@Math.Truncate(totalDaysDone) < 0)
                                                         {
