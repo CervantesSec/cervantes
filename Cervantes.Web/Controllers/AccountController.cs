@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,12 +14,13 @@ public class AccountController : ControllerBase
     private IHttpContextAccessor HttpContextAccessor;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private string aspNetUserId;
+    private IAuditManager auditManager;
     
-    public AccountController(ILogger<AccountController> logger, SignInManager<ApplicationUser> signInManager)
+    public AccountController(ILogger<AccountController> logger, SignInManager<ApplicationUser> signInManager, IAuditManager auditManager)
     {
         _logger = logger;
         _signInManager = signInManager;
-
+        this.auditManager = auditManager;
     }
     
     [HttpPost]
@@ -30,6 +32,22 @@ public class AccountController : ControllerBase
         if (result.Succeeded)
         {
             _logger.LogInformation("User logged in. User: {0}", parameters.UserName);
+            var audit = new Audit
+            {
+                UserId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
+                Type = "Login",
+                TableName = "ApplicationUser",
+                DateTime = DateTime.Now.ToUniversalTime(),
+                OldValues = "",
+                NewValues = "",
+                AffectedColumns = "",
+                PrimaryKey = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
+                IpAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Browser = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString(),
+                
+            };
+            await auditManager.AddAsync(audit);
+            await auditManager.Context.SaveChangesAsync();
             return Ok();
         }
         else
@@ -46,6 +64,22 @@ public class AccountController : ControllerBase
         try
         {
             await _signInManager.SignOutAsync();
+            var audit = new Audit
+            {
+                UserId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
+                Type = "Logout",
+                TableName = "ApplicationUser",
+                DateTime = DateTime.Now.ToUniversalTime(),
+                OldValues = "",
+                NewValues = "",
+                AffectedColumns = "",
+                PrimaryKey = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
+                IpAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Browser = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString(),
+                
+            };
+            await auditManager.AddAsync(audit);
+            await auditManager.Context.SaveChangesAsync();
             return NoContent();
         }
         catch

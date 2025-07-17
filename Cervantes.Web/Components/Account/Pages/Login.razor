@@ -1,6 +1,9 @@
 ﻿ @rendermode InteractiveServer
 @page "/Account/Login"
 @using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+@using Cervantes.Application
+@using Cervantes.Contracts
 @using Cervantes.CORE.Entities
 @using Cervantes.Web.Components.Layout
 @using Cervantes.Web.Localization
@@ -15,6 +18,8 @@
 @inject IdentityRedirectManager RedirectManager
 @inject IStringLocalizer<Resource> localizer
 @inject ISnackbar Snackbar
+@inject IAuditManager AuditManager
+@inject IHttpContextAccessor HttpContextAccessor
 
 
 <PageTitle>@localizer["login"] | Cervantes</PageTitle>
@@ -155,6 +160,22 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
+            var audit = new Audit
+            {
+                UserId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
+                Type = "Login",
+                TableName = "ApplicationUser",
+                DateTime = DateTime.Now.ToUniversalTime(),
+                OldValues = "",
+                NewValues = "",
+                AffectedColumns = "",
+                PrimaryKey = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
+                IpAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Browser = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString(),
+                
+            };
+            await AuditManager.AddAsync(audit);
+            await AuditManager.Context.SaveChangesAsync();
             RedirectManager.RedirectTo(ReturnUrl);
         }
         else if (result.RequiresTwoFactor)

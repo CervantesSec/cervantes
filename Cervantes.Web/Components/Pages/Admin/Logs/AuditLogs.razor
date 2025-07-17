@@ -69,11 +69,11 @@
                 <PropertyColumn Property="x => x.DateTime" Title="@localizer["date"]">
                     <CellTemplate>
                         <MudItem>
-                            <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Warning" Label="true" Color="Color.Surface">@localizer["local"] : @context.Item.DateTime.Value.ToLocalTime().ToString("G", CultureInfo.CurrentCulture)</MudChip>
+                            <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Default" Label="true" Color="Color.Surface">@localizer["local"] : @context.Item.DateTime.Value.ToLocalTime().ToString("G", CultureInfo.CurrentCulture)</MudChip>
                         </MudItem>
 
                         <MudItem>
-                            <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Warning" Label="true" Color="Color.Surface">@localizer["utc"] : @context.Item.DateTime.Value.ToUniversalTime().ToString("G", CultureInfo.CurrentCulture)</MudChip>
+                            <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Default" Label="true" Color="Color.Surface">@localizer["utc"] : @context.Item.DateTime.Value.ToUniversalTime().ToString("G", CultureInfo.CurrentCulture)</MudChip>
                         </MudItem>
 
                     </CellTemplate>
