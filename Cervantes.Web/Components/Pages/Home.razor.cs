@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using ApexCharts;
 using Cervantes.CORE.Entities;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
@@ -25,11 +24,6 @@ public partial class Home: ComponentBase
     private List<CORE.Entities.Task> Tasks { get; set; } = new List<CORE.Entities.Task>();
     private ApplicationUser User { get; set; }
 
-    private ApexChartOptions<Project> optionsProject;
-    private ApexChartOptions<CORE.Entities.Vuln> optionsVulns;
-    private ApexChartOptions<CORE.Entities.Task> optionsTask = new();
-
-    private ApexChart<Project> chart;
     protected override async Task OnInitializedAsync()
     {
         Projects = _projectController.Get().ToList();
@@ -54,133 +48,91 @@ public partial class Home: ComponentBase
 
     }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        if (_isDarkMode)
-        {
-            optionsProject = new ApexChartOptions<Project>
-            {
-                Theme = new Theme
-                {
-                    Mode = Mode.Dark,
-                },
-                Chart = new Chart
-                {
-                    Background = "0",
-                    Height = 275,
-                },
-            };
-            optionsVulns = new ApexChartOptions<CORE.Entities.Vuln>
-            {
-                Theme = new Theme
-                {
-                    Mode = Mode.Dark,
-                },
-                Chart = new Chart
-                {
-                    Background = "0",
-                    Height = 275,
-                },
-            };
-            optionsTask = new ApexChartOptions<CORE.Entities.Task>
-            {
-                Theme = new Theme
-                {
-                    Mode = Mode.Dark,
-                },
-                Chart = new Chart
-                {
-                    Background = "0",
-                    Height = 275,
-                },
-            };
-        }else
-        {
-            optionsProject = new ApexChartOptions<Project>
-            {
-                Chart = new Chart
-                {
-                    Background = "0",
-                    Height = 275,
-                },
-            };
-            optionsVulns = new ApexChartOptions<CORE.Entities.Vuln>
-            {
-                Chart = new Chart
-                {
-                    Background = "0",
-                    Height = 275,
-                },
-            };
-            optionsTask = new ApexChartOptions<CORE.Entities.Task>
-            {
-               
-                Chart = new Chart
-                {
-                    Background = "0",
-                    Height = 275,
-                },
-            };
-            //optionsTask.PlotOptions = new PlotOptions { Pie = new PlotOptionsPie { StartAngle = -90, EndAngle = 90 } };
 
-            
-        }
-        await base.OnParametersSetAsync();
+    // Project Chart Methods
+    private double[] GetProjectChartData()
+    {
+        var grouped = Projects.GroupBy(p => p.Status).ToList();
+        return grouped.Select(g => (double)g.Count()).ToArray();
     }
 
-    private string GetPointColorProject(Project project)
+    private string[] GetProjectChartLabels()
     {
-        switch (project.Status)
-        {
-            case ProjectStatus.Active:
-                return "#3dcb6c";
-            case ProjectStatus.Archived:
-                return "#4a86ff";
-            case ProjectStatus.Waiting:
-                return "#ffb545";
-            default:
-                return "#7e6fff";
-        }
+        var grouped = Projects.GroupBy(p => p.Status).ToList();
+        return grouped.Select(g => g.Key.ToString()).ToArray();
+    }
 
+    private ChartOptions GetProjectChartOptions()
+    {
+        return new ChartOptions
+        {
+            ChartPalette = new[] { "#3dcb6c", "#4a86ff", "#ffb545", "#7e6fff" }
+        };
+    }
+
+    // Vulnerability Chart Methods
+    private List<ChartSeries> GetVulnChartSeries()
+    {
+        var riskOrder = new[] { VulnRisk.Critical, VulnRisk.High, VulnRisk.Medium, VulnRisk.Low, VulnRisk.Info };
+        var riskNames = new[] { "Critical", "High", "Medium", "Low", "Info" };
+        // Colors matching MudBlazor theme: Secondary, Error, Warning, Success, Info
+        var colors = new[] { "#7C4DFF", "#F44336", "#FF9800", "#4CAF50", "#2196F3" };
+        
+        var seriesList = new List<ChartSeries>();
+        
+        for (int i = 0; i < riskOrder.Length; i++)
+        {
+            var count = Vulns.Count(v => v.Risk == riskOrder[i]);
+            seriesList.Add(new ChartSeries 
+            { 
+                Name = riskNames[i], 
+                Data = new double[] { count }
+            });
+        }
+        
+        return seriesList;
+    }
+
+    private string[] GetVulnChartLabels()
+    {
+        return new[] { "Vulnerabilities" };
+    }
+
+    private ChartOptions GetVulnChartOptions()
+    {
+        return new ChartOptions
+        {
+            ChartPalette = new[] { "#7C4DFF", "#F44336", "#FF9800", "#4CAF50", "#2196F3" }
+        };
     }
     
-    private string GetPointColorVulns(CORE.Entities.Vuln vuln)
+    private AxisChartOptions GetVulnAxisChartOptions()
     {
-        switch (vuln.Risk)
+        return new AxisChartOptions
         {
-            case VulnRisk.Critical:
-                return "#ff1f69";
-            case VulnRisk.High:
-                return "#ff6699";
-            case VulnRisk.Medium:
-                return "#ffb545";
-            case VulnRisk.Low:
-                return "#1ec8a5";
-            case VulnRisk.Info:
-                return "#4a86ff";
-            default:
-                return "#7e6fff";
-        }
-
+            MatchBoundsToSize = true
+        };
     }
-    private string GetPointColorTasks(CORE.Entities.Task task)
-    {
-        switch (task.Status)
-        {
-            case TaskStatus.InProgress:
-                return "#ff9800";
-            case TaskStatus.Backlog:
-                return "#594ae2";
-            case TaskStatus.Blocked:
-                return "#f44336";
-            case TaskStatus.ToDo:
-                return "#ffb545";
-            case TaskStatus.Done:
-                return "#00c853";
-            default:
-                return "#7e6fff";
-        }
 
+    // Task Chart Methods
+    private double[] GetTaskChartData()
+    {
+        var statusOrder = new[] { TaskStatus.Backlog, TaskStatus.ToDo, TaskStatus.InProgress, TaskStatus.Blocked, TaskStatus.Done };
+        return statusOrder.Select(status => (double)Tasks.Count(t => t.Status == status)).ToArray();
+    }
+
+    private string[] GetTaskChartLabels()
+    {
+        return new[] { "Backlog", "ToDo", "InProgress", "Blocked", "Done" };
+    }
+
+    private ChartOptions GetTaskChartOptions()
+    {
+        return new ChartOptions
+        {
+            // Colors matching MudBlazor theme: Backlog=Info, ToDo=Primary, InProgress=Warning, Blocked=Error, Done=Success
+            ChartPalette = new[] { "#2196F3", "#594AE2", "#FF9800", "#F44336", "#4CAF50" }
+        };
     }
     
 }

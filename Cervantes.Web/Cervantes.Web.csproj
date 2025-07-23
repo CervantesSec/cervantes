@@ -11,7 +11,6 @@
     <ItemGroup>
         <PackageReference Include="AngleSharp" Version="1.2.0" />
         <PackageReference Include="AuthPermissions.AspNetCore" Version="8.0.0" />
-        <PackageReference Include="Blazor-ApexCharts" Version="5.1.0" />
         <PackageReference Include="Blazor.Flags" Version="1.0.0.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="BlazorMonaco" Version="3.3.0" />

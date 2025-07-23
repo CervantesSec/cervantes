@@ -1,9 +1,7 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @using Cervantes.Web.Localization
-@using ApexCharts
 @using Cervantes.CORE.Entities
-@using DocumentFormat.OpenXml.Drawing.Charts
 @using Align = MudBlazor.Align
 @using Color = MudBlazor.Color
 @using Size = MudBlazor.Size
@@ -71,20 +69,12 @@
                     <MudText Typo="Typo.h6">@localizer["projectStatus"]</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
-            <MudCardContent>
-                <ApexChart TItem="Project"
-                           Options="optionsProject" Height="200">
-
-                    <ApexPointSeries TItem="Project"
-                                     Items="Projects"
-                                     Name="Gross Value"
-                                     SeriesType="SeriesType.Pie"
-                                     XValue="@(e => e.Status)"
-                                     YAggregate="@(e => e.Count())"
-                                     OrderByDescending="e => e.Y"
-                                     PointColor="e => GetPointColorProject(e)"/>
-                </ApexChart>
-
+            <MudCardContent Class="d-flex justify-center">
+                <MudChart ChartType="ChartType.Pie" 
+                         Width="100%" Height="170px"
+                         InputData="@GetProjectChartData()"
+                         InputLabels="@GetProjectChartLabels()"
+                         ChartOptions="@GetProjectChartOptions()" />
             </MudCardContent>
 
         </MudCard>
@@ -171,18 +161,12 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <ApexChart TItem="CORE.Entities.Vuln"
-                           Options="optionsVulns" Height="200">
-
-                    <ApexPointSeries TItem="CORE.Entities.Vuln"
-                                     Items="Vulns"
-                                     Name="@localizer["vulns"]"
-                                     XValue="@(e => e.Risk)"
-                                     YAggregate="@(e => e.Count())"
-                                     OrderByDescending="e => e.Y"
-                                     SeriesType="SeriesType.Bar" PointColor="e => GetPointColorVulns(e)"/>
-                </ApexChart>
-
+                <MudChart ChartType="ChartType.Bar" 
+                         ChartSeries="@GetVulnChartSeries()"
+                         XAxisLabels="@GetVulnChartLabels()"
+                         Width="100%" Height="170px"
+                         ChartOptions="@GetVulnChartOptions()"
+                         AxisChartOptions="@GetVulnAxisChartOptions()" />
             </MudCardContent>
 
         </MudCard>
@@ -278,20 +262,12 @@
                     <MudText Typo="Typo.h6">@localizer["tasksStatus"]</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
-            <MudCardContent>
-                <ApexChart TItem="CORE.Entities.Task"
-                           Options="optionsTask" Height="200">
-
-                    <ApexPointSeries TItem="CORE.Entities.Task"
-                                     Items="Tasks"
-                                     SeriesType=SeriesType.Donut
-                                     Name="Gross Value"
-                                     XValue="@(e => e.Status)"
-                                     YAggregate="@(e => e.Count())"
-                                     OrderByDescending="e => e.Y" PointColor="e => GetPointColorTasks(e)"/>
-                </ApexChart>
-
-
+            <MudCardContent Class="d-flex justify-center">
+                <MudChart ChartType="ChartType.Donut" 
+                         Width="100%" Height="170px"
+                         InputData="@GetTaskChartData()"
+                         InputLabels="@GetTaskChartLabels()"
+                         ChartOptions="@GetTaskChartOptions()" />
             </MudCardContent>
 
         </MudCard>
