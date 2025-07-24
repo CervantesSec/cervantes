@@ -1130,6 +1130,7 @@ public class ReportController : ControllerBase
                 scriptObject.Add("ProjectDescription", Project.Description);
                 scriptObject.Add("ProjectLanguage", Project.Language);
                 scriptObject.Add("ProjecStatus", Project.Status);
+                scriptObject.Add("ProjectBusinessImpact", Project.BusinessImpact);
                 scriptObject.Add("StartDate", Project.StartDate.ToString("dd/MM/yyyy"));
                 scriptObject.Add("EndDate", Project.EndDate.ToString("dd/MM/yyyy"));
                 scriptObject.Add("ProjectType", Project.ProjectType.ToString());
