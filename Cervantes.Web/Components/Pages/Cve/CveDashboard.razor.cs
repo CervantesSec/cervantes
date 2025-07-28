@@ -90,13 +90,21 @@ public partial class CveDashboard
                 }
                 else
                 {
-                    LoadSampleData();
+                    // No statistics available
+                    totalCves = 0;
+                    criticalCves = 0;
+                    kevCves = 0;
+                    newCvesToday = 0;
                 }
             }
             catch (Exception ex)
             {
                 Snackbar.Add($"Error loading CVE statistics: {ex.Message}", Severity.Error);
-                LoadSampleData();
+                // Set default values when error occurs
+                totalCves = 0;
+                criticalCves = 0;
+                kevCves = 0;
+                newCvesToday = 0;
             }
             
             // Load recent CVEs
@@ -117,13 +125,15 @@ public partial class CveDashboard
                 }
                 else
                 {
-                    CreateSampleCves();
+                    allCves = new List<CORE.Entities.Cve>();
+                    recentCves = new List<CORE.Entities.Cve>();
                 }
             }
             catch (Exception ex)
             {
                 Snackbar.Add($"Error loading CVE data: {ex.Message}", Severity.Error);
-                CreateSampleCves();
+                allCves = new List<CORE.Entities.Cve>();
+                recentCves = new List<CORE.Entities.Cve>();
             }
             
             // Load user subscriptions
@@ -160,8 +170,13 @@ public partial class CveDashboard
         catch (Exception ex)
         {
             Snackbar.Add($"Error loading dashboard data: {ex.Message}", Severity.Error);
-            LoadSampleData();
-            CreateSampleCves();
+            // Set default values when error occurs
+            totalCves = 0;
+            criticalCves = 0;
+            kevCves = 0;
+            newCvesToday = 0;
+            allCves = new List<CORE.Entities.Cve>();
+            recentCves = new List<CORE.Entities.Cve>();
         }
         finally
         {
@@ -171,19 +186,15 @@ public partial class CveDashboard
         }
     }
     
-    private void LoadSampleData()
-    {
-        totalCves = 1500;
-        criticalCves = 45;
-        kevCves = 23;
-        newCvesToday = 5;
-    }
     
     private void RecalculateStatistics()
     {
         if (allCves == null || !allCves.Any())
         {
-            LoadSampleData();
+            totalCves = 0;
+            criticalCves = 0;
+            kevCves = 0;
+            newCvesToday = 0;
             return;
         }
         
@@ -193,48 +204,7 @@ public partial class CveDashboard
         newCvesToday = allCves.Count(c => c.PublishedDate.Date == DateTime.Today);
     }
     
-    private void CreateSampleCves()
-    {
-        allCves = new List<CORE.Entities.Cve>();
-        recentCves = new List<CORE.Entities.Cve>();
-        
-        // Create sample CVEs for testing
-        var sampleCves = new List<CORE.Entities.Cve>();
-        
-        for (int i = 1; i <= 30; i++)
-        {
-            var cve = new CORE.Entities.Cve
-            {
-                Id = Guid.NewGuid(),
-                CveId = $"CVE-2024-{1000 + i}",
-                Title = $"Sample CVE {i}",
-                Description = $"This is a sample CVE description for testing purposes - CVE {i}",
-                PublishedDate = DateTime.Today.AddDays(-i),
-                CvssV3BaseScore = GetRandomScore(),
-                IsKnownExploited = i % 5 == 0,
-                EpssScore = GetRandomEpssScore(),
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
-                UserId = "sample-user"
-            };
-            sampleCves.Add(cve);
-        }
-        
-        allCves = sampleCves;
-        recentCves = sampleCves.Take(10).ToList();
-    }
     
-    private double GetRandomScore()
-    {
-        var random = new Random();
-        return Math.Round(random.NextDouble() * 10, 1);
-    }
-    
-    private double GetRandomEpssScore()
-    {
-        var random = new Random();
-        return Math.Round(random.NextDouble(), 2);
-    }
     
     private string GetCurrentUserId()
     {
@@ -368,10 +338,10 @@ public partial class CveDashboard
         
         var data = vendorGroups.Select(g => (double)g.Count()).ToArray();
         
-        // Ensure we have at least some data for the chart
+        // Return empty array if no data
         if (data.Length == 0)
         {
-            data = new double[] { 0, 0, 0, 0, 0 };
+            data = new double[0];
         }
         
         
@@ -397,10 +367,10 @@ public partial class CveDashboard
             .Select(g => g.Key)
             .ToArray();
             
-        // Ensure we have labels even if no data
+        // Return empty array if no data
         if (labels.Length == 0)
         {
-            labels = new[] { "Microsoft", "Adobe", "Apple", "Google", "Oracle" };
+            labels = new string[0];
         }
         
         return labels;
@@ -525,7 +495,7 @@ public partial class CveDashboard
     {
         if (allCves == null || !allCves.Any())
         {
-            return new List<string> { "Microsoft", "Adobe", "Apple", "Google", "Oracle", "IBM", "Cisco", "VMware" };
+            return new List<string>();
         }
         
         return allCves
