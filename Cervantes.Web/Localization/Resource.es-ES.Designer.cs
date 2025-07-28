@@ -207,12 +207,6 @@ namespace Cervantes.Web.Localization {
             }
         }
         
-        internal static string active {
-            get {
-                return ResourceManager.GetString("active", resourceCulture);
-            }
-        }
-        
         internal static string archived {
             get {
                 return ResourceManager.GetString("archived", resourceCulture);
@@ -240,12 +234,6 @@ namespace Cervantes.Web.Localization {
         internal static string whitebox {
             get {
                 return ResourceManager.GetString("whitebox", resourceCulture);
-            }
-        }
-        
-        internal static string search {
-            get {
-                return ResourceManager.GetString("search", resourceCulture);
             }
         }
         
@@ -278,12 +266,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("score", resourceCulture);
             }
         }
-        
-        internal static string cancel {
-            get {
-                return ResourceManager.GetString("cancel", resourceCulture);
-            }
-        }
+
         
         internal static string projectCreated {
             get {
@@ -294,12 +277,6 @@ namespace Cervantes.Web.Localization {
         internal static string projectCreatedError {
             get {
                 return ResourceManager.GetString("projectCreatedError", resourceCulture);
-            }
-        }
-        
-        internal static string add {
-            get {
-                return ResourceManager.GetString("add", resourceCulture);
             }
         }
         
@@ -332,12 +309,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("deleteAttachment", resourceCulture);
             }
         }
-        
-        internal static string delete {
-            get {
-                return ResourceManager.GetString("delete", resourceCulture);
-            }
-        }
+
         
         internal static string attachmentDeleted {
             get {
@@ -584,12 +556,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("editProject", resourceCulture);
             }
         }
-        
-        internal static string edit {
-            get {
-                return ResourceManager.GetString("edit", resourceCulture);
-            }
-        }
+
         
         internal static string projectEdited {
             get {
@@ -855,30 +822,6 @@ namespace Cervantes.Web.Localization {
             }
         }
         
-        internal static string low {
-            get {
-                return ResourceManager.GetString("low", resourceCulture);
-            }
-        }
-        
-        internal static string medium {
-            get {
-                return ResourceManager.GetString("medium", resourceCulture);
-            }
-        }
-        
-        internal static string high {
-            get {
-                return ResourceManager.GetString("high", resourceCulture);
-            }
-        }
-        
-        internal static string critical {
-            get {
-                return ResourceManager.GetString("critical", resourceCulture);
-            }
-        }
-        
         internal static string open {
             get {
                 return ResourceManager.GetString("open", resourceCulture);
@@ -1008,12 +951,6 @@ namespace Cervantes.Web.Localization {
         internal static string signin {
             get {
                 return ResourceManager.GetString("signin", resourceCulture);
-            }
-        }
-        
-        internal static string email {
-            get {
-                return ResourceManager.GetString("email", resourceCulture);
             }
         }
         

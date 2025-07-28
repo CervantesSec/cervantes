@@ -1074,6 +1074,282 @@
     <data name="searchCVELoadError" xml:space="preserve">
         <value>Este CVE es erroneo o no existe !</value>
     </data>
+    <data name="cveManagement" xml:space="preserve">
+        <value>Gestión de CVE</value>
+    </data>
+    <data name="cveDatabase" xml:space="preserve">
+        <value>Base de Datos CVE</value>
+    </data>
+    <data name="createCve" xml:space="preserve">
+        <value>Crear CVE</value>
+    </data>
+    <data name="syncCves" xml:space="preserve">
+        <value>Sincronizar CVE</value>
+    </data>
+    <data name="searchAndFilters" xml:space="preserve">
+        <value>Buscar y Filtros</value>
+    </data>
+    <data name="searchCves" xml:space="preserve">
+        <value>Buscar CVEs</value>
+    </data>
+    <data name="searchByCveId" xml:space="preserve">
+        <value>Buscar por ID CVE, título o descripción</value>
+    </data>
+    <data name="cveId" xml:space="preserve">
+        <value>ID CVE</value>
+    </data>
+    <data name="severity" xml:space="preserve">
+        <value>Severidad</value>
+    </data>
+    <data name="critical" xml:space="preserve">
+        <value>Crítico</value>
+    </data>
+    <data name="high" xml:space="preserve">
+        <value>Alto</value>
+    </data>
+    <data name="medium" xml:space="preserve">
+        <value>Medio</value>
+    </data>
+    <data name="low" xml:space="preserve">
+        <value>Bajo</value>
+    </data>
+    <data name="minCvssScore" xml:space="preserve">
+        <value>Puntuación CVSS Mínima</value>
+    </data>
+    <data name="maxCvssScore" xml:space="preserve">
+        <value>Puntuación CVSS Máxima</value>
+    </data>
+    <data name="knownExploitedOnly" xml:space="preserve">
+        <value>Solo Exploitadas Conocidas</value>
+    </data>
+    <data name="search" xml:space="preserve">
+        <value>Buscar</value>
+    </data>
+    <data name="clear" xml:space="preserve">
+        <value>Limpiar</value>
+    </data>
+    <data name="totalCves" xml:space="preserve">
+        <value>Total CVEs</value>
+    </data>
+    <data name="knownExploited" xml:space="preserve">
+        <value>Exploitadas Conocidas</value>
+    </data>
+    <data name="cves" xml:space="preserve">
+        <value>CVEs</value>
+    </data>
+    <data name="quickSearch" xml:space="preserve">
+        <value>Búsqueda rápida</value>
+    </data>
+    <data name="title" xml:space="preserve">
+        <value>Título</value>
+    </data>
+    <data name="cvssScore" xml:space="preserve">
+        <value>Puntuación CVSS</value>
+    </data>
+    <data name="epssScore" xml:space="preserve">
+        <value>Puntuación EPSS</value>
+    </data>
+    <data name="published" xml:space="preserve">
+        <value>Publicado</value>
+    </data>
+    <data name="kev" xml:space="preserve">
+        <value>KEV</value>
+    </data>
+    <data name="actions" xml:space="preserve">
+        <value>Acciones</value>
+    </data>
+    <data name="viewDetails" xml:space="preserve">
+        <value>Ver Detalles</value>
+    </data>
+    <data name="toggleFavorite" xml:space="preserve">
+        <value>Alternar Favorito</value>
+    </data>
+    <data name="archive" xml:space="preserve">
+        <value>Archivar</value>
+    </data>
+    <data name="knownExploitedVulnerability" xml:space="preserve">
+        <value>Vulnerabilidad Exploitada Conocida</value>
+    </data>
+    <data name="errorLoadingCves" xml:space="preserve">
+        <value>Error cargando CVEs</value>
+    </data>
+    <data name="errorSearchingCves" xml:space="preserve">
+        <value>Error buscando CVEs</value>
+    </data>
+    <data name="cveCreatedSuccessfully" xml:space="preserve">
+        <value>CVE creado exitosamente</value>
+    </data>
+    <data name="cveSynchronizationStarted" xml:space="preserve">
+        <value>Sincronización de CVE iniciada</value>
+    </data>
+    <data name="errorTriggeringSync" xml:space="preserve">
+        <value>Error iniciando sincronización</value>
+    </data>
+    <data name="addedToFavorites" xml:space="preserve">
+        <value>Agregado a favoritos</value>
+    </data>
+    <data name="removedFromFavorites" xml:space="preserve">
+        <value>Removido de favoritos</value>
+    </data>
+    <data name="errorUpdatingFavorite" xml:space="preserve">
+        <value>Error actualizando favorito</value>
+    </data>
+    <data name="cveArchived" xml:space="preserve">
+        <value>CVE archivado</value>
+    </data>
+    <data name="cveUnarchived" xml:space="preserve">
+        <value>CVE desarchivado</value>
+    </data>
+    <data name="errorArchivingCve" xml:space="preserve">
+        <value>Error archivando CVE</value>
+    </data>
+    <data name="cveDetails" xml:space="preserve">
+        <value>Detalles del CVE</value>
+    </data>
+    <data name="loading" xml:space="preserve">
+        <value>Cargando...</value>
+    </data>
+    <data name="cveNotFound" xml:space="preserve">
+        <value>CVE no encontrado.</value>
+    </data>
+    <data name="kevListed" xml:space="preserve">
+        <value>Listado KEV</value>
+    </data>
+    <data name="share" xml:space="preserve">
+        <value>Compartir</value>
+    </data>
+    <data name="scoringInformation" xml:space="preserve">
+        <value>Información de Puntuación</value>
+    </data>
+    <data name="cvssV31Score" xml:space="preserve">
+        <value>Puntuación CVSS v3.1</value>
+    </data>
+    <data name="cvssV2Score" xml:space="preserve">
+        <value>Puntuación CVSS v2</value>
+    </data>
+    <data name="cveSubscriptions" xml:space="preserve">
+        <value>Suscripciones CVE</value>
+    </data>
+    <data name="mySubscriptions" xml:space="preserve">
+        <value>Mis Suscripciones</value>
+    </data>
+    <data name="createSubscription" xml:space="preserve">
+        <value>Crear Suscripción</value>
+    </data>
+    <data name="noSubscriptionsMessage" xml:space="preserve">
+        <value>No se encontraron suscripciones. Crea tu primera suscripción para recibir notificaciones sobre nuevos CVEs.</value>
+    </data>
+    <data name="createDefaultSubscriptions" xml:space="preserve">
+        <value>Crear Suscripciones Predeterminadas</value>
+    </data>
+    <data name="active" xml:space="preserve">
+        <value>Activo</value>
+    </data>
+    <data name="inactive" xml:space="preserve">
+        <value>Inactivo</value>
+    </data>
+    <data name="vendor" xml:space="preserve">
+        <value>Proveedor</value>
+    </data>
+    <data name="product" xml:space="preserve">
+        <value>Producto</value>
+    </data>
+    <data name="cvss" xml:space="preserve">
+        <value>CVSS</value>
+    </data>
+    <data name="subscriptionCreatedSuccessfully" xml:space="preserve">
+        <value>Suscripción creada exitosamente</value>
+    </data>
+    <data name="subscriptionUpdatedSuccessfully" xml:space="preserve">
+        <value>Suscripción actualizada exitosamente</value>
+    </data>
+    <data name="subscriptionDeletedSuccessfully" xml:space="preserve">
+        <value>Suscripción eliminada exitosamente</value>
+    </data>
+    <data name="errorTogglingSubscription" xml:space="preserve">
+        <value>Error alternando suscripción</value>
+    </data>
+    <data name="errorDeletingSubscription" xml:space="preserve">
+        <value>Error eliminando suscripción</value>
+    </data>
+    <data name="deleteSubscription" xml:space="preserve">
+        <value>Eliminar Suscripción</value>
+    </data>
+    <data name="deleteSubscriptionConfirmation" xml:space="preserve">
+        <value>¿Estás seguro de que deseas eliminar esta suscripción? Esta acción no se puede deshacer.</value>
+    </data>
+    <data name="delete" xml:space="preserve">
+        <value>Eliminar</value>
+    </data>
+    <data name="cancel" xml:space="preserve">
+        <value>Cancelar</value>
+    </data>
+    <data name="edit" xml:space="preserve">
+        <value>Editar</value>
+    </data>
+    <data name="editSubscription" xml:space="preserve">
+        <value>Editar Suscripción</value>
+    </data>
+    <data name="relatedCves" xml:space="preserve">
+        <value>CVEs Relacionados</value>
+    </data>
+    <data name="refresh" xml:space="preserve">
+        <value>Actualizar</value>
+    </data>
+    <data name="createVulnerabilityFromCve" xml:space="preserve">
+        <value>Crear Vulnerabilidad desde CVE</value>
+    </data>
+    <data name="linkToProject" xml:space="preserve">
+        <value>Vincular al Proyecto</value>
+    </data>
+    <data name="notesUpdatedSuccessfully" xml:space="preserve">
+        <value>Notas actualizadas exitosamente</value>
+    </data>
+    <data name="editCveNotes" xml:space="preserve">
+        <value>Editar Notas del CVE</value>
+    </data>
+    <data name="cveUrlCopiedToClipboard" xml:space="preserve">
+        <value>URL del CVE copiada al portapapeles</value>
+    </data>
+    <data name="cveDashboard" xml:space="preserve">
+        <value>Panel CVE</value>
+    </data>
+    <data name="addWidget" xml:space="preserve">
+        <value>Agregar Widget</value>
+    </data>
+    <data name="configure" xml:space="preserve">
+        <value>Configurar</value>
+    </data>
+    <data name="saveLayout" xml:space="preserve">
+        <value>Guardar Diseño</value>
+    </data>
+    <data name="timeRange" xml:space="preserve">
+        <value>Rango de Tiempo</value>
+    </data>
+    <data name="unknownWidgetType" xml:space="preserve">
+        <value>Tipo de widget desconocido</value>
+    </data>
+    <data name="addDashboardWidget" xml:space="preserve">
+        <value>Agregar Widget al Panel</value>
+    </data>
+    <data name="widgetType" xml:space="preserve">
+        <value>Tipo de Widget</value>
+    </data>
+    <data name="widgetTitle" xml:space="preserve">
+        <value>Título del Widget</value>
+    </data>
+    <data name="width" xml:space="preserve">
+        <value>Ancho</value>
+    </data>
+    <data name="height" xml:space="preserve">
+        <value>Alto</value>
+    </data>
+    <data name="numberOfItems" xml:space="preserve">
+        <value>Número de Elementos</value>
+    </data>
+    <data name="add" xml:space="preserve">
+        <value>Agregar</value>
+    </data>
     <data name="detailsVuln" xml:space="preserve">
         <value>Detalles de la Vulnerabilidad</value>
     </data>
@@ -2431,5 +2707,605 @@ Opción 3</value>
     </data>
     <data name="logsDeletedError" xml:space="preserve">
         <value>Error al eliminar registros</value>
+    </data>
+    <data name="cveDetails" xml:space="preserve">
+        <value>Detalles de CVE</value>
+    </data>
+    <data name="loading" xml:space="preserve">
+        <value>Cargando...</value>
+    </data>
+    <data name="cveNotFound" xml:space="preserve">
+        <value>CVE no encontrado</value>
+    </data>
+    <data name="mySubscriptions" xml:space="preserve">
+        <value>Mis Suscripciones</value>
+    </data>
+    <data name="createSubscription" xml:space="preserve">
+        <value>Crear Suscripción</value>
+    </data>
+    <data name="subscriptions" xml:space="preserve">
+        <value>Suscripciones</value>
+    </data>
+    <data name="cveDashboard" xml:space="preserve">
+        <value>Dashboard CVE</value>
+    </data>
+    <data name="dashboard" xml:space="preserve">
+        <value>Dashboard</value>
+    </data>
+    <data name="addWidget" xml:space="preserve">
+        <value>Agregar Widget</value>
+    </data>
+    <data name="configure" xml:space="preserve">
+        <value>Configurar</value>
+    </data>
+    <data name="saveLayout" xml:space="preserve">
+        <value>Guardar Diseño</value>
+    </data>
+    <data name="timeRange" xml:space="preserve">
+        <value>Rango de Tiempo</value>
+    </data>
+    <data name="relatedCves" xml:space="preserve">
+        <value>CVEs Relacionados</value>
+    </data>
+    <data name="noSubscriptionsFound" xml:space="preserve">
+        <value>No se encontraron suscripciones. Crea tu primera suscripción para recibir notificaciones sobre CVEs.</value>
+    </data>
+    <data name="createDefaultSubscriptions" xml:space="preserve">
+        <value>Crear Suscripciones Predeterminadas</value>
+    </data>
+    <data name="active" xml:space="preserve">
+        <value>Activo</value>
+    </data>
+    <data name="inactive" xml:space="preserve">
+        <value>Inactivo</value>
+    </data>
+    <data name="vendor" xml:space="preserve">
+        <value>Proveedor</value>
+    </data>
+    <data name="product" xml:space="preserve">
+        <value>Producto</value>
+    </data>
+    <data name="frequency" xml:space="preserve">
+        <value>Frecuencia</value>
+    </data>
+    <data name="method" xml:space="preserve">
+        <value>Método</value>
+    </data>
+    <data name="editSubscription" xml:space="preserve">
+        <value>Editar Suscripción</value>
+    </data>
+    <data name="deactivate" xml:space="preserve">
+        <value>Desactivar</value>
+    </data>
+    <data name="activate" xml:space="preserve">
+        <value>Activar</value>
+    </data>
+    <data name="deleteSubscription" xml:space="preserve">
+        <value>Eliminar Suscripción</value>
+    </data>
+    <data name="viewStatistics" xml:space="preserve">
+        <value>Ver Estadísticas</value>
+    </data>
+    <data name="subscriptionSummary" xml:space="preserve">
+        <value>Resumen de Suscripciones</value>
+    </data>
+    <data name="activeSubscriptions" xml:space="preserve">
+        <value>Suscripciones Activas</value>
+    </data>
+    <data name="unreadNotifications" xml:space="preserve">
+        <value>Notificaciones No Leídas</value>
+    </data>
+    <data name="matchesToday" xml:space="preserve">
+        <value>Coincidencias Hoy</value>
+    </data>
+    <data name="matchesThisWeek" xml:space="preserve">
+        <value>Coincidencias Esta Semana</value>
+    </data>
+    <data name="cveNotifications" xml:space="preserve">
+        <value>Notificaciones CVE</value>
+    </data>
+    <data name="criticalCves" xml:space="preserve">
+        <value>CVEs Críticos</value>
+    </data>
+    <data name="kevCves" xml:space="preserve">
+        <value>CVEs KEV</value>
+    </data>
+    <data name="newToday" xml:space="preserve">
+        <value>Nuevos Hoy</value>
+    </data>
+    <data name="severityDistribution" xml:space="preserve">
+        <value>Distribución de Severidad</value>
+    </data>
+    <data name="cveTrend" xml:space="preserve">
+        <value>Tendencia CVE</value>
+    </data>
+    <data name="topVendors" xml:space="preserve">
+        <value>Principales Proveedores</value>
+    </data>
+    <data name="recentCves" xml:space="preserve">
+        <value>CVEs Recientes</value>
+    </data>
+    <data name="epssScoreDistribution" xml:space="preserve">
+        <value>Distribución de Puntuación EPSS</value>
+    </data>
+    <data name="last24Hours" xml:space="preserve">
+        <value>Últimas 24 Horas</value>
+    </data>
+    <data name="last7Days" xml:space="preserve">
+        <value>Últimos 7 Días</value>
+    </data>
+    <data name="last30Days" xml:space="preserve">
+        <value>Últimos 30 Días</value>
+    </data>
+    <data name="last90Days" xml:space="preserve">
+        <value>Últimos 90 Días</value>
+    </data>
+    <data name="lastYear" xml:space="preserve">
+        <value>Último Año</value>
+    </data>
+    <data name="allTime" xml:space="preserve">
+        <value>Todo el Tiempo</value>
+    </data>
+    <data name="severity" xml:space="preserve">
+        <value>Severidad</value>
+    </data>
+    <data name="allSeverities" xml:space="preserve">
+        <value>Todas las Severidades</value>
+    </data>
+    <data name="critical" xml:space="preserve">
+        <value>Crítico (9.0-10.0)</value>
+    </data>
+    <data name="high" xml:space="preserve">
+        <value>Alto (7.0-8.9)</value>
+    </data>
+    <data name="medium" xml:space="preserve">
+        <value>Medio (4.0-6.9)</value>
+    </data>
+    <data name="low" xml:space="preserve">
+        <value>Bajo (0.1-3.9)</value>
+    </data>
+    <data name="noScore" xml:space="preserve">
+        <value>Sin Puntuación</value>
+    </data>
+    <data name="allVendors" xml:space="preserve">
+        <value>Todos los Proveedores</value>
+    </data>
+    <data name="kevOnly" xml:space="preserve">
+        <value>Solo KEV</value>
+    </data>
+    <data name="reset" xml:space="preserve">
+        <value>Restablecer</value>
+    </data>
+    <data name="vendorLabel" xml:space="preserve">
+        <value>Proveedor</value>
+    </data>
+    <data name="productLabel" xml:space="preserve">
+        <value>Producto</value>
+    </data>
+    <data name="notifications" xml:space="preserve">
+        <value>Notificaciones</value>
+    </data>
+    <data name="markAllAsRead" xml:space="preserve">
+        <value>Marcar Todo Como Leído</value>
+    </data>
+    <data name="unread" xml:space="preserve">
+        <value>No Leído</value>
+    </data>
+    <data name="today" xml:space="preserve">
+        <value>Hoy</value>
+    </data>
+    <data name="thisWeek" xml:space="preserve">
+        <value>Esta Semana</value>
+    </data>
+    <data name="total" xml:space="preserve">
+        <value>Total</value>
+    </data>
+    <data name="noNotificationsFound" xml:space="preserve">
+        <value>No se encontraron notificaciones. Crea suscripciones CVE para comenzar a recibir notificaciones.</value>
+    </data>
+    <data name="state" xml:space="preserve">
+        <value>Estado</value>
+    </data>
+    <data name="published" xml:space="preserve">
+        <value>Publicado</value>
+    </data>
+    <data name="modified" xml:space="preserve">
+        <value>Modificado</value>
+    </data>
+    <data name="withdrawn" xml:space="preserve">
+        <value>Retirado</value>
+    </data>
+    <data name="rejected" xml:space="preserve">
+        <value>Rechazado</value>
+    </data>
+    <data name="cveIdRequired" xml:space="preserve">
+        <value>CVE ID es requerido</value>
+    </data>
+    <data name="titleRequired" xml:space="preserve">
+        <value>Título es requerido</value>
+    </data>
+    <data name="descriptionRequired" xml:space="preserve">
+        <value>Descripción es requerida</value>
+    </data>
+    <data name="publishedDate" xml:space="preserve">
+        <value>Fecha de Publicación</value>
+    </data>
+    <data name="lastModifiedDate" xml:space="preserve">
+        <value>Fecha de Última Modificación</value>
+    </data>
+    <data name="cvssV3Information" xml:space="preserve">
+        <value>Información CVSS v3.1</value>
+    </data>
+    <data name="cvssV3BaseScore" xml:space="preserve">
+        <value>Puntuación Base CVSS v3.1</value>
+    </data>
+    <data name="cvssV3Severity" xml:space="preserve">
+        <value>Severidad CVSS v3.1</value>
+    </data>
+    <data name="cvssV3Vector" xml:space="preserve">
+        <value>Vector CVSS v3.1</value>
+    </data>
+    <data name="epssInformation" xml:space="preserve">
+        <value>Información EPSS</value>
+    </data>
+    <data name="epssPercentile" xml:space="preserve">
+        <value>Percentil EPSS</value>
+    </data>
+    <data name="cweInformation" xml:space="preserve">
+        <value>Información CWE</value>
+    </data>
+    <data name="primaryCweId" xml:space="preserve">
+        <value>ID CWE Principal</value>
+    </data>
+    <data name="primaryCweName" xml:space="preserve">
+        <value>Nombre CWE Principal</value>
+    </data>
+    <data name="cisaKevInformation" xml:space="preserve">
+        <value>Información CISA KEV</value>
+    </data>
+    <data name="kevDueDate" xml:space="preserve">
+        <value>Fecha Límite KEV</value>
+    </data>
+    <data name="sourceInformation" xml:space="preserve">
+        <value>Información de Fuente</value>
+    </data>
+    <data name="sourceIdentifier" xml:space="preserve">
+        <value>Identificador de Fuente</value>
+    </data>
+    <data name="assignerOrganization" xml:space="preserve">
+        <value>Organización Asignadora</value>
+    </data>
+    <data name="additionalNotesPlaceholder" xml:space="preserve">
+        <value>Notas adicionales sobre este CVE...</value>
+    </data>
+    <data name="subscriptionName" xml:space="preserve">
+        <value>Nombre de Suscripción</value>
+    </data>
+    <data name="nameRequired" xml:space="preserve">
+        <value>Nombre es requerido</value>
+    </data>
+    <data name="briefDescriptionPlaceholder" xml:space="preserve">
+        <value>Breve descripción de esta suscripción...</value>
+    </data>
+    <data name="filters" xml:space="preserve">
+        <value>Filtros</value>
+    </data>
+    <data name="minEpssScore" xml:space="preserve">
+        <value>Puntuación Mínima EPSS</value>
+    </data>
+    <data name="addCustomKeyword" xml:space="preserve">
+        <value>Agregar Palabra Clave Personalizada</value>
+    </data>
+    <data name="enterKeywordPlaceholder" xml:space="preserve">
+        <value>Ingrese palabra clave y presione Enter</value>
+    </data>
+    <data name="notificationSettings" xml:space="preserve">
+        <value>Configuración de Notificaciones</value>
+    </data>
+    <data name="notificationFrequency" xml:space="preserve">
+        <value>Frecuencia de Notificación</value>
+    </data>
+    <data name="immediate" xml:space="preserve">
+        <value>Inmediato</value>
+    </data>
+    <data name="daily" xml:space="preserve">
+        <value>Diario</value>
+    </data>
+    <data name="weekly" xml:space="preserve">
+        <value>Semanal</value>
+    </data>
+    <data name="notificationMethod" xml:space="preserve">
+        <value>Método de Notificación</value>
+    </data>
+    <data name="email" xml:space="preserve">
+        <value>Correo Electrónico</value>
+    </data>
+    <data name="inApp" xml:space="preserve">
+        <value>En Aplicación</value>
+    </data>
+    <data name="webhook" xml:space="preserve">
+        <value>Webhook</value>
+    </data>
+    <data name="webhookUrl" xml:space="preserve">
+        <value>URL de Webhook</value>
+    </data>
+    <data name="webhookUrlRequired" xml:space="preserve">
+        <value>URL de Webhook es requerida</value>
+    </data>
+    <data name="updateSubscription" xml:space="preserve">
+        <value>Actualizar Suscripción</value>
+    </data>
+    <data name="cveNotes" xml:space="preserve">
+        <value>Notas CVE</value>
+    </data>
+    <data name="addNotesPlaceholder" xml:space="preserve">
+        <value>Agrega tus notas sobre este CVE...</value>
+    </data>
+    <data name="notesHelperText" xml:space="preserve">
+        <value>Estas notas solo son visibles para ti y tu equipo</value>
+    </data>
+    <data name="saveNotes" xml:space="preserve">
+        <value>Guardar Notas</value>
+    </data>
+    <data name="quickPresets" xml:space="preserve">
+        <value>Preconfigurados Rápidos</value>
+    </data>
+    <data name="dateFilters" xml:space="preserve">
+        <value>Filtros de Fecha</value>
+    </data>
+    <data name="severityFilters" xml:space="preserve">
+        <value>Filtros de Severidad y Puntuación</value>
+    </data>
+    <data name="advancedOptions" xml:space="preserve">
+        <value>Opciones Avanzadas</value>
+    </data>
+    <data name="startYear" xml:space="preserve">
+        <value>Año de Inicio</value>
+    </data>
+    <data name="endYear" xml:space="preserve">
+        <value>Año de Fin</value>
+    </data>
+    <data name="publishedFrom" xml:space="preserve">
+        <value>Publicado Desde</value>
+    </data>
+    <data name="publishedTo" xml:space="preserve">
+        <value>Publicado Hasta</value>
+    </data>
+    <data name="lastModifiedFrom" xml:space="preserve">
+        <value>Última Modificación Desde</value>
+    </data>
+    <data name="lastModifiedTo" xml:space="preserve">
+        <value>Última Modificación Hasta</value>
+    </data>
+    <data name="severities" xml:space="preserve">
+        <value>Severidades</value>
+    </data>
+    <data name="minCvss" xml:space="preserve">
+        <value>CVSS Mínimo</value>
+    </data>
+    <data name="maxCvss" xml:space="preserve">
+        <value>CVSS Máximo</value>
+    </data>
+    <data name="keywordFilter" xml:space="preserve">
+        <value>Filtro de Palabras Clave</value>
+    </data>
+    <data name="keywordFilterPlaceholder" xml:space="preserve">
+        <value>Introduce palabras clave para buscar...</value>
+    </data>
+    <data name="maxTotalCves" xml:space="preserve">
+        <value>Máximo Total de CVEs</value>
+    </data>
+    <data name="resultsPerPage" xml:space="preserve">
+        <value>Resultados por Página</value>
+    </data>
+    <data name="onlyKnownExploited" xml:space="preserve">
+        <value>Solo Explotados Conocidos</value>
+    </data>
+    <data name="skipExisting" xml:space="preserve">
+        <value>Omitir Existentes</value>
+    </data>
+    <data name="updateExisting" xml:space="preserve">
+        <value>Actualizar Existentes</value>
+    </data>
+    <data name="syncSource" xml:space="preserve">
+        <value>Fuente de Sincronización</value>
+    </data>
+    <data name="estimatedCount" xml:space="preserve">
+        <value>Recuento Estimado</value>
+    </data>
+    <data name="syncInProgress" xml:space="preserve">
+        <value>Sincronización en Progreso</value>
+    </data>
+    <data name="syncInProgressDesc" xml:space="preserve">
+        <value>Por favor espera mientras se sincronizan los CVEs...</value>
+    </data>
+    <data name="validate" xml:space="preserve">
+        <value>Validar</value>
+    </data>
+    <data name="startSync" xml:space="preserve">
+        <value>Iniciar Sincronización</value>
+    </data>
+    <data name="lastModifiedDates" xml:space="preserve">
+        <value>Fechas de Última Modificación</value>
+    </data>
+    <data name="nvdApiLimitations" xml:space="preserve">
+        <value>Limitaciones de la API NVD</value>
+    </data>
+    <data name="nvdApiLimitationsDesc" xml:space="preserve">
+        <value>Rangos de fechas limitados a 120 días consecutivos&lt;br/&gt;• Máximo 2,000 resultados por página&lt;br/&gt;• Se aplican límites de velocidad (retraso de 6s sin clave API, 50ms con clave)&lt;br/&gt;• Los filtros de fechas Publicado y Última Modificación usan diferentes alcances de búsqueda</value>
+    </data>
+    <data name="nvdApiDateLimit" xml:space="preserve">
+        <value>La API NVD limita los rangos de fechas a un máximo de 120 días</value>
+    </data>
+    <data name="publishedModifiedDateLimit" xml:space="preserve">
+        <value>Rangos de fechas de Publicado/Modificado limitados a 120 días (API NVD)</value>
+    </data>
+    <data name="redHatEnterprise" xml:space="preserve">
+        <value>Red Hat Enterprise</value>
+    </data>
+    <data name="nistOfficial" xml:space="preserve">
+        <value>NIST Oficial</value>
+    </data>
+    <data name="readAt" xml:space="preserve">
+        <value>Leído</value>
+    </data>
+    <data name="viewCve" xml:space="preserve">
+        <value>Ver CVE</value>
+    </data>
+    <data name="markAsRead" xml:space="preserve">
+        <value>Marcar como leído</value>
+    </data>
+    <data name="subscription" xml:space="preserve">
+        <value>Suscripción</value>
+    </data>
+    <data name="deliveryStatus" xml:space="preserve">
+        <value>Estado de Entrega</value>
+    </data>
+    <data name="activeProjectsOnly" xml:space="preserve">
+        <value>Solo Proyectos Activos</value>
+    </data>
+    <data name="myTasksOnly" xml:space="preserve">
+        <value>Solo Mis Tareas</value>
+    </data>
+    <data name="allTime" xml:space="preserve">
+        <value>Todo el Tiempo</value>
+    </data>
+    <data name="allStatuses" xml:space="preserve">
+        <value>Todos los Estados</value>
+    </data>
+    <data name="allRisks" xml:space="preserve">
+        <value>Todos los Riesgos</value>
+    </data>
+    <data name="vulnRisk" xml:space="preserve">
+        <value>Riesgo de Vulnerabilidad</value>
+    </data>
+    <data name="recentClients" xml:space="preserve">
+        <value>Clientes Recientes</value>
+    </data>
+    <data name="welcomeUser" xml:space="preserve">
+        <value>Bienvenido</value>
+    </data>
+    <data name="deleteSelected" xml:space="preserve">
+        <value>Eliminar Seleccionados</value>
+    </data>
+    <data name="clearSelection" xml:space="preserve">
+        <value>Limpiar Selección</value>
+    </data>
+    <data name="read" xml:space="preserve">
+        <value>Leído</value>
+    </data>
+    <data name="created" xml:space="preserve">
+        <value>Creado</value>
+    </data>
+    <data name="errorLoadingNotifications" xml:space="preserve">
+        <value>Error cargando notificaciones</value>
+    </data>
+    <data name="notificationMarkedAsRead" xml:space="preserve">
+        <value>Notificación marcada como leída</value>
+    </data>
+    <data name="errorMarkingNotificationAsRead" xml:space="preserve">
+        <value>Error marcando notificación como leída</value>
+    </data>
+    <data name="notificationsMarkedAsRead" xml:space="preserve">
+        <value>notificaciones marcadas como leídas</value>
+    </data>
+    <data name="errorMarkingAllNotificationsAsRead" xml:space="preserve">
+        <value>Error marcando todas las notificaciones como leídas</value>
+    </data>
+    <data name="confirmDelete" xml:space="preserve">
+        <value>Confirmar Eliminación</value>
+    </data>
+    <data name="confirmDeleteNotificationsMessage" xml:space="preserve">
+        <value>¿Estás seguro de que quieres eliminar {0} notificaciones seleccionadas? Esta acción no se puede deshacer.</value>
+    </data>
+    <data name="delete" xml:space="preserve">
+        <value>Eliminar</value>
+    </data>
+    <data name="cancel" xml:space="preserve">
+        <value>Cancelar</value>
+    </data>
+    <data name="notificationsDeletedSuccessfully" xml:space="preserve">
+        <value>notificaciones eliminadas exitosamente</value>
+    </data>
+    <data name="errorDeletingNotifications" xml:space="preserve">
+        <value>Error eliminando notificaciones</value>
+    </data>
+    <data name="errorLoadingSubscriptions" xml:space="preserve">
+        <value>Error cargando suscripciones</value>
+    </data>
+    <data name="createSubscription" xml:space="preserve">
+        <value>Crear Suscripción</value>
+    </data>
+    <data name="subscriptionCreatedSuccessfully" xml:space="preserve">
+        <value>Suscripción creada exitosamente</value>
+    </data>
+    <data name="editSubscription" xml:space="preserve">
+        <value>Editar Suscripción</value>
+    </data>
+    <data name="subscriptionUpdatedSuccessfully" xml:space="preserve">
+        <value>Suscripción actualizada exitosamente</value>
+    </data>
+    <data name="subscriptionDeactivated" xml:space="preserve">
+        <value>Suscripción desactivada</value>
+    </data>
+    <data name="subscriptionActivated" xml:space="preserve">
+        <value>Suscripción activada</value>
+    </data>
+    <data name="errorTogglingSubscription" xml:space="preserve">
+        <value>Error activando/desactivando suscripción</value>
+    </data>
+    <data name="confirmDeleteSubscriptionMessage" xml:space="preserve">
+        <value>¿Estás seguro de que quieres eliminar esta suscripción? Esta acción no se puede deshacer.</value>
+    </data>
+    <data name="deleteSubscription" xml:space="preserve">
+        <value>Eliminar Suscripción</value>
+    </data>
+    <data name="subscriptionDeletedSuccessfully" xml:space="preserve">
+        <value>Suscripción eliminada exitosamente</value>
+    </data>
+    <data name="errorDeletingSubscription" xml:space="preserve">
+        <value>Error eliminando suscripción</value>
+    </data>
+    <data name="defaultSubscriptionsCreatedSuccessfully" xml:space="preserve">
+        <value>Creadas {0} suscripciones por defecto exitosamente</value>
+    </data>
+    <data name="errorCreatingDefaultSubscriptions" xml:space="preserve">
+        <value>Error creando suscripciones por defecto</value>
+    </data>
+    <data name="testNotificationCreated" xml:space="preserve">
+        <value>Notificación de prueba creada para '{0}'</value>
+    </data>
+    <data name="failedToCreateTestNotification" xml:space="preserve">
+        <value>Error al crear notificación de prueba</value>
+    </data>
+    <data name="errorTestingNotification" xml:space="preserve">
+        <value>Error probando notificación</value>
+    </data>
+    <data name="testNotificationsCreatedForAllSubscriptions" xml:space="preserve">
+        <value>Notificaciones de prueba creadas exitosamente para todas las {0} suscripciones activas</value>
+    </data>
+    <data name="testNotificationsPartialSuccess" xml:space="preserve">
+        <value>Creadas {0} notificaciones de prueba, {1} fallaron</value>
+    </data>
+    <data name="errorTestingNotifications" xml:space="preserve">
+        <value>Error probando notificaciones</value>
+    </data>
+    <data name="notificationTestResults" xml:space="preserve">
+        <value>Resultados de Prueba de Notificaciones</value>
+    </data>
+    <data name="testAllActive" xml:space="preserve">
+        <value>Probar Todas Activas</value>
+    </data>
+    <data name="testNotification" xml:space="preserve">
+        <value>Probar Notificación</value>
+    </data>
+    <data name="confirmDeleteCvesMessage" xml:space="preserve">
+        <value>¿Estás seguro de que quieres eliminar {0} CVEs seleccionados? Esta acción no se puede deshacer.</value>
+    </data>
+    <data name="cvesDeletedSuccessfully" xml:space="preserve">
+        <value>CVEs eliminados exitosamente</value>
+    </data>
+    <data name="errorDeletingCves" xml:space="preserve">
+        <value>Error eliminando CVEs</value>
     </data>
 </root>

@@ -222,6 +222,9 @@ builder.Services.AddServerSideBlazor().AddHubOptions(o =>
     o.MaximumReceiveMessageSize = 10 * 1024 * 1024;
 });
 
+// Add SignalR for real-time notifications
+builder.Services.AddSignalR();
+
 builder.Services.AddMudServices();
 //builder.Services.AddMudExtensions(c => c.WithoutAutomaticCssLoading());
 MudExtensions.Services.ExtensionServiceCollectionExtensions.AddMudExtensions(builder.Services);
@@ -312,6 +315,9 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 app.MapControllers();
+
+// Map SignalR Hub
+app.MapHub<Cervantes.Web.Hubs.CveNotificationHub>("/cvehub");
 var options = new DashboardOptions
 {
     DashboardTitle = "Cervantes Jobs",
@@ -393,6 +399,7 @@ using (var scope = app.Services.CreateScope())
         {
             System.IO.Directory.CreateDirectory($"{env.WebRootPath}/Attachments/Imports");
         }
+        
     }
     catch (Exception ex)
     {

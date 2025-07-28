@@ -17,6 +17,7 @@
     <ItemGroup>
       <PackageReference Include="Atlassian.SDK" Version="13.0.0" />
       <PackageReference Include="CsvHelper" Version="33.0.1" />
+      <PackageReference Include="Hangfire.Core" Version="1.8.18" />
       <PackageReference Include="Html2JiraMarkup" Version="1.0.4" />
       <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
       <PackageReference Include="HtmlSanitizer" Version="9.0.884" />
@@ -59,6 +60,10 @@
       <None Include="ChecklistMigration\mastg.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="CveServices\Extensions\" />
     </ItemGroup>
 
 </Project>

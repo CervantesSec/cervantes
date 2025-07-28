@@ -1,0 +1,336 @@
+@page "/cve/notifications"
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using Cervantes.CORE
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using Cervantes.Web.Localization
+@using Microsoft.AspNetCore.Components.Authorization
+@using MudBlazor
+@using Task = System.Threading.Tasks.Task
+@inject ICveNotificationManager NotificationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IStringLocalizer<Resource> localizer
+@attribute [Authorize]
+
+<PageTitle>@localizer["cveNotifications"] | Cervantes</PageTitle>
+
+<SectionContent SectionName="appbar">
+    
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@breadcrumbs" Separator=">" />
+    
+</SectionContent>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                    <MudButton Href="/cve"
+
+                               StartIcon="@cveSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveDashboard"]
+                    </MudButton>
+                    
+                    <MudButton Href="/cve/list"
+
+                               StartIcon="@cveSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveManagement"]
+                    </MudButton>
+
+                    <MudButton Href="/cve/notifications"
+
+                               StartIcon="@cveNotSVG"
+                               Color="Color.Primary">
+                        @localizer["cveNotifications"]
+                    </MudButton>
+                        
+                    <MudButton Href="/cve/subscriptions"
+
+                               StartIcon="@cveSubSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveSubscriptions"]
+                    </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["notifications"]</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.MarkEmailRead"
+                               OnClick="MarkAllAsRead"
+                               Disabled="!notifications.Any(n => !n.IsRead)">
+                        @localizer["markAllAsRead"]
+                    </MudButton>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <!-- Notification Statistics -->
+                @if (statistics != null)
+                {
+                    <MudGrid Class="mb-4">
+                        <MudItem xs="12" md="3">
+                            <MudCard Elevation="1">
+                                <MudCardContent Class="d-flex align-center justify-center">
+                                    <div class="d-flex flex-column align-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.MarkEmailUnread" Size="Size.Large" Color="Color.Info"/>
+                                        <MudText Typo="Typo.h6" Color="Color.Info">@statistics.UnreadNotifications</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["unread"]</MudText>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                        <MudItem xs="12" md="3">
+                            <MudCard Elevation="1">
+                                <MudCardContent Class="d-flex align-center justify-center">
+                                    <div class="d-flex flex-column align-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.Today" Size="Size.Large" Color="Color.Success"/>
+                                        <MudText Typo="Typo.h6" Color="Color.Success">@statistics.NotificationsToday</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["today"]</MudText>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                        <MudItem xs="12" md="3">
+                            <MudCard Elevation="1">
+                                <MudCardContent Class="d-flex align-center justify-center">
+                                    <div class="d-flex flex-column align-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.DateRange" Size="Size.Large" Color="Color.Warning"/>
+                                        <MudText Typo="Typo.h6" Color="Color.Warning">@statistics.NotificationsThisWeek</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["thisWeek"]</MudText>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                        <MudItem xs="12" md="3">
+                            <MudCard Elevation="1">
+                                <MudCardContent Class="d-flex align-center justify-center">
+                                    <div class="d-flex flex-column align-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.Notifications" Size="Size.Large" Color="Color.Primary"/>
+                                        <MudText Typo="Typo.h6">@statistics.TotalNotifications</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["total"]</MudText>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                }
+
+                <!-- Notification DataGrid -->
+                <MudDataGrid T="CveNotification" 
+                             Items="@filteredNotifications" 
+                             Loading="@loading"
+                             Filterable="true"
+                             SortMode="SortMode.Multiple" 
+                             Groupable="false"
+                             ShowMenuIcon="true"
+                             Dense="true"
+                             Hover="true"
+                             ReadOnly="false"
+                             MultiSelection="true"
+                             SelectedItems="@selectedNotifications"
+                             SelectedItemsChanged="OnSelectedItemsChanged"
+                             Class="mud-data-grid"
+                             RowClassFunc="@_rowClassFunc"
+                             RowStyleFunc="@_rowStyleFunc">
+                    
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">@localizer["notifications"]</MudText>
+                        <MudSpacer />
+                        @if (selectedNotifications?.Count > 0)
+                        {
+                            <MudButton StartIcon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Variant="Variant.Filled"
+                                       Size="Size.Small"
+                                       Class="mr-2"
+                                       OnClick="DeleteSelectedNotifications">
+                                @localizer["deleteSelected"] (@selectedNotifications.Count)
+                            </MudButton>
+                            <MudButton StartIcon="@Icons.Material.Filled.Clear"
+                                       Color="Color.Secondary"
+                                       Variant="Variant.Outlined"
+                                       Size="Size.Small"
+                                       Class="mr-2"
+                                       OnClick="ClearSelection">
+                                @localizer["clearSelection"]
+                            </MudButton>
+                        }
+                        <MudTextField @bind-Value="searchString" 
+                                      @bind-Value:after="OnSearchChanged"
+                                      Placeholder="@localizer["search"]" 
+                                      Adornment="Adornment.Start" 
+                                      AdornmentIcon="Icons.Material.Filled.Search" 
+                                      IconSize="Size.Medium" 
+                                      Class="mt-0"
+                                      Clearable="true"
+                                      Immediate="true"></MudTextField>
+                    </ToolBarContent>
+                    
+                    <Columns>
+                        <!-- Selection Column -->
+                        <SelectColumn T="CveNotification" ShowInHeader="true" ShowInFooter="false" />
+                        
+                        <!-- Status Column -->
+                        <PropertyColumn Property="x => x.IsRead" Title="@localizer["status"]" Sortable="true">
+                            <CellTemplate>
+                                @if (!context.Item.IsRead)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.FiberNew" Color="Color.Info" Size="Size.Small" Title="@localizer["unread"]" />
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.MarkEmailRead" Color="Color.Success" Size="Size.Small" Title="@localizer["read"]" />
+                                }
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- Title Column -->
+                        <PropertyColumn Property="x => x.Title" Title="@localizer["title"]" Sortable="true">
+                            <CellTemplate>
+                                <div>
+                                    <MudText Typo="Typo.body2" Class="fw-bold">@context.Item.Title</MudText>
+                                    <MudText Typo="Typo.caption" Class="mud-text-secondary">@TruncateString(context.Item.Message, 100)</MudText>
+                                </div>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- CVE ID Column -->
+                        <PropertyColumn Property="x => x.Cve.CveId" Title="CVE ID" Sortable="true">
+                            <CellTemplate>
+                                @if (context.Item.Cve != null)
+                                {
+                                    <MudChip Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined">
+                                        @context.Item.Cve.CveId
+                                    </MudChip>
+                                }
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- Type Column -->
+                        <PropertyColumn Property="x => x.NotificationType" Title="@localizer["type"]" Sortable="true">
+                            <CellTemplate>
+                                <MudChip Size="Size.Small" Color="@GetNotificationTypeColor(context.Item.NotificationType)">
+                                    @context.Item.NotificationType
+                                </MudChip>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- Priority Column -->
+                        <PropertyColumn Property="x => x.Priority" Title="@localizer["priority"]" Sortable="true">
+                            <CellTemplate>
+                                <MudChip Size="Size.Small" Color="@GetPriorityColor(context.Item.Priority)" Variant="Variant.Outlined">
+                                    @context.Item.Priority
+                                </MudChip>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- Status Column -->
+                        <PropertyColumn Property="x => x.Status" Title="@localizer["deliveryStatus"]" Sortable="true">
+                            <CellTemplate>
+                                <MudChip Size="Size.Small" Color="@GetStatusColor(context.Item.Status)" Variant="Variant.Outlined">
+                                    @context.Item.Status
+                                </MudChip>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- Method Column -->
+                        <PropertyColumn Property="x => x.Method" Title="@localizer["method"]" Sortable="true">
+                            <CellTemplate>
+                                <MudText Typo="Typo.caption">@context.Item.Method</MudText>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- Created Date Column -->
+                        <PropertyColumn Property="x => x.CreatedDate" Title="@localizer["created"]" Sortable="true">
+                            <CellTemplate>
+                                <div>
+                                    <MudText Typo="Typo.caption">@context.Item.CreatedDate.ToString("MMM dd, yyyy")</MudText>
+                                    <MudText Typo="Typo.caption" Class="mud-text-secondary">@context.Item.CreatedDate.ToString("HH:mm")</MudText>
+                                </div>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- Read Date Column -->
+                        <PropertyColumn Property="x => x.ReadDate" Title="@localizer["readAt"]" Sortable="true">
+                            <CellTemplate>
+                                @if (context.Item.ReadDate.HasValue)
+                                {
+                                    <div>
+                                        <MudText Typo="Typo.caption">@context.Item.ReadDate.Value.ToString("MMM dd, yyyy")</MudText>
+                                        <MudText Typo="Typo.caption" Class="mud-text-secondary">@context.Item.ReadDate.Value.ToString("HH:mm")</MudText>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.caption" Class="mud-text-disabled">-</MudText>
+                                }
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <!-- Actions Column -->
+                        <TemplateColumn Title="@localizer["actions"]" Sortable="false">
+                            <CellTemplate>
+                                <MudStack Row="true">
+                                    @if (context.Item.Cve != null)
+                                    {
+                                        <MudIconButton Icon="@Icons.Material.Filled.Visibility"
+                                                       Color="Color.Primary"
+                                                       Size="Size.Small"
+                                                       Title="@localizer["viewCve"]"
+                                                       OnClick="() => ViewCve(context.Item.Cve.Id)" />
+                                    }
+                                    @if (!context.Item.IsRead)
+                                    {
+                                        <MudIconButton Icon="@Icons.Material.Filled.MarkEmailRead"
+                                                       Color="Color.Info"
+                                                       Size="Size.Small"
+                                                       Title="@localizer["markAsRead"]"
+                                                       OnClick="() => MarkAsRead(context.Item)" />
+                                    }
+                                </MudStack>
+                            </CellTemplate>
+                        </TemplateColumn>
+                    </Columns>
+                    
+                    <PagerContent>
+                        <MudDataGridPager T="CveNotification" PageSizeOptions="new int[]{10, 25, 50, 100}" />
+                    </PagerContent>
+                    
+                    <NoRecordsContent>
+                        <MudAlert Severity="Severity.Info">
+                            @localizer["noNotificationsFound"]
+                        </MudAlert>
+                    </NoRecordsContent>
+                    
+                </MudDataGrid>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<style>
+    .notification-unread {
+        border-left: 4px solid var(--mud-palette-primary);
+    }
+    
+    .notification-read {
+        opacity: 0.8;
+    }
+</style>

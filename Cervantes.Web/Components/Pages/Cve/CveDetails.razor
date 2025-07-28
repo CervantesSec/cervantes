@@ -1,0 +1,363 @@
+@page "/cve/{id:guid}"
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using Cervantes.CORE
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using Cervantes.Web.Localization
+@using Microsoft.AspNetCore.Components.Authorization
+@using MudBlazor
+@using MudBlazor.Extensions
+@using MudBlazor.Extensions.Core
+@using MudBlazor.Extensions.Options
+@using Task = System.Threading.Tasks.Task
+@inject ICveManager CveManager
+@inject ICveNotificationManager NotificationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IStringLocalizer<Resource> localizer
+@attribute [Authorize]
+
+<PageTitle>@localizer["cveDetails"] - @(cve?.CveId ?? localizer["loading"])</PageTitle>
+
+<SectionContent SectionName="appbar">
+    <MudText Typo="Typo.h5">
+        <MudIcon Icon="@Icons.Material.Filled.Security" Class="mr-3 mb-n1"/>
+        @localizer["cveDetails"]
+    </MudText>
+</SectionContent>
+
+<SectionContent SectionName="breadcrumbs">
+    <MudBreadcrumbs Items="breadcrumbs"></MudBreadcrumbs>
+</SectionContent>
+
+@if (loading)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else if (cve == null)
+{
+    <MudAlert Severity="Severity.Error">@localizer["cveNotFound"]</MudAlert>
+}
+else
+{
+    <MudGrid>
+        <!-- CVE Header -->
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="12" md="8">
+                            <MudText Typo="Typo.h4" Class="mb-2">@cve.CveId</MudText>
+                            <MudText Typo="Typo.h6" Class="mb-4">@cve.Title</MudText>
+                            <MudChip T="string" Color="@GetSeverityColor(cve.CvssV3Severity)" Size="Size.Medium" Class="mr-2">
+                                @cve.CvssV3Severity
+                            </MudChip>
+                            @if (cve.IsKnownExploited)
+                            {
+                                <MudChip T="string" Color="Color.Error" Size="Size.Medium" Class="mr-2">
+                                    <MudIcon Icon="@Icons.Material.Filled.Warning" Size="Size.Small" Class="mr-1"/>
+                                    KEV Listed
+                                </MudChip>
+                            }
+                            <MudChip T="string" Color="@GetStateColor(cve.State)" Size="Size.Medium" Variant="Variant.Outlined">
+                                @cve.State
+                            </MudChip>
+                        </MudItem>
+                        <MudItem xs="12" md="4" Class="d-flex justify-end">
+                            <MudButtonGroup Variant="Variant.Outlined">
+                                <MudIconButton Icon="@(cve.IsFavorite ? Icons.Material.Filled.Star : Icons.Material.Filled.StarBorder)" 
+                                               Color="@(cve.IsFavorite ? Color.Warning : Color.Default)"
+                                               OnClick="ToggleFavorite" 
+                                               Title="Toggle Favorite" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Archive" 
+                                               OnClick="ArchiveCve" 
+                                               Title="Archive" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Share" 
+                                               OnClick="ShareCve" 
+                                               Title="Share" />
+                            </MudButtonGroup>
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- CVE Scores -->
+        <MudItem xs="12" md="6">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Scoring Information</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        @if (cve.CvssV3BaseScore.HasValue)
+                        {
+                            <MudItem xs="6">
+                                <MudText Typo="Typo.subtitle2">CVSS v3.1 Score</MudText>
+                                <MudText Typo="Typo.h5" Color="@GetSeverityColor(cve.CvssV3Severity)">
+                                    @cve.CvssV3BaseScore.Value.ToString("F1")
+                                </MudText>
+                                @if (!string.IsNullOrEmpty(cve.CvssV3Vector))
+                                {
+                                    <MudText Typo="Typo.caption">@cve.CvssV3Vector</MudText>
+                                }
+                            </MudItem>
+                        }
+                        @if (cve.EpssScore.HasValue)
+                        {
+                            <MudItem xs="6">
+                                <MudText Typo="Typo.subtitle2">EPSS Score</MudText>
+                                <MudText Typo="Typo.h5" Color="Color.Info">
+                                    @cve.EpssScore.Value.ToString("F3")
+                                </MudText>
+                                @if (cve.EpssPercentile.HasValue)
+                                {
+                                    <MudText Typo="Typo.caption">@cve.EpssPercentile.Value.ToString("F1")th percentile</MudText>
+                                }
+                            </MudItem>
+                        }
+                        @if (cve.CvssV2BaseScore.HasValue)
+                        {
+                            <MudItem xs="6">
+                                <MudText Typo="Typo.subtitle2">CVSS v2 Score</MudText>
+                                <MudText Typo="Typo.h6">@cve.CvssV2BaseScore.Value.ToString("F1")</MudText>
+                                @if (!string.IsNullOrEmpty(cve.CvssV2Vector))
+                                {
+                                    <MudText Typo="Typo.caption">@cve.CvssV2Vector</MudText>
+                                }
+                            </MudItem>
+                        }
+                        @if (cve.IsKnownExploited && cve.KevDueDate.HasValue)
+                        {
+                            <MudItem xs="6">
+                                <MudText Typo="Typo.subtitle2">KEV Due Date</MudText>
+                                <MudText Typo="Typo.h6" Color="Color.Error">
+                                    @cve.KevDueDate.Value.ToString("yyyy-MM-dd")
+                                </MudText>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- CVE Timeline -->
+        <MudItem xs="12" md="6">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Timeline</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudTimeline>
+                        <MudTimelineItem Color="Color.Info" Icon="@Icons.Material.Filled.Publish">
+                            <MudText Typo="Typo.body2">Published</MudText>
+                            <MudText Typo="Typo.body1">@cve.PublishedDate.ToString("yyyy-MM-dd HH:mm")</MudText>
+                        </MudTimelineItem>
+                        <MudTimelineItem Color="Color.Warning" Icon="@Icons.Material.Filled.Update">
+                            <MudText Typo="Typo.body2">Last Modified</MudText>
+                            <MudText Typo="Typo.body1">@cve.LastModifiedDate.ToString("yyyy-MM-dd HH:mm")</MudText>
+                        </MudTimelineItem>
+                        @if (cve.IsKnownExploited)
+                        {
+                            <MudTimelineItem Color="Color.Error" Icon="@Icons.Material.Filled.Warning">
+                                <MudText Typo="Typo.body2">Added to KEV</MudText>
+                                <MudText Typo="Typo.body1">Known Exploited</MudText>
+                            </MudTimelineItem>
+                        }
+                    </MudTimeline>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- CVE Description -->
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Description</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>@cve.Description</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- CWE Information -->
+        @if (!string.IsNullOrEmpty(cve.PrimaryCweId))
+        {
+            <MudItem xs="12" md="6">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">Weakness Information</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.subtitle2">Primary CWE</MudText>
+                        <MudText Typo="Typo.body1">CWE-@cve.PrimaryCweId</MudText>
+                        @if (!string.IsNullOrEmpty(cve.PrimaryCweName))
+                        {
+                            <MudText Typo="Typo.body2">@cve.PrimaryCweName</MudText>
+                        }
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+
+        <!-- Source Information -->
+        <MudItem xs="12" md="6">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Source Information</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (!string.IsNullOrEmpty(cve.SourceIdentifier))
+                    {
+                        <MudText Typo="Typo.subtitle2">Source</MudText>
+                        <MudText Typo="Typo.body1">@cve.SourceIdentifier</MudText>
+                    }
+                    @if (!string.IsNullOrEmpty(cve.AssignerOrgId))
+                    {
+                        <MudText Typo="Typo.subtitle2">Assigner</MudText>
+                        <MudText Typo="Typo.body1">@cve.AssignerOrgId</MudText>
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- Notes Section -->
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Notes</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudButton Variant="Variant.Outlined" 
+                                   StartIcon="@Icons.Material.Filled.Edit"
+                                   OnClick="EditNotes">
+                            Edit Notes
+                        </MudButton>
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (string.IsNullOrEmpty(cve.Notes))
+                    {
+                        <MudText Color="Color.Tertiary">No notes added yet.</MudText>
+                    }
+                    else
+                    {
+                        <MudText>@cve.Notes</MudText>
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- References -->
+        @if (cve.References?.Any() == true)
+        {
+            <MudItem xs="12">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">References</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudList T="string">
+                            @foreach (var reference in cve.References)
+                            {
+                                <MudListItem T="string">
+                                    <MudLink Href="@reference.Url" Target="_blank">
+                                        @(reference.Name ?? reference.Url)
+                                    </MudLink>
+                                    @if (!string.IsNullOrEmpty(reference.Source))
+                                    {
+                                        <MudText Typo="Typo.caption"> - @reference.Source</MudText>
+                                    }
+                                </MudListItem>
+                            }
+                        </MudList>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+
+        <!-- Affected Products -->
+        @if (cve.Configurations?.Any() == true)
+        {
+            <MudItem xs="12">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">Affected Products</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudTable Items="cve.Configurations" Dense="true">
+                            <HeaderContent>
+                                <MudTh>Vendor</MudTh>
+                                <MudTh>Product</MudTh>
+                                <MudTh>Version</MudTh>
+                                <MudTh>Vulnerable</MudTh>
+                            </HeaderContent>
+                            <RowTemplate>
+                                <MudTd>@context.Vendor</MudTd>
+                                <MudTd>@context.Product</MudTd>
+                                <MudTd>
+                                    @if (!string.IsNullOrEmpty(context.Version))
+                                    {
+                                        <span>@context.Version</span>
+                                    }
+                                    else
+                                    {
+                                        @if (!string.IsNullOrEmpty(context.VersionStartIncluding))
+                                        {
+                                            <span>≥ @context.VersionStartIncluding</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(context.VersionStartExcluding))
+                                        {
+                                            <span>> @context.VersionStartExcluding</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(context.VersionEndIncluding))
+                                        {
+                                            <span>≤ @context.VersionEndIncluding</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(context.VersionEndExcluding))
+                                        {
+                                            <span>&lt; @context.VersionEndExcluding</span>
+                                        }
+                                    }
+                                </MudTd>
+                                <MudTd>
+                                    @if (context.IsVulnerable)
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Error" />
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Success" />
+                                    }
+                                </MudTd>
+                            </RowTemplate>
+                        </MudTable>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+}
+

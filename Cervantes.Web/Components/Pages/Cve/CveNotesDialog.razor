@@ -1,0 +1,42 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using Cervantes.Web.Localization
+@using MudBlazor
+@using Task = System.Threading.Tasks.Task
+@inject ICveManager CveManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<Resource> localizer
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer>
+            <MudTextField @bind-Value="notes" 
+                          Label="@localizer["cveNotes"]" 
+                          Lines="8"
+                          Placeholder="@localizer["addNotesPlaceholder"]"
+                          HelperText="@localizer["notesHelperText"]"
+                          Variant="Variant.Outlined" />
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Color="Color.Primary" 
+                   Variant="Variant.Filled" 
+                   OnClick="SaveNotes" 
+                   Disabled="loading">
+            @if (loading)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+            }
+            else
+            {
+                <span>@localizer["saveNotes"]</span>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+

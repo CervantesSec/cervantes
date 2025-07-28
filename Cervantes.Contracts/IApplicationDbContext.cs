@@ -14,6 +14,7 @@ public interface IApplicationDbContext
 
     int SaveChanges();
     Task<int> SaveChangesAsync();
+    Task<int> SaveChangesNoAuditAsync();
 
 
     //DbSet Set(Type entityType);

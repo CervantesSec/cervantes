@@ -1,6 +1,7 @@
 using Cervantes.Application;
 using Cervantes.Contracts;
 using Cervantes.IFR.ChecklistMigration;
+using Cervantes.IFR.CveServices;
 
 namespace Cervantes.Web.Extensions;
 
@@ -68,6 +69,14 @@ public static class ManagerServiceExtensions
         services.AddScoped<IVaultManager, VaultManager>();
         services.AddScoped<IVulnCustomFieldManager, VulnCustomFieldManager>();
         services.AddScoped<IVulnCustomFieldValueManager, VulnCustomFieldValueManager>();
+        
+        // CVE Management System
+        services.AddScoped<ICveManager, CveManager>();
+        services.AddScoped<ICveSubscriptionManager, CveSubscriptionManager>();
+        services.AddScoped<ICveNotificationManager, CveNotificationManager>();
+        
+        // CVE Controllers for Blazor Component Injection
+        services.AddScoped<Cervantes.Web.Controllers.CveSyncController>();
         
         return services;
     }
@@ -157,6 +166,10 @@ public static class ManagerServiceExtensions
         services.AddScoped<IRssNewsManager, RssNewsManager>();
         services.AddScoped<IRssSourceManager, RssSourceManager>();
         services.AddScoped<IRssCategoryManager, RssCategoryManager>();
+        
+        // CVE External Services (HttpClient registration moved to ExternalServiceExtensions)
+        services.AddScoped<CveSubscriptionProcessor>();
+        services.AddHostedService<CveBackgroundService>();
         
         return services;
     }

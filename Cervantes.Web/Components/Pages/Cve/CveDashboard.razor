@@ -1,0 +1,471 @@
+@page "/cve"
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using Cervantes.CORE
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using MudBlazor
+@using System.Text.Json
+@using Blazored.LocalStorage
+@using Cervantes.Web.Localization
+@using Cervantes.Web.Controllers
+@using Task = System.Threading.Tasks.Task
+@inject CveController CveController
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ILocalStorageService LocalStorage
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<Resource> localizer
+@attribute [Authorize]
+
+<PageTitle>@localizer["cveDashboard"] | Cervantes</PageTitle>
+
+<SectionContent SectionName="appbar">
+    
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@breadcrumbs" Separator=">" />
+    
+</SectionContent>
+
+<!-- Main Dashboard Grid -->
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                    <MudButton Href="/cve"
+
+                               StartIcon="@cveSVG"
+                               Color="Color.Primary">
+                        @localizer["cveDashboard"]
+                    </MudButton>
+                    
+                    <MudButton Href="/cve/list"
+
+                               StartIcon="@cveSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveManagement"]
+                    </MudButton>
+
+                    <MudButton Href="/cve/notifications"
+
+                               StartIcon="@cveNotSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveNotifications"]
+                    </MudButton>
+                        
+                    <MudButton Href="/cve/subscriptions"
+
+                               StartIcon="@cveSubSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveSubscriptions"]
+                    </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
+    <!-- Dashboard Filters Row -->
+    <MudItem xs="12">
+        <MudPaper Class="pa-4">
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="2">
+                    <MudSelect @bind-Value="selectedTimeRange"
+                               Label="@localizer["timeRange"]"
+                               Dense="true"
+                               OnSelectionChanged="OnFiltersChanged">
+                        <MudSelectItem Value="@("24h")">@localizer["last24Hours"]</MudSelectItem>
+                        <MudSelectItem Value="@("7d")">@localizer["last7Days"]</MudSelectItem>
+                        <MudSelectItem Value="@("30d")">@localizer["last30Days"]</MudSelectItem>
+                        <MudSelectItem Value="@("90d")">@localizer["last90Days"]</MudSelectItem>
+                        <MudSelectItem Value="@("1y")">@localizer["lastYear"]</MudSelectItem>
+                        <MudSelectItem Value="@("all")">@localizer["allTime"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="3">
+                    <MudSelect @bind-Value="selectedSeverity"
+                               Label="@localizer["severity"]"
+                               Dense="true"
+                               OnSelectionChanged="OnFiltersChanged">
+                        <MudSelectItem Value="@("all")">@localizer["allSeverities"]</MudSelectItem>
+                        <MudSelectItem Value="@("critical")">@localizer["criticalSeverity"]</MudSelectItem>
+                        <MudSelectItem Value="@("high")">@localizer["highSeverity"]</MudSelectItem>
+                        <MudSelectItem Value="@("medium")">@localizer["mediumSeverity"]</MudSelectItem>
+                        <MudSelectItem Value="@("low")">@localizer["lowSeverity"]</MudSelectItem>
+                        <MudSelectItem Value="@("none")">@localizer["noScore"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="3">
+                    <MudSelect @bind-Value="selectedVendor"
+                               Label="@localizer["vendor"]"
+                               Dense="true"
+                               OnSelectionChanged="OnFiltersChanged">
+                        <MudSelectItem Value="@("all")">@localizer["allVendors"]</MudSelectItem>
+                        @foreach (var vendor in GetAvailableVendors())
+                        {
+                            <MudSelectItem Value="@vendor">@vendor</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" Class="d-flex align-center">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudCheckBox T="bool" Checked="onlyKevCves"
+                                 Label="@localizer["kevOnly"]"
+                                 Dense="true"
+                                 CheckedChanged="@((bool value) =>
+                                                 {
+                                                     onlyKevCves = value;
+                                                     OnFiltersChanged();
+                                                 })"/>
+                    <MudButton StartIcon="@Icons.Material.Filled.Refresh"
+                               Size="Size.Small"
+                               OnClick="RefreshDashboard">
+                        @localizer["refresh"]
+                    </MudButton>
+                    <MudButton StartIcon="@Icons.Material.Filled.Clear"
+                               Size="Size.Small"
+                               Class="ml-2"
+                               OnClick="ResetFilters">
+@localizer["reset"]
+                    </MudButton>
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+    <!-- CVE Statistics Cards -->
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Style="height: 120px;">
+            <MudCardContent Class="d-flex align-center justify-center">
+                <div class="d-flex flex-column align-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Security" Size="Size.Large" Color="Color.Primary"/>
+                    <MudText Typo="Typo.h4">@totalCves</MudText>
+                    <MudText Typo="Typo.body2">@localizer["totalCves"]</MudText>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Style="height: 120px;">
+            <MudCardContent Class="d-flex align-center justify-center">
+                <div class="d-flex flex-column align-center">
+                    <MudIcon Icon="@Icons.Material.Filled.NewReleases" Size="Size.Large" Color="Color.Error"/>
+                    <MudText Typo="Typo.h4">@criticalCves</MudText>
+                    <MudText Typo="Typo.body2">@localizer["criticalCves"]</MudText>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Style="height: 120px;">
+            <MudCardContent Class="d-flex align-center justify-center">
+                <div class="d-flex flex-column align-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Warning" Size="Size.Large" Color="Color.Warning"/>
+                    <MudText Typo="Typo.h4">@kevCves</MudText>
+                    <MudText Typo="Typo.body2">@localizer["kevCves"]</MudText>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Style="height: 120px;">
+            <MudCardContent Class="d-flex align-center justify-center">
+                <div class="d-flex flex-column align-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Notifications" Size="Size.Large" Color="Color.Info"/>
+                    <MudText Typo="Typo.h4">@newCvesToday</MudText>
+                    <MudText Typo="Typo.body2">@localizer["newToday"]</MudText>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- CVE Severity Distribution Chart -->
+    <MudItem xs="12" md="6">
+        <MudCard Style="height: 400px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["severityDistribution"]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="d-flex justify-center">
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudChart ChartType="ChartType.Donut"
+                              Width="100%" Height="250px"
+                              InputData="@GetSeverityChartData()"
+                              InputLabels="@GetSeverityChartLabels()"
+                              ChartOptions="@GetSeverityChartOptions()"
+                              @key="@($"severity-{chartKey}")"/>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- CVE Trend Chart -->
+    <MudItem xs="12" md="6">
+        <MudCard Style="height: 400px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["cveTrend"]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudChart ChartType="ChartType.Line"
+                              ChartSeries="@GetTrendChartSeries()"
+                              XAxisLabels="@GetTrendChartLabels()"
+                              Width="100%" Height="250px"
+                              ChartOptions="@GetTrendChartOptions()"
+                              @key="@($"trend-{chartKey}")"/>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- Top Vendors Affected Chart -->
+    <MudItem xs="12" md="6">
+        <MudCard Style="height: 400px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["topVendors"]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudChart ChartType="ChartType.Bar"
+                              ChartSeries="@GetVendorsChartSeries()"
+                              XAxisLabels="@GetVendorsChartLabels()"
+                              Width="100%" Height="250px"
+                              ChartOptions="@GetVendorsChartOptions()"
+                              AxisChartOptions="@GetVendorsAxisChartOptions()"
+                              @key="@($"vendors-{chartKey}")"/>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- EPSS Score Distribution -->
+    <MudItem xs="12" md="6">
+        <MudCard Style="height: 400px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["epssScoreDistribution"]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="d-flex justify-center">
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudChart ChartType="ChartType.Pie"
+                              Width="100%" Height="250px"
+                              InputData="@GetEpssChartData()"
+                              InputLabels="@GetEpssChartLabels()"
+                              ChartOptions="@GetEpssChartOptions()"
+                              @key="@($"epss-{chartKey}")"/>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- Recent CVEs List -->
+    <MudItem xs="12" lg="6">
+        <MudCard Style="height: 500px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["recentCves"]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="px-0" Style="overflow-y: auto;">
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudList T="string" Dense="true">
+                        @foreach (var cve in recentCves.Take(10))
+                        {
+                            <MudListItem T="string">
+                                <div class="d-flex flex-row align-center justify-space-between">
+                                    <div class="d-flex flex-row align-center" style="flex: 0 0 auto;">
+                                        <MudAvatar Class="mud-elevation-25" Color="@GetSeverityColor(cve.CvssV3BaseScore)">
+                                            <MudText Typo="Typo.caption">@cve.CvssV3BaseScore?.ToString("F1")</MudText>
+                                        </MudAvatar>
+                                        <div class="ml-4">
+                                            <MudText Typo="Typo.subtitle2">@cve.CveId</MudText>
+                                            <MudText Typo="Typo.body2" Class="text-truncate" Style="max-width: 150px;">@cve.Description</MudText>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex flex-row align-center justify-center" style="flex: 1; gap: 24px;">
+                                        <div class="d-flex flex-column align-center">
+                                            <MudText Typo="Typo.caption" Color="Color.Tertiary">@localizer["severity"]</MudText>
+                                            <MudChip T="string" Color="@GetSeverityColor(cve.CvssV3BaseScore)" Size="Size.Small">
+                                                @(!string.IsNullOrEmpty(cve.CvssV3Severity) ? cve.CvssV3Severity.Substring(0, 1) : "-")
+                                            </MudChip>
+                                        </div>
+                                        
+                                        <div class="d-flex flex-column align-center">
+                                            <MudText Typo="Typo.caption" Color="Color.Tertiary">@localizer["vendor"]</MudText>
+                                            <MudText Typo="Typo.body2" Class="text-truncate" Style="max-width: 60px;">
+                                                @if (cve.Configurations?.Any() == true)
+                                                {
+                                                    @cve.Configurations.First().Vendor
+                                                }
+                                                else
+                                                {
+                                                    <span>-</span>
+                                                }
+                                            </MudText>
+                                        </div>
+                                        
+                                        <div class="d-flex flex-column align-center">
+                                            <MudText Typo="Typo.caption" Color="Color.Tertiary">EPSS</MudText>
+                                            <MudText Typo="Typo.body2">
+                                                @if (cve.EpssScore.HasValue)
+                                                {
+                                                    @cve.EpssScore.Value.ToString("F2")
+                                                }
+                                                else
+                                                {
+                                                    <span>-</span>
+                                                }
+                                            </MudText>
+                                        </div>
+                                        
+                                        <div class="d-flex flex-column align-center">
+                                            @if (cve.IsKnownExploited)
+                                            {
+                                                <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Error" Size="Size.Small" Title="KEV"/>
+                                                <MudText Typo="Typo.caption" Color="Color.Error">KEV</MudText>
+                                            }
+                                            else
+                                            {
+                                                <MudText Typo="Typo.caption" Color="Color.Tertiary">KEV</MudText>
+                                                <MudText Typo="Typo.body2">-</MudText>
+                                            }
+                                        </div>
+                                        
+                                        <div class="d-flex flex-column align-center">
+                                            <MudText Typo="Typo.caption" Color="Color.Tertiary">CWE</MudText>
+                                            <MudText Typo="Typo.body2">
+                                                @if (!string.IsNullOrEmpty(cve.PrimaryCweId))
+                                                {
+                                                    @cve.PrimaryCweId.Replace("CWE-", "")
+                                                }
+                                                else
+                                                {
+                                                    <span>-</span>
+                                                }
+                                            </MudText>
+                                        </div>
+                                        
+                                        <div class="d-flex flex-column align-center">
+                                            <MudText Typo="Typo.caption" Color="Color.Tertiary">@localizer["published"]</MudText>
+                                            <MudText Typo="Typo.body2">@cve.PublishedDate.ToString("MMM dd")</MudText>
+                                        </div>
+                                    </div>
+                                </div>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- Active Subscriptions -->
+    <MudItem xs="12" lg="6">
+        <MudCard Style="height: 500px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["activeSubscriptions"]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="px-0" Style="overflow-y: auto;">
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudList T="string" Dense="true">
+                        @foreach (var subscription in activeSubscriptions.Take(10))
+                        {
+                            <MudListItem T="string">
+                                <div class="d-flex flex-row align-center">
+                                    <MudAvatar Class="mud-elevation-25" Color="Color.Primary">
+                                        <MudIcon Icon="Icons.Material.Filled.NotificationsActive"/>
+                                    </MudAvatar>
+                                    <div class="ml-4 flex-grow-1">
+                                        <MudText Typo="Typo.subtitle2">@subscription.Name</MudText>
+                                        <MudText Typo="Typo.body2">
+                                            @if (!string.IsNullOrEmpty(subscription.Vendor))
+                                            {
+                                                <span>@localizer["vendor"]: @subscription.Vendor</span>
+                                            }
+                                            @if (!string.IsNullOrEmpty(subscription.Product))
+                                            {
+                                                <span> | @localizer["product"]: @subscription.Product</span>
+                                            }
+                                        </MudText>
+                                    </div>
+                                    <MudChip T="string" Label="true"
+                                             Color="@(subscription.IsActive ? Color.Success : Color.Default)"
+                                             Size="Size.Small" Class="ml-auto">
+                                        @(subscription.IsActive ? localizer["active"] : localizer["inactive"])
+                                    </MudChip>
+                                </div>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<style>
+    .dashboard-widget {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .widget-content {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .widget-container {
+        margin-bottom: 16px;
+    }
+
+    .widget-loading {
+        height: 200px;
+    }
+</style>

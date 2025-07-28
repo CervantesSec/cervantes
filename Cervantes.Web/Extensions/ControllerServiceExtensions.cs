@@ -79,6 +79,7 @@ public static class ControllerServiceExtensions
     {
         services.AddScoped<VulnController>();
         services.AddScoped<VulnCustomFieldController>();
+        services.AddScoped<CveController>();
         services.AddScoped<VaultController>();
         
         return services;

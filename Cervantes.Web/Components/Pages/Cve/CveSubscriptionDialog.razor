@@ -1,0 +1,160 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using Cervantes.Web.Controllers
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using Cervantes.Web.Localization
+@using MudBlazor
+@using Task = System.Threading.Tasks.Task
+@inject CveController CveController
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<Resource> localizer
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style="max-height: 600px; overflow-y: scroll;">
+            <MudForm @ref="form" Model="model" Validation="@(ValidateModel)">
+                <MudGrid>
+                    <MudItem xs="12" md="8">
+                        <MudTextField @bind-Value="model.Name" 
+                                      Label="@localizer["subscriptionName"]" 
+                                      Required="true"
+                                      RequiredError="@localizer["nameRequired"]"
+                                      Placeholder="e.g., Critical Apache CVEs" />
+                    </MudItem>
+                    <MudItem xs="12" md="4">
+                        <MudSwitch @bind-Value="model.IsActive" 
+                                   Label="@localizer["active"]" 
+                                   Color="Color.Primary" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="model.Description" 
+                                      Label="@localizer["description"]" 
+                                      Lines="2"
+                                      Placeholder="@localizer["briefDescriptionPlaceholder"]" />
+                    </MudItem>
+                    
+                    <MudItem xs="12"><MudDivider /></MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">@localizer["filters"]</MudText>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="model.Vendor" 
+                                      Label="@localizer["vendor"]" 
+                                      Placeholder="e.g., Apache, Microsoft, Google" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="model.Product" 
+                                      Label="@localizer["product"]" 
+                                      Placeholder="e.g., HTTP Server, Windows, Chrome" />
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6">
+                        <MudNumericField @bind-Value="model.MinCvssScore" 
+                                         Label="@localizer["minCvssScore"]" 
+                                         Min="0" 
+                                         Max="10" 
+                                         Step="0.1" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudNumericField @bind-Value="model.MaxCvssScore" 
+                                         Label="@localizer["maxCvssScore"]" 
+                                         Min="0" 
+                                         Max="10" 
+                                         Step="0.1" />
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6">
+                        <MudNumericField @bind-Value="model.MinEpssScore" 
+                                         Label="@localizer["minEpssScore"]" 
+                                         Min="0" 
+                                         Max="1" 
+                                         Step="0.001" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudSwitch @bind-Value="model.OnlyKnownExploited" 
+                                   Label="@localizer["knownExploitedOnly"]" 
+                                   Color="Color.Error" />
+                    </MudItem>
+                    
+                    <MudItem xs="12">
+                        <MudChipSet T="string" 
+                                    MultiSelection="true" 
+                                    Filter="true">
+                            @foreach (var keyword in commonKeywords)
+                            {
+                                <MudChip T="string" 
+                                         Value="keyword" 
+                                         Color="@(selectedKeywords.Contains(keyword) ? Color.Primary : Color.Default)" 
+                                         Variant="Variant.Outlined"
+                                         OnClick="@(() => ToggleKeyword(keyword))">
+                                    @keyword
+                                </MudChip>
+                            }
+                        </MudChipSet>
+                        <MudTextField @bind-Value="newKeyword" 
+                                      Label="@localizer["addCustomKeyword"]" 
+                                      Placeholder="@localizer["enterKeywordPlaceholder"]"
+                                      @onkeydown="@(async (e) => await HandleKeyDown(e))"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.Add"
+                                      OnAdornmentClick="AddKeyword" />
+                    </MudItem>
+                    
+                    <MudItem xs="12"><MudDivider /></MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">@localizer["notificationSettings"]</MudText>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6">
+                        <MudSelect @bind-Value="model.NotificationFrequency" 
+                                   Label="@localizer["notificationFrequency"]" 
+                                   Required="true">
+                            <MudSelectItem Value="Immediate">@localizer["immediate"]</MudSelectItem>
+                            <MudSelectItem Value="Daily">@localizer["daily"]</MudSelectItem>
+                            <MudSelectItem Value="Weekly">@localizer["weekly"]</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudSelect @bind-Value="model.NotificationMethod" 
+                                   Label="@localizer["notificationMethod"]" 
+                                   Required="true">
+                            @foreach (var method in AvailableNotificationMethods)
+                            {
+                                <MudSelectItem Value="@method">
+                                    @(method switch
+                                    {
+                                        "Email" => localizer["email"],
+                                        "InApp" => localizer["inApp"],
+                                        _ => method
+                                    })
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    
+                </MudGrid>
+            </MudForm>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Color="Color.Primary" 
+                   Variant="Variant.Filled" 
+                   OnClick="SaveSubscription" 
+                   Disabled="loading">
+            @if (loading)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+            }
+            else
+            {
+                <span>@(IsEditMode ? localizer["updateSubscription"] : localizer["createSubscription"])</span>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+

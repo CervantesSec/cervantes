@@ -206,7 +206,14 @@
                     <MudImage Class="mud-nav-link-icon" Src="img/logo.png" Height="40" Width="40"></MudImage>
                     }
                 </MudDrawerHeader>
-                <NavMenu/>
+                @if (IsWorkspacePage)
+                {
+                    <WorkspaceNavMenu project="@CurrentProjectId" />
+                }
+                else
+                {
+                    <NavMenu/>
+                }
                 <MudStack>
 
                     @if (_drawerOpen)
@@ -263,6 +270,26 @@
     private string CurrentUserId { get; set; }
     private ApplicationUser CurrentUser { get; set; }
     [Inject] UserController userController { get; set; }
+    
+    // Workspace detection properties
+    private bool IsWorkspacePage => navigationManager.Uri.Contains("/workspace/");
+    private string CurrentProjectId
+    {
+        get
+        {
+            var uri = navigationManager.Uri;
+            if (uri.Contains("/workspace/"))
+            {
+                var segments = new Uri(uri).Segments;
+                var workspaceIndex = Array.FindIndex(segments, s => s.TrimEnd('/') == "workspace");
+                if (workspaceIndex >= 0 && workspaceIndex + 1 < segments.Length)
+                {
+                    return segments[workspaceIndex + 1].TrimEnd('/');
+                }
+            }
+            return string.Empty;
+        }
+    }
 
     private bool _searchDialogOpen;
     private void OpenSearchDialog() => _searchDialogOpen = true;

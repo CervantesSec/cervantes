@@ -42,6 +42,105 @@
     <data name="projects" xml:space="preserve">
         <value>Projeler</value>
     </data>
+    <data name="quickPresets" xml:space="preserve">
+        <value>Hızlı Ön Ayarlar</value>
+    </data>
+    <data name="dateFilters" xml:space="preserve">
+        <value>Tarih Filtreleri</value>
+    </data>
+    <data name="severityFilters" xml:space="preserve">
+        <value>Önem Derecesi Filtreleri</value>
+    </data>
+    <data name="advancedOptions" xml:space="preserve">
+        <value>Gelişmiş Seçenekler</value>
+    </data>
+    <data name="startYear" xml:space="preserve">
+        <value>Başlangıç Yılı</value>
+    </data>
+    <data name="endYear" xml:space="preserve">
+        <value>Bitiş Yılı</value>
+    </data>
+    <data name="publishedFrom" xml:space="preserve">
+        <value>Yayınlama Başlangıcı</value>
+    </data>
+    <data name="publishedTo" xml:space="preserve">
+        <value>Yayınlama Bitişi</value>
+    </data>
+    <data name="lastModifiedDates" xml:space="preserve">
+        <value>Son Değiştirilme Tarihleri</value>
+    </data>
+    <data name="lastModifiedFrom" xml:space="preserve">
+        <value>Son Değiştirme Başlangıcı</value>
+    </data>
+    <data name="lastModifiedTo" xml:space="preserve">
+        <value>Son Değiştirme Bitişi</value>
+    </data>
+    <data name="severities" xml:space="preserve">
+        <value>Önem Dereceleri</value>
+    </data>
+    <data name="minCvss" xml:space="preserve">
+        <value>Minimum CVSS</value>
+    </data>
+    <data name="maxCvss" xml:space="preserve">
+        <value>Maksimum CVSS</value>
+    </data>
+    <data name="keywordFilter" xml:space="preserve">
+        <value>Anahtar Kelime Filtresi</value>
+    </data>
+    <data name="keywordFilterPlaceholder" xml:space="preserve">
+        <value>Örn: microsoft, apache, openssl</value>
+    </data>
+    <data name="maxTotalCves" xml:space="preserve">
+        <value>Maksimum Toplam CVE</value>
+    </data>
+    <data name="resultsPerPage" xml:space="preserve">
+        <value>Sayfa Başına Sonuç</value>
+    </data>
+    <data name="onlyKnownExploited" xml:space="preserve">
+        <value>Sadece Bilinen Sömürülenler</value>
+    </data>
+    <data name="skipExisting" xml:space="preserve">
+        <value>Mevcut Olanları Atla</value>
+    </data>
+    <data name="updateExisting" xml:space="preserve">
+        <value>Mevcut Olanları Güncelle</value>
+    </data>
+    <data name="syncSource" xml:space="preserve">
+        <value>Senkronizasyon Kaynağı</value>
+    </data>
+    <data name="redHatEnterprise" xml:space="preserve">
+        <value>Red Hat Kurumsal</value>
+    </data>
+    <data name="nistOfficial" xml:space="preserve">
+        <value>NIST Resmi</value>
+    </data>
+    <data name="estimatedCount" xml:space="preserve">
+        <value>Tahmini Sayı</value>
+    </data>
+    <data name="syncInProgress" xml:space="preserve">
+        <value>Senkronizasyon Devam Ediyor</value>
+    </data>
+    <data name="syncInProgressDesc" xml:space="preserve">
+        <value>CVE verilerini senkronize ederken lütfen bekleyin...</value>
+    </data>
+    <data name="validate" xml:space="preserve">
+        <value>Doğrula</value>
+    </data>
+    <data name="startSync" xml:space="preserve">
+        <value>Senkronizasyonu Başlat</value>
+    </data>
+    <data name="nvdApiDateLimit" xml:space="preserve">
+        <value>NVD API sorguları 120 günlük dönemlerle sınırlandırılmıştır</value>
+    </data>
+    <data name="publishedModifiedDateLimit" xml:space="preserve">
+        <value>Yayınlama veya değiştirme tarihlerine göre filtrele</value>
+    </data>
+    <data name="nvdApiLimitations" xml:space="preserve">
+        <value>NVD API Sınırlamaları</value>
+    </data>
+    <data name="nvdApiLimitationsDesc" xml:space="preserve">
+        <value>• Sayfa başına maksimum 2000 sonuç&lt;br/&gt;• Tarih sorguları 120 gün ile sınırlı&lt;br/&gt;• Büyük sorgular için hız sınırlaması uygulanır</value>
+    </data>
     <data name="clients" xml:space="preserve">
         <value>Müşteriler</value>
     </data>
@@ -2292,5 +2391,341 @@
     </data>
     <data name="logsDeletedError" xml:space="preserve">
         <value>Günlükleri silme hatası</value>
+    </data>
+    <data name="criticalCves" xml:space="preserve">
+        <value>Kritik CVE'ler</value>
+    </data>
+    <data name="kevCves" xml:space="preserve">
+        <value>KEV CVE'ler</value>
+    </data>
+    <data name="newToday" xml:space="preserve">
+        <value>Bugün Yeni</value>
+    </data>
+    <data name="severityDistribution" xml:space="preserve">
+        <value>Önem Dağılımı</value>
+    </data>
+    <data name="cveTrend" xml:space="preserve">
+        <value>CVE Trendi</value>
+    </data>
+    <data name="topVendors" xml:space="preserve">
+        <value>En İyi Satıcılar</value>
+    </data>
+    <data name="recentCves" xml:space="preserve">
+        <value>Son CVE'ler</value>
+    </data>
+    <data name="activeSubscriptions" xml:space="preserve">
+        <value>Aktif Abonelikler</value>
+    </data>
+    <data name="epssScoreDistribution" xml:space="preserve">
+        <value>EPSS Puan Dağılımı</value>
+    </data>
+    <data name="last24Hours" xml:space="preserve">
+        <value>Son 24 Saat</value>
+    </data>
+    <data name="last7Days" xml:space="preserve">
+        <value>Son 7 Gün</value>
+    </data>
+    <data name="last30Days" xml:space="preserve">
+        <value>Son 30 Gün</value>
+    </data>
+    <data name="last90Days" xml:space="preserve">
+        <value>Son 90 Gün</value>
+    </data>
+    <data name="lastYear" xml:space="preserve">
+        <value>Son Yıl</value>
+    </data>
+    <data name="allTime" xml:space="preserve">
+        <value>Tüm Zamanlar</value>
+    </data>
+    <data name="allSeverities" xml:space="preserve">
+        <value>Tüm Önem Dereceleri</value>
+    </data>
+    <data name="criticalSeverity" xml:space="preserve">
+        <value>Kritik (9.0-10.0)</value>
+    </data>
+    <data name="highSeverity" xml:space="preserve">
+        <value>Yüksek (7.0-8.9)</value>
+    </data>
+    <data name="mediumSeverity" xml:space="preserve">
+        <value>Orta (4.0-6.9)</value>
+    </data>
+    <data name="lowSeverity" xml:space="preserve">
+        <value>Düşük (0.1-3.9)</value>
+    </data>
+    <data name="noScore" xml:space="preserve">
+        <value>Puan Yok</value>
+    </data>
+    <data name="allVendors" xml:space="preserve">
+        <value>Tüm Satıcılar</value>
+    </data>
+    <data name="kevOnly" xml:space="preserve">
+        <value>Sadece KEV</value>
+    </data>
+    <data name="refresh" xml:space="preserve">
+        <value>Yenile</value>
+    </data>
+    <data name="reset" xml:space="preserve">
+        <value>Sıfırla</value>
+    </data>
+    <data name="timeRange" xml:space="preserve">
+        <value>Zaman Aralığı</value>
+    </data>
+    <data name="vendor" xml:space="preserve">
+        <value>Satıcı</value>
+    </data>
+    <data name="cveDashboard" xml:space="preserve">
+        <value>CVE Paneli</value>
+    </data>
+    <data name="cveManagement" xml:space="preserve">
+        <value>CVE Yönetimi</value>
+    </data>
+    <data name="cveNotifications" xml:space="preserve">
+        <value>CVE Bildirimleri</value>
+    </data>
+    <data name="cveSubscriptions" xml:space="preserve">
+        <value>CVE Abonelikleri</value>
+    </data>
+    <data name="totalCves" xml:space="preserve">
+        <value>Toplam CVE</value>
+    </data>
+    <data name="active" xml:space="preserve">
+        <value>Aktif</value>
+    </data>
+    <data name="readAt" xml:space="preserve">
+        <value>Okundu</value>
+    </data>
+    <data name="viewCve" xml:space="preserve">
+        <value>CVE Görüntüle</value>
+    </data>
+    <data name="markAsRead" xml:space="preserve">
+        <value>Okundu olarak işaretle</value>
+    </data>
+    <data name="subscription" xml:space="preserve">
+        <value>Abonelik</value>
+    </data>
+    <data name="deliveryStatus" xml:space="preserve">
+        <value>Teslimat Durumu</value>
+    </data>
+    <data name="cveNotifications" xml:space="preserve">
+        <value>CVE Bildirimleri</value>
+    </data>
+    <data name="cveSubscriptions" xml:space="preserve">
+        <value>CVE Abonelikleri</value>
+    </data>
+    <data name="mySubscriptions" xml:space="preserve">
+        <value>Aboneliklerim</value>
+    </data>
+    <data name="createSubscription" xml:space="preserve">
+        <value>Abonelik Oluştur</value>
+    </data>
+    <data name="noSubscriptionsFound" xml:space="preserve">
+        <value>Abonelik bulunamadı</value>
+    </data>
+    <data name="createDefaultSubscriptions" xml:space="preserve">
+        <value>Varsayılan Abonelikler Oluştur</value>
+    </data>
+    <data name="subscriptionSummary" xml:space="preserve">
+        <value>Abonelik Özeti</value>
+    </data>
+    <data name="activeSubscriptions" xml:space="preserve">
+        <value>Aktif Abonelikler</value>
+    </data>
+    <data name="unreadNotifications" xml:space="preserve">
+        <value>Okunmamış Bildirimler</value>
+    </data>
+    <data name="matchesToday" xml:space="preserve">
+        <value>Bugün Bulunan</value>
+    </data>
+    <data name="matchesThisWeek" xml:space="preserve">
+        <value>Bu Hafta Bulunan</value>
+    </data>
+    <data name="markAllAsRead" xml:space="preserve">
+        <value>Tümünü Okundu İşaretle</value>
+    </data>
+    <data name="readAt" xml:space="preserve">
+        <value>Okunma Tarihi</value>
+    </data>
+    <data name="noNotificationsFound" xml:space="preserve">
+        <value>Bildirim bulunamadı</value>
+    </data>
+    <data name="notifications" xml:space="preserve">
+        <value>Bildirimler</value>
+    </data>
+    <data name="activeProjectsOnly" xml:space="preserve">
+        <value>Sadece Aktif Projeler</value>
+    </data>
+    <data name="myTasksOnly" xml:space="preserve">
+        <value>Sadece Benim Görevlerim</value>
+    </data>
+    <data name="allTime" xml:space="preserve">
+        <value>Tüm Zamanlar</value>
+    </data>
+    <data name="allStatuses" xml:space="preserve">
+        <value>Tüm Durumlar</value>
+    </data>
+    <data name="allRisks" xml:space="preserve">
+        <value>Tüm Riskler</value>
+    </data>
+    <data name="vulnRisk" xml:space="preserve">
+        <value>Güvenlik Açığı Riski</value>
+    </data>
+    <data name="recentClients" xml:space="preserve">
+        <value>Son Müşteriler</value>
+    </data>
+    <data name="welcomeUser" xml:space="preserve">
+        <value>Hoş geldiniz</value>
+    </data>
+    <data name="deleteSelected" xml:space="preserve">
+        <value>Seçilenleri Sil</value>
+    </data>
+    <data name="clearSelection" xml:space="preserve">
+        <value>Seçimi Temizle</value>
+    </data>
+    <data name="read" xml:space="preserve">
+        <value>Okundu</value>
+    </data>
+    <data name="created" xml:space="preserve">
+        <value>Oluşturuldu</value>
+    </data>
+    <data name="unread" xml:space="preserve">
+        <value>Okunmamış</value>
+    </data>
+    <data name="today" xml:space="preserve">
+        <value>Bugün</value>
+    </data>
+    <data name="thisWeek" xml:space="preserve">
+        <value>Bu hafta</value>
+    </data>
+    <data name="total" xml:space="preserve">
+        <value>Toplam</value>
+    </data>
+    <data name="knownExploitedOnly" xml:space="preserve">
+        <value>Sadece bilinen exploit'ler</value>
+    </data>
+    <data name="product" xml:space="preserve">
+        <value>Ürün</value>
+    </data>
+    <data name="frequency" xml:space="preserve">
+        <value>Sıklık</value>
+    </data>
+    <data name="method" xml:space="preserve">
+        <value>Yöntem</value>
+    </data>
+    <data name="deactivate" xml:space="preserve">
+        <value>Devre Dışı Bırak</value>
+    </data>
+    <data name="activate" xml:space="preserve">
+        <value>Etkinleştir</value>
+    </data>
+    <data name="errorLoadingNotifications" xml:space="preserve">
+        <value>Bildirimler yüklenirken hata</value>
+    </data>
+    <data name="notificationMarkedAsRead" xml:space="preserve">
+        <value>Bildirim okundu olarak işaretlendi</value>
+    </data>
+    <data name="errorMarkingNotificationAsRead" xml:space="preserve">
+        <value>Bildirim okundu olarak işaretlenirken hata</value>
+    </data>
+    <data name="notificationsMarkedAsRead" xml:space="preserve">
+        <value>bildirim okundu olarak işaretlendi</value>
+    </data>
+    <data name="errorMarkingAllNotificationsAsRead" xml:space="preserve">
+        <value>Tüm bildirimler okundu olarak işaretlenirken hata</value>
+    </data>
+    <data name="confirmDelete" xml:space="preserve">
+        <value>Silmeyi Onayla</value>
+    </data>
+    <data name="confirmDeleteNotificationsMessage" xml:space="preserve">
+        <value>{0} seçili bildirimi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</value>
+    </data>
+    <data name="delete" xml:space="preserve">
+        <value>Sil</value>
+    </data>
+    <data name="cancel" xml:space="preserve">
+        <value>İptal</value>
+    </data>
+    <data name="notificationsDeletedSuccessfully" xml:space="preserve">
+        <value>bildirim başarıyla silindi</value>
+    </data>
+    <data name="errorDeletingNotifications" xml:space="preserve">
+        <value>Bildirimler silinirken hata</value>
+    </data>
+    <data name="errorLoadingSubscriptions" xml:space="preserve">
+        <value>Abonelikler yüklenirken hata</value>
+    </data>
+    <data name="createSubscription" xml:space="preserve">
+        <value>Abonelik Oluştur</value>
+    </data>
+    <data name="subscriptionCreatedSuccessfully" xml:space="preserve">
+        <value>Abonelik başarıyla oluşturuldu</value>
+    </data>
+    <data name="editSubscription" xml:space="preserve">
+        <value>Aboneliği Düzenle</value>
+    </data>
+    <data name="subscriptionUpdatedSuccessfully" xml:space="preserve">
+        <value>Abonelik başarıyla güncellendi</value>
+    </data>
+    <data name="subscriptionDeactivated" xml:space="preserve">
+        <value>Abonelik devre dışı bırakıldı</value>
+    </data>
+    <data name="subscriptionActivated" xml:space="preserve">
+        <value>Abonelik etkinleştirildi</value>
+    </data>
+    <data name="errorTogglingSubscription" xml:space="preserve">
+        <value>Abonelik etkinleştirme/devre dışı bırakma hatası</value>
+    </data>
+    <data name="confirmDeleteSubscriptionMessage" xml:space="preserve">
+        <value>Bu aboneliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</value>
+    </data>
+    <data name="deleteSubscription" xml:space="preserve">
+        <value>Aboneliği Sil</value>
+    </data>
+    <data name="subscriptionDeletedSuccessfully" xml:space="preserve">
+        <value>Abonelik başarıyla silindi</value>
+    </data>
+    <data name="errorDeletingSubscription" xml:space="preserve">
+        <value>Abonelik silinirken hata</value>
+    </data>
+    <data name="defaultSubscriptionsCreatedSuccessfully" xml:space="preserve">
+        <value>{0} varsayılan abonelik başarıyla oluşturuldu</value>
+    </data>
+    <data name="errorCreatingDefaultSubscriptions" xml:space="preserve">
+        <value>Varsayılan abonelikler oluşturulurken hata</value>
+    </data>
+    <data name="testNotificationCreated" xml:space="preserve">
+        <value>'{0}' için test bildirimi oluşturuldu</value>
+    </data>
+    <data name="failedToCreateTestNotification" xml:space="preserve">
+        <value>Test bildirimi oluşturulamadı</value>
+    </data>
+    <data name="errorTestingNotification" xml:space="preserve">
+        <value>Bildirim test edilirken hata</value>
+    </data>
+    <data name="testNotificationsCreatedForAllSubscriptions" xml:space="preserve">
+        <value>Tüm {0} aktif abonelik için test bildirimleri başarıyla oluşturuldu</value>
+    </data>
+    <data name="testNotificationsPartialSuccess" xml:space="preserve">
+        <value>{0} test bildirimi oluşturuldu, {1} başarısız</value>
+    </data>
+    <data name="errorTestingNotifications" xml:space="preserve">
+        <value>Bildirimler test edilirken hata</value>
+    </data>
+    <data name="notificationTestResults" xml:space="preserve">
+        <value>Bildirim Test Sonuçları</value>
+    </data>
+    <data name="testAllActive" xml:space="preserve">
+        <value>Tüm Aktif Olanları Test Et</value>
+    </data>
+    <data name="testNotification" xml:space="preserve">
+        <value>Bildirimi Test Et</value>
+    </data>
+    <data name="confirmDeleteCvesMessage" xml:space="preserve">
+        <value>Seçili {0} CVE'yi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</value>
+    </data>
+    <data name="cvesDeletedSuccessfully" xml:space="preserve">
+        <value>CVE'ler başarıyla silindi</value>
+    </data>
+    <data name="errorDeletingCves" xml:space="preserve">
+        <value>CVE'leri silerken hata oluştu</value>
     </data>
 </root>

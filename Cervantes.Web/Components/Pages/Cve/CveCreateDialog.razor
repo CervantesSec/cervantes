@@ -1,0 +1,182 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using Cervantes.Web.Localization
+@using MudBlazor
+@using Task = System.Threading.Tasks.Task
+@inject ICveManager CveManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<Resource> localizer
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style="max-height: 500px; overflow-y: scroll;">
+            <MudForm @ref="form" Model="model" Validation="@(ValidateModel)">
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="model.CveId" 
+                                      Label="@localizer["cveId"]" 
+                                      Required="true"
+                                      RequiredError="@localizer["cveIdRequired"]"
+                                      Placeholder="e.g., CVE-2023-1234" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudSelect @bind-Value="model.State" 
+                                   Label="@localizer["state"]" 
+                                   Required="true">
+                            <MudSelectItem Value="@("PUBLISHED")">@localizer["published"]</MudSelectItem>
+                            <MudSelectItem Value="@("MODIFIED")">@localizer["modified"]</MudSelectItem>
+                            <MudSelectItem Value="@("WITHDRAWN")">@localizer["withdrawn"]</MudSelectItem>
+                            <MudSelectItem Value="@("REJECTED")">@localizer["rejected"]</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="model.Title" 
+                                      Label="@localizer["title"]" 
+                                      Required="true"
+                                      RequiredError="@localizer["titleRequired"]"
+                                      Lines="2" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="model.Description" 
+                                      Label="@localizer["description"]" 
+                                      Required="true"
+                                      RequiredError="@localizer["descriptionRequired"]"
+                                      Lines="4" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudDatePicker @bind-Date="publishedDate" 
+                                       Label="@localizer["publishedDate"]" 
+                                       Required="true" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudDatePicker @bind-Date="lastModifiedDate" 
+                                       Label="@localizer["lastModifiedDate"]" />
+                    </MudItem>
+                    
+                    <MudItem xs="12"><MudDivider /></MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">@localizer["cvssV3Information"]</MudText>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="4">
+                        <MudNumericField @bind-Value="model.CvssV3BaseScore" 
+                                         Label="@localizer["cvssV3BaseScore"]" 
+                                         Min="0" 
+                                         Max="10" 
+                                         Step="0.1" />
+                    </MudItem>
+                    <MudItem xs="12" md="4">
+                        <MudSelect @bind-Value="model.CvssV3Severity" 
+                                   Label="@localizer["cvssV3Severity"]">
+                            <MudSelectItem Value="@("LOW")">@localizer["low"]</MudSelectItem>
+                            <MudSelectItem Value="@("MEDIUM")">@localizer["medium"]</MudSelectItem>
+                            <MudSelectItem Value="@("HIGH")">@localizer["high"]</MudSelectItem>
+                            <MudSelectItem Value="@("CRITICAL")">@localizer["critical"]</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" md="4">
+                        <MudTextField @bind-Value="model.CvssV3Vector" 
+                                      Label="@localizer["cvssV3Vector"]" 
+                                      Placeholder="e.g., CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H" />
+                    </MudItem>
+                    
+                    <MudItem xs="12"><MudDivider /></MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">@localizer["epssInformation"]</MudText>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6">
+                        <MudNumericField @bind-Value="model.EpssScore" 
+                                         Label="@localizer["epssScore"]" 
+                                         Min="0" 
+                                         Max="1" 
+                                         Step="0.001" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudNumericField @bind-Value="model.EpssPercentile" 
+                                         Label="@localizer["epssPercentile"]" 
+                                         Min="0" 
+                                         Max="100" 
+                                         Step="0.1" />
+                    </MudItem>
+                    
+                    <MudItem xs="12"><MudDivider /></MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">@localizer["cweInformation"]</MudText>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="model.PrimaryCweId" 
+                                      Label="@localizer["primaryCweId"]" 
+                                      Placeholder="e.g., 79" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="model.PrimaryCweName" 
+                                      Label="@localizer["primaryCweName"]" 
+                                      Placeholder="e.g., Cross-site Scripting" />
+                    </MudItem>
+                    
+                    <MudItem xs="12"><MudDivider /></MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">@localizer["cisaKevInformation"]</MudText>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6">
+                        <MudSwitch @bind-Value="model.IsKnownExploited" 
+                                   Label="@localizer["knownExploitedVulnerability"]" 
+                                   Color="Color.Error" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudDatePicker @bind-Date="model.KevDueDate" 
+                                       Label="@localizer["kevDueDate"]" 
+                                       Disabled="!model.IsKnownExploited" />
+                    </MudItem>
+                    
+                    <MudItem xs="12"><MudDivider /></MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">@localizer["sourceInformation"]</MudText>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="model.SourceIdentifier" 
+                                      Label="@localizer["sourceIdentifier"]" 
+                                      Placeholder="e.g., nvd@nist.gov" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="model.AssignerOrgId" 
+                                      Label="@localizer["assignerOrganization"]" 
+                                      Placeholder="e.g., cna@vulndb.org" />
+                    </MudItem>
+                    
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="model.Notes" 
+                                      Label="@localizer["notes"]" 
+                                      Lines="3" 
+                                      Placeholder="@localizer["additionalNotesPlaceholder"]" />
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Color="Color.Primary" 
+                   Variant="Variant.Filled" 
+                   OnClick="CreateCve" 
+                   Disabled="loading">
+            @if (loading)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+            }
+            else
+            {
+                <span>@localizer["createCve"]</span>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+

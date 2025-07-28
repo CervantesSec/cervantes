@@ -36,6 +36,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         BeforeSaveChanges();
         return base.SaveChanges();
     }
+    
+    public Task<int> SaveChangesNoAuditAsync()
+    {
+        return base.SaveChangesAsync();
+    }
+    
     private void BeforeSaveChanges()
         {
             ChangeTracker.DetectChanges();
@@ -428,6 +434,114 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             .WithMany()
             .HasForeignKey(ce => ce.VulnId)
             .OnDelete(DeleteBehavior.SetNull);
+            
+        // CVE System Configuration
+        modelBuilder.Entity<Cve>()
+            .HasKey(c => c.Id);
+            
+        modelBuilder.Entity<Cve>()
+            .HasIndex(c => c.CveId)
+            .IsUnique();
+            
+        modelBuilder.Entity<Cve>()
+            .HasMany(c => c.Configurations)
+            .WithOne(cc => cc.Cve)
+            .HasForeignKey(cc => cc.CveId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<Cve>()
+            .HasMany(c => c.References)
+            .WithOne(cr => cr.Cve)
+            .HasForeignKey(cr => cr.CveId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<Cve>()
+            .HasMany(c => c.Tags)
+            .WithOne(ct => ct.Cve)
+            .HasForeignKey(ct => ct.CveId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<Cve>()
+            .HasMany(c => c.CweMappings)
+            .WithOne(ccm => ccm.Cve)
+            .HasForeignKey(ccm => ccm.CveId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<Cve>()
+            .HasMany(c => c.ProjectMappings)
+            .WithOne(cpm => cpm.Cve)
+            .HasForeignKey(cpm => cpm.CveId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<CveConfiguration>()
+            .HasKey(cc => cc.Id);
+            
+        modelBuilder.Entity<CveReference>()
+            .HasKey(cr => cr.Id);
+            
+        modelBuilder.Entity<CveTag>()
+            .HasKey(ct => ct.Id);
+            
+        modelBuilder.Entity<CveCweMapping>()
+            .HasKey(ccm => ccm.Id);
+            
+        modelBuilder.Entity<CveCweMapping>()
+            .HasOne(ccm => ccm.Cwe)
+            .WithMany()
+            .HasForeignKey(ccm => ccm.CweId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        modelBuilder.Entity<CveProjectMapping>()
+            .HasKey(cpm => cpm.Id);
+            
+        modelBuilder.Entity<CveProjectMapping>()
+            .HasOne(cpm => cpm.Project)
+            .WithMany()
+            .HasForeignKey(cpm => cpm.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<CveSubscription>()
+            .HasKey(cs => cs.Id);
+            
+        modelBuilder.Entity<CveSubscription>()
+            .HasOne(cs => cs.User)
+            .WithMany()
+            .HasForeignKey(cs => cs.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<CveSubscription>()
+            .HasOne(cs => cs.Project)
+            .WithMany()
+            .HasForeignKey(cs => cs.ProjectId)
+            .OnDelete(DeleteBehavior.SetNull);
+            
+        modelBuilder.Entity<CveSubscription>()
+            .HasMany(cs => cs.Notifications)
+            .WithOne(cn => cn.Subscription)
+            .HasForeignKey(cn => cn.SubscriptionId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<CveNotification>()
+            .HasKey(cn => cn.Id);
+            
+        modelBuilder.Entity<CveNotification>()
+            .HasOne(cn => cn.Cve)
+            .WithMany()
+            .HasForeignKey(cn => cn.CveId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<CveNotification>()
+            .HasOne(cn => cn.User)
+            .WithMany()
+            .HasForeignKey(cn => cn.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        modelBuilder.Entity<CveSyncSource>()
+            .HasKey(css => css.Id);
+            
+        modelBuilder.Entity<CveSyncSource>()
+            .HasIndex(css => css.Name)
+            .IsUnique();
     }
     
     public DbSet<Report> Reports { get; set; }
@@ -487,4 +601,49 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     /// Table for target custom field values
     /// </summary>
     public DbSet<TargetCustomFieldValue> TargetCustomFieldValues { get; set; }
+    
+    /// <summary>
+    /// Table for CVE entities
+    /// </summary>
+    public DbSet<Cve> Cves { get; set; }
+    
+    /// <summary>
+    /// Table for CVE configurations (affected products)
+    /// </summary>
+    public DbSet<CveConfiguration> CveConfigurations { get; set; }
+    
+    /// <summary>
+    /// Table for CVE references
+    /// </summary>
+    public DbSet<CveReference> CveReferences { get; set; }
+    
+    /// <summary>
+    /// Table for CVE tags
+    /// </summary>
+    public DbSet<CveTag> CveTags { get; set; }
+    
+    /// <summary>
+    /// Table for CVE to CWE mappings
+    /// </summary>
+    public DbSet<CveCweMapping> CveCweMappings { get; set; }
+    
+    /// <summary>
+    /// Table for CVE to project mappings
+    /// </summary>
+    public DbSet<CveProjectMapping> CveProjectMappings { get; set; }
+    
+    /// <summary>
+    /// Table for CVE subscriptions
+    /// </summary>
+    public DbSet<CveSubscription> CveSubscriptions { get; set; }
+    
+    /// <summary>
+    /// Table for CVE notifications
+    /// </summary>
+    public DbSet<CveNotification> CveNotifications { get; set; }
+    
+    /// <summary>
+    /// Table for CVE synchronization sources
+    /// </summary>
+    public DbSet<CveSyncSource> CveSyncSources { get; set; }
 }

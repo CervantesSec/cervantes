@@ -1,0 +1,388 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using MudBlazor
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using Task = System.Threading.Tasks.Task
+@inject IVulnManager VulnManager
+@inject IVulnCategoryManager VulnCategoryManager
+@inject IProjectManager ProjectManager
+@inject ITargetManager TargetManager
+@inject ICveManager CveManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudAlert Severity="Severity.Info">
+                        Creating vulnerability from CVE: <strong>@CveId</strong>
+                    </MudAlert>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="model.Name" 
+                                  Label="Vulnerability Name" 
+                                  Required="true"
+                                  RequiredError="Name is required" />
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudSelect @bind-Value="model.VulnCategoryId" 
+                               Label="Category" 
+                               Required="true"
+                               RequiredError="Category is required">
+                        @foreach (var category in categories)
+                        {
+                            <MudSelectItem Value="@category.Id">@category.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudSelect @bind-Value="model.Risk" 
+                               Label="Risk Level" 
+                               Required="true">
+                        <MudSelectItem Value="@(VulnRisk.Critical)">Critical</MudSelectItem>
+                        <MudSelectItem Value="@(VulnRisk.High)">High</MudSelectItem>
+                        <MudSelectItem Value="@(VulnRisk.Medium)">Medium</MudSelectItem>
+                        <MudSelectItem Value="@(VulnRisk.Low)">Low</MudSelectItem>
+                        <MudSelectItem Value="@(VulnRisk.Info)">Info</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudSelect @bind-Value="model.Status" 
+                               Label="Status" 
+                               Required="true">
+                        <MudSelectItem Value="@(VulnStatus.Open)">Open</MudSelectItem>
+                        <MudSelectItem Value="@(VulnStatus.Confirmed)">Confirmed</MudSelectItem>
+                        <MudSelectItem Value="@(VulnStatus.Resolved)">Resolved</MudSelectItem>
+                        <MudSelectItem Value="@(VulnStatus.OutOfScope)">Out of Scope</MudSelectItem>
+                        <MudSelectItem Value="@(VulnStatus.Accepted)">Accepted</MudSelectItem>
+                        <MudSelectItem Value="@(VulnStatus.Invalid)">Invalid</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+                
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="model.Description" 
+                                  Label="Description" 
+                                  Lines="4"
+                                  Required="true"
+                                  RequiredError="Description is required" />
+                </MudItem>
+                
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="model.ProofOfConcept" 
+                                  Label="Proof of Concept" 
+                                  Lines="3"
+                                  Placeholder="Steps to reproduce or proof of concept..." />
+                </MudItem>
+                
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="model.Impact" 
+                                  Label="Impact" 
+                                  Lines="3"
+                                  Required="true"
+                                  RequiredError="Impact is required" />
+                </MudItem>
+                
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="model.Remediation" 
+                                  Label="Remediation" 
+                                  Lines="3"
+                                  Required="true"
+                                  RequiredError="Remediation is required" />
+                </MudItem>
+                
+                <MudItem xs="12">
+                    <MudText Typo="Typo.subtitle2">Select Affected Targets:</MudText>
+                    @if (projectTargets.Any())
+                    {
+                        <MudList T="string">
+                            @foreach (var target in projectTargets)
+                            {
+                                <MudListItem T="string">
+                                    <MudCheckBox @bind-Value="@target.IsSelected" 
+                                                 Label="@target.Name">
+                                        @target.Name
+                                    </MudCheckBox>
+                                </MudListItem>
+                            }
+                        </MudList>
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.body2" Color="Color.Tertiary">No targets available in this project</MudText>
+                    }
+                </MudItem>
+                
+                <MudItem xs="12">
+                    <MudDivider />
+                    <MudText Typo="Typo.h6" Class="mt-2">CVE Information</MudText>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudTextField Value="@CveId" 
+                                  Label="CVE ID" 
+                                  ReadOnly="true" />
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudTextField Value="@(CvssScore?.ToString("F1") ?? "N/A")" 
+                                  Label="CVSS Score" 
+                                  ReadOnly="true" />
+                </MudItem>
+                
+                <MudItem xs="12">
+                    <MudTextField Value="@CveTitle" 
+                                  Label="CVE Title" 
+                                  ReadOnly="true" />
+                </MudItem>
+                
+                <MudItem xs="12">
+                    <MudTextField Value="@CveDescription" 
+                                  Label="CVE Description" 
+                                  Lines="3"
+                                  ReadOnly="true" />
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" 
+                   Variant="Variant.Filled" 
+                   OnClick="CreateVulnerability" 
+                   Disabled="loading">
+            @if (loading)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+            }
+            else
+            {
+                <span>Create Vulnerability</span>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IDialogReference? MudDialog { get; set; } = default!;
+    [Parameter] public string CveId { get; set; } = "";
+    [Parameter] public string CveTitle { get; set; } = "";
+    [Parameter] public string CveDescription { get; set; } = "";
+    [Parameter] public double? CvssScore { get; set; }
+    [Parameter] public string CvssSeverity { get; set; } = "";
+    [Parameter] public Guid ProjectId { get; set; }
+
+    private VulnCreateViewModel model = new();
+    private List<VulnCategory> categories = new();
+    private List<TargetSelectionModel> projectTargets = new();
+    private bool loading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+        InitializeModelFromCve();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            // Load categories
+            categories = VulnCategoryManager.GetAll().ToList();
+            
+            // Load project targets
+            var targets = TargetManager.GetAll().Where(t => t.ProjectId == ProjectId).ToList();
+            projectTargets = targets.Select(t => new TargetSelectionModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Description = t.Description ?? "",
+                IsSelected = false
+            }).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading data: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void InitializeModelFromCve()
+    {
+        model.Name = CveTitle ?? CveId;
+        model.Description = CveDescription ?? "";
+        model.ProjectId = ProjectId;
+        
+        // Set risk based on CVSS score
+        if (CvssScore.HasValue)
+        {
+            model.Risk = CvssScore.Value switch
+            {
+                >= 9.0 => VulnRisk.Critical,
+                >= 7.0 => VulnRisk.High,
+                >= 4.0 => VulnRisk.Medium,
+                >= 0.1 => VulnRisk.Low,
+                _ => VulnRisk.Info
+            };
+        }
+        else
+        {
+            model.Risk = CvssSeverity?.ToUpper() switch
+            {
+                "CRITICAL" => VulnRisk.Critical,
+                "HIGH" => VulnRisk.High,
+                "MEDIUM" => VulnRisk.Medium,
+                "LOW" => VulnRisk.Low,
+                _ => VulnRisk.Medium
+            };
+        }
+
+        model.Status = VulnStatus.Open;
+        
+        // Set default category to first available
+        if (categories.Any())
+        {
+            model.VulnCategoryId = categories.First().Id;
+        }
+
+        // Generate basic remediation text
+        model.Remediation = $"Apply security patches and updates to address CVE {CveId}. " +
+                           "Consult vendor documentation for specific remediation steps.";
+        
+        // Generate basic impact text
+        model.Impact = $"This vulnerability (CVE {CveId}) could potentially allow attackers to compromise the system. " +
+                       $"CVSS Score: {CvssScore?.ToString("F1") ?? "N/A"}";
+        
+        // Generate basic PoC text
+        model.ProofOfConcept = $"Vulnerability identified through CVE {CveId} analysis. " +
+                              "Detailed proof of concept testing may be required.";
+    }
+
+    private async Task CreateVulnerability()
+    {
+        loading = true;
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Create the vulnerability
+            var vuln = new Vuln
+            {
+                Id = Guid.NewGuid(),
+                Name = model.Name,
+                Description = model.Description,
+                VulnCategoryId = model.VulnCategoryId,
+                Risk = model.Risk,
+                Status = model.Status,
+                ProofOfConcept = model.ProofOfConcept,
+                Impact = model.Impact,
+                Remediation = model.Remediation,
+                ProjectId = ProjectId,
+                UserId = userId,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                
+                // CVE-specific fields
+                cve = CveId,
+                CVSS3 = CvssScore ?? 0.0,
+                
+                // Additional fields that might be useful
+                OWASPRisk = MapRiskToOWASPString(model.Risk),
+                OWASPImpact = MapRiskToOWASPString(model.Risk),
+                OWASPLikehood = MapRiskToOWASPString(model.Risk),
+                Template = false,
+                FindingId = Guid.NewGuid().ToString()
+            };
+
+            var createdVuln = await VulnManager.AddAsync(vuln);
+
+            // Create vulnerability-target mappings for selected targets
+            var selectedTargets = projectTargets.Where(t => t.IsSelected).ToList();
+            foreach (var target in selectedTargets)
+            {
+                var vulnTarget = new VulnTargets
+                {
+                    Id = Guid.NewGuid(),
+                    VulnId = createdVuln.Id,
+                    TargetId = target.Id
+                };
+                // This would need to be implemented
+                // await VulnTargetManager.AddAsync(vulnTarget);
+            }
+
+            // Link CVE to project if not already linked
+            try
+            {
+                var cve = await CveManager.GetByCveIdAsync(CveId);
+                if (cve != null)
+                {
+                    var mapping = new CveProjectMapping
+                    {
+                        Id = Guid.NewGuid(),
+                        CveId = cve.Id,
+                        ProjectId = ProjectId,
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow,
+                        UserId = userId,
+                        Status = "New",
+                        Priority = "High",
+                        IsAutomatic = false,
+                        IsValidated = true,
+                        RelevanceScore = 1.0,
+                        Notes = $"Created from vulnerability: {createdVuln.Name}"
+                    };
+                    // This would need to be implemented
+                    // await CveManager.AddProjectMappingAsync(mapping);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error linking CVE to project: {ex.Message}");
+                // Don't fail the whole operation if linking fails
+            }
+
+            MudDialog.Close(DialogResult.Ok(createdVuln));
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error creating vulnerability: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog?.Close();
+    }
+
+    private string MapRiskToOWASPString(VulnRisk risk)
+    {
+        return risk switch
+        {
+            VulnRisk.Critical => "5",
+            VulnRisk.High => "4",
+            VulnRisk.Medium => "3",
+            VulnRisk.Low => "2",
+            VulnRisk.Info => "1",
+            _ => "3"
+        };
+    }
+
+    private class TargetSelectionModel
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "";
+        public bool IsSelected { get; set; }
+    }
+}

@@ -1,0 +1,263 @@
+@page "/cve/subscriptions"
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using Cervantes.CORE
+@using Cervantes.Web.Controllers
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using Cervantes.Web.Localization
+@using Microsoft.AspNetCore.Components.Authorization
+@using MudBlazor
+@using MudBlazor.Extensions
+@using MudBlazor.Extensions.Core
+@using MudBlazor.Extensions.Options
+@using Task = System.Threading.Tasks.Task
+@inject CveController CveController
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IStringLocalizer<Resource> localizer
+@attribute [Authorize]
+
+<PageTitle>@localizer["cveSubscriptions"] | Cervantes</PageTitle>
+
+<SectionContent SectionName="appbar">
+    
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@breadcrumbs" Separator=">" />
+    
+</SectionContent>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                    <MudButton Href="/cve"
+
+                               StartIcon="@cveSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveDashboard"]
+                    </MudButton>
+                    
+                    <MudButton Href="/cve/list"
+
+                               StartIcon="@cveSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveManagement"]
+                    </MudButton>
+
+                    <MudButton Href="/cve/notifications"
+
+                               StartIcon="@cveNotSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveNotifications"]
+                    </MudButton>
+                        
+                    <MudButton Href="/cve/subscriptions"
+
+                               StartIcon="@cveSubSVG"
+                               Color="Color.Primary">
+                        @localizer["cveSubscriptions"]
+                    </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["mySubscriptions"]</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudButtonGroup Variant="Variant.Filled" Size="Size.Small">
+                        <MudButton Color="Color.Secondary"
+                                   StartIcon="@Icons.Material.Filled.NotificationsActive"
+                                   OnClick="TestAllActiveNotifications"
+                                   Disabled="@(!subscriptions.Any(s => s.IsActive))">
+                            @localizer["testAllActive"]
+                        </MudButton>
+                        <MudButton Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.Add"
+                                   OnClick="CreateSubscription">
+                            @localizer["createSubscription"]
+                        </MudButton>
+                    </MudButtonGroup>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (loading)
+                {
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+                }
+                else if (!subscriptions.Any())
+                {
+                    <MudAlert Severity="Severity.Info">
+                        @localizer["noSubscriptionsFound"]
+                    </MudAlert>
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.Add"
+                               OnClick="CreateDefaultSubscriptions"
+                               Class="mt-3">
+                        @localizer["createDefaultSubscriptions"]
+                    </MudButton>
+                }
+                else
+                {
+                    <MudGrid>
+                        @foreach (var subscription in subscriptions)
+                        {
+                            <MudItem xs="12" md="6" lg="4">
+                                <MudCard Elevation="2" Class="h-100">
+                                    <MudCardContent>
+                                        <MudText Typo="Typo.h6" Class="mb-2">
+                                            @subscription.Name
+                                            @if (subscription.IsActive)
+                                            {
+                                                <MudChip T="string" Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined">@localizer["active"]</MudChip>
+                                            }
+                                            else
+                                            {
+                                                <MudChip T="string" Size="Size.Small" Color="Color.Default" Variant="Variant.Outlined">@localizer["inactive"]</MudChip>
+                                            }
+                                        </MudText>
+                                        <MudText Typo="Typo.body2" Class="mb-3">@subscription.Description</MudText>
+
+                                        <MudGrid>
+                                            @if (!string.IsNullOrEmpty(subscription.Vendor))
+                                            {
+                                                <MudItem xs="12">
+                                                    <MudText Typo="Typo.caption">@localizer["vendor"]: @subscription.Vendor</MudText>
+                                                </MudItem>
+                                            }
+                                            @if (!string.IsNullOrEmpty(subscription.Product))
+                                            {
+                                                <MudItem xs="12">
+                                                    <MudText Typo="Typo.caption">@localizer["product"]: @subscription.Product</MudText>
+                                                </MudItem>
+                                            }
+                                            @if (subscription.MinCvssScore.HasValue || subscription.MaxCvssScore.HasValue)
+                                            {
+                                                <MudItem xs="12">
+                                                    <MudText Typo="Typo.caption">
+                                                        CVSS: @(subscription.MinCvssScore?.ToString("F1") ?? "0.0") - @(subscription.MaxCvssScore?.ToString("F1") ?? "10.0")
+                                                    </MudText>
+                                                </MudItem>
+                                            }
+                                            @if (subscription.OnlyKnownExploited)
+                                            {
+                                                <MudItem xs="12">
+                                                    <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Error" Size="Size.Small"/>
+                                                    <MudText Typo="Typo.caption" Color="Color.Error">@localizer["knownExploitedOnly"]</MudText>
+                                                </MudItem>
+                                            }
+                                        </MudGrid>
+
+                                        <MudText Typo="Typo.caption" Class="mt-3">
+                                            @localizer["frequency"]: @subscription.NotificationFrequency | @localizer["method"]: @subscription.NotificationMethod
+                                        </MudText>
+                                    </MudCardContent>
+                                    <MudCardActions>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                                       Size="Size.Small"
+                                                       OnClick="() => EditSubscription(subscription)"
+                                                       Title="@localizer["editSubscription"]"/>
+                                        <MudIconButton Icon="@Icons.Material.Filled.NotificationAdd"
+                                                       Size="Size.Small"
+                                                       Color="Color.Info"
+                                                       OnClick="() => TestSubscriptionNotification(subscription)"
+                                                       Title="@localizer["testNotification"]"
+                                                       Disabled="@(!subscription.IsActive)"/>
+                                        <MudIconButton Icon="@(subscription.IsActive ? Icons.Material.Filled.Pause : Icons.Material.Filled.PlayArrow)"
+                                                       Size="Size.Small"
+                                                       Color="@(subscription.IsActive ? Color.Warning : Color.Success)"
+                                                       OnClick="() => ToggleSubscription(subscription)"
+                                                       Title="@(subscription.IsActive ? localizer["deactivate"] : localizer["activate"])"/>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                       Size="Size.Small"
+                                                       Color="Color.Error"
+                                                       OnClick="() => DeleteSubscription(subscription)"
+                                                       Title="@localizer["deleteSubscription"]"/>
+                                        <MudSpacer/>
+                                        @*<MudIconButton Icon="@Icons.Material.Filled.Analytics"
+                                                       Size="Size.Small"
+                                                       OnClick="() => ViewStatistics(subscription)"
+                                                       Title="@localizer["viewStatistics"]"/>*@
+                                    </MudCardActions>
+                                </MudCard>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    @if (userSummary != null)
+    {
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@localizer["subscriptionSummary"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="12" md="3">
+                            <MudCard Elevation="1">
+                                <MudCardContent Class="d-flex align-center justify-center">
+                                    <div class="d-flex flex-column align-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.NotificationsActive" Size="Size.Large" Color="Color.Primary"/>
+                                        <MudText Typo="Typo.h6">@userSummary.ActiveSubscriptions</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["activeSubscriptions"]</MudText>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                        <MudItem xs="12" md="3">
+                            <MudCard Elevation="1">
+                                <MudCardContent Class="d-flex align-center justify-center">
+                                    <div class="d-flex flex-column align-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.MarkEmailUnread" Size="Size.Large" Color="Color.Info"/>
+                                        <MudText Typo="Typo.h6" Color="Color.Info">@userSummary.UnreadNotifications</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["unreadNotifications"]</MudText>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                        <MudItem xs="12" md="3">
+                            <MudCard Elevation="1">
+                                <MudCardContent Class="d-flex align-center justify-center">
+                                    <div class="d-flex flex-column align-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.Today" Size="Size.Large" Color="Color.Success"/>
+                                        <MudText Typo="Typo.h6" Color="Color.Success">@userSummary.CveMatchesToday</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["matchesToday"]</MudText>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                        <MudItem xs="12" md="3">
+                            <MudCard Elevation="1">
+                                <MudCardContent Class="d-flex align-center justify-center">
+                                    <div class="d-flex flex-column align-center">
+                                        <MudIcon Icon="@Icons.Material.Filled.DateRange" Size="Size.Large" Color="Color.Warning"/>
+                                        <MudText Typo="Typo.h6" Color="Color.Warning">@userSummary.CveMatchesThisWeek</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["matchesThisWeek"]</MudText>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
+

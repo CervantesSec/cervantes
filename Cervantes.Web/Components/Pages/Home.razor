@@ -26,12 +26,98 @@
         </MudToolBar>
     </MudPaper>
     </MudItem>
+    
+    <!-- Dashboard Filters Row -->
+    <MudItem xs="12">
+        <MudPaper Class="pa-4" Elevation="2">
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="2">
+                    <MudSelect @bind-Value="selectedTimeRange"
+                               Label="@localizer["timeRange"]"
+                               Dense="true"
+                               OnSelectionChanged="OnFiltersChanged">
+                        <MudSelectItem Value="@("7d")">@localizer["last7Days"]</MudSelectItem>
+                        <MudSelectItem Value="@("30d")">@localizer["last30Days"]</MudSelectItem>
+                        <MudSelectItem Value="@("90d")">@localizer["last90Days"]</MudSelectItem>
+                        <MudSelectItem Value="@("1y")">@localizer["lastYear"]</MudSelectItem>
+                        <MudSelectItem Value="@("all")">@localizer["allTime"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="2">
+                    <MudSelect @bind-Value="selectedProjectStatus"
+                               Label="@localizer["projectStatus"]"
+                               Dense="true"
+                               OnSelectionChanged="OnFiltersChanged">
+                        <MudSelectItem Value="@("all")">@localizer["allStatuses"]</MudSelectItem>
+                        <MudSelectItem Value="@("Active")">@localizer["active"]</MudSelectItem>
+                        <MudSelectItem Value="@("Waiting")">@localizer["waiting"]</MudSelectItem>
+                        <MudSelectItem Value="@("Archived")">@localizer["archived"]</MudSelectItem>
+                        <MudSelectItem Value="@("Finished")">@localizer["finished"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="2">
+                    <MudSelect @bind-Value="selectedVulnRisk"
+                               Label="@localizer["vulnRisk"]"
+                               Dense="true"
+                               OnSelectionChanged="OnFiltersChanged">
+                        <MudSelectItem Value="@("all")">@localizer["allRisks"]</MudSelectItem>
+                        <MudSelectItem Value="@("Critical")">@localizer["critical"]</MudSelectItem>
+                        <MudSelectItem Value="@("High")">@localizer["high"]</MudSelectItem>
+                        <MudSelectItem Value="@("Medium")">@localizer["medium"]</MudSelectItem>
+                        <MudSelectItem Value="@("Low")">@localizer["low"]</MudSelectItem>
+                        <MudSelectItem Value="@("Info")">@localizer["info"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="2">
+                    <MudSelect @bind-Value="selectedTaskStatus"
+                               Label="@localizer["taskStatus"]"
+                               Dense="true"
+                               OnSelectionChanged="OnFiltersChanged">
+                        <MudSelectItem Value="@("all")">@localizer["allStatuses"]</MudSelectItem>
+                        <MudSelectItem Value="@("Backlog")">@localizer["backlog"]</MudSelectItem>
+                        <MudSelectItem Value="@("ToDo")">@localizer["todo"]</MudSelectItem>
+                        <MudSelectItem Value="@("InProgress")">@localizer["inProgress"]</MudSelectItem>
+                        <MudSelectItem Value="@("Blocked")">@localizer["blocked"]</MudSelectItem>
+                        <MudSelectItem Value="@("Done")">@localizer["done"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="4" Class="d-flex align-center">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                        @*<MudCheckBox @bind-Value="showOnlyActiveProjects"
+                                     Label="@localizer["activeProjectsOnly"]"
+                                     Dense="true"
+                                     CheckedChanged="@OnFiltersChanged"/>
+                        <MudCheckBox @bind-Value="showOnlyMyTasks"
+                                     Label="@localizer["myTasksOnly"]"
+                                     Dense="true"
+                                     CheckedChanged="@OnFiltersChanged"/>*@
+                        <MudButton StartIcon="@Icons.Material.Filled.Refresh"
+                                   Size="Size.Small"
+                                   OnClick="RefreshDashboard">
+                            @localizer["refresh"]
+                        </MudButton>
+                        <MudButton StartIcon="@Icons.Material.Filled.Clear"
+                                   Size="Size.Small"
+                                   Class="ml-2"
+                                   OnClick="ResetFilters">
+                            @localizer["reset"]
+                        </MudButton>
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+    
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
             <MudIcon Icon="@Icons.Material.Filled.Folder" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
             <div>
                 <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["projects"]</MudText>
-                <MudText Typo="Typo.h5">@Projects.Count()</MudText>
+                <MudText Typo="Typo.h5">@FilteredProjects.Count()</MudText>
             </div>
         </MudPaper>
     </MudItem>
@@ -40,7 +126,7 @@
             <MudIcon Icon="@Icons.Material.Filled.BugReport" Color="Color.Secondary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
             <div>
                 <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["vulns"]</MudText>
-                <MudText Typo="Typo.h5">@Vulns.Count()</MudText>
+                <MudText Typo="Typo.h5">@FilteredVulns.Count()</MudText>
             </div>
         </MudPaper>
     </MudItem>
@@ -49,7 +135,7 @@
             <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
             <div>
                 <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["tasks"]</MudText>
-                <MudText Typo="Typo.h5">@Tasks.Count()</MudText>
+                <MudText Typo="Typo.h5">@FilteredTasks.Count()</MudText>
             </div>
         </MudPaper>
     </MudItem>
@@ -70,11 +156,18 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent Class="d-flex justify-center">
-                <MudChart ChartType="ChartType.Pie" 
-                         Width="100%" Height="170px"
-                         InputData="@GetProjectChartData()"
-                         InputLabels="@GetProjectChartLabels()"
-                         ChartOptions="@GetProjectChartOptions()" />
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudChart ChartType="ChartType.Pie" 
+                             Width="100%" Height="170px"
+                             InputData="@GetProjectChartData()"
+                             InputLabels="@GetProjectChartLabels()"
+                             ChartOptions="@GetProjectChartOptions()" />
+                }
             </MudCardContent>
 
         </MudCard>
@@ -87,30 +180,37 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent >
-                <MudList T="string" Dense="true">
-                    @foreach (var client in Clients.Take(3).OrderByDescending(c => c.CreatedDate))
-                    {
-                        <MudListItem T="string">
-                            <div class="d-flex flex-row">
-                                @if (client.ImagePath != "None")
-                                {
-                                    <MudImage Src="@client.ImagePath" Class="mx-4" ObjectFit="ObjectFit.ScaleDown" Height="50" Width="50"/>
-                                }
-                                else
-                                {
-                                    <MudAvatar Class="mud-elevation-25">
-                                        <MudIcon Icon="@Icons.Material.Filled.BusinessCenter" Class="mx-4"/>
-                                    </MudAvatar>
-                                }
-                                <div class="ml-6">
-                                    <MudText Typo="Typo.subtitle2">@client.Name</MudText>
-                                    <MudText Typo="Typo.body2">@client.Url</MudText>
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudList T="string" Dense="true">
+                        @foreach (var client in Clients.Take(3).OrderByDescending(c => c.CreatedDate))
+                        {
+                            <MudListItem T="string">
+                                <div class="d-flex flex-row">
+                                    @if (client.ImagePath != "None")
+                                    {
+                                        <MudImage Src="@client.ImagePath" Class="mx-4" ObjectFit="ObjectFit.ScaleDown" Height="50" Width="50"/>
+                                    }
+                                    else
+                                    {
+                                        <MudAvatar Class="mud-elevation-25">
+                                            <MudIcon Icon="@Icons.Material.Filled.BusinessCenter" Class="mx-4"/>
+                                        </MudAvatar>
+                                    }
+                                    <div class="ml-6">
+                                        <MudText Typo="Typo.subtitle2">@client.Name</MudText>
+                                        <MudText Typo="Typo.body2">@client.Url</MudText>
+                                    </div>
+                                    <MudChip T="string" Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@client.CreatedDate.ToShortDateString()</MudChip>
                                 </div>
-                                <MudChip T="string" Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">@client.CreatedDate.ToShortDateString()</MudChip>
-                            </div>
-                        </MudListItem>
-                    }
-                </MudList>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -122,33 +222,40 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent Class="px-0">
-                <MudList T="string" Dense="true">
-                    @foreach (var task in Tasks.Take(3).OrderByDescending(v => v.StartDate))
-                    {
-                        <MudListItem T="string">
-                            <div class="d-flex flex-row">
-                                <MudAvatar Class="mud-elevation-25">
-                                    <MudIcon Icon="@Icons.Material.Filled.BugReport" Class="mx-4"/>
-                                </MudAvatar>
-                                <div class="ml-6">
-                                    <MudText Typo="Typo.subtitle2">@task.Name</MudText>
-                                    <MudText Typo="Typo.body2">@task.Status</MudText>
-                                </div>
-                                <MudChip T="string" Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">
-                                    @if (task.AsignedUser != null)
-                                    {
-                                        @task.AsignedUser.FullName
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudList T="string" Dense="true">
+                        @foreach (var task in FilteredTasks.Take(3).OrderByDescending(v => v.StartDate))
+                        {
+                            <MudListItem T="string">
+                                <div class="d-flex flex-row">
+                                    <MudAvatar Class="mud-elevation-25">
+                                        <MudIcon Icon="@Icons.Material.Filled.BugReport" Class="mx-4"/>
+                                    </MudAvatar>
+                                    <div class="ml-6">
+                                        <MudText Typo="Typo.subtitle2">@task.Name</MudText>
+                                        <MudText Typo="Typo.body2">@task.Status</MudText>
+                                    </div>
+                                    <MudChip T="string" Label="true" Color="Color.Primary" Size="Size.Small" Class="ml-auto mud-elevation-25">
+                                        @if (task.AsignedUser != null)
+                                        {
+                                            @task.AsignedUser.FullName
 
-                                    }
-                                    else
-                                    {
-                                        <span>@localizer["noAssignee"]</span>
-                                    }
-                                </MudChip>
-                            </div>
-                        </MudListItem>
-                    }
-                </MudList>
+                                        }
+                                        else
+                                        {
+                                            <span>@localizer["noAssignee"]</span>
+                                        }
+                                    </MudChip>
+                                </div>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -161,12 +268,19 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudChart ChartType="ChartType.Bar" 
-                         ChartSeries="@GetVulnChartSeries()"
-                         XAxisLabels="@GetVulnChartLabels()"
-                         Width="100%" Height="170px"
-                         ChartOptions="@GetVulnChartOptions()"
-                         AxisChartOptions="@GetVulnAxisChartOptions()" />
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudChart ChartType="ChartType.Bar" 
+                             ChartSeries="@GetVulnChartSeries()"
+                             XAxisLabels="@GetVulnChartLabels()"
+                             Width="100%" Height="170px"
+                             ChartOptions="@GetVulnChartOptions()"
+                             AxisChartOptions="@GetVulnAxisChartOptions()" />
+                }
             </MudCardContent>
 
         </MudCard>
@@ -180,74 +294,81 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent Class="px-0">
-                <MudSimpleTable Style="overflow-x: auto;" Dense="true">
-                    <thead>
-                    <tr>
-                        <th>@localizer["name"]</th>
-                        <th>@localizer["risk"]</th>
-                        <th>@localizer["status"]</th>
-                        <th>@localizer["category"]</th>
-                        <th>@localizer["createdDate"]</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var x in Vulns.Take(3).OrderByDescending(x => x.CreatedDate))
-                    {
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudSimpleTable Style="overflow-x: auto;" Dense="true">
+                        <thead>
                         <tr>
-                            <td>@x.Name</td>
-                            @switch (x.Risk)
-                            {
-                                case VulnRisk.Info:
-                                    <td><MudChip T="string" Color="Color.Info" Icon="@Icons.Material.Filled.Info">@localizer["info"]</MudChip></td>
-                                    break;
-                                case VulnRisk.Low:
-                                    <td><MudChip T="string" Color="Color.Success" Icon="@Icons.Material.Filled.Flag">@localizer["low"]</MudChip></td>
-                                    break;
-                                case VulnRisk.Medium:
-                                    <td><MudChip T="string" Color="Color.Warning" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["medium"]</MudChip></td>
-                                    break;
-                                case VulnRisk.High:
-                                    <td><MudChip T="string" Color="Color.Error" Icon="@Icons.Material.Filled.Error">@localizer["high"]</MudChip></td>
-                                    break;
-                                case VulnRisk.Critical:
-                                    <td><MudChip T="string" Color="Color.Secondary" Icon="@Icons.Material.Filled.CrisisAlert">@localizer["critical"]</MudChip></td>
-                                    break;
-                            }
-                            @switch (x.Status)
-                            {
-                                case VulnStatus.Open:
-                                    <td><MudChip T="string" Color="Color.Info" Icon="@Icons.Material.Filled.Flag">@localizer["open"]</MudChip></td>
-                                    break;
-                                case VulnStatus.Accepted:
-                                    <td><MudChip T="string" Color="Color.Warning" Icon="@Icons.Material.Filled.CheckCircle">@localizer["accepted"]</MudChip></td>
-                                    break;
-                                case VulnStatus.Confirmed:
-                                    <td><MudChip T="string" Color="Color.Error" Icon="@Icons.Material.Filled.CheckBox">@localizer["confirmed"]</MudChip></td>
-                                    break;
-                                case VulnStatus.Invalid:
-                                    <td><MudChip T="string" Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["invalid"]</MudChip></td>
-                                    break;
-                                case VulnStatus.OutOfScope:
-                                    <td><MudChip T="string" Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["outofScope"]</MudChip></td>
-                                    break;
-                                case VulnStatus.Resolved:
-                                    <td><MudChip T="string" Color="Color.Success" Icon="@Icons.Material.Filled.Check">@localizer["resolved"]</MudChip></td>
-                                    break;
-                            }
-                            @if (x.VulnCategory != null)
-                            {
-                                <td>@x.VulnCategory.Name</td>
-
-                            }
-                            else
-                            {
-                                <td>@localizer["noCategory"]</td>
-                            }
-                            <td>@x.CreatedDate</td>
+                            <th>@localizer["name"]</th>
+                            <th>@localizer["risk"]</th>
+                            <th>@localizer["status"]</th>
+                            <th>@localizer["category"]</th>
+                            <th>@localizer["createdDate"]</th>
                         </tr>
-                    }
-                    </tbody>
-                </MudSimpleTable>
+                        </thead>
+                        <tbody>
+                        @foreach (var x in FilteredVulns.Take(3).OrderByDescending(x => x.CreatedDate))
+                        {
+                            <tr>
+                                <td>@x.Name</td>
+                                @switch (x.Risk)
+                                {
+                                    case VulnRisk.Info:
+                                        <td><MudChip T="string" Color="Color.Info" Icon="@Icons.Material.Filled.Info">@localizer["info"]</MudChip></td>
+                                        break;
+                                    case VulnRisk.Low:
+                                        <td><MudChip T="string" Color="Color.Success" Icon="@Icons.Material.Filled.Flag">@localizer["low"]</MudChip></td>
+                                        break;
+                                    case VulnRisk.Medium:
+                                        <td><MudChip T="string" Color="Color.Warning" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["medium"]</MudChip></td>
+                                        break;
+                                    case VulnRisk.High:
+                                        <td><MudChip T="string" Color="Color.Error" Icon="@Icons.Material.Filled.Error">@localizer["high"]</MudChip></td>
+                                        break;
+                                    case VulnRisk.Critical:
+                                        <td><MudChip T="string" Color="Color.Secondary" Icon="@Icons.Material.Filled.CrisisAlert">@localizer["critical"]</MudChip></td>
+                                        break;
+                                }
+                                @switch (x.Status)
+                                {
+                                    case VulnStatus.Open:
+                                        <td><MudChip T="string" Color="Color.Info" Icon="@Icons.Material.Filled.Flag">@localizer["open"]</MudChip></td>
+                                        break;
+                                    case VulnStatus.Accepted:
+                                        <td><MudChip T="string" Color="Color.Warning" Icon="@Icons.Material.Filled.CheckCircle">@localizer["accepted"]</MudChip></td>
+                                        break;
+                                    case VulnStatus.Confirmed:
+                                        <td><MudChip T="string" Color="Color.Error" Icon="@Icons.Material.Filled.CheckBox">@localizer["confirmed"]</MudChip></td>
+                                        break;
+                                    case VulnStatus.Invalid:
+                                        <td><MudChip T="string" Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["invalid"]</MudChip></td>
+                                        break;
+                                    case VulnStatus.OutOfScope:
+                                        <td><MudChip T="string" Color="Color.Primary" Icon="@Icons.Material.Filled.ErrorOutline">@localizer["outofScope"]</MudChip></td>
+                                        break;
+                                    case VulnStatus.Resolved:
+                                        <td><MudChip T="string" Color="Color.Success" Icon="@Icons.Material.Filled.Check">@localizer["resolved"]</MudChip></td>
+                                        break;
+                                }
+                                @if (x.VulnCategory != null)
+                                {
+                                    <td>@x.VulnCategory.Name</td>
+
+                                }
+                                else
+                                {
+                                    <td>@localizer["noCategory"]</td>
+                                }
+                                <td>@x.CreatedDate</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </MudSimpleTable>
+                }
 
             </MudCardContent>
         </MudCard>
@@ -263,11 +384,18 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent Class="d-flex justify-center">
-                <MudChart ChartType="ChartType.Donut" 
-                         Width="100%" Height="170px"
-                         InputData="@GetTaskChartData()"
-                         InputLabels="@GetTaskChartLabels()"
-                         ChartOptions="@GetTaskChartOptions()" />
+                @if (loading)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else
+                {
+                    <MudChart ChartType="ChartType.Donut" 
+                             Width="100%" Height="170px"
+                             InputData="@GetTaskChartData()"
+                             InputLabels="@GetTaskChartLabels()"
+                             ChartOptions="@GetTaskChartOptions()" />
+                }
             </MudCardContent>
 
         </MudCard>

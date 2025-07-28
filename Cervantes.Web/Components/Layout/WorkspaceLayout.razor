@@ -19,9 +19,9 @@
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <MudThemeProvider Theme="CervantesTheme.Theme" @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
+<MudPopoverProvider />
 <MudDialogProvider/>
 <MudSnackbarProvider/>
-<MudPopoverProvider />
 
 <AuthorizeView>
     <Authorized>
@@ -62,7 +62,6 @@
                                                 @task.Name
                                             </MudListItem>
 
-
                                         }
                                         @foreach (var client in searchViewModel.Clients)
                                         {
@@ -70,8 +69,6 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.BusinessCenter" Href="@link">
                                                 @client.Name
                                             </MudListItem>
-
-
 
                                         }
                                         @foreach (var project in searchViewModel.Projects)
@@ -81,7 +78,6 @@
                                                 @project.Name
                                             </MudListItem>
 
-
                                         }
                                         @foreach (var doc in searchViewModel.Documents)
                                         {
@@ -89,8 +85,6 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.FileCopy" Href="@link">
                                                 @doc.Name
                                             </MudListItem>
-
-
 
                                         }
                                         @foreach (var report in searchViewModel.Reports)
@@ -100,8 +94,6 @@
                                                 @report.Name
                                             </MudListItem>
 
-
-
                                         }
                                         @foreach (var target in searchViewModel.Targets)
                                         {
@@ -109,7 +101,6 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.Adjust" Href="@link">
                                                 @target.Name
                                             </MudListItem>
-
 
                                         }
                                         @foreach (var target in searchViewModel.TargetServices)
@@ -119,8 +110,6 @@
                                                 @target.Name
                                             </MudListItem>
 
-
-
                                         }
                                         @foreach (var vault in searchViewModel.Vaults)
                                         {
@@ -129,8 +118,6 @@
                                                 @vault.Name
                                             </MudListItem>
 
-
-
                                         }
                                         @foreach (var cat in searchViewModel.VulnCategories)
                                         {
@@ -138,7 +125,6 @@
                                             <MudListItem T="string" Icon="@Icons.Material.Filled.Category" Href="@link">
                                                 @cat.Name
                                             </MudListItem>
-
 
                                         }
                                         @foreach (var vuln in searchViewModel.Vulns)
@@ -198,7 +184,7 @@
                     <MudImage Class="mud-nav-link-icon" Src="img/logo.png" Height="40" Width="40"></MudImage>
                     }
                 </MudDrawerHeader>
-                <WorkspaceNavMenu project="@project" />
+                <NavMenu />
                 <MudStack>
 
                     @if (_drawerOpen)
@@ -221,7 +207,7 @@
                
                 <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-2 pt-2">
                     <MudStack>
-  
+ 
                         @*<div style="padding-bottom:60px">
                                 @Body
                             </div>*@
@@ -245,8 +231,6 @@
 
 @code {
 
-   private string? currentUrl;
-
     bool _isDarkMode { get; set; }
     private MudThemeProvider _mudThemeProvider;
     /*private HubConnection hubConnection;
@@ -258,11 +242,9 @@ public string project { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        currentUrl = navigationManager.ToBaseRelativePath(navigationManager.Uri);
-        navigationManager.LocationChanged += OnLocationChanged;
+        searchViewModel = new SearchViewModel();
         await LoadDataAsync();
         await base.OnInitializedAsync();
-
     }
     
     private async Task LoadDataAsync()
@@ -277,13 +259,6 @@ public string project { get; set; }
         {
             CurrentUser = userController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier));
         }
-    }
-    
-    
-    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
-    {
-        currentUrl = navigationManager.ToBaseRelativePath(e.Location);
-        StateHasChanged();
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -355,14 +330,14 @@ public string project { get; set; }
     }
     
    
-    protected override void OnParametersSet()
+    /*protected override void OnParametersSet()
     {
         object project1 = null;
         if ((this.Body.Target as RouteView)?.RouteData.RouteValues?.TryGetValue("project", out project1) == true)
         {
             project = project1?.ToString();
         }
-    }
+    }*/
     
     private bool _searchDialogOpen;
     private void OpenSearchDialog() => _searchDialogOpen = true;

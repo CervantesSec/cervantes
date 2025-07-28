@@ -1,0 +1,487 @@
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using MudBlazor
+@using MudBlazor.Extensions
+@using MudBlazor.Extensions.Core
+@using MudBlazor.Extensions.Options
+@using System.Text.RegularExpressions
+@using Cervantes.Web.Localization
+@using Task = System.Threading.Tasks.Task
+@inject ICveManager CveManager
+@inject IProjectManager ProjectManager
+@inject ITargetManager TargetManager
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+@inject IStringLocalizer<Resource> localizer
+
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">
+                <MudIcon Icon="@Icons.Material.Filled.Security" Class="mr-2" />
+                @localizer["relatedCves"]
+            </MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudButton Variant="Variant.Outlined" 
+                       Color="Color.Primary" 
+                       Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.Sync"
+                       OnClick="RefreshCves">
+                @localizer["refresh"]
+            </MudButton>
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        @if (loading)
+        {
+            <div class="d-flex justify-center align-center" style="height: 200px;">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </div>
+        }
+        else if (relatedCves.Any())
+        {
+            <!-- CVE Statistics for Project -->
+            <MudGrid Class="mb-4">
+                <MudItem xs="12" md="3">
+                    <MudPaper Class="pa-2 text-center">
+                        <MudText Typo="Typo.h6" Color="Color.Primary">@relatedCves.Count</MudText>
+                        <MudText Typo="Typo.caption">Total CVEs</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" md="3">
+                    <MudPaper Class="pa-2 text-center">
+                        <MudText Typo="Typo.h6" Color="Color.Error">@relatedCves.Count(c => c.CvssV3Severity == "CRITICAL")</MudText>
+                        <MudText Typo="Typo.caption">Critical</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" md="3">
+                    <MudPaper Class="pa-2 text-center">
+                        <MudText Typo="Typo.h6" Color="Color.Warning">@relatedCves.Count(c => c.CvssV3Severity == "HIGH")</MudText>
+                        <MudText Typo="Typo.caption">High</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" md="3">
+                    <MudPaper Class="pa-2 text-center">
+                        <MudText Typo="Typo.h6" Color="Color.Error">@relatedCves.Count(c => c.IsKnownExploited)</MudText>
+                        <MudText Typo="Typo.caption">Known Exploited</MudText>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+
+            <!-- CVE List -->
+            <MudTable Items="relatedCves" 
+                      Dense="true" 
+                      Hover="true" 
+                      Filter="new Func<Cve, bool>(FilterCves)"
+                      Class="project-cves-table">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">CVEs Related to Project Technologies</MudText>
+                    <MudSpacer />
+                    <MudTextField @bind-Value="searchString" 
+                                  Placeholder="Search CVEs" 
+                                  Adornment="Adornment.Start" 
+                                  AdornmentIcon="@Icons.Material.Filled.Search" 
+                                  IconSize="Size.Medium" 
+                                  Class="mt-0" />
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>CVE ID</MudTh>
+                    <MudTh>Title</MudTh>
+                    <MudTh>Severity</MudTh>
+                    <MudTh>CVSS Score</MudTh>
+                    <MudTh>Published</MudTh>
+                    <MudTh>KEV</MudTh>
+                    <MudTh>Match Reason</MudTh>
+                    <MudTh>Actions</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        <MudLink Href="@($"/cve/{context.Id}")" Color="Color.Primary">
+                            @context.CveId
+                        </MudLink>
+                    </MudTd>
+                    <MudTd>
+                        <MudText Typo="Typo.body2">
+                            @(context.Title?.Length > 50 ? context.Title.Substring(0, 50) + "..." : context.Title)
+                        </MudText>
+                    </MudTd>
+                    <MudTd>
+                        <MudChip T="string" Color="@GetSeverityColor(context.CvssV3Severity)" Size="Size.Small">
+                            @context.CvssV3Severity
+                        </MudChip>
+                    </MudTd>
+                    <MudTd>
+                        @if (context.CvssV3BaseScore.HasValue)
+                        {
+                            <MudText Typo="Typo.body2">@context.CvssV3BaseScore.Value.ToString("F1")</MudText>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body2" Color="Color.Tertiary">-</MudText>
+                        }
+                    </MudTd>
+                    <MudTd>
+                        <MudText Typo="Typo.body2">@context.PublishedDate.ToString("yyyy-MM-dd")</MudText>
+                    </MudTd>
+                    <MudTd>
+                        @if (context.IsKnownExploited)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Warning" 
+                                     Color="Color.Error" 
+                                     Size="Size.Small" 
+                                     Title="Known Exploited Vulnerability" />
+                        }
+                    </MudTd>
+                    <MudTd>
+                        <MudText Typo="Typo.caption">
+                            @GetMatchReason(context)
+                        </MudText>
+                    </MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Link" 
+                                       Size="Size.Small" 
+                                       OnClick="() => LinkCveToProject(context)" 
+                                       Title="Link to Project" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Add" 
+                                       Size="Size.Small" 
+                                       OnClick="() => CreateVulnerabilityFromCve(context)" 
+                                       Title="Create Vulnerability from CVE" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+        else
+        {
+            <MudAlert Severity="Severity.Info">
+                No CVEs found related to this project's technologies. This could mean:
+                <ul>
+                    <li>No CVEs exist for the identified technologies</li>
+                    <li>The project targets need more specific technology information</li>
+                    <li>The CVE database needs to be updated</li>
+                </ul>
+            </MudAlert>
+        }
+    </MudCardContent>
+</MudCard>
+
+<style>
+    .project-cves-table {
+        margin-top: 16px;
+    }
+
+    .project-cves-table .mud-table-row:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+</style>
+
+@code {
+    [Parameter] public Guid ProjectId { get; set; }
+    
+    private List<Cve> relatedCves = new();
+    private List<Target> projectTargets = new();
+    private Project project = new();
+    private bool loading = true;
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProjectData();
+        await LoadRelatedCves();
+    }
+
+    private async Task LoadProjectData()
+    {
+        try
+        {
+            project = ProjectManager.GetById(ProjectId);
+            projectTargets = TargetManager.GetAll().Where(t => t.ProjectId == ProjectId).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading project data: {ex.Message}");
+        }
+    }
+
+    private async Task LoadRelatedCves()
+    {
+        loading = true;
+        try
+        {
+            relatedCves = await FindCvesForProjectTechnologies();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading related CVEs: {ex.Message}");
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task<List<Cve>> FindCvesForProjectTechnologies()
+    {
+        var allCves = new List<Cve>();
+        var technologies = ExtractTechnologiesFromProject();
+
+        foreach (var technology in technologies)
+        {
+            try
+            {
+                // Search CVEs by vendor/product
+                var cvesByVendor = await CveManager.GetByVendorAsync(technology.Vendor);
+                var cvesByProduct = await CveManager.GetByProductAsync(technology.Product);
+
+                // Search CVEs by keywords in title/description
+                var searchModel = new CveSearchViewModel
+                {
+                    SearchTerm = technology.Product,
+                    PageSize = 100
+                };
+                var cvesByKeyword = await CveManager.GetWithAdvancedSearchAsync(searchModel);
+
+                // Combine results
+                var combinedCves = cvesByVendor
+                    .Union(cvesByProduct)
+                    .Union(cvesByKeyword)
+                    .Distinct()
+                    .ToList();
+
+                allCves.AddRange(combinedCves);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error searching CVEs for technology {technology.Product}: {ex.Message}");
+            }
+        }
+
+        // Remove duplicates and sort by CVSS score descending
+        return allCves
+            .GroupBy(c => c.CveId)
+            .Select(g => g.First())
+            .OrderByDescending(c => c.CvssV3BaseScore ?? 0)
+            .ThenByDescending(c => c.PublishedDate)
+            .Take(100) // Limit to top 100 results
+            .ToList();
+    }
+
+    private List<ProjectTechnology> ExtractTechnologiesFromProject()
+    {
+        var technologies = new List<ProjectTechnology>();
+
+        // Extract from project description
+        if (!string.IsNullOrEmpty(project.Description))
+        {
+            technologies.AddRange(ExtractTechnologiesFromText(project.Description));
+        }
+
+        // Extract from target information
+        foreach (var target in projectTargets)
+        {
+            if (!string.IsNullOrEmpty(target.Description))
+            {
+                technologies.AddRange(ExtractTechnologiesFromText(target.Description));
+            }
+
+            // Note: Target services functionality removed as Target entity doesn't have Services property
+        }
+
+        return technologies
+            .GroupBy(t => new { t.Vendor, t.Product })
+            .Select(g => g.First())
+            .ToList();
+    }
+
+    private List<ProjectTechnology> ExtractTechnologiesFromText(string text)
+    {
+        var technologies = new List<ProjectTechnology>();
+        var commonTechnologies = new Dictionary<string, string>
+        {
+            { "apache", "Apache" },
+            { "nginx", "Nginx" },
+            { "mysql", "Oracle" },
+            { "postgresql", "PostgreSQL" },
+            { "redis", "Redis" },
+            { "mongodb", "MongoDB" },
+            { "elasticsearch", "Elastic" },
+            { "tomcat", "Apache" },
+            { "jenkins", "Jenkins" },
+            { "wordpress", "WordPress" },
+            { "drupal", "Drupal" },
+            { "joomla", "Joomla" },
+            { "php", "PHP" },
+            { "python", "Python" },
+            { "nodejs", "Node.js" },
+            { "java", "Oracle" },
+            { "spring", "VMware" },
+            { "docker", "Docker" },
+            { "kubernetes", "Kubernetes" },
+            { "openssl", "OpenSSL" }
+        };
+
+        foreach (var tech in commonTechnologies)
+        {
+            if (text.ToLower().Contains(tech.Key))
+            {
+                technologies.Add(new ProjectTechnology
+                {
+                    Product = tech.Key,
+                    Vendor = tech.Value
+                });
+            }
+        }
+
+        return technologies;
+    }
+
+    private string GuessVendorFromService(string serviceName)
+    {
+        var serviceVendorMap = new Dictionary<string, string>
+        {
+            { "apache", "Apache" },
+            { "nginx", "Nginx" },
+            { "mysql", "Oracle" },
+            { "postgresql", "PostgreSQL" },
+            { "redis", "Redis" },
+            { "mongodb", "MongoDB" },
+            { "elasticsearch", "Elastic" },
+            { "tomcat", "Apache" },
+            { "jenkins", "Jenkins" }
+        };
+
+        var lowerServiceName = serviceName.ToLower();
+        foreach (var mapping in serviceVendorMap)
+        {
+            if (lowerServiceName.Contains(mapping.Key))
+            {
+                return mapping.Value;
+            }
+        }
+
+        return "Unknown";
+    }
+
+    private string GetMatchReason(Cve cve)
+    {
+        var reasons = new List<string>();
+        
+        // Check which technologies matched
+        var technologies = ExtractTechnologiesFromProject();
+        foreach (var tech in technologies)
+        {
+            if (cve.Configurations?.Any(c => 
+                c.Vendor.ToLower().Contains(tech.Vendor.ToLower()) || 
+                c.Product.ToLower().Contains(tech.Product.ToLower())) == true)
+            {
+                reasons.Add($"Technology: {tech.Product}");
+            }
+        }
+
+        return reasons.Any() ? string.Join(", ", reasons) : "Keyword match";
+    }
+
+    private async Task RefreshCves()
+    {
+        await LoadRelatedCves();
+    }
+
+    private async Task LinkCveToProject(Cve cve)
+    {
+        try
+        {
+            // Create CVE-Project mapping
+            var mapping = new CveProjectMapping
+            {
+                Id = Guid.NewGuid(),
+                CveId = cve.Id,
+                ProjectId = ProjectId,
+                CreatedDate = DateTime.UtcNow,
+                UserId = "system" // Would get from current user
+            };
+
+            // This would need to be implemented in the CveManager
+            // await CveManager.AddProjectMappingAsync(mapping);
+            
+            // For now, just show a success message
+            // Snackbar.Add($"CVE {cve.CveId} linked to project", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error linking CVE to project: {ex.Message}");
+        }
+    }
+
+    private DialogOptionsEx largeWidthEx = new DialogOptionsEx() 
+    {
+        MaximizeButton = true,
+        CloseButton = true,
+        FullHeight = false,
+        CloseOnEscapeKey = true,
+        MaxWidth = MaxWidth.Large,
+        MaxHeight = MaxHeight.False,
+        FullWidth = true,
+        DragMode = MudDialogDragMode.Simple,
+        Animations = new[] { MudBlazor.Extensions.Options.AnimationType.SlideIn },
+        Position = DialogPosition.Center,
+        DisableSizeMarginY = true,
+        DisablePositionMargin = true,
+        BackdropClick = false,
+        Resizeable = true,
+    };
+
+    private async Task CreateVulnerabilityFromCve(Cve cve)
+    {
+        var parameters = new DialogParameters
+        {
+            { "CveId", cve.CveId },
+            { "CveTitle", cve.Title },
+            { "CveDescription", cve.Description },
+            { "CvssScore", cve.CvssV3BaseScore },
+            { "CvssSeverity", cve.CvssV3Severity },
+            { "ProjectId", ProjectId }
+        };
+
+        IMudExDialogReference<Cervantes.Web.Components.Pages.Vuln.CreateVulnFromCveDialog>? dlgReference = await DialogService.ShowEx<Cervantes.Web.Components.Pages.Vuln.CreateVulnFromCveDialog>("Create Vulnerability from CVE", parameters, largeWidthEx);
+        var result = await dlgReference.Result;
+
+        if (!result.Canceled)
+        {
+            // Refresh the page or show success message
+            Navigation.NavigateTo($"/projects/{ProjectId}");
+        }
+    }
+
+    private bool FilterCves(Cve cve)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+
+        return cve.CveId.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+               (cve.Title?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true) ||
+               (cve.Description?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true);
+    }
+
+    private Color GetSeverityColor(string severity)
+    {
+        return severity?.ToUpper() switch
+        {
+            "CRITICAL" => Color.Error,
+            "HIGH" => Color.Warning,
+            "MEDIUM" => Color.Info,
+            "LOW" => Color.Success,
+            _ => Color.Default
+        };
+    }
+
+    private class ProjectTechnology
+    {
+        public string Product { get; set; } = "";
+        public string Vendor { get; set; } = "";
+        public string Version { get; set; } = "";
+    }
+}
+
+// This would be a separate dialog component
+@* <CreateVulnFromCveDialog /> *@

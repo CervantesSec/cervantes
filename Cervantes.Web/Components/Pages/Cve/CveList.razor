@@ -1,0 +1,337 @@
+@page "/cve/list"
+@using Cervantes.CORE.Entities
+@using Cervantes.CORE.ViewModel
+@using Cervantes.Contracts
+@using Cervantes.CORE
+@using global::AuthPermissions.BaseCode.PermissionsCode
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using System.Net.Http.Headers
+@using Cervantes.Web.Localization
+@using Microsoft.AspNetCore.Components.Authorization
+@using MudBlazor
+@using MudBlazor.Extensions
+@using MudBlazor.Extensions.Core
+@using MudBlazor.Extensions.Options
+@using Task = System.Threading.Tasks.Task
+@attribute [Authorize]
+
+<PageTitle>@localizer["cveManagement"] | Cervantes</PageTitle>
+
+<SectionContent SectionName="appbar">
+    
+    <Cervantes.Web.Components.Shared.Breadcrumbs Items="@breadcrumbs" Separator=">" />
+    
+</SectionContent>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudPaper Class="ma-0" Elevation="25">
+            <MudToolBar>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudButton Href="/cve"
+
+                               StartIcon="@cveSVG"
+                               Color="Color.Transparent">
+                        @localizer["cveDashboard"]
+                    </MudButton>
+                    
+                        <MudButton Href="/cve/list"
+
+                                   StartIcon="@cveSVG"
+                                   Color="Color.Primary">
+                            @localizer["cveManagement"]
+                        </MudButton>
+
+                        <MudButton Href="/cve/notifications"
+
+                                   StartIcon="@cveNotSVG"
+                                   Color="Color.Transparent">
+                            @localizer["cveNotifications"]
+                        </MudButton>
+                        
+                        <MudButton Href="/cve/subscriptions"
+
+                                   StartIcon="@cveSubSVG"
+                                   Color="Color.Transparent">
+                            @localizer["cveSubscriptions"]
+                        </MudButton>
+                </MudStack>
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@localizer["cveDatabase"]</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.Add"
+                               OnClick="OpenCreateDialog">
+                        @localizer["createCve"]
+                    </MudButton>
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Info"
+                               StartIcon="@Icons.Material.Filled.Sync"
+                               OnClick="TriggerSync">
+                        @localizer["syncCves"]
+                    </MudButton>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <!-- Search and Filter Section -->
+                <MudExpansionPanels>
+                    <MudExpansionPanel Text="@localizer["searchAndFilters"]">
+                        <MudGrid>
+                            <MudItem xs="12" md="6">
+                                <MudTextField @bind-Value="searchModel.SearchTerm"
+                                              Label="@localizer["searchCves"]"
+                                              Placeholder="@localizer["searchByCveId"]"
+                                              Adornment="Adornment.Start"
+                                              AdornmentIcon="@Icons.Material.Filled.Search"
+                                              @onkeydown="@HandleSearchKeyDown"/>
+                            </MudItem>
+                            <MudItem xs="12" md="6">
+                                <MudTextField @bind-Value="searchModel.CveId"
+                                              Label="@localizer["cveId"]"
+                                              Placeholder="e.g., CVE-2023-1234"/>
+                            </MudItem>
+                            <MudItem xs="12" md="3">
+                                <MudSelect SelectedValues="@searchModel.Severities"
+                                           SelectedValuesChanged="@OnSeveritiesChanged"
+                                           Label="@localizer["severity"]"
+                                           MultiSelection="true"
+                                           T="string">
+                                    <MudSelectItem T="string" Value="CRITICAL">@localizer["critical"]</MudSelectItem>
+                                    <MudSelectItem T="string" Value="HIGH">@localizer["high"]</MudSelectItem>
+                                    <MudSelectItem T="string" Value="MEDIUM">@localizer["medium"]</MudSelectItem>
+                                    <MudSelectItem T="string" Value="LOW">@localizer["low"]</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="12" md="3">
+                                <MudNumericField @bind-Value="searchModel.MinCvssScore"
+                                                 Label="@localizer["minCvssScore"]"
+                                                 Min="0"
+                                                 Max="10"
+                                                 Step="0.1"/>
+                            </MudItem>
+                            <MudItem xs="12" md="3">
+                                <MudNumericField @bind-Value="searchModel.MaxCvssScore"
+                                                 Label="@localizer["maxCvssScore"]"
+                                                 Min="0"
+                                                 Max="10"
+                                                 Step="0.1"/>
+                            </MudItem>
+                            <MudItem xs="12" md="3">
+                                <MudSwitch @bind-Value="searchModel.KnownExploited"
+                                           Label="@localizer["knownExploitedOnly"]"
+                                           Color="Color.Error"/>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.Search"
+                                           OnClick="SearchCves">
+                                    @localizer["search"]
+                                </MudButton>
+                                <MudButton Variant="Variant.Outlined"
+                                           StartIcon="@Icons.Material.Filled.Clear"
+                                           OnClick="ClearSearch"
+                                           Class="ml-2">
+                                    @localizer["clear"]
+                                </MudButton>
+                            </MudItem>
+                        </MudGrid>
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+
+                <!-- CVE Statistics Cards -->
+                <MudGrid Class="mt-4">
+                    <MudItem xs="12" md="3">
+                        <MudCard>
+                            <MudCardContent Class="d-flex align-center justify-center">
+                                <div class="d-flex flex-column align-center">
+                                    <MudIcon Icon="@Icons.Material.Filled.Security" Size="Size.Large" Color="Color.Primary"/>
+                                    <MudText Typo="Typo.h6">@statistics.TotalCves</MudText>
+                                    <MudText Typo="Typo.body2">@localizer["totalCves"]</MudText>
+                                </div>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" md="3">
+                        <MudCard>
+                            <MudCardContent Class="d-flex align-center justify-center">
+                                <div class="d-flex flex-column align-center">
+                                    <MudIcon Icon="@Icons.Material.Filled.NewReleases" Size="Size.Large" Color="Color.Error"/>
+                                    <MudText Typo="Typo.h6" Color="Color.Error">@statistics.CriticalCves</MudText>
+                                    <MudText Typo="Typo.body2">@localizer["critical"]</MudText>
+                                </div>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" md="3">
+                        <MudCard>
+                            <MudCardContent Class="d-flex align-center justify-center">
+                                <div class="d-flex flex-column align-center">
+                                    <MudIcon Icon="@Icons.Material.Filled.PriorityHigh" Size="Size.Large" Color="Color.Warning"/>
+                                    <MudText Typo="Typo.h6" Color="Color.Warning">@statistics.HighCves</MudText>
+                                    <MudText Typo="Typo.body2">@localizer["high"]</MudText>
+                                </div>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" md="3">
+                        <MudCard>
+                            <MudCardContent Class="d-flex align-center justify-center">
+                                <div class="d-flex flex-column align-center">
+                                    <MudIcon Icon="@Icons.Material.Filled.Dangerous" Size="Size.Large" Color="Color.Error"/>
+                                    <MudText Typo="Typo.h6" Color="Color.Error">@statistics.KnownExploitedCves</MudText>
+                                    <MudText Typo="Typo.body2">@localizer["knownExploited"]</MudText>
+                                </div>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                </MudGrid>
+
+                <!-- CVE Data Grid -->
+                <MudDataGrid T="CORE.Entities.Cve" Items="cves"
+                           SortMode="SortMode.Multiple"
+                           Filterable="true"
+                           QuickFilter="_quickFilter"
+                           Hideable="true"
+                           Hover="true"
+                           Dense="true"
+                           Loading="loading"
+                           LoadingProgressColor="Color.Info"
+                           Virtualize="true"
+                           DragDropColumnReordering="true"
+                           MultiSelection="true"
+                           SelectedItemsChanged="OnSelectedItemsChanged"
+                           Class="mt-4">
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">@localizer["cves"]</MudText>
+                        <MudSpacer/>
+                        @if (selectedCves.Count > 0)
+                        {
+                            <MudButton StartIcon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Variant="Variant.Filled"
+                                       Size="Size.Small"
+                                       OnClick="DeleteSelectedCves"
+                                       Class="mr-2">
+                                @localizer["delete"] (@selectedCves.Count)
+                            </MudButton>
+                            <MudButton StartIcon="@Icons.Material.Filled.Clear"
+                                       Color="Color.Default"
+                                       Variant="Variant.Outlined"
+                                       Size="Size.Small"
+                                       OnClick="ClearSelection"
+                                       Class="mr-2">
+                                @localizer["clearSelection"]
+                            </MudButton>
+                        }
+                        <MudTextField @bind-Value="searchString"
+                                      Placeholder="@localizer["quickSearch"]"
+                                      Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Search"
+                                      IconSize="Size.Medium"
+                                      Immediate="true"
+                                      Class="mt-0"/>
+                    </ToolBarContent>
+                    <Columns>
+                        <SelectColumn T="CORE.Entities.Cve" ShowInHeader="true" ShowInFooter="false" />
+                        <PropertyColumn Property="x => x.CveId" Title="@localizer["cveId"]">
+                            <CellTemplate>
+                                <MudLink Href="@($"/cve/{context.Item.Id}")" Color="Color.Primary">
+                                    @context.Item.CveId
+                                </MudLink>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <PropertyColumn Property="x => x.Title" Title="@localizer["title"]">
+                            <CellTemplate>
+                                <MudText Typo="Typo.body2">
+                                    @(context.Item.Title?.Length > 50 ? context.Item.Title.Substring(0, 50) + "..." : context.Item.Title)
+                                </MudText>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <PropertyColumn Property="x => x.CvssV3Severity" Title="@localizer["severity"]" Filterable="true">
+                            <CellTemplate>
+                                <MudChip T="string" Color="@GetSeverityColor(context.Item.CvssV3Severity)" Size="Size.Small">
+                                    @context.Item.CvssV3Severity
+                                </MudChip>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <PropertyColumn Property="x => x.CvssV3BaseScore" Title="@localizer["cvssScore"]" Filterable="true">
+                            <CellTemplate>
+                                @if (context.Item.CvssV3BaseScore.HasValue)
+                                {
+                                    <MudText Typo="Typo.body2">@context.Item.CvssV3BaseScore.Value.ToString("F1")</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">-</MudText>
+                                }
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <PropertyColumn Property="x => x.EpssScore" Title="@localizer["epssScore"]" Filterable="true">
+                            <CellTemplate>
+                                @if (context.Item.EpssScore.HasValue)
+                                {
+                                    <MudText Typo="Typo.body2">@context.Item.EpssScore.Value.ToString("F3")</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">-</MudText>
+                                }
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <PropertyColumn Property="x => x.PublishedDate" Title="@localizer["published"]" Filterable="true">
+                            <CellTemplate>
+                                <MudText Typo="Typo.body2">@context.Item.PublishedDate.ToString("yyyy-MM-dd")</MudText>
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <PropertyColumn Property="x => x.IsKnownExploited" Title="@localizer["kev"]" Filterable="true">
+                            <CellTemplate>
+                                @if (context.Item.IsKnownExploited)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Error" Title="@localizer["knownExploitedVulnerability"]"/>
+                                }
+                            </CellTemplate>
+                        </PropertyColumn>
+                        
+                        <TemplateColumn Title="@localizer["actions"]" Sortable="false" Filterable="false">
+                            <CellTemplate>
+                                <MudIconButton Icon="@Icons.Material.Filled.Visibility"
+                                               Size="Size.Small"
+                                               OnClick="() => ViewCve(context.Item)"
+                                               Title="@localizer["viewDetails"]"/>
+                                <MudIconButton Icon="@(context.Item.IsFavorite ? Icons.Material.Filled.Star : Icons.Material.Filled.StarBorder)"
+                                               Size="Size.Small"
+                                               Color="@(context.Item.IsFavorite ? Color.Warning : Color.Default)"
+                                               OnClick="() => ToggleFavorite(context.Item)"
+                                               Title="@localizer["toggleFavorite"]"/>
+                                <MudIconButton Icon="@Icons.Material.Filled.Archive"
+                                               Size="Size.Small"
+                                               OnClick="() => ArchiveCve(context.Item)"
+                                               Title="@localizer["archive"]"/>
+                            </CellTemplate>
+                        </TemplateColumn>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="CORE.Entities.Cve"/>
+                    </PagerContent>
+                </MudDataGrid>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+

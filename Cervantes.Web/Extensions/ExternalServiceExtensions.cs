@@ -4,6 +4,8 @@ using Cervantes.IFR.Export;
 using Cervantes.IFR.File;
 using Cervantes.IFR.Jira;
 using Cervantes.IFR.Ldap;
+using Cervantes.IFR.CveServices;
+using Cervantes.Contracts;
 
 namespace Cervantes.Web.Extensions;
 
@@ -34,6 +36,9 @@ public static class ExternalServiceExtensions
         
         // File and Export Services
         services.AddFileServices();
+        
+        // CVE Services
+        services.AddCveServices(configuration);
         
         return services;
     }
@@ -111,6 +116,30 @@ public static class ExternalServiceExtensions
     {
         services.AddScoped<IFileCheck, FileCheck>();
         services.AddSingleton<IExportToCsv, ExportToCsv>();
+        
+        return services;
+    }
+
+    /// <summary>
+    /// Registers CVE services
+    /// </summary>
+    /// <param name="services">The service collection</param>
+    /// <param name="configuration">The configuration</param>
+    /// <returns>The service collection for chaining</returns>
+    public static IServiceCollection AddCveServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Register HttpClient for CVE services
+        services.AddHttpClient<INvdApiService, NvdApiService>();
+        services.AddHttpClient<IRedHatApiService, RedHatApiService>();
+        services.AddHttpClient<ICveNotificationService, CveNotificationService>();
+        
+        // Register CVE services
+        services.AddScoped<ICveSyncService, CveSyncService>();
+        
+        // Register VulnEnrichment services
+        services.AddHttpClient<IEpssApiService, EpssApiService>();
+        services.AddHttpClient<ICisaKevApiService, CisaKevApiService>(); 
+        services.AddScoped<IVulnEnrichmentService, VulnEnrichmentService>();
         
         return services;
     }

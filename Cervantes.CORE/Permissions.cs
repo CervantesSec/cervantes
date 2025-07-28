@@ -387,5 +387,28 @@ public enum Permissions: ushort
     [Display(GroupName = "AI Service", Name = "Use AI Service", Description = "Can use the AI chat service")]
     AIChatUsage = 60001,
 
+    [Display(GroupName = "CVE Management", Name = "View/Read CVEs", Description = "Can read and view CVE information")]
+    CveRead = 450,
+    [Display(GroupName = "CVE Management", Name = "Edit CVEs", Description = "Can edit CVE information")]
+    CveEdit = 451,
+    [Display(GroupName = "CVE Management", Name = "Delete CVEs", Description = "Can delete CVE information")]
+    CveDelete = 452,
+    [Display(GroupName = "CVE Management", Name = "Add New CVEs", Description = "Can add new CVE information")]
+    CveCreate = 453,
+    [Display(GroupName = "CVE Management", Name = "Import CVEs", Description = "Can import CVE data from external sources")]
+    CveImport = 454,
+    [Display(GroupName = "CVE Management", Name = "Export CVEs", Description = "Can export CVE data")]
+    CveExport = 455,
+    [Display(GroupName = "CVE Management", Name = "Sync CVEs", Description = "Can trigger CVE synchronization with external sources")]
+    CveSync = 456,
+    [Display(GroupName = "CVE Management", Name = "Manage CVE Sources", Description = "Can manage CVE data sources")]
+    CveSources = 457,
+    [Display(GroupName = "CVE Management", Name = "Manage CVE Subscriptions", Description = "Can manage CVE subscriptions and alerts")]
+    CveSubscriptions = 458,
+    [Display(GroupName = "CVE Management", Name = "View CVE Notifications", Description = "Can view CVE notifications and alerts")]
+    CveNotifications = 459,
+    [Display(GroupName = "CVE Management", Name = "Manage CVE Dashboard", Description = "Can access and customize CVE dashboard")]
+    CveDashboard = 460,
+
     
 }

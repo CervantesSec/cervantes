@@ -2289,4 +2289,439 @@
     <data name="logsDeletedError" xml:space="preserve">
         <value>Chyba při mazání protokolů</value>
     </data>
+    <data name="quickPresets" xml:space="preserve">
+        <value>Rychlé předvolby</value>
+    </data>
+    <data name="dateFilters" xml:space="preserve">
+        <value>Filtry dat</value>
+    </data>
+    <data name="severityFilters" xml:space="preserve">
+        <value>Filtry závažnosti &amp; skóre</value>
+    </data>
+    <data name="advancedOptions" xml:space="preserve">
+        <value>Pokročilé možnosti</value>
+    </data>
+    <data name="startYear" xml:space="preserve">
+        <value>Počáteční rok</value>
+    </data>
+    <data name="endYear" xml:space="preserve">
+        <value>Koncový rok</value>
+    </data>
+    <data name="publishedFrom" xml:space="preserve">
+        <value>Publikováno od</value>
+    </data>
+    <data name="publishedTo" xml:space="preserve">
+        <value>Publikováno do</value>
+    </data>
+    <data name="lastModifiedFrom" xml:space="preserve">
+        <value>Naposledy změněno od</value>
+    </data>
+    <data name="lastModifiedTo" xml:space="preserve">
+        <value>Naposledy změněno do</value>
+    </data>
+    <data name="severities" xml:space="preserve">
+        <value>Závažnosti</value>
+    </data>
+    <data name="minCvss" xml:space="preserve">
+        <value>Min CVSS</value>
+    </data>
+    <data name="maxCvss" xml:space="preserve">
+        <value>Max CVSS</value>
+    </data>
+    <data name="keywordFilter" xml:space="preserve">
+        <value>Filtr klíčových slov</value>
+    </data>
+    <data name="keywordFilterPlaceholder" xml:space="preserve">
+        <value>Zadejte klíčová slova pro vyhledávání...</value>
+    </data>
+    <data name="maxTotalCves" xml:space="preserve">
+        <value>Max celkem CVE</value>
+    </data>
+    <data name="resultsPerPage" xml:space="preserve">
+        <value>Výsledků na stránku</value>
+    </data>
+    <data name="onlyKnownExploited" xml:space="preserve">
+        <value>Pouze známé zneužité</value>
+    </data>
+    <data name="skipExisting" xml:space="preserve">
+        <value>Přeskočit existující</value>
+    </data>
+    <data name="updateExisting" xml:space="preserve">
+        <value>Aktualizovat existující</value>
+    </data>
+    <data name="syncSource" xml:space="preserve">
+        <value>Zdroj synchronizace</value>
+    </data>
+    <data name="estimatedCount" xml:space="preserve">
+        <value>Odhadovaný počet</value>
+    </data>
+    <data name="syncInProgress" xml:space="preserve">
+        <value>Probíhá synchronizace</value>
+    </data>
+    <data name="syncInProgressDesc" xml:space="preserve">
+        <value>Prosím čekejte, probíhá synchronizace CVE...</value>
+    </data>
+    <data name="validate" xml:space="preserve">
+        <value>Validovat</value>
+    </data>
+    <data name="startSync" xml:space="preserve">
+        <value>Spustit synchronizaci</value>
+    </data>
+    <data name="lastModifiedDates" xml:space="preserve">
+        <value>Data posledních změn</value>
+    </data>
+    <data name="nvdApiLimitations" xml:space="preserve">
+        <value>Omezení NVD API</value>
+    </data>
+    <data name="nvdApiLimitationsDesc" xml:space="preserve">
+        <value>Rozsahy dat omezené na 120 po sobě jdoucích dnů&lt;br/&gt;• Maximum 2,000 výsledků na stránku&lt;br/&gt;• Platí omezení rychlosti (6s zpoždění bez API klíče, 50ms s klíčem)&lt;br/&gt;• Filtry dat Publikováno a Naposledy změněno používají různé rozsahy vyhledávání</value>
+    </data>
+    <data name="nvdApiDateLimit" xml:space="preserve">
+        <value>NVD API omezuje rozsahy dat na maximum 120 dnů</value>
+    </data>
+    <data name="publishedModifiedDateLimit" xml:space="preserve">
+        <value>Rozsahy dat Publikováno/Změněno omezené na 120 dnů (NVD API)</value>
+    </data>
+    <data name="redHatEnterprise" xml:space="preserve">
+        <value>Red Hat Enterprise</value>
+    </data>
+    <data name="nistOfficial" xml:space="preserve">
+        <value>NIST Oficiální</value>
+    </data>
+    <data name="criticalCves" xml:space="preserve">
+        <value>Kritické CVE</value>
+    </data>
+    <data name="kevCves" xml:space="preserve">
+        <value>KEV CVE</value>
+    </data>
+    <data name="newToday" xml:space="preserve">
+        <value>Nové Dnes</value>
+    </data>
+    <data name="severityDistribution" xml:space="preserve">
+        <value>Distribuce Závažnosti</value>
+    </data>
+    <data name="cveTrend" xml:space="preserve">
+        <value>Trend CVE</value>
+    </data>
+    <data name="topVendors" xml:space="preserve">
+        <value>Nejlepší Dodavatelé</value>
+    </data>
+    <data name="recentCves" xml:space="preserve">
+        <value>Nedávné CVE</value>
+    </data>
+    <data name="activeSubscriptions" xml:space="preserve">
+        <value>Aktivní Odběry</value>
+    </data>
+    <data name="epssScoreDistribution" xml:space="preserve">
+        <value>Distribuce EPSS Score</value>
+    </data>
+    <data name="last24Hours" xml:space="preserve">
+        <value>Posledních 24 Hodin</value>
+    </data>
+    <data name="last7Days" xml:space="preserve">
+        <value>Posledních 7 Dní</value>
+    </data>
+    <data name="last30Days" xml:space="preserve">
+        <value>Posledních 30 Dní</value>
+    </data>
+    <data name="last90Days" xml:space="preserve">
+        <value>Posledních 90 Dní</value>
+    </data>
+    <data name="lastYear" xml:space="preserve">
+        <value>Poslední Rok</value>
+    </data>
+    <data name="allTime" xml:space="preserve">
+        <value>Celý Čas</value>
+    </data>
+    <data name="allSeverities" xml:space="preserve">
+        <value>Všechny Závažnosti</value>
+    </data>
+    <data name="criticalSeverity" xml:space="preserve">
+        <value>Kritická (9.0-10.0)</value>
+    </data>
+    <data name="highSeverity" xml:space="preserve">
+        <value>Vysoká (7.0-8.9)</value>
+    </data>
+    <data name="mediumSeverity" xml:space="preserve">
+        <value>Střední (4.0-6.9)</value>
+    </data>
+    <data name="lowSeverity" xml:space="preserve">
+        <value>Nízká (0.1-3.9)</value>
+    </data>
+    <data name="noScore" xml:space="preserve">
+        <value>Bez Skóre</value>
+    </data>
+    <data name="allVendors" xml:space="preserve">
+        <value>Všichni Dodavatelé</value>
+    </data>
+    <data name="kevOnly" xml:space="preserve">
+        <value>Pouze KEV</value>
+    </data>
+    <data name="refresh" xml:space="preserve">
+        <value>Obnovit</value>
+    </data>
+    <data name="reset" xml:space="preserve">
+        <value>Resetovat</value>
+    </data>
+    <data name="timeRange" xml:space="preserve">
+        <value>Časový Rozsah</value>
+    </data>
+    <data name="vendor" xml:space="preserve">
+        <value>Dodavatel</value>
+    </data>
+    <data name="cveDashboard" xml:space="preserve">
+        <value>CVE Dashboard</value>
+    </data>
+    <data name="cveManagement" xml:space="preserve">
+        <value>Správa CVE</value>
+    </data>
+    <data name="cveNotifications" xml:space="preserve">
+        <value>CVE Oznámení</value>
+    </data>
+    <data name="cveSubscriptions" xml:space="preserve">
+        <value>CVE Odběry</value>
+    </data>
+    <data name="totalCves" xml:space="preserve">
+        <value>Celkem CVE</value>
+    </data>
+    <data name="active" xml:space="preserve">
+        <value>Aktivní</value>
+    </data>
+    <data name="readAt" xml:space="preserve">
+        <value>Přečteno</value>
+    </data>
+    <data name="viewCve" xml:space="preserve">
+        <value>Zobrazit CVE</value>
+    </data>
+    <data name="markAsRead" xml:space="preserve">
+        <value>Označit jako přečtené</value>
+    </data>
+    <data name="subscription" xml:space="preserve">
+        <value>Předplatné</value>
+    </data>
+    <data name="deliveryStatus" xml:space="preserve">
+        <value>Stav doručení</value>
+    </data>
+    <data name="cveNotifications" xml:space="preserve">
+        <value>CVE upozornění</value>
+    </data>
+    <data name="cveSubscriptions" xml:space="preserve">
+        <value>CVE předplatná</value>
+    </data>
+    <data name="mySubscriptions" xml:space="preserve">
+        <value>Moje předplatná</value>
+    </data>
+    <data name="createSubscription" xml:space="preserve">
+        <value>Vytvořit předplatné</value>
+    </data>
+    <data name="noSubscriptionsFound" xml:space="preserve">
+        <value>Žádná předplatná nenalezena</value>
+    </data>
+    <data name="createDefaultSubscriptions" xml:space="preserve">
+        <value>Vytvořit výchozí předplatná</value>
+    </data>
+    <data name="subscriptionSummary" xml:space="preserve">
+        <value>Souhrn předplatných</value>
+    </data>
+    <data name="activeSubscriptions" xml:space="preserve">
+        <value>Aktivní předplatná</value>
+    </data>
+    <data name="unreadNotifications" xml:space="preserve">
+        <value>Nepřečtená upozornění</value>
+    </data>
+    <data name="matchesToday" xml:space="preserve">
+        <value>Nalezeno dnes</value>
+    </data>
+    <data name="matchesThisWeek" xml:space="preserve">
+        <value>Nalezeno tento týden</value>
+    </data>
+    <data name="markAllAsRead" xml:space="preserve">
+        <value>Označit vše jako přečtené</value>
+    </data>
+    <data name="readAt" xml:space="preserve">
+        <value>Přečteno v</value>
+    </data>
+    <data name="noNotificationsFound" xml:space="preserve">
+        <value>Žádná upozornění nenalezena</value>
+    </data>
+    <data name="notifications" xml:space="preserve">
+        <value>Upozornění</value>
+    </data>
+    <data name="activeProjectsOnly" xml:space="preserve">
+        <value>Pouze aktivní projekty</value>
+    </data>
+    <data name="myTasksOnly" xml:space="preserve">
+        <value>Pouze mé úkoly</value>
+    </data>
+    <data name="allTime" xml:space="preserve">
+        <value>Celou dobu</value>
+    </data>
+    <data name="allStatuses" xml:space="preserve">
+        <value>Všechny stavy</value>
+    </data>
+    <data name="allRisks" xml:space="preserve">
+        <value>Všechna rizika</value>
+    </data>
+    <data name="vulnRisk" xml:space="preserve">
+        <value>Riziko zranitelnosti</value>
+    </data>
+    <data name="recentClients" xml:space="preserve">
+        <value>Nedávní klienti</value>
+    </data>
+    <data name="welcomeUser" xml:space="preserve">
+        <value>Vítejte</value>
+    </data>
+    <data name="deleteSelected" xml:space="preserve">
+        <value>Smazat vybrané</value>
+    </data>
+    <data name="clearSelection" xml:space="preserve">
+        <value>Vymazat výběr</value>
+    </data>
+    <data name="read" xml:space="preserve">
+        <value>Přečteno</value>
+    </data>
+    <data name="created" xml:space="preserve">
+        <value>Vytvořeno</value>
+    </data>
+    <data name="unread" xml:space="preserve">
+        <value>Nepřečteno</value>
+    </data>
+    <data name="today" xml:space="preserve">
+        <value>Dnes</value>
+    </data>
+    <data name="thisWeek" xml:space="preserve">
+        <value>Tento týden</value>
+    </data>
+    <data name="total" xml:space="preserve">
+        <value>Celkem</value>
+    </data>
+    <data name="knownExploitedOnly" xml:space="preserve">
+        <value>Pouze známé exploity</value>
+    </data>
+    <data name="product" xml:space="preserve">
+        <value>Produkt</value>
+    </data>
+    <data name="frequency" xml:space="preserve">
+        <value>Frekvence</value>
+    </data>
+    <data name="method" xml:space="preserve">
+        <value>Metoda</value>
+    </data>
+    <data name="deactivate" xml:space="preserve">
+        <value>Deaktivovat</value>
+    </data>
+    <data name="activate" xml:space="preserve">
+        <value>Aktivovat</value>
+    </data>
+    <data name="errorLoadingNotifications" xml:space="preserve">
+        <value>Chyba při načítání oznámení</value>
+    </data>
+    <data name="notificationMarkedAsRead" xml:space="preserve">
+        <value>Oznámení označeno jako přečtené</value>
+    </data>
+    <data name="errorMarkingNotificationAsRead" xml:space="preserve">
+        <value>Chyba při označování oznámení jako přečtené</value>
+    </data>
+    <data name="notificationsMarkedAsRead" xml:space="preserve">
+        <value>oznámení označena jako přečtená</value>
+    </data>
+    <data name="errorMarkingAllNotificationsAsRead" xml:space="preserve">
+        <value>Chyba při označování všech oznámení jako přečtená</value>
+    </data>
+    <data name="confirmDelete" xml:space="preserve">
+        <value>Potvrdit smazání</value>
+    </data>
+    <data name="confirmDeleteNotificationsMessage" xml:space="preserve">
+        <value>Jste si jisti, že chcete smazat {0} vybraných oznámení? Tuto akci nelze vrátit zpět.</value>
+    </data>
+    <data name="delete" xml:space="preserve">
+        <value>Smazat</value>
+    </data>
+    <data name="cancel" xml:space="preserve">
+        <value>Zrušit</value>
+    </data>
+    <data name="notificationsDeletedSuccessfully" xml:space="preserve">
+        <value>oznámení úspěšně smazána</value>
+    </data>
+    <data name="errorDeletingNotifications" xml:space="preserve">
+        <value>Chyba při mazání oznámení</value>
+    </data>
+    <data name="errorLoadingSubscriptions" xml:space="preserve">
+        <value>Chyba při načítání odběrů</value>
+    </data>
+    <data name="createSubscription" xml:space="preserve">
+        <value>Vytvořit odběr</value>
+    </data>
+    <data name="subscriptionCreatedSuccessfully" xml:space="preserve">
+        <value>Odběr úspěšně vytvořen</value>
+    </data>
+    <data name="editSubscription" xml:space="preserve">
+        <value>Upravit odběr</value>
+    </data>
+    <data name="subscriptionUpdatedSuccessfully" xml:space="preserve">
+        <value>Odběr úspěšně aktualizován</value>
+    </data>
+    <data name="subscriptionDeactivated" xml:space="preserve">
+        <value>Odběr deaktivován</value>
+    </data>
+    <data name="subscriptionActivated" xml:space="preserve">
+        <value>Odběr aktivován</value>
+    </data>
+    <data name="errorTogglingSubscription" xml:space="preserve">
+        <value>Chyba při aktivaci/deaktivaci odběru</value>
+    </data>
+    <data name="confirmDeleteSubscriptionMessage" xml:space="preserve">
+        <value>Jste si jisti, že chcete smazat tento odběr? Tuto akci nelze vrátit zpět.</value>
+    </data>
+    <data name="deleteSubscription" xml:space="preserve">
+        <value>Smazat odběr</value>
+    </data>
+    <data name="subscriptionDeletedSuccessfully" xml:space="preserve">
+        <value>Odběr úspěšně smazán</value>
+    </data>
+    <data name="errorDeletingSubscription" xml:space="preserve">
+        <value>Chyba při mazání odběru</value>
+    </data>
+    <data name="defaultSubscriptionsCreatedSuccessfully" xml:space="preserve">
+        <value>{0} výchozích odběrů úspěšně vytvořeno</value>
+    </data>
+    <data name="errorCreatingDefaultSubscriptions" xml:space="preserve">
+        <value>Chyba při vytváření výchozích odběrů</value>
+    </data>
+    <data name="testNotificationCreated" xml:space="preserve">
+        <value>Testovací oznámení vytvořeno pro '{0}'</value>
+    </data>
+    <data name="failedToCreateTestNotification" xml:space="preserve">
+        <value>Nepodařilo se vytvořit testovací oznámení</value>
+    </data>
+    <data name="errorTestingNotification" xml:space="preserve">
+        <value>Chyba při testování oznámení</value>
+    </data>
+    <data name="testNotificationsCreatedForAllSubscriptions" xml:space="preserve">
+        <value>Testovací oznámení úspěšně vytvořena pro všech {0} aktivních odběrů</value>
+    </data>
+    <data name="testNotificationsPartialSuccess" xml:space="preserve">
+        <value>{0} testovacích oznámení vytvořeno, {1} neúspěšných</value>
+    </data>
+    <data name="errorTestingNotifications" xml:space="preserve">
+        <value>Chyba při testování oznámení</value>
+    </data>
+    <data name="notificationTestResults" xml:space="preserve">
+        <value>Výsledky testování oznámení</value>
+    </data>
+    <data name="testAllActive" xml:space="preserve">
+        <value>Testovat všechny aktivní</value>
+    </data>
+    <data name="testNotification" xml:space="preserve">
+        <value>Testovat oznámení</value>
+    </data>
+    <data name="confirmDeleteCvesMessage" xml:space="preserve">
+        <value>Jste si jisti, že chcete smazat {0} vybraných CVE? Tuto akci nelze vrátit zpět.</value>
+    </data>
+    <data name="cvesDeletedSuccessfully" xml:space="preserve">
+        <value>CVE úspěšně smazány</value>
+    </data>
+    <data name="errorDeletingCves" xml:space="preserve">
+        <value>Chyba při mazání CVE</value>
+    </data>
 </root>

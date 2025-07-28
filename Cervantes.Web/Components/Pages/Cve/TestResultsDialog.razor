@@ -1,0 +1,64 @@
+@using Cervantes.CORE.ViewModel
+@using MudBlazor
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style="max-height: 500px; overflow-y: scroll;">
+            @if (Results.Any())
+            {
+                <MudList T="string">
+                    @foreach (var result in Results)
+                    {
+                        <MudListItem>
+                            <div class="d-flex align-center">
+                                @if (result.IsSuccess)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Class="mr-3" />
+                                    <div>
+                                        <MudText Typo="Typo.body1">
+                                            <strong>@result.SubscriptionName</strong>
+                                        </MudText>
+                                        <MudText Typo="Typo.body2" Color="Color.Success">
+                                            @result.Message
+                                        </MudText>
+                                        <MudText Typo="Typo.caption">
+                                            Tested at: @result.TestedAt.ToString("HH:mm:ss")
+                                        </MudText>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Error" Color="Color.Error" Class="mr-3" />
+                                    <div>
+                                        <MudText Typo="Typo.body1">
+                                            <strong>@result.SubscriptionName</strong>
+                                        </MudText>
+                                        <MudText Typo="Typo.body2" Color="Color.Error">
+                                            @result.ErrorMessage
+                                        </MudText>
+                                        <MudText Typo="Typo.caption">
+                                            Tested at: @result.TestedAt.ToString("HH:mm:ss")
+                                        </MudText>
+                                    </div>
+                                }
+                            </div>
+                        </MudListItem>
+                        @if (result != Results.Last())
+                        {
+                            <MudDivider />
+                        }
+                    }
+                </MudList>
+            }
+            else
+            {
+                <MudText Typo="Typo.body1" Align="Align.Center">
+                    No test results to display
+                </MudText>
+            }
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Close</MudButton>
+    </DialogActions>
+</MudDialog>

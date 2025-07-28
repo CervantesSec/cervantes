@@ -1,0 +1,291 @@
+@using Cervantes.CORE.ViewModel
+@using Cervantes.IFR.CveServices
+@using Cervantes.Web.Controllers
+@using Microsoft.AspNetCore.Components
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style="max-height: 70vh; overflow-y: auto;">
+            <MudGrid>
+                <!-- Quick Presets -->
+                <MudItem xs="12">
+                    <MudCard Elevation="2" Class="mb-4">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">@localizer["quickPresets"]</MudText>
+                                <MudText Typo="Typo.caption" Class="mt-1">
+                                    @localizer["nvdApiDateLimit"]
+                                </MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudGrid>
+                                @foreach (var preset in CveSyncOptionsViewModel.AvailablePresets)
+                                {
+                                    <MudItem xs="6" md="4">
+                                        <MudButton Variant="Variant.Outlined" 
+                                                 Color="@(Model.QuickPreset == preset.Key ? Color.Primary : Color.Default)"
+                                                 FullWidth="true"
+                                                 Size="Size.Small"
+                                                 OnClick="() => ApplyPreset(preset.Key)"
+                                                 Class="text-left">
+                                            <MudText Typo="Typo.body2">@preset.Value</MudText>
+                                        </MudButton>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <!-- Date Filters -->
+                <MudItem xs="12" md="6">
+                    <MudCard Elevation="2" Class="mb-4">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">@localizer["dateFilters"]</MudText>
+                                <MudText Typo="Typo.caption" Class="mt-1">
+                                    @localizer["publishedModifiedDateLimit"]
+                                </MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudGrid>
+                                <MudItem xs="6">
+                                    <MudNumericField @bind-Value="Model.StartYear"
+                                                   Label="@localizer["startYear"]"
+                                                   Min="1999"
+                                                   Max="@(DateTime.Now.Year + 1)"
+                                                   Variant="Variant.Outlined"
+                                                   Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudNumericField @bind-Value="Model.EndYear"
+                                                   Label="@localizer["endYear"]"
+                                                   Min="1999"
+                                                   Max="@(DateTime.Now.Year + 1)"
+                                                   Variant="Variant.Outlined"
+                                                   Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudDatePicker @bind-Date="Model.PublishedDateStart"
+                                                 Label="@localizer["publishedFrom"]"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudDatePicker @bind-Date="Model.PublishedDateEnd"
+                                                 Label="@localizer["publishedTo"]"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="12" Class="mt-3">
+                                    <MudText Typo="Typo.subtitle2">@localizer["lastModifiedDates"]</MudText>
+                                    <MudDivider Class="mb-2" />
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudDatePicker @bind-Date="Model.LastModifiedStart"
+                                                 Label="@localizer["lastModifiedFrom"]"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudDatePicker @bind-Date="Model.LastModifiedEnd"
+                                                 Label="@localizer["lastModifiedTo"]"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense" />
+                                </MudItem>
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <!-- Severity & Score Filters -->
+                <MudItem xs="12" md="6">
+                    <MudCard Elevation="2" Class="mb-4">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">@localizer["severityFilters"]</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <MudSelect SelectedValues="@Model.Severities.AsEnumerable()"
+                                             SelectedValuesChanged="@((IEnumerable<string> values) => OnSeveritiesChanged(values))"
+                                             Label="@localizer["severities"]"
+                                             MultiSelection="true"
+                                             Variant="Variant.Outlined"
+                                             Margin="Margin.Dense">
+                                        @foreach (var severity in CveSyncOptionsViewModel.AvailableSeverities)
+                                        {
+                                            <MudSelectItem Value="severity">
+                                                <MudChip T="string" Color="GetSeverityColor(severity)" Size="Size.Small">
+                                                    @severity
+                                                </MudChip>
+                                            </MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudNumericField @bind-Value="Model.MinCvssScore"
+                                                   Label="@localizer["minCvss"]"
+                                                   Min="0.0" Max="10.0" Step="0.1"
+                                                   Variant="Variant.Outlined"
+                                                   Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudNumericField @bind-Value="Model.MaxCvssScore"
+                                                   Label="@localizer["maxCvss"]"
+                                                   Min="0.0" Max="10.0" Step="0.1"
+                                                   Variant="Variant.Outlined"
+                                                   Margin="Margin.Dense" />
+                                </MudItem>
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <!-- Advanced Options -->
+                <MudItem xs="12">
+                    <MudExpansionPanels Elevation="2">
+                        <MudExpansionPanel Text="@localizer["advancedOptions"]">
+                            <MudAlert Severity="Severity.Info" Class="mb-3">
+                                <MudText Typo="Typo.body2">
+                                    <strong>@localizer["nvdApiLimitations"]:</strong><br/>
+                                    @((MarkupString)localizer["nvdApiLimitationsDesc"].Value)
+                                </MudText>
+                            </MudAlert>
+                            <MudGrid>
+                                <MudItem xs="12" md="6">
+                                    <MudTextField @bind-Value="Model.KeywordFilter"
+                                                Label="@localizer["keywordFilter"]"
+                                                Placeholder="@localizer["keywordFilterPlaceholder"]"
+                                                Variant="Variant.Outlined"
+                                                Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="12" md="6">
+                                    <MudNumericField @bind-Value="Model.MaxTotalCves"
+                                                   Label="@localizer["maxTotalCves"]"
+                                                   Min="1" Max="50000"
+                                                   Variant="Variant.Outlined"
+                                                   Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="12" md="6">
+                                    <MudNumericField @bind-Value="Model.ResultsPerPage"
+                                                   Label="@localizer["resultsPerPage"]"
+                                                   Min="1" Max="2000"
+                                                   Variant="Variant.Outlined"
+                                                   Margin="Margin.Dense" />
+                                </MudItem>
+                                <MudItem xs="12" md="6">
+                                    <MudSwitch T="bool" @bind-Checked="Model.OnlyKnownExploited"
+                                             Label="@localizer["onlyKnownExploited"]"
+                                             Color="Color.Warning" />
+                                </MudItem>
+                                <MudItem xs="6" md="3">
+                                    <MudSwitch T="bool" @bind-Checked="Model.SkipExisting"
+                                             Label="@localizer["skipExisting"]"
+                                             Color="Color.Info" />
+                                </MudItem>
+                                <MudItem xs="6" md="3">
+                                    <MudSwitch T="bool" @bind-Checked="Model.UpdateExisting"
+                                             Label="@localizer["updateExisting"]"
+                                             Color="Color.Success" />
+                                </MudItem>
+                                <MudItem xs="12" md="6">
+                                    <MudSelect @bind-Value="Model.SyncSource"
+                                             Label="@localizer["syncSource"]"
+                                             Variant="Variant.Outlined"
+                                             Margin="Margin.Dense">
+                                        @foreach (var source in CveSyncOptionsViewModel.AvailableSyncSources)
+                                        {
+                                            <MudSelectItem Value="source">
+                                                <div style="display: flex; align-items: center;">
+                                                    <MudIcon Icon="@GetSourceIcon(source)" Class="mr-2" />
+                                                    @source
+                                                    @if (source == "RedHat")
+                                                    {
+                                                        <MudChip T="string" Size="Size.Small" Color="Color.Info" Class="ml-2">@localizer["redHatEnterprise"]</MudChip>
+                                                    }
+                                                    else if (source == "NVD")
+                                                    {
+                                                        <MudChip T="string" Size="Size.Small" Color="Color.Primary" Class="ml-2">@localizer["nistOfficial"]</MudChip>
+                                                    }
+                                                </div>
+                                            </MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                </MudItem>
+                            </MudGrid>
+                        </MudExpansionPanel>
+                    </MudExpansionPanels>
+                </MudItem>
+
+                <!-- Validation Results -->
+                @if (ValidationResult != null)
+                {
+                    <MudItem xs="12">
+                        <MudCard Elevation="2" Class="mb-4">
+                            <MudCardContent>
+                                @if (ValidationResult.EstimatedCount.HasValue)
+                                {
+                                    <MudAlert Severity="Severity.Info" Class="mb-2">
+                                        @localizer["estimatedCount"]: <strong>@ValidationResult.EstimatedCount.Value.ToString("N0")</strong> CVEs
+                                    </MudAlert>
+                                }
+
+                                @foreach (var warning in ValidationResult.Warnings)
+                                {
+                                    <MudAlert Severity="Severity.Warning" Class="mb-1">
+                                        @warning
+                                    </MudAlert>
+                                }
+
+                                @foreach (var error in ValidationResult.Errors)
+                                {
+                                    <MudAlert Severity="Severity.Error" Class="mb-1">
+                                        @error
+                                    </MudAlert>
+                                }
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                }
+
+                <!-- Progress -->
+                @if (IsProcessing)
+                {
+                    <MudItem xs="12">
+                        <MudCard Elevation="2">
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem xs="12" Class="text-center">
+                                        <MudProgressCircular Indeterminate="true" Size="Size.Large" />
+                                        <MudText Typo="Typo.h6" Class="mt-2">@localizer["syncInProgress"]</MudText>
+                                        <MudText Typo="Typo.body2">@localizer["syncInProgressDesc"]</MudText>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Disabled="IsProcessing">@localizer["cancel"]</MudButton>
+        <MudButton OnClick="ValidateOptionsAsync" 
+                 Variant="Variant.Filled" 
+                 Color="Color.Secondary" 
+                 Disabled="IsProcessing">
+            @localizer["validate"]
+        </MudButton>
+        <MudButton OnClick="StartSyncAsync" 
+                 Variant="Variant.Filled" 
+                 Color="Color.Primary" 
+                 Disabled="IsProcessing || (ValidationResult != null && !ValidationResult.IsValid)">
+            @localizer["startSync"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>

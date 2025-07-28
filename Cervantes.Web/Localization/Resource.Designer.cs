@@ -206,13 +206,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("español", resourceCulture);
             }
         }
-        
-        internal static string active {
-            get {
-                return ResourceManager.GetString("active", resourceCulture);
-            }
-        }
-        
+  
         internal static string archived {
             get {
                 return ResourceManager.GetString("archived", resourceCulture);
@@ -242,13 +236,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("whitebox", resourceCulture);
             }
         }
-        
-        internal static string search {
-            get {
-                return ResourceManager.GetString("search", resourceCulture);
-            }
-        }
-        
+
         internal static string createProject {
             get {
                 return ResourceManager.GetString("createProject", resourceCulture);
@@ -278,13 +266,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("score", resourceCulture);
             }
         }
-        
-        internal static string cancel {
-            get {
-                return ResourceManager.GetString("cancel", resourceCulture);
-            }
-        }
-        
+
         internal static string projectCreated {
             get {
                 return ResourceManager.GetString("projectCreated", resourceCulture);
@@ -296,13 +278,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("projectCreatedError", resourceCulture);
             }
         }
-        
-        internal static string add {
-            get {
-                return ResourceManager.GetString("add", resourceCulture);
-            }
-        }
-        
+
         internal static string noFiles {
             get {
                 return ResourceManager.GetString("noFiles", resourceCulture);
@@ -332,13 +308,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("deleteAttachment", resourceCulture);
             }
         }
-        
-        internal static string delete {
-            get {
-                return ResourceManager.GetString("delete", resourceCulture);
-            }
-        }
-        
+
         internal static string deleteMessageIntro {
             get {
                 return ResourceManager.GetString("deleteMessageIntro", resourceCulture);
@@ -584,13 +554,7 @@ namespace Cervantes.Web.Localization {
                 return ResourceManager.GetString("editProject", resourceCulture);
             }
         }
-        
-        internal static string edit {
-            get {
-                return ResourceManager.GetString("edit", resourceCulture);
-            }
-        }
-        
+
         internal static string projectEdited {
             get {
                 return ResourceManager.GetString("projectEdited", resourceCulture);
@@ -855,30 +819,6 @@ namespace Cervantes.Web.Localization {
             }
         }
         
-        internal static string low {
-            get {
-                return ResourceManager.GetString("low", resourceCulture);
-            }
-        }
-        
-        internal static string medium {
-            get {
-                return ResourceManager.GetString("medium", resourceCulture);
-            }
-        }
-        
-        internal static string high {
-            get {
-                return ResourceManager.GetString("high", resourceCulture);
-            }
-        }
-        
-        internal static string critical {
-            get {
-                return ResourceManager.GetString("critical", resourceCulture);
-            }
-        }
-        
         internal static string open {
             get {
                 return ResourceManager.GetString("open", resourceCulture);
@@ -1008,12 +948,6 @@ namespace Cervantes.Web.Localization {
         internal static string signin {
             get {
                 return ResourceManager.GetString("signin", resourceCulture);
-            }
-        }
-        
-        internal static string email {
-            get {
-                return ResourceManager.GetString("email", resourceCulture);
             }
         }
         
