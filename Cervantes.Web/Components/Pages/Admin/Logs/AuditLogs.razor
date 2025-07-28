@@ -49,15 +49,21 @@
     </MudItem>
     
     <MudItem xs="12" sm="12" md="12">
-        <MudDataGrid T="Audit" Items="@model.OrderByDescending(x => x.Id)" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
-                     Hideable="true" MultiSelection="true" Virtualize="true" DragDropColumnReordering="true">
+        @if (isLoading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+        }
+        <MudDataGrid T="Audit" SortMode="SortMode.None" Filterable="false" 
+                     Hideable="true" MultiSelection="false" Virtualize="false" DragDropColumnReordering="true"
+                     Loading="@isLoading" ServerData="@(new Func<GridState<Audit>, Task<GridData<Audit>>>(ServerReload))"
+                     @ref="dataGrid">
             <ToolBarContent>
                 <MudStack Row="true">
 
                 </MudStack>
                 <MudSpacer/>
-                <MudTextField @bind-Value="searchString" Placeholder="@localizer["search"]" Adornment="Adornment.Start" Immediate="true"
-                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                <MudTextField Value="@searchString" ValueChanged="@((string value) => OnSearchChanged(value))" Placeholder="@localizer["search"]" Adornment="Adornment.Start" 
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Clearable="true">
                 </MudTextField>
             </ToolBarContent>
             <Columns>
@@ -96,9 +102,9 @@
                                     <td>@localizer["affectedColumns"]</td>
                                     <td>
                                         <MudItem>
-                                            @foreach (var column in context.Item.AffectedColumns.Trim('[').Trim(']').Split(','))
+                                            @foreach (var column in ParseJsonArray(context.Item.AffectedColumns))
                                             {
-                                                <MudChip Label="true" Color="Color.Surface">@column.Replace('"', ' ').Trim()</MudChip>
+                                                <MudChip Label="true" Color="Color.Surface">@column</MudChip>
                                             }
                                         </MudItem>
                                     </td>
@@ -108,7 +114,10 @@
                                 <td>@localizer["primaryKey"]</td>
                                 <td>
                                     <MudItem>
-                                        <MudChip Label="true" Color="Color.Surface">@context.Item.PrimaryKey.Trim('{').Trim('}').Replace('"', ' ').Trim()</MudChip>
+                                        @foreach (var key in ParseJsonArray(context.Item.PrimaryKey))
+                                        {
+                                            <MudChip Label="true" Color="Color.Surface">@key</MudChip>
+                                        }
                                     </MudItem>
                                 </td>
                             </tr>
@@ -120,9 +129,9 @@
                                     <td>
 
                                         <MudItem>
-                                            @foreach (var value in context.Item.OldValues.Trim('{').Trim('}').Split(','))
+                                            @foreach (var value in ParseJsonArray(context.Item.OldValues))
                                             {
-                                                <MudChip Label="true" Color="Color.Warning">@value.Replace('"', ' ').Trim()</MudChip>
+                                                <MudChip Label="true" Color="Color.Warning">@value</MudChip>
                                             }
                                         </MudItem>
                                     </td>
@@ -135,9 +144,9 @@
                                     <td>
 
                                         <MudItem>
-                                            @foreach (var value in context.Item.NewValues.Trim('{').Trim('}').Split(','))
+                                            @foreach (var value in ParseJsonArray(context.Item.NewValues))
                                             {
-                                                <MudChip Label="true" Color="Color.Success">@value.Replace('"', ' ').Trim()</MudChip>
+                                                <MudChip Label="true" Color="Color.Success">@value</MudChip>
                                             }
                                         </MudItem>
                                     </td>

@@ -8,52 +8,94 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Components.Pages.Admin.Logs;
 
-public partial class AuditLogs : ComponentBase
+public partial class AuditLogs : ComponentBase, IDisposable
 {
     private List<BreadcrumbItem> _items;
     private string searchString = "";
     [Inject] LogController _logController { get; set; }
-    [Inject ]private IExportToCsv ExportToCsv { get; set; }
+    [Inject] private IExportToCsv ExportToCsv { get; set; }
     private ClaimsPrincipal userAth;
     [Inject] private AuditController _AuditController { get; set; }
-    private List<CORE.Entities.Audit> model = new List<CORE.Entities.Audit>();
+    private bool isLoading = false;
+    private int currentPage = 0;
+    private int pageSize = 50;
+    private Timer? searchTimer;
+    private MudDataGrid<Audit>? dataGrid;
 
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
-        model = new List<Audit>();
-        model = _AuditController.Get().ToList();
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(@localizer["home"], href: "/",icon: Icons.Material.Filled.Home),
             new BreadcrumbItem("Admin", href: null,icon: Icons.Material.Filled.AdminPanelSettings),
             new BreadcrumbItem("Logs", href: null, disabled: true,icon: Icons.Material.Filled.ViewCompact)
         };
-
+        
+        // Data will be loaded via ServerReload method
     }
     
-    private Func<Audit, bool> _quickFilter => x =>
+    private async Task OnSearchChanged(string value)
     {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (x.Type.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (x.DateTime.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (x.UserId.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (x.TableName.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (x.AffectedColumns.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (x.Id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (x.OldValues.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (x.NewValues.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (x.PrimaryKey.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
-    };
+        searchString = value;
+        currentPage = 0;
+        
+        searchTimer?.Dispose();
+        searchTimer = new Timer(async _ => await InvokeAsync(async () => 
+        {
+            if (dataGrid != null)
+                await dataGrid.ReloadServerData();
+        }), null, TimeSpan.FromMilliseconds(500), Timeout.InfiniteTimeSpan);
+    }
+    
+    private async Task<GridData<Audit>> ServerReload(GridState<Audit> state)
+    {
+        try
+        {
+            currentPage = state.Page;
+            pageSize = state.PageSize;
+            
+            var query = _AuditController.GetPaged(currentPage, pageSize, string.IsNullOrEmpty(searchString) ? null : searchString);
+            var items = query.ToList();
+            
+            var count = _AuditController.GetCount(string.IsNullOrEmpty(searchString) ? null : searchString);
+            
+            return new GridData<Audit>()
+            {
+                Items = items,
+                TotalItems = count
+            };
+        }
+        catch (Exception)
+        {
+            return new GridData<Audit>()
+            {
+                Items = new List<Audit>(),
+                TotalItems = 0
+            };
+        }
+    }
+    
+    private string[] ParseJsonArray(string? jsonString)
+    {
+        if (string.IsNullOrEmpty(jsonString)) return Array.Empty<string>();
+        
+        try
+        {
+            return jsonString.Trim('[', ']', '{', '}')
+                .Split(',')
+                .Select(s => s.Replace('"', ' ').Trim())
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToArray();
+        }
+        catch
+        {
+            return Array.Empty<string>();
+        }
+    }
+    
+    public void Dispose()
+    {
+        searchTimer?.Dispose();
+    }
 }
