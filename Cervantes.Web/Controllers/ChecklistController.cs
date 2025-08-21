@@ -1890,6 +1890,7 @@ public class ChecklistController : ControllerBase
 
     #region Private Methods
 
+    [NonAction]
     private async Task CreateInitialExecutions(Checklist checklist)
     {
         var template = _checklistTemplateManager.GetAll()

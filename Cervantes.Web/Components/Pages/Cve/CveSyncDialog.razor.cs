@@ -18,7 +18,7 @@ public partial class CveSyncDialog
     [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     public CveSyncOptionsViewModel Model { get; set; } = new();
-    public ValidationResult? ValidationResult { get; set; }
+    public CveSyncController.CveSyncValidationResult? ValidationResult { get; set; }
     public bool IsProcessing { get; set; }
 
     protected override async Task OnInitializedAsync()

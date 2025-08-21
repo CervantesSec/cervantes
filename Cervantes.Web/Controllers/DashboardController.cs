@@ -38,7 +38,6 @@ public class DashboardController: ControllerBase
         this.noteManager = noteManager;
     }
     
-    [HttpGet]
     public async Task<IActionResult> Get()
     {
         var model = new DashboardViewModel();

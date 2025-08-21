@@ -782,6 +782,7 @@ public class CveController : ControllerBase
     /// Get all CVEs for Blazor components (non-API method)
     /// </summary>
     /// <returns>List of CVE entities</returns>
+    [NonAction]
     public IEnumerable<Cve> Get()
     {
         try
@@ -799,6 +800,7 @@ public class CveController : ControllerBase
     /// Get CVE statistics for Blazor components (non-API method)
     /// </summary>
     /// <returns>CVE statistics</returns>
+    [NonAction]
     public async Task<CveStatistics> GetStatisticsForComponentsAsync()
     {
         try
@@ -817,6 +819,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="searchModel">Search criteria</param>
     /// <returns>List of matching CVEs</returns>
+    [NonAction]
     public async Task<List<Cve>> SearchForComponentsAsync(CveSearchViewModel searchModel)
     {
         try
@@ -835,6 +838,7 @@ public class CveController : ControllerBase
     /// Trigger CVE synchronization for Blazor components (non-API method)
     /// </summary>
     /// <returns>Synchronization result</returns>
+    [NonAction]
     public async Task<CveSyncResult> TriggerSyncForComponentsAsync()
     {
         try
@@ -853,6 +857,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="id">CVE ID</param>
     /// <returns>Success status</returns>
+    [NonAction]
     public async Task<bool> MarkAsFavoriteForComponentsAsync(Guid id)
     {
         try
@@ -871,6 +876,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="id">CVE ID</param>
     /// <returns>Success status</returns>
+    [NonAction]
     public async Task<bool> ArchiveForComponentsAsync(Guid id)
     {
         try
@@ -889,6 +895,7 @@ public class CveController : ControllerBase
     /// Get user subscriptions for Blazor components (non-API method)
     /// </summary>
     /// <returns>List of CVE subscriptions</returns>
+    [NonAction]
     public async Task<List<CveSubscription>> GetUserSubscriptionsForComponentsAsync()
     {
         try
@@ -907,6 +914,7 @@ public class CveController : ControllerBase
     /// Get user subscription summary for Blazor components (non-API method)
     /// </summary>
     /// <returns>User subscription summary</returns>
+    [NonAction]
     public async Task<CveUserSubscriptionSummary> GetUserSubscriptionSummaryForComponentsAsync()
     {
         try
@@ -925,6 +933,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="subscriptionId">Subscription ID</param>
     /// <returns>Success status</returns>
+    [NonAction]
     public async Task<bool> ToggleSubscriptionForComponentsAsync(Guid subscriptionId)
     {
         try
@@ -958,6 +967,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="subscriptionId">Subscription ID</param>
     /// <returns>Success status</returns>
+    [NonAction]
     public async Task<bool> DeleteSubscriptionForComponentsAsync(Guid subscriptionId)
     {
         try
@@ -984,6 +994,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="subscription">CVE subscription</param>
     /// <returns>Created subscription</returns>
+    [NonAction]
     public async Task<CveSubscription> CreateSubscriptionForComponentsAsync(CveSubscription subscription)
     {
         try
@@ -1032,6 +1043,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="subscription">CVE subscription</param>
     /// <returns>Updated subscription</returns>
+    [NonAction]
     public async Task<CveSubscription> UpdateSubscriptionForComponentsAsync(CveSubscription subscription)
     {
         try
@@ -1089,6 +1101,7 @@ public class CveController : ControllerBase
     /// Create default subscriptions for user (non-API method)
     /// </summary>
     /// <returns>List of created subscriptions</returns>
+    [NonAction]
     public async Task<List<CveSubscription>> CreateDefaultSubscriptionsForComponentsAsync()
     {
         try
@@ -1112,6 +1125,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="subscriptionId">Subscription ID</param>
     /// <returns>Test result</returns>
+    [NonAction]
     public async Task<CveNotificationTestResult> TestSubscriptionNotificationForComponentsAsync(Guid subscriptionId)
     {
         try
@@ -1213,6 +1227,7 @@ public class CveController : ControllerBase
     /// Test all active subscriptions for current user (non-API method)
     /// </summary>
     /// <returns>Test results</returns>
+    [NonAction]
     public async Task<List<CveNotificationTestResult>> TestAllActiveSubscriptionsForComponentsAsync()
     {
         try
@@ -1243,6 +1258,7 @@ public class CveController : ControllerBase
     /// </summary>
     /// <param name="cveIds">List of CVE IDs to delete</param>
     /// <returns>Number of deleted CVEs</returns>
+    [NonAction]
     public async Task<int> DeleteMultipleForComponentsAsync(List<Guid> cveIds)
     {
         try
@@ -1270,6 +1286,7 @@ public class CveController : ControllerBase
     /// <param name="value">String to truncate</param>
     /// <param name="maxLength">Maximum length</param>
     /// <returns>Truncated string</returns>
+    [NonAction]
     private static string TruncateString(string value, int maxLength)
     {
         if (string.IsNullOrEmpty(value))

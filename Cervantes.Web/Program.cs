@@ -252,6 +252,13 @@ builder.Services.AddCervantesControllers();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cervantes API", Version = "v1" });
+    
+    // Add this to resolve conflicts with duplicate schema IDs
+    c.CustomSchemaIds(type => type.FullName);
+    
+    // Enable annotations
+    c.EnableAnnotations();
+    
     c.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -274,6 +281,9 @@ builder.Services.AddSwaggerGen(c =>
             new string[] { }
         }
     });
+    
+    // Add filter to handle exceptions
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 });
 
 var app = builder.Build();

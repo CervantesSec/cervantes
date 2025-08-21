@@ -713,6 +713,7 @@ public class TargetController : ControllerBase
     /// </summary>
     /// <param name="targetId">Target ID</param>
     /// <returns>List of custom field values</returns>
+    [NonAction]
     public List<TargetCustomFieldValueViewModel> GetCustomFieldValuesByTargetId(Guid targetId)
     {
         var customFieldValues = targetCustomFieldValueManager.GetAll()

@@ -104,12 +104,12 @@ public class CveSyncController : ControllerBase
     /// <param name="options">Options to validate</param>
     /// <returns>Validation result</returns>
     [HttpPost("validate")]
-    public ActionResult<ValidationResult> ValidateOptions([FromBody] CveSyncOptionsViewModel options)
+    public ActionResult<CveSyncValidationResult> ValidateOptions([FromBody] CveSyncOptionsViewModel options)
     {
         var errors = options.Validate();
         var estimatedCount = options.GetEstimatedCount();
         
-        return Ok(new ValidationResult
+        return Ok(new CveSyncValidationResult
         {
             IsValid = !errors.Any(),
             Errors = errors,
@@ -157,6 +157,7 @@ public class CveSyncController : ControllerBase
     /// <param name="options">Sync options</param>
     /// <param name="estimatedCount">Estimated CVE count</param>
     /// <returns>List of warnings</returns>
+    [NonAction]
     private List<string> GenerateWarnings(CveSyncOptionsViewModel options, int? estimatedCount)
     {
         var warnings = new List<string>();
@@ -192,6 +193,7 @@ public class CveSyncController : ControllerBase
     /// </summary>
     /// <param name="options">Sync options</param>
     /// <returns>Sync result</returns>
+    [NonAction]
     internal async Task<CveSyncResult> SyncCvesInternalAsync(CveSyncOptionsViewModel options)
     {
         return await _cveSyncService.SyncWithOptionsAsync(options);
@@ -201,6 +203,7 @@ public class CveSyncController : ControllerBase
     /// Get sync status (internal method for Blazor)
     /// </summary>
     /// <returns>Sync status</returns>
+    [NonAction]
     internal async Task<List<CveSyncStatus>> GetSyncStatusInternalAsync()
     {
         return await _cveSyncService.GetSyncStatusAsync();
@@ -211,12 +214,13 @@ public class CveSyncController : ControllerBase
     /// </summary>
     /// <param name="options">Options to validate</param>
     /// <returns>Validation result</returns>
-    internal ValidationResult ValidateOptionsInternal(CveSyncOptionsViewModel options)
+    [NonAction]
+    internal CveSyncValidationResult ValidateOptionsInternal(CveSyncOptionsViewModel options)
     {
         var errors = options.Validate();
         var estimatedCount = options.GetEstimatedCount();
         
-        return new ValidationResult
+        return new CveSyncValidationResult
         {
             IsValid = !errors.Any(),
             Errors = errors,
@@ -226,15 +230,15 @@ public class CveSyncController : ControllerBase
     }
 
     #endregion
-}
-
-/// <summary>
-/// Validation result for sync options
-/// </summary>
-public class ValidationResult
-{
-    public bool IsValid { get; set; }
-    public List<string> Errors { get; set; } = new();
-    public List<string> Warnings { get; set; } = new();
-    public int? EstimatedCount { get; set; }
+    
+    /// <summary>
+    /// Validation result for sync options
+    /// </summary>
+    public class CveSyncValidationResult
+    {
+        public bool IsValid { get; set; }
+        public List<string> Errors { get; set; } = new();
+        public List<string> Warnings { get; set; } = new();
+        public int? EstimatedCount { get; set; }
+    }
 }

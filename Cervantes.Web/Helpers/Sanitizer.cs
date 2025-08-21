@@ -45,6 +45,36 @@ public class Sanitizer
         if (string.IsNullOrEmpty(html))
             return string.Empty;
 
+        // First, check if this looks like plain text that shouldn't be HTML
+        // If it contains < but not as part of a valid HTML tag, treat it as plain text
+        bool hasIncompleteTags = false;
+        if (html.Contains("<"))
+        {
+            // Check if the < is part of a valid HTML tag
+            var validTagPattern = @"<\s*/?[a-zA-Z][^>]*>";
+            var allLessThan = Regex.Matches(html, @"<");
+            var validTags = Regex.Matches(html, validTagPattern);
+            
+            // If we have < characters that aren't part of valid tags, it's likely plain text
+            if (allLessThan.Count > validTags.Count)
+            {
+                hasIncompleteTags = true;
+            }
+        }
+
+        // If it has incomplete tags, remove the problematic < characters but keep the text
+        if (hasIncompleteTags)
+        {
+            // Remove problematic < characters that aren't part of valid HTML tags
+            var processed = Regex.Replace(html, @"<(?![a-zA-Z/!][^>]*>)", "");
+            
+            // Now sanitize the processed text
+            var sanitizedText = _sanitizer.Sanitize(processed);
+            
+            // Return the cleaned text
+            return sanitizedText.Trim();
+        }
+
         // Step 1: Extract and protect code blocks before any processing
         var codeBlocks = new Dictionary<string, string>();
         var placeholderIndex = 0;
