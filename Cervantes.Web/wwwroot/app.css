@@ -111,3 +111,31 @@ h1:focus {
     box-shadow: none;
 }
 
+/* Dialog header adjustments - only affect title content, not action buttons */
+.mud-dialog-title {
+    padding-right: 100px !important; /* Reserve space for close/maximize buttons */
+}
+
+/* Make title and chips wrap when needed */
+.mud-dialog-title .mud-stack {
+    flex-wrap: wrap !important;
+    max-width: calc(100% - 100px) !important; /* Don't overlap with buttons */
+    gap: 8px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .mud-dialog-title .mud-stack {
+        max-width: calc(100% - 90px) !important;
+    }
+    
+    .mud-dialog-title .mud-chip {
+        margin: 2px;
+        font-size: 0.875rem;
+    }
+}
+
+/* Ensure proper z-index for TinyMCE in dialogs */
+.tox-tinymce-aux {
+    z-index: 999999 !important;
+}
