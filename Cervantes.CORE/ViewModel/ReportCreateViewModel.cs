@@ -12,6 +12,4 @@ public class ReportCreateViewModel
     public string Version { get; set; }
     public Guid ReportTemplateId { get; set; }
     public Guid ProjectId { get; set; }
-    
-    public List<Guid> SelectedVulnerabilityIds { get; set; } = new List<Guid>();
 }

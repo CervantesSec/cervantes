@@ -616,7 +616,8 @@ public class ReportController : ControllerBase
     }
 
     [HttpPost]
-    [Route("Generate")]
+    [Route("Generate" +
+           "")]
     [HasPermission(Permissions.ReportsAdd)]
     public async Task<IActionResult> GenerateNewReport([FromBody] ReportCreateViewModel model)
     {
