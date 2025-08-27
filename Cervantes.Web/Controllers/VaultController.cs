@@ -89,7 +89,7 @@ public class VaultController : ControllerBase
                 await vaultManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vault added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetByVaultId), new { vaultId = vault.Id }, vault);
+                return Created($"/api/Vault/{vault.Id}", vault);
             }
             else
             {

@@ -427,7 +427,7 @@ public class VulnController: ControllerBase
   
                 _logger.LogInformation("Vuln added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetVulnById), new { vulnId = vuln.Id }, vuln);
+                return Created($"/api/Vuln/{vuln.Id}", vuln);
             }
 
             _logger.LogError("Validation failed when adding a Vuln. User: {0}",
@@ -812,7 +812,7 @@ public class VulnController: ControllerBase
   
                 _logger.LogInformation("Vuln Note added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetVulnNoteById), new { vulnNoteId = model.VulnId }, model);
+                return Created($"/api/Vuln/Note/{note.Id}", note);
             }
 
             _logger.LogError("An error ocurred adding a Vuln Note. User: {0}",
@@ -1099,7 +1099,7 @@ public class VulnController: ControllerBase
                 await vulnAttachmentManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Attachment deleted successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetVulnAttachmentById), new { vulnAttachmentId = attachment.Id }, attachment);
+                return Created($"/api/Vuln/Attachment/{attachment.Id}", attachment);
             }
             _logger.LogError("An error ocurred adding a Vuln Attachment. User: {0}",
                 aspNetUserId);
@@ -1458,7 +1458,7 @@ public class VulnController: ControllerBase
                 await vulnCategoryManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vuln Category added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetCategoryById), new { categoryId = category.Id }, category);;
+                return Created($"/api/Vuln/Category/{category.Id}", category);
                 
             }
             _logger.LogError( "An error ocurred adding a Vuln Category. User: {0}",

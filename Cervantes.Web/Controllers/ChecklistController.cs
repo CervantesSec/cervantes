@@ -994,7 +994,7 @@ public class ChecklistController : ControllerBase
                 reportManager.Context.SaveChanges();
                 _logger.LogInformation("Report MASVS generated successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetReportById), new { reportId = rep.Id }, rep.Id);
+                return Created($"/api/Checklist/Report/{rep.Id}", rep.Id);
                
            }
            
@@ -1166,7 +1166,7 @@ public class ChecklistController : ControllerBase
 
                 _logger.LogInformation("Report generated successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetReportById), new { reportId = rep.Id }, rep);
+                return Created($"/api/Checklist/Report/{rep.Id}", rep);
                 }
                 
                 _logger.LogError("An error ocurred generating report. User: {0}",

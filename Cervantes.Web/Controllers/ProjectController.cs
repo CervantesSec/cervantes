@@ -516,7 +516,7 @@ public class ProjectController : ControllerBase
                 await projectNoteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Project note added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetNoteById),  new { noteId = note.Id }, note );
+                return Created($"/api/Project/Note/{note.Id}", note);
             }
 
             _logger.LogError("An error ocurred adding project notes. User: {0}",
@@ -723,7 +723,7 @@ public class ProjectController : ControllerBase
 
                 _logger.LogInformation("Project attachment added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetAttachmentById), new { attachmentId = attachment.Id }, attachment);
+                return Created($"/api/Project/Attachment/{attachment.Id}", attachment);
             }
 
             _logger.LogError("An error ocurred adding project attachments. User: {0}",

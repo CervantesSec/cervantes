@@ -87,7 +87,7 @@ public partial class CreateReportDialog: ComponentBase
 		    model.ProjectId = project;
 
 		    var response = await _ReportController.GenerateNewReport(model);
-		    if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+		    if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
 		    {
 			    Snackbar.Add(@localizer["reportCreated"], Severity.Success);
 			    MudDialog.Close(DialogResult.Ok(true));

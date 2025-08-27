@@ -48,7 +48,7 @@ public partial class AddTaskTargetDialog : ComponentBase
             model.TaskId = task.Id;
 
             var response = await _taskController.AddTarget(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
             {
                     Snackbar.Add(@localizer["targetAdded"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));

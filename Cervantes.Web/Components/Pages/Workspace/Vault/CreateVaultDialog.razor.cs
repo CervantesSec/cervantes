@@ -81,7 +81,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
         {
 	        model.ProjectId = project;
 	        var response = await _VaultController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
 	        {
 		        Snackbar.Add(@localizer["vaultCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

@@ -98,7 +98,7 @@ public partial class CreateProjectNoteDialog: ComponentBase
         {
             model.ProjectId = project;
             var response = await ProjectController.AddNote(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
             {
                 Snackbar.Add(@localizer["noteAdded"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

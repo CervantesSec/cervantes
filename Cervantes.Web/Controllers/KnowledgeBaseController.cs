@@ -77,7 +77,7 @@ public class KnowledgeBaseController : Controller
                 await knowledgeBaseManager.AddAsync(page);
                 await knowledgeBaseManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Knowledge Page added successfully. User: {0}",aspNetUserId);
-                return CreatedAtAction(nameof(GetPageById), new { pageId = page.Id }, page);
+                return Created($"/api/KnowledgeBase/Page/{page.Id}", page);
             }
             _logger.LogError("An error ocurred adding a Knowledge Page. User: {0}",
                 aspNetUserId);
@@ -233,7 +233,7 @@ public class KnowledgeBaseController : Controller
                 await knowledgeBaseCategoryManager.AddAsync(cat);
                 await knowledgeBaseCategoryManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Knowledge Category added successfully. User: {0}",aspNetUserId);
-                return CreatedAtAction(nameof(GetCategoryById), new { categoryId = cat.Id }, cat);
+                return Created($"/api/KnowledgeBase/Category/{cat.Id}", cat);
             }
             _logger.LogError("An error ocurred adding a Knowledge Category. User: {0}",
                 aspNetUserId);

@@ -203,7 +203,7 @@ public partial class CreateVulnDialog: ComponentBase
             }
             
 	        var response = await VulnController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
 	        {
 		        Snackbar.Add(@localizer["vulnCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

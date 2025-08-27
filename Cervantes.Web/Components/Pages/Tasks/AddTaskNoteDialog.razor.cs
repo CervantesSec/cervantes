@@ -75,7 +75,7 @@ public partial class AddTaskNoteDialog: ComponentBase
 
             model.TaskId = task.Id;
             var response = await _taskController.AddNote(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
             {
 
                     Snackbar.Add(@localizer["noteAdded"], Severity.Success);

@@ -224,7 +224,7 @@ public class TaskController: ControllerBase
                     
                 }
                 
-                return CreatedAtAction(nameof(GetTaskById), new { taskId = task.Id }, task);
+                return Created($"/api/Task/{task.Id}", task);
             }
             else
             {
@@ -568,7 +568,7 @@ public class TaskController: ControllerBase
                     await taskTargetManager.AddAsync(target);
                     await taskTargetManager.Context.SaveChangesAsync();
 
-                    return CreatedAtAction(nameof(GetTaskTargetById), new { targetId = model.TaskId }, model);
+                    return Created($"/api/Task/Target/{target.Id}", target);
                 }
                 else
                 {
@@ -674,7 +674,7 @@ public class TaskController: ControllerBase
                     };
                 await taskNoteManager.AddAsync(note);
                 await taskNoteManager.Context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetTaskNoteById), new { noteId = note.TaskId }, note);
+                return Created($"/api/Task/Note/{note.Id}", note);
             }
             return BadRequest("Invalid request");
         }
@@ -859,7 +859,7 @@ public class TaskController: ControllerBase
                     await taskAttachmentManager.Context.SaveChangesAsync();
                     _logger.LogInformation("User: {0} added Task Attachment on Task: {1}",
                         aspNetUserId, model.TaskId);
-                    return CreatedAtAction(nameof(GetTaskAttachmentById), new { attachmentId = attachment.TaskId }, attachment);
+                    return Created($"/api/Task/Attachment/{attachment.Id}", attachment);
                 }
             }
 

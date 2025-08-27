@@ -115,7 +115,7 @@ public class DocumentController : Controller
                 await docManager.AddAsync(doc);
                 await docManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Document added successfully. User: {0}",aspNetUserId);
-                return CreatedAtAction(nameof(GetById), new { documentId = doc.Id }, doc);
+                return Created($"/api/Document/{doc.Id}", doc);
             }
             _logger.LogError("Validation failed when adding a Document. User: {0}",
                 aspNetUserId);

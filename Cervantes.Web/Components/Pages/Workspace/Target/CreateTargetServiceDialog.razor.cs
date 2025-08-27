@@ -103,7 +103,7 @@ public partial class CreateTargetServiceDialog: ComponentBase
         {
             service.TargetId = target;
             var response = await _targetController.AddService(service);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
             {
 
                 Snackbar.Add(@localizer["serviceAdded"], Severity.Success);

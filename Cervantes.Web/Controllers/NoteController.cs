@@ -50,7 +50,7 @@ public class NoteController : Controller
                 await noteManager.AddAsync(note);
                 await noteManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Note added successfully. User: {0}",aspNetUserId);
-                return CreatedAtAction(nameof(GetById), new { noteId = note.Id }, note);
+                return Created($"/api/Note/{note.Id}", note);
             }
             _logger.LogError("An error ocurred adding a Note. User: {0}",
                 aspNetUserId);

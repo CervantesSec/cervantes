@@ -118,7 +118,7 @@ public partial class CreateReportComponentDialog: ComponentBase
             model.CssContent = await _editor.GetValue();
 
             var response = await _reportController.CreateComponent(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
             {
                 Snackbar.Add(@localizer["reportComponentCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -108,6 +108,7 @@ public class ReportController : ControllerBase
         this.reportTemplateManager = reportTemplateManager;
         _logger = logger;
         this.env = env;
+        this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
         this.reportComponentsManager = reportComponentsManager;
@@ -128,6 +129,12 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return null;
+            }
             IEnumerable<CORE.Entities.Report> model = reportManager.GetAll().Include(x => x.User).ToArray();
             if (model != null)
             {
@@ -156,7 +163,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred getting reports. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -168,6 +175,12 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return null;
+            }
             IEnumerable<CORE.Entities.Report> model = reportManager.GetAll().Where(x => x.ProjectId == id)
                 .Include(x => x.User).ToArray();
             if (model != null)
@@ -191,7 +204,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred getting project reports. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -202,6 +215,13 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return Unauthorized("User authentication failed");
+            }
+            
             if (ModelState.IsValid)
             {
                 var report = reportManager.GetById(model.Id);
@@ -237,7 +257,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing reports. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -256,7 +276,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred getting report templates. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -270,7 +290,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred getting report templates. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -282,6 +302,13 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return Unauthorized("User authentication failed");
+            }
+            
             if (ModelState.IsValid)
             {
                 var template = new ReportTemplate();
@@ -307,7 +334,7 @@ public class ReportController : ControllerBase
 
                 _logger.LogInformation("Report template added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetReportTemplateById), new { reportId = template.Id }, template);
+                return Created($"/api/Report/Template/{template.Id}", template);
             }
 
             _logger.LogError("An error ocurred adding report templates. User: {0}",
@@ -317,7 +344,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding report templates. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -329,6 +356,12 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return Unauthorized("User authentication failed");
+            }
             if (ModelState.IsValid)
             {
                 var template = reportTemplateManager.GetById(model.Id);
@@ -376,7 +409,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing report templates. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -388,6 +421,12 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return Unauthorized("User authentication failed");
+            }
             if (ModelState.IsValid)
             {
                 var report = reportTemplateManager.GetById(id);
@@ -413,7 +452,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting report templates. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -425,6 +464,12 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return Unauthorized("User authentication failed");
+            }
             if (ModelState.IsValid)
             {
                 var report = reportManager.GetById(reportId);
@@ -449,7 +494,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting report. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -467,7 +512,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred getting report components. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -486,7 +531,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred getting report components. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -501,7 +546,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred getting report components. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -513,6 +558,13 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return Unauthorized("User authentication failed");
+            }
+            
             if (ModelState.IsValid)
             {
                 var comp = new ReportComponents();
@@ -531,7 +583,7 @@ public class ReportController : ControllerBase
 
                 _logger.LogInformation("Report Components added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetComponentById), new { componentId = comp.Id }, comp);
+                return Created($"/api/Report/Component/{comp.Id}", comp);
             }
 
             _logger.LogError("An error ocurred adding report Components. User: {0}",
@@ -541,7 +593,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding report Components. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -553,6 +605,12 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return Unauthorized("User authentication failed");
+            }
             var result = reportComponentsManager.GetById(model.Id);
             if (result != null)
             {
@@ -580,7 +638,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred editing report Components. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -592,6 +650,12 @@ public class ReportController : ControllerBase
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return Unauthorized("User authentication failed");
+            }
             var result = reportComponentsManager.GetById(componentId);
             if (result != null)
             {
@@ -610,19 +674,25 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred deleting report Components. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
 
     [HttpPost]
-    [Route("Generate" +
-           "")]
+    [Route("Generate")]
     [HasPermission(Permissions.ReportsAdd)]
     public async Task<IActionResult> GenerateNewReport([FromBody] ReportCreateViewModel model)
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims for Generate endpoint");
+                return Unauthorized("User authentication failed");
+            }
+            
             if (ModelState.IsValid)
             {
                 var pro = projectManager.GetById(model.ProjectId);
@@ -1209,7 +1279,7 @@ public class ReportController : ControllerBase
 
                 _logger.LogInformation("Report generated successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetReportById), new { reportId = rep.Id }, rep);
+                return Created($"/api/Report/{rep.Id}", rep);
             }
 
             _logger.LogError("An error ocurred generating report. User: {0}",
@@ -1219,7 +1289,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred generating report. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     } 
@@ -1234,7 +1304,7 @@ public class ReportController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred getting report components. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -1313,6 +1383,13 @@ private static string ReplaceTableRowWithFor(string htmlContent)
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return null;
+            }
+            
             if (ModelState.IsValid)
             {
                 var report = reportManager.GetById(model.Id);
@@ -1711,7 +1788,7 @@ private static string ReplaceTableRowWithFor(string htmlContent)
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred generating report. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }
@@ -1723,6 +1800,13 @@ private static string ReplaceTableRowWithFor(string htmlContent)
     {
         try
         {
+            var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(aspNetUserId))
+            {
+                _logger.LogWarning("User ID not found in claims");
+                return null;
+            }
+            
             if (ModelState.IsValid)
             {
                 if (model.FileContent != null)
@@ -1758,7 +1842,7 @@ private static string ReplaceTableRowWithFor(string htmlContent)
         catch (Exception e)
         {
             _logger.LogError(e, "An error ocurred adding report templates. User: {0}",
-                aspNetUserId);
+                HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unknown");
             throw;
         }
     }

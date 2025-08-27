@@ -156,7 +156,7 @@ public partial class CreateTargetDialog: ComponentBase
             target.ProjectId = project;
 
             var response = await _targetController.Add(target);
-            if (response is Microsoft.AspNetCore.Mvc.CreatedAtActionResult)
+            if (response is Microsoft.AspNetCore.Mvc.CreatedResult)
             {
                 Snackbar.Add(@localizer["targetCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

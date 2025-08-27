@@ -94,7 +94,7 @@ public partial class CreateReportChecklistDialog: ComponentBase
 		    if (checklistType == "OWASPWSTG")
 		    {
 			    var response = await _ChecklistController.GenerateWstgReport(model);
-			    if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+			    if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
 			    {
 				    Snackbar.Add(@localizer["reportCreated"], Severity.Success);
 				    MudDialog.Close(DialogResult.Ok(true));
@@ -107,7 +107,7 @@ public partial class CreateReportChecklistDialog: ComponentBase
 		    else
 		    {
 			    var response = await _ChecklistController.GenerateMastgReport(model);
-			    if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+			    if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
 			    {
 				    Snackbar.Add(@localizer["reportCreated"], Severity.Success);
 				    MudDialog.Close(DialogResult.Ok(true));

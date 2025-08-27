@@ -170,7 +170,7 @@ public class TargetController : ControllerBase
                 
                 _logger.LogInformation("Target added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetTargetById),  new { targetId = target.Id }, target);
+                return Created($"/api/Target/{target.Id}", target);
             }
 
             _logger.LogError("Validation failed when adding a Target. User: {0}",
@@ -563,7 +563,7 @@ public class TargetController : ControllerBase
                 await targetServicesManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Target added successfully. User: {0}",
                     aspNetUserId);
-                return CreatedAtAction(nameof(GetServiceById), new { serviceId = service.Id }, service);
+                return Created($"/api/Target/Service/{service.Id}", service);
             }
 
             _logger.LogError("Validation failed when adding a Target Service. User: {0}",

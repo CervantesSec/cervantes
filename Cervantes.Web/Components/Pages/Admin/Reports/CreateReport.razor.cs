@@ -108,7 +108,7 @@ public partial class CreateReport: ComponentBase
             }
             
 	        var response = await _reportController.CreateTemplate(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
 	        {
 		        Snackbar.Add(@localizer["reportTemplateCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));
