@@ -68,7 +68,6 @@ public class ReportController : ControllerBase
     private IReportTemplateManager reportTemplateManager = null;
     private readonly IWebHostEnvironment env;
     private IHttpContextAccessor HttpContextAccessor;
-    private string aspNetUserId;
     private IFileCheck fileCheck;
     private IReportComponentsManager reportComponentsManager;
     private IReportsPartsManager reportsPartsManager;
@@ -79,7 +78,8 @@ public class ReportController : ControllerBase
     private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
     private IChecklistManager checklistManager;
     private IChecklistExecutionManager checklistExecutionManager;
-
+    private string aspNetUserId;
+    
     public ReportController(IProjectManager projectManager, IClientManager clientManager,
         IOrganizationManager organizationManager, IProjectUserManager projectUserManager,
         IProjectNoteManager projectNoteManager, IVulnTargetManager vulnTargetManager,
@@ -109,7 +109,6 @@ public class ReportController : ControllerBase
         _logger = logger;
         this.env = env;
         this.HttpContextAccessor = HttpContextAccessor;
-        aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
         this.reportComponentsManager = reportComponentsManager;
         this.reportsPartsManager = reportsPartsManager;
@@ -121,6 +120,8 @@ public class ReportController : ControllerBase
         this.sanitizer = sanitizer;
         this.checklistManager = checklistManager;
         this.checklistExecutionManager = checklistExecutionManager;
+        aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
     }
 
     [HttpGet]
@@ -725,7 +726,7 @@ public class ReportController : ControllerBase
                 var Vulns = vulnManager.GetAll()
                     .Where(x => x.ProjectId == model.ProjectId && x.Template == false).ToList();
                 var Targets = targetManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
-                var Users = projectUserManager.GetAll().Where(x => x.ProjectId == model.ProjectId).ToList();
+                var Users = projectUserManager.GetAll().Where(x => x.ProjectId == model.ProjectId).Include(x => x.User).ToList();
                 var Reports = reportManager.GetAll().Where(x => x.ProjectId == model.ProjectId && x.ReportType == ReportType.General).ToList();
                 Reports.Add(rep);
                 var VulnTargets = vulnTargetManager.GetAll().Where(x => vul.Contains(x.VulnId)).Include(x => x.Target).ToList();
@@ -1274,12 +1275,12 @@ public class ReportController : ControllerBase
 
                 rep.HtmlCode = result;
                 
-                reportManager.Add(rep);
-                reportManager.Context.SaveChanges();
+                await reportManager.AddAsync(rep);
+                await reportManager.Context.SaveChangesAsync();
 
                 _logger.LogInformation("Report generated successfully. User: {0}",
                     aspNetUserId);
-                return Created($"/api/Report/{rep.Id}", rep);
+                return Created($"/api/Report/{rep.Id}", new { rep.Id });
             }
 
             _logger.LogError("An error ocurred generating report. User: {0}",

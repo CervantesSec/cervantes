@@ -25,7 +25,7 @@
         <PackageReference Include="Hangfire.PostgreSql" Version="1.20.12" />
         <PackageReference Include="Heron.MudCalendar" Version="3.0.0" />
         <PackageReference Include="HtmlSanitizer" Version="9.0.884" />
-        <PackageReference Include="HtmlToOpenXml.dll" Version="3.2.5" />
+        <PackageReference Include="HtmlToOpenXml.dll" Version="3.2.6" />
         <PackageReference Include="Markdig" Version="0.40.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.14" />
         <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.2.0" />
