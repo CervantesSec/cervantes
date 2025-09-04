@@ -71,20 +71,31 @@
                             @{
                                 var progress = Math.Round((((DateTime.Today - @pro.StartDate) / (@pro.EndDate - @pro.StartDate)) * 100));
                             }
-                            @if (progress >= 100)
+                            @if (pro.Status == ProjectStatus.PendingReview)
                             {
-                                <MudProgressLinear Color="Color.Success" Size="Size.Medium" Value="@progress" Class="my-7"/>
-                                <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Success">
-                                    <b>@localizer["completed"]</b>
+                                <MudProgressLinear Color="Color.Warning" Size="Size.Medium" Value="@progress" Class="my-7"/>
+                                <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Warning">
+                                    <b>@localizer["pendingReview"]</b>
                                 </MudText>
                             }
                             else
                             {
-                                <MudProgressLinear Color="Color.Primary" Size="Size.Medium" Value="@progress" Class="my-7"/>
-                                <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Primary">
-                                    <b>@progress %</b>
-                                </MudText>
+                                if (progress >= 100)
+                                {
+                                    <MudProgressLinear Color="Color.Success" Size="Size.Medium" Value="@progress" Class="my-7"/>
+                                    <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Success">
+                                        <b>@localizer["completed"]</b>
+                                    </MudText>
+                                }
+                                else
+                                {
+                                    <MudProgressLinear Color="Color.Primary" Size="Size.Medium" Value="@progress" Class="my-7"/>
+                                    <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Primary">
+                                        <b>@progress %</b>
+                                    </MudText>
+                                }
                             }
+                            
             
                         </MudCardContent>
                         <MudCardActions>
