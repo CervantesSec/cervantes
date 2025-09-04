@@ -2729,4 +2729,16 @@
     <data name="errorDeletingCves" xml:space="preserve">
         <value>Errore nell'eliminazione dei CVE</value>
     </data>
+    <data name="pendingReview" xml:space="preserve">
+        <value>In attesa di revisione</value>
+    </data>
+    <data name="updateStatus" xml:space="preserve">
+        <value>Aggiorna stato</value>
+    </data>
+    <data name="vulnsUpdated" xml:space="preserve">
+        <value>Vulnerabilità aggiornate con successo!</value>
+    </data>
+    <data name="vulnUpdatedError" xml:space="preserve">
+        <value>Si è verificato un errore durante l'aggiornamento delle vulnerabilità!</value>
+    </data>
 </root>

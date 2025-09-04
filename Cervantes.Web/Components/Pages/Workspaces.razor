@@ -1,5 +1,6 @@
 @page "/workspaces"
 @using Cervantes.CORE
+@using Cervantes.CORE.Entities
 @using Cervantes.Web.Localization
 @using global::AuthPermissions.AspNetCore
 @using Microsoft.Extensions.Localization
@@ -30,7 +31,21 @@
                                 <MudIcon Icon="@Icons.Material.Filled.Folder"/>
                             </CardHeaderAvatar>
                             <CardHeaderContent>
-                                <MudText Typo="Typo.body1">@pro.Name</MudText>
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                                    <MudText Typo="Typo.body1">@pro.Name</MudText>
+                                    <MudSpacer/>
+                                    @if (pro.Status == ProjectStatus.Active)
+                                    {
+                                        <MudChip T="string" Color="Color.Success" Icon="@Icons.Material.Filled.PlayArrow">@localizer["active"]</MudChip>
+
+                                    }
+                                    else
+                                    {
+                                        <MudChip T="string"  Color="Color.Warning" Icon="@Icons.Material.Filled.Archive">@localizer["pendingReview"]</MudChip>
+
+                                    }
+
+                                </MudStack>
                             </CardHeaderContent>
                         </MudCardHeader>
                         @if (pro.Client.ImagePath != "None")

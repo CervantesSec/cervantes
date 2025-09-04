@@ -3308,4 +3308,16 @@ Opción 3</value>
     <data name="errorDeletingCves" xml:space="preserve">
         <value>Error eliminando CVEs</value>
     </data>
+    <data name="pendingReview" xml:space="preserve">
+        <value>Pendiente de Revisión</value>
+    </data>
+    <data name="updateStatus" xml:space="preserve">
+        <value>Actualizar Estado</value>
+    </data>
+    <data name="vulnsUpdated" xml:space="preserve">
+        <value>Vulnerabilidades actualizadas correctamente!</value>
+    </data>
+    <data name="vulnUpdatedError" xml:space="preserve">
+        <value>Se ha producido un error al actualizar las vulnerabilidades.</value>
+    </data>
 </root>

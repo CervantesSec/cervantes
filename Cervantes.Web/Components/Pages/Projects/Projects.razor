@@ -163,6 +163,9 @@
                             case ProjectStatus.Archived:
                                 <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Archive">@localizer["archived"]</MudChip>
                                 break;
+                            case ProjectStatus.PendingReview:
+                                <MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.Archive">@localizer["pendingReview"]</MudChip>
+                                break;
                         }
     
                     </CellTemplate>

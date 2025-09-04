@@ -90,6 +90,10 @@
                                 {
                                     <MudMenuItem OnClick="@((e) => Export(0))">@localizer["exportCSV"]</MudMenuItem>
                                 }
+                                @if (userAth.HasPermission(Permissions.VulnsEdit))
+                                {
+                                    <MudMenuItem OnClick="@((e) => BtnActions(3))">@localizer["updateStatus"]</MudMenuItem>
+                                }
                                 @if (jiraEnabled)
                                 {
                                     <MudMenuItem OnClick="@((e) => BtnActions(1))">@localizer["createJira"]</MudMenuItem>

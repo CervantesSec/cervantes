@@ -709,6 +709,10 @@ else
                                                 {
                                                     <MudMenuItem OnClick="@((e) => ExportVulns(0))">@localizer["exportCSV"]</MudMenuItem>
                                                 }
+                                                @if (userAth.HasPermission(Permissions.VulnsEdit))
+                                                {
+                                                    <MudMenuItem OnClick="@((e) => BtnActionsVulns(3))">@localizer["updateStatus"]</MudMenuItem>
+                                                }
                                             </MudMenu>
                                             
                                         </MudButtonGroup>

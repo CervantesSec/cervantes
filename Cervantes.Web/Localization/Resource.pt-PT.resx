@@ -2693,4 +2693,16 @@
     <data name="errorDeletingCves" xml:space="preserve">
         <value>Erro ao excluir CVEs</value>
     </data>
+    <data name="pendingReview" xml:space="preserve">
+        <value>Pendente de Revisão</value>
+    </data>
+    <data name="updateStatus" xml:space="preserve">
+        <value>Atualizar Estado</value>
+    </data>
+    <data name="vulnsUpdated" xml:space="preserve">
+        <value>Vulnerabilidades atualizadas com sucesso!</value>
+    </data>
+    <data name="vulnUpdatedError" xml:space="preserve">
+        <value>Ocorreu um erro ao atualizar as vulnerabilidades!</value>
+    </data>
 </root>

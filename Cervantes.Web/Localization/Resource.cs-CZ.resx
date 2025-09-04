@@ -2724,4 +2724,16 @@
     <data name="errorDeletingCves" xml:space="preserve">
         <value>Chyba při mazání CVE</value>
     </data>
+    <data name="pendingReview" xml:space="preserve">
+        <value>Čeká na kontrolu</value>
+    </data>
+    <data name="updateStatus" xml:space="preserve">
+        <value>Aktualizovat stav</value>
+    </data>
+    <data name="vulnsUpdated" xml:space="preserve">
+        <value>Zranitelnosti byly úspěšně aktualizovány!</value>
+    </data>
+    <data name="vulnUpdatedError" xml:space="preserve">
+        <value>Při aktualizaci zranitelností došlo k chybě!</value>
+    </data>
 </root>

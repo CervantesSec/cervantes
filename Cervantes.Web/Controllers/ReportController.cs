@@ -963,6 +963,31 @@ public class ReportController : ControllerBase
                         vulnJiraProject = jira.JiraProject;
                     }
 
+                    var VulnCvssSeverity = "";
+
+                    if (vuln.CVSS3 != null)
+                    {
+                        if (vuln.CVSS3 == 0.0)
+                        {
+                            VulnCvssSeverity = "Info";
+                        }
+                        else if(vuln.CVSS3 >= 0.1 & vuln.CVSS3 <= 3.9)
+                        {
+                            VulnCvssSeverity = "Low";
+                        }
+                        else if (vuln.CVSS3 >= 4.0 & vuln.CVSS3 <= 6.9)
+                        {
+                            VulnCvssSeverity = "Medium";
+                        }
+                        else if (vuln.CVSS3 >= 7.0 & vuln.CVSS3 <= 8.9)
+                        {
+                            VulnCvssSeverity = "High";
+                        }
+                        else if (vuln.CVSS3 >= 9.0 )
+                        {
+                            VulnCvssSeverity = "Critical";
+                        }
+                    }
                     // Create base vulnerability data dictionary
                     var vulnData = new Dictionary<string, string>
                     {
@@ -977,6 +1002,7 @@ public class ReportController : ControllerBase
                         {"VulnImpact", vuln.Impact},
                         {"VulnCvss", vuln.CVSS3.ToString(CultureInfo.InvariantCulture)},
                         {"VulnCvssVector", vuln.CVSSVector},
+                        {"VulnCvssSeverity", VulnCvssSeverity},
                         {"VulnRemediation", vuln.Remediation},
                         {"VulnComplexity", vuln.RemediationComplexity.ToString()},
                         {"VulnPriority", vuln.RemediationPriority.ToString()},
@@ -999,7 +1025,8 @@ public class ReportController : ControllerBase
                         {"VulnOwaspVector", vuln.OWASPVector},
                         {"VulnTargets", targets},
                         {"VulnFindingId", vuln.FindingId},
-                        {"VulnMitreTechniques", vuln.MitreTechniques}
+                        {"VulnMitreTechniques", vuln.MitreTechniques},
+                        
                     };
                     
                     // Add custom field values

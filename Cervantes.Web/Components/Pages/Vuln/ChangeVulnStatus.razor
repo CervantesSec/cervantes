@@ -1,0 +1,29 @@
+@using Cervantes.CORE
+@using Cervantes.CORE.Entities
+@using Variant = MudBlazor.Variant
+@using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Resource> localizer
+@attribute [HasPermission(Permissions.VulnsEdit)]
+
+
+<MudDialog Class="mud-ex-dialog-initial">
+    <TitleContent>
+        <MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.BugReport" /> @localizer["updateStatus"]</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm Model="@vulns" @ref="@form" ValidationDelay="0">
+            <MudSelect @bind-Value="vulns.Status" For="@(() => vulns.Status)" Label="@localizer["status"]" AdornmentIcon="@Icons.Material.Filled.AddTask" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                @foreach (VulnStatus item in Enum.GetValues(typeof(VulnStatus)))
+                {
+                    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                }
+            </MudSelect>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="@Color.Primary" OnClick="Submit">@localizer["edit"]</MudButton>
+    </DialogActions>
+</MudDialog>

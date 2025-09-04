@@ -3286,4 +3286,16 @@ Option 3</value>
     <data name="errorDeletingCves" xml:space="preserve">
         <value>Error deleting CVEs</value>
     </data>
+    <data name="updateStatus" xml:space="preserve">
+        <value>Update Status</value>
+    </data>
+    <data name="pendingReview" xml:space="preserve">
+        <value>Pending Review</value>
+    </data>
+    <data name="vulnsUpdated" xml:space="preserve">
+        <value>Vulns updated successfully !</value>
+    </data>
+    <data name="vulnUpdatedError" xml:space="preserve">
+        <value>An error occurred updating the vulns!</value>
+    </data>
 </root>

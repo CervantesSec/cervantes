@@ -572,6 +572,26 @@ protected override async Task OnInitializedAsync()
                 }
 
                 break;
+            case 3:
+                var update = new VulnStatusUpdate();
+                update.VulnIds = new List<Guid>();
+
+                foreach (var ids in   seleVulns)
+                {
+                    update.VulnIds.Add(ids.Id);
+                }
+                    
+                var parametersUpdate = new DialogParameters { ["vulns"]=update };
+
+                IMudExDialogReference<ChangeVulnStatus>? dlgReference2 = await Dialog.ShowExAsync<ChangeVulnStatus>("Simple Dialog", parametersUpdate, centerWidthEx);
+                var resultUpdate = await dlgReference2.Result;
+
+                if (!resultUpdate.Canceled)
+                {
+                    vulns = _VulnController.GetByProject(project).ToList();
+                    StateHasChanged();
+                }
+                break;
         }
     }
 

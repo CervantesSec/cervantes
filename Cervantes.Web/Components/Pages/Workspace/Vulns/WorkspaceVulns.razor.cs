@@ -236,6 +236,26 @@ public partial class WorkspaceVulns: ComponentBase
                     StateHasChanged();
                 }
                 break;
+            case 3:
+                var update = new VulnStatusUpdate();
+                update.VulnIds = new List<Guid>();
+
+                foreach (var ids in   seleVulns)
+                {
+                    update.VulnIds.Add(ids.Id);
+                }
+                    
+                var parametersUpdate = new DialogParameters { ["vulns"]=update };
+
+                var dialog2 =  await DialogService.ShowExAsync<ChangeVulnStatus>(@localizer["delete"], parametersUpdate,middleWidthEx);
+                var resultUpdate = await dialog2.Result;
+
+                if (!resultUpdate.Canceled)
+                {
+                    await Update();
+                    StateHasChanged();
+                }
+                break;
         }
     }
     

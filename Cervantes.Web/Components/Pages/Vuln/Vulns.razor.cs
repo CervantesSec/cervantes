@@ -317,6 +317,26 @@ private async Task Update()
                     }
                 }
                 break;
+            case 3:
+                    var update = new VulnStatusUpdate();
+                    update.VulnIds = new List<Guid>();
+
+                    foreach (var ids in   seleVulns)
+                    {
+                        update.VulnIds.Add(ids.Id);
+                    }
+                    
+                    var parametersUpdate = new DialogParameters { ["vulns"]=update };
+
+                    var dialog =  await DialogService.ShowExAsync<ChangeVulnStatus>(@localizer["delete"], parametersUpdate,middleWidthEx);
+                    var resultUpdate = await dialog.Result;
+
+                    if (!resultUpdate.Canceled)
+                    {
+                        await Update();
+                        StateHasChanged();
+                    }
+                break;
         }
     }
     

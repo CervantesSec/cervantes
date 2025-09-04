@@ -33,7 +33,7 @@ public class WorkspacesController : ControllerBase
         {
          
                 var projects = projectUserManager.GetAll().Where(x => x.UserId == aspNetUserId).Select(y => y.ProjectId).ToList();
-                var model = projectManager.GetAll().Where(x => projects.Contains(x.Id) && x.Status == ProjectStatus.Active).Include(x => x.Client).ToList();
+                var model = projectManager.GetAll().Where(x => projects.Contains(x.Id) && x.Status == ProjectStatus.Active || x.Status == ProjectStatus.PendingReview).Include(x => x.Client).ToList();
                 return model;
             
         }

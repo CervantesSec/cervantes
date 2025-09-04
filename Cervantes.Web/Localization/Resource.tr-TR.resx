@@ -2728,4 +2728,16 @@
     <data name="errorDeletingCves" xml:space="preserve">
         <value>CVE'leri silerken hata oluştu</value>
     </data>
+    <data name="pendingReview" xml:space="preserve">
+        <value>İnceleme Bekleniyor</value>
+    </data>
+    <data name="updateStatus" xml:space="preserve">
+        <value>Durumu Güncelle</value>
+    </data>
+    <data name="vulnsUpdated" xml:space="preserve">
+        <value>Güvenlik açıkları başarıyla güncellendi!</value>
+    </data>
+    <data name="vulnUpdatedError" xml:space="preserve">
+        <value>Güvenlik açıkları güncellenirken bir hata oluştu!</value>
+    </data>
 </root>

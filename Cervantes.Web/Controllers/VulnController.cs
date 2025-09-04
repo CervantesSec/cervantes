@@ -1548,4 +1548,42 @@ public class VulnController: ControllerBase
         }
     }
     
+    [HttpPost]
+    [Route("UpdateStatus")]
+    [HasPermission(Permissions.VulnsEdit)]
+    public async Task<IActionResult> VulnStatusUpdate([FromBody] VulnStatusUpdate model)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var item in model.VulnIds)
+                {
+                    var vuln = vulnManager.GetById(item);
+                    if (vuln != null)
+                    {
+                        vuln.Status = model.Status;
+                    }
+                }
+                return NoContent();
+            }
+
+            _logger.LogError("An error ocurred updating a Vuln . User: {0}",
+                aspNetUserId);
+            var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { message = "Validation failed", errors });
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error ocurred updating a Vuln. User: {0}",
+                aspNetUserId);
+            return StatusCode(500, "An error occurred while adding the vulnerability note. Please try again later.");
+        }
+    }
+    
 }
