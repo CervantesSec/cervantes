@@ -14,7 +14,7 @@ using Pgvector;
 
 namespace Cervantes.DAL;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,IHttpContextAccessor _httpContextAccessor)
@@ -219,6 +219,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Chat> Chats { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
 
+    public DbSet<ApiKey> ApiKeys { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder){
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasPostgresExtension("vector");
@@ -226,6 +228,23 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
             
+        // ApiKey Configuration
+        modelBuilder.Entity<ApiKey>(entity =>
+        {
+            entity.HasKey(k => k.Id);
+            entity.HasIndex(k => k.KeyHash).IsUnique();
+            entity.HasIndex(k => k.KeyPrefix);
+            entity.HasIndex(k => k.UserId);
+            entity.Property(k => k.KeyHash).IsRequired().HasMaxLength(200);
+            entity.Property(k => k.KeyPrefix).IsRequired().HasMaxLength(24);
+            entity.Property(k => k.Name).HasMaxLength(100);
+
+            entity.HasOne(k => k.User)
+                .WithMany(u => u.ApiKeys)
+                .HasForeignKey(k => k.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
         // Custom Field Configuration
         modelBuilder.Entity<VulnCustomField>()
             .HasIndex(e => e.Name)

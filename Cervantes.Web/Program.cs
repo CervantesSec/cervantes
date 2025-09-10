@@ -17,6 +17,7 @@ using Cervantes.Server.Helpers;
 using Cervantes.Web.AuthPermissions;
 using Cervantes.Web.Authentication;
 using Cervantes.Web.Extensions;
+using Cervantes.CORE.Security;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -148,6 +149,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddAuthorization();
+builder.Services.Configure<ApiKeyOptions>(builder.Configuration.GetSection("ApiKeys"));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -281,6 +283,27 @@ builder.Services.AddSwaggerGen(c =>
             new string[] { }
         }
     });
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Name = builder.Configuration.GetValue<string>("ApiKeys:HeaderName") ?? "X-API-Key",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Description = "Provide an API key in the configured header (default X-API-Key). Example: ck_abcd1234.<secret>"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
+            },
+            new string[] { }
+        }
+    });
     
     // Add filter to handle exceptions
     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
@@ -317,6 +340,7 @@ var localizationOptions = new RequestLocalizationOptions()
 
 app.UseRequestLocalization(localizationOptions);
 app.UseRouting();
+app.UseApiKeyAuthForApi();
 app.UseBasicAuthForApi();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -134,6 +134,91 @@
     </MudGrid>
 
 </MudTabPanel>
+<MudTabPanel Text="@localizer["apiKeys_tab"]" Icon="@Icons.Material.Filled.VpnKey">
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="12">
+            <MudCard Elevation="25">
+                <MudCardContent>
+                    <MudContainer>
+                        @if (!string.IsNullOrEmpty(justCreatedPlaintextKey))
+                        {
+                            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
+                                <MudText Typo="Typo.body1">@localizer["apiKeys_warning_copy"]</MudText>
+                                <MudText Typo="Typo.subtitle2" Color="Color.Primary">@justCreatedPlaintextKey</MudText>
+                            </MudAlert>
+                            <br/>
+                        }
+
+                        <MudForm>
+                            <MudStack AlignItems="AlignItems.Stretch">
+                                <MudTextField T="string" Placeholder="@localizer["apiKeys_name"]" @bind-Value="newApiKeyName"
+                                              Label="@localizer["apiKeys_name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Label"/>
+                                <MudDatePicker T="DateTime?" @bind-Date="newApiKeyExpiresAt"
+                                               Label="@localizer["apiKeys_expiresAt"]"
+                                               PickerVariant="PickerVariant.Dialog"
+                                               Editable="true"/>
+                            </MudStack>
+                        </MudForm>
+                        <br/>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="CreateApiKey">@localizer["apiKeys_create"]</MudButton>
+                    </MudContainer>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="12">
+            <MudCard Elevation="25">
+                <MudCardContent>
+                    <MudTable Items="apiKeys" Loading="isLoadingApiKeys" Dense="true">
+                        <HeaderContent>
+                            <MudTh>@localizer["apiKeys_name"]</MudTh>
+                            <MudTh>@localizer["apiKeys_prefix"]</MudTh>
+                            <MudTh>@localizer["apiKeys_created"]</MudTh>
+                            <MudTh>@localizer["apiKeys_expires"]</MudTh>
+                            <MudTh>@localizer["apiKeys_lastUsed"]</MudTh>
+                            <MudTh>@localizer["apiKeys_status"]</MudTh>
+                            <MudTh>@localizer["apiKeys_actions"]</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>@(context.Name ?? "-")</MudTd>
+                            <MudTd>@context.KeyPrefix</MudTd>
+                            <MudTd>@context.CreatedAt.LocalDateTime.ToString("g")</MudTd>
+                            <MudTd>@(context.ExpiresAt.HasValue ? context.ExpiresAt.Value.LocalDateTime.ToString("g") : "-")</MudTd>
+                            <MudTd>@(context.LastUsedAt.HasValue ? context.LastUsedAt.Value.LocalDateTime.ToString("g") : "-")</MudTd>
+                            <MudTd>
+                                @if (context.IsRevoked)
+                                {
+                                    <MudChip T="string" Color="Color.Error" Variant="Variant.Outlined" Icon="@Icons.Material.Filled.Block">@localizer["apiKeys_status_revoked"]</MudChip>
+                                }
+                                else if (context.IsExpired)
+                                {
+                                    <MudChip T="string" Color="Color.Warning" Variant="Variant.Outlined" Icon="@Icons.Material.Filled.Schedule">@localizer["apiKeys_status_expired"]</MudChip>
+                                }
+                                else
+                                {
+                                    <MudChip T="string" Color="Color.Success" Variant="Variant.Outlined" Icon="@Icons.Material.Filled.CheckCircle">@localizer["apiKeys_status_active"]</MudChip>
+                                }
+                            </MudTd>
+                            <MudTd>
+                                @if (!context.IsRevoked)
+                                {
+                                    <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Refresh" OnClick="() => RotateApiKey(context.Id, context.KeyPrefix)">@localizer["apiKeys_action_rotate"]</MudButton>
+                                    <MudButton Variant="Variant.Text" Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete" OnClick="() => RevokeApiKey(context.Id, context.KeyPrefix)">@localizer["apiKeys_action_revoke"]</MudButton>
+                                }
+                                else
+                                {
+                                    <MudText Color="Color.Error">—</MudText>
+                                }
+                            </MudTd>
+                        </RowTemplate>
+                        <NoRecordsContent>
+                            <MudText>@localizer["apiKeys_noRecords"]</MudText>
+                        </NoRecordsContent>
+                    </MudTable>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudTabPanel>
 @if (user.NormalizedEmail != "ADMIN@CERVANTES.LOCAL")
 {
     <MudTabPanel Text="@localizer["email"]" Icon="@Icons.Material.Filled.Email">

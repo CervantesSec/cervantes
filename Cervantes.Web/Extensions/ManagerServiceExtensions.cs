@@ -48,7 +48,7 @@ public static class ManagerServiceExtensions
         services.AddScoped<IUserManager, UserManager>();
         services.AddScoped<IRoleManager, RoleManager>();
         services.AddScoped<IOrganizationManager, OrganizationManager>();
-        
+        services.AddScoped<IApiKeyManager, ApiKeyManager>();
         return services;
     }
 
@@ -69,6 +69,7 @@ public static class ManagerServiceExtensions
         services.AddScoped<IVaultManager, VaultManager>();
         services.AddScoped<IVulnCustomFieldManager, VulnCustomFieldManager>();
         services.AddScoped<IVulnCustomFieldValueManager, VulnCustomFieldValueManager>();
+        
         
         // CVE Management System
         services.AddScoped<ICveManager, CveManager>();

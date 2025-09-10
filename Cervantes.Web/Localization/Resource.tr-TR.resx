@@ -2740,4 +2740,35 @@
     <data name="vulnUpdatedError" xml:space="preserve">
         <value>Güvenlik açıkları güncellenirken bir hata oluştu!</value>
     </data>
+    <data name="apiKeys_tab" xml:space="preserve"><value>API Anahtarları</value></data>
+    <data name="apiKeys_warning_copy" xml:space="preserve"><value>Bu API anahtarını şimdi kopyalayıp saklayın. Daha sonra görüntülenmeyecek.</value></data>
+    <data name="apiKeys_name" xml:space="preserve"><value>Ad</value></data>
+    <data name="apiKeys_expiresAt" xml:space="preserve"><value>Son Kullanım (isteğe bağlı)</value></data>
+    <data name="apiKeys_create" xml:space="preserve"><value>API Anahtarı Oluştur</value></data>
+    <data name="apiKeys_prefix" xml:space="preserve"><value>Önek</value></data>
+    <data name="apiKeys_created" xml:space="preserve"><value>Oluşturuldu</value></data>
+    <data name="apiKeys_expires" xml:space="preserve"><value>Sona Erme</value></data>
+    <data name="apiKeys_lastUsed" xml:space="preserve"><value>Son Kullanım</value></data>
+    <data name="apiKeys_status" xml:space="preserve"><value>Durum</value></data>
+    <data name="apiKeys_actions" xml:space="preserve"><value>Eylemler</value></data>
+    <data name="apiKeys_status_revoked" xml:space="preserve"><value>İptal edildi</value></data>
+    <data name="apiKeys_status_expired" xml:space="preserve"><value>Süresi doldu</value></data>
+    <data name="apiKeys_status_active" xml:space="preserve"><value>Aktif</value></data>
+    <data name="apiKeys_noRecords" xml:space="preserve"><value>Henüz API anahtarı yok.</value></data>
+    <data name="apiKeys_action_rotate" xml:space="preserve"><value>Döndür</value></data>
+    <data name="apiKeys_action_revoke" xml:space="preserve"><value>İptal et</value></data>
+    <data name="apiKeys_confirm_revoke_title" xml:space="preserve"><value>İptali onayla</value></data>
+    <data name="apiKeys_confirm_revoke_message" xml:space="preserve"><value>API anahtarı {0} iptal edilsin mi?</value></data>
+    <data name="apiKeys_confirm_revoke_yes" xml:space="preserve"><value>İptal et</value></data>
+    <data name="apiKeys_confirm_cancel" xml:space="preserve"><value>İptal</value></data>
+    <data name="apiKeys_confirm_rotate_title" xml:space="preserve"><value>Döndürmeyi onayla</value></data>
+    <data name="apiKeys_confirm_rotate_message" xml:space="preserve"><value>API anahtarı {0} döndürülsün mü? Eski anahtar iptal edilecektir.</value></data>
+    <data name="apiKeys_confirm_rotate_yes" xml:space="preserve"><value>Döndür</value></data>
+    <data name="apiKeys_toast_created" xml:space="preserve"><value>API anahtarı oluşturuldu</value></data>
+    <data name="apiKeys_toast_create_failed" xml:space="preserve"><value>API anahtarı oluşturulamadı</value></data>
+    <data name="apiKeys_toast_revoked" xml:space="preserve"><value>API anahtarı iptal edildi</value></data>
+    <data name="apiKeys_toast_not_found" xml:space="preserve"><value>API anahtarı bulunamadı</value></data>
+    <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>API anahtarı iptal edilemedi</value></data>
+    <data name="apiKeys_toast_rotated" xml:space="preserve"><value>API anahtarı döndürüldü</value></data>
+    <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>API anahtarı döndürülemedi</value></data>
 </root>

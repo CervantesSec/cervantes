@@ -2736,4 +2736,35 @@
     <data name="vulnUpdatedError" xml:space="preserve">
         <value>Při aktualizaci zranitelností došlo k chybě!</value>
     </data>
+    <data name="apiKeys_tab" xml:space="preserve"><value>API klíče</value></data>
+    <data name="apiKeys_warning_copy" xml:space="preserve"><value>Zkopírujte a uložte si tento API klíč nyní. Později již nebude viditelný.</value></data>
+    <data name="apiKeys_name" xml:space="preserve"><value>Název</value></data>
+    <data name="apiKeys_expiresAt" xml:space="preserve"><value>Vyprší (volitelné)</value></data>
+    <data name="apiKeys_create" xml:space="preserve"><value>Vytvořit API klíč</value></data>
+    <data name="apiKeys_prefix" xml:space="preserve"><value>Prefix</value></data>
+    <data name="apiKeys_created" xml:space="preserve"><value>Vytvořeno</value></data>
+    <data name="apiKeys_expires" xml:space="preserve"><value>Vyprší</value></data>
+    <data name="apiKeys_lastUsed" xml:space="preserve"><value>Poslední použití</value></data>
+    <data name="apiKeys_status" xml:space="preserve"><value>Stav</value></data>
+    <data name="apiKeys_actions" xml:space="preserve"><value>Akce</value></data>
+    <data name="apiKeys_status_revoked" xml:space="preserve"><value>Zneplatněn</value></data>
+    <data name="apiKeys_status_expired" xml:space="preserve"><value>Vypršelo</value></data>
+    <data name="apiKeys_status_active" xml:space="preserve"><value>Aktivní</value></data>
+    <data name="apiKeys_noRecords" xml:space="preserve"><value>Zatím žádné API klíče.</value></data>
+    <data name="apiKeys_action_rotate" xml:space="preserve"><value>Rotovat</value></data>
+    <data name="apiKeys_action_revoke" xml:space="preserve"><value>Zneplatnit</value></data>
+    <data name="apiKeys_confirm_revoke_title" xml:space="preserve"><value>Potvrdit zneplatnění</value></data>
+    <data name="apiKeys_confirm_revoke_message" xml:space="preserve"><value>Opravdu chcete zneplatnit API klíč {0}?</value></data>
+    <data name="apiKeys_confirm_revoke_yes" xml:space="preserve"><value>Zneplatnit</value></data>
+    <data name="apiKeys_confirm_cancel" xml:space="preserve"><value>Storno</value></data>
+    <data name="apiKeys_confirm_rotate_title" xml:space="preserve"><value>Potvrdit rotaci</value></data>
+    <data name="apiKeys_confirm_rotate_message" xml:space="preserve"><value>Rotovat API klíč {0}? Původní klíč bude zneplatněn.</value></data>
+    <data name="apiKeys_confirm_rotate_yes" xml:space="preserve"><value>Rotovat</value></data>
+    <data name="apiKeys_toast_created" xml:space="preserve"><value>API klíč vytvořen</value></data>
+    <data name="apiKeys_toast_create_failed" xml:space="preserve"><value>Vytvoření API klíče se nezdařilo</value></data>
+    <data name="apiKeys_toast_revoked" xml:space="preserve"><value>API klíč zneplatněn</value></data>
+    <data name="apiKeys_toast_not_found" xml:space="preserve"><value>API klíč nenalezen</value></data>
+    <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Zneplatnění API klíče se nezdařilo</value></data>
+    <data name="apiKeys_toast_rotated" xml:space="preserve"><value>API klíč rotován</value></data>
+    <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Rotace API klíče se nezdařila</value></data>
 </root>

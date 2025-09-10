@@ -2741,4 +2741,35 @@
     <data name="vulnUpdatedError" xml:space="preserve">
         <value>Si è verificato un errore durante l'aggiornamento delle vulnerabilità!</value>
     </data>
+    <data name="apiKeys_tab" xml:space="preserve"><value>Chiavi API</value></data>
+    <data name="apiKeys_warning_copy" xml:space="preserve"><value>Copia e conserva questa chiave ora. Non potrai vederla di nuovo.</value></data>
+    <data name="apiKeys_name" xml:space="preserve"><value>Nome</value></data>
+    <data name="apiKeys_expiresAt" xml:space="preserve"><value>Scadenza (opzionale)</value></data>
+    <data name="apiKeys_create" xml:space="preserve"><value>Crea chiave API</value></data>
+    <data name="apiKeys_prefix" xml:space="preserve"><value>Prefisso</value></data>
+    <data name="apiKeys_created" xml:space="preserve"><value>Creata</value></data>
+    <data name="apiKeys_expires" xml:space="preserve"><value>Scade</value></data>
+    <data name="apiKeys_lastUsed" xml:space="preserve"><value>Ultimo utilizzo</value></data>
+    <data name="apiKeys_status" xml:space="preserve"><value>Stato</value></data>
+    <data name="apiKeys_actions" xml:space="preserve"><value>Azioni</value></data>
+    <data name="apiKeys_status_revoked" xml:space="preserve"><value>Revocata</value></data>
+    <data name="apiKeys_status_expired" xml:space="preserve"><value>Scaduta</value></data>
+    <data name="apiKeys_status_active" xml:space="preserve"><value>Attiva</value></data>
+    <data name="apiKeys_noRecords" xml:space="preserve"><value>Nessuna chiave API.</value></data>
+    <data name="apiKeys_action_rotate" xml:space="preserve"><value>Ruota</value></data>
+    <data name="apiKeys_action_revoke" xml:space="preserve"><value>Revoca</value></data>
+    <data name="apiKeys_confirm_revoke_title" xml:space="preserve"><value>Conferma revoca</value></data>
+    <data name="apiKeys_confirm_revoke_message" xml:space="preserve"><value>Sei sicuro di revocare la chiave API {0}?</value></data>
+    <data name="apiKeys_confirm_revoke_yes" xml:space="preserve"><value>Revoca</value></data>
+    <data name="apiKeys_confirm_cancel" xml:space="preserve"><value>Annulla</value></data>
+    <data name="apiKeys_confirm_rotate_title" xml:space="preserve"><value>Conferma rotazione</value></data>
+    <data name="apiKeys_confirm_rotate_message" xml:space="preserve"><value>Ruotare la chiave API {0}? La chiave precedente verrà revocata.</value></data>
+    <data name="apiKeys_confirm_rotate_yes" xml:space="preserve"><value>Ruota</value></data>
+    <data name="apiKeys_toast_created" xml:space="preserve"><value>Chiave API creata</value></data>
+    <data name="apiKeys_toast_create_failed" xml:space="preserve"><value>Errore durante la creazione della chiave API</value></data>
+    <data name="apiKeys_toast_revoked" xml:space="preserve"><value>Chiave API revocata</value></data>
+    <data name="apiKeys_toast_not_found" xml:space="preserve"><value>Chiave API non trovata</value></data>
+    <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Errore durante la revoca della chiave API</value></data>
+    <data name="apiKeys_toast_rotated" xml:space="preserve"><value>Chiave API ruotata</value></data>
+    <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Errore durante la rotazione della chiave API</value></data>
 </root>

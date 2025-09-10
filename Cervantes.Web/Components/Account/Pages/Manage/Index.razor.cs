@@ -8,6 +8,8 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.DAL;
 using Cervantes.Web.Controllers;
 using FluentValidation;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +20,7 @@ using MudBlazor;
 using Net.Codecrete.QrCodeGenerator;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
+using Cervantes.Web.Controllers;
 
 namespace Cervantes.Web.Components.Account.Pages.Manage;
 
@@ -108,6 +111,9 @@ public partial class Index: ComponentBase
         emailModel.NewEmail = user.Email;
         var rolUser = await _UserController.GetRole(user.Id);
         Role = rolUser;
+
+        // Load API Keys for current user
+        await LoadApiKeys();
     }
   
     
@@ -403,6 +409,110 @@ public partial class Index: ComponentBase
         await SignInManager.RefreshSignInAsync(user);
         Logger.LogInformation("User changed their password successfully.");
         RedirectManager.RedirectToCurrentPageWithStatus("Your password has been changed", HttpContext);
+    }
+    #endregion
+
+    #region ApiKeys
+    private List<ApiKey> apiKeys = new();
+    private bool isLoadingApiKeys = false;
+    private string? newApiKeyName;
+    private DateTime? newApiKeyExpiresAt;
+    private string? justCreatedPlaintextKey;
+    [Inject] private ApiKeysController ApiKeysController { get; set; }
+    [Inject] private IDialogService Dialog { get; set; }
+
+    private async Task LoadApiKeys()
+    {
+        isLoadingApiKeys = true;
+        apiKeys = ApiKeysController.GetByUser(user.Id).ToList();
+        isLoadingApiKeys = false;
+        StateHasChanged();
+    }
+
+    private async Task CreateApiKey()
+    {
+        DateTimeOffset? expires = null;
+        if (newApiKeyExpiresAt.HasValue)
+        {
+            var local = DateTime.SpecifyKind(newApiKeyExpiresAt.Value, DateTimeKind.Local);
+            var dto = new DateTimeOffset(local, TimeZoneInfo.Local.GetUtcOffset(local));
+            expires = dto.ToUniversalTime();
+        }
+        var req = new ApiKeysController.CreateApiKeyRequest(user.Id, newApiKeyName, expires);
+        var action = await ApiKeysController.Create(req);
+        ApiKeysController.CreateApiKeyResponse? payload = null;
+        if (action.Result is OkObjectResult ok)
+            payload = ok.Value as ApiKeysController.CreateApiKeyResponse;
+        else
+            payload = action.Value;
+
+        if (payload != null)
+        {
+            justCreatedPlaintextKey = payload.ApiKey;
+            newApiKeyName = null;
+            newApiKeyExpiresAt = null;
+            Snackbar.Add(localizer["apiKeys_toast_created"], Severity.Success);
+            await LoadApiKeys();
+        }
+        else
+        {
+            Snackbar.Add(localizer["apiKeys_toast_create_failed"], Severity.Error);
+        }
+    }
+
+    private async Task RevokeApiKey(Guid id, string prefix)
+    {
+        bool? confirm = await Dialog.ShowMessageBox(
+            title: localizer["apiKeys_confirm_revoke_title"],
+            markupMessage: (MarkupString)string.Format(localizer["apiKeys_confirm_revoke_message"], $"<b>{prefix}</b>"),
+            yesText: localizer["apiKeys_confirm_revoke_yes"],
+            cancelText: localizer["apiKeys_confirm_cancel"]);
+        if (confirm != true)
+            return;
+
+        var result = await ApiKeysController.Revoke(id);
+        if (result is NoContentResult)
+        {
+            Snackbar.Add(localizer["apiKeys_toast_revoked"], Severity.Success);
+            await LoadApiKeys();
+        }
+        else if (result is NotFoundResult)
+        {
+            Snackbar.Add(localizer["apiKeys_toast_not_found"], Severity.Warning);
+        }
+        else
+        {
+            Snackbar.Add(localizer["apiKeys_toast_revoke_failed"], Severity.Error);
+        }
+    }
+
+    private async Task RotateApiKey(Guid id, string prefix)
+    {
+        bool? confirm = await Dialog.ShowMessageBox(
+            title: localizer["apiKeys_confirm_rotate_title"],
+            markupMessage: (MarkupString)string.Format(localizer["apiKeys_confirm_rotate_message"], $"<b>{prefix}</b>"),
+            yesText: localizer["apiKeys_confirm_rotate_yes"],
+            cancelText: localizer["apiKeys_confirm_cancel"]);
+        if (confirm != true)
+            return;
+
+        var action = await ApiKeysController.Rotate(id, null);
+        ApiKeysController.CreateApiKeyResponse? payload = null;
+        if (action.Result is OkObjectResult ok)
+            payload = ok.Value as ApiKeysController.CreateApiKeyResponse;
+        else
+            payload = action.Value;
+
+        if (payload != null)
+        {
+            justCreatedPlaintextKey = payload.ApiKey;
+            Snackbar.Add(localizer["apiKeys_toast_rotated"], Severity.Success);
+            await LoadApiKeys();
+        }
+        else
+        {
+            Snackbar.Add(localizer["apiKeys_toast_rotate_failed"], Severity.Error);
+        }
     }
     #endregion
 

@@ -2736,4 +2736,35 @@
     <data name="vulnUpdatedError" xml:space="preserve">
         <value>Beim Aktualisieren der Schwachstellen ist ein Fehler aufgetreten!</value>
     </data>
+    <data name="apiKeys_tab" xml:space="preserve"><value>API-Schlüssel</value></data>
+    <data name="apiKeys_warning_copy" xml:space="preserve"><value>Kopieren und speichern Sie diesen API-Schlüssel jetzt. Später ist er nicht mehr sichtbar.</value></data>
+    <data name="apiKeys_name" xml:space="preserve"><value>Name</value></data>
+    <data name="apiKeys_expiresAt" xml:space="preserve"><value>Ablauf (optional)</value></data>
+    <data name="apiKeys_create" xml:space="preserve"><value>API-Schlüssel erstellen</value></data>
+    <data name="apiKeys_prefix" xml:space="preserve"><value>Präfix</value></data>
+    <data name="apiKeys_created" xml:space="preserve"><value>Erstellt</value></data>
+    <data name="apiKeys_expires" xml:space="preserve"><value>Läuft ab</value></data>
+    <data name="apiKeys_lastUsed" xml:space="preserve"><value>Letzte Nutzung</value></data>
+    <data name="apiKeys_status" xml:space="preserve"><value>Status</value></data>
+    <data name="apiKeys_actions" xml:space="preserve"><value>Aktionen</value></data>
+    <data name="apiKeys_status_revoked" xml:space="preserve"><value>Widerrufen</value></data>
+    <data name="apiKeys_status_expired" xml:space="preserve"><value>Abgelaufen</value></data>
+    <data name="apiKeys_status_active" xml:space="preserve"><value>Aktiv</value></data>
+    <data name="apiKeys_noRecords" xml:space="preserve"><value>Noch keine API-Schlüssel.</value></data>
+    <data name="apiKeys_action_rotate" xml:space="preserve"><value>Rotieren</value></data>
+    <data name="apiKeys_action_revoke" xml:space="preserve"><value>Widerrufen</value></data>
+    <data name="apiKeys_confirm_revoke_title" xml:space="preserve"><value>Widerruf bestätigen</value></data>
+    <data name="apiKeys_confirm_revoke_message" xml:space="preserve"><value>Möchten Sie den API-Schlüssel {0} wirklich widerrufen?</value></data>
+    <data name="apiKeys_confirm_revoke_yes" xml:space="preserve"><value>Widerrufen</value></data>
+    <data name="apiKeys_confirm_cancel" xml:space="preserve"><value>Abbrechen</value></data>
+    <data name="apiKeys_confirm_rotate_title" xml:space="preserve"><value>Rotation bestätigen</value></data>
+    <data name="apiKeys_confirm_rotate_message" xml:space="preserve"><value>API-Schlüssel {0} rotieren? Der alte Schlüssel wird widerrufen.</value></data>
+    <data name="apiKeys_confirm_rotate_yes" xml:space="preserve"><value>Rotieren</value></data>
+    <data name="apiKeys_toast_created" xml:space="preserve"><value>API-Schlüssel erstellt</value></data>
+    <data name="apiKeys_toast_create_failed" xml:space="preserve"><value>API-Schlüssel konnte nicht erstellt werden</value></data>
+    <data name="apiKeys_toast_revoked" xml:space="preserve"><value>API-Schlüssel widerrufen</value></data>
+    <data name="apiKeys_toast_not_found" xml:space="preserve"><value>API-Schlüssel nicht gefunden</value></data>
+    <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>API-Schlüssel konnte nicht widerrufen werden</value></data>
+    <data name="apiKeys_toast_rotated" xml:space="preserve"><value>API-Schlüssel rotiert</value></data>
+    <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>API-Schlüssel konnte nicht rotiert werden</value></data>
 </root>

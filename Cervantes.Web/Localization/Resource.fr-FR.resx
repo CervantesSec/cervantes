@@ -2736,4 +2736,35 @@
     <data name="vulnUpdatedError" xml:space="preserve">
         <value>Une erreur s'est produite lors de la mise à jour des vulnérabilités !</value>
     </data>
+    <data name="apiKeys_tab" xml:space="preserve"><value>Clés API</value></data>
+    <data name="apiKeys_warning_copy" xml:space="preserve"><value>Copiez et enregistrez cette clé maintenant. Vous ne pourrez plus l'afficher.</value></data>
+    <data name="apiKeys_name" xml:space="preserve"><value>Nom</value></data>
+    <data name="apiKeys_expiresAt" xml:space="preserve"><value>Expiration (facultatif)</value></data>
+    <data name="apiKeys_create" xml:space="preserve"><value>Créer une clé API</value></data>
+    <data name="apiKeys_prefix" xml:space="preserve"><value>Préfixe</value></data>
+    <data name="apiKeys_created" xml:space="preserve"><value>Créée</value></data>
+    <data name="apiKeys_expires" xml:space="preserve"><value>Expire</value></data>
+    <data name="apiKeys_lastUsed" xml:space="preserve"><value>Dernière utilisation</value></data>
+    <data name="apiKeys_status" xml:space="preserve"><value>Statut</value></data>
+    <data name="apiKeys_actions" xml:space="preserve"><value>Actions</value></data>
+    <data name="apiKeys_status_revoked" xml:space="preserve"><value>Révoquée</value></data>
+    <data name="apiKeys_status_expired" xml:space="preserve"><value>Expirée</value></data>
+    <data name="apiKeys_status_active" xml:space="preserve"><value>Active</value></data>
+    <data name="apiKeys_noRecords" xml:space="preserve"><value>Aucune clé API pour le moment.</value></data>
+    <data name="apiKeys_action_rotate" xml:space="preserve"><value>Renouveler</value></data>
+    <data name="apiKeys_action_revoke" xml:space="preserve"><value>Révoquer</value></data>
+    <data name="apiKeys_confirm_revoke_title" xml:space="preserve"><value>Confirmer la révocation</value></data>
+    <data name="apiKeys_confirm_revoke_message" xml:space="preserve"><value>Voulez-vous vraiment révoquer la clé API {0} ?</value></data>
+    <data name="apiKeys_confirm_revoke_yes" xml:space="preserve"><value>Révoquer</value></data>
+    <data name="apiKeys_confirm_cancel" xml:space="preserve"><value>Annuler</value></data>
+    <data name="apiKeys_confirm_rotate_title" xml:space="preserve"><value>Confirmer le renouvellement</value></data>
+    <data name="apiKeys_confirm_rotate_message" xml:space="preserve"><value>Renouveler la clé API {0} ? L'ancienne clé sera révoquée.</value></data>
+    <data name="apiKeys_confirm_rotate_yes" xml:space="preserve"><value>Renouveler</value></data>
+    <data name="apiKeys_toast_created" xml:space="preserve"><value>Clé API créée</value></data>
+    <data name="apiKeys_toast_create_failed" xml:space="preserve"><value>Échec de la création de la clé API</value></data>
+    <data name="apiKeys_toast_revoked" xml:space="preserve"><value>Clé API révoquée</value></data>
+    <data name="apiKeys_toast_not_found" xml:space="preserve"><value>Clé API introuvable</value></data>
+    <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Échec de la révocation de la clé API</value></data>
+    <data name="apiKeys_toast_rotated" xml:space="preserve"><value>Clé API renouvelée</value></data>
+    <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Échec du renouvellement de la clé API</value></data>
 </root>
