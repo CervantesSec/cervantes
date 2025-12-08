@@ -2767,4 +2767,8 @@
     <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Échec de la révocation de la clé API</value></data>
     <data name="apiKeys_toast_rotated" xml:space="preserve"><value>Clé API renouvelée</value></data>
     <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Échec du renouvellement de la clé API</value></data>
+    <data name="draftSaving" xml:space="preserve"><value>Enregistrement du brouillon…</value></data>
+    <data name="draftSavedAgo" xml:space="preserve"><value>Brouillon enregistré il y a {0}s</value></data>
+    <data name="draftError" xml:space="preserve"><value>Erreur lors de l’enregistrement du brouillon</value></data>
+    <data name="draftReady" xml:space="preserve"><value>Brouillon prêt</value></data>
 </root>

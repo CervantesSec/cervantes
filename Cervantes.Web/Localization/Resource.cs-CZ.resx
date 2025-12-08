@@ -2767,4 +2767,8 @@
     <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Zneplatnění API klíče se nezdařilo</value></data>
     <data name="apiKeys_toast_rotated" xml:space="preserve"><value>API klíč rotován</value></data>
     <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Rotace API klíče se nezdařila</value></data>
+    <data name="draftSaving" xml:space="preserve"><value>Ukládání konceptu…</value></data>
+    <data name="draftSavedAgo" xml:space="preserve"><value>Koncept uložen před {0}s</value></data>
+    <data name="draftError" xml:space="preserve"><value>Chyba při ukládání konceptu</value></data>
+    <data name="draftReady" xml:space="preserve"><value>Koncept připraven</value></data>
 </root>

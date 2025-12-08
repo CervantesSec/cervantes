@@ -3351,4 +3351,8 @@ Opción 3</value>
     <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Error al revocar la clave API</value></data>
     <data name="apiKeys_toast_rotated" xml:space="preserve"><value>Clave API rotada</value></data>
     <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Error al rotar la clave API</value></data>
+    <data name="draftSaving" xml:space="preserve"><value>Guardando borrador…</value></data>
+    <data name="draftSavedAgo" xml:space="preserve"><value>Borrador guardado hace {0}s</value></data>
+    <data name="draftError" xml:space="preserve"><value>Error guardando borrador</value></data>
+    <data name="draftReady" xml:space="preserve"><value>Borrador listo</value></data>
 </root>

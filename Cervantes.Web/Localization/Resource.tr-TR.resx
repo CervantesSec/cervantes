@@ -2771,4 +2771,8 @@
     <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>API anahtarı iptal edilemedi</value></data>
     <data name="apiKeys_toast_rotated" xml:space="preserve"><value>API anahtarı döndürüldü</value></data>
     <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>API anahtarı döndürülemedi</value></data>
+    <data name="draftSaving" xml:space="preserve"><value>Taslak kaydediliyor…</value></data>
+    <data name="draftSavedAgo" xml:space="preserve"><value>Taslak {0} sn önce kaydedildi</value></data>
+    <data name="draftError" xml:space="preserve"><value>Taslak kaydedilirken hata oluştu</value></data>
+    <data name="draftReady" xml:space="preserve"><value>Taslak hazır</value></data>
 </root>

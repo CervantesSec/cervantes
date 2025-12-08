@@ -2772,4 +2772,8 @@
     <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Errore durante la revoca della chiave API</value></data>
     <data name="apiKeys_toast_rotated" xml:space="preserve"><value>Chiave API ruotata</value></data>
     <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Errore durante la rotazione della chiave API</value></data>
+    <data name="draftSaving" xml:space="preserve"><value>Salvataggio bozza…</value></data>
+    <data name="draftSavedAgo" xml:space="preserve"><value>Bozza salvata {0}s fa</value></data>
+    <data name="draftError" xml:space="preserve"><value>Errore durante il salvataggio della bozza</value></data>
+    <data name="draftReady" xml:space="preserve"><value>Bozza pronta</value></data>
 </root>

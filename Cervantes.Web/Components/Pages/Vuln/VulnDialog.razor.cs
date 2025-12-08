@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
@@ -37,6 +38,8 @@ public partial class VulnDialog: ComponentBase
     private VulnCreateViewModel model { get; set; } = new VulnCreateViewModel();
 
     MudForm form;
+    private EditContext _editContext;
+    private Cervantes.Web.Components.Shared.AutosaveScope autosave;
     [Inject] private VulnController _vulnController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
     [Inject] private TargetController _targetController { get; set; }
@@ -310,6 +313,7 @@ public partial class VulnDialog: ComponentBase
 		}
         
         }
+        _editContext = new EditContext(model);
         model.MitreTechniques = vuln.MitreTechniques.Split(',').ToList();
         model.MitreValues = vuln.MitreValues.Split(',').ToList();
         MudDialog.StateHasChanged();
@@ -365,6 +369,10 @@ public partial class VulnDialog: ComponentBase
             if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {
                 Snackbar.Add(@localizer["vulnCreated"], Severity.Success);
+                if (autosave is not null)
+                {
+                    await autosave.ClearAsync();
+                }
                 MudDialog.Close(DialogResult.Ok(true));
             }
             else if (response is BadRequestObjectResult badRequestResult)

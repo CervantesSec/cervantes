@@ -82,11 +82,16 @@
 							<MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Default" OnClick="@(async (e) => await EditMode())">@localizer["edit"]</MudChip>
 						}
 					}
-					
-					@if (userAth.HasPermission(Permissions.VulnsDelete))
-					{
-						<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteVulnDialog(vuln, medium))">@localizer["delete"]</MudChip>
-					}
+                
+                @if (userAth.HasPermission(Permissions.VulnsDelete))
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteVulnDialog(vuln, medium))">@localizer["delete"]</MudChip>
+                }
+
+                @if (editMode)
+                {
+                    <!-- autosave indicator will render inside EditForm at top -->
+                }
 
 				}
 			
@@ -98,7 +103,23 @@
 				<MudContainer MaxWidth="MaxWidth.False" Style="max-height: 1000px; overflow-y: scroll;">
                 <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
 
-                    <MudForm Model="@model" @ref="@form" Validation="@(vulnValidator.ValidateValue)" ValidationDelay="0">
+                    <EditForm EditContext="@_editContext">
+                    <MudStack Row="true" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                        <Cervantes.Web.Components.Shared.AutosaveScope
+                            @ref="autosave"
+                            FormFingerprint="vuln-edit-v1"
+                            KeySuffix="@vuln.Id.ToString()"
+                            Model="@model"
+                            Prominent="true"
+                            ShowWhenIdle="true"
+                            IdleText="@localizer["draftReady"]"
+                            DebounceMs="1500"
+                            InitDelayMs="200"
+                            RehydrateNotify="false"
+                            ChipClass="ml-2"
+                            IncludeFields="@(new[] { "Name", "Language", "Description", "Impact", "Remediation", "ProofOfConcept", "Risk", "Status", "CVSSVector", "CVSS3", "OWASPVector", "OWASPRisk", "OWASPImpact", "OWASPLikehood", "cve" })" />
+                    </MudStack>
+                    <MudForm EditContext="@_editContext" Model="@model" @ref="@form" Validation="@(vulnValidator.ValidateValue)" ValidationDelay="0">
 
                         <MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details" Style="min-width: 260px;">
                             <MudStack >
@@ -144,7 +165,7 @@
 
 
                                 <MudText Typo="Typo.body2">@localizer["description"]</MudText>
-                                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
+                                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" Field="@(() => model.Description)" data-mce-placeholder="Description"/>
 <div Class="overflow-y-hidden" Style="height: 60px">
                                 <MudSelect @bind-Value="SelectedCategory" For="@(() => SelectedCategory)" Label="@localizer["vulnCategory"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
                                     <MudSelectItem Value="Guid.Empty" Disabled>@localizer["selectVulnCategory"]</MudSelectItem>
@@ -175,7 +196,7 @@
                                     }
                                 </MudSelect>
                                 <MudText Typo="Typo.body2">@localizer["impact"]</MudText>
-                                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Impact" data-mce-placeholder="Description"/>
+                                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Impact" Field="@(() => model.Impact)" data-mce-placeholder="Description"/>
 	                            <MudExpansionPanels>
 		                            <MudExpansionPanel Text="Mitre Att&ck">
 			                            <Cervantes.Web.Components.Shared.MitreAttack @bind-MitreTechniques="@model.MitreTechniques" @bind-TechniquesValues="@model.MitreValues"/>
@@ -207,13 +228,13 @@
                         <MudTabPanel Text="@localizer["exploitation"]" Icon="@Icons.Material.Filled.BugReport" Style="min-width: 260px;">
                             <MudStack AlignItems="AlignItems.Stretch">
                                 <MudText Typo="Typo.body2">@localizer["poc"]</MudText>
-                                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.ProofOfConcept" data-mce-placeholder="Description"/>
+                                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.ProofOfConcept" Field="@(() => model.ProofOfConcept)" data-mce-placeholder="Description"/>
                             </MudStack>
                         </MudTabPanel>
                         <MudTabPanel Text="@localizer["remediation"]" Icon="@Icons.Material.Filled.Build" Style="min-width: 260px;">
                             <MudStack AlignItems="AlignItems.Stretch">
                                 <MudText Typo="Typo.body2">@localizer["remediation"]</MudText>
-                                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Remediation" data-mce-placeholder="Description"/>
+                                <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Remediation" Field="@(() => model.Remediation)" data-mce-placeholder="Description"/>
                                 <MudSelect @bind-Value="model.RemediationComplexity" For="@(() => model.RemediationComplexity)" Label="@localizer["complexity"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
                                     @foreach (RemediationComplexity item in Enum.GetValues(typeof(RemediationComplexity)))
                                     {
@@ -245,6 +266,14 @@
                             </MudTabPanel>
                         }
                     </MudForm>
+                    <Cervantes.Web.Components.Shared.AutosaveScope
+                        @ref="autosave"
+                        FormFingerprint="vuln-edit-v1"
+                        KeySuffix="@vuln.Id.ToString()"
+                        Model="@model"
+                        Prominent="true"
+                        IncludeFields="@(new[] { "Name", "Language", "Description", "Impact", "Remediation", "ProofOfConcept", "Risk", "Status", "CVSSVector", "CVSS3", "OWASPVector", "OWASPRisk", "OWASPImpact", "OWASPLikehood", "cve" })" />
+                    </EditForm>
                 </MudTabs>
                 <MudStack Row="true" Justify="Justify.FlexEnd">
 	                <MudButton Variant="Variant.Filled" Color="@Color.Default" OnClick="Cancel">@localizer["cancel"]</MudButton>

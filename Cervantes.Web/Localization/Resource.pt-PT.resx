@@ -2736,4 +2736,8 @@
     <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Falha ao revogar a chave API</value></data>
     <data name="apiKeys_toast_rotated" xml:space="preserve"><value>Chave API rodada</value></data>
     <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Falha ao rodar a chave API</value></data>
+    <data name="draftSaving" xml:space="preserve"><value>A guardar rascunho…</value></data>
+    <data name="draftSavedAgo" xml:space="preserve"><value>Rascunho guardado há {0}s</value></data>
+    <data name="draftError" xml:space="preserve"><value>Erro ao guardar o rascunho</value></data>
+    <data name="draftReady" xml:space="preserve"><value>Rascunho pronto</value></data>
 </root>

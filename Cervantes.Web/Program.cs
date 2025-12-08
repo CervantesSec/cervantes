@@ -59,6 +59,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Autosave local storage service
+builder.Services.AddScoped<Cervantes.Web.Helpers.IAutosaveStorage, Cervantes.Web.Helpers.LocalStorageAutosaveStorage>();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();

@@ -1565,6 +1565,7 @@ public class VulnController: ControllerBase
                         vuln.Status = model.Status;
                     }
                 }
+                await vulnManager.Context.SaveChangesAsync();
                 return NoContent();
             }
 

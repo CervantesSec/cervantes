@@ -6,6 +6,7 @@ using Cervantes.Web.Components.Pages.Workspace.Target;
 using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
 using MudExtensions;
@@ -71,6 +72,8 @@ public partial class CreateVulnDialog: ComponentBase
      [Inject] ISnackbar Snackbar { get; set; }
 
     MudForm form;
+    private EditContext _editContext;
+    private Cervantes.Web.Components.Shared.AutosaveScope autosave;
 
     VulnModelFluentValidator vulnValidator = new VulnModelFluentValidator();
 	 
@@ -128,6 +131,7 @@ public partial class CreateVulnDialog: ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        _editContext = new EditContext(model);
         Categories = VulnController.GetCategories().ToList();
         Cwes = VulnController.GetCwes().ToList();
         Projects = ProjectController.Get().Where(x => x.Template == false).ToList();
@@ -202,12 +206,16 @@ public partial class CreateVulnDialog: ComponentBase
                 }
             }
             
-	        var response = await VulnController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
-	        {
-		        Snackbar.Add(@localizer["vulnCreated"], Severity.Success);
-		        MudDialog.Close(DialogResult.Ok(true));
-	        }
+        var response = await VulnController.Add(model);
+        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+        {
+                Snackbar.Add(@localizer["vulnCreated"], Severity.Success);
+                if (autosave is not null)
+                {
+                    await autosave.ClearAsync();
+                }
+                MudDialog.Close(DialogResult.Ok(true));
+        }
 	        else if (response is BadRequestObjectResult badRequestResult)
 	        {
 			        var message = badRequestResult.Value;

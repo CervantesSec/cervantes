@@ -3329,4 +3329,8 @@ Option 3</value>
     <data name="apiKeys_toast_revoke_failed" xml:space="preserve"><value>Failed to revoke API key</value></data>
     <data name="apiKeys_toast_rotated" xml:space="preserve"><value>API key rotated</value></data>
     <data name="apiKeys_toast_rotate_failed" xml:space="preserve"><value>Failed to rotate API key</value></data>
+    <data name="draftSaving" xml:space="preserve"><value>Saving draft…</value></data>
+    <data name="draftSavedAgo" xml:space="preserve"><value>Draft saved {0}s ago</value></data>
+    <data name="draftError" xml:space="preserve"><value>Error saving draft</value></data>
+    <data name="draftReady" xml:space="preserve"><value>Draft ready</value></data>
 </root>
