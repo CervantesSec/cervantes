@@ -1,0 +1,400 @@
+@using Cervantes.Web.Helpers
+@using MudBlazor
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@inject NavigationManager Nav
+@inject IAutosaveStorage Storage
+@inject IStringLocalizer<Resource> L
+
+@if (ShowWhenIdle || State != AutosaveState.Idle || LastSavedAt.HasValue)
+{
+    if (Prominent)
+    {
+        <MudChip T="string" Color="@(State == AutosaveState.Error ? Color.Error : State == AutosaveState.Saving ? Color.Info : Color.Success)"
+                 Variant="Variant.Outlined" Icon="@(State == AutosaveState.Error ? Icons.Material.Filled.Error : Icons.Material.Filled.Save)"
+                 Class="@(ChipClass ?? "")">
+            @GetStatusText()
+        </MudChip>
+    }
+    else
+    {
+        <div class="autosave-status @(Class ?? string.Empty)" style="font-size: .8rem; color: @(State == AutosaveState.Error ? "#d32f2f" : "#6b7280");">
+            @GetStatusText()
+        </div>
+    }
+}
+
+@code {
+    [CascadingParameter] public EditContext? EditContext { get; set; }
+    [Parameter] public object? Model { get; set; }
+    [Parameter] public string FormFingerprint { get; set; } = string.Empty;
+    [Parameter] public string? KeySuffix { get; set; }
+    [Parameter] public string[]? IncludeFields { get; set; }
+    [Parameter] public string[]? ExcludeFields { get; set; }
+    [Parameter] public bool Enabled { get; set; } = true;
+    [Parameter] public bool Prominent { get; set; } = false;
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? ChipClass { get; set; }
+    [Parameter] public bool ShowWhenIdle { get; set; } = false;
+    [Parameter] public string IdleText { get; set; } = string.Empty;
+    [Parameter] public int DebounceMs { get; set; } = 2000;
+    [Parameter] public int InitDelayMs { get; set; } = 0;
+    [Parameter] public bool RehydrateNotify { get; set; } = false;
+    [Parameter] public bool DisableRehydrateWhenNoKeySuffix { get; set; } = false;
+
+    private readonly Dictionary<string, object?> _snapshot = new();
+    private CancellationTokenSource? _debounceCts;
+    private int _version;
+    private object? _lastModelRef;
+
+    protected override void OnParametersSet()
+    {
+        if (!Enabled)
+        {
+            return;
+        }
+
+        if (EditContext is null)
+        {
+            throw new InvalidOperationException("AutosaveScope requiere un EditContext en cascada.");
+        }
+
+        if (Model is null)
+        {
+            throw new InvalidOperationException("AutosaveScope requiere Model no nulo.");
+        }
+
+        // Re-suscribe de forma idempotente
+        EditContext.OnFieldChanged -= OnFieldChanged;
+        EditContext.OnFieldChanged += OnFieldChanged;
+        
+        // Construye snapshot solo si el modelo es nuevo o aún no hay snapshot
+        if (!ReferenceEquals(_lastModelRef, Model) || _snapshot.Count == 0)
+        {
+            Snapshot(Model);
+            _lastModelRef = Model;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || !Enabled)
+        {
+            return;
+        }
+
+        if (DisableRehydrateWhenNoKeySuffix && string.IsNullOrWhiteSpace(KeySuffix))
+        {
+            return;
+        }
+
+        if (InitDelayMs > 0)
+        {
+            await Task.Delay(InitDelayMs);
+        }
+
+        var key = BuildKey();
+        var json = await Storage.GetAsync(key);
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return;
+        }
+
+        try
+        {
+            var record = System.Text.Json.JsonSerializer.Deserialize<AutosaveRecord>(json);
+            if (record?.Payload is not null && Model is not null)
+            {
+                ApplyPayloadToModel(record.Payload, Model);
+                _version = record.Version;
+                Snapshot(Model);
+                State = AutosaveState.Saved;
+                LastSavedAt = record.UpdatedAt;
+                StateHasChanged();
+            }
+        }
+        catch
+        {
+            State = AutosaveState.Error;
+            StateHasChanged();
+        }
+    }
+
+    public async Task ClearAsync()
+    {
+        var key = BuildKey();
+        await Storage.RemoveAsync(key);
+        _version = 0;
+        State = AutosaveState.Idle;
+        LastSavedAt = null;
+    }
+
+    private void OnFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        if (!Enabled)
+        {
+            return;
+        }
+
+        _debounceCts?.Cancel();
+        _debounceCts = new CancellationTokenSource();
+        _ = DebouncedSaveAsync(_debounceCts.Token);
+    }
+
+    private async Task DebouncedSaveAsync(CancellationToken ct)
+    {
+        try
+        {
+            await Task.Delay(DebounceMs, ct);
+            if (Model is null)
+            {
+                return;
+            }
+
+            var changes = Diff(Model, _snapshot);
+            if (changes.Count == 0)
+            {
+                return;
+            }
+
+            State = AutosaveState.Saving;
+            StateHasChanged();
+
+            // Cargar borrador existente para acumular cambios
+            var key = BuildKey();
+            AutosaveRecord record;
+            try
+            {
+                var existing = await Storage.GetAsync(key);
+                if (!string.IsNullOrWhiteSpace(existing))
+                {
+                    var prev = System.Text.Json.JsonSerializer.Deserialize<AutosaveRecord>(existing);
+                    if (prev is not null)
+                    {
+                        // Merge: cambios nuevos pisan a los anteriores
+                        foreach (var kv in changes)
+                        {
+                            prev.Payload[kv.Key] = kv.Value;
+                        }
+                        _version = prev.Version + 1;
+                        record = new AutosaveRecord
+                        {
+                            Version = _version,
+                            UpdatedAt = DateTimeOffset.UtcNow,
+                            Payload = prev.Payload
+                        };
+                    }
+                    else
+                    {
+                        _version++;
+                        record = new AutosaveRecord
+                        {
+                            Version = _version,
+                            UpdatedAt = DateTimeOffset.UtcNow,
+                            Payload = changes
+                        };
+                    }
+                }
+                else
+                {
+                    _version++;
+                    record = new AutosaveRecord
+                    {
+                        Version = _version,
+                        UpdatedAt = DateTimeOffset.UtcNow,
+                        Payload = changes
+                    };
+                }
+            }
+            catch
+            {
+                _version++;
+                record = new AutosaveRecord
+                {
+                    Version = _version,
+                    UpdatedAt = DateTimeOffset.UtcNow,
+                    Payload = changes
+                };
+            }
+
+            var json = System.Text.Json.JsonSerializer.Serialize(record);
+            await Storage.SetAsync(key, json);
+
+            // Actualiza snapshot
+            foreach (var kv in changes)
+            {
+                _snapshot[kv.Key] = kv.Value;
+            }
+
+            LastSavedAt = record.UpdatedAt;
+            State = AutosaveState.Saved;
+            StateHasChanged();
+        }
+        catch (OperationCanceledException)
+        {
+            // ignorado
+        }
+        catch
+        {
+            State = AutosaveState.Error;
+            StateHasChanged();
+        }
+    }
+
+    private void Snapshot(object model)
+    {
+        _snapshot.Clear();
+        foreach (var (name, value) in EnumerateModelProperties(model))
+        {
+            _snapshot[name] = value;
+        }
+    }
+
+    private Dictionary<string, object?> Diff(object model, IReadOnlyDictionary<string, object?> baseline)
+    {
+        var changes = new Dictionary<string, object?>();
+        foreach (var (name, value) in EnumerateModelProperties(model))
+        {
+            baseline.TryGetValue(name, out var oldValue);
+            if (!AreEqual(value, oldValue))
+            {
+                changes[name] = value;
+            }
+        }
+        return changes;
+    }
+
+    private IEnumerable<(string Name, object? Value)> EnumerateModelProperties(object model)
+    {
+        var type = model.GetType();
+        var include = IncludeFields is { Length: > 0 } ? new HashSet<string>(IncludeFields) : null;
+        var exclude = ExcludeFields is { Length: > 0 } ? new HashSet<string>(ExcludeFields) : null;
+
+        foreach (var prop in type.GetProperties())
+        {
+            if (!prop.CanRead || !prop.CanWrite)
+            {
+                continue;
+            }
+            if (include is not null && !include.Contains(prop.Name))
+            {
+                continue;
+            }
+            if (exclude is not null && exclude.Contains(prop.Name))
+            {
+                continue;
+            }
+
+            var value = prop.GetValue(model);
+            if (!IsSupportedType(prop.PropertyType))
+            {
+                // Serializa tipos complejos simples como JSON para comparación básica
+                value = value is null ? null : System.Text.Json.JsonSerializer.Serialize(value);
+            }
+
+            yield return (prop.Name, value);
+        }
+    }
+
+    private static bool IsSupportedType(Type t)
+    {
+        t = Nullable.GetUnderlyingType(t) ?? t;
+        return t.IsPrimitive
+               || t.IsEnum
+               || t == typeof(string)
+               || t == typeof(decimal)
+               || t == typeof(DateTime)
+               || t == typeof(DateTimeOffset)
+               || t == typeof(Guid);
+    }
+
+    private static bool AreEqual(object? a, object? b)
+    {
+        if (a is null && b is null) return true;
+        if (a is null || b is null) return false;
+        return a.Equals(b);
+    }
+
+    private void ApplyPayloadToModel(Dictionary<string, object?> payload, object model)
+    {
+        var type = model.GetType();
+        foreach (var kv in payload)
+        {
+            var prop = type.GetProperty(kv.Key);
+            if (prop is null || !prop.CanWrite)
+            {
+                continue;
+            }
+
+            var targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+            try
+            {
+                object? valueToSet;
+                if (kv.Value is null)
+                {
+                    valueToSet = null;
+                }
+                else if (kv.Value is System.Text.Json.JsonElement je)
+                {
+                    valueToSet = System.Text.Json.JsonSerializer.Deserialize(je, targetType);
+                }
+                else if (!IsSupportedType(targetType) && kv.Value is string json)
+                {
+                    valueToSet = System.Text.Json.JsonSerializer.Deserialize(json, targetType);
+                }
+                else
+                {
+                    valueToSet = Convert.ChangeType(kv.Value, targetType);
+                }
+
+                prop.SetValue(model, valueToSet);
+                if (RehydrateNotify)
+                {
+                    EditContext?.NotifyFieldChanged(new FieldIdentifier(model, prop.Name));
+                }
+            }
+            catch
+            {
+                // Ignora conversiones inválidas
+            }
+        }
+    }
+
+    private string BuildKey()
+    {
+        var uri = new Uri(Nav.Uri);
+        var routeKey = uri.AbsolutePath.TrimEnd('/');
+        var suffix = string.IsNullOrWhiteSpace(KeySuffix) ? string.Empty : $":{KeySuffix}";
+        return $"autosave:{FormFingerprint}:{routeKey}{suffix}";
+    }
+
+    private AutosaveState State { get; set; } = AutosaveState.Idle;
+    private DateTimeOffset? LastSavedAt { get; set; }
+
+    private enum AutosaveState
+    {
+        Idle,
+        Saving,
+        Saved,
+        Error
+    }
+
+    private sealed class AutosaveRecord
+    {
+        public int Version { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
+        public Dictionary<string, object?> Payload { get; set; } = new();
+    }
+
+    private string GetStatusText()
+    {
+        return State switch
+        {
+            AutosaveState.Saving => L["draftSaving"],
+            AutosaveState.Saved when LastSavedAt.HasValue => string.Format(L["draftSavedAgo"], (int)(DateTimeOffset.UtcNow - LastSavedAt.Value).TotalSeconds),
+            AutosaveState.Error => L["draftError"],
+            AutosaveState.Idle when ShowWhenIdle => string.IsNullOrWhiteSpace(IdleText) ? L["draftReady"] : IdleText,
+            _ => string.Empty
+        };
+    }
+}
