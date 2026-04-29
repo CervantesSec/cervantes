@@ -424,6 +424,30 @@
                                             </CellTemplate>
                     
                                         </PropertyColumn>
+                                        <PropertyColumn Property="x => x.CVSS3" Title="CVSS">
+                                            <CellTemplate>
+                                                @if (@context.Item.CVSS3 == 0.0)
+                                                {
+                                                    <MudChip Color="Color.Info" Icon="@Icons.Material.Filled.Info"><MudText Typo="Typo.h6">Info @context.Item.CVSS3</MudText> </MudChip>
+                                                }
+                                                else if(@context.Item.CVSS3 >= 0.1 & @context.Item.CVSS3 <= 3.9)
+                                                {
+                                                    <MudChip Color="Color.Success" Icon="@Icons.Material.Filled.Flag"><MudText Typo="Typo.h6">@localizer["low"] @context.Item.CVSS3</MudText></MudChip>
+                                                }
+                                                else if (@context.Item.CVSS3 >= 4.0 & @context.Item.CVSS3 <= 6.9)
+                                                {
+                                                    <MudChip Color="Color.Warning" Icon="@Icons.Material.Filled.ErrorOutline"><MudText Typo="Typo.h6">@localizer["medium"] @context.Item.CVSS3</MudText></MudChip>
+                                                }
+                                                else if (@context.Item.CVSS3 >= 7.0 & @context.Item.CVSS3 <= 8.9)
+                                                {
+                                                    <MudChip Style="@($"color:{Colors.DeepOrange.Lighten5}; background:{Colors.DeepOrange.Default};")" Icon="@Icons.Material.Filled.Error"><MudText Typo="Typo.h6">@localizer["high"] @context.Item.CVSS3</MudText></MudChip>
+                                                }
+                                                else if (@context.Item.CVSS3 >= 9.0 )
+                                                {
+                                                    <MudChip Color="Color.Error" Icon="@Icons.Material.Filled.CrisisAlert"><MudText  Typo="Typo.h6">@localizer["critical"] @context.Item.CVSS3</MudText></MudChip>
+                                                }
+                                            </CellTemplate>
+                                        </PropertyColumn>
                                         <PropertyColumn Property="x => x.Status" Title="@localizer["status"]">
                                             <CellTemplate>
                                                 @switch (@context.Item.Status)
