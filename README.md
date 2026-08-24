@@ -176,6 +176,7 @@ If you have bugs to report please use the [issues](https://github.com/CervantesS
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jpostolk"><img src="https://avatars.githubusercontent.com/u/115724129?v=4?s=100" width="100px;" alt="jpostolk"/><br /><sub><b>jpostolk</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/issues?q=author%3Ajpostolk" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://app.grayback.es/profile/pvF15F0gOMevpGzHeHPvrrvnmNI3"><img src="https://avatars.githubusercontent.com/u/115724129?v=4?s=100" width="100px;" alt="sergioframi"/><br /><sub><b>sergioframi</b></sub></a><br /><a href="https://app.grayback.es/profile/pvF15F0gOMevpGzHeHPvrrvnmNI3" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
