@@ -2993,6 +2993,9 @@ Opción 3</value>
     <data name="minEpssScore" xml:space="preserve">
         <value>Puntuación Mínima EPSS</value>
     </data>
+    <data name="maxEpssScore" xml:space="preserve">
+        <value>Puntuación Máxima EPSS</value>
+    </data>
     <data name="addCustomKeyword" xml:space="preserve">
         <value>Agregar Palabra Clave Personalizada</value>
     </data>

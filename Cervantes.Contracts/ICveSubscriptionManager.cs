@@ -129,6 +129,7 @@ public class CveSubscriptionFilters
     public double? MinCvssScore { get; set; }
     public double? MaxCvssScore { get; set; }
     public double? MinEpssScore { get; set; }
+    public double? MaxEpssScore { get; set; }
     public bool OnlyKnownExploited { get; set; }
     public List<string> CweFilter { get; set; } = new();
     public List<string> SeverityFilter { get; set; } = new();
