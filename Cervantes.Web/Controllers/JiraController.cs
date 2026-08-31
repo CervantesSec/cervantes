@@ -102,6 +102,10 @@ public class JiraController : Controller
         try
         {
             var jira = jiraManager.GetAll().FirstOrDefault(x => x.VulnId == vulnId);
+            if (jira == null)
+            {
+                return Array.Empty<CORE.Entities.JiraComments>();
+            }
             var model = jiraCommentManager.GetAll().Where(x => x.JiraId == jira.Id).ToArray();
             return model;
         }
