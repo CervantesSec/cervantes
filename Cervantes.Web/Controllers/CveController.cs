@@ -412,7 +412,7 @@ public class CveController : ControllerBase
             var projectUser = _projectUserManager.VerifyUser(projectId, _aspNetUserId);
             if (projectUser == null)
             {
-                return Forbid("You don't have access to this project");
+                return StatusCode(403, "You don't have access to this project");
             }
 
             var cves = await _cveManager.GetByProjectAsync(projectId);
@@ -528,7 +528,7 @@ public class CveController : ControllerBase
             // Check if user owns the subscription
             if (subscription.UserId != _aspNetUserId)
             {
-                return Forbid("You don't have access to this subscription");
+                return StatusCode(403, "You don't have access to this subscription");
             }
 
             return Ok(subscription);
@@ -566,7 +566,7 @@ public class CveController : ControllerBase
             // Check if user owns the subscription
             if (existingSubscription.UserId != _aspNetUserId)
             {
-                return Forbid("You don't have access to this subscription");
+                return StatusCode(403, "You don't have access to this subscription");
             }
 
             // Update fields
@@ -626,7 +626,7 @@ public class CveController : ControllerBase
             // Check if user owns the subscription
             if (subscription.UserId != _aspNetUserId)
             {
-                return Forbid("You don't have access to this subscription");
+                return StatusCode(403, "You don't have access to this subscription");
             }
 
             var subscriptionToDelete = _cveSubscriptionManager.GetById(id);

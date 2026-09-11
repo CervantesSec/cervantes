@@ -23,20 +23,23 @@ public class ProjectCustomFieldController : ControllerBase
 {
     private IProjectCustomFieldManager customFieldManager = null;
     private IProjectCustomFieldValueManager customFieldValueManager = null;
+    private IProjectUserManager projectUserManager = null;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private readonly ILogger<ProjectCustomFieldController> _logger = null;
     private Sanitizer sanitizer;
 
     public ProjectCustomFieldController(
-        IProjectCustomFieldManager customFieldManager, 
+        IProjectCustomFieldManager customFieldManager,
         IProjectCustomFieldValueManager customFieldValueManager,
+        IProjectUserManager projectUserManager,
         ILogger<ProjectCustomFieldController> logger,
         IHttpContextAccessor HttpContextAccessor,
         Sanitizer sanitizer)
     {
         this.customFieldManager = customFieldManager;
         this.customFieldValueManager = customFieldValueManager;
+        this.projectUserManager = projectUserManager;
         this._logger = logger;
         this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -226,6 +229,11 @@ public class ProjectCustomFieldController : ControllerBase
     {
         try
         {
+            if (projectUserManager.VerifyUser(projectId, aspNetUserId) == null)
+            {
+                return Enumerable.Empty<ProjectCustomFieldValue>();
+            }
+
             var values = customFieldValueManager.GetAll()
                 .Where(cfv => cfv.ProjectId == projectId)
                 .Include(cfv => cfv.ProjectCustomField)
@@ -245,6 +253,13 @@ public class ProjectCustomFieldController : ControllerBase
     {
         try
         {
+            if (projectUserManager.VerifyUser(projectId, aspNetUserId) == null)
+            {
+                _logger.LogWarning("Access denied to custom field values of project {ProjectId}. User: {UserId}",
+                    projectId, aspNetUserId);
+                return StatusCode(403, "You do not have permission to access this project");
+            }
+
             // Remove existing values
             var existingValues = customFieldValueManager.GetAll()
                 .Where(cfv => cfv.ProjectId == projectId)

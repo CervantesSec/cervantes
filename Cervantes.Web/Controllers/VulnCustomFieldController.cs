@@ -23,20 +23,26 @@ public class VulnCustomFieldController : ControllerBase
 {
     private IVulnCustomFieldManager customFieldManager = null;
     private IVulnCustomFieldValueManager customFieldValueManager = null;
+    private IVulnManager vulnManager = null;
+    private IProjectUserManager projectUserManager = null;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private readonly ILogger<VulnCustomFieldController> _logger = null;
     private Sanitizer sanitizer;
 
     public VulnCustomFieldController(
-        IVulnCustomFieldManager customFieldManager, 
+        IVulnCustomFieldManager customFieldManager,
         IVulnCustomFieldValueManager customFieldValueManager,
+        IVulnManager vulnManager,
+        IProjectUserManager projectUserManager,
         ILogger<VulnCustomFieldController> logger,
         IHttpContextAccessor HttpContextAccessor,
         Sanitizer sanitizer)
     {
         this.customFieldManager = customFieldManager;
         this.customFieldValueManager = customFieldValueManager;
+        this.vulnManager = vulnManager;
+        this.projectUserManager = projectUserManager;
         this._logger = logger;
         this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -228,6 +234,11 @@ public class VulnCustomFieldController : ControllerBase
     {
         try
         {
+            if (CheckVulnAccess(vulnId) != null)
+            {
+                return Enumerable.Empty<VulnCustomFieldValue>();
+            }
+
             IEnumerable<VulnCustomFieldValue> model = customFieldValueManager.GetAll()
                 .Where(x => x.VulnId == vulnId).Include(x => x.VulnCustomField).ToArray();
             return model;
@@ -248,6 +259,12 @@ public class VulnCustomFieldController : ControllerBase
         {
             if (ModelState.IsValid)
             {
+                var accessResult = CheckVulnAccess(vulnId);
+                if (accessResult != null)
+                {
+                    return accessResult;
+                }
+
                 // Remove existing values
                 var existingValues = customFieldValueManager.GetAll().Where(x => x.VulnId == vulnId);
                 foreach (var existingValue in existingValues)
@@ -309,6 +326,30 @@ public class VulnCustomFieldController : ControllerBase
                 aspNetUserId);
             throw;
         }
+    }
+
+    /// <summary>
+    /// Returns null when the current user can access the vuln, otherwise the error result.
+    /// Vulns without a project (templates) are accessible to anyone with the permission.
+    /// </summary>
+    [NonAction]
+    private IActionResult? CheckVulnAccess(Guid vulnId)
+    {
+        var vuln = vulnManager.GetById(vulnId);
+        if (vuln == null)
+        {
+            return NotFound();
+        }
+
+        if (vuln.ProjectId.HasValue &&
+            projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId) == null)
+        {
+            _logger.LogWarning("Access denied to custom field values of vuln {VulnId}. User: {UserId}",
+                vulnId, aspNetUserId);
+            return StatusCode(403, "You do not have permission to access this project");
+        }
+
+        return null;
     }
 
 }

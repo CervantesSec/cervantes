@@ -295,7 +295,7 @@ public class VulnController: ControllerBase
                     var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return Forbid("You do not have permission to access this project");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
                 
@@ -461,7 +461,7 @@ public class VulnController: ControllerBase
                     var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return Forbid("You do not have permission to access this project");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
 
@@ -684,7 +684,7 @@ public class VulnController: ControllerBase
                     var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return Forbid("You do not have permission to access this project");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
                 
@@ -794,7 +794,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return Forbid("You do not have permission to access this project");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                 }
@@ -852,7 +852,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return Forbid("You do not have permission to access this project");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                 }
@@ -893,7 +893,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return Forbid("You do not have permission to access this project");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                 }
@@ -941,7 +941,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return Forbid("You do not have permission to access this project");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                 }
@@ -1005,7 +1005,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(tar.Vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return Forbid("You do not have permission to access this project");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                 
@@ -1045,7 +1045,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return Forbid("You do not have permission to access this project");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                 }
@@ -1135,7 +1135,7 @@ public class VulnController: ControllerBase
                         var user = projectUserManager.VerifyUser(attachment.Vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return Forbid("You do not have permission to access this project");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                     
@@ -1185,7 +1185,7 @@ public class VulnController: ControllerBase
                     var user = projectUserManager.VerifyUser(model.Project.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return Forbid("You do not have permission to access this project");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
                 

@@ -23,20 +23,26 @@ public class TargetCustomFieldController : ControllerBase
 {
     private ITargetCustomFieldManager customFieldManager = null;
     private ITargetCustomFieldValueManager customFieldValueManager = null;
+    private ITargetManager targetManager = null;
+    private IProjectUserManager projectUserManager = null;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private readonly ILogger<TargetCustomFieldController> _logger = null;
     private Sanitizer sanitizer;
 
     public TargetCustomFieldController(
-        ITargetCustomFieldManager customFieldManager, 
+        ITargetCustomFieldManager customFieldManager,
         ITargetCustomFieldValueManager customFieldValueManager,
+        ITargetManager targetManager,
+        IProjectUserManager projectUserManager,
         ILogger<TargetCustomFieldController> logger,
         IHttpContextAccessor HttpContextAccessor,
         Sanitizer sanitizer)
     {
         this.customFieldManager = customFieldManager;
         this.customFieldValueManager = customFieldValueManager;
+        this.targetManager = targetManager;
+        this.projectUserManager = projectUserManager;
         this._logger = logger;
         this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -226,6 +232,11 @@ public class TargetCustomFieldController : ControllerBase
     {
         try
         {
+            if (CheckTargetAccess(targetId) != null)
+            {
+                return Enumerable.Empty<TargetCustomFieldValue>();
+            }
+
             var values = customFieldValueManager.GetAll()
                 .Where(cfv => cfv.TargetId == targetId)
                 .Include(cfv => cfv.TargetCustomField)
@@ -245,6 +256,12 @@ public class TargetCustomFieldController : ControllerBase
     {
         try
         {
+            var accessResult = CheckTargetAccess(targetId);
+            if (accessResult != null)
+            {
+                return accessResult;
+            }
+
             // Remove existing values
             var existingValues = customFieldValueManager.GetAll()
                 .Where(cfv => cfv.TargetId == targetId)
@@ -305,5 +322,29 @@ public class TargetCustomFieldController : ControllerBase
             _logger.LogError(ex, "An error occurred while checking target custom field name");
             return BadRequest(new { message = "An error occurred while checking target custom field name" });
         }
+    }
+
+    /// <summary>
+    /// Returns null when the current user can access the target, otherwise the error result.
+    /// Targets without a project are accessible to anyone with the permission.
+    /// </summary>
+    [NonAction]
+    private IActionResult? CheckTargetAccess(Guid targetId)
+    {
+        var target = targetManager.GetById(targetId);
+        if (target == null)
+        {
+            return NotFound();
+        }
+
+        if (target.ProjectId.HasValue &&
+            projectUserManager.VerifyUser(target.ProjectId.Value, aspNetUserId) == null)
+        {
+            _logger.LogWarning("Access denied to custom field values of target {TargetId}. User: {UserId}",
+                targetId, aspNetUserId);
+            return StatusCode(403, "You do not have permission to access this project");
+        }
+
+        return null;
     }
 }

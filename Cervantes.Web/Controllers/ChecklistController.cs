@@ -1351,10 +1351,10 @@ public class ChecklistController : ControllerBase
 
             // Check if user can edit this template
             if (template.IsSystemTemplate)
-                return Forbid("Cannot edit system templates");
+                return StatusCode(403, "Cannot edit system templates");
 
             if (template.UserId != aspNetUserId && !User.HasPermission(Permissions.Admin))
-                return Forbid("Cannot edit templates created by other users");
+                return StatusCode(403, "Cannot edit templates created by other users");
 
             // Update basic template info
             template.Name = model.Name;
@@ -1429,10 +1429,10 @@ public class ChecklistController : ControllerBase
                 return NotFound();
 
             if (template.IsSystemTemplate)
-                return Forbid("Cannot delete system templates");
+                return StatusCode(403, "Cannot delete system templates");
 
             if (template.UserId != aspNetUserId && !User.HasPermission(Permissions.Admin))
-                return Forbid("Cannot delete templates created by other users");
+                return StatusCode(403, "Cannot delete templates created by other users");
 
             _checklistTemplateManager.Remove(template);
             await _checklistTemplateManager.Context.SaveChangesAsync();

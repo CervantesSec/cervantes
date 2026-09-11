@@ -34,7 +34,7 @@ public partial class DeleteChecklistTemplateDialog: ComponentBase
                 Snackbar.Add(@localizer["templateDeletedSuccessfully"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }
-            else if (response is ForbidResult)
+            else if (response is ObjectResult { StatusCode: StatusCodes.Status403Forbidden })
             {
                 Snackbar.Add(@localizer["cannotDeleteSystemTemplate"], Severity.Warning);
             }
