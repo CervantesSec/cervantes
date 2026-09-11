@@ -413,7 +413,7 @@ public partial class Index: ComponentBase
     #endregion
 
     #region ApiKeys
-    private List<ApiKey> apiKeys = new();
+    private List<ApiKeyViewModel> apiKeys = new();
     private bool isLoadingApiKeys = false;
     private string? newApiKeyName;
     private DateTime? newApiKeyExpiresAt;
@@ -424,7 +424,13 @@ public partial class Index: ComponentBase
     private async Task LoadApiKeys()
     {
         isLoadingApiKeys = true;
-        apiKeys = ApiKeysController.GetByUser(user.Id).ToList();
+        var action = ApiKeysController.GetByUser(user.Id);
+        IEnumerable<ApiKeyViewModel>? payload;
+        if (action.Result is OkObjectResult ok)
+            payload = ok.Value as IEnumerable<ApiKeyViewModel>;
+        else
+            payload = action.Value;
+        apiKeys = payload?.ToList() ?? new List<ApiKeyViewModel>();
         isLoadingApiKeys = false;
         StateHasChanged();
     }
