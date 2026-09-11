@@ -4,8 +4,19 @@ namespace Cervantes.IFR.File;
 
 public class FileCheck: IFileCheck
 {
-    private readonly List<string> bannedExtensions = new List<string> { ".exe", ".dll", ".js", ".php", ".py", ".rb", ".java", ".cs", ".ts", ".go", ".sh",".aspx", ".jsp" };
-    private readonly List<string> bannedMimeTypes = new List<string> { "application/x-dosexec", "application/x-msdownload", "application/javascript", "application/x-httpd-php", "application/x-python-code", "application/x-ruby", "text/x-java-source", "text/x-csharp", "application/typescript", "text/x-go" };
+    // Whitelist of dotless extensions, compared against the value returned by GetExtension,
+    // which is also the extension used to name the stored file. Active content (html, svg,
+    // xhtml, scripts, executables) is rejected because it is not listed here.
+    private static readonly HashSet<string> allowedExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "png", "jpg", "jpeg", "gif", "webp", "bmp", "ico", "tif", "tiff", "heic", "heif", "avif",
+        "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx",
+        "txt", "csv", "rtf", "xml", "json", "zip",
+        // Video evidence (webm is detected as mkv, wmv as asf)
+        "mp4", "m4v", "mov", "3gp", "mkv", "webm", "avi", "wmv", "asf", "mpg", "mpeg",
+        // Network captures
+        "pcap", "pcapng", "cap"
+    };
 
     public FileCheck()
     {
@@ -15,34 +26,8 @@ public class FileCheck: IFileCheck
     {
         try
         {
-
-            var inspector = new ContentInspectorBuilder() {
-                Definitions = new MimeDetective.Definitions.ExhaustiveBuilder() {
-                    UsageType = MimeDetective.Definitions.Licensing.UsageType.PersonalNonCommercial
-                }.Build()
-            }.Build();
-            
-        
-            var results = inspector.Inspect(file);
-            var ResultsByFileExtension = results.ByFileExtension();
-            var ResultsByMimeType = results.ByMimeType();
-
-            foreach (var extension in ResultsByFileExtension)
-            {
-                if (bannedExtensions.Contains(extension.Extension))
-                {
-                    return false;
-                }
-            }
-            foreach (var mime in ResultsByMimeType)
-            {
-                if (bannedMimeTypes.Contains(mime.MimeType))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            var extension = GetExtension(file);
+            return allowedExtensions.Contains(extension);
         }
         catch (Exception e)
         {
@@ -84,21 +69,39 @@ public class FileCheck: IFileCheck
                 }
             }
             
-            // Check for JSON signature
-            if (fileContent.Trim().StartsWith("{") && fileContent.Trim().EndsWith("}"))
+            // AVIF shares the ISO BMFF "ftyp" box with MP4; MimeDetective reports it as mp4
+            if (file.Length > 12 && file[4] == 0x66 && file[5] == 0x74 && file[6] == 0x79 && file[7] == 0x70)
+            {
+                var brand = System.Text.Encoding.ASCII.GetString(file, 8, 4);
+                if (brand == "avif" || brand == "avis")
+                {
+                    return "avif";
+                }
+            }
+
+            // Check for JSON signature (object or array)
+            var trimmedContent = fileContent.Trim().TrimStart('﻿');
+            if ((trimmedContent.StartsWith("{") && trimmedContent.EndsWith("}")) ||
+                (trimmedContent.StartsWith("[") && trimmedContent.EndsWith("]")))
             {
                 return "json";
             }
 
-            
+
             var inspector = new ContentInspectorBuilder() {
                 Definitions = new MimeDetective.Definitions.ExhaustiveBuilder() {
                     UsageType = MimeDetective.Definitions.Licensing.UsageType.PersonalNonCommercial
                 }.Build()
             }.Build();
-            
-        
-            var results = inspector.Inspect(file);
+
+            // Skip a UTF-8 BOM so it cannot hide the real signature (e.g. BOM + <html>)
+            var content = file;
+            if (content.Length >= 3 && content[0] == 0xEF && content[1] == 0xBB && content[2] == 0xBF)
+            {
+                content = content[3..];
+            }
+
+            var results = inspector.Inspect(content);
             var ResultsByFileExtension = results.ByFileExtension();
             string extension;
             if (ResultsByFileExtension.Length != 0)

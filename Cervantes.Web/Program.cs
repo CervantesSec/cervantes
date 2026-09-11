@@ -334,7 +334,10 @@ else
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
+// Attachments are not served statically: they go through the authenticated FileController.
+app.UseWhen(
+    ctx => !ctx.Request.Path.StartsWithSegments("/Attachments", StringComparison.OrdinalIgnoreCase),
+    branch => branch.UseStaticFiles());
 var supportedCultures = new[] { "en-US", "es-ES","pt-PT", "tr-TR", "fr-FR", "de-DE", "it-IT", "cs-CZ" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture(supportedCultures[0])
