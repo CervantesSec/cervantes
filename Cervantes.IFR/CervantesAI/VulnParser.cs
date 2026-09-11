@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,9 +12,62 @@ namespace Cervantes.IFR.CervantesAI;
 
 public class VulnParser
 {
+    // The markdown comes from the AI provider, so every regex runs with a timeout to bound backtracking cost.
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
+    // Far above what AIConfiguration:MaxTokens produces; larger inputs are truncated before parsing.
+    private const int MaxMarkdownLength = 512_000;
+
+    private static readonly Regex[] TitleRegexes = new[]
+    {
+        @"###\s*Finding:\s*(.*?)(?=\n|$)",              // ### Finding: Title
+        @"#\s+(.*?)(?=\n|$)",                          // # Title
+        @"###\s+(.*?)(?=\n|$)",                        // ### Title
+        @"##\s+(.*?)(?=\n|$)",                         // ## Title
+    }.Select(p => new Regex(p, RegexOptions.Compiled, RegexTimeout)).ToArray();
+
+    private static readonly Regex[] RiskRegexes = new[]
+    {
+        @"####\s*\*\*Risk Level\*\*\s*\n\*\*(.*?)\*\*",     // #### **Risk Level** \n**Critical**
+        @"####\s*Risk Level\s*\n\*\*(.*?)\*\*",             // #### Risk Level \n**Critical**
+        @"##\s*Risk Level\s*\n\*\*(.*?)\*\*",
+        @"##\s*Risk Level\s*\n\*\*(.*?)\*\*",// ## Risk Level \n**Critical**
+        @"Risk Level:\s*\*\*(.*?)\*\*",
+        @"\*\*Risk Level:\*\*\s*(.*?)",
+
+        @"####\s*\*\*Nivel de Riesgo\*\*\s*\n\*\*(.*?)\*\*",     // #### **Risk Level** \n**Critical**
+        @"####\s*Nivel de Riesgo\s*\n\*\*(.*?)\*\*",             // #### Risk Level \n**Critical**
+        @"##\s*Nivel de Riesgo\s*\n\*\*(.*?)\*\*",
+        @"##\s*Nivel de Riesgo\s*\n\*\*(.*?)\*\*",// ## Risk Level \n**Critical**
+        @"Nivel de Riesgo:\s*\*\*(.*?)\*\*",
+        @"\*\*Nivel de Riesgo:\*\*\s*(.*?)",
+
+        @"####\s*\*\*Nível de Risco\*\*\s*\n\*\*(.*?)\*\*",     // #### **Risk Level** \n**Critical**
+        @"####\s*Nível de Riscoo\s*\n\*\*(.*?)\*\*",             // #### Risk Level \n**Critical**
+        @"##\s*Nível de Risco\s*\n\*\*(.*?)\*\*",
+        @"##\s*Nível de Risco\s*\n\*\*(.*?)\*\*",// ## Risk Level \n**Critical**
+        @"Nível de Risco:\s*\*\*(.*?)\*\*",
+        @"\*\*Nível de Risco:\*\*\s*(.*?)",
+    }.Select(p => new Regex(p, RegexOptions.Singleline | RegexOptions.Compiled, RegexTimeout)).ToArray();
+
+    // Section patterns embed the section name, so they are built once per name and cached.
+    private static readonly ConcurrentDictionary<string, Regex[]> SectionRegexCache = new();
+
+    private static readonly Regex BulletBoldHeaderRegex =
+        new(@"^\*\*([^:]+):\*\*\s*(.+)$", RegexOptions.Compiled, RegexTimeout);
+
+    private static readonly Regex InlineCodeRegex = new(@"`([^`]+)`", RegexOptions.Compiled, RegexTimeout);
+    private static readonly Regex BoldRegex = new(@"\*\*([^*]+)\*\*", RegexOptions.Compiled, RegexTimeout);
+    private static readonly Regex ItalicRegex = new(@"\*([^*]+)\*", RegexOptions.Compiled, RegexTimeout);
+    private static readonly Regex BracketsRegex = new(@"\[([^\]]+)\]", RegexOptions.Compiled, RegexTimeout);
 
     public static VulnAiModel ParseSecurityReport(string markdown, Language language)
     {
+        if (markdown is { Length: > MaxMarkdownLength })
+        {
+            markdown = markdown.Substring(0, MaxMarkdownLength);
+        }
+
         var vuln = new VulnAiModel();
         switch (language)
         {
@@ -41,7 +95,6 @@ public class VulnParser
                 }
                 vuln.ProofOfConcept = Markdown.ToHtml(ExtractSection(markdown, "Proof of Concept"));
                 vuln.Remediation = Markdown.ToHtml(ExtractSection(markdown, "Remediation"));
-                Console.WriteLine(ExtractSection(markdown, "Remediation"));
                 break;
             case Language.Español:
                 vuln.Description = Markdown.ToHtml(ExtractSection(markdown, "Descripción"));
@@ -100,17 +153,9 @@ public class VulnParser
     
    public static string ExtractTitle(string markdown)
     {
-        string[] titlePatterns = new[]
+        foreach (var regex in TitleRegexes)
         {
-            @"###\s*Finding:\s*(.*?)(?=\n|$)",              // ### Finding: Title
-            @"#\s+(.*?)(?=\n|$)",                          // # Title
-            @"###\s+(.*?)(?=\n|$)",                        // ### Title
-            @"##\s+(.*?)(?=\n|$)",                         // ## Title
-        };
-
-        foreach (var pattern in titlePatterns)
-        {
-            var match = Regex.Match(markdown, pattern);
+            var match = SafeMatch(regex, markdown);
             if (match.Success)
             {
                 return CleanMarkdownText(match.Groups[1].Value);
@@ -125,33 +170,9 @@ public class VulnParser
     /// </summary>
     public static string ExtractRiskLevel(string markdown)
     {
-        string[] riskPatterns = new[]
+        foreach (var regex in RiskRegexes)
         {
-            @"####\s*\*\*Risk Level\*\*\s*\n\*\*(.*?)\*\*",     // #### **Risk Level** \n**Critical**
-            @"####\s*Risk Level\s*\n\*\*(.*?)\*\*",             // #### Risk Level \n**Critical**
-            @"##\s*Risk Level\s*\n\*\*(.*?)\*\*",
-            @"##\s*Risk Level\s*\n\*\*(.*?)\*\*",// ## Risk Level \n**Critical**
-            @"Risk Level:\s*\*\*(.*?)\*\*",
-            @"\*\*Risk Level:\*\*\s*(.*?)",
-            
-            @"####\s*\*\*Nivel de Riesgo\*\*\s*\n\*\*(.*?)\*\*",     // #### **Risk Level** \n**Critical**
-            @"####\s*Nivel de Riesgo\s*\n\*\*(.*?)\*\*",             // #### Risk Level \n**Critical**
-            @"##\s*Nivel de Riesgo\s*\n\*\*(.*?)\*\*",
-            @"##\s*Nivel de Riesgo\s*\n\*\*(.*?)\*\*",// ## Risk Level \n**Critical**
-            @"Nivel de Riesgo:\s*\*\*(.*?)\*\*",
-            @"\*\*Nivel de Riesgo:\*\*\s*(.*?)",
-            
-            @"####\s*\*\*Nível de Risco\*\*\s*\n\*\*(.*?)\*\*",     // #### **Risk Level** \n**Critical**
-            @"####\s*Nível de Riscoo\s*\n\*\*(.*?)\*\*",             // #### Risk Level \n**Critical**
-            @"##\s*Nível de Risco\s*\n\*\*(.*?)\*\*",
-            @"##\s*Nível de Risco\s*\n\*\*(.*?)\*\*",// ## Risk Level \n**Critical**
-            @"Nível de Risco:\s*\*\*(.*?)\*\*",
-            @"\*\*Nível de Risco:\*\*\s*(.*?)",
-        };
-
-        foreach (var pattern in riskPatterns)
-        {
-            var match = Regex.Match(markdown, pattern, RegexOptions.Singleline);
+            var match = SafeMatch(regex, markdown);
             if (match.Success)
             {
                 return CleanMarkdownText(match.Groups[1].Value);
@@ -161,6 +182,32 @@ public class VulnParser
     }
 
     public static string ExtractSection(string markdown, string sectionName)
+    {
+        var sectionRegexes = SectionRegexCache.GetOrAdd(sectionName, BuildSectionRegexes);
+
+        foreach (var regex in sectionRegexes)
+        {
+            Match match;
+            try
+            {
+                match = regex.Match(markdown);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                // The remaining patterns use similar lookaheads and would most likely time out too,
+                // so give up on this section instead of spending the timeout once per pattern.
+                return string.Empty;
+            }
+
+            if (match.Success)
+            {
+                return ProcessSectionContent(match.Groups[1].Value);
+            }
+        }
+        return string.Empty;
+    }
+
+    private static Regex[] BuildSectionRegexes(string sectionName)
     {
         string[] sectionPatterns = new[]
         {
@@ -206,15 +253,9 @@ public class VulnParser
             $@"##\s*{Regex.Escape(sectionName)}\s*\n(.*?)(?=##|\*\*[^*]+:\*\*|\z)",
         };
 
-        foreach (var pattern in sectionPatterns)
-        {
-            var match = Regex.Match(markdown, pattern, RegexOptions.Singleline);
-            if (match.Success)
-            {
-                return ProcessSectionContent(match.Groups[1].Value);
-            }
-        }
-        return string.Empty;
+        return sectionPatterns
+            .Select(p => new Regex(p, RegexOptions.Singleline, RegexTimeout))
+            .ToArray();
     }
 
  private static string ProcessSectionContent(string content)
@@ -263,7 +304,7 @@ public class VulnParser
             if (line.StartsWith("* "))
             {
                 string bulletContent = line.Substring(2);
-                var boldHeaderMatch = Regex.Match(bulletContent, @"^\*\*([^:]+):\*\*\s*(.+)$");
+                var boldHeaderMatch = SafeMatch(BulletBoldHeaderRegex, bulletContent);
                 
                 if (boldHeaderMatch.Success)
                 {
@@ -311,7 +352,7 @@ public class VulnParser
         int counter = 0;
 
         // Preserve inline code
-        text = Regex.Replace(text, @"`([^`]+)`", m =>
+        text = SafeReplace(InlineCodeRegex, text, m =>
         {
             string placeholder = $"__CODE_{counter}__";
             codeBlocks[placeholder] = m.Groups[0].Value;
@@ -320,9 +361,9 @@ public class VulnParser
         });
 
         // Clean markdown formatting
-        text = Regex.Replace(text, @"\*\*([^*]+)\*\*", "$1");  // Remove bold
-        text = Regex.Replace(text, @"\*([^*]+)\*", "$1");      // Remove italic
-        text = Regex.Replace(text, @"\[([^\]]+)\]", "$1");     // Remove brackets
+        text = SafeReplace(BoldRegex, text, "$1");      // Remove bold
+        text = SafeReplace(ItalicRegex, text, "$1");    // Remove italic
+        text = SafeReplace(BracketsRegex, text, "$1");  // Remove brackets
 
         // Restore code blocks
         foreach (var block in codeBlocks)
@@ -342,11 +383,48 @@ public class VulnParser
             return string.Empty;
 
         // Remove markdown formatting
-        text = Regex.Replace(text, @"\*\*([^*]+)\*\*", "$1");  // Remove bold
-        text = Regex.Replace(text, @"\*([^*]+)\*", "$1");      // Remove italic
-        text = Regex.Replace(text, @"\[([^\]]+)\]", "$1");     // Remove brackets
+        text = SafeReplace(BoldRegex, text, "$1");      // Remove bold
+        text = SafeReplace(ItalicRegex, text, "$1");    // Remove italic
+        text = SafeReplace(BracketsRegex, text, "$1");  // Remove brackets
 
         return text.Trim();
     }
-    
+
+    // A regex timeout is treated as "no match" so a pathological AI response degrades to an empty
+    // or unformatted field instead of failing the whole vulnerability generation.
+    private static Match SafeMatch(Regex regex, string input)
+    {
+        try
+        {
+            return regex.Match(input);
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return Match.Empty;
+        }
+    }
+
+    private static string SafeReplace(Regex regex, string input, string replacement)
+    {
+        try
+        {
+            return regex.Replace(input, replacement);
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return input;
+        }
+    }
+
+    private static string SafeReplace(Regex regex, string input, MatchEvaluator evaluator)
+    {
+        try
+        {
+            return regex.Replace(input, evaluator);
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return input;
+        }
+    }
 }
