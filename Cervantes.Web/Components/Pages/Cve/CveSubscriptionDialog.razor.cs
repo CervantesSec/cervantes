@@ -196,6 +196,17 @@ public partial class CveSubscriptionDialog
             }
         }
 
+        if (propertyName == nameof(CveSubscriptionViewModel.MinEpssScore) || propertyName == nameof(CveSubscriptionViewModel.MaxEpssScore))
+        {
+            if (subscriptionModel.MinEpssScore.HasValue && subscriptionModel.MaxEpssScore.HasValue)
+            {
+                if (subscriptionModel.MinEpssScore > subscriptionModel.MaxEpssScore)
+                {
+                    errors.Add("Minimum EPSS score cannot be greater than maximum EPSS score");
+                }
+            }
+        }
+
         if (propertyName == nameof(CveSubscriptionViewModel.NotificationMethod))
         {
             if (!AvailableNotificationMethods.Contains(subscriptionModel.NotificationMethod))
