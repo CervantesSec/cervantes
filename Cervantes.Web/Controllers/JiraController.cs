@@ -27,6 +27,7 @@ public class JiraController : Controller
     private IJIraService jiraService = null;
     private IJiraManager jiraManager = null;
     private IJiraCommentManager jiraCommentManager = null;
+    private IProjectUserManager projectUserManager = null;
     private readonly IWebHostEnvironment env;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
@@ -36,7 +37,8 @@ public class JiraController : Controller
         ITargetManager targetManager, IVulnTargetManager vulnTargetManager,
         IVulnCategoryManager vulnCategoryManager, IVulnNoteManager vulnNoteManager,
         IVulnAttachmentManager vulnAttachmentManager, IWebHostEnvironment env, IJIraService jiraService,
-        IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IHttpContextAccessor HttpContextAccessor, Sanitizer sanitizer)
+        IJiraManager jiraManager, IJiraCommentManager jiraCommentManager, IHttpContextAccessor HttpContextAccessor, Sanitizer sanitizer,
+        IProjectUserManager projectUserManager)
     {
         this.vulnManager = vulnManager;
         this.projectManager = projectManager;
@@ -52,8 +54,26 @@ public class JiraController : Controller
         this.jiraCommentManager = jiraCommentManager;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.sanitizer = sanitizer;
+        this.projectUserManager = projectUserManager;
     }
-    
+
+    [NonAction]
+    private bool HasProjectAccess(CORE.Entities.Vuln vuln)
+    {
+        if (vuln == null)
+        {
+            return false;
+        }
+
+        // Vulns without a project (templates) do not require project membership, same as VulnController
+        if (vuln.ProjectId == null || vuln.ProjectId == Guid.Empty)
+        {
+            return true;
+        }
+
+        return projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId) != null;
+    }
+
     [HttpGet]
     [HasPermission(Permissions.JiraRead)]
     public IEnumerable<CORE.Entities.Jira> GetJiras()
@@ -80,6 +100,12 @@ public class JiraController : Controller
     {
         try
         {
+            var vuln = vulnManager.GetById(vulnId);
+            if (!HasProjectAccess(vuln))
+            {
+                return null;
+            }
+
             var model = jiraManager.GetAll().FirstOrDefault(x => x.VulnId == vulnId);
             return model;
         }
@@ -101,7 +127,18 @@ public class JiraController : Controller
     {
         try
         {
+            var vuln = vulnManager.GetById(vulnId);
+            if (!HasProjectAccess(vuln))
+            {
+                return Array.Empty<CORE.Entities.JiraComments>();
+            }
+
             var jira = jiraManager.GetAll().FirstOrDefault(x => x.VulnId == vulnId);
+            if (jira == null)
+            {
+                return Array.Empty<CORE.Entities.JiraComments>();
+            }
+
             var model = jiraCommentManager.GetAll().Where(x => x.JiraId == jira.Id).ToArray();
             return model;
         }
@@ -119,6 +156,18 @@ public class JiraController : Controller
     [HasPermission(Permissions.JiraAdd)]
     public async Task<IActionResult> Add(Guid vulnId)
     {
+        // Access check runs before the try block so the catch never writes to a vuln the user cannot access
+        var vuln = vulnManager.GetById(vulnId);
+        if (vuln == null)
+        {
+            return BadRequest("Invalid request");
+        }
+
+        if (!HasProjectAccess(vuln))
+        {
+            return StatusCode(403, "You do not have permission to access this project");
+        }
+
         try{
             if (ModelState.IsValid)
             {
@@ -128,11 +177,16 @@ public class JiraController : Controller
                     _logger.LogError("Jira already exists. User: {0}",aspNetUserId);
                     return BadRequest("Invalid request");
                 }
-                
-                
-                jiraService.CreateIssue(vulnId,aspNetUserId);
-                
-                var vuln = vulnManager.GetById(vulnId);
+
+
+                var created = jiraService.CreateIssue(vulnId,aspNetUserId);
+                if (!created)
+                {
+                    _logger.LogError("An error ocurred creating Jira Issue on Vuln {0} User {1}", vulnId,
+                        aspNetUserId);
+                    return BadRequest("Invalid request");
+                }
+
                 vuln.JiraCreated = true;
                 await vulnManager.Context.SaveChangesAsync();
                 
@@ -145,7 +199,6 @@ public class JiraController : Controller
         }
         catch (Exception e)
         {
-            var vuln = vulnManager.GetById(vulnId);
             vuln.JiraCreated = false;
             vulnManager.Context.SaveChanges();
             _logger.LogError(e,"An error ocurred adding a jira. User: {0}",
@@ -160,7 +213,23 @@ public class JiraController : Controller
     {
         try
         {
+            var vuln = vulnManager.GetById(vulnId);
+            if (vuln == null)
+            {
+                return BadRequest("Invalid request");
+            }
+
+            if (!HasProjectAccess(vuln))
+            {
+                return StatusCode(403, "You do not have permission to access this project");
+            }
+
             var jira = jiraManager.GetByVulnId(vulnId);
+            if (jira == null)
+            {
+                return BadRequest("Invalid request");
+            }
+
             var issue = jiraService.DeleteIssue(jira.JiraKey);
             if (issue == false)
             {
@@ -172,7 +241,6 @@ public class JiraController : Controller
             jiraManager.Remove(jira);
             jiraManager.Context.SaveChanges();
 
-            var vuln = vulnManager.GetById(vulnId);
             vuln.JiraCreated = false;
             vulnManager.Context.SaveChanges();
             _logger.LogInformation("Jira {0} deleted successfully. User {1}", jira.JiraKey, aspNetUserId);
@@ -195,7 +263,23 @@ public class JiraController : Controller
     {
         try
         {
+            var vuln = vulnManager.GetById(vulnId);
+            if (vuln == null)
+            {
+                return BadRequest("Invalid request");
+            }
+
+            if (!HasProjectAccess(vuln))
+            {
+                return StatusCode(403, "You do not have permission to access this project");
+            }
+
             var jira = jiraManager.GetByVulnId(vulnId);
+            if (jira == null)
+            {
+                return BadRequest("Invalid request");
+            }
+
             jiraService.UpdateIssue(jira.JiraKey);
             _logger.LogInformation("Jira {0} updated successfully. User {1}", jira.JiraKey, aspNetUserId);
 
@@ -216,9 +300,24 @@ public class JiraController : Controller
     {
         try
         {
+            var vuln = vulnManager.GetById(model.VulnId);
+            if (vuln == null)
+            {
+                return BadRequest("Invalid request");
+            }
+
+            if (!HasProjectAccess(vuln))
+            {
+                return StatusCode(403, "You do not have permission to access this project");
+            }
+
+            var jira = jiraManager.GetByVulnId(model.VulnId);
+            if (jira == null)
+            {
+                return BadRequest("Invalid request");
+            }
 
             var comment = sanitizer.Sanitize(model.Comment);
-            var jira = jiraManager.GetByVulnId(model.VulnId);
             var issue = await jiraService.AddCommentAsync(jira.JiraKey, comment);
             if (issue == false)
             {

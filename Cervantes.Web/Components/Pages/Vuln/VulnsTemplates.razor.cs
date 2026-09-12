@@ -5,6 +5,7 @@ using Cervantes.IFR.Export;
 using Cervantes.IFR.Jira;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
@@ -253,7 +254,7 @@ private async Task Update()
                 foreach (var vuln in seleVulns)
                 {
                     var response = await _jiraController.Add(vuln.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                    if (response is CreatedAtActionResult)
                     {
                         Snackbar.Add(@localizer["jiraCreated"], Severity.Success);
                     }
@@ -267,7 +268,7 @@ private async Task Update()
                 foreach (var vuln in seleVulns)
                 {
                     var response = await _jiraController.DeleteIssue(vuln.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                    if (response is NoContentResult)
                     {
                         Snackbar.Add(@localizer["jiraDeleted"], Severity.Success);
                     }

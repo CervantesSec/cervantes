@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
 
 namespace Cervantes.Web.Components.Pages.Jira;
@@ -83,7 +84,7 @@ public partial class JiraDialog: ComponentBase
     private async Task CreateJira()
     {
         var response = await _jiraController.Add(@vuln.Id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+        if (response is CreatedAtActionResult)
         {
             Snackbar.Add(@localizer["jiraCreated"], Severity.Success);
             await UpdateJira();
@@ -99,7 +100,7 @@ public partial class JiraDialog: ComponentBase
     {
         
         var response = await _jiraController.DeleteIssue(@vuln.Id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["jiraDeleted"], Severity.Success);
             StateHasChanged();
@@ -113,7 +114,7 @@ public partial class JiraDialog: ComponentBase
     private async Task UpdateJira()
     {
         var response = await _jiraController.UpdateIssue(@vuln.Id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["jiraUpdated"], Severity.Success);
             jira = _jiraController.GetJiraByVuln(vuln.Id);
@@ -134,7 +135,7 @@ public partial class JiraDialog: ComponentBase
             Comment = test
         };
         var response = await _jiraController.AddComment(jiraComment);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+        if (response is CreatedResult)
         {
             Snackbar.Add(@localizer["addedComment"], Severity.Success);
             await UpdateJira();

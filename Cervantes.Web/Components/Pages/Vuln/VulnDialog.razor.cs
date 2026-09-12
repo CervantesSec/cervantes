@@ -673,7 +673,7 @@ public partial class VulnDialog: ComponentBase
     private async Task CreateJira()
     {
         var response = await _jiraController.Add(@vuln.Id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is CreatedAtActionResult)
         {
             Snackbar.Add(@localizer["jiraCreated"], Severity.Success);
             await UpdateJira();
@@ -689,7 +689,7 @@ public partial class VulnDialog: ComponentBase
     {
         
         var response = await _jiraController.DeleteIssue(@vuln.Id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["jiraDeleted"], Severity.Success);
             StateHasChanged();
@@ -703,7 +703,7 @@ public partial class VulnDialog: ComponentBase
     private async Task UpdateJira()
     {
         var response = await _jiraController.UpdateIssue(@vuln.Id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["jiraUpdated"], Severity.Success);
             jira = _jiraController.GetJiraByVuln(vuln.Id);
@@ -724,7 +724,7 @@ public partial class VulnDialog: ComponentBase
             Comment = test
         };
         var response = await _jiraController.AddComment(jiraComment);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is CreatedResult)
         {
             Snackbar.Add(@localizer["addedComment"], Severity.Success);
             await UpdateJira();

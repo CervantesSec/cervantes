@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Cervantes.Web.Components.Pages.Vuln;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
@@ -113,7 +114,7 @@ public partial class Jira: ComponentBase
                 foreach (var vuln in seleJiras)
                 {
                     var response = await _JiraController.Add(vuln.Id);
-                    if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                    if (response is CreatedAtActionResult)
                     {
                         Snackbar.Add(@localizer["jiraCreated"], Severity.Success);
                     }
