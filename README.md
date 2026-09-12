@@ -177,6 +177,9 @@ If you have bugs to report please use the [issues](https://github.com/CervantesS
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jpostolk"><img src="https://avatars.githubusercontent.com/u/115724129?v=4?s=100" width="100px;" alt="jpostolk"/><br /><sub><b>jpostolk</b></sub></a><br /><a href="https://github.com/CervantesSec/cervantes/issues?q=author%3Ajpostolk" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://app.grayback.es/profile/pvF15F0gOMevpGzHeHPvrrvnmNI3"><img src="https://avatars.githubusercontent.com/u/115724129?v=4?s=100" width="100px;" alt="sergioframi"/><br /><sub><b>sergioframi</b></sub></a><br /><a href="https://app.grayback.es/profile/pvF15F0gOMevpGzHeHPvrrvnmNI3" title="Documentation">📖</a></td>
+ <td align="center" valign="top" width="14.28%"><a href="https://github.com/archnexus707"><img src="https://avatars.githubusercontent.com/u/115724129?v=4?s=100" width="100px;" alt="archnexus707"/><br /><sub><b>archnexus707</b></sub></a><br /><a href="https://github.com/archnexus707" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://app.grayback.es/profile/quPQjaSAsbWarWMCX4A1LTyQXJq2"><img src="https://firebasestorage.googleapis.com/v0/b/grayback-bugbounty-d10b3.firebasestorage.app/o/users%2FquPQjaSAsbWarWMCX4A1LTyQXJq2%2Fprofile_1787728592257.jpg?alt=media&token=58a39b23-981b-4a35-ad60-6f4af7969b28" width="100px;" alt="sergioframi"/><br /><sub><b>Manuel Martínez Casasola
+</b></sub></a><br /><a href="https://app.grayback.es/profile/quPQjaSAsbWarWMCX4A1LTyQXJq2" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
