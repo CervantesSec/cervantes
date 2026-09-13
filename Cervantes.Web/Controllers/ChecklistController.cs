@@ -1107,7 +1107,7 @@ public class ChecklistController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Footer)
                              .OrderBy(x => x.Order))
                 {
-                    sbBody.Append(part.Component.Content);
+                    sbFooter.Append(part.Component.Content);
                 }
 
                 source = source.Replace("{{FooterComponents}}", sbFooter.ToString());
