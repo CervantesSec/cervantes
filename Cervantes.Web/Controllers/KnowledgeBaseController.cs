@@ -308,7 +308,7 @@ public class KnowledgeBaseController : Controller
             {
 
                 var category = knowledgeBaseCategoryManager.GetById(categoryId);
-                if (category.Name != null)
+                if (category != null)
                 {
                     knowledgeBaseCategoryManager.Remove(category);
                     knowledgeBaseCategoryManager.Context.SaveChanges();
