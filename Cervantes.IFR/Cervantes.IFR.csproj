@@ -33,7 +33,7 @@
       <PackageReference Include="Microsoft.KernelMemory.AI.OpenAI" Version="0.93.241118.1" />
       <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.93.241118.1" />
       <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.93.241118.1" />
-      <PackageReference Include="Microsoft.SemanticKernel" Version="1.41.0" />
+      <PackageReference Include="Microsoft.SemanticKernel" Version="1.70.0" />
       <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="1.41.0" />
       <PackageReference Include="Microsoft.SemanticKernel.Connectors.Google" Version="1.28.0-alpha" />
       <PackageReference Include="Microsoft.SemanticKernel.Connectors.HuggingFace" Version="1.28.0-preview" />
