@@ -34,7 +34,7 @@
         <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.5" />
         <PackageReference Include="itext7.commons" Version="8.0.5" />
         <PackageReference Include="itext7.pdfhtml" Version="5.0.5" />
-        <PackageReference Include="Mammoth" Version="1.8.0" />
+        <PackageReference Include="Mammoth" Version="1.11.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.14" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.14" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.14" />
