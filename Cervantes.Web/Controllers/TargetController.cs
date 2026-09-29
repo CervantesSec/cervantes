@@ -120,6 +120,21 @@ public class TargetController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Returns true when the current user is a member of the project that owns the target.
+    /// Every target belongs to a project, so a missing target or project is denied.
+    /// </summary>
+    [NonAction]
+    private bool CanWriteTarget(CORE.Entities.Target target)
+    {
+        if (target?.ProjectId == null || target.ProjectId == Guid.Empty)
+        {
+            return false;
+        }
+
+        return projectUserManager.VerifyUser(target.ProjectId.Value, aspNetUserId) != null;
+    }
+
     [HttpPost]
     [HasPermission(Permissions.TargetsAdd)]
     public async Task<IActionResult> Add([FromBody] TargetCreateViewModel model)
@@ -202,10 +217,13 @@ public class TargetController : ControllerBase
                 var result = targetManager.GetById(model.Id);
                 if (result != null)
                 {
-                    var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
-                    if (user == null)
+                    // Authorize against the project stored in the database, never the one sent in the request.
+                    // Edit never moves a target, so model.ProjectId is ignored.
+                    if (!CanWriteTarget(result))
                     {
-                        return BadRequest("Access denied: User does not have permission to access this project");
+                        _logger.LogWarning("Access denied editing target {TargetId}. User: {UserId}",
+                            result.Id, aspNetUserId);
+                        return StatusCode(403, "Access denied: User does not have permission to access this project");
                     }
 
                     result.Name = sanitizer.Sanitize(model.Name);
