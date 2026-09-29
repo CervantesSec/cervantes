@@ -811,7 +811,14 @@ public class TargetController : ControllerBase
             {
                 return NotFound();
             }
-            
+
+            if (!CanWriteTarget(target))
+            {
+                _logger.LogWarning("Access denied updating custom fields of target {TargetId}. User: {UserId}",
+                    targetId, aspNetUserId);
+                return StatusCode(403, "Access denied: User does not have permission to access this project");
+            }
+
             // Remove existing custom field values
             var existingValues = targetCustomFieldValueManager.GetAll()
                 .Where(v => v.TargetId == targetId)
