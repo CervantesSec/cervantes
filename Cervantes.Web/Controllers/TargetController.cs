@@ -569,6 +569,19 @@ public class TargetController : ControllerBase
         {
             if (ModelState.IsValid)
             {
+                var target = targetManager.GetById(model.TargetId);
+                if (target == null)
+                {
+                    return NotFound("Target not found");
+                }
+
+                if (!CanWriteTarget(target))
+                {
+                    _logger.LogWarning("Access denied adding a service to target {TargetId}. User: {UserId}",
+                        target.Id, aspNetUserId);
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
+                }
+
                 var service = new CORE.Entities.TargetServices();
                 service.Name = sanitizer.Sanitize(model.Name);
                 service.Description = sanitizer.Sanitize(model.Description);
@@ -614,6 +627,21 @@ public class TargetController : ControllerBase
                 var service = targetServicesManager.GetById(model.Id);
                 if (service != null)
                 {
+                    // Authorize against the target stored in the database, never the one sent in the request.
+                    // Moving the service to another target also requires membership in that target's project.
+                    var destination = targetManager.GetById(model.TargetId);
+                    if (destination == null)
+                    {
+                        return NotFound("Target not found");
+                    }
+
+                    if (!CanWriteTarget(targetManager.GetById(service.TargetId)) || !CanWriteTarget(destination))
+                    {
+                        _logger.LogWarning("Access denied editing target service {ServiceId}. User: {UserId}",
+                            service.Id, aspNetUserId);
+                        return StatusCode(403, "Access denied: User does not have permission to access this project");
+                    }
+
                     service.Name = sanitizer.Sanitize(model.Name);
                     service.Description = sanitizer.Sanitize(model.Description);
                     service.Port = model.Port;
@@ -662,6 +690,13 @@ public class TargetController : ControllerBase
                 var result = targetServicesManager.GetById(serviceId);
                 if (result != null)
                 {
+                    if (!CanWriteTarget(targetManager.GetById(result.TargetId)))
+                    {
+                        _logger.LogWarning("Access denied deleting target service {ServiceId}. User: {UserId}",
+                            result.Id, aspNetUserId);
+                        return StatusCode(403, "Access denied: User does not have permission to access this project");
+                    }
+
                     targetServicesManager.Remove(result);
                     await targetManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Target Service deleted successfully. User: {0}",
