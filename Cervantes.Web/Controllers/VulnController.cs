@@ -279,7 +279,22 @@ public class VulnController: ControllerBase
                 aspNetUserId);
             throw;
         }
-        
+
+    }
+
+    /// <summary>
+    /// Returns true when the current user can write data of the given project.
+    /// Vulns without a project (templates) do not require project membership.
+    /// </summary>
+    [NonAction]
+    private bool CanWriteProject(Guid? projectId)
+    {
+        if (projectId == null || projectId == Guid.Empty)
+        {
+            return true;
+        }
+
+        return projectUserManager.VerifyUser(projectId.Value, aspNetUserId) != null;
     }
 
     [HttpPost]
@@ -456,19 +471,20 @@ public class VulnController: ControllerBase
         {
             if (ModelState.IsValid)
             {
-                if (model.ProjectId != null && model.ProjectId != Guid.Empty)
+                var vuln = vulnManager.GetById(model.Id);
+                if (vuln != null)
                 {
-                    var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
-                    if (user == null)
-                    {
-                        return StatusCode(403, "You do not have permission to access this project");
-                    }
+                // Authorize against the project stored in the database, never the one sent in the request.
+                // Moving the vuln to another project also requires membership in the destination project.
+                Guid? projectId = model.ProjectId == Guid.Empty ? null : model.ProjectId;
+                if (!CanWriteProject(vuln.ProjectId) || !CanWriteProject(projectId))
+                {
+                    _logger.LogWarning("Access denied editing vuln {VulnId}. User: {UserId}",
+                        vuln.Id, aspNetUserId);
+                    return StatusCode(403, "You do not have permission to access this project");
                 }
 
-                var vuln = vulnManager.GetById(model.Id);
-                if (vuln.Id != Guid.Empty)
-                {
-                vuln.ProjectId = model.ProjectId;
+                vuln.ProjectId = projectId;
                 vuln.VulnCategoryId = model.VulnCategoryId;
                 vuln.Name = Sanitizer.Sanitize(model.Name);
                 vuln.Description = Sanitizer.Sanitize(model.Description);
