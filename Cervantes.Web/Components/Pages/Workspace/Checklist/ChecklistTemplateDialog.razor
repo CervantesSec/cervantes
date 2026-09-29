@@ -203,7 +203,7 @@
                                     </CardHeaderContent>
                                 </MudCardHeader>
                                 <MudCardContent>
-                                    @((MarkupString)template.Description)
+                                    @((MarkupString)(template.Description ?? string.Empty))
                                 </MudCardContent>
                             </MudCard>
                         </MudItem>

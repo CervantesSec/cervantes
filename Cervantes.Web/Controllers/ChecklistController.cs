@@ -871,7 +871,7 @@ public class ChecklistController : ControllerBase
                {
                    Id = Guid.NewGuid(),
                    Name = Sanitizer.Sanitize(model.Name),
-                   ProjectId = model.ProjectId,
+                   ProjectId = mastg.ProjectId,
                    UserId = aspNetUserId,
                    CreatedDate = DateTime.Now.ToUniversalTime(),
                    Description = Sanitizer.Sanitize(model.Description),
@@ -1028,14 +1028,14 @@ public class ChecklistController : ControllerBase
                         return BadRequest("Access denied: User does not have permission to access this project");
                     }
                     
-                    var pro = projectManager.GetById(model.ProjectId);
+                    var pro = projectManager.GetById(wstg.ProjectId);
                 var template = reportTemplateManager.GetById(model.ReportTemplateId);
 
                 Report rep = new Report
                 {
                     Id = Guid.NewGuid(),
                     Name = Sanitizer.Sanitize(model.Name),
-                    ProjectId = model.ProjectId,
+                    ProjectId = wstg.ProjectId,
                     UserId = aspNetUserId,
                     CreatedDate = DateTime.Now.ToUniversalTime(),
                     Description = Sanitizer.Sanitize(model.Description),
@@ -1273,10 +1273,12 @@ public class ChecklistController : ControllerBase
             var template = new ChecklistTemplate
             {
                 Id = Guid.NewGuid(),
-                Name = model.Name,
-                Description = model.Description,
-                Version = model.Version,
-                OrganizationId = model.OrganizationId,
+                Name = Sanitizer.Sanitize(model.Name),
+                Description = SanitizeOptional(model.Description),
+                Version = Sanitizer.Sanitize(model.Version),
+                // Custom templates are global, like the seeded system templates (OrganizationId = null).
+                // The client-supplied OrganizationId is ignored so it cannot point to an arbitrary organization.
+                OrganizationId = null,
                 UserId = aspNetUserId,
                 IsSystemTemplate = false,
                 IsActive = true,
@@ -1290,8 +1292,8 @@ public class ChecklistController : ControllerBase
                 var category = new ChecklistCategory
                 {
                     Id = Guid.NewGuid(),
-                    Name = categoryModel.Name,
-                    Description = categoryModel.Description,
+                    Name = Sanitizer.Sanitize(categoryModel.Name),
+                    Description = SanitizeOptional(categoryModel.Description),
                     Order = categoryModel.Order,
                     ChecklistTemplateId = template.Id
                 };
@@ -1301,16 +1303,16 @@ public class ChecklistController : ControllerBase
                     var item = new ChecklistItem
                     {
                         Id = Guid.NewGuid(),
-                        Code = itemModel.Code,
-                        Name = itemModel.Name,
-                        Description = itemModel.Description,
-                        Objectives = itemModel.Objectives,
-                        TestProcedure = itemModel.TestProcedure,
-                        PassCriteria = itemModel.PassCriteria,
+                        Code = Sanitizer.Sanitize(itemModel.Code),
+                        Name = Sanitizer.Sanitize(itemModel.Name),
+                        Description = SanitizeOptional(itemModel.Description),
+                        Objectives = SanitizeOptional(itemModel.Objectives),
+                        TestProcedure = SanitizeOptional(itemModel.TestProcedure),
+                        PassCriteria = SanitizeOptional(itemModel.PassCriteria),
                         Order = itemModel.Order,
                         IsRequired = itemModel.IsRequired,
                         Severity = itemModel.Severity,
-                        References = itemModel.References,
+                        References = SanitizeOptional(itemModel.References),
                         ChecklistCategoryId = category.Id
                     };
 
@@ -1357,9 +1359,9 @@ public class ChecklistController : ControllerBase
                 return StatusCode(403, "Cannot edit templates created by other users");
 
             // Update basic template info
-            template.Name = model.Name;
-            template.Description = model.Description;
-            template.Version = model.Version;
+            template.Name = Sanitizer.Sanitize(model.Name);
+            template.Description = SanitizeOptional(model.Description);
+            template.Version = Sanitizer.Sanitize(model.Version);
             template.ModifiedDate = DateTime.UtcNow;
 
             // Clear existing categories and items (the cascade delete in the DB will handle the deletion)
@@ -1375,8 +1377,8 @@ public class ChecklistController : ControllerBase
                 var category = new ChecklistCategory
                 {
                     Id = Guid.NewGuid(),
-                    Name = categoryModel.Name,
-                    Description = categoryModel.Description,
+                    Name = Sanitizer.Sanitize(categoryModel.Name),
+                    Description = SanitizeOptional(categoryModel.Description),
                     Order = categoryModel.Order,
                     ChecklistTemplateId = template.Id,
                     Items = new List<ChecklistItem>()
@@ -1387,16 +1389,16 @@ public class ChecklistController : ControllerBase
                     var item = new ChecklistItem
                     {
                         Id = Guid.NewGuid(),
-                        Code = itemModel.Code,
-                        Name = itemModel.Name,
-                        Description = itemModel.Description,
-                        Objectives = itemModel.Objectives,
-                        TestProcedure = itemModel.TestProcedure,
-                        PassCriteria = itemModel.PassCriteria,
+                        Code = Sanitizer.Sanitize(itemModel.Code),
+                        Name = Sanitizer.Sanitize(itemModel.Name),
+                        Description = SanitizeOptional(itemModel.Description),
+                        Objectives = SanitizeOptional(itemModel.Objectives),
+                        TestProcedure = SanitizeOptional(itemModel.TestProcedure),
+                        PassCriteria = SanitizeOptional(itemModel.PassCriteria),
                         Order = itemModel.Order,
                         IsRequired = itemModel.IsRequired,
                         Severity = itemModel.Severity,
-                        References = itemModel.References,
+                        References = SanitizeOptional(itemModel.References),
                         ChecklistCategoryId = category.Id
                     };
 
@@ -1459,7 +1461,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(projectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest("Access denied: User does not have permission to access this project");
+                return ProjectAccessDenied(projectId);
             }
 
             var checklists = await _checklistManager.GetByProject(projectId)
@@ -1489,7 +1491,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest("Access denied: User does not have permission to access this project");
+                return ProjectAccessDenied(checklist.ProjectId);
             }
 
             return Ok(checklist);
@@ -1525,7 +1527,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest("Access denied: User does not have permission to access this project");
+                return ProjectAccessDenied(checklist.ProjectId);
             }
 
             return Ok(checklist);
@@ -1564,19 +1566,19 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest("Access denied: User does not have permission to access this project");
+                return ProjectAccessDenied(model.ProjectId);
             }
 
             var checklist = new Checklist
             {
                 Id = Guid.NewGuid(),
-                Name = model.Name,
+                Name = Sanitizer.Sanitize(model.Name),
                 ChecklistTemplateId = model.ChecklistTemplateId,
                 ProjectId = model.ProjectId,
                 TargetId = model.TargetId,
                 UserId = aspNetUserId,
                 Status = ChecklistStatus.NotStarted,
-                Notes = model.Notes,
+                Notes = SanitizeOptional(model.Notes),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow
             };
@@ -1626,11 +1628,11 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest("Access denied: User does not have permission to access this project");
+                return ProjectAccessDenied(checklist.ProjectId);
             }
 
-            checklist.Name = model.Name;
-            checklist.Notes = model.Notes;
+            checklist.Name = Sanitizer.Sanitize(model.Name);
+            checklist.Notes = SanitizeOptional(model.Notes);
             checklist.Status = model.Status;
             checklist.ModifiedDate = DateTime.UtcNow;
 
@@ -1659,7 +1661,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest("Access denied: User does not have permission to delete this checklist");
+                return ProjectAccessDenied(checklist.ProjectId);
             }
 
             _checklistManager.Remove(checklist);
@@ -1691,7 +1693,7 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest("Access denied: User does not have permission to access this project");
+                return ProjectAccessDenied(checklist.ProjectId);
             }
 
             var executions = await _checklistExecutionManager.GetByChecklist(checklistId)
@@ -1729,12 +1731,12 @@ public class ChecklistController : ControllerBase
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return BadRequest("Access denied: User does not have permission to access this project");
+                return ProjectAccessDenied(checklist.ProjectId);
             }
 
             execution.Status = model.Status;
-            execution.Notes = model.Notes;
-            execution.Evidence = model.Evidence;
+            execution.Notes = SanitizeOptional(model.Notes);
+            execution.Evidence = SanitizeOptional(model.Evidence);
             execution.EstimatedTimeMinutes = model.EstimatedTimeMinutes;
             execution.ActualTimeMinutes = model.ActualTimeMinutes;
             execution.DifficultyRating = model.DifficultyRating;
@@ -1772,7 +1774,22 @@ public class ChecklistController : ControllerBase
                 return BadRequest(new { message = "Validation failed", errors });
             }
 
-            var count = await _checklistExecutionManager.BulkUpdateStatus(model.ExecutionIds, model.Status);
+            var executionIds = model.ExecutionIds?.Distinct().ToList() ?? new List<Guid>();
+
+            // Every execution must belong to a project the user is a member of
+            var projectIds = await _checklistExecutionManager.GetAll()
+                .Where(e => executionIds.Contains(e.Id))
+                .Select(e => e.Checklist.ProjectId)
+                .Distinct()
+                .ToListAsync();
+
+            foreach (var projectId in projectIds)
+            {
+                if (projectUserManager.VerifyUser(projectId, aspNetUserId) == null)
+                    return ProjectAccessDenied(projectId);
+            }
+
+            var count = await _checklistExecutionManager.BulkUpdateStatus(executionIds, model.Status);
             return Ok(new { UpdatedCount = count });
         }
         catch (Exception ex)
@@ -1807,7 +1824,15 @@ public class ChecklistController : ControllerBase
 
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
-                return BadRequest("User does not have access to this project");
+                return ProjectAccessDenied(checklist.ProjectId);
+
+            // The item must belong to the template the checklist was created from
+            var itemTemplateId = await _checklistExecutionManager.Context.Set<ChecklistItem>()
+                .Where(i => i.Id == itemId)
+                .Select(i => (Guid?)i.ChecklistCategory.ChecklistTemplateId)
+                .FirstOrDefaultAsync();
+            if (itemTemplateId != checklist.ChecklistTemplateId)
+                return BadRequest("Checklist item does not belong to this checklist's template");
 
             // Check if execution already exists
             var existingExecution = _checklistExecutionManager.GetAll()
@@ -1822,8 +1847,8 @@ public class ChecklistController : ControllerBase
                 ChecklistId = checklistId,
                 ChecklistItemId = itemId,
                 Status = model.Status,
-                Notes = model.Notes,
-                Evidence = model.Evidence,
+                Notes = SanitizeOptional(model.Notes),
+                Evidence = SanitizeOptional(model.Evidence),
                 EstimatedTimeMinutes = model.EstimatedTimeMinutes,
                 ActualTimeMinutes = model.ActualTimeMinutes,
                 DifficultyRating = model.DifficultyRating,
@@ -1863,11 +1888,11 @@ public class ChecklistController : ControllerBase
 
             var user = projectUserManager.VerifyUser(checklist.ProjectId, aspNetUserId);
             if (user == null)
-                return BadRequest("User does not have access to this project");
+                return ProjectAccessDenied(checklist.ProjectId);
 
             execution.Status = model.Status;
-            execution.Notes = model.Notes;
-            execution.Evidence = model.Evidence;
+            execution.Notes = SanitizeOptional(model.Notes);
+            execution.Evidence = SanitizeOptional(model.Evidence);
             execution.EstimatedTimeMinutes = model.EstimatedTimeMinutes;
             execution.ActualTimeMinutes = model.ActualTimeMinutes;
             execution.DifficultyRating = model.DifficultyRating;
@@ -1889,6 +1914,20 @@ public class ChecklistController : ControllerBase
     #endregion
 
     #region Private Methods
+
+    [NonAction]
+    private string? SanitizeOptional(string? value)
+    {
+        // Sanitizer.Sanitize(null) returns string.Empty; keep null so "no value" stays distinguishable
+        return string.IsNullOrEmpty(value) ? null : Sanitizer.Sanitize(value);
+    }
+
+    [NonAction]
+    private ObjectResult ProjectAccessDenied(Guid projectId)
+    {
+        _logger.LogWarning("Access denied to project {ProjectId}. User: {UserId}", projectId, aspNetUserId);
+        return StatusCode(403, "You do not have permission to access this project");
+    }
 
     [NonAction]
     private async Task CreateInitialExecutions(Checklist checklist)

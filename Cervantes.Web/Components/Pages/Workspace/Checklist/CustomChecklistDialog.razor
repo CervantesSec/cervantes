@@ -170,7 +170,9 @@
                                         </CardHeaderContent>
                                     </MudCardHeader>
                                     <MudCardContent>
-                                        @((MarkupString)(checklist.Notes ?? localizer["noNotes"]))
+                                        <MudText Style="white-space: pre-wrap;">
+                                            @(string.IsNullOrWhiteSpace(checklist.Notes) ? localizer["noNotes"].Value : checklist.Notes)
+                                        </MudText>
                                     </MudCardContent>
                                 </MudCard>
                                 

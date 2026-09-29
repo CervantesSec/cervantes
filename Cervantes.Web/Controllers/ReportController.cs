@@ -58,7 +58,6 @@ public class ReportController : ControllerBase
     private IProjectAttachmentManager projectAttachmentManager = null;
     private ITargetManager targetManager = null;
     private ITaskManager taskManager = null;
-    private IUserManager userManager = null;
     private IVulnManager vulnManager = null;
     private IVulnCweManager vulnCweManager = null;
     private IVulnTargetManager vulnTargetManager = null;
@@ -75,7 +74,6 @@ public class ReportController : ControllerBase
     private IVulnCustomFieldValueManager vulnCustomFieldValueManager;
     private IProjectCustomFieldValueManager projectCustomFieldValueManager;
     private Sanitizer sanitizer;
-    private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager = null;
     private IChecklistManager checklistManager;
     private IChecklistExecutionManager checklistExecutionManager;
     private string aspNetUserId;
@@ -84,9 +82,9 @@ public class ReportController : ControllerBase
         IOrganizationManager organizationManager, IProjectUserManager projectUserManager,
         IProjectNoteManager projectNoteManager, IVulnTargetManager vulnTargetManager,
         IProjectAttachmentManager projectAttachmentManager, ITargetManager targetManager, ITaskManager taskManager,
-        IUserManager userManager, IVulnManager vulnManager, IVulnCweManager vulnCweManager,
+        IVulnManager vulnManager, IVulnCweManager vulnCweManager,
         ILogger<ReportController> logger, IReportManager reportManager, IReportTemplateManager reportTemplateManager,
-        IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck,Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager,
+        IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, IFileCheck fileCheck,
         IReportComponentsManager reportComponentsManager, IReportsPartsManager reportsPartsManager, 
         IVaultManager vaultManager, IJiraManager jiraManager, IVulnCustomFieldValueManager vulnCustomFieldValueManager,
         IProjectCustomFieldValueManager projectCustomFieldValueManager, Sanitizer sanitizer,
@@ -100,7 +98,6 @@ public class ReportController : ControllerBase
         this.projectAttachmentManager = projectAttachmentManager;
         this.targetManager = targetManager;
         this.taskManager = taskManager;
-        this.userManager = userManager;
         this.vulnManager = vulnManager;
         this.vulnTargetManager = vulnTargetManager;
         this.vulnCweManager = vulnCweManager;
@@ -113,7 +110,6 @@ public class ReportController : ControllerBase
         this.reportComponentsManager = reportComponentsManager;
         this.reportsPartsManager = reportsPartsManager;
         this.vaultManager = vaultManager;
-        this._userManager = _userManager;
         this.jiraManager = jiraManager;
         this.vulnCustomFieldValueManager = vulnCustomFieldValueManager;
         this.projectCustomFieldValueManager = projectCustomFieldValueManager;
@@ -136,30 +132,9 @@ public class ReportController : ControllerBase
                 _logger.LogWarning("User ID not found in claims");
                 return null;
             }
-            IEnumerable<CORE.Entities.Report> model = reportManager.GetAll().Include(x => x.User).ToArray();
-            if (model != null)
-            {
-                var user = projectUserManager.VerifyUser(model.First().ProjectId, aspNetUserId);
-                if (user == null)
-                {
-                    return null;
-                }
-                
-                var user2 = userManager.GetByUserId(user.UserId);
-                var roles = _userManager.GetRolesAsync(user2).Result;
-                if (roles.FirstOrDefault() == "Client")
-                {
-                    if (user2.ClientId != model.First().Project.ClientId)
-                    {
-                        return null;
-                    }
-                }
-                
-                return model;
-
-            }
-
-            return null;
+            // By design: ReportsRead grants read access to reports in every project.
+            // Project membership is only required to add, edit or delete (see SECURITY.md).
+            return reportManager.GetAll().Include(x => x.User).ToArray();
         }
         catch (Exception e)
         {
@@ -182,25 +157,10 @@ public class ReportController : ControllerBase
                 _logger.LogWarning("User ID not found in claims");
                 return null;
             }
-            IEnumerable<CORE.Entities.Report> model = reportManager.GetAll().Where(x => x.ProjectId == id)
+            // By design: ReportsRead grants read access to reports in every project.
+            // Project membership is only required to add, edit or delete (see SECURITY.md).
+            return reportManager.GetAll().Where(x => x.ProjectId == id)
                 .Include(x => x.User).ToArray();
-            if (model != null)
-            {
-                var user = projectUserManager.VerifyUser(id, aspNetUserId);
-                /*
-                if (user == null)
-                {
-                    return model = new List<Report>();
-                }
-                */
-                
-                
-                
-                
-                return model;
-
-            }
-            return null;
         }
         catch (Exception e)
         {
