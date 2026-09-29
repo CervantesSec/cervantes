@@ -1573,13 +1573,28 @@ public class VulnController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                var vulns = new List<CORE.Entities.Vuln>();
                 foreach (var item in model.VulnIds)
                 {
                     var vuln = vulnManager.GetById(item);
                     if (vuln != null)
                     {
-                        vuln.Status = model.Status;
+                        vulns.Add(vuln);
                     }
+                }
+
+                // All or nothing: reject the whole batch if any vuln belongs to a project
+                // the user is not a member of, so a mixed selection is never half applied.
+                if (vulns.Select(x => x.ProjectId).Distinct().Any(x => !CanWriteProject(x)))
+                {
+                    _logger.LogWarning("Access denied updating vuln status. User: {UserId}",
+                        aspNetUserId);
+                    return StatusCode(403, "You do not have permission to access this project");
+                }
+
+                foreach (var vuln in vulns)
+                {
+                    vuln.Status = model.Status;
                 }
                 await vulnManager.Context.SaveChangesAsync();
                 return NoContent();
