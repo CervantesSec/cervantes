@@ -1,7 +1,10 @@
 @page "/chat"
 @using System.Collections.ObjectModel
+@using Cervantes.CORE
 @using Cervantes.IFR.CervantesAI
 @using Cervantes.Web.Localization
+@using global::AuthPermissions.AspNetCore
+@attribute [HasPermission(Permissions.AIChatUsage)]
 @inject IDialogService Dialog
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<Resource> localizer
