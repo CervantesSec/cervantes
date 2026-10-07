@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using AuthPermissions.AspNetCore;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
@@ -50,6 +51,14 @@ public class CveController : ControllerBase
         _sanitizer = sanitizer;
         _aspNetUserId = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
+
+    /// <summary>
+    /// Permission attributes are not evaluated when Blazor components call this controller in-process,
+    /// so methods used by components check permissions explicitly.
+    /// </summary>
+    [NonAction]
+    private bool CurrentUserHasPermission(Permissions permission) =>
+        _httpContextAccessor.HttpContext?.User.HasPermission(permission) == true;
 
     #region CVE Management
 
@@ -841,6 +850,12 @@ public class CveController : ControllerBase
     [NonAction]
     public async Task<CveSyncResult> TriggerSyncForComponentsAsync()
     {
+        if (!CurrentUserHasPermission(Permissions.CveSync))
+        {
+            _logger.LogWarning("Access denied triggering CVE sync. User: {UserId}", _aspNetUserId);
+            throw new UnauthorizedAccessException("You do not have permission to sync CVEs");
+        }
+
         try
         {
             return await _cveSyncService.SyncAllSourcesAsync();
@@ -860,6 +875,12 @@ public class CveController : ControllerBase
     [NonAction]
     public async Task<bool> MarkAsFavoriteForComponentsAsync(Guid id)
     {
+        if (!CurrentUserHasPermission(Permissions.CveEdit))
+        {
+            _logger.LogWarning("Access denied toggling favorite on CVE {Id}. User: {UserId}", id, _aspNetUserId);
+            return false;
+        }
+
         try
         {
             return await _cveManager.MarkAsFavoriteAsync(id, _aspNetUserId);
@@ -879,6 +900,12 @@ public class CveController : ControllerBase
     [NonAction]
     public async Task<bool> ArchiveForComponentsAsync(Guid id)
     {
+        if (!CurrentUserHasPermission(Permissions.CveEdit))
+        {
+            _logger.LogWarning("Access denied archiving CVE {Id}. User: {UserId}", id, _aspNetUserId);
+            return false;
+        }
+
         try
         {
             return await _cveManager.ArchiveAsync(id, _aspNetUserId);
@@ -1261,6 +1288,12 @@ public class CveController : ControllerBase
     [NonAction]
     public async Task<int> DeleteMultipleForComponentsAsync(List<Guid> cveIds)
     {
+        if (!CurrentUserHasPermission(Permissions.CveDelete))
+        {
+            _logger.LogWarning("Access denied deleting CVEs. User: {UserId}", _aspNetUserId);
+            throw new UnauthorizedAccessException("You do not have permission to delete CVEs");
+        }
+
         try
         {
             var deletedCount = await _cveManager.DeleteMultipleAsync(cveIds);
