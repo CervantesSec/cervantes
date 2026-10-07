@@ -21,7 +21,8 @@ public static class AppAuthSetupData
                                          "TaskTargetsRead,TaskTargetsEdit,TaskTargetsAdd,TaskTargetsDelete," +
                                          "VulnTargetsRead,VulnTargetsEdit,VulnTargetsAdd,VulnTargetsDelete," +
                                          "JiraRead,JiraEdit,JiraAdd,JiraDelete,JiraCommentsRead,JiraCommentsAdd," +
-                                         "VaultRead,VaultEdit,VaultAdd,VaultDelete,ChecklistsRead,ChecklistsEdit,ChecklistsAdd,ChecklistsDelete,AIServiceUsage"),
+                                         "VaultRead,VaultEdit,VaultAdd,VaultDelete,ChecklistsRead,ChecklistsEdit,ChecklistsAdd,ChecklistsDelete,AIServiceUsage," +
+                                         "CveRead,CveDashboard,CveSubscriptions,CveNotifications"),
         new("Manager",  "Manager Role (Manage Projects, Reports, Tasks, etc.)", "ClientsRead,ClientsEdit,ClientsAdd,ClientsDelete," +
                                          "ProjectsRead,ProjectsEdit,ProjectsAdd,ProjectsDelete,ProjectMembersRead,ProjectMembersAdd,ProjectMembersDelete," +
                                          "ProjectNotesRead,ProjectNotesEdit,ProjectNotesAdd,ProjectNotesDelete,ProjectAttachmentsRead,ProjectAttachmentsAdd,ProjectAttachmentsDelete,ProjectAttachmentsDownload," +
@@ -33,7 +34,8 @@ public static class AppAuthSetupData
                                          "ReportsRead,ReportsEdit,ReportsAdd,ReportsDelete,CalendarRead,WorkspacesRead," +
                                          "TargetsRead,TargetsEdit,TargetsAdd,TargetsDelete,TargetsServicesRead,TargetsServicesEdit,TargetsServicesAdd,TargetsServicesDelete,NotesRead,NotesEdit,NotesAdd,NotesDelete," +
                                          "TaskNotesRead,TaskNotesEdit,TaskNotesAdd,TaskNotesDelete,TaskAttachmentsRead,TaskAttachmentsAdd,TaskAttachmentsDelete,TaskAttachmentsDownload,TaskTargetsRead,TaskTargetsEdit,TaskTargetsAdd,TaskTargetsDelete," +
-                                         "VulnTargetsRead,VulnTargetsEdit,VulnTargetsAdd,VulnTargetsDelete,JiraRead,JiraEdit,JiraAdd,JiraDelete,JiraCommentsRead,JiraCommentsAdd,VaultRead,VaultEdit,VaultAdd,VaultDelete,ChecklistsRead,ChecklistsEdit,ChecklistsAdd,ChecklistsDelete,AIServiceUsage"),
+                                         "VulnTargetsRead,VulnTargetsEdit,VulnTargetsAdd,VulnTargetsDelete,JiraRead,JiraEdit,JiraAdd,JiraDelete,JiraCommentsRead,JiraCommentsAdd,VaultRead,VaultEdit,VaultAdd,VaultDelete,ChecklistsRead,ChecklistsEdit,ChecklistsAdd,ChecklistsDelete,AIServiceUsage," +
+                                         "CveRead,CveDashboard,CveSubscriptions,CveNotifications"),
         new("Admin", "This allows the user to access every feature", "Admin"),
     };
 

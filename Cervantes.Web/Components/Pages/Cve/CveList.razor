@@ -15,7 +15,8 @@
 @using MudBlazor.Extensions.Core
 @using MudBlazor.Extensions.Options
 @using Task = System.Threading.Tasks.Task
-@attribute [Authorize]
+@using global::AuthPermissions.AspNetCore
+@attribute [HasPermission(Permissions.CveRead)]
 
 <PageTitle>@localizer["cveManagement"] | Cervantes</PageTitle>
 

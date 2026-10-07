@@ -21,7 +21,8 @@
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IStringLocalizer<Resource> localizer
-@attribute [Authorize]
+@using global::AuthPermissions.AspNetCore
+@attribute [HasPermission(Permissions.CveSubscriptions)]
 
 <PageTitle>@localizer["cveSubscriptions"] | Cervantes</PageTitle>
 
