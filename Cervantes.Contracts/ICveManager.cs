@@ -202,8 +202,11 @@ public interface ICveManager : IGenericManager<Cve>
     /// Delete multiple CVEs by their IDs
     /// </summary>
     /// <param name="cveIds">List of CVE IDs to delete</param>
+    /// <param name="userId">User performing the deletion, recorded in the summary audit entry</param>
+    /// <param name="ipAddress">Client IP address, recorded in the summary audit entry</param>
+    /// <param name="browser">Client user agent, recorded in the summary audit entry</param>
     /// <returns>Number of deleted CVEs</returns>
-    Task<int> DeleteMultipleAsync(List<Guid> cveIds);
+    Task<int> DeleteMultipleAsync(List<Guid> cveIds, string? userId, string? ipAddress, string? browser);
 }
 
 /// <summary>

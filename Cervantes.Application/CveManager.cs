@@ -613,8 +613,11 @@ public class CveManager : GenericManager<Cve>, ICveManager
     /// Delete multiple CVEs by their IDs
     /// </summary>
     /// <param name="cveIds">List of CVE IDs to delete</param>
+    /// <param name="userId">User performing the deletion, recorded in the summary audit entry</param>
+    /// <param name="ipAddress">Client IP address, recorded in the summary audit entry</param>
+    /// <param name="browser">Client user agent, recorded in the summary audit entry</param>
     /// <returns>Number of deleted CVEs</returns>
-    public async Task<int> DeleteMultipleAsync(List<Guid> cveIds)
+    public async Task<int> DeleteMultipleAsync(List<Guid> cveIds, string? userId, string? ipAddress, string? browser)
     {
         if (cveIds == null || !cveIds.Any())
             return 0;
@@ -629,6 +632,27 @@ public class CveManager : GenericManager<Cve>, ICveManager
                 return 0;
 
             Context.Set<Cve>().RemoveRange(cvesToDelete);
+
+            // Row-level auditing would store every deleted CVE in full and flood AuditLogs,
+            // so record a single summary entry for the whole operation instead.
+            Context.Set<Audit>().Add(new Audit
+            {
+                UserId = userId,
+                Type = AuditType.Delete.ToString(),
+                TableName = nameof(Cve),
+                IpAddress = ipAddress,
+                Browser = browser,
+                DateTime = DateTime.UtcNow,
+                PrimaryKey = JsonSerializer.Serialize(cvesToDelete.Select(c => c.Id)),
+                OldValues = JsonSerializer.Serialize(new
+                {
+                    Count = cvesToDelete.Count,
+                    CveIds = cvesToDelete.Select(c => c.CveId)
+                }),
+                NewValues = "null",
+                AffectedColumns = "null"
+            });
+
             await Context.SaveChangesNoAuditAsync();
 
             return cvesToDelete.Count;

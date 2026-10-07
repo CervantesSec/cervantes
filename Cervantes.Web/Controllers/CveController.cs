@@ -1296,9 +1296,14 @@ public class CveController : ControllerBase
 
         try
         {
-            var deletedCount = await _cveManager.DeleteMultipleAsync(cveIds);
-            
-            _logger.LogInformation("Deleted {Count} CVEs for Blazor component", deletedCount);
+            var httpContext = _httpContextAccessor.HttpContext;
+            var deletedCount = await _cveManager.DeleteMultipleAsync(
+                cveIds,
+                _aspNetUserId,
+                httpContext?.Connection.RemoteIpAddress?.ToString(),
+                httpContext?.Request.Headers["User-Agent"].ToString());
+
+            _logger.LogInformation("Deleted {Count} CVEs for Blazor component. User: {UserId}", deletedCount, _aspNetUserId);
             
             return deletedCount;
         }
