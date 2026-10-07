@@ -1,3 +1,5 @@
+using AuthPermissions.BaseCode.PermissionsCode;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Contracts;
@@ -32,6 +34,12 @@ public partial class CveNotesDialog
         try
         {
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (!authState.User.HasPermission(Permissions.CveEdit))
+            {
+                Snackbar.Add("You do not have permission to edit CVE notes", Severity.Error);
+                return;
+            }
+
             var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             await CveManager.UpdateNotesAsync(CveId, notes, userId);

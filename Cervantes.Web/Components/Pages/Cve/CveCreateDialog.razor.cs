@@ -1,3 +1,5 @@
+using AuthPermissions.BaseCode.PermissionsCode;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Contracts;
@@ -59,6 +61,12 @@ public partial class CveCreateDialog
             }
 
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (!authState.User.HasPermission(Permissions.CveCreate))
+            {
+                Snackbar.Add("You do not have permission to create CVEs", Severity.Error);
+                return;
+            }
+
             var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var cve = new CORE.Entities.Cve

@@ -68,18 +68,24 @@
                     <MudText Typo="Typo.h6">@localizer["cveDatabase"]</MudText>
                 </CardHeaderContent>
                 <CardHeaderActions>
-                    <MudButton Variant="Variant.Filled"
-                               Color="Color.Primary"
-                               StartIcon="@Icons.Material.Filled.Add"
-                               OnClick="OpenCreateDialog">
-                        @localizer["createCve"]
-                    </MudButton>
-                    <MudButton Variant="Variant.Outlined"
-                               Color="Color.Info"
-                               StartIcon="@Icons.Material.Filled.Sync"
-                               OnClick="TriggerSync">
-                        @localizer["syncCves"]
-                    </MudButton>
+                    @if (userAth.HasPermission(Permissions.CveCreate))
+                    {
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.Add"
+                                   OnClick="OpenCreateDialog">
+                            @localizer["createCve"]
+                        </MudButton>
+                    }
+                    @if (userAth.HasPermission(Permissions.CveSync))
+                    {
+                        <MudButton Variant="Variant.Outlined"
+                                   Color="Color.Info"
+                                   StartIcon="@Icons.Material.Filled.Sync"
+                                   OnClick="TriggerSync">
+                            @localizer["syncCves"]
+                        </MudButton>
+                    }
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCardContent>
@@ -217,14 +223,17 @@
                         <MudSpacer/>
                         @if (selectedCves.Count > 0)
                         {
-                            <MudButton StartIcon="@Icons.Material.Filled.Delete"
-                                       Color="Color.Error"
-                                       Variant="Variant.Filled"
-                                       Size="Size.Small"
-                                       OnClick="DeleteSelectedCves"
-                                       Class="mr-2">
-                                @localizer["delete"] (@selectedCves.Count)
-                            </MudButton>
+                            @if (userAth.HasPermission(Permissions.CveDelete))
+                            {
+                                <MudButton StartIcon="@Icons.Material.Filled.Delete"
+                                           Color="Color.Error"
+                                           Variant="Variant.Filled"
+                                           Size="Size.Small"
+                                           OnClick="DeleteSelectedCves"
+                                           Class="mr-2">
+                                    @localizer["delete"] (@selectedCves.Count)
+                                </MudButton>
+                            }
                             <MudButton StartIcon="@Icons.Material.Filled.Clear"
                                        Color="Color.Default"
                                        Variant="Variant.Outlined"
@@ -315,15 +324,18 @@
                                                Size="Size.Small"
                                                OnClick="() => ViewCve(context.Item)"
                                                Title="@localizer["viewDetails"]"/>
-                                <MudIconButton Icon="@(context.Item.IsFavorite ? Icons.Material.Filled.Star : Icons.Material.Filled.StarBorder)"
-                                               Size="Size.Small"
-                                               Color="@(context.Item.IsFavorite ? Color.Warning : Color.Default)"
-                                               OnClick="() => ToggleFavorite(context.Item)"
-                                               Title="@localizer["toggleFavorite"]"/>
-                                <MudIconButton Icon="@Icons.Material.Filled.Archive"
-                                               Size="Size.Small"
-                                               OnClick="() => ArchiveCve(context.Item)"
-                                               Title="@localizer["archive"]"/>
+                                @if (userAth.HasPermission(Permissions.CveEdit))
+                                {
+                                    <MudIconButton Icon="@(context.Item.IsFavorite ? Icons.Material.Filled.Star : Icons.Material.Filled.StarBorder)"
+                                                   Size="Size.Small"
+                                                   Color="@(context.Item.IsFavorite ? Color.Warning : Color.Default)"
+                                                   OnClick="() => ToggleFavorite(context.Item)"
+                                                   Title="@localizer["toggleFavorite"]"/>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Archive"
+                                                   Size="Size.Small"
+                                                   OnClick="() => ArchiveCve(context.Item)"
+                                                   Title="@localizer["archive"]"/>
+                                }
                             </CellTemplate>
                         </TemplateColumn>
                     </Columns>

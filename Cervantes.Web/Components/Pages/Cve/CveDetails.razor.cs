@@ -27,9 +27,11 @@ public partial class CveDetails
     private CORE.Entities.Cve cve;
     private bool loading = true;
     private List<BreadcrumbItem> breadcrumbs = new();
+    private ClaimsPrincipal userAth = new();
 
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
         await LoadCve();
         UpdateBreadcrumbs();
     }
@@ -65,12 +67,14 @@ public partial class CveDetails
     {
         try
         {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
-            await CveManager.MarkAsFavoriteAsync(cve.Id, userId);
+            if (!await CveController.MarkAsFavoriteForComponentsAsync(cve.Id))
+            {
+                Snackbar.Add("Error updating favorite", Severity.Error);
+                return;
+            }
+
             cve.IsFavorite = !cve.IsFavorite;
-            
+
             var message = cve.IsFavorite ? "Added to favorites" : "Removed from favorites";
             Snackbar.Add(message, Severity.Success);
         }
@@ -84,12 +88,14 @@ public partial class CveDetails
     {
         try
         {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
-            await CveManager.ArchiveAsync(cve.Id, userId);
+            if (!await CveController.ArchiveForComponentsAsync(cve.Id))
+            {
+                Snackbar.Add("Error archiving CVE", Severity.Error);
+                return;
+            }
+
             cve.IsArchived = !cve.IsArchived;
-            
+
             var message = cve.IsArchived ? "CVE archived" : "CVE unarchived";
             Snackbar.Add(message, Severity.Success);
         }
