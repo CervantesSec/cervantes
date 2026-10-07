@@ -23,10 +23,11 @@ public class ChatController : ControllerBase
     private readonly IAiService _aiService = null;
     private IDocumentManager documentManager = null;
     private IProjectManager projectManager = null;
-    
-    public ChatController(IWebHostEnvironment env, ILogger<ChatController> logger,IHttpContextAccessor HttpContextAccessor, 
+    private IProjectUserManager projectUserManager = null;
+
+    public ChatController(IWebHostEnvironment env, ILogger<ChatController> logger,IHttpContextAccessor HttpContextAccessor,
         IChatManager chatManager, IChatMessageManager chatMessageManager ,Sanitizer Sanitizer, IAiService _aiService,
-        IDocumentManager documentManager, IProjectManager projectManager)
+        IDocumentManager documentManager, IProjectManager projectManager, IProjectUserManager projectUserManager)
     {
         this.chatManager = chatManager;
         this.chatMessageManager = chatMessageManager;
@@ -37,13 +38,21 @@ public class ChatController : ControllerBase
         this._aiService = _aiService;
         this.documentManager = documentManager;
         this.projectManager = projectManager;
+        this.projectUserManager = projectUserManager;
     }
     
     public IEnumerable<Chat> GetChats()
     {
         return chatManager.GetAll().Where(x => x.UserId == aspNetUserId);
     }
-    
+
+    public IEnumerable<CORE.Entities.Project> GetMemberProjects()
+    {
+        var projectIds = projectUserManager.GetAll().Where(x => x.UserId == aspNetUserId)
+            .Select(x => x.ProjectId).ToList();
+        return projectManager.GetAll().Where(x => projectIds.Contains(x.Id)).ToList();
+    }
+
     public IEnumerable<ChatMessageViewModel> GetMessages(Guid chatId)
     {
         var messages = chatMessageManager.GetAll().Where(x => x.ChatId == chatId);
@@ -65,6 +74,15 @@ public class ChatController : ControllerBase
     
     public async Task<Chat> CreateChat(CreateChatViewModel model)
     {
+        // A project chat loads the project data (findings, proofs of concept, targets) into the AI context,
+        // so only project members can create one.
+        if (model.Type == "Project" && projectUserManager.VerifyUser(model.ProjectId, aspNetUserId) == null)
+        {
+            _logger.LogWarning("Access denied creating an AI chat for project {ProjectId}. User: {UserId}",
+                model.ProjectId, aspNetUserId);
+            return null;
+        }
+
         var chat = new Chat
         {
             Id = Guid.NewGuid(),

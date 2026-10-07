@@ -19,7 +19,7 @@ Before reporting an access control issue, please take into account how access wo
 
 * **Roles grant read access to modules.** Each role has a set of permissions, such as `ReportsRead`, `VulnsRead` or `TasksRead`. A user with a read permission can view that module's data in every project, not only in the projects they are assigned to. This is intended: Cervantes is built for pentest teams that share knowledge across engagements.
 * **Project membership is required to change data.** Adding, editing or deleting project data (vulnerabilities, tasks, targets, notes, reports, etc.) also requires the user to be a member of that project.
-* Some modules, such as the Vault and checklists, also require project membership to read.
+* Some modules, such as the Vault, checklists and AI project chats, also require project membership to read.
 
 Administrators decide what each role can read on the **Roles** page (`/roles`). The default `User` role includes `ReportsRead` and `VulnsRead`, so every user with that role can view the findings and reports of all clients. If your organization needs need-to-know separation, remove those permissions from the relevant roles.
 

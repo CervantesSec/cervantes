@@ -19,7 +19,6 @@ namespace Cervantes.Web.Components.Pages.Chat;
 public partial class Chat: ComponentBase
 {
     [Inject] private ChatController _chatController { get; set; }
-    [Inject] private ProjectController _ProjectController { get; set; }
     [Inject] private DocumentController _DocumentController { get; set; }
    private List<ChatMessageViewModel> _messages = new();
     private List<ChatViewModel> _chatList = new();
@@ -111,7 +110,7 @@ public partial class Chat: ComponentBase
             CreateChatViewModel.ProjectId = Guid.Empty;
             CreateChatViewModel.DocumentId = Guid.Empty;
             Projects = new List<Project>();
-            Projects = _ProjectController.Get().ToList();
+            Projects = _chatController.GetMemberProjects().ToList();
             Console.WriteLine(Projects.Count());
             Documents = new List<Document>();
             Documents = _DocumentController.Get().ToList();
@@ -150,6 +149,7 @@ public partial class Chat: ComponentBase
             }
             else
             {
+                _isCreating = false;
                 Snackbar.Add(@localizer["chatCreatedError"], Severity.Error);
             }
 
