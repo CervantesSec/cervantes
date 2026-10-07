@@ -23,6 +23,7 @@ public class SearchController: ControllerBase
     private IVaultManager vaultManager = null;
     private IVulnCategoryManager vulnCategoryManager = null;
     private IVulnManager vulnManager = null;
+    private IProjectUserManager projectUserManager = null;
     private string aspNetUserId;
     private IHttpContextAccessor HttpContextAccessor;
 
@@ -43,7 +44,10 @@ public class SearchController: ControllerBase
         this.vaultManager = vaultManager;
         this.vulnCategoryManager = vulnCategoryManager;
         this.vulnManager = vulnManager;
+        this.projectUserManager = projectUserManager;
         _logger = logger;
+        // MainLayout also renders for anonymous users, so the user may be missing here.
+        aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
     public SearchViewModel Search(string search)
@@ -55,6 +59,10 @@ public class SearchController: ControllerBase
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
                 search = sanitizer.Sanitize(HttpUtility.HtmlDecode(search));
+                // The Vault module is limited to project members, so only search vault entries
+                // of the projects the current user belongs to.
+                var memberProjectIds = projectUserManager.GetAll().Where(x => x.UserId == aspNetUserId)
+                    .Select(x => x.ProjectId).ToList();
                 var model = new SearchViewModel
                 {
                     Users = userManager.GetAll().Where(x => x.FullName.Contains(search) || x.Email.Contains(search) ||
@@ -75,7 +83,8 @@ public class SearchController: ControllerBase
                         .Where(x => x.Name.Contains(search) || x.Description.Contains(search)).ToList(),
                     Tasks = taskManager.GetAll().Where(x => x.Name.Contains(search) || x.Description.Contains(search))
                         .ToList(),
-                    Vaults = vaultManager.GetAll().Where(x => x.Name.Contains(search) || x.Description.Contains(search))
+                    Vaults = vaultManager.GetAll().Where(x => memberProjectIds.Contains(x.ProjectId) &&
+                                                              (x.Name.Contains(search) || x.Description.Contains(search)))
                         .ToList(),
                     Vulns = vulnManager.GetAll().Where(x =>
                         x.Name.Contains(search) || x.Description.Contains(search) || x.Impact.Contains(search) ||
