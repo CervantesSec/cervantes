@@ -37,14 +37,13 @@ public class AiService : IAiService
     private IProjectManager projectManager;
     private IChatManager chatManager;
     private IChatMessageManager chatMessageManager;
-    private IVaultManager vaultManager;
     private ITaskTargetManager taskTargetManager;
     private readonly IConfiguration configuration;
 
     public AiService(IAiConfiguration aiConfiguration, IProjectUserManager projectUserManager, IVulnManager vulnManager,
         ITargetManager targetManager,
         IVulnTargetManager vulnTargetManager, IChatManager chatManager, IChatMessageManager chatMessageManager,
-        IConfiguration configuration, ITaskManager taskManager, IProjectManager projectManager, IVaultManager vaultManager, ITaskTargetManager taskTargetManager)
+        IConfiguration configuration, ITaskManager taskManager, IProjectManager projectManager, ITaskTargetManager taskTargetManager)
     {
         _aiConfiguration = aiConfiguration;
         this.projectUserManager = projectUserManager;
@@ -56,7 +55,6 @@ public class AiService : IAiService
         this.configuration = configuration;
         this.taskManager = taskManager;
         this.projectManager = projectManager;
-        this.vaultManager = vaultManager;
         this.taskTargetManager = taskTargetManager;
     }
 
@@ -946,15 +944,12 @@ public class AiService : IAiService
                             CreatedBy = new
                             {
                                 FullName = p.User.FullName,
-                                Position = p.User.Position,
-                                Email = p.User.Email
+                                Position = p.User.Position
                             },
                             Client = new
                             {
                                 Name = p.Client.Name,
                                 Description = p.Client.Description,
-                                Email = p.Client.ContactEmail,
-                                Phone = p.Client.ContactPhone,
                                 Url = p.Client.Url,
                                 Address = p.Client.ContactName,
                                 CreatedDate = p.Client.CreatedDate
@@ -969,8 +964,7 @@ public class AiService : IAiService
                         ProjectMembers = new
                         {
                             FullName = pu.User.FullName,
-                            Position = pu.User.Position,
-                            Email = pu.User.Email
+                            Position = pu.User.Position
                         }
                     }).ToList();
                 var taskIds = taskManager.GetAll().Where(x => x.ProjectId == projectId).Select(y => y.Id).ToList();
@@ -987,14 +981,12 @@ public class AiService : IAiService
                             AsignedTo = new
                             {
                                 FullName = pu.Task.AsignedUser.FullName,
-                                Position = pu.Task.AsignedUser.Position,
-                                Email = pu.Task.AsignedUser.Email
+                                Position = pu.Task.AsignedUser.Position
                             },
                             CreatedBy = new
                             {
                                 FullName = pu.Task.CreatedUser.FullName,
-                                Position = pu.Task.CreatedUser.Position,
-                                Email = pu.Task.CreatedUser.Email
+                                Position = pu.Task.CreatedUser.Position
                             },
                             Targets = new
                             {
@@ -1031,24 +1023,12 @@ public class AiService : IAiService
                         CreatedBy = new
                         {
                             FullName = pu.User.FullName,
-                            Position = pu.User.Position,
-                            Email = pu.User.Email
+                            Position = pu.User.Position
                         }
                     }
                 }).ToList();
-                var vaults = vaultManager.GetAll().Where(x => x.ProjectId == projectId).Include(x => x.User).Select(pu => new
-                    {
-                        Name = pu.Name,
-                        Description = pu.Description,
-                        Type = pu.Type.ToString(),
-                        CreatedDate = pu.CreatedDate,
-                        CreatedBy = new
-                        {
-                            FullName = pu.User.FullName,
-                            Position = pu.User.Position,
-                            Email = pu.User.Email
-                        }
-                    }).ToList();
+                // Vault entries, email addresses and phone numbers are not sent to the AI provider.
+                // Vault descriptions may hold secrets, and the AI does not need contact details.
                 var targets = targetManager.GetAll().Where(x => x.ProjectId == projectId).Include(x => x.User)
                     .Select(pu => new
                     {
@@ -1060,8 +1040,7 @@ public class AiService : IAiService
                             CreatedBy = new
                             {
                                 FullName = pu.User.FullName,
-                                Position = pu.User.Position,
-                                Email = pu.User.Email
+                                Position = pu.User.Position
                             }
                         }
                     }).ToList();
@@ -1070,7 +1049,7 @@ public class AiService : IAiService
                 foreach (var item in projectUsers)
                 {
                     membersInfo.AppendLine("## Member");
-                    membersInfo.Append($"- Name:{item.ProjectMembers.FullName}\n- Position:{item.ProjectMembers.Position}\n- Email:{item.ProjectMembers.Email}\n");
+                    membersInfo.Append($"- Name:{item.ProjectMembers.FullName}\n- Position:{item.ProjectMembers.Position}\n");
                 }
                 StringBuilder tasksInfo = new StringBuilder();
                 foreach (var item in tasks)
@@ -1081,8 +1060,8 @@ public class AiService : IAiService
                     tasksInfo.Append($"### Start Date\n{item.Task.StartDate.ToShortDateString()}\n");
                     tasksInfo.Append($"### End Date\n{item.Task.EndDate.ToShortDateString()}\n");
                     tasksInfo.Append($"### Status\n{item.Task.Status}\n");
-                    tasksInfo.Append($"### Asigned To\n- {item.Task.AsignedTo.FullName}\n- {item.Task.AsignedTo.Position}\n- {item.Task.AsignedTo.Email}\n");
-                    tasksInfo.Append($"### Created By\n- {item.Task.CreatedBy.FullName}\n- {item.Task.CreatedBy.Position}\n- {item.Task.CreatedBy.Email}\n");
+                    tasksInfo.Append($"### Asigned To\n- {item.Task.AsignedTo.FullName}\n- {item.Task.AsignedTo.Position}\n");
+                    tasksInfo.Append($"### Created By\n- {item.Task.CreatedBy.FullName}\n- {item.Task.CreatedBy.Position}\n");
                 }
                 StringBuilder vulnsInfo = new StringBuilder();
                 foreach (var item in vulns)
@@ -1107,18 +1086,8 @@ public class AiService : IAiService
                     vulnsInfo.Append($"### Mitre Techniques\n{item.Vulnerability.Mitre}\n");
                     vulnsInfo.Append($"### Cwes\n{string.Join(", ", item.Vulnerability.Cwes)}\n");
                     vulnsInfo.Append($"### Targets\n{string.Join(", ", item.Vulnerability.Targets)}\n");
-                    vulnsInfo.Append($"### Created By\n- {item.Vulnerability.CreatedBy.FullName}\n- {item.Vulnerability.CreatedBy.Position}\n- {item.Vulnerability.CreatedBy.Email}\n");
+                    vulnsInfo.Append($"### Created By\n- {item.Vulnerability.CreatedBy.FullName}\n- {item.Vulnerability.CreatedBy.Position}\n");
                     
-                }
-                StringBuilder vaultsInfo = new StringBuilder();
-                foreach (var item in vaults)
-                {
-                    tasksInfo.Append($"## Vault\n");
-                    vaultsInfo.Append($"### Name\n{item.Name}\n");
-                    vaultsInfo.Append($"### Description\n{converter.Convert(item.Description)}\n");
-                    vaultsInfo.Append($"### Type\n{item.Type}\n");
-                    vaultsInfo.Append($"### Created Date\n{item.CreatedDate.ToShortDateString()}\n");
-                    vaultsInfo.Append($"### Created By\n- {item.CreatedBy.FullName}\n- {item.CreatedBy.Position}\n- {item.CreatedBy.Email}\n");
                 }
                 StringBuilder targetsInfo = new StringBuilder();
                 foreach (var item in targets)
@@ -1127,7 +1096,7 @@ public class AiService : IAiService
                     targetsInfo.Append($"### Name\n{item.Target.Name}\n");
                     targetsInfo.Append($"### Description\n{converter.Convert(item.Target.Description)}\n");
                     targetsInfo.Append($"### Type\n{item.Target.Type}\n");
-                    targetsInfo.Append($"### Created By\n- {item.Target.CreatedBy.FullName}\n- {item.Target.CreatedBy.Position}\n- {item.Target.CreatedBy.Email}\n");
+                    targetsInfo.Append($"### Created By\n- {item.Target.CreatedBy.FullName}\n- {item.Target.CreatedBy.Position}\n");
                 }
                 
                 var info = $@"
@@ -1153,7 +1122,6 @@ public class AiService : IAiService
                 ##  Project Created By:
                 - {project.Project.CreatedBy.FullName}
                 - {project.Project.CreatedBy.Position}
-                - {project.Project.CreatedBy.Email}
                 # Project Executive Summary:
                 {converter.Convert(project.Project.ExecutiveSummary)}
                 # Client
@@ -1161,10 +1129,6 @@ public class AiService : IAiService
                 {project.Project.Client.Name}
                 ## Description
                 {converter.Convert(project.Project.Client.Description)}
-                ## Email
-                {project.Project.Client.Email}
-                ## Phone
-                {project.Project.Client.Phone}
                 ## Url
                 {project.Project.Client.Url}
                 ## Address
@@ -1178,8 +1142,6 @@ public class AiService : IAiService
                 {tasksInfo}
                 # Vulnerabilities
                 {vulnsInfo}
-                # Vaults
-                {vaultsInfo}
                 # Targets
                 {targetsInfo}
                 ";

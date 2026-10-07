@@ -25,6 +25,16 @@ Administrators decide what each role can read on the **Roles** page (`/roles`). 
 
 A user with a read permission viewing data from a project they are not a member of is expected behavior. Ways to add, change or delete project data without being a member of the project are in scope, and we would love to hear about them.
 
+## AI features
+
+AI features are disabled by default. When an administrator enables them (the `AIConfiguration` section in `appsettings.json`), Cervantes sends project data to the AI provider the administrator configured:
+
+* **Generation features** (vulnerability, executive summary and custom prompts) are available to roles with the `AIServiceUsage` permission. They send the vulnerability name; the project name, dates and description, the client name, member names, target names and vulnerability names with their risk and affected targets; or the text the user writes.
+* **Chats** require the `AIChatUsage` permission. When a project or document chat is created, the project data or the document text is sent to the text embedding provider, and the relevant parts are sent to the chat provider with each message. Project chats include project, client, task, vulnerability (proof of concept included) and target details. They do not include vault entries, email addresses or phone numbers. Only project members can create a project chat.
+* Chat context is stored in the Cervantes database, in the tables with the `sk_` prefix, until the chat is deleted.
+
+Sending this data to the provider the administrator configured is expected behavior. Proofs of concept often contain credentials or session tokens captured during a test. For engagements with sensitive data, use a provider you control, such as a local model, or keep AI features disabled.
+
 ## Exclusions
 
 While researching, we'd like to ask you to refrain from:
