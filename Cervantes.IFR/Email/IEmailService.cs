@@ -8,6 +8,7 @@ public interface IEmailService
 {
     void SendWelcome(string userId,string link);
     void SendAsignedProject(string userId,Guid projectId);
+    void SendMemberAddedToProject(string addedUserId, string addedByUserId, Guid projectId);
     void SendAsignedTask(string userId, Guid? projectId, Guid taskId);
     Task<bool> SendCveNotificationAsync(CveNotification notification);
     bool IsEnabled();

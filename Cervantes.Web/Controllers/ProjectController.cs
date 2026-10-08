@@ -403,6 +403,8 @@ public class ProjectController : ControllerBase
                         {
                             BackgroundJob.Enqueue(
                                 () => emailService.SendAsignedProject(item, model.ProjectId));
+                            BackgroundJob.Enqueue(
+                                () => emailService.SendMemberAddedToProject(item, aspNetUserId, model.ProjectId));
                         }
                         
                     }

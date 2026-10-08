@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
@@ -19,16 +20,18 @@ public class EmailService : IEmailService
     private readonly IProjectManager projectManager;
     private readonly IClientManager clientManager;
     private readonly ITaskManager taskManager;
+    private readonly IProjectUserManager projectUserManager;
 
     public EmailService(IEmailConfiguration emailConfiguration, IUserManager userManager,
         IProjectManager projectManager,
-        IClientManager clientManager, ITaskManager taskManager)
+        IClientManager clientManager, ITaskManager taskManager, IProjectUserManager projectUserManager)
     {
         _emailConfiguration = emailConfiguration;
         this.userManager = userManager;
         this.projectManager = projectManager;
         this.clientManager = clientManager;
         this.taskManager = taskManager;
+        this.projectUserManager = projectUserManager;
     }
 
     public bool IsEnabled()
@@ -174,6 +177,94 @@ public class EmailService : IEmailService
 
                 emailClient.Send(mimeMessage);
 
+                emailClient.Disconnect(true);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public void SendMemberAddedToProject(string addedUserId, string addedByUserId, Guid projectId)
+    {
+        try
+        {
+            if (_emailConfiguration.Enabled == false)
+            {
+                return;
+            }
+
+            var addedUser = userManager.GetByUserId(addedUserId);
+            var addedBy = userManager.GetByUserId(addedByUserId);
+            var project = projectManager.GetById(projectId);
+            if (addedUser == null || addedBy == null || project == null)
+            {
+                return;
+            }
+
+            var client = clientManager.GetById(project.ClientId);
+
+            var recipientIds = projectUserManager.GetAll()
+                .Where(x => x.ProjectId == projectId && x.UserId != addedUserId && x.UserId != addedByUserId)
+                .Select(x => x.UserId)
+                .ToList();
+
+            var to = new List<EmailAddress>();
+            foreach (var recipientId in recipientIds)
+            {
+                var recipient = userManager.GetByUserId(recipientId);
+                if (recipient == null || string.IsNullOrEmpty(recipient.Email))
+                {
+                    continue;
+                }
+
+                to.Add(new EmailAddress
+                {
+                    Address = recipient.Email,
+                    Name = recipient.FullName,
+                });
+            }
+
+            if (to.Count == 0)
+            {
+                return;
+            }
+
+            StreamReader sr =
+                new StreamReader(Directory.GetCurrentDirectory() + "/wwwroot/Resources/Email/MemberAddedToProject.html");
+            string s = sr.ReadToEnd();
+            s = s.Replace("{NewMember}", WebUtility.HtmlEncode(addedUser.FullName))
+                .Replace("{AddedBy}", WebUtility.HtmlEncode(addedBy.FullName))
+                .Replace("{Project}", WebUtility.HtmlEncode(project.Name))
+                .Replace("{Client}", WebUtility.HtmlEncode(client?.Name ?? string.Empty));
+            sr.Close();
+
+            EmailMessage message = new EmailMessage
+            {
+                ToAddresses = to,
+                Subject = "Cervantes - " + addedUser.FullName + " has been added to the project " + project.Name,
+                Content = s
+            };
+
+            var mimeMessage = new MimeMessage();
+            mimeMessage.To.AddRange(message.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
+            var from = new MailboxAddress(_emailConfiguration.Name, _emailConfiguration.From);
+            mimeMessage.From.Add(from);
+            mimeMessage.Subject = message.Subject;
+            mimeMessage.Body = new TextPart(TextFormat.Html)
+            {
+                Text = message.Content
+            };
+
+            using (var emailClient = new SmtpClient())
+            {
+                emailClient.Connect(_emailConfiguration.SmtpServer, _emailConfiguration.SmtpPort,
+                    SecureSocketOptions.Auto);
+                emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
+                emailClient.Authenticate(_emailConfiguration.SmtpUsername, _emailConfiguration.SmtpPassword);
+                emailClient.Send(mimeMessage);
                 emailClient.Disconnect(true);
             }
         }
