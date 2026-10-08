@@ -863,6 +863,7 @@ public class ProjectController : ControllerBase
 
     [HttpGet]
     [Route("GetCustomFieldValues/{projectId}")]
+    [HasPermission(Permissions.ProjectsRead)]
     public async Task<List<ProjectCustomFieldValue>> GetCustomFieldValues(Guid projectId)
     {
         try
@@ -880,10 +881,25 @@ public class ProjectController : ControllerBase
 
     [HttpPost]
     [Route("UpdateCustomFieldValues/{projectId}")]
+    [HasPermission(Permissions.ProjectCustomFieldsEdit)]
     public async Task<IActionResult> UpdateCustomFieldValues(Guid projectId, [FromBody] Dictionary<Guid, string> customFieldValues)
     {
         try
         {
+            var project = projectManager.GetById(projectId);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Changing project data requires membership in the project
+            if (projectUserManager.VerifyUser(projectId, aspNetUserId) == null)
+            {
+                _logger.LogWarning("Access denied updating custom fields of project {ProjectId}. User: {UserId}",
+                    projectId, aspNetUserId);
+                return StatusCode(403, "Access denied: User does not have permission to access this project");
+            }
+
             // Get existing values
             var existingValues = projectCustomFieldValueManager.GetAll()
                 .Where(v => v.ProjectId == projectId)
