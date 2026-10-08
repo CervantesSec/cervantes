@@ -18,12 +18,13 @@ No technology is perfect, and OWASP Cervantes believes that working with skilled
 Before reporting an access control issue, please take into account how access works in Cervantes:
 
 * **Roles grant read access to modules.** Each role has a set of permissions, such as `ReportsRead`, `VulnsRead` or `TasksRead`. A user with a read permission can view that module's data in every project, not only in the projects they are assigned to. This is intended: Cervantes is built for pentest teams that share knowledge across engagements.
-* **Project membership is required to change data.** Adding, editing or deleting project data (vulnerabilities, tasks, targets, notes, reports, etc.) also requires the user to be a member of that project.
-* Some modules, such as the Vault, checklists and AI project chats, also require project membership to read.
+* **Project membership is required to change project content.** Adding, editing or deleting project content (vulnerabilities, tasks, targets, notes, reports, attachments, etc.) also requires the user to be a member of that project. This applies to every role, including administrators.
+* **Project lifecycle and membership are role capabilities.** Creating, editing or deleting a project, and adding or removing its members, are governed by role permissions (`ProjectsAdd`, `ProjectsEdit`, `ProjectsDelete`, `ProjectMembersAdd`, `ProjectMembersDelete`) and do not require membership. The default `Manager` and `Admin` roles can therefore manage any project and add any user, including themselves, to it. Every membership change is recorded in the audit log and, when email is enabled, the existing members of the project are notified. If your organization needs per-project leads, remove those permissions from the role on the **Roles** page.
+* Some modules, such as the Vault, checklists and AI project chats, also require project membership to read. A user who holds the role permissions above can obtain that access by adding themselves to the project.
 
 Administrators decide what each role can read on the **Roles** page (`/roles`). The default `User` role includes `ReportsRead` and `VulnsRead`, so every user with that role can view the findings and reports of all clients. If your organization needs need-to-know separation, remove those permissions from the relevant roles.
 
-A user with a read permission viewing data from a project they are not a member of is expected behavior. Ways to add, change or delete project data without being a member of the project are in scope, and we would love to hear about them.
+A user with a read permission viewing data from a project they are not a member of, or a user with the role permissions above managing a project or its members, is expected behavior. Ways to add, change or delete project content without being a member of the project, or to manage projects or their members without the corresponding role permission, are in scope, and we would love to hear about them.
 
 ## AI features
 
