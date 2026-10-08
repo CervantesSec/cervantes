@@ -1,3 +1,4 @@
+using AuthPermissions.BaseCode.PermissionsCode;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -240,6 +241,13 @@ protected override async Task OnInitializedAsync()
     
     private async Task SaveProjectCustomFields()
     {
+        // The custom fields tab is only shown with ProjectCustomFieldsEdit. Do not write values the user cannot see.
+        if (!userAth.HasPermission(Cervantes.CORE.Permissions.ProjectCustomFieldsEdit)
+            || projectCustomFieldValues == null || !projectCustomFieldValues.Any())
+        {
+            return;
+        }
+
         try
         {
             var customFieldData = projectCustomFieldValues.ToDictionary(
@@ -247,8 +255,15 @@ protected override async Task OnInitializedAsync()
                 cf => cf.Value ?? string.Empty
             );
             
-            await _projectController.UpdateCustomFieldValues(project.Id, customFieldData);
-            Snackbar.Add("Custom fields saved successfully", Severity.Success);
+            var response = await _projectController.UpdateCustomFieldValues(project.Id, customFieldData);
+            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            {
+                Snackbar.Add("Custom fields saved successfully", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add("Error saving custom fields", Severity.Error);
+            }
         }
         catch (Exception ex)
         {
