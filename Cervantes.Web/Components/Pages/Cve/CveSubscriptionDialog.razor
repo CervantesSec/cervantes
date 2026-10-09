@@ -68,14 +68,21 @@
                     </MudItem>
                     
                     <MudItem xs="12" md="6">
-                        <MudNumericField @bind-Value="model.MinEpssScore" 
-                                         Label="@localizer["minEpssScore"]" 
-                                         Min="0" 
-                                         Max="1" 
+                        <MudNumericField @bind-Value="model.MinEpssScore"
+                                         Label="@localizer["minEpssScore"]"
+                                         Min="0"
+                                         Max="1"
                                          Step="0.001" />
                     </MudItem>
                     <MudItem xs="12" md="6">
-                        <MudSwitch @bind-Value="model.OnlyKnownExploited" 
+                        <MudNumericField @bind-Value="model.MaxEpssScore"
+                                         Label="@localizer["maxEpssScore"]"
+                                         Min="0"
+                                         Max="1"
+                                         Step="0.001" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudSwitch @bind-Value="model.OnlyKnownExploited"
                                    Label="@localizer["knownExploitedOnly"]" 
                                    Color="Color.Error" />
                     </MudItem>

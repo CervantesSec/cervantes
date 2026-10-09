@@ -2977,6 +2977,9 @@ Option 3</value>
     <data name="minEpssScore" xml:space="preserve">
         <value>Min EPSS Score</value>
     </data>
+    <data name="maxEpssScore" xml:space="preserve">
+        <value>Max EPSS Score</value>
+    </data>
     <data name="addCustomKeyword" xml:space="preserve">
         <value>Add Custom Keyword</value>
     </data>

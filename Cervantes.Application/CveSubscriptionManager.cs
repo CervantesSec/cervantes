@@ -157,6 +157,11 @@ public class CveSubscriptionManager : GenericManager<CveSubscription>, ICveSubsc
             return false;
         }
 
+        if (subscription.MaxEpssScore.HasValue && cve.EpssScore > subscription.MaxEpssScore.Value)
+        {
+            return false;
+        }
+
         // Check known exploited filter
         if (subscription.OnlyKnownExploited && !cve.IsKnownExploited)
         {
@@ -263,6 +268,7 @@ public class CveSubscriptionManager : GenericManager<CveSubscription>, ICveSubsc
         subscription.MinCvssScore = filters.MinCvssScore;
         subscription.MaxCvssScore = filters.MaxCvssScore;
         subscription.MinEpssScore = filters.MinEpssScore;
+        subscription.MaxEpssScore = filters.MaxEpssScore;
         subscription.OnlyKnownExploited = filters.OnlyKnownExploited;
         subscription.CweFilter = JsonSerializer.Serialize(filters.CweFilter);
         subscription.ModifiedDate = DateTime.UtcNow;
@@ -474,6 +480,19 @@ public class CveSubscriptionManager : GenericManager<CveSubscription>, ICveSubsc
         if (subscription.MinEpssScore.HasValue && (subscription.MinEpssScore < 0 || subscription.MinEpssScore > 1))
         {
             result.Errors.Add("Minimum EPSS score must be between 0.0 and 1.0");
+            result.IsValid = false;
+        }
+
+        if (subscription.MaxEpssScore.HasValue && (subscription.MaxEpssScore < 0 || subscription.MaxEpssScore > 1))
+        {
+            result.Errors.Add("Maximum EPSS score must be between 0.0 and 1.0");
+            result.IsValid = false;
+        }
+
+        if (subscription.MinEpssScore.HasValue && subscription.MaxEpssScore.HasValue &&
+            subscription.MinEpssScore > subscription.MaxEpssScore)
+        {
+            result.Errors.Add("Minimum EPSS score cannot be greater than maximum EPSS score");
             result.IsValid = false;
         }
 

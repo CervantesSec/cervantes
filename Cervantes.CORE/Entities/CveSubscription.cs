@@ -68,6 +68,11 @@ public class CveSubscription
     public double? MinEpssScore { get; set; }
 
     /// <summary>
+    /// Maximum EPSS score threshold
+    /// </summary>
+    public double? MaxEpssScore { get; set; }
+
+    /// <summary>
     /// Whether to only monitor CISA KEV listed CVEs
     /// </summary>
     public bool OnlyKnownExploited { get; set; }

@@ -588,6 +588,7 @@ public class CveController : ControllerBase
             existingSubscription.MinCvssScore = subscription.MinCvssScore;
             existingSubscription.MaxCvssScore = subscription.MaxCvssScore;
             existingSubscription.MinEpssScore = subscription.MinEpssScore;
+            existingSubscription.MaxEpssScore = subscription.MaxEpssScore;
             existingSubscription.OnlyKnownExploited = subscription.OnlyKnownExploited;
             existingSubscription.CweFilter = subscription.CweFilter;
             existingSubscription.NotificationFrequency = subscription.NotificationFrequency;
@@ -1097,6 +1098,7 @@ public class CveController : ControllerBase
             existingSubscription.MinCvssScore = subscription.MinCvssScore;
             existingSubscription.MaxCvssScore = subscription.MaxCvssScore;
             existingSubscription.MinEpssScore = subscription.MinEpssScore;
+            existingSubscription.MaxEpssScore = subscription.MaxEpssScore;
             existingSubscription.OnlyKnownExploited = subscription.OnlyKnownExploited;
             existingSubscription.CweFilter = subscription.CweFilter;
             existingSubscription.NotificationFrequency = subscription.NotificationFrequency;
