@@ -55,7 +55,7 @@ namespace Cervantes.DAL;
 
                 if (_httpContextAccessor.HttpContext != null)
                 {
-                    auditEntry.IpAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+                    auditEntry.IpAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
                     auditEntry.Browser = _httpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
                 }
                 
