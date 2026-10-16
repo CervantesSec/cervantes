@@ -193,7 +193,7 @@ public partial class Index: ComponentBase
         {
 
             var response = await _UserController.ProfileEdit(modelEdit);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(localizer["profileEdited"], Severity.Success);
                 StateHasChanged();
