@@ -7,6 +7,8 @@ using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
+using Cervantes.IFR.Email;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +22,15 @@ public class ApiKeysController : ControllerBase
 {
     private readonly IApiKeyManager _apiKeyManager;
     private readonly IHttpContextAccessor HttpContextAccessor;
+    private readonly IEmailService _emailService;
     private readonly string? aspNetUserId;
 
-    public ApiKeysController(IApiKeyManager apiKeyManager, IHttpContextAccessor HttpContextAccessor)
+    public ApiKeysController(IApiKeyManager apiKeyManager, IHttpContextAccessor HttpContextAccessor,
+        IEmailService emailService)
     {
         _apiKeyManager = apiKeyManager;
         this.HttpContextAccessor = HttpContextAccessor;
+        _emailService = emailService;
         // ControllerBase.User is not populated when Blazor components call this controller in-process,
         // so resolve the current user from the accessor.
         aspNetUserId = HttpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -75,6 +80,12 @@ public class ApiKeysController : ControllerBase
         if (!ModelState.IsValid) return BadRequest(ModelState);
         if (!CanManage(req.UserId)) return Forbid();
         var (plaintext, created) = await _apiKeyManager.GenerateAsync(req.UserId, req.Name, req.ExpiresAt);
+        // Tell the key's owner. Metadata only: the plaintext key is never handed to the job.
+        if (_emailService.IsEnabled())
+        {
+            BackgroundJob.Enqueue(() => _emailService.SendApiKeyCreated(
+                created.UserId, created.Name, created.KeyPrefix, created.ExpiresAt));
+        }
         return Ok(new CreateApiKeyResponse(plaintext, created.Id, created.KeyPrefix, created.ExpiresAt));
     }
 
@@ -104,6 +115,12 @@ public class ApiKeysController : ControllerBase
         var rotated = await _apiKeyManager.RotateAsync(id, req?.ExpiresAt);
         if (rotated == null) return NotFound();
         var (plaintext, newKey) = rotated.Value;
+        // Rotation mints a new key, so the owner gets the same notice. Metadata only.
+        if (_emailService.IsEnabled())
+        {
+            BackgroundJob.Enqueue(() => _emailService.SendApiKeyCreated(
+                newKey.UserId, newKey.Name, newKey.KeyPrefix, newKey.ExpiresAt));
+        }
         return Ok(new CreateApiKeyResponse(plaintext, newKey.Id, newKey.KeyPrefix, newKey.ExpiresAt));
     }
 }

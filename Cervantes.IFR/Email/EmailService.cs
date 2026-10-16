@@ -371,6 +371,75 @@ public class EmailService : IEmailService
         }
     }
 
+    public void SendApiKeyCreated(string userId, string? keyName, string keyPrefix, DateTimeOffset? expiresAt)
+    {
+        try
+        {
+            if (_emailConfiguration.Enabled == false)
+            {
+                return;
+            }
+
+            var user = userManager.GetByUserId(userId);
+            if (user == null || string.IsNullOrEmpty(user.Email))
+            {
+                return;
+            }
+
+            var to = new List<EmailAddress>();
+            to.Add(new EmailAddress
+            {
+                Address = user.Email,
+                Name = user.FullName,
+            });
+
+
+            StreamReader sr =
+                new StreamReader(Directory.GetCurrentDirectory() + "/wwwroot/Resources/Email/ApiKeyCreated.html");
+            string s = sr.ReadToEnd();
+            // Metadata only: the plaintext key and its secret never reach this method. The template is HTML and the
+            // key name / full name are user-supplied, so every value is HTML-encoded before substitution.
+            s = s.Replace("{UserName}", WebUtility.HtmlEncode(user.FullName))
+                .Replace("{KeyName}", WebUtility.HtmlEncode(string.IsNullOrEmpty(keyName) ? "(unnamed)" : keyName))
+                .Replace("{KeyPrefix}", WebUtility.HtmlEncode(keyPrefix ?? string.Empty))
+                .Replace("{ExpiresAt}", WebUtility.HtmlEncode(expiresAt?.ToString("u") ?? "never"));
+            sr.Close();
+
+            EmailMessage message = new EmailMessage
+            {
+                ToAddresses = to,
+                Subject = "Cervantes - New API key created on your account",
+                Content = s
+            };
+
+
+            var mimeMessage = new MimeMessage();
+            mimeMessage.To.AddRange(message.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
+            var from = new MailboxAddress(_emailConfiguration.Name, _emailConfiguration.From);
+            mimeMessage.From.Add(from);
+            mimeMessage.Subject = message.Subject;
+            mimeMessage.Body = new TextPart(TextFormat.Html)
+            {
+                Text = message.Content
+            };
+
+            using (var emailClient = new SmtpClient())
+            {
+                emailClient.Connect(_emailConfiguration.SmtpServer, _emailConfiguration.SmtpPort,
+                    SecureSocketOptions.Auto);
+                emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
+                emailClient.Authenticate(_emailConfiguration.SmtpUsername, _emailConfiguration.SmtpPassword);
+                emailClient.Send(mimeMessage);
+                emailClient.Disconnect(true);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     public async Task<bool> SendCveNotificationAsync(CveNotification notification)
     {
         try

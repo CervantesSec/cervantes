@@ -10,6 +10,7 @@ public interface IEmailService
     void SendAsignedProject(string userId,Guid projectId);
     void SendMemberAddedToProject(string addedUserId, string addedByUserId, Guid projectId);
     void SendAsignedTask(string userId, Guid? projectId, Guid taskId);
+    void SendApiKeyCreated(string userId, string? keyName, string keyPrefix, DateTimeOffset? expiresAt);
     Task<bool> SendCveNotificationAsync(CveNotification notification);
     bool IsEnabled();
 }
