@@ -313,6 +313,31 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+// Content-Security-Policy, Report-Only for now: the browser logs violations to the DevTools console and blocks
+// nothing. Rename the header to "Content-Security-Policy" to enforce, once the UI runs without violations.
+// script-src has no 'unsafe-inline' on purpose: that is what stops an injected <script> or inline handler.
+// style-src 'unsafe-inline': MudBlazor and TinyMCE inject inline styles. The Google Fonts hosts serve Roboto (App.razor).
+// connect-src ws:/wss: is the Blazor Server SignalR circuit. blob: in img-src/connect-src is required by TinyMCE.
+// object-src 'self' keeps the <embed> attachment previews working (the files come from FileController).
+// form-action does not fall back to default-src, so it is explicit: a stored <form action="https://evil"> cannot post offsite.
+const string contentSecurityPolicy =
+    "default-src 'self'; " +
+    "script-src 'self'; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "img-src 'self' data: blob:; " +
+    "font-src 'self' data: https://fonts.gstatic.com; " +
+    "connect-src 'self' blob: wss: ws:; " +
+    "frame-ancestors 'self'; " +
+    "form-action 'self'; " +
+    "object-src 'self'; " +
+    "base-uri 'self'";
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Content-Security-Policy-Report-Only"] = contentSecurityPolicy;
+    await next();
+});
+
 app.Use(MudExWebApp.MudExMiddleware);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
