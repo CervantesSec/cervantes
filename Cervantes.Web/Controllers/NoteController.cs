@@ -74,7 +74,12 @@ public class NoteController : Controller
                 var note = noteManager.GetById(model.Id);
                 if (note != null)
                 {
-                    
+                    // Notes are private to their author, same rule as Delete.
+                    if (note.UserId != aspNetUserId)
+                    {
+                        return NotFound();
+                    }
+
                     note.Name = sanitizer.Sanitize(model.Name);
                     note.Description = sanitizer.Sanitize(model.Description);
                     await noteManager.Context.SaveChangesAsync();

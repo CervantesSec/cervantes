@@ -64,6 +64,7 @@ public class UserController: ControllerBase
         _logger = logger;
         this.env = env;
         this.emailService = emailService;
+        this.HttpContextAccessor = HttpContextAccessor;
         if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated == true)
         {
             aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -74,7 +75,17 @@ public class UserController: ControllerBase
         this.authRolesAdminService = authRolesAdminService;
         this.authUsersAdminService = authUsersAdminService;
     }
-    
+
+    /// <summary>
+    /// [HasPermission] is not evaluated when Blazor components call this controller in-process, and the profile
+    /// page (open to every signed-in user) calls Delete and DeleteAvatar. A user may act on their own account;
+    /// acting on any other account needs the permission the attribute names.
+    /// </summary>
+    [NonAction]
+    private bool CanActOnUser(string targetUserId, Permissions permission) =>
+        (aspNetUserId != null && targetUserId == aspNetUserId) ||
+        HttpContextAccessor?.HttpContext?.User.HasPermission(permission) == true;
+
     [HttpGet]
     [HasPermission(Permissions.UsersRead)]
     public IEnumerable<CORE.Entities.ApplicationUser> Get()
@@ -525,6 +536,13 @@ public class UserController: ControllerBase
     [HasPermission(Permissions.UsersDelete)]
     public async Task<IActionResult> Delete(string userId)
     {
+        // Checked outside the try so a denial is not logged as an error.
+        if (!CanActOnUser(userId, Permissions.UsersDelete))
+        {
+            _logger.LogWarning("Access denied deleting user {TargetUserId}. User: {UserId}", userId, aspNetUserId);
+            return Forbid();
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -568,6 +586,13 @@ public class UserController: ControllerBase
     [HasPermission(Permissions.UsersEdit)]
     public async Task<IActionResult> DeleteAvatar(string id)
     {
+        // Checked outside the try so a denial is not logged as an error.
+        if (!CanActOnUser(id, Permissions.UsersEdit))
+        {
+            _logger.LogWarning("Access denied deleting the avatar of user {TargetUserId}. User: {UserId}", id, aspNetUserId);
+            return Forbid();
+        }
+
         try
         {
             var user = usrManager.GetByUserId(id);

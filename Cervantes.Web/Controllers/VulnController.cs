@@ -805,7 +805,7 @@ public class VulnController: ControllerBase
                 var vuln = vulnManager.GetById(model.VulnId);
                 if (vuln != null)
                 {
-                    if (vuln.Project != null)
+                    if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
                     {
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
@@ -863,7 +863,7 @@ public class VulnController: ControllerBase
                 var vuln = vulnManager.GetById(note.VulnId);
                 if (vuln != null)
                 {
-                    if (vuln.Project != null)
+                    if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
                     {
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
@@ -901,21 +901,23 @@ public class VulnController: ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var vuln = vulnManager.GetById(model.VulnId);
-                if (vuln != null)
-                {
-                    if (vuln.Project != null)
-                    {
-                        var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
-                        if (user == null)
-                        {
-                            return StatusCode(403, "You do not have permission to access this project");
-                        }
-                    }
-                }
-                
                 var note = vulnNoteManager.GetById(model.Id);
-                note.Id = model.Id;
+                if (note == null)
+                {
+                    return NotFound("Vulnerability note not found");
+                }
+
+                // Authorize against the note's current parent vuln (from the DB), never the one sent in the request.
+                // Moving the note to another vuln also requires membership in the destination vuln's project.
+                var currentVuln = vulnManager.GetById(note.VulnId);
+                var destinationVuln = vulnManager.GetById(model.VulnId);
+                if (!CanWriteProject(currentVuln?.ProjectId) || !CanWriteProject(destinationVuln?.ProjectId))
+                {
+                    _logger.LogWarning("Access denied editing vuln note {NoteId}. User: {UserId}",
+                        note.Id, aspNetUserId);
+                    return StatusCode(403, "You do not have permission to access this project");
+                }
+
                 note.VulnId = model.VulnId;
                 note.Name = Sanitizer.Sanitize(model.Name);
                 note.Description = Sanitizer.Sanitize(model.Description);
@@ -952,7 +954,7 @@ public class VulnController: ControllerBase
                 var vuln = vulnManager.GetById(model.VulnId);
                 if (vuln != null)
                 {
-                    if (vuln.Project != null)
+                    if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
                     {
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
@@ -1016,9 +1018,10 @@ public class VulnController: ControllerBase
             if (tar != null)
             {
   
-                    if (tar.Vuln.Project != null)
+                    var vuln = vulnManager.GetById(tar.VulnId);
+                    if (vuln != null && vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
                     {
-                        var user = projectUserManager.VerifyUser(tar.Vuln.ProjectId.Value, aspNetUserId);
+                        var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
                             return StatusCode(403, "You do not have permission to access this project");
@@ -1056,7 +1059,7 @@ public class VulnController: ControllerBase
                 var vuln = vulnManager.GetById(model.VulnId);
                 if (vuln != null)
                 {
-                    if (vuln.Project != null)
+                    if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
                     {
                         var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
@@ -1146,9 +1149,10 @@ public class VulnController: ControllerBase
                 var attachment = vulnAttachmentManager.GetById(id);
                 if (attachment.Id != Guid.Empty)
                 {
-                    if (attachment.Vuln.Project != null)
+                    var vuln = vulnManager.GetById(attachment.VulnId);
+                    if (vuln != null && vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
                     {
-                        var user = projectUserManager.VerifyUser(attachment.Vuln.ProjectId.Value, aspNetUserId);
+                        var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
                             return StatusCode(403, "You do not have permission to access this project");

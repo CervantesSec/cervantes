@@ -40,7 +40,29 @@ public class ChatController : ControllerBase
         this.projectManager = projectManager;
         this.projectUserManager = projectUserManager;
     }
-    
+
+    /// <summary>
+    /// Returns the chat only when it belongs to the current user, otherwise null. This controller is only called
+    /// in-process (no HTTP surface and no permission attributes), so nothing else stops a caller from passing
+    /// another user's chat id.
+    /// </summary>
+    private Chat GetOwnChat(Guid chatId)
+    {
+        var chat = chatManager.GetById(chatId);
+        if (chat == null)
+        {
+            return null;
+        }
+
+        if (chat.UserId != aspNetUserId)
+        {
+            _logger.LogWarning("Access denied to AI chat {ChatId}. User: {UserId}", chatId, aspNetUserId);
+            return null;
+        }
+
+        return chat;
+    }
+
     public IEnumerable<Chat> GetChats()
     {
         return chatManager.GetAll().Where(x => x.UserId == aspNetUserId);
@@ -55,6 +77,11 @@ public class ChatController : ControllerBase
 
     public IEnumerable<ChatMessageViewModel> GetMessages(Guid chatId)
     {
+        if (GetOwnChat(chatId) == null)
+        {
+            return new List<ChatMessageViewModel>();
+        }
+
         var messages = chatMessageManager.GetAll().Where(x => x.ChatId == chatId);
         var chatMessages = new List<ChatMessageViewModel>();
         foreach (var item in messages)
@@ -117,7 +144,7 @@ public class ChatController : ControllerBase
     
     public async Task<Chat> EditChat(Guid chatId, string title)
     {
-        var chat = chatManager.GetById(chatId);
+        var chat = GetOwnChat(chatId);
         if (chat == null)
         {
             return null;
@@ -133,7 +160,7 @@ public class ChatController : ControllerBase
     {
         try
         {
-            var chat = chatManager.GetById(chatId);
+            var chat = GetOwnChat(chatId);
             if (chat == null)
             {
                 return false;
@@ -158,8 +185,15 @@ public class ChatController : ControllerBase
     
     public async Task<ChatMessageViewModel> AddMessage(ChatMessageCreateViewModel model)
     {
+        // The AI call below answers from the chat's context (project findings, documents), so a chat that is
+        // not the caller's must not be reachable by id. Checked outside the try so a denial is not logged as an error.
+        if (GetOwnChat(model.ChatId) == null)
+        {
+            throw new UnauthorizedAccessException("The chat does not exist or does not belong to the current user");
+        }
+
         try{
-            
+
         var index = chatMessageManager.GetAll().Count(x => x.ChatId == model.ChatId);
         var chatMessage = new ChatMessage()
         {

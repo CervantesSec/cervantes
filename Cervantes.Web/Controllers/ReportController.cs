@@ -436,6 +436,13 @@ public class ReportController : ControllerBase
                 var report = reportManager.GetById(reportId);
                 if (report != null)
                 {
+                    // Reports belong to a project: only its members may delete them (same rule as EditReport).
+                    var user = projectUserManager.VerifyUser(report.ProjectId, aspNetUserId);
+                    if (user == null)
+                    {
+                        return StatusCode(403, "Access denied. You don't have permission to delete reports in this project.");
+                    }
+
                     reportManager.Remove(report);
                     await reportTemplateManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Report deleted successfully. User: {0}",
