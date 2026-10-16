@@ -1,5 +1,6 @@
 using System.Configuration;
 using System.Security.Claims;
+using System.Text.Json.Serialization.Metadata;
 using AngleSharp;
 using AuthPermissions;
 using AuthPermissions.AspNetCore;
@@ -215,7 +216,12 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 });
 
-builder.Services.AddControllers();
+// API responses never carry user credential fields (see UserJsonModifiers). Backups serialize separately.
+builder.Services.AddControllers().AddJsonOptions(options =>
+    options.JsonSerializerOptions.TypeInfoResolver = new DefaultJsonTypeInfoResolver
+    {
+        Modifiers = { UserJsonModifiers.HideUserSecrets }
+    });
 
 /*builder.Services.AddServerSideBlazor().AddHubOptions(o =>
 {
