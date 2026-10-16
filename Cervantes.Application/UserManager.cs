@@ -49,7 +49,7 @@ public class UserManager : GenericManager<ApplicationUser>, IUserManager, IUserS
         throw new NotImplementedException();
     }
 
-    // IUserStore<ApplicationUser> is IDisposable. The DbContext and the Identity UserManager used here are owned
+    // IUserStore<ApplicationUser> is IDisposable. The DbContext and the Identity UserManager held here are owned
     // and disposed by the DI container, so there is nothing to release. Throwing here made every DI scope that
     // resolved this manager fail on disposal: Hangfire then marked email jobs Failed after the mail was sent and
     // retried them, sending duplicates.

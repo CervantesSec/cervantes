@@ -127,6 +127,7 @@ public static class ControllerServiceExtensions
     public static IServiceCollection AddHelperServices(this IServiceCollection services)
     {
         services.AddScoped<Sanitizer>();
+        services.AddScoped<StoredHtmlResanitizer>();
         
         return services;
     }

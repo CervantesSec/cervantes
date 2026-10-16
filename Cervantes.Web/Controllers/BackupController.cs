@@ -8,6 +8,8 @@ using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.File;
+using Cervantes.Web.Helpers;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +59,7 @@ public class BackupController : ControllerBase
     private IReportsPartsManager reportsPartsManager;
     private IKnowledgeBaseManager knowledgeBaseManager;
     private IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager;
+    private readonly StoredHtmlResanitizer resanitizer;
 
     public BackupController(IUserManager userManager,
         Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> usrManager, IClientManager clientManager,
@@ -75,8 +78,9 @@ public class BackupController : ControllerBase
         IJiraCommentManager jiraCommentManager, IHttpContextAccessor HttpContextAccessor,
         IFileCheck fileCheck, IReportComponentsManager reportComponentsManager,
         IReportsPartsManager reportsPartsManager, IKnowledgeBaseManager knowledgeBaseManager,
-        IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager)
+        IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager, StoredHtmlResanitizer resanitizer)
     {
+        this.resanitizer = resanitizer;
         this.userManager = userManager;
         _userManager = usrManager;
         this.clientManager = clientManager;
@@ -1616,6 +1620,22 @@ public class BackupController : ControllerBase
                 await knowledgeBaseManager.Context.SaveChangesAsync();
             }
 
+            // A backup can carry HTML stored before a sanitizer fix (or crafted by hand); clean it like any write.
+            // The rows are already committed here, so a failure must not turn the restore into a 400: queue the
+            // same pass in a fresh scope instead.
+            try
+            {
+                var changed = await resanitizer.RunAsync();
+                _logger.LogInformation("Restored data re-sanitized, {Changed} fields changed. User: {UserId}",
+                    changed, aspNetUserId);
+            }
+            catch (Exception resanitizeEx)
+            {
+                _logger.LogError(resanitizeEx, "Re-sanitizing restored data failed, queueing a background run. User: {UserId}",
+                    aspNetUserId);
+                QueueResanitize();
+            }
+
             System.IO.File.Delete(path);
             _logger.LogInformation("Data restored successfully. User: {0}",
                 aspNetUserId);
@@ -1625,7 +1645,48 @@ public class BackupController : ControllerBase
         {
             _logger.LogError(ex, "An error ocurred restoring data. User: {0}",
                 aspNetUserId);
+            // Earlier entity blocks were already committed with their own SaveChangesAsync; clean them in a fresh
+            // scope, since this request's DbContext may hold failed entries.
+            QueueResanitize();
             return await System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest());
+        }
+    }
+
+    /// <summary>
+    /// Queues <see cref="StoredHtmlResanitizer"/> as a background job (it runs in its own DI scope). Never throws:
+    /// callers are on a failure path that must keep its own response.
+    /// </summary>
+    private void QueueResanitize()
+    {
+        try
+        {
+            BackgroundJob.Enqueue<StoredHtmlResanitizer>(r => r.RunAsync());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Could not queue the stored HTML re-sanitize job. User: {UserId}", aspNetUserId);
+        }
+    }
+
+    /// <summary>
+    /// Re-sanitizes stored HTML (see <see cref="StoredHtmlResanitizer"/>). Run once after upgrading to a release
+    /// that fixes the sanitizer. Not called by any component, so the attribute is enforced (HTTP only).
+    /// </summary>
+    [HttpPost]
+    [Route("Resanitize")]
+    [HasPermission(Permissions.BackupRestore)]
+    public async Task<IActionResult> Resanitize()
+    {
+        try
+        {
+            var changed = await resanitizer.RunAsync();
+            _logger.LogInformation("Stored HTML re-sanitized, {Changed} fields changed. User: {UserId}", changed, aspNetUserId);
+            return Ok(new { changed });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred re-sanitizing stored data. User: {UserId}", aspNetUserId);
+            return StatusCode(500, "An error occurred while re-sanitizing stored data. Please try again later.");
         }
     }
 }
