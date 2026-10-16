@@ -228,6 +228,10 @@ public class UserController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                // An omitted (null) description keeps the stored one.
+                var description = model.Description ?? authRolesAdminService.QueryRoleToPermissions()
+                    .Where(x => x.RoleName == model.Name).Select(x => x.Description).FirstOrDefault();
+
                 if (model.Permissions.Contains("Admin"))
                 {
                     IEnumerable<string> permissionNames = new List<string>
@@ -239,7 +243,7 @@ public class UserController: ControllerBase
                     
                     await authRolesAdminService.UpdateRoleToPermissionsAsync(
                         model.Name, permissionNames2,
-                        sanitizer.Sanitize(model.Description),
+                        sanitizer.Sanitize(description),
                         // Use a known valid role type to avoid NullReferenceException
                         RoleTypes.Normal);
                 }
@@ -248,7 +252,7 @@ public class UserController: ControllerBase
                     await authRolesAdminService.UpdateRoleToPermissionsAsync(
                         model.Name,
                         model.Permissions,
-                        sanitizer.Sanitize(model.Description),
+                        sanitizer.Sanitize(description),
                         // Use a known valid role type to avoid NullReferenceException
                         RoleTypes.Normal);
                 }
@@ -321,6 +325,12 @@ public class UserController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                // A local account needs a password and a matching confirmation; external (LDAP/OpenID) accounts do not.
+                if (!model.ExternalLogin && (string.IsNullOrWhiteSpace(model.Password) || model.Password != model.ConfirmPassword))
+                {
+                    return BadRequest("A password and a matching confirmation are required for local accounts");
+                }
+
                 var user = new ApplicationUser();
                 var path = "";
                 var unique = "";
@@ -405,6 +415,12 @@ public class UserController: ControllerBase
         {
             if (ModelState.IsValid)
             {
+                // The password only changes when a new one is sent, and it must match its confirmation.
+                if (!string.IsNullOrWhiteSpace(model.Password) && model.Password != model.ConfirmPassword)
+                {
+                    return BadRequest("The password confirmation does not match");
+                }
+
                 var user = usrManager.GetByUserId(model.Id);
                 var path = "";
                 var unique = "";
@@ -438,10 +454,23 @@ public class UserController: ControllerBase
                 user.NormalizedEmail = sanitizer.Sanitize(model.Email.ToUpper());
                 user.SecurityStamp = Guid.NewGuid().ToString();
                 user.ConcurrencyStamp = Guid.NewGuid().ToString();
-                user.PhoneNumber = sanitizer.Sanitize(model.PhoneNumber);
                 user.FullName = sanitizer.Sanitize(model.FullName);
-                user.Description = sanitizer.Sanitize(model.Description);
-                user.Position = sanitizer.Sanitize(model.Position);
+                // Optional profile fields: an omitted (null) value keeps the stored one.
+                if (model.PhoneNumber != null)
+                {
+                    user.PhoneNumber = sanitizer.Sanitize(model.PhoneNumber);
+                }
+
+                if (model.Description != null)
+                {
+                    user.Description = sanitizer.Sanitize(model.Description);
+                }
+
+                if (model.Position != null)
+                {
+                    user.Position = sanitizer.Sanitize(model.Position);
+                }
+
                 user.TwoFactorEnabled = model.TwoFactorEnabled;
                 user.ExternalLogin = model.ExternalLogin;
                 if (model.Lockout)
@@ -453,7 +482,7 @@ public class UserController: ControllerBase
                     user.LockoutEnd = null;
                 }
                 
-                if (model.Password != null)
+                if (!string.IsNullOrWhiteSpace(model.Password))
                 {
                     var hasher = new PasswordHasher<ApplicationUser>();
                     user.PasswordHash = hasher.HashPassword(user, model.Password);
@@ -461,10 +490,24 @@ public class UserController: ControllerBase
 
                 await usrManager.Context.SaveChangesAsync();
 
+                // Keep the AuthPermissions copy of the user (email, user name, roles) in sync. An omitted role keeps the
+                // user's current roles.
+                var roles = new List<string>();
                 if (!string.IsNullOrEmpty(model.Role))
                 {
-                    var roles = new List<string>();
                     roles.Add(model.Role);
+                }
+                else
+                {
+                    var authUser = await authUsersAdminService.FindAuthUserByUserIdAsync(user.Id);
+                    if (authUser.Result != null)
+                    {
+                        roles.AddRange(authUser.Result.UserRoles.Select(x => x.RoleName));
+                    }
+                }
+
+                if (roles.Count > 0)
+                {
                     await authUsersAdminService.UpdateUserAsync(user.Id, user.Email, user.UserName, roles);
                 }
                 
@@ -504,10 +547,23 @@ public class UserController: ControllerBase
                     //user.UserName = sanitizer.Sanitize(model.Email));
                     //user.NormalizedUserName = sanitizer.Sanitize(model.Email));
                     //user.Email = sanitizer.Sanitize(model.Email));
-                    user.PhoneNumber = sanitizer.Sanitize(model.PhoneNumber);
                     user.FullName = sanitizer.Sanitize(model.FullName);
-                    user.Description = sanitizer.Sanitize(model.Description);
-                    user.Position = sanitizer.Sanitize(model.Position);
+                    // Optional profile fields: an omitted (null) value keeps the stored one.
+                    if (model.PhoneNumber != null)
+                    {
+                        user.PhoneNumber = sanitizer.Sanitize(model.PhoneNumber);
+                    }
+
+                    if (model.Description != null)
+                    {
+                        user.Description = sanitizer.Sanitize(model.Description);
+                    }
+
+                    if (model.Position != null)
+                    {
+                        user.Position = sanitizer.Sanitize(model.Position);
+                    }
+
                     await usrManager.Context.SaveChangesAsync();
                 
                     _logger.LogInformation("User edited successfully. User: {0}",

@@ -40,7 +40,7 @@ public class Sanitizer
         }
     }
 
-    public string Sanitize(string html)
+    public string Sanitize(string? html)
     {
         if (string.IsNullOrEmpty(html))
             return string.Empty;

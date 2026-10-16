@@ -11,16 +11,16 @@ public class ProfileEdit
     /// <summary>
     /// Phone Number
     /// </summary>
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
     
 
     /// <summary>
     /// user Bio description
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// User Position
     /// </summary>
-    public string Position { get; set; }
+    public string? Position { get; set; }
 }
