@@ -133,7 +133,7 @@
                                     }
                                 </MudSelect>
 <div Class="overflow-y-hidden" Style="height: 60px">
-                                <MudSelect @bind-Value="@SelectedProject" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+                                <MudSelect @bind-Value="@SelectedProject" Disabled="true" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
                                     <MudSelectItem Value="Guid.Empty" Disabled>@localizer["selectProject"]</MudSelectItem>
                                     @foreach(var item in Projects)
 									{

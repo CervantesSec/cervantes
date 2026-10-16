@@ -475,16 +475,20 @@ public class VulnController: ControllerBase
                 if (vuln != null)
                 {
                 // Authorize against the project stored in the database, never the one sent in the request.
-                // Moving the vuln to another project also requires membership in the destination project.
-                Guid? projectId = model.ProjectId == Guid.Empty ? null : model.ProjectId;
-                if (!CanWriteProject(vuln.ProjectId) || !CanWriteProject(projectId))
+                if (!CanWriteProject(vuln.ProjectId))
                 {
                     _logger.LogWarning("Access denied editing vuln {VulnId}. User: {UserId}",
                         vuln.Id, aspNetUserId);
                     return StatusCode(403, "You do not have permission to access this project");
                 }
 
-                vuln.ProjectId = projectId;
+                // An edit never moves a vuln to another project, or between a project and the templates.
+                Guid? projectId = model.ProjectId == Guid.Empty ? null : model.ProjectId;
+                if (projectId != vuln.ProjectId)
+                {
+                    return BadRequest("A vulnerability cannot be moved to another project");
+                }
+
                 vuln.VulnCategoryId = model.VulnCategoryId;
                 vuln.Name = Sanitizer.Sanitize(model.Name);
                 vuln.Description = Sanitizer.Sanitize(model.Description);
@@ -908,17 +912,20 @@ public class VulnController: ControllerBase
                 }
 
                 // Authorize against the note's current parent vuln (from the DB), never the one sent in the request.
-                // Moving the note to another vuln also requires membership in the destination vuln's project.
                 var currentVuln = vulnManager.GetById(note.VulnId);
-                var destinationVuln = vulnManager.GetById(model.VulnId);
-                if (!CanWriteProject(currentVuln?.ProjectId) || !CanWriteProject(destinationVuln?.ProjectId))
+                if (!CanWriteProject(currentVuln?.ProjectId))
                 {
                     _logger.LogWarning("Access denied editing vuln note {NoteId}. User: {UserId}",
                         note.Id, aspNetUserId);
                     return StatusCode(403, "You do not have permission to access this project");
                 }
 
-                note.VulnId = model.VulnId;
+                // An edit never moves a note to another vulnerability.
+                if (model.VulnId != note.VulnId)
+                {
+                    return BadRequest("A note cannot be moved to another vulnerability");
+                }
+
                 note.Name = Sanitizer.Sanitize(model.Name);
                 note.Description = Sanitizer.Sanitize(model.Description);
                 await vulnNoteManager.Context.SaveChangesAsync();
