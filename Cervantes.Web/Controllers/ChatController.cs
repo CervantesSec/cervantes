@@ -20,6 +20,9 @@ public class ChatController : ControllerBase
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private Sanitizer Sanitizer;
+    // AI replies are Markdown. HTML the model writes is shown as text (DisableHtml), and the generated HTML is
+    // sanitized because Markdown links can still carry javascript: URLs. The reply is rendered via MarkupString.
+    private static readonly MarkdownPipeline AiReplyPipeline = new MarkdownPipelineBuilder().DisableHtml().Build();
     private readonly IAiService _aiService = null;
     private IDocumentManager documentManager = null;
     private IProjectManager projectManager = null;
@@ -210,7 +213,7 @@ public class ChatController : ControllerBase
         var msgId = Guid.NewGuid();
         model.Id = msgId;
         var msg = await _aiService.SendMessage(model);
-        var msgConverted = Markdown.ToHtml(msg);
+        var msgConverted = Sanitizer.Sanitize(Markdown.ToHtml(msg, AiReplyPipeline));
         var chatMessage2 = new ChatMessage()
         {
             Id = msgId,

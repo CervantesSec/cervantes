@@ -32,8 +32,7 @@ public class ZapParser : IZapParser
         doc.Load(path);
 
         XmlNodeList alerts = doc.GetElementsByTagName("alertitem");
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedSchemes.Add("data");
+        var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
         if (project != null)
         {

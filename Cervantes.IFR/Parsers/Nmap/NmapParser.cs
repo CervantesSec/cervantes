@@ -36,8 +36,7 @@ public class NmapParser: INmapParser
         XElement nmap = XElement.Load(file);
 
         var hosts = nmap.Descendants("host");
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedSchemes.Add("data");
+        var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
         
         foreach (var host in hosts)
         {

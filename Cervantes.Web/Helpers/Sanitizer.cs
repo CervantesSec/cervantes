@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using System.Web;
+using Cervantes.IFR;
 using Ganss.Xss;
 
 namespace Cervantes.Web.Helpers;
@@ -9,15 +9,6 @@ public class Sanitizer
     private readonly HtmlSanitizer _sanitizer;
     private static readonly Regex _htmlEntityRegex = new Regex(@"&(?:#\d+|#x[a-fA-F0-9]+|[a-zA-Z]+);", RegexOptions.Compiled);
     private static readonly Regex _htmlTagRegex = new Regex(@"</?[a-zA-Z]+(?:\s+[a-zA-Z]+(?:\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)*\s*/?>", RegexOptions.Compiled);
-    
-    // Regex to match pre/code blocks with their content
-    private static readonly Regex _codeBlockRegex = new Regex(
-        @"<pre([^>]*)><code([^>]*)>(.*?)</code></pre>",
-        RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
-    
-    private static readonly Regex _preBlockRegex = new Regex(
-        @"<pre([^>]*)>(.*?)</pre>",
-        RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
     public Sanitizer()
     {
@@ -28,8 +19,17 @@ public class Sanitizer
         _sanitizer.AllowedAttributes.Add("class");
         _sanitizer.AllowedAttributes.Add("tabindex");
         _sanitizer.AllowedAttributes.Add("data-language");
+        // "style" and the "data" scheme are allowed on purpose; removing either breaks existing features.
+        //  - style: TinyMCE stores alignment, colour, font and table layout as inline styles, and the
+        //    seeded report templates and the DOCX/PDF report pipeline read them (e.g. image width/height).
+        //    HtmlSanitizer already drops url(javascript:), expression(), behavior and -moz-binding from them.
+        //  - data: with no TinyMCE upload handler configured, pasted/inserted screenshots and the Word
+        //    import (Mammoth) are stored as base64 data:image URIs, as are the logos in the seeded cover
+        //    pages; the Jira export and report generation read them back from the stored HTML.
         _sanitizer.AllowedAttributes.Add("style");
-        _sanitizer.AllowedSchemes.Add("data");
+        // HtmlSanitizer does not check the media type of a data: URI, so the scheme is limited to inline
+        // images (shared with the scanner import parsers).
+        _sanitizer.AllowDataImagesOnly();
         _sanitizer.AllowedTags.Add("pre");
         _sanitizer.AllowedTags.Add("code");
         
@@ -45,81 +45,13 @@ public class Sanitizer
         if (string.IsNullOrEmpty(html))
             return string.Empty;
 
-        // First, check if this looks like plain text that shouldn't be HTML
-        // If it contains < but not as part of a valid HTML tag, treat it as plain text
-        bool hasIncompleteTags = false;
-        if (html.Contains("<"))
-        {
-            // Check if the < is part of a valid HTML tag
-            var validTagPattern = @"<\s*/?[a-zA-Z][^>]*>";
-            var allLessThan = Regex.Matches(html, @"<");
-            var validTags = Regex.Matches(html, validTagPattern);
-            
-            // If we have < characters that aren't part of valid tags, it's likely plain text
-            if (allLessThan.Count > validTags.Count)
-            {
-                hasIncompleteTags = true;
-            }
-        }
-
-        // If it has incomplete tags, remove the problematic < characters but keep the text
-        if (hasIncompleteTags)
-        {
-            // Remove problematic < characters that aren't part of valid HTML tags
-            var processed = Regex.Replace(html, @"<(?![a-zA-Z/!][^>]*>)", "");
-            
-            // Now sanitize the processed text
-            var sanitizedText = _sanitizer.Sanitize(processed);
-            
-            // Return the cleaned text
-            return sanitizedText.Trim();
-        }
-
-        // Step 1: Extract and protect code blocks before any processing
-        var codeBlocks = new Dictionary<string, string>();
-        var placeholderIndex = 0;
-        
-        // Replace code blocks with placeholders
-        html = _codeBlockRegex.Replace(html, match =>
-        {
-            var placeholder = $"___CODE_BLOCK_{placeholderIndex}___";
-            codeBlocks[placeholder] = match.Value;
-            placeholderIndex++;
-            return placeholder;
-        });
-        
-        // Also handle standalone pre blocks
-        html = _preBlockRegex.Replace(html, match =>
-        {
-            // Skip if this pre block was already handled as part of a pre/code pair
-            if (match.Value.Contains("<code"))
-                return match.Value;
-                
-            var placeholder = $"___PRE_BLOCK_{placeholderIndex}___";
-            codeBlocks[placeholder] = match.Value;
-            placeholderIndex++;
-            return placeholder;
-        });
-
-        // Step 2: Decode the non-code content
-        string decodedHtml = html;
-        string previousDecoded;
-        do 
-        {
-            previousDecoded = decodedHtml;
-            decodedHtml = HttpUtility.HtmlDecode(previousDecoded);
-        } while (decodedHtml != previousDecoded);
-
-        // Step 3: Sanitize the content (without code blocks)
-        string sanitized = _sanitizer.Sanitize(decodedHtml);
-        
-        // Step 4: Restore the protected code blocks
-        foreach (var kvp in codeBlocks)
-        {
-            sanitized = sanitized.Replace(kvp.Key, kvp.Value);
-        }
-        
-        return sanitized;
+        // Run the whole input through HtmlSanitizer. <pre> and <code> are kept
+        // because they are in AllowedTags, so code blocks survive, but nothing is
+        // exempted from sanitization: event-handler attributes (onerror, onload,
+        // onmouseover, ...) are stripped even inside <pre>/<code>. Do NOT reintroduce
+        // any "extract raw block then reinsert verbatim" logic here; that bypasses
+        // the sanitizer and allows stored XSS.
+        return _sanitizer.Sanitize(html).Trim();
     }
 
     private static bool IsHtmlEncoded(string input)

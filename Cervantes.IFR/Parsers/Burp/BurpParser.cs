@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Xml;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
+using Ganss.Xss;
 
 namespace Cervantes.IFR.Parsers.Burp;
 
@@ -26,7 +28,10 @@ public class BurpParser: IBurpParser
     }
     public void Parse(Guid? project, string user, string path)
     {
-       
+        // Burp stores HTML in CDATA, so InnerText is markup. Sanitize it, and do not HtmlDecode first:
+        // payloads quoted in issueDetail are entity-encoded on purpose and must stay text.
+        var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
+
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
 
@@ -74,6 +79,7 @@ public class BurpParser: IBurpParser
                 if(issue.SelectSingleNode("poc") != null){poc = issue.SelectSingleNode("poc").InnerText;}
 
 
+                host = sanitizer.Sanitize(host);
                 var tar = targetManager.GetByName(host);
                 Target target = null;
                 if (tar == null)
@@ -96,7 +102,7 @@ public class BurpParser: IBurpParser
                 var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
                 vuln.FindingId = pro.FindingsId + "-" + vulNum.ToString("D2");
                 vuln.Template = false;
-                vuln.Name = name;
+                vuln.Name = sanitizer.Sanitize(name);
                 vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                 vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                 vuln.UserId = user;
@@ -122,12 +128,15 @@ public class BurpParser: IBurpParser
                 }
                 vuln.Status = VulnStatus.Open;
                 vuln.cve = "None";
-                vuln.Description =  issueBack + "<br><p>Path: " + pathIssue + "</p>"+ "<p>Location: " + location + "</p><br>"+ "<p>References</p>"+references+classifications;
-                vuln.ProofOfConcept = poc;
-                vuln.Impact = issueDet;
+                // path and location are plain text, so encode them before they are placed in HTML.
+                vuln.Description = sanitizer.Sanitize(issueBack + "<br><p>Path: " + WebUtility.HtmlEncode(pathIssue) +
+                    "</p><p>Location: " + WebUtility.HtmlEncode(location) + "</p><br><p>References</p>" +
+                    references + classifications);
+                vuln.ProofOfConcept = sanitizer.Sanitize(poc);
+                vuln.Impact = sanitizer.Sanitize(issueDet);
                 vuln.CVSS3 = 0;
                 vuln.CVSSVector = "";
-                vuln.Remediation = remediation + remediationDet;
+                vuln.Remediation = sanitizer.Sanitize(remediation + remediationDet);
                 vuln.RemediationComplexity = RemediationComplexity.Low;
                 vuln.RemediationPriority = RemediationPriority.Low;
                 vuln.JiraCreated = false;
@@ -210,7 +219,7 @@ public class BurpParser: IBurpParser
                 var vuln = new Vuln();
                 var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
                 vuln.Template = false;
-                vuln.Name = name;
+                vuln.Name = sanitizer.Sanitize(name);
                 vuln.FindingId = "No Project";
                 vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                 vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
@@ -237,12 +246,15 @@ public class BurpParser: IBurpParser
                 }
                 vuln.Status = VulnStatus.Open;
                 vuln.cve = "None";
-                vuln.Description =  issueBack + "<br><p>Path: " + pathIssue + "</p>"+ "<p>Location: " + location + "</p><br>"+ "<p>References</p>"+references+classifications;
-                vuln.ProofOfConcept = poc;
-                vuln.Impact = issueDet;
+                // path and location are plain text, so encode them before they are placed in HTML.
+                vuln.Description = sanitizer.Sanitize(issueBack + "<br><p>Path: " + WebUtility.HtmlEncode(pathIssue) +
+                    "</p><p>Location: " + WebUtility.HtmlEncode(location) + "</p><br><p>References</p>" +
+                    references + classifications);
+                vuln.ProofOfConcept = sanitizer.Sanitize(poc);
+                vuln.Impact = sanitizer.Sanitize(issueDet);
                 vuln.CVSS3 = 0;
                 vuln.CVSSVector = "";
-                vuln.Remediation = remediation + remediationDet;
+                vuln.Remediation = sanitizer.Sanitize(remediation + remediationDet);
                 vuln.RemediationComplexity = RemediationComplexity.Low;
                 vuln.RemediationPriority = RemediationPriority.Low;
                 vuln.JiraCreated = false;

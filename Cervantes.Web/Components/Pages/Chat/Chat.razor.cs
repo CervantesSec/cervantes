@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
+using Cervantes.Web.Helpers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -20,6 +21,7 @@ public partial class Chat: ComponentBase
 {
     [Inject] private ChatController _chatController { get; set; }
     [Inject] private DocumentController _DocumentController { get; set; }
+    [Inject] private Sanitizer Sanitizer { get; set; }
    private List<ChatMessageViewModel> _messages = new();
     private List<ChatViewModel> _chatList = new();
     private List<Project> Projects = new();
@@ -220,7 +222,7 @@ public partial class Chat: ComponentBase
             {
                 Id = Guid.NewGuid(),
                 ChatId = _currentChatId,
-                Content = _currentMessage,
+                Content = Sanitizer.Sanitize(_currentMessage),
                 IsUser = true,
                 Timestamp = DateTime.Now
             };

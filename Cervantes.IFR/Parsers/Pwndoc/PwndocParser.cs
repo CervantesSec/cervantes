@@ -33,8 +33,7 @@ public class PwndocParser: IPwndocParser
 
             //yml contains a string containing your YAML
            var vulns = deserializer.Deserialize<List<PwndocVuln>>(reader);
-           var sanitizer = new HtmlSanitizer();
-           sanitizer.AllowedSchemes.Add("data");
+           var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
            
             if (project != null)
             {

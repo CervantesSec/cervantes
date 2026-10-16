@@ -29,8 +29,7 @@ public class NiktoParser : INiktoParser
 
     public void Parse(Guid? project, string user, string path)
     {
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedSchemes.Add("data");
+        var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
         if (project != null)
         {

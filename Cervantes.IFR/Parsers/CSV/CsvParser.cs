@@ -33,8 +33,7 @@ public class CsvParser: ICsvParser
         {
             Delimiter = ";"
         };
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedSchemes.Add("data");
+        var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
         
         using (var reader = new StreamReader(path))
         using (var csv = new CsvReader(reader, config))
@@ -111,7 +110,7 @@ public class CsvParser: ICsvParser
                     vuln.OWASPLikehood = vul.OwaspLikehood == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.OwaspLikehood));
                     vuln.OWASPVector = vul.OwaspVector == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.OwaspVector));
                     vuln.ProjectId = null;
-                    vuln.ProofOfConcept = vul.Poc == "" ? "No Data" : vul.Poc;
+                    vuln.ProofOfConcept = vul.Poc == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Poc));
                     vuln.UserId = user;
                     vuln.CVSS3 = vul.CVSS3 ?? 0;
                     vuln.CVSSVector = vul.CVSSVector == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.CVSSVector));

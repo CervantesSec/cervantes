@@ -430,7 +430,7 @@ public class VulnController: ControllerBase
                             Id = Guid.NewGuid(),
                             VulnId = vuln.Id,
                             VulnCustomFieldId = kvp.Key,
-                            Value = kvp.Value,
+                            Value = Sanitizer.Sanitize(kvp.Value),
                             CreatedDate = DateTime.UtcNow,
                             ModifiedDate = DateTime.UtcNow,
                             UserId = aspNetUserId

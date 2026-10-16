@@ -38,8 +38,7 @@ public class AcunetixParser : IAcunetixParser
             vulnerabilities = doc.GetElementsByTagName("ReportItem");
         }
 
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedSchemes.Add("data");
+        var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
         if (project != null)
         {

@@ -199,7 +199,7 @@ public class UserController: ControllerBase
         {
             if (ModelState.IsValid)
             {
-                await authRolesAdminService.CreateRoleToPermissionsAsync(model.Name, model.Permissions, model.Description);
+                await authRolesAdminService.CreateRoleToPermissionsAsync(model.Name, model.Permissions, sanitizer.Sanitize(model.Description));
                 return Created();
             }
             var errors = ModelState
@@ -239,7 +239,7 @@ public class UserController: ControllerBase
                     
                     await authRolesAdminService.UpdateRoleToPermissionsAsync(
                         model.Name, permissionNames2,
-                        model.Description,
+                        sanitizer.Sanitize(model.Description),
                         // Use a known valid role type to avoid NullReferenceException
                         RoleTypes.Normal);
                 }
@@ -248,7 +248,7 @@ public class UserController: ControllerBase
                     await authRolesAdminService.UpdateRoleToPermissionsAsync(
                         model.Name,
                         model.Permissions,
-                        model.Description,
+                        sanitizer.Sanitize(model.Description),
                         // Use a known valid role type to avoid NullReferenceException
                         RoleTypes.Normal);
                 }

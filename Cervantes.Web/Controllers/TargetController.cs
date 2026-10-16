@@ -475,10 +475,10 @@ public class TargetController : ControllerBase
                                     foreach (var tar in records)
                                     {
                                         Target target = new Target();
-                                        target.Name = tar.Name;
+                                        target.Name = sanitizer.Sanitize(tar.Name);
                                         target.ProjectId = model.Project;
                                         target.UserId = aspNetUserId;
-                                        target.Description = tar.Description;
+                                        target.Description = sanitizer.Sanitize(tar.Description);
                                         target.Type = tar.Type;
 
                                         await targetManager.AddAsync(target);

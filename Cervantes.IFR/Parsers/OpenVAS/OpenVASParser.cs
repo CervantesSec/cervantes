@@ -32,8 +32,7 @@ public class OpenVASParser : IOpenVASParser
         doc.Load(path);
 
         XmlNodeList results = doc.GetElementsByTagName("result");
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedSchemes.Add("data");
+        var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
         if (project != null)
         {

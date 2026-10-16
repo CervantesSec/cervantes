@@ -789,9 +789,6 @@ public class ProjectController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var sanitizer = new HtmlSanitizer();
-                sanitizer.AllowedSchemes.Add("data");
-
                 var project = projectManager.GetById(model.Project);
 
                 if (project != null)

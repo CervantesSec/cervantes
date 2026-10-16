@@ -30,8 +30,7 @@ public class NessusParser: INessusParser
         doc.Load(path);
 
         XmlNodeList hosts = doc.GetElementsByTagName("ReportHost");
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedSchemes.Add("data");
+        var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
         if (project != null)
         {
             var pro = projectManager.GetById((Guid) project);
