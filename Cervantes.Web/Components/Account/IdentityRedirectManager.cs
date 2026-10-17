@@ -18,13 +18,9 @@ internal sealed class IdentityRedirectManager(NavigationManager navigationManage
     [DoesNotReturn]
     public void RedirectTo(string? uri)
     {
-        uri ??= "";
-
-        // Prevent open redirects.
-        if (!Uri.IsWellFormedUriString(uri, UriKind.Relative))
-        {
-            uri = navigationManager.ToBaseRelativePath(uri);
-        }
+        // Prevent open redirects: only follow targets under the app base, otherwise go to the app root.
+        var baseUri = new Uri(navigationManager.BaseUri);
+        uri = Uri.TryCreate(baseUri, uri ?? "", out var target) && baseUri.IsBaseOf(target) ? target.AbsoluteUri : "";
 
         // During static rendering, NavigateTo throws a NavigationException which is handled by the framework as a redirect.
         // So as long as this is called from a statically rendered Identity component, the InvalidOperationException is never thrown.
