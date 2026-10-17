@@ -104,7 +104,8 @@ public partial class ImportReport : ComponentBase
 		        file = null;
 	        }
 	        
-	        var response =  await _ReportController.Import(model);
+	        // Word import is disabled: ReportController.Import is commented out.
+	        ReportImportResultViewModel? response = null; // await _ReportController.Import(model);
 	        if (response != null)
 	        {
 		        Snackbar.Add(@localizer["clientCreated"], Severity.Success);

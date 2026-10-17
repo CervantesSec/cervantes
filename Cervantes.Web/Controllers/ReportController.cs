@@ -28,7 +28,7 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Font;
 using iText.Layout.Properties;
-using Mammoth;
+// using Mammoth; // Word import is disabled, see the commented-out Import action below.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -1813,6 +1813,9 @@ private static string ReplaceTableRowWithFor(string htmlContent)
         }
     }
     
+    // Word import (POST api/Report/Import and the /reports/import page) is disabled until the Mammoth converter is
+    // updated. Restore this action and StreamToBase64 together with the page route in ImportReport.razor.
+    /*
     [HttpPost]
     [Route("Import")]
     [HasPermission(Permissions.ReportTemplatesRead)]
@@ -1873,5 +1876,6 @@ private static string ReplaceTableRowWithFor(string htmlContent)
         stream.CopyTo(memoryStream);
         return System.Convert.ToBase64String(memoryStream.ToArray());
     }
-    
+    */
+
 }
