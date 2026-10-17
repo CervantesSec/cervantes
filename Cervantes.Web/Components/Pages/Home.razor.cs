@@ -34,6 +34,7 @@ public partial class Home: ComponentBase
     private bool showOnlyActiveProjects = false;
     private bool showOnlyMyTasks = false;
     private bool loading = true;
+    private bool canReadProjects, canReadVulns, canReadTasks, canReadClients;
 
     // Filtered data properties
     private List<Project> FilteredProjects => ApplyProjectFilters();
@@ -64,6 +65,10 @@ public partial class Home: ComponentBase
     private async Task LoadDashboardData()
     {
         loading = true;
+        canReadProjects = _accessor.CurrentUserHas(Permissions.ProjectsRead);
+        canReadClients = _accessor.CurrentUserHas(Permissions.ClientsRead);
+        canReadVulns = _accessor.CurrentUserHas(Permissions.VulnsRead);
+        canReadTasks = _accessor.CurrentUserHas(Permissions.TasksRead);
         try
         {
             // Home has no permission gate of its own: only load the modules the user can read.
@@ -71,7 +76,7 @@ public partial class Home: ComponentBase
             Clients = _accessor.CurrentUserHas(Permissions.ClientsRead) ? _ClientsController.Get().ToList() : new List<Client>();
             Vulns = _accessor.CurrentUserHas(Permissions.VulnsRead) ? _VulnController.GetVulns().ToList() : new List<CORE.Entities.Vuln>();
             Tasks = _accessor.CurrentUserHas(Permissions.TasksRead) ? _TaskController.Get().ToList() : new List<CORE.Entities.Task>();
-            
+
             // Simulate async operation for better UX
             await Task.Delay(100);
         }

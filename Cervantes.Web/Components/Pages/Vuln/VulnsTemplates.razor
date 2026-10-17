@@ -76,7 +76,8 @@
                     }
 
                  
-                    @if (seleVulns.Count() != 0)
+                    @if (seleVulns.Count() != 0 && (userAth.HasPermission(Permissions.VulnsDelete) || userAth.HasPermission(Permissions.VulnsExport)
+                            || (jiraEnabled && (userAth.HasPermission(Permissions.JiraAdd) || userAth.HasPermission(Permissions.JiraDelete)))))
                     {
                     <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
                         <MudButton>@localizer["actions"]</MudButton>

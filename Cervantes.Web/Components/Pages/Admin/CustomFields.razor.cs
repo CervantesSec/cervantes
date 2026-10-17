@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
@@ -87,16 +88,24 @@ public partial class CustomFields : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         userAuth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+        if (!userAuth.HasPermission(Cervantes.CORE.Permissions.VulnCustomFieldsRead)
+            && !userAuth.HasPermission(Cervantes.CORE.Permissions.ProjectCustomFieldsRead)
+            && !userAuth.HasPermission(Cervantes.CORE.Permissions.ClientCustomFieldsRead)
+            && !userAuth.HasPermission(Cervantes.CORE.Permissions.TargetCustomFieldsRead))
+        {
+            navigationManager.NavigateTo("/Account/AccessDenied");
+            return;
+        }
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(localizer["home"], href: "/", icon: Icons.Material.Filled.Home),
             new BreadcrumbItem(localizer["Admin"], href: null, icon: Icons.Material.Filled.AdminPanelSettings),
             new BreadcrumbItem(localizer["customFields"], href: null, disabled: true, icon: Icons.Material.Filled.DynamicForm),
         };
-        await UpdateVulnFields();
-        await UpdateProjectFields();
-        await UpdateClientFields();
-        await UpdateTargetFields();
+        if (userAuth.HasPermission(Cervantes.CORE.Permissions.VulnCustomFieldsRead)) await UpdateVulnFields();
+        if (userAuth.HasPermission(Cervantes.CORE.Permissions.ProjectCustomFieldsRead)) await UpdateProjectFields();
+        if (userAuth.HasPermission(Cervantes.CORE.Permissions.ClientCustomFieldsRead)) await UpdateClientFields();
+        if (userAuth.HasPermission(Cervantes.CORE.Permissions.TargetCustomFieldsRead)) await UpdateTargetFields();
     }
 
     private async Task UpdateVulnFields()

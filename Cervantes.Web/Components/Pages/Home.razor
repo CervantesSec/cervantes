@@ -112,6 +112,8 @@
         </MudPaper>
     </MudItem>
     
+    @if (canReadProjects)
+    {
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
             <MudIcon Icon="@Icons.Material.Filled.Folder" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
@@ -121,6 +123,9 @@
             </div>
         </MudPaper>
     </MudItem>
+    }
+    @if (canReadVulns)
+    {
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
             <MudIcon Icon="@Icons.Material.Filled.BugReport" Color="Color.Secondary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
@@ -130,6 +135,9 @@
             </div>
         </MudPaper>
     </MudItem>
+    }
+    @if (canReadTasks)
+    {
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
             <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
@@ -139,6 +147,9 @@
             </div>
         </MudPaper>
     </MudItem>
+    }
+    @if (canReadClients)
+    {
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
             <MudIcon Icon="@Icons.Material.Filled.Contacts" Color="Color.Warning" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
@@ -148,6 +159,9 @@
             </div>
         </MudPaper>
     </MudItem>
+    }
+    @if (canReadProjects)
+    {
     <MudItem xs="12" sm="6">
         <MudCard Style="height:300px;">
             <MudCardHeader>
@@ -172,6 +186,9 @@
 
         </MudCard>
     </MudItem>
+    }
+    @if (canReadClients)
+    {
     <MudItem xs="12" sm="6">
         <MudCard Style="height:300px;">
             <MudCardHeader>
@@ -214,6 +231,9 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
+    }
+    @if (canReadTasks)
+    {
     <MudItem xs="12" sm="12" md="4">
         <MudCard Style="height:100%;">
             <MudCardHeader>
@@ -259,7 +279,10 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
+    }
 
+    @if (canReadVulns)
+    {
     <MudItem xs="12" sm="12" md="8">
         <MudCard Style="height:300px;">
             <MudCardHeader>
@@ -286,6 +309,9 @@
         </MudCard>
 
     </MudItem>
+    }
+    @if (canReadVulns)
+    {
     <MudItem xs="12" sm="12" md="8">
         <MudCard Style="height:300px;">
             <MudCardHeader>
@@ -375,7 +401,10 @@
 
 
     </MudItem>
+    }
 
+    @if (canReadTasks)
+    {
     <MudItem xs="12" sm="12" md="4">
         <MudCard Style="height:300px;">
             <MudCardHeader>
@@ -401,6 +430,7 @@
         </MudCard>
 
     </MudItem>
+    }
 
 
 

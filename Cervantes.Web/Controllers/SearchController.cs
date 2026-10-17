@@ -62,12 +62,13 @@ public class SearchController: ControllerBase
                 var sanitizer = new HtmlSanitizer();
                 sanitizer.AllowedSchemes.Add("data");
                 search = sanitizer.Sanitize(HttpUtility.HtmlDecode(search));
-                // The Vault module is limited to project members, so only search vault entries
-                // of the projects the current user belongs to.
-                var memberProjectIds = projectUserManager.GetAll().Where(x => x.UserId == aspNetUserId)
-                    .Select(x => x.ProjectId).ToList();
                 // Search has no HTTP surface, so its body is the only gate: return only modules the user can read.
                 bool Can(Permissions permission) => HttpContextAccessor.CurrentUserHas(permission);
+                // The Vault module is limited to project members, so only search vault entries
+                // of the projects the current user belongs to.
+                var memberProjectIds = Can(Permissions.VaultRead)
+                    ? projectUserManager.GetAll().Where(x => x.UserId == aspNetUserId).Select(x => x.ProjectId).ToList()
+                    : new List<Guid>();
                 var model = new SearchViewModel
                 {
                     Users = Can(Permissions.UsersRead)

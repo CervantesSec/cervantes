@@ -59,7 +59,8 @@
         
         @if(user.HasPermission(Permissions.LogsRead) || user.HasPermission(Permissions.JobsRead) || user.HasPermission(Permissions.BackupRead) 
             || user.HasPermission(Permissions.OrganizationRead) || user.HasPermission(Permissions.ReportTemplatesRead) 
-            || user.HasPermission(Permissions.UsersRead) || user.HasPermission(Permissions.RolesRead) || user.HasPermission(Permissions.VulnCustomFieldsRead))
+            || user.HasPermission(Permissions.UsersRead) || user.HasPermission(Permissions.RolesRead) || user.HasPermission(Permissions.VulnCustomFieldsRead)
+            || user.HasPermission(Permissions.ProjectCustomFieldsRead) || user.HasPermission(Permissions.ClientCustomFieldsRead) || user.HasPermission(Permissions.TargetCustomFieldsRead))
         {
             <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin" @bind-Expanded=isAdminExpanded>
                 @if(user.HasPermission(Permissions.LogsRead))
@@ -90,7 +91,7 @@
                 {
                 <MudNavLink Icon="@Icons.Material.Filled.Badge" Href="/roles">@localizer["roles"]</MudNavLink>
                 }
-                @if(user.HasPermission(Permissions.VulnCustomFieldsRead) || user.HasPermission(Permissions.ProjectCustomFieldsRead))
+                @if(user.HasPermission(Permissions.VulnCustomFieldsRead) || user.HasPermission(Permissions.ProjectCustomFieldsRead) || user.HasPermission(Permissions.ClientCustomFieldsRead) || user.HasPermission(Permissions.TargetCustomFieldsRead))
                 {
                     <MudNavLink Icon="@Icons.Material.Filled.DynamicForm" Href="/admin/customfields">@localizer["customFields"]</MudNavLink>
                 }

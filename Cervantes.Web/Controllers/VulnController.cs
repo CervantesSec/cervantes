@@ -305,16 +305,14 @@ public class VulnController: ControllerBase
     [NonAction]
     private bool TargetsBelongToProject(IEnumerable<Guid> targetIds, Guid? projectId)
     {
-        foreach (var targetId in targetIds)
+        var ids = targetIds.Distinct().ToList();
+        if (ids.Count == 0)
         {
-            var target = targetManager.GetById(targetId);
-            if (target == null || target.ProjectId != projectId)
-            {
-                return false;
-            }
+            return true;
         }
 
-        return true;
+        // One query: every id must exist and belong to the project (a null project matches project-less targets).
+        return targetManager.GetAll().Count(x => ids.Contains(x.Id) && x.ProjectId == projectId) == ids.Count;
     }
 
     [HttpPost]

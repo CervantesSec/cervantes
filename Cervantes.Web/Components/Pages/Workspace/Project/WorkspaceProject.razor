@@ -169,7 +169,7 @@
 			{
 				<MudTabPanel Text="@localizer["members"]" Icon="@Icons.Material.Filled.SupervisedUserCircle" BadgeData="@Members.Count()" BadgeColor="Color.Primary">
 					<MudDataGrid T="ProjectUser" Items="@Members" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterMember"
-					             Hideable="true" Hover="true" RowClick="@OpenProjectDeleteMembersDialog" MultiSelection="true" SelectedItemsChanged="@SelectedMembersChanged" Virtualize="true" DragDropColumnReordering="true">
+					             Hideable="true" Hover="true" RowClick="@(CanRemoveMembers ? EventCallback.Factory.Create<DataGridRowClickEventArgs<ProjectUser>>(this, OpenProjectDeleteMembersDialog) : default)" MultiSelection="true" SelectedItemsChanged="@SelectedMembersChanged" Virtualize="true" DragDropColumnReordering="true">
 						<ToolBarContent>
 							<MudStack Row="true">
 									@if (userAth.HasPermission(Permissions.ProjectMembersAdd))

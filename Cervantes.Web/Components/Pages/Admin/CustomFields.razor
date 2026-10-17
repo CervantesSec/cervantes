@@ -22,7 +22,7 @@
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
 @inject AuthenticationStateProvider authenticationStateProvider
-@attribute [HasPermission(Permissions.VulnCustomFieldsRead)]
+@attribute [Authorize]
 
 <PageTitle>@localizer["customFields"] | Cervantes</PageTitle>
 
@@ -33,6 +33,8 @@
 <MudGrid>
     <MudItem xs="12" sm="12" md="12">
             <MudTabs Elevation="25" Rounded="true" ApplyEffectsToContainer="true" PanelClass="mt-6">
+                @if (userAuth.HasPermission(Permissions.VulnCustomFieldsRead))
+                {
                 <MudTabPanel Text="@localizer["vulns"]" Icon="@Icons.Material.Filled.BugReport" Style="min-width: 260px;">
                     <MudDataGrid T="VulnCustomFieldViewModel" Items="@vulnModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_vulnQuickFilter"
                                  Hideable="true" Hover="true" RowClick="@VulnRowClicked" MultiSelection="true" SelectedItemsChanged="@VulnSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
@@ -111,6 +113,7 @@
                         </PagerContent>
                     </MudDataGrid>
                 </MudTabPanel>
+                }
 
                 @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsRead))
                 {

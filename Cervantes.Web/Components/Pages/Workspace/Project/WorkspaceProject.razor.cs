@@ -329,6 +329,8 @@ protected override async Task OnInitializedAsync()
         }
     }
 
+    private bool CanRemoveMembers => userAth.HasPermission(Cervantes.CORE.Permissions.ProjectMembersDelete);
+
     async Task OpenProjectDeleteMembersDialog(DataGridRowClickEventArgs<ProjectUser> args)
     {
         if (!userAth.HasPermission(Cervantes.CORE.Permissions.ProjectMembersDelete))

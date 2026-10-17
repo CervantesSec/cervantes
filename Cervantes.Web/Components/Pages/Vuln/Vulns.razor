@@ -77,7 +77,9 @@
                     {
                         <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ImportExport" Color="Color.Primary" OnClick="@((e) => OpenDialogImport(mediumWidth))">@localizer["import"]</MudButton>
                     }
-                    @if (seleVulns.Count() != 0)
+                    @if (seleVulns.Count() != 0 && (userAth.HasPermission(Permissions.VulnsDelete) || userAth.HasPermission(Permissions.VulnsExport)
+                            || userAth.HasPermission(Permissions.VulnsEdit)
+                            || (jiraEnabled && (userAth.HasPermission(Permissions.JiraAdd) || userAth.HasPermission(Permissions.JiraDelete)))))
                     {
                         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
                             <MudButton>@localizer["actions"]</MudButton>
