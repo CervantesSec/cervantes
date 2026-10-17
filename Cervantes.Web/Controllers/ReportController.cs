@@ -1459,8 +1459,9 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                     FooterPart footerPart = mainPart.AddNewPart<FooterPart>();
                                     Body body = mainPart.Document.Body;
 
-                                    // Convert the header, footer, and cover HTML to OpenXML elements
-                                    HtmlToOpenXml.HtmlConverter converter = new HtmlToOpenXml.HtmlConverter(mainPart){ ContinueNumbering = false };
+                                    // Convert the header, footer, and cover HTML to OpenXML elements.
+                                    // The export loads nothing outside the stored HTML; inline data: images still render.
+                                    HtmlToOpenXml.HtmlConverter converter = new HtmlToOpenXml.HtmlConverter(mainPart, new OfflineWebRequest()){ ContinueNumbering = false };
 
                                     // check if the report has a cover page
                                     bool hasCover;
@@ -1663,7 +1664,7 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                     PdfDocument pdfDoc = new PdfDocument(writer);
                                     pdfDoc.SetDefaultPageSize(PageSize.A4);
 
-                                    ConverterProperties converterProperties = new ConverterProperties();
+                                    ConverterProperties converterProperties = new ConverterProperties().SetResourceRetriever(new OfflineResourceRetriever());
                                     iText.Html2pdf.HtmlConverter.ConvertToPdf(fullCoverHtml, pdfDoc, converterProperties);
                                     pdfDoc.Close();
 
@@ -1755,10 +1756,11 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                             // Wrap the remaining content in a div container
                             mainContent = Regex.Replace(mainContent, @"(<div id=\""footer\"">.*?</div>)(.*?)(</body>)", "$1<div id=\"document-body-container\">$2</div>$3", RegexOptions.Singleline);
 
-                            // Convert main content to PDF
+                            // Convert main content to PDF. Like the cover, it loads nothing outside the stored HTML;
+                            // inline data: images still render.
                             using (MemoryStream mainContentStream = new MemoryStream())
                             {
-                                ConverterProperties props = new ConverterProperties();
+                                ConverterProperties props = new ConverterProperties().SetResourceRetriever(new OfflineResourceRetriever());
                                 iText.Html2pdf.HtmlConverter.ConvertToPdf(mainContent, mainContentStream, props);
                                 pdfParts.Add(mainContentStream.ToArray());
                             }
