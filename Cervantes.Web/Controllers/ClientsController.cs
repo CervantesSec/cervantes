@@ -269,7 +269,7 @@ public class ClientsController : ControllerBase
                 {
                     System.IO.File.Delete(imagePath);
                 }
-                else
+                else if (!string.IsNullOrWhiteSpace(client.ImagePath) && client.ImagePath != "None")
                 {
                     _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
                         "Client", client.Id, aspNetUserId);

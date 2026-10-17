@@ -152,7 +152,8 @@ public class DocumentController : Controller
                     {
                         System.IO.File.Delete(filePath);
                     }
-                    else
+                    // "Attachments/Documents/" is what a document without a file stores.
+                    else if (!string.IsNullOrWhiteSpace(doc.FilePath) && doc.FilePath != "Attachments/Documents/")
                     {
                         _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
                             "Document", doc.Id, aspNetUserId);

@@ -152,7 +152,7 @@ public class OrganizationController: ControllerBase
             {
                 System.IO.File.Delete(imagePath);
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(org.ImagePath))
             {
                 _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
                     "Organization", org.Id, aspNetUserId);

@@ -682,7 +682,7 @@ public class UserController: ControllerBase
             {
                 System.IO.File.Delete(imagePath);
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(user.Avatar))
             {
                 _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
                     "User", user.Id, aspNetUserId);
