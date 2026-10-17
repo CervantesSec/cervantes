@@ -228,18 +228,9 @@ public partial class CreateVulnDialog: ComponentBase
                 }
                 MudDialog.Close(DialogResult.Ok(true));
         }
-	        else if (response is BadRequestObjectResult badRequestResult)
+	        else if (response is ObjectResult { StatusCode: 403 })
 	        {
-			        var message = badRequestResult.Value;
-			        if (message.ToString() == "NotAllowed")
-			        {
-				        Snackbar.Add(@localizer["noInProject"], Severity.Warning);
-			        }
-			        else
-			        {
-				        Snackbar.Add(@localizer["vulnCreatedError"], Severity.Error);
-			        }
-			        
+	            Snackbar.Add(@localizer["noInProject"], Severity.Warning);
 	        }
 	        else
 	        {

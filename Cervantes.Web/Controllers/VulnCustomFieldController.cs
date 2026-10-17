@@ -103,6 +103,12 @@ public class VulnCustomFieldController : ControllerBase
     [HasPermission(Permissions.VulnCustomFieldsAdd)]
     public async Task<IActionResult> Add([FromBody] VulnCustomFieldCreateViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.VulnCustomFieldsAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -202,6 +208,12 @@ public class VulnCustomFieldController : ControllerBase
     [HasPermission(Permissions.VulnCustomFieldsDelete)]
     public async Task<IActionResult> Delete(Guid id)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.VulnCustomFieldsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)

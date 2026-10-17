@@ -178,8 +178,13 @@ public class TaskController: ControllerBase
                     var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("NotAllowed");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
+                }
+
+                if (!CanBeAssigned(model.ProjectId, model.AsignedUserId))
+                {
+                    return BadRequest("The assigned user must be a member of the project");
                 }
 
                 var task = new CORE.Entities.Task();
@@ -203,7 +208,8 @@ public class TaskController: ControllerBase
                     task.ClosedDate = DateTime.Today.ToUniversalTime();
                 }
                 task.AsignedUserId = model.AsignedUserId;
-                task.CreatedUserId = model.CreatedUserId;
+                // The creator is whoever makes the request; the request cannot attribute the task to someone else.
+                task.CreatedUserId = aspNetUserId;
                 
                 await taskManager.AddAsync(task);
                 await taskManager.Context.SaveChangesAsync();
@@ -264,7 +270,7 @@ public class TaskController: ControllerBase
                         var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
 
@@ -272,6 +278,11 @@ public class TaskController: ControllerBase
                     if (task.ProjectId != result.ProjectId)
                     {
                         return BadRequest("A task cannot be moved to another project");
+                    }
+
+                    if (task.AsignedUserId != result.AsignedUserId && !CanBeAssigned(result.ProjectId, task.AsignedUserId))
+                    {
+                        return BadRequest("The assigned user must be a member of the project");
                     }
 
                     result.Name = sanitizer.Sanitize(task.Name);
@@ -284,7 +295,6 @@ public class TaskController: ControllerBase
                     {
                         result.ClosedDate = DateTime.Today.ToUniversalTime();
                     }
-                    result.Template = false;
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task edited successfully. User: {0}",
                         aspNetUserId);
@@ -331,7 +341,7 @@ public class TaskController: ControllerBase
                         var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                     
@@ -385,7 +395,7 @@ public class TaskController: ControllerBase
                         var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                     
@@ -420,6 +430,18 @@ public class TaskController: ControllerBase
         }
     }
     
+    // A task in a project may only be assigned to a member of that project. Tasks without a project are not limited.
+    [NonAction]
+    private bool CanBeAssigned(Guid? projectId, string? userId)
+    {
+        if (string.IsNullOrEmpty(userId) || projectId == null || projectId == Guid.Empty)
+        {
+            return true;
+        }
+
+        return projectUserManager.VerifyUser(projectId.Value, userId) != null;
+    }
+
     [NonAction]
     public async Task<IActionResult> AssignToMe([FromBody] TaskAssignToMeViewModel task)
     {
@@ -435,11 +457,12 @@ public class TaskController: ControllerBase
                         var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                     
-                    result.AsignedUserId = task.UserId;
+                    // "Assign to me" always means the signed-in user, whatever the model says.
+                    result.AsignedUserId = aspNetUserId;
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task updated successfully. User: {0}",
                         aspNetUserId);
@@ -557,7 +580,7 @@ public class TaskController: ControllerBase
                     var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("NotAllowed");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
 
@@ -622,7 +645,7 @@ public class TaskController: ControllerBase
                         var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                     
@@ -676,7 +699,7 @@ public class TaskController: ControllerBase
                     var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("NotAllowed");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
                 
@@ -771,7 +794,7 @@ public class TaskController: ControllerBase
                         var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                     
@@ -825,7 +848,7 @@ public class TaskController: ControllerBase
                     var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("NotAllowed");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
 
@@ -916,7 +939,7 @@ public class TaskController: ControllerBase
                         var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
                         if (user == null)
                         {
-                            return BadRequest("NotAllowed");
+                            return StatusCode(403, "You do not have permission to access this project");
                         }
                     }
                     

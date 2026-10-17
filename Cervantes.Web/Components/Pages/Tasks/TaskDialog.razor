@@ -60,7 +60,7 @@
 						                       Immediate="true"
 						                       Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Folder"/>
                         
-						        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="task.Description" data-mce-placeholder="Description"/>
+						        <TinyMCE.Blazor.Editor ScriptSrc="lib/tinymce/tinymce.min.js" Conf="@editorConf" @bind-Value="model.Description" data-mce-placeholder="Description"/>
 						        <MudSelect @bind-Value="@SelectedProject" Disabled="true" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 							        <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
 							        @foreach (var project in Projects)
@@ -78,7 +78,7 @@
 
 						        <MudSelect @bind-Value="model.AsignedUserId" For="@(() => model.AsignedUserId)" Label="@localizer["assignedTo"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 							        <MudSelectItem Value="string.Empty">@localizer["selectUser"]</MudSelectItem>
-							        @foreach (var user in Users)
+							        @foreach (var user in AssignableUsers)
 							        {
 								        <MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
 							        }

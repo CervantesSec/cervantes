@@ -15,6 +15,7 @@ using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Microsoft.JSInterop;
 
 namespace Cervantes.Web.Components.Pages.Cve;
 
@@ -143,9 +144,15 @@ public partial class CveDetails
 
     private async Task ShareCve()
     {
-        var url = Navigation.Uri;
-        Navigation.NavigateTo("javascript:navigator.clipboard.writeText('" + url + "')");
-        Snackbar.Add("CVE URL copied to clipboard", Severity.Success);
+        try
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", Navigation.Uri);
+            Snackbar.Add("CVE URL copied to clipboard", Severity.Success);
+        }
+        catch (JSException)
+        {
+            Snackbar.Add("Could not copy the URL", Severity.Error);
+        }
     }
 
     private Color GetSeverityColor(string severity)

@@ -64,6 +64,12 @@ public class OrganizationController: ControllerBase
     [HasPermission(Permissions.OrganizationEdit)]
     public async Task<IActionResult> Save([FromBody] OrganizationViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.OrganizationEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
  if (ModelState.IsValid)

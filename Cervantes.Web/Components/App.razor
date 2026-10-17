@@ -24,20 +24,10 @@
 <script src="_content/TinyMCE.Blazor/tinymce-blazor.js"></script>
 <script src="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.js"></script>
 <script src="lib/saveFile.js"></script>
-<script>
-        window.blazorCulture = {
-            get: () => localStorage['BlazorCulture'],
-            set: (value) => localStorage['BlazorCulture'] = value
-        };
-    </script>
 <script src="_content/BlazorMonaco/jsInterop.js"></script>
 <script src="lib/monaco-editor.min.js"></script>
-<script>
-    // Configure Prism.js for manual initialization
-    window.Prism = window.Prism || {};
-    window.Prism.manual = true;
-</script>
-<script src="lib/prism/prism.js"></script>
+<script src="lib/prism/prism.js" data-manual></script>
+<script src="lib/prism/initPrism.js"></script>
 
 </body>
 

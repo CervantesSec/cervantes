@@ -80,7 +80,7 @@ public class BurpParser: IBurpParser
 
 
                 host = sanitizer.Sanitize(host);
-                var tar = targetManager.GetByName(host);
+                var tar = targetManager.GetByName(host, project);
                 Target target = null;
                 if (tar == null)
                 {

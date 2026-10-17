@@ -78,21 +78,17 @@ public partial class TasksKanban : ComponentBase
         {
             Snackbar.Add(@localizer["taskUpdated"], Severity.Success);
         }
-        else if (response is BadRequestObjectResult badRequestResult)
-        {
-            dropItem.Item.Status = status;
-            var message = badRequestResult.Value;
-            if (message.ToString() == "NotAllowed")
-            {
-                Snackbar.Add(@localizer["noInProject"], Severity.Warning);
-            }
-			        
-        }
         else
         {
             dropItem.Item.Status = status;
-
-            Snackbar.Add(@localizer["taskUpdatedError"], Severity.Error);
+            if (response is ObjectResult { StatusCode: 403 })
+            {
+                Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+            }
+            else
+            {
+                Snackbar.Add(@localizer["taskUpdatedError"], Severity.Error);
+            }
         }
     }
     

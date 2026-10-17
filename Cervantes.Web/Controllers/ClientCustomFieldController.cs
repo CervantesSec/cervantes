@@ -98,6 +98,12 @@ public class ClientCustomFieldController : ControllerBase
     [HasPermission(Permissions.ClientCustomFieldsAdd)]
     public async Task<IActionResult> Post([FromBody] ClientCustomFieldCreateViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ClientCustomFieldsAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (!ModelState.IsValid)
@@ -206,6 +212,12 @@ public class ClientCustomFieldController : ControllerBase
     [HasPermission(Permissions.ClientCustomFieldsDelete)]
     public async Task<IActionResult> Delete(Guid id)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ClientCustomFieldsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var customField = customFieldManager.GetById(id);

@@ -10,5 +10,6 @@ namespace Cervantes.Contracts;
 
 public interface ITargetManager : IGenericManager<Target>
 {
-    Target GetByName(string name);
+    /// <summary>The target with this name inside the given project (null projectId: targets without a project).</summary>
+    Target GetByName(string name, Guid? projectId);
 }

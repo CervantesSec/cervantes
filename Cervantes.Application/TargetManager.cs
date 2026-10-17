@@ -19,8 +19,8 @@ public class TargetManager : GenericManager<Target>, ITargetManager
     {
     }
     
-    public Target GetByName(string name)
+    public Target GetByName(string name, Guid? projectId)
     {
-        return Context.Set<Target>().FirstOrDefault(x => x.Name == name);
+        return Context.Set<Target>().FirstOrDefault(x => x.ProjectId == projectId && x.Name == name);
     }
 }

@@ -577,6 +577,12 @@ public class ReportController : ControllerBase
     [HasPermission(Permissions.ReportComponentsEdit)]
     public async Task<IActionResult> EditComponent([FromBody] EditReportComponentModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ReportComponentsEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;

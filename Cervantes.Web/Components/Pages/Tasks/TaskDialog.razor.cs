@@ -42,6 +42,7 @@ public partial class TaskDialog: ComponentBase
     private DateTime? dateEnd;
     private List<Project> Projects = new List<Project>();
     private List<ApplicationUser> Users = new List<ApplicationUser>();
+    private List<ApplicationUser> AssignableUsers = new List<ApplicationUser>();
     private List<TaskTargets> Targets = new List<TaskTargets>();
     private List<TaskTargets> seleTargets = new List<TaskTargets>();
     private List<TaskNote> Notes = new List<TaskNote>();
@@ -172,6 +173,11 @@ public partial class TaskDialog: ComponentBase
 
         }
         Users = _userController.Get().ToList();
+        // The project of a task never changes, so the member list is loaded once.
+        var memberIds = task.ProjectId == null
+            ? null
+            : _projectController.GetMembers(task.ProjectId.Value).Select(m => m.UserId).ToHashSet();
+        AssignableUsers = memberIds == null ? Users : Users.Where(u => memberIds.Contains(u.Id)).ToList();
         Projects = _projectController.Get().Where(x => x.Template == false).ToList();
         MudDialog.StateHasChanged();
     }

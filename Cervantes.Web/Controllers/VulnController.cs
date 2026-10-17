@@ -842,15 +842,17 @@ public class VulnController: ControllerBase
             if (ModelState.IsValid)
             {
                 var vuln = vulnManager.GetById(model.VulnId);
-                if (vuln != null)
+                if (vuln == null)
                 {
-                    if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
+                    return NotFound("Vulnerability not found");
+                }
+
+                if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
+                {
+                    var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
+                    if (user == null)
                     {
-                        var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
-                        if (user == null)
-                        {
-                            return StatusCode(403, "You do not have permission to access this project");
-                        }
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
                 
@@ -1108,15 +1110,17 @@ public class VulnController: ControllerBase
             if (ModelState.IsValid)
             {
                 var vuln = vulnManager.GetById(model.VulnId);
-                if (vuln != null)
+                if (vuln == null)
                 {
-                    if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
+                    return NotFound("Vulnerability not found");
+                }
+
+                if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
+                {
+                    var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
+                    if (user == null)
                     {
-                        var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
-                        if (user == null)
-                        {
-                            return StatusCode(403, "You do not have permission to access this project");
-                        }
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
                 

@@ -200,7 +200,12 @@ public class ChecklistController : ControllerBase
                 {
                     return BadRequest("Access denied: User does not have permission to access this project");
                 }
-                
+
+                if (!TargetBelongsToProject(model.TargetId, model.ProjectId))
+                {
+                    return BadRequest("The target must belong to the checklist's project");
+                }
+
                 switch (model.Type)
                 {
                     case ChecklistType.OWASPWSTG:
@@ -503,6 +508,12 @@ public class ChecklistController : ControllerBase
     [HasPermission(Permissions.ChecklistsDelete)]
     public async Task<IActionResult> DeleteWstg(Guid checklistId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ChecklistsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var result = wstgManager.GetById(checklistId);
@@ -1576,6 +1587,11 @@ public class ChecklistController : ControllerBase
                 return ProjectAccessDenied(model.ProjectId);
             }
 
+            if (model.TargetId != null && !TargetBelongsToProject(model.TargetId.Value, model.ProjectId))
+            {
+                return BadRequest("The target must belong to the checklist's project");
+            }
+
             var checklist = new Checklist
             {
                 Id = Guid.NewGuid(),
@@ -1659,6 +1675,12 @@ public class ChecklistController : ControllerBase
     [HasPermission(Permissions.ChecklistsDelete)]
     public async Task<ActionResult> DeleteCustomChecklist(Guid id)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ChecklistsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var checklist = _checklistManager.GetById(id);
@@ -1739,6 +1761,12 @@ public class ChecklistController : ControllerBase
             if (user == null)
             {
                 return ProjectAccessDenied(checklist.ProjectId);
+            }
+
+            if (model.VulnId != null && model.VulnId != execution.VulnId
+                && !VulnBelongsToProject(model.VulnId.Value, checklist.ProjectId))
+            {
+                return BadRequest("The vulnerability must belong to the checklist's project");
             }
 
             execution.Status = model.Status;
@@ -1841,6 +1869,11 @@ public class ChecklistController : ControllerBase
             if (itemTemplateId != checklist.ChecklistTemplateId)
                 return BadRequest("Checklist item does not belong to this checklist's template");
 
+            if (model.VulnId != null && !VulnBelongsToProject(model.VulnId.Value, checklist.ProjectId))
+            {
+                return BadRequest("The vulnerability must belong to the checklist's project");
+            }
+
             // Check if execution already exists
             var existingExecution = _checklistExecutionManager.GetAll()
                 .FirstOrDefault(e => e.ChecklistId == checklistId && e.ChecklistItemId == itemId);
@@ -1897,6 +1930,12 @@ public class ChecklistController : ControllerBase
             if (user == null)
                 return ProjectAccessDenied(checklist.ProjectId);
 
+            if (model.VulnId != null && model.VulnId != execution.VulnId
+                && !VulnBelongsToProject(model.VulnId.Value, checklist.ProjectId))
+            {
+                return BadRequest("The vulnerability must belong to the checklist's project");
+            }
+
             execution.Status = model.Status;
             execution.Notes = SanitizeOptional(model.Notes);
             execution.Evidence = SanitizeOptional(model.Evidence);
@@ -1927,6 +1966,21 @@ public class ChecklistController : ControllerBase
     {
         // Sanitizer.Sanitize(null) returns string.Empty; keep null so "no value" stays distinguishable
         return string.IsNullOrEmpty(value) ? null : Sanitizer.Sanitize(value);
+    }
+
+    // A checklist (and its executions) may only point at targets and findings of its own project.
+    [NonAction]
+    private bool VulnBelongsToProject(Guid vulnId, Guid projectId)
+    {
+        var vuln = _checklistExecutionManager.Context.Set<Vuln>().Find(vulnId);
+        return vuln != null && vuln.ProjectId == projectId;
+    }
+
+    [NonAction]
+    private bool TargetBelongsToProject(Guid targetId, Guid projectId)
+    {
+        var target = targetManager.GetById(targetId);
+        return target != null && target.ProjectId == projectId;
     }
 
     [NonAction]

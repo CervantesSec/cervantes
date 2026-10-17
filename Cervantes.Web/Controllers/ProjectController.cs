@@ -559,6 +559,12 @@ public class ProjectController : ControllerBase
     [HasPermission(Permissions.ProjectNotesEdit)]
     public async Task<IActionResult> EditNote(ProjectNoteEditViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ProjectNotesEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)

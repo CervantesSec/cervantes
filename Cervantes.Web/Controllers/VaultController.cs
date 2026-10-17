@@ -66,6 +66,12 @@ public class VaultController : ControllerBase
     [HasPermission(Permissions.VaultAdd)]
     public async Task<IActionResult> Add([FromBody] VaultCreateViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.VaultAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -73,7 +79,8 @@ public class VaultController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    _logger.LogWarning("Access denied adding a vault entry to project {ProjectId}. User: {UserId}", model.ProjectId, aspNetUserId);
+                    return StatusCode(403, "You do not have permission to access this project");
                 }
                 
                 
@@ -197,7 +204,8 @@ public class VaultController : ControllerBase
                 var user = projectUserManager.VerifyUser(vault.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    _logger.LogWarning("Access denied deleting vault entry {VaultId}. User: {UserId}", vault.Id, aspNetUserId);
+                    return StatusCode(403, "You do not have permission to access this project");
                 }
                 
                 vaultManager.Remove(vault);

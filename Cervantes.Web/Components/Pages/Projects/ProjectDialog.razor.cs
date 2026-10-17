@@ -12,6 +12,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
 using Microsoft.SemanticKernel;
 using MudBlazor;
@@ -542,7 +543,7 @@ protected override async Task OnInitializedAsync()
         model.TaskId = id;
         model.UserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         var response = await _TaskController.AssignToMe(model);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["taskAssigned"], Severity.Success);
         }

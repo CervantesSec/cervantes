@@ -338,10 +338,16 @@ const string contentSecurityPolicy =
     "form-action 'self'; " +
     "object-src 'self'; " +
     "base-uri 'self'";
-app.Use(async (context, next) =>
+app.Use((context, next) =>
 {
-    context.Response.Headers["Content-Security-Policy-Report-Only"] = contentSecurityPolicy;
-    await next();
+    // OnStarting, not a plain assignment: UseExceptionHandler clears the response (headers included) before it
+    // re-executes /Error, and this middleware sits before it, so a header set up front is lost on error pages.
+    context.Response.OnStarting(static state =>
+    {
+        ((HttpResponse)state).Headers["Content-Security-Policy-Report-Only"] = contentSecurityPolicy;
+        return Task.CompletedTask;
+    }, context.Response);
+    return next();
 });
 
 app.Use(MudExWebApp.MudExMiddleware);

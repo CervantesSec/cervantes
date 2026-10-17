@@ -482,6 +482,12 @@ public class CveController : ControllerBase
             subscription.CreatedDate = DateTime.UtcNow;
             subscription.ModifiedDate = DateTime.UtcNow;
 
+            // The entity is bound straight from the body: drop relations the caller must not set.
+            subscription.ProjectId = null;
+            subscription.Project = null;
+            subscription.User = null;
+            subscription.Notifications = new List<CveNotification>();
+
             // Sanitize input
             subscription.Name = _sanitizer.Sanitize(subscription.Name);
             subscription.Description = _sanitizer.Sanitize(subscription.Description);

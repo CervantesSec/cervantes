@@ -31,14 +31,9 @@ public partial class DeleteVulnBulkDialog: ComponentBase
                 Snackbar.Add(@localizer["deletedVuln"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }
-            else if (response is BadRequestObjectResult badRequestResult)
+            else if (response is ObjectResult { StatusCode: 403 })
             {
-                var message = badRequestResult.Value;
-                if (message.ToString() == "NotAllowed")
-                {
-                    Snackbar.Add(@localizer["noInProject"], Severity.Warning);
-                }
-			        
+                Snackbar.Add(@localizer["noInProject"], Severity.Warning);
             }
             else
             {

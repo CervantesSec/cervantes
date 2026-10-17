@@ -44,7 +44,7 @@
 					}
 				</MudSelect>
 				
-				<MudSelect @bind-Value="model.CreatedUserId" For="@(() => model.CreatedUserId)" Label="@localizer["createdBy"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+				<MudSelect @bind-Value="model.CreatedUserId" Disabled="true" For="@(() => model.CreatedUserId)" Label="@localizer["createdBy"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 					@foreach (var user in Users)
 					{
 						<MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
@@ -53,7 +53,7 @@
 				
 				<MudSelect @bind-Value="model.AsignedUserId" For="@(() => model.AsignedUserId)" Label="@localizer["assignedTo"]" AdornmentIcon="@Icons.Material.Filled.Person" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 					<MudSelectItem Value="string.Empty">@localizer["selectUser"]</MudSelectItem>
-					@foreach (var user in Users)
+					@foreach (var user in AssignableUsers)
 					{
 						<MudSelectItem Value="@user.Id">@user.FullName</MudSelectItem>
 					}

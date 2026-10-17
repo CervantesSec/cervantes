@@ -80,7 +80,28 @@ public partial class CreateTaskDialog: ComponentBase
     TaskCreateViewModel model = new TaskCreateViewModel();
     [Parameter] public Guid project { get; set; }
     private List<Project> Projects = new List<Project>();
-    private Guid SelectedProject { get; set; } = Guid.Empty;
+    private Guid selectedProject = Guid.Empty;
+    private HashSet<string> projectMemberIds = new HashSet<string>();
+    private Guid SelectedProject
+    {
+        get => selectedProject;
+        set
+        {
+            selectedProject = value;
+            projectMemberIds = value == Guid.Empty
+                ? new HashSet<string>()
+                : _projectController.GetMembers(value).Select(m => m.UserId).ToHashSet();
+            // Only members of the selected project can be assigned; drop an assignee who is not one.
+            if (model != null && !string.IsNullOrEmpty(model.AsignedUserId)
+                && AssignableUsers.All(u => u.Id != model.AsignedUserId))
+            {
+                model.AsignedUserId = string.Empty;
+            }
+        }
+    }
+
+    private IEnumerable<ApplicationUser> AssignableUsers =>
+        SelectedProject == Guid.Empty ? Users : Users.Where(u => projectMemberIds.Contains(u.Id));
     private List<ApplicationUser> Users = new List<ApplicationUser>();
     //private Guid SelectedProject { get; set; } = Guid.Empty;
     private List<Target> Targets = new List<Target>();
@@ -136,14 +157,9 @@ public partial class CreateTaskDialog: ComponentBase
 		        Snackbar.Add(@localizer["taskCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));
 	        }
-	        else if (response is BadRequestObjectResult badRequestResult)
+	        else if (response is ObjectResult { StatusCode: 403 })
 	        {
-		        var message = badRequestResult.Value;
-		        if (message.ToString() == "NotAllowed")
-		        {
-			        Snackbar.Add(@localizer["noInProject"], Severity.Warning);
-		        }
-			        
+	            Snackbar.Add(@localizer["noInProject"], Severity.Warning);
 	        }
 	        else
 	        {

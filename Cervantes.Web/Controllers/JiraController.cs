@@ -247,7 +247,7 @@ public class JiraController : Controller
             if (issue == false)
             {
                 _logger.LogError("An error ocurred deleting Jira Issue on Vuln {0} User {1}", vulnId,
-                    User.FindFirstValue(ClaimTypes.Name));
+                    aspNetUserId);
                 return BadRequest("Invalid request");
             }
 
@@ -263,7 +263,7 @@ public class JiraController : Controller
         catch (Exception e)
         {
             _logger.LogError("An error ocurred deleting Jira Issue on Vuln {0} User {1}", vulnId,
-                User.FindFirstValue(ClaimTypes.Name));
+                aspNetUserId);
 
             return BadRequest("Invalid request");
         }
@@ -274,6 +274,12 @@ public class JiraController : Controller
     [HasPermission(Permissions.JiraEdit)]
     public async Task<IActionResult> UpdateIssue(Guid vulnId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.JiraEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var vuln = vulnManager.GetById(vulnId);
@@ -311,6 +317,12 @@ public class JiraController : Controller
     [HasPermission(Permissions.JiraCommentsAdd)]
     public async Task<IActionResult> AddComment(JiraCommentCreate model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.JiraCommentsAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var vuln = vulnManager.GetById(model.VulnId);

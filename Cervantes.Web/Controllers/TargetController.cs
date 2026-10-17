@@ -640,15 +640,14 @@ public class TargetController : ControllerBase
                 var service = targetServicesManager.GetById(model.Id);
                 if (service != null)
                 {
-                    // Authorize against the target stored in the database, never the one sent in the request.
-                    // Moving the service to another target also requires membership in that target's project.
-                    var destination = targetManager.GetById(model.TargetId);
-                    if (destination == null)
+                    // An edit never moves a service to another target.
+                    if (model.TargetId != service.TargetId)
                     {
-                        return NotFound("Target not found");
+                        return BadRequest("A service cannot be moved to another target");
                     }
 
-                    if (!CanWriteTarget(targetManager.GetById(service.TargetId)) || !CanWriteTarget(destination))
+                    // Authorize against the target stored in the database.
+                    if (!CanWriteTarget(targetManager.GetById(service.TargetId)))
                     {
                         _logger.LogWarning("Access denied editing target service {ServiceId}. User: {UserId}",
                             service.Id, aspNetUserId);
@@ -659,7 +658,6 @@ public class TargetController : ControllerBase
                     service.Description = sanitizer.Sanitize(model.Description);
                     service.Port = model.Port;
                     service.Version = sanitizer.Sanitize(model.Version);
-                    service.TargetId = model.TargetId;
                     service.UserId = aspNetUserId;
                     service.Note = sanitizer.Sanitize(model.Note);
                     await targetServicesManager.Context.SaveChangesAsync();

@@ -50,7 +50,8 @@ public class NessusParser: INessusParser
                     if(tag.Attributes["host-ip"] != null){hostIp = tag.Attributes["host-ip"].InnerText;}
                 }
                 
-                var tar = targetManager.GetByName(hostName);
+                var targetName = sanitizer.Sanitize(HttpUtility.HtmlDecode(hostName));
+                var tar = targetManager.GetByName(targetName, project);
                 Target target = null;
                 if (tar == null)
                 {
@@ -58,7 +59,7 @@ public class NessusParser: INessusParser
                     {
                         UserId = user,
                         ProjectId = project,
-                        Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(hostName)),
+                        Name = targetName,
                         Description = "<p>Host created from Nessus Scan Import</p>" + "<p>OS: "+ sanitizer.Sanitize(HttpUtility.HtmlDecode(os)) +"</p>"+ "<p>Host Ip: "+ sanitizer.Sanitize(HttpUtility.HtmlDecode(hostIp)) +"</p>",
                         Type = TargetType.Hostname
                     };
