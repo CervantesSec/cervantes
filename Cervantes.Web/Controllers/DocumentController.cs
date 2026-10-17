@@ -148,8 +148,15 @@ public class DocumentController : Controller
                 var doc = docManager.GetById(docId);
                 if (doc != null)
                 {
-                    var filePath = $"{env.WebRootPath}/{doc.FilePath}";
-                    System.IO.File.Delete(filePath);
+                    if (AttachmentPath.TryResolve(env.WebRootPath, doc.FilePath, "Documents", out var filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
+                            "Document", doc.Id, aspNetUserId);
+                    }
                     docManager.Remove(doc);
                     docManager.Context.SaveChanges();
                     _logger.LogInformation("Document deleted successfully. User: {0}",

@@ -113,6 +113,18 @@ public class ChatController : ControllerBase
             return null;
         }
 
+        string? documentPath = null;
+        if (model.Type == "Document")
+        {
+            var doc = documentManager.GetById(model.DocumentId);
+            if (doc != null && !AttachmentPath.TryResolve(env.WebRootPath, doc.FilePath, "Documents", out documentPath))
+            {
+                _logger.LogWarning("Document {DocumentId} has no file inside the documents folder, AI chat not created. User: {UserId}",
+                    model.DocumentId, aspNetUserId);
+                return null;
+            }
+        }
+
         var chat = new Chat
         {
             Id = Guid.NewGuid(),
@@ -134,10 +146,9 @@ public class ChatController : ControllerBase
                 }
                 break;
             case "Document":
-                var doc = documentManager.GetById(model.DocumentId);
-                if (doc != null)
+                if (documentPath != null)
                 {
-                    await _aiService.AddDocument(chat.Id, env.WebRootPath+"/"+doc.FilePath); 
+                    await _aiService.AddDocument(chat.Id, documentPath);
                 }
                 break;
         }

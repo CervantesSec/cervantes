@@ -148,9 +148,16 @@ public class OrganizationController: ControllerBase
         try
         {
             var org = organizationManager.GetAll().First();
-            var imagePath = $"{env.WebRootPath}/{org.ImagePath}";
-            System.IO.File.Delete(imagePath);
-            
+            if (AttachmentPath.TryResolve(env.WebRootPath, org.ImagePath, "Organization", out var imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+            else
+            {
+                _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
+                    "Organization", org.Id, aspNetUserId);
+            }
+
             org.ImagePath = null;
 
             await organizationManager.Context.SaveChangesAsync();

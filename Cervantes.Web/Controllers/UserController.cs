@@ -678,9 +678,16 @@ public class UserController: ControllerBase
         try
         {
             var user = usrManager.GetByUserId(id);
-            var imagePath = $"{env.WebRootPath}/{user.Avatar}";
-            System.IO.File.Delete(imagePath);
-            
+            if (AttachmentPath.TryResolve(env.WebRootPath, user.Avatar, "Users", out var imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+            else
+            {
+                _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
+                    "User", user.Id, aspNetUserId);
+            }
+
             user.Avatar = null;
 
             await usrManager.Context.SaveChangesAsync();

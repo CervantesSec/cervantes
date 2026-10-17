@@ -943,10 +943,17 @@ public class TaskController: ControllerBase
                         }
                     }
                     
-                    var path = $"{env.WebRootPath}/{result.FilePath}";
-                    if (System.IO.File.Exists(path))
+                    if (AttachmentPath.TryResolve(env.WebRootPath, result.FilePath, "Task", out var path))
                     {
-                        System.IO.File.Delete(path);
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
+                            "TaskAttachment", result.Id, aspNetUserId);
                     }
                     taskAttachmentManager.Remove(result);
                     await taskTargetManager.Context.SaveChangesAsync();

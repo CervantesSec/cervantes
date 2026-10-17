@@ -265,8 +265,15 @@ public class ClientsController : ControllerBase
             {
 
                 var client = clientManager.GetById(id);
-                var imagePath = $"{env.WebRootPath}/{client.ImagePath}";
-                System.IO.File.Delete(imagePath);
+                if (AttachmentPath.TryResolve(env.WebRootPath, client.ImagePath, "Clients", out var imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+                else
+                {
+                    _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
+                        "Client", client.Id, aspNetUserId);
+                }
 
                 client.ImagePath = "None";
 
