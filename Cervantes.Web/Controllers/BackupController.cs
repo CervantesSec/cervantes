@@ -992,8 +992,12 @@ public class BackupController : ControllerBase
                 }
             }
 
-            using FileStream openStream = System.IO.File.OpenRead(path);
-            BackupViewModel backupViewModel = JsonSerializer.Deserialize<BackupViewModel>(openStream);
+            BackupViewModel backupViewModel;
+            // Close the file before the restore runs: it is deleted at the end, and Windows cannot delete an open file.
+            using (var openStream = System.IO.File.OpenRead(path))
+            {
+                backupViewModel = JsonSerializer.Deserialize<BackupViewModel>(openStream);
+            }
 
             string oldUserId = "";
             if (backupViewModel.Users != null)

@@ -71,6 +71,8 @@ public class CsvParser: ICsvParser
                     vuln.UserId = user;
                     vuln.CVSS3 = vul.CVSS3 ?? 0;
                     vuln.CVSSVector = vul.CVSSVector == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.CVSSVector));
+                    vuln.MitreTechniques = string.IsNullOrEmpty(vul.MitreTechniques) ? "" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.MitreTechniques));
+                    vuln.MitreValues = string.IsNullOrEmpty(vul.MitreValues) ? "" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.MitreValues));
                     var cat = vulnCategoryManager.GetByName(vul.VulnCategory);
                     if (cat != null)
                     {
@@ -124,8 +126,8 @@ public class CsvParser: ICsvParser
                         continue;
                     }
                     vuln.FindingId = "No Project";
-                    vuln.MitreTechniques = vul.MitreTechniques == "" ? "" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.MitreTechniques));
-                    vuln.MitreValues = vul.MitreValues == "" ? "" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.MitreValues));
+                    vuln.MitreTechniques = string.IsNullOrEmpty(vul.MitreTechniques) ? "" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.MitreTechniques));
+                    vuln.MitreValues = string.IsNullOrEmpty(vul.MitreValues) ? "" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.MitreValues));
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                 }

@@ -14,7 +14,7 @@ public class Vuln
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
     
-    public string FindingId { get; set; }
+    public string FindingId { get; set; } = string.Empty;
 
     /// <summary>
     /// Is vuln template
@@ -29,7 +29,7 @@ public class Vuln
     /// <summary>
     /// Vuln Name
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Vuln Created Date
@@ -51,7 +51,7 @@ public class Vuln
     /// <summary>
     /// Id user
     /// </summary>
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 
     /// <summary>
     /// Project Associated
@@ -90,22 +90,22 @@ public class Vuln
     /// <summary>
     /// CVE Associated to vuln
     /// </summary>
-    public string cve { get; set; }
+    public string cve { get; set; } = string.Empty;
 
     /// <summary>
     /// Vuln Description
     /// </summary>
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Vuln POC
     /// </summary>
-    public string ProofOfConcept { get; set; }
+    public string ProofOfConcept { get; set; } = string.Empty;
 
     /// <summary>
     /// Vuln Impact
     /// </summary>
-    public string Impact { get; set; }
+    public string Impact { get; set; } = string.Empty;
 
     /// <summary>
     /// Vuln CVSS3 Score
@@ -115,12 +115,12 @@ public class Vuln
     /// <summary>
     /// Vuln CVSS Vector
     /// </summary>
-    public string CVSSVector { get; set; }
+    public string CVSSVector { get; set; } = string.Empty;
 
     /// <summary>
     /// Vuln Remediation Description
     /// </summary>
-    public string Remediation { get; set; }
+    public string Remediation { get; set; } = string.Empty;
 
     /// <summary>
     /// Vuln Remediation Complexity
@@ -137,13 +137,13 @@ public class Vuln
     /// </summary>
     public bool JiraCreated { get; set; }
     
-    public string OWASPRisk { get; set; }
-    public string OWASPImpact { get; set; }
-    public string OWASPLikehood { get; set; }
-    public string OWASPVector { get; set; }
+    public string OWASPRisk { get; set; } = string.Empty;
+    public string OWASPImpact { get; set; } = string.Empty;
+    public string OWASPLikehood { get; set; } = string.Empty;
+    public string OWASPVector { get; set; } = string.Empty;
     
-    public string MitreValues { get; set; }
-    public string MitreTechniques { get; set; }
+    public string MitreValues { get; set; } = string.Empty;
+    public string MitreTechniques { get; set; } = string.Empty;
     
     //public string References { get; set; }
     

@@ -14,7 +14,7 @@ public partial class Jira: ComponentBase
 {
     private List<BreadcrumbItem> _items;
     private List<CORE.Entities.Jira> model = new List<CORE.Entities.Jira>();
-    private List<CORE.Entities.Jira> seleJiras = new List<CORE.Entities.Jira>();
+    private HashSet<CORE.Entities.Jira> seleJiras = new HashSet<CORE.Entities.Jira>();
     [Inject] private JiraController _JiraController { get; set; }
     private string searchString = "";
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
@@ -111,24 +111,27 @@ public partial class Jira: ComponentBase
         switch (id)
         {
             case 1:
-                foreach (var vuln in seleJiras)
+                foreach (var jira in seleJiras.ToList())
                 {
-                    var response = await _JiraController.Add(vuln.Id);
-                    if (response is CreatedAtActionResult)
+                    var response = await _JiraController.DeleteIssue(jira.VulnId);
+                    if (response is NoContentResult)
                     {
-                        Snackbar.Add(@localizer["jiraCreated"], Severity.Success);
+                        Snackbar.Add(@localizer["jiraDeleted"], Severity.Success);
                     }
                     else
                     {
-                        Snackbar.Add(@localizer["jiraCreatedError"], Severity.Error);
+                        Snackbar.Add(@localizer["jiraDeletedError"], Severity.Error);
                     }
                 }
+                seleJiras.Clear();
+                await Update();
+                StateHasChanged();
                 break;
         }
     }
     void SelectedItemsChanged(HashSet<CORE.Entities.Jira> items)
     {
         
-        seleJiras = items.ToList();
+        seleJiras = items;
     }
 }
