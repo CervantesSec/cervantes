@@ -1046,6 +1046,14 @@ public class BackupController : ControllerBase
                     {
                         client.UserId = aspNetUserId;
                     }
+                    if (!AttachmentPath.TryResolve(env.WebRootPath, client.ImagePath, "Clients", out _))
+                    {
+                        if (client.ImagePath != null && client.ImagePath != "None")
+                        {
+                            LogDiscardedPath("Client", client.Id);
+                        }
+                        client.ImagePath = "None";
+                    }
                     await clientManager.AddAsync(client);
                 }
 
@@ -1140,6 +1148,15 @@ public class BackupController : ControllerBase
                     {
                         doc.UserId = aspNetUserId;
                     }
+                    if (!AttachmentPath.TryResolve(env.WebRootPath, doc.FilePath, "Documents", out _))
+                    {
+                        // "Attachments/Documents/" is what a document without a file stores.
+                        if (doc.FilePath != "Attachments/Documents/")
+                        {
+                            LogDiscardedPath("Document", doc.Id);
+                        }
+                        doc.FilePath = "Attachments/Documents/";
+                    }
                     await documentManager.AddAsync(doc);
                 }
 
@@ -1176,7 +1193,18 @@ public class BackupController : ControllerBase
                 org.ContactEmail = backupViewModel.Organization.ContactEmail;
                 org.ContactName = backupViewModel.Organization.ContactName;
                 org.ContactPhone = backupViewModel.Organization.ContactPhone;
-                org.ImagePath = backupViewModel.Organization.ImagePath;
+                if (AttachmentPath.TryResolve(env.WebRootPath, backupViewModel.Organization.ImagePath, "Organization", out _))
+                {
+                    org.ImagePath = backupViewModel.Organization.ImagePath;
+                }
+                else
+                {
+                    if (backupViewModel.Organization.ImagePath != null)
+                    {
+                        LogDiscardedPath("Organization", org.Id);
+                    }
+                    org.ImagePath = null;
+                }
 
                 await organizationManager.Context.SaveChangesAsync();
             }
@@ -1283,6 +1311,11 @@ public class BackupController : ControllerBase
                         continue;
                     }
                     // Check if the CreatedUserId exists in the AspNetUsers table
+                    if (!AttachmentPath.TryResolve(env.WebRootPath, att.FilePath, "Task", out _))
+                    {
+                        LogDiscardedPath("TaskAttachment", att.Id);
+                        continue;
+                    }
                     var userExists = await _userManager.FindByIdAsync(att.UserId);
                     if (userExists == null)
                     {
@@ -1654,6 +1687,15 @@ public class BackupController : ControllerBase
             QueueResanitize();
             return await System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest());
         }
+    }
+
+    /// <summary>
+    /// Logs a restored file path that was dropped because it does not resolve inside its attachments folder.
+    /// </summary>
+    private void LogDiscardedPath(string entity, object id)
+    {
+        _logger.LogWarning("Restore discarded the stored file of {Entity} {Id}: it is outside its attachments folder. User: {UserId}",
+            entity, id, aspNetUserId);
     }
 
     /// <summary>
