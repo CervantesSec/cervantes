@@ -35,6 +35,7 @@ public class OrganizationController: ControllerBase
         this.organizationManager = organizationManager;
         this.env = env;        
         _logger = logger;
+        this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
         this.sanitizer = sanitizer;
@@ -132,6 +133,12 @@ public class OrganizationController: ControllerBase
     [HasPermission(Permissions.OrganizationEdit)]
     public async Task<IActionResult> DeleteAvatar()
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.OrganizationEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var org = organizationManager.GetAll().First();

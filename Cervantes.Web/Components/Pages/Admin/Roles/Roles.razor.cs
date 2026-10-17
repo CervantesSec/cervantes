@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using AuthPermissions.AdminCode;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Components.Pages.Admin.Users;
@@ -69,7 +70,7 @@ public partial class Roles : ComponentBase
             new BreadcrumbItem(@localizer["roles"], href: null, disabled: true,icon: Icons.Material.Filled.Group)
         };
         await Update();
-        if (navigationManager.Uri.Contains("/roles/create"))
+        if (navigationManager.Uri.Contains("/roles/create") && userAth.HasPermission(Cervantes.CORE.Permissions.RolesAdd))
         {
              await OpenDialogCreate(maxWidthEx);
         }

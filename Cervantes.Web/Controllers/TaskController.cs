@@ -55,6 +55,7 @@ public class TaskController: ControllerBase
         this.userManager = userManager;
         _logger = logger;
         this.env = env;
+        this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.emailService = emailService;
         this.fileCheck = fileCheck;
@@ -267,10 +268,15 @@ public class TaskController: ControllerBase
                         }
                     }
 
+                    // An edit never moves a task to another project, or between a project and the templates.
+                    if (task.ProjectId != result.ProjectId)
+                    {
+                        return BadRequest("A task cannot be moved to another project");
+                    }
+
                     result.Name = sanitizer.Sanitize(task.Name);
                     result.Description = sanitizer.Sanitize(task.Description);
                     result.AsignedUserId = task.AsignedUserId;
-                    result.CreatedUserId = task.CreatedUserId;
                     result.Status = task.Status;
                     result.StartDate = task.StartDate.ToUniversalTime();
                     result.EndDate = task.EndDate.ToUniversalTime();
@@ -279,14 +285,6 @@ public class TaskController: ControllerBase
                         result.ClosedDate = DateTime.Today.ToUniversalTime();
                     }
                     result.Template = false;
-                    if (task.ProjectId != null)
-                    {
-                        result.ProjectId = task.ProjectId.Value;
-                    }
-                    else
-                    {
-                        result.ProjectId = null;
-                    }
                     await taskManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Task edited successfully. User: {0}",
                         aspNetUserId);
@@ -369,6 +367,12 @@ public class TaskController: ControllerBase
     [HasPermission(Permissions.TasksEdit)]
     public async Task<IActionResult> UpdateStatus([FromBody] TaskUpdateViewModel task)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TasksEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -543,6 +547,11 @@ public class TaskController: ControllerBase
             if (ModelState.IsValid)
             {
                 var task = taskManager.GetById(model.TaskId);
+                if (task == null)
+                {
+                    return NotFound("Task not found");
+                }
+
                 if (task.ProjectId != null && task.ProjectId != Guid.Empty)
                 {
                     var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
@@ -551,7 +560,14 @@ public class TaskController: ControllerBase
                         return BadRequest("NotAllowed");
                     }
                 }
-                
+
+                // A task is never linked to a target of another project.
+                var linkedTarget = targetManager.GetById(model.TargetId);
+                if (linkedTarget == null || linkedTarget.ProjectId != task.ProjectId)
+                {
+                    return BadRequest("The target must belong to the task's project");
+                }
+
                 var result = taskTargetManager.GetAll()
                     .Where(x => x.TaskId == model.TaskId && x.TargetId == model.TargetId);
 
@@ -695,19 +711,27 @@ public class TaskController: ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var task = taskManager.GetById(model.TaskId);
-                if (task.ProjectId != null && task.ProjectId != Guid.Empty)
+                var note = taskNoteManager.GetById(model.Id);
+                if (note == null)
                 {
-                    var user = projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId);
-                    if (user == null)
-                    {
-                        return BadRequest("NotAllowed");
-                    }
+                    return NotFound("Task note not found");
                 }
 
-                var note = taskNoteManager.GetById(model.Id);
-                note.Id = model.Id;
-                note.TaskId = model.TaskId;
+                // Authorize against the task stored with the note, never the one sent in the request.
+                var task = taskManager.GetById(note.TaskId);
+                if (task?.ProjectId != null && task.ProjectId != Guid.Empty &&
+                    projectUserManager.VerifyUser(task.ProjectId.Value, aspNetUserId) == null)
+                {
+                    _logger.LogWarning("Access denied editing task note {NoteId}. User: {UserId}", note.Id, aspNetUserId);
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
+                }
+
+                // An edit never moves a note to another task.
+                if (model.TaskId != note.TaskId)
+                {
+                    return BadRequest("A note cannot be moved to another task");
+                }
+
                 note.Name = sanitizer.Sanitize(model.Name);
                 note.Description = sanitizer.Sanitize(model.Description);
                 await taskNoteManager.Context.SaveChangesAsync();

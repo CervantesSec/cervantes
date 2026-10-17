@@ -2,6 +2,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
@@ -30,7 +31,7 @@ public partial class CreateRole : ComponentBase
         if (form.IsValid)
         {
 	        var response = await _UserController.AddRole(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+	        if (response is CreatedResult)
 	        {
 		        Snackbar.Add(@localizer["roleCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

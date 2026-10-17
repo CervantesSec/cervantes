@@ -179,7 +179,7 @@
                 </MudPaper>
                 <MudPaper Elevation="25">
 
-                    <MudDropContainer T="CORE.Entities.Task" Items="tasks.Where(x => x.Template == false)" ItemsSelector="@((item, dropzone) => item.Status.ToString() == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+                    <MudDropContainer T="CORE.Entities.Task" Items="tasks.Where(x => x.Template == false)" ItemsSelector="@((item, dropzone) => item.Status.ToString() == dropzone)" ItemDropped="ItemUpdated" ItemDisabled="@(_ => !userAth.HasPermission(Permissions.TasksEdit))" Class="d-flex flex-wrap flex-grow-1">
                         <ChildContent>
 
                             <MudDropZone T="CORE.Entities.Task" Identifier="@CORE.Entities.TaskStatus.Backlog.ToString()" ItemDraggingClass="mud-info-text" Class="rounded-lg mud-alert-text-info pa-6 ma-4 flex-grow-1 mud-elevation-25">

@@ -82,6 +82,7 @@ public class ProjectController : ControllerBase
         this.emailService = emailService;
         this.fileCheck = fileCheck;
         this.sanitizer = sanitizer;
+        this.HttpContextAccessor = HttpContextAccessor;
     }
 
     [HttpGet]
@@ -435,6 +436,12 @@ public class ProjectController : ControllerBase
     [HasPermission(Permissions.ProjectMembersDelete)]
     public async Task<IActionResult> DeleteMember(Guid memberId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ProjectMembersDelete))
+        {
+            return StatusCode(403, "You do not have permission to remove project members");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -556,15 +563,26 @@ public class ProjectController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
-                if (user == null)
-                {
-                    return BadRequest("Access denied: User does not have permission to access this project");
-                }
                 var note = projectNoteManager.GetById(model.Id);
-                note.Id = model.Id;
-                note.ProjectId = model.ProjectId;
-                note.UserId = aspNetUserId;
+                if (note == null)
+                {
+                    return NotFound("Project note not found");
+                }
+
+                // Authorize against the project stored in the database, never the one sent in the request.
+                if (projectUserManager.VerifyUser(note.ProjectId, aspNetUserId) == null)
+                {
+                    _logger.LogWarning("Access denied editing project note {NoteId}. User: {UserId}", note.Id, aspNetUserId);
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
+                }
+
+                // An edit never moves a note to another project.
+                if (model.ProjectId != note.ProjectId)
+                {
+                    return BadRequest("A note cannot be moved to another project");
+                }
+
+                // The author (note.UserId) is not changed by an edit.
                 note.Name = sanitizer.Sanitize(model.Name);
                 note.Description = sanitizer.Sanitize(model.Description);
 

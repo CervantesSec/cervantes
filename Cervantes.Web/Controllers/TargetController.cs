@@ -60,6 +60,7 @@ public class TargetController : ControllerBase
         this.projectAttachmentManager = projectAttachmentManager;
         this.nmapParser = nmapParser;
         this.env = env;
+        this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
         this.sanitizer = sanitizer;
@@ -139,6 +140,12 @@ public class TargetController : ControllerBase
     [HasPermission(Permissions.TargetsAdd)]
     public async Task<IActionResult> Add([FromBody] TargetCreateViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TargetsAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -565,6 +572,12 @@ public class TargetController : ControllerBase
     [HasPermission(Permissions.TargetsServicesAdd)]
     public async Task<IActionResult> AddService([FromBody] TargetServiceCreateViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TargetsServicesAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -683,6 +696,12 @@ public class TargetController : ControllerBase
     [HasPermission(Permissions.TargetsServicesDelete)]
     public async Task<IActionResult> DeleteService(Guid serviceId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TargetsServicesDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)

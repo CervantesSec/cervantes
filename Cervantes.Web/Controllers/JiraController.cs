@@ -52,6 +52,7 @@ public class JiraController : Controller
         this.jiraService = jiraService;
         this.jiraManager = jiraManager;
         this.jiraCommentManager = jiraCommentManager;
+        this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.sanitizer = sanitizer;
         this.projectUserManager = projectUserManager;
@@ -156,6 +157,12 @@ public class JiraController : Controller
     [HasPermission(Permissions.JiraAdd)]
     public async Task<IActionResult> Add(Guid vulnId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.JiraAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         // Access check runs before the try block so the catch never writes to a vuln the user cannot access
         var vuln = vulnManager.GetById(vulnId);
         if (vuln == null)
@@ -211,6 +218,12 @@ public class JiraController : Controller
     [HasPermission(Permissions.JiraDelete)]
     public async Task<IActionResult> DeleteIssue(Guid vulnId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.JiraDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var vuln = vulnManager.GetById(vulnId);

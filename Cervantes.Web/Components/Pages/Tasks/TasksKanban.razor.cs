@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.Export;
@@ -61,6 +62,12 @@ public partial class TasksKanban : ComponentBase
     
     private async Task ItemUpdated(MudItemDropInfo<CORE.Entities.Task> dropItem)
     {
+        // Gate before touching the tracked entity; the controller re-checks TasksEdit as well.
+        if (!userAth.HasPermission(Cervantes.CORE.Permissions.TasksEdit))
+        {
+            return;
+        }
+
         var status = dropItem.Item.Status;
         dropItem.Item.Status = (CORE.Entities.TaskStatus)Enum.Parse(typeof(CORE.Entities.TaskStatus), dropItem.DropzoneIdentifier);
         var update = new TaskUpdateViewModel();

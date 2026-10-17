@@ -112,6 +112,8 @@
                     </MudDataGrid>
                 </MudTabPanel>
 
+                @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsRead))
+                {
                 <MudTabPanel Text="@localizer["projects"]" Icon="@Icons.Material.Filled.Folder" Style="min-width: 260px;">
                     <MudDataGrid T="ProjectCustomFieldViewModel" Items="@projectModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_projectQuickFilter"
                                  Hideable="true" Hover="true" RowClick="@ProjectRowClicked" MultiSelection="true" SelectedItemsChanged="@ProjectSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
@@ -204,7 +206,10 @@
                         </PagerContent>
                     </MudDataGrid>
                 </MudTabPanel>
+                }
 
+                @if (userAuth.HasPermission(Permissions.ClientCustomFieldsRead))
+                {
                 <MudTabPanel Text="@localizer["clients"]" Icon="@Icons.Material.Filled.Person" Style="min-width: 260px;">
                     <MudDataGrid T="ClientCustomFieldViewModel" Items="@clientModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_clientQuickFilter"
                                  Hideable="true" Hover="true" RowClick="@ClientRowClicked" MultiSelection="true" SelectedItemsChanged="@ClientSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
@@ -297,7 +302,10 @@
                         </PagerContent>
                     </MudDataGrid>
                 </MudTabPanel>
+                }
 
+                @if (userAuth.HasPermission(Permissions.TargetCustomFieldsRead))
+                {
                 <MudTabPanel Text="@localizer["targets"]" Icon="@Icons.Material.Filled.GpsFixed" Style="min-width: 260px;">
                     <MudDataGrid T="TargetCustomFieldViewModel" Items="@targetModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_targetQuickFilter"
                                  Hideable="true" Hover="true" RowClick="@TargetRowClicked" MultiSelection="true" SelectedItemsChanged="@TargetSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
@@ -390,6 +398,7 @@
                         </PagerContent>
                     </MudDataGrid>
                 </MudTabPanel>
+                }
             </MudTabs>
     </MudItem>
 </MudGrid>

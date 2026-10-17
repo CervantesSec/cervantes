@@ -421,7 +421,7 @@ protected override async Task OnInitializedAsync()
 
     async Task OpenProjectDeleteMembersDialog(DataGridRowClickEventArgs<ProjectUser> args)
     {
-        if (inProject)
+        if (inProject && userAth.HasPermission(Cervantes.CORE.Permissions.ProjectMembersDelete))
         {
             var parameters = new DialogParameters { ["user"] = args.Item };
             IMudExDialogReference<DeleteProjectMemberDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberDialog>("Simple Dialog", parameters, middleWidthEx);

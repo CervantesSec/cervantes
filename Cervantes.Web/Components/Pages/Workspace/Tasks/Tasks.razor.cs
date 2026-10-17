@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Security.Claims;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
@@ -102,6 +103,13 @@ public partial class Tasks: ComponentBase
     
     private async Task ItemUpdated(MudItemDropInfo<CORE.Entities.Task> dropItem)
     {
+        // Gate before touching the tracked entity; the controller re-checks TasksEdit as well.
+        if (!userAth.HasPermission(Cervantes.CORE.Permissions.TasksEdit))
+        {
+            return;
+        }
+
+        var status = dropItem.Item.Status;
         dropItem.Item.Status = (CORE.Entities.TaskStatus)Enum.Parse(typeof(CORE.Entities.TaskStatus), dropItem.DropzoneIdentifier);
         var update = new TaskUpdateViewModel();
         update.Id = dropItem.Item.Id;
@@ -113,6 +121,8 @@ public partial class Tasks: ComponentBase
         }
         else
         {
+            // The card shares the tracked entity with the controller: undo the in-memory status change.
+            dropItem.Item.Status = status;
             Snackbar.Add(@localizer["taskUpdatedError"], Severity.Error);
         }
     }

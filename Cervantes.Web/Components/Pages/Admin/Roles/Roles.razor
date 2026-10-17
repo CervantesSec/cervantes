@@ -51,11 +51,11 @@
                      Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
-                    @if (userAth.HasPermission(Permissions.UsersAdd))
+                    @if (userAth.HasPermission(Permissions.RolesAdd))
                     {
                         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidthEx))">@localizer["create"]</MudButton>
                     }
-                    @if (userAth.HasPermission(Permissions.UsersDelete))
+                    @if (userAth.HasPermission(Permissions.RolesDelete))
                     {
                         @if (seleUsers.Count() != 0)
                         {

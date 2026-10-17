@@ -192,9 +192,15 @@ public class UserController: ControllerBase
     
     [HttpPost]
     [Route("Role")]
-    [HasPermission(Permissions.RolesRead)]
+    [HasPermission(Permissions.RolesAdd)]
     public async Task<IActionResult> AddRole([FromBody] CreateRoleViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.RolesAdd))
+        {
+            return StatusCode(403, "You do not have permission to manage roles");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -224,6 +230,12 @@ public class UserController: ControllerBase
     [HasPermission(Permissions.RolesEdit)]
     public async Task<IActionResult> EditRole([FromBody] CreateRoleViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.RolesEdit))
+        {
+            return StatusCode(403, "You do not have permission to manage roles");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -273,6 +285,12 @@ public class UserController: ControllerBase
     [HasPermission(Permissions.RolesDelete)]
     public async Task<IActionResult> DeleteRole(string roleName)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.RolesDelete))
+        {
+            return StatusCode(403, "You do not have permission to manage roles");
+        }
+
         try
         {
             if (ModelState.IsValid)

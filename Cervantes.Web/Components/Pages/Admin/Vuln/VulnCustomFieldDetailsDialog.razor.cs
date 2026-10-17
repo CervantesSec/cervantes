@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -22,12 +23,18 @@ public partial class VulnCustomFieldDetailsDialog : ComponentBase
     [Inject] private VulnCustomFieldController VulnCustomFieldController { get; set; }
     [Inject] private IStringLocalizer<Resource> localizer { get; set; }
     [Inject] private ISnackbar Snackbar { get; set; }
-    
+    [Inject] private AuthenticationStateProvider authenticationStateProvider { get; set; }
+
     MudForm form;
     VulnCustomFieldValidator validator = new VulnCustomFieldValidator();
     
     private VulnCustomFieldEditViewModel model = new VulnCustomFieldEditViewModel();
     private string optionsText = string.Empty;
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+    }
 
     protected override void OnInitialized()
     {
@@ -121,7 +128,7 @@ public partial class VulnCustomFieldDetailsDialog : ComponentBase
             try
             {
                 var response = await VulnCustomFieldController.Edit(model);
-                if (response != null)
+                if (response is Microsoft.AspNetCore.Mvc.NoContentResult)
                 {
                     Snackbar.Add(localizer["customFieldUpdated"], MudBlazor.Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));

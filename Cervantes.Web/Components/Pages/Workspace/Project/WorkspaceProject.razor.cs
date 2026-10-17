@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Security.Claims;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
@@ -328,6 +329,11 @@ protected override async Task OnInitializedAsync()
 
     async Task OpenProjectDeleteMembersDialog(DataGridRowClickEventArgs<ProjectUser> args)
     {
+        if (!userAth.HasPermission(Cervantes.CORE.Permissions.ProjectMembersDelete))
+        {
+            return;
+        }
+
         var parameters = new DialogParameters { ["user"] = args.Item };
         IMudExDialogReference<DeleteProjectMemberDialog>? dlgReference = await Dialog.ShowExAsync<DeleteProjectMemberDialog>("Simple Dialog", parameters, middleWidthEx);
 

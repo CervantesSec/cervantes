@@ -154,6 +154,12 @@ public class TargetCustomFieldController : ControllerBase
     [HasPermission(Permissions.TargetCustomFieldsEdit)]
     public async Task<IActionResult> Put([FromBody] TargetCustomFieldEditViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TargetCustomFieldsEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (!ModelState.IsValid)

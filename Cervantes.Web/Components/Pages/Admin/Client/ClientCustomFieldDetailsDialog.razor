@@ -118,6 +118,9 @@
 	</DialogContent>
 	<DialogActions>
 		<MudButton OnClick="@(() => MudDialog.Cancel())">@localizer["cancel"]</MudButton>
-		<MudButton Color="Color.Primary" OnClick="@(() => Submit())">@localizer["update"]</MudButton>
+		@if (userAth.HasPermission(Permissions.ClientCustomFieldsEdit))
+		{
+			<MudButton Color="Color.Primary" OnClick="@(() => Submit())">@localizer["update"]</MudButton>
+		}
 	</DialogActions>
 </MudDialog>

@@ -524,6 +524,12 @@ public class ReportController : ControllerBase
     [HasPermission(Permissions.ReportComponentsAdd)]
     public async Task<IActionResult> CreateComponent([FromBody] CreateReportComponentModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ReportComponentsAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -616,6 +622,12 @@ public class ReportController : ControllerBase
     [HasPermission(Permissions.ReportComponentsDelete)]
     public async Task<IActionResult> DeleteComponent(Guid componentId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ReportComponentsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var aspNetUserId = HttpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -1050,7 +1062,8 @@ public class ReportController : ControllerBase
                         {"VaultType", vault.Type.ToString()},
                            {"VaultCreatedBy", vault.User.FullName},
                             {"VaultCreatedDate", vault.CreatedDate.ToString("dd/MM/yyyy")},
-                            {"VaultValue", vault.Value}
+                            // Vault values are stored verbatim, so encode them where they enter report HTML.
+                            {"VaultValue", HttpUtility.HtmlEncode(vault.Value)}
                       
                     });
                 }

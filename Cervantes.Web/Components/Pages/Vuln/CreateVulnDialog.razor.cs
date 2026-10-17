@@ -1,4 +1,6 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
+using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
@@ -6,6 +8,7 @@ using Cervantes.Web.Components.Pages.Workspace.Target;
 using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
@@ -105,6 +108,8 @@ public partial class CreateVulnDialog: ComponentBase
     [Inject] private VulnCustomFieldController VulnCustomFieldController { get; set; }
     [Inject] private ProjectController ProjectController { get; set; }
     [Inject] private TargetController TargetController { get; set; }
+    [Inject] private AuthenticationStateProvider authenticationStateProvider { get; set; }
+    private ClaimsPrincipal userAth;
 	[Inject] private IAiService _aiService { get; set; }
 	private bool aiEnabled = false;
 
@@ -131,6 +136,7 @@ public partial class CreateVulnDialog: ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         _editContext = new EditContext(model);
         Categories = VulnController.GetCategories().ToList();
         Cwes = VulnController.GetCwes().ToList();
@@ -172,10 +178,16 @@ public partial class CreateVulnDialog: ComponentBase
 	            model.CweId.Add(cwe);
 			}
             
+            // Only targets of the selected project are sent; a selection made before changing the project is dropped.
+            Guid? targetProjectId = SelectedProject != Guid.Empty ? SelectedProject : null;
+            var projectTargetIds = Targets.Where(x => x.ProjectId == targetProjectId).Select(x => x.Id).ToHashSet();
             model.TargetId = new List<Guid>();
             foreach (var target in SelectedTargets)
             {
-	            model.TargetId.Add(target);
+	            if (projectTargetIds.Contains(target))
+	            {
+		            model.TargetId.Add(target);
+	            }
             }
 	        
             if (SelectedCategory != Guid.Empty)
@@ -222,6 +234,10 @@ public partial class CreateVulnDialog: ComponentBase
 			        if (message.ToString() == "NotAllowed")
 			        {
 				        Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+			        }
+			        else
+			        {
+				        Snackbar.Add(@localizer["vulnCreatedError"], Severity.Error);
 			        }
 			        
 	        }

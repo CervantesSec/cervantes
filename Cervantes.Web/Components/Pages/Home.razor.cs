@@ -1,6 +1,8 @@
 using System.Security.Claims;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.Web.Controllers;
+using Cervantes.Web.Helpers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
@@ -64,10 +66,11 @@ public partial class Home: ComponentBase
         loading = true;
         try
         {
-            Projects = _projectController.Get().ToList();
-            Clients = _ClientsController.Get().ToList();
-            Vulns = _VulnController.GetVulns().ToList();
-            Tasks = _TaskController.Get().ToList();
+            // Home has no permission gate of its own: only load the modules the user can read.
+            Projects = _accessor.CurrentUserHas(Permissions.ProjectsRead) ? _projectController.Get().ToList() : new List<Project>();
+            Clients = _accessor.CurrentUserHas(Permissions.ClientsRead) ? _ClientsController.Get().ToList() : new List<Client>();
+            Vulns = _accessor.CurrentUserHas(Permissions.VulnsRead) ? _VulnController.GetVulns().ToList() : new List<CORE.Entities.Vuln>();
+            Tasks = _accessor.CurrentUserHas(Permissions.TasksRead) ? _TaskController.Get().ToList() : new List<CORE.Entities.Task>();
             
             // Simulate async operation for better UX
             await Task.Delay(100);

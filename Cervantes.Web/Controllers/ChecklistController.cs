@@ -67,6 +67,7 @@ public class ChecklistController : ControllerBase
         this.env = env;
         this.organizationManager = organizationManager;
         this.clientManager = clientManager;
+        this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.reportComponentsManager = reportComponentsManager;
         this.reportsPartsManager = reportsPartsManager;
@@ -537,6 +538,12 @@ public class ChecklistController : ControllerBase
     [HasPermission(Permissions.ChecklistsDelete)]
     public async Task<IActionResult> DeleteMastg(Guid checklistId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ChecklistsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var result = mastgManager.GetById(checklistId);

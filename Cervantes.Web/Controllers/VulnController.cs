@@ -117,6 +117,7 @@ public class VulnController: ControllerBase
         this.vulnCustomFieldValueManager = vulnCustomFieldValueManager;
         _logger = logger;
         this.env = env;
+        this.HttpContextAccessor = HttpContextAccessor;
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.fileCheck = fileCheck;
         this.projectUserManager = projectUserManager;
@@ -297,6 +298,25 @@ public class VulnController: ControllerBase
         return projectUserManager.VerifyUser(projectId.Value, aspNetUserId) != null;
     }
 
+    /// <summary>
+    /// True when every target exists and belongs to the given project (null for template vulns).
+    /// A vuln is never linked to a target of another project.
+    /// </summary>
+    [NonAction]
+    private bool TargetsBelongToProject(IEnumerable<Guid> targetIds, Guid? projectId)
+    {
+        foreach (var targetId in targetIds)
+        {
+            var target = targetManager.GetById(targetId);
+            if (target == null || target.ProjectId != projectId)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     [HttpPost]
     [HasPermission(Permissions.VulnsAdd)]
     public async Task<IActionResult> Add([FromBody] VulnCreateViewModel model)
@@ -388,6 +408,11 @@ public class VulnController: ControllerBase
                 else
                 {
                     vuln.MitreValues = string.Empty;
+                }
+
+                if (model.TargetId != null && !TargetsBelongToProject(model.TargetId, vuln.ProjectId))
+                {
+                    return BadRequest("Targets must belong to the vulnerability's project");
                 }
 
                 await vulnManager.AddAsync(vuln);
@@ -487,6 +512,16 @@ public class VulnController: ControllerBase
                 if (projectId != vuln.ProjectId)
                 {
                     return BadRequest("A vulnerability cannot be moved to another project");
+                }
+
+                // Links that already exist are kept, so an older cross-project link does not block edits;
+                // no new foreign link can be added.
+                var linkedTargetIds = vulnTargetManager.GetAll().Where(x => x.VulnId == vuln.Id)
+                    .Select(x => x.TargetId).ToList();
+                if (model.TargetId != null &&
+                    !TargetsBelongToProject(model.TargetId.Except(linkedTargetIds), projectId))
+                {
+                    return BadRequest("Targets must belong to the vulnerability's project");
                 }
 
                 vuln.VulnCategoryId = model.VulnCategoryId;
@@ -959,18 +994,21 @@ public class VulnController: ControllerBase
             if (ModelState.IsValid)
             {
                 var vuln = vulnManager.GetById(model.VulnId);
-                if (vuln != null)
+                if (vuln == null)
                 {
-                    if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
-                    {
-                        var user = projectUserManager.VerifyUser(vuln.ProjectId.Value, aspNetUserId);
-                        if (user == null)
-                        {
-                            return StatusCode(403, "You do not have permission to access this project");
-                        }
-                    }
+                    return NotFound("Vulnerability not found");
                 }
-                
+
+                if (!CanWriteProject(vuln.ProjectId))
+                {
+                    return StatusCode(403, "You do not have permission to access this project");
+                }
+
+                if (!TargetsBelongToProject(new[] { model.TargetId }, vuln.ProjectId))
+                {
+                    return BadRequest("The target must belong to the vulnerability's project");
+                }
+
                 var result = vulnTargetManager.GetAll().Where(x => x.TargetId == model.TargetId && x.VulnId == model.VulnId);
 
                 
@@ -1018,6 +1056,12 @@ public class VulnController: ControllerBase
     [HasPermission(Permissions.VulnTargetsDelete)]
     public async Task<IActionResult> DeleteVulnTarget(Guid id)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.VulnTargetsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var tar = vulnTargetManager.GetById(id);

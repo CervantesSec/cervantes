@@ -5,6 +5,7 @@
 @using Cervantes.Web.Localization
 @using CsvHelper.TypeConversion
 @using global::AuthPermissions.AspNetCore
+@using global::AuthPermissions.BaseCode.PermissionsCode
 @inject IJSRuntime jsRuntime
 @inject IStringLocalizer<Resource> localizer
 @inject IDialogService DialogService
@@ -174,7 +175,10 @@
                                         <MudSelectItem Value="@tar.Id">@tar.Name</MudSelectItem>
                                     }
                                 </MudSelect>
-                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="@Color.Primary" OnClick="@((e) => OpenTargetCreate(maxWidth))">@localizer["addTarget"]</MudButton>
+                                @if (userAth.HasPermission(Permissions.TargetsAdd))
+                                {
+                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Adjust" Color="@Color.Primary" OnClick="@((e) => OpenTargetCreate(maxWidth))">@localizer["addTarget"]</MudButton>
+                                }
 
                             }
                         </MudStack>

@@ -57,7 +57,10 @@
                             @if(model.ImagePath != null)
                             {
                                 <MudImage Src="@model.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="Client Logo" Elevation="25" Class="rounded-lg ma-4"/>
-                                <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
+                                @if (userAth.HasPermission(Permissions.OrganizationEdit))
+                                {
+                                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
+                                }
                             }
                             else
                             {

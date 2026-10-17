@@ -33,6 +33,7 @@ public class VaultController : ControllerBase
         aspNetUserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         this.projectUserManager = projectUserManager;
         this.Sanitizer = Sanitizer;
+        this.HttpContextAccessor = HttpContextAccessor;
     }
     
     [HttpGet]
@@ -81,7 +82,8 @@ public class VaultController : ControllerBase
                 vault.Description = Sanitizer.Sanitize(model.Description);
                 vault.CreatedDate = DateTime.Now.ToUniversalTime();
                 vault.Type = model.Type;
-                vault.Value = Sanitizer.Sanitize(model.Value);
+                // Stored exactly as typed: shown as text in the vault dialog, HTML-encoded where it enters report HTML.
+                vault.Value = model.Value;
                 vault.ProjectId = model.ProjectId;
                vault.UserId = aspNetUserId;
                
@@ -116,22 +118,40 @@ public class VaultController : ControllerBase
     [HasPermission(Permissions.VaultEdit)]
     public async Task<IActionResult> Edit([FromBody] VaultEditViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.VaultEdit))
+        {
+            return StatusCode(403, "You do not have permission to edit vault entries");
+        }
+
         try
         {
             if (ModelState.IsValid)
             {
-                var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
-                if (user == null)
+                var vault = vaultManager.GetById(model.Id);
+                if (vault == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    return NotFound($"Vault with ID {model.Id} not found");
                 }
 
-                var vault = vaultManager.GetById(model.Id);
+                // Authorize against the project stored in the database, never the one sent in the request.
+                if (projectUserManager.VerifyUser(vault.ProjectId, aspNetUserId) == null)
+                {
+                    _logger.LogWarning("Access denied editing vault entry {VaultId}. User: {UserId}", vault.Id, aspNetUserId);
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
+                }
+
+                // An edit never moves an entry to another project.
+                if (model.ProjectId != vault.ProjectId)
+                {
+                    return BadRequest("A vault entry cannot be moved to another project");
+                }
+
                 vault.Name = Sanitizer.Sanitize(model.Name);
                 vault.Description = Sanitizer.Sanitize(model.Description);
                 vault.Type = model.Type;
-                vault.Value = Sanitizer.Sanitize(model.Value);
-                vault.ProjectId = model.ProjectId;
+                // Stored exactly as typed: shown as text in the vault dialog, HTML-encoded where it enters report HTML.
+                vault.Value = model.Value;
                 await vaultManager.Context.SaveChangesAsync();
                 _logger.LogInformation("Vault edited successfully. User: {0}",
                     aspNetUserId);
@@ -163,6 +183,12 @@ public class VaultController : ControllerBase
     [HasPermission(Permissions.VaultDelete)]
     public async Task<IActionResult> Delete(Guid vaultId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.VaultDelete))
+        {
+            return StatusCode(403, "You do not have permission to delete vault entries");
+        }
+
         try
         {
             var vault = vaultManager.GetById(vaultId);

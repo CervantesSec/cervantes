@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using AuthPermissions.BaseCode.PermissionsCode;
+using Cervantes.CORE;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
@@ -382,6 +384,10 @@ public partial class VulnDialog: ComponentBase
                 {
                     Snackbar.Add(@localizer["noInProject"], Severity.Warning);
                 }
+                else
+                {
+                    Snackbar.Add(@localizer["vulnCreatedError"], Severity.Error);
+                }
 			        
             }
             else
@@ -490,7 +496,7 @@ public partial class VulnDialog: ComponentBase
     
     async Task RowClickedTargets(DataGridRowClickEventArgs<CORE.Entities.VulnTargets> args)
     {
-        if (inProject)
+        if (inProject && userAth.HasPermission(Permissions.VulnTargetsDelete))
         {
             var parameters = new DialogParameters { ["target"]=args.Item };
             IMudExDialogReference<DeleteVulnTarget>? dlgReference = await Dialog.ShowExAsync<DeleteVulnTarget>("Simple Dialog", parameters, middleWidthEx);

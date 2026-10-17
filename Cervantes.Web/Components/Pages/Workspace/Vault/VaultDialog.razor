@@ -29,7 +29,7 @@
 
 		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Castle"/> @vault.Name</MudText>
 
-		@if (userAth.HasPermission(Permissions.VulnsEdit))
+		@if (userAth.HasPermission(Permissions.VaultEdit))
 		{
 			@if (editMode)
 			{
@@ -42,7 +42,7 @@
 			}
 		}
 		
-		@if (userAth.HasPermission(Permissions.VulnsDelete))
+		@if (userAth.HasPermission(Permissions.VaultDelete))
 		{
 			<MudChip T="string" Icon="@Icons.Material.Filled.Delete" Color="Color.Default" OnClick="@((e) => DeleteVaultDialog(vault, medium))">@localizer["delete"]</MudChip>
 		}
@@ -134,9 +134,9 @@
 								</CardHeaderContent>
 							</MudCardHeader>
 							<MudCardContent>
-								<MudTextField @bind-Value="vault.Value"
+								<MudTextField Value="@vault.Value"
 								              For="@(() => vault.Value)"
-								              Immediate="true"
+								              ReadOnly="true"
 								              Label="@localizer["value"]" Adornment="Adornment.Start" InputType="@PasswordInput"
 								              AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ValueClick" AdornmentAriaLabel="Show Password"/>
 							</MudCardContent>

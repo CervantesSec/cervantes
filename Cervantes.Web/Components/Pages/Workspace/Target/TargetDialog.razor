@@ -148,8 +148,11 @@
 									<MudStack Row="true">
 										@if (inProject)
 										{
-											<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
-											@if (seleServices.Count() != 0)
+											@if (userAth.HasPermission(Permissions.TargetsServicesAdd))
+											{
+												<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@((e) => OpenDialogCreate(maxWidth))">@localizer["create"]</MudButton>
+											}
+											@if (seleServices.Count() != 0 && userAth.HasPermission(Permissions.TargetsServicesDelete))
 											{
 												<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
 													<MudButton>@localizer["actions"]</MudButton>

@@ -147,6 +147,12 @@ public class VulnCustomFieldController : ControllerBase
     [HasPermission(Permissions.VulnCustomFieldsEdit)]
     public async Task<IActionResult> Edit([FromBody] VulnCustomFieldEditViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.VulnCustomFieldsEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
