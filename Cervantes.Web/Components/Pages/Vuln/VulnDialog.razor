@@ -103,7 +103,7 @@
 
                         <MudTabPanel Text="@localizer["details"]" Icon="@Icons.Material.Filled.Details" Style="min-width: 260px;">
                             <MudStack >
-                                @if (vuln.ProjectId == null)
+                                @if (vuln.ProjectId == null || vuln.Template)
                                 {
                                     <MudSwitch Color="Color.Primary" T="bool" @bind-Value="@model.Template" For="@(() => model.Template)" Label="@localizer["template"]"/>
                                 }

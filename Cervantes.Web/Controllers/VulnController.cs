@@ -527,8 +527,9 @@ public class VulnController: ControllerBase
                 vuln.Description = Sanitizer.Sanitize(model.Description);
                 vuln.Risk = model.Risk;
                 vuln.Status = model.Status;
-                // A project vuln is never a template; only a vuln without a project may switch the flag.
-                if (vuln.ProjectId == null)
+                // A project vuln is never a template: the flag can be cleared on any vuln (older project
+                // vulns may still carry it), but only a vuln without a project may turn it on.
+                if (vuln.ProjectId == null || !model.Template)
                 {
                     vuln.Template = model.Template;
                 }
@@ -627,21 +628,34 @@ public class VulnController: ControllerBase
 
                 }
 
-                // Handle custom field values
+                // Handle custom field values. Only the submitted fields are touched: values of fields
+                // that are not in the request (for example deactivated fields) are kept.
                 if (model.CustomFieldValues != null && model.CustomFieldValues.Any())
                 {
-                    // Remove existing custom field values for this vulnerability
-                    var existingValues = vulnCustomFieldValueManager.GetAll().Where(x => x.VulnId == vuln.Id);
-                    foreach (var existingValue in existingValues)
-                    {
-                        vulnCustomFieldValueManager.Remove(existingValue);
-                    }
-                    await vulnCustomFieldValueManager.Context.SaveChangesAsync();
+                    var existingValues = vulnCustomFieldValueManager.GetAll()
+                        .Where(x => x.VulnId == vuln.Id)
+                        .ToList();
 
-                    // Add new custom field values
                     foreach (var customFieldValue in model.CustomFieldValues)
                     {
-                        if (!string.IsNullOrEmpty(customFieldValue.Value))
+                        var existingValue = existingValues
+                            .FirstOrDefault(x => x.VulnCustomFieldId == customFieldValue.Key);
+
+                        if (string.IsNullOrEmpty(customFieldValue.Value))
+                        {
+                            // An empty value clears the field
+                            if (existingValue != null)
+                            {
+                                vulnCustomFieldValueManager.Remove(existingValue);
+                            }
+                        }
+                        else if (existingValue != null)
+                        {
+                            existingValue.Value = Sanitizer.Sanitize(customFieldValue.Value);
+                            existingValue.ModifiedDate = DateTime.UtcNow;
+                            existingValue.UserId = aspNetUserId;
+                        }
+                        else
                         {
                             var vulnCustomFieldValue = new VulnCustomFieldValue
                             {
@@ -649,6 +663,8 @@ public class VulnController: ControllerBase
                                 VulnId = vuln.Id,
                                 VulnCustomFieldId = customFieldValue.Key,
                                 Value = Sanitizer.Sanitize(customFieldValue.Value),
+                                CreatedDate = DateTime.UtcNow,
+                                ModifiedDate = DateTime.UtcNow,
                                 UserId = aspNetUserId
                             };
                             await vulnCustomFieldValueManager.AddAsync(vulnCustomFieldValue);

@@ -177,7 +177,10 @@ public partial class TaskDialog: ComponentBase
         var memberIds = task.ProjectId == null
             ? null
             : _projectController.GetMembers(task.ProjectId.Value).Select(m => m.UserId).ToHashSet();
-        AssignableUsers = memberIds == null ? Users : Users.Where(u => memberIds.Contains(u.Id)).ToList();
+        // The current assignee stays in the list even if they left the project, so the select shows a name.
+        AssignableUsers = memberIds == null
+            ? Users
+            : Users.Where(u => memberIds.Contains(u.Id) || u.Id == task.AsignedUserId).ToList();
         Projects = _projectController.Get().Where(x => x.Template == false).ToList();
         MudDialog.StateHasChanged();
     }

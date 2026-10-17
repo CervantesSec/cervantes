@@ -198,7 +198,11 @@ public class ReportController : ControllerBase
                     report.Description = sanitizer.Sanitize(model.Description);
                     report.Language = model.Language;
                     report.Version = sanitizer.Sanitize(model.Version);
-                    report.HtmlCode = sanitizer.SanitizeReportHtml(model.HtmlCode);
+                    // The stored HTML was sanitized when it was saved: only sanitize what the request changes.
+                    if (model.HtmlCode != report.HtmlCode)
+                    {
+                        report.HtmlCode = sanitizer.SanitizeReportHtml(model.HtmlCode);
+                    }
 
                     await reportManager.Context.SaveChangesAsync();
                     _logger.LogInformation("Report edited successfully. User: {0}",

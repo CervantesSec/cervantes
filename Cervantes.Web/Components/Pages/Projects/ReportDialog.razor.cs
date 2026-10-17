@@ -262,6 +262,11 @@ public partial class ReportDialog: ComponentBase
                 {"noneditable_noneditable_class", "mceNonEditable"},
                 {"toolbar_mode", "sliding"},
                 {"contextmenu", "link image imagetools table"},
+                // The report HTML has a <style> block and a <cover> element that TinyMCE would otherwise
+                // drop from the editor content (and from the saved report).
+                {"custom_elements", "cover"},
+                {"extended_valid_elements", "cover[*],style[*]"},
+                {"valid_children", "+body[style],+cover[style|div|p|h1|h2|h3|h4|h5|h6|table|img|span|br]"},
                 {"textpattern_patterns", new object[] {
                     new {start = "#", format = "h1"},
                     new {start = "##", format = "h2"},

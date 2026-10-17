@@ -114,6 +114,11 @@ public partial class CreateVulnDialog: ComponentBase
             selectedProject = value;
             // Targets belong to one project: a selection made for the previous project is meaningless now.
             SelectedTargets = new HashSet<Guid>();
+            // A project vuln is never a template; the switch is only shown without a project.
+            if (value != Guid.Empty)
+            {
+                model.Template = false;
+            }
         }
     }
     private Guid SelectedCategory { get; set; } = Guid.Empty;
