@@ -245,6 +245,7 @@ protected override async Task OnInitializedAsync()
             model.FindingsId = pro.FindingsId;
             model.StartDate = pro.StartDate;
             model.EndDate = pro.EndDate;
+            model.BusinessImpact = pro.BusinessImpact;
             dateStart = model.StartDate;
             dateEnd = model.EndDate;
         }
@@ -264,7 +265,7 @@ protected override async Task OnInitializedAsync()
             model.StartDate = dateStart.Value;
             model.EndDate = dateEnd.Value;
             var response = await _projectController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["projectEdited"], Severity.Success);
             }

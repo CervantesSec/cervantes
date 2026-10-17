@@ -164,12 +164,12 @@ public partial class MastgDialog: ComponentBase
             Network1Status6 = mastg.Network1Status6,
             Network1Note7 = mastg.Network1Note7,
             Network1Status7 = mastg.Network1Status7,
-            Network2Note = mastg.Storage2Note,
-            Network2Status = mastg.Storage2Status,
-            Network2Note1 = mastg.Storage2Note1,
-            Network2Status1 = mastg.Storage2Status1,
-            Network2Note2 = mastg.Storage2Note2,
-            Network2Status2 = mastg.Storage2Status2,
+            Network2Note = mastg.Network2Note,
+            Network2Status = mastg.Network2Status,
+            Network2Note1 = mastg.Network2Note1,
+            Network2Status1 = mastg.Network2Status1,
+            Network2Note2 = mastg.Network2Note2,
+            Network2Status2 = mastg.Network2Status2,
         };
 
         model.Platform = new MASTGPlatform()

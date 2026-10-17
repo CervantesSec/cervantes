@@ -155,6 +155,16 @@ public partial class CreateTargetDialog: ComponentBase
         {
             target.ProjectId = project;
 
+            // Defaults shown by the renderer never raise FieldChanged, so copy every value, as the other create dialogs do.
+            target.CustomFieldValues ??= new Dictionary<Guid, string>();
+            foreach (var field in CustomFields)
+            {
+                if (!string.IsNullOrEmpty(field.Value))
+                {
+                    target.CustomFieldValues[field.TargetCustomFieldId] = field.Value;
+                }
+            }
+
             var response = await _targetController.Add(target);
             if (response is Microsoft.AspNetCore.Mvc.CreatedResult)
             {

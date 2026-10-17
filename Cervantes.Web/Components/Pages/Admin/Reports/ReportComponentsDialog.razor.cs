@@ -150,6 +150,12 @@ public partial class ReportComponentsDialog: ComponentBase
 
         if (form.IsValid)
         {
+            // The Monaco CSS editor is not bound; read it here, as CreateReportComponentDialog does.
+            if (_editor != null)
+            {
+                model.CssContent = await _editor.GetValue();
+            }
+
             var response = await _reportController.EditComponent(model);
             if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
             {

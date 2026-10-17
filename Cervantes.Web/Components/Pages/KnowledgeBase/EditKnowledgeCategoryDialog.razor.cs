@@ -104,6 +104,7 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
             model.Name = category.Name;
             model.Description = category.Description;
             model.Order = category.Order;
+            model.Icon = category.Icon;
         }
         MudDialog.StateHasChanged();
     }

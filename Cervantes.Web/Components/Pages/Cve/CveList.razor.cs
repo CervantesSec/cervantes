@@ -193,7 +193,6 @@ public partial class CveList
             var success = await _cveController.MarkAsFavoriteForComponentsAsync(cve.Id);
             if (success)
             {
-                cve.IsFavorite = !cve.IsFavorite;
                 var message = cve.IsFavorite ? localizer["addedToFavorites"] : localizer["removedFromFavorites"];
                 Snackbar.Add(message, Severity.Success);
             }
@@ -215,7 +214,6 @@ public partial class CveList
             var success = await _cveController.ArchiveForComponentsAsync(cve.Id);
             if (success)
             {
-                cve.IsArchived = !cve.IsArchived;
                 var message = cve.IsArchived ? localizer["cveArchived"] : localizer["cveUnarchived"];
                 Snackbar.Add(message, Severity.Success);
             }

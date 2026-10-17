@@ -29,7 +29,7 @@ public partial class DeleteCustomChecklistDialog: ComponentBase
         {
             var response = await _checklistController.DeleteCustomChecklist(checklist.Id);
             
-            if (response is OkResult)
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["checklistDeletedSuccessfully"], MudBlazor.Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

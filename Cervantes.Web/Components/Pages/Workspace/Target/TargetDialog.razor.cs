@@ -197,11 +197,12 @@ public partial class TargetDialog: ComponentBase
         }
     }
     
-    void EditMode()
+    async Task EditMode()
     {
         if (editMode)
         {
             editMode = false;
+            await LoadCustomFields();
         }
         else
         {

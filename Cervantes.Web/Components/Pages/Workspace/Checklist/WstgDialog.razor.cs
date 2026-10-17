@@ -222,7 +222,7 @@ public partial class WstgDialog: ComponentBase
             model.Errh = new WSTGErrh
             {
                 Errh01Note = wstg.Errh01Note,
-                Errh02Note = wstg.Errh01Note,
+                Errh02Note = wstg.Errh02Note,
                 Errh01Status = wstg.Errh01Status,
                 Errh02Status = wstg.Errh02Status
             };

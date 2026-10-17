@@ -57,7 +57,7 @@
 					        <MudStack AlignItems="AlignItems.Stretch">
 
 
-						        <MudTextField Placeholder="John Doe" @bind-Value="model.Name"
+						        <MudTextField Placeholder="John Doe" @bind-Value="model.Name" ReadOnly="true"
 						                      For="@(() => model.Name)"
 						                      Immediate="true"
 						                      Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Badge"/>

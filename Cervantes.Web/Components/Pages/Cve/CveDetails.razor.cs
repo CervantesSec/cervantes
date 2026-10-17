@@ -74,8 +74,6 @@ public partial class CveDetails
                 return;
             }
 
-            cve.IsFavorite = !cve.IsFavorite;
-
             var message = cve.IsFavorite ? "Added to favorites" : "Removed from favorites";
             Snackbar.Add(message, Severity.Success);
         }
@@ -94,8 +92,6 @@ public partial class CveDetails
                 Snackbar.Add("Error archiving CVE", Severity.Error);
                 return;
             }
-
-            cve.IsArchived = !cve.IsArchived;
 
             var message = cve.IsArchived ? "CVE archived" : "CVE unarchived";
             Snackbar.Add(message, Severity.Success);

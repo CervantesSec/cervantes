@@ -286,7 +286,8 @@ public partial class VulnDialog: ComponentBase
         model.Remediation = vuln.Remediation;
         model.RemediationComplexity = vuln.RemediationComplexity;
         model.RemediationPriority = vuln.RemediationPriority;
-        if (string.IsNullOrEmpty(model.OWASPVector))
+        model.Language = vuln.Language;
+        if (string.IsNullOrEmpty(vuln.OWASPVector))
         {
 	        model.OWASPVector = "(SL:1/M:1/O:0/S:2/ED:1/EE:1/A:1/ID:1/LC:2/LI:1/LAV:1/LAC:1/FD:1/RD:1/NC:2/PV:3)";
 	        model.OWASPImpact = String.Empty;
@@ -358,13 +359,10 @@ public partial class VulnDialog: ComponentBase
                 model.ProjectId = null;
             }
             
-            // Add custom field values to the model
+            // Send every field, empty ones included, so clearing the last value is saved too.
             foreach (var customField in CustomFields)
             {
-                if (!string.IsNullOrEmpty(customField.Value))
-                {
-                    model.CustomFieldValues[customField.CustomFieldId] = customField.Value;
-                }
+                model.CustomFieldValues[customField.CustomFieldId] = customField.Value ?? string.Empty;
             }
             
             var response = await _vulnController.Edit(model);
@@ -383,7 +381,7 @@ public partial class VulnDialog: ComponentBase
             }
             else
             {
-                Snackbar.Add(@localizer["vulnCreatedError"], Severity.Error);
+                Snackbar.Add(@localizer["vulnUpdatedError"], Severity.Error);
             }
             
         }
@@ -438,18 +436,6 @@ public partial class VulnDialog: ComponentBase
         model.OWASPRisk = vuln.OWASPRisk;
         model.OWASPVector = vuln.OWASPVector;
 	    
-        var cwesVuln = _vulnController.GetVulnCwes(model.Id);
-        foreach (var cwe in cwesVuln)
-        {
-            SelectedCwes.Append(cwe.CweId);
-        }
-	    
-        var vulnTargets = _vulnController.GetVulnTargets(model.Id);
-        foreach (var tar in vulnTargets)
-        {
-            SelectedTargets.Append(tar.TargetId);
-        }
-
         StateHasChanged();
     }
     

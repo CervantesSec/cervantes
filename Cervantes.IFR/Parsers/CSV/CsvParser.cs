@@ -50,7 +50,7 @@ public class CsvParser: ICsvParser
                     Vuln vuln = new Vuln();
                     vuln.Name = vul.Name == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Name));
                     
-                    vuln.Template = vul.Template.HasValue && vul.Template.Value;
+                    vuln.Template = false;
                     vuln.cve = vul.CVE == "" ? "None" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.CVE));
                     vuln.Description = vul.Description == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Description));
                     vuln.Impact = vul.Impact == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Impact));

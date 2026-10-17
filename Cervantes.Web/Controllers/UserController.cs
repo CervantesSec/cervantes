@@ -19,6 +19,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StatusGeneric;
 using Task = System.Threading.Tasks.Task;
 
 namespace Cervantes.Web.Controllers;
@@ -244,6 +245,7 @@ public class UserController: ControllerBase
                 var description = model.Description ?? authRolesAdminService.QueryRoleToPermissions()
                     .Where(x => x.RoleName == model.Name).Select(x => x.Description).FirstOrDefault();
 
+                IStatusGeneric status;
                 if (model.Permissions.Contains("Admin"))
                 {
                     IEnumerable<string> permissionNames = new List<string>
@@ -253,7 +255,7 @@ public class UserController: ControllerBase
                     IEnumerable<string> permissionNames2 = Enum.GetValues<Permissions>()
                         .Select(p => p.ToString()).Except(permissionNames);
                     
-                    await authRolesAdminService.UpdateRoleToPermissionsAsync(
+                    status = await authRolesAdminService.UpdateRoleToPermissionsAsync(
                         model.Name, permissionNames2,
                         sanitizer.Sanitize(description),
                         // Use a known valid role type to avoid NullReferenceException
@@ -261,14 +263,20 @@ public class UserController: ControllerBase
                 }
                 else
                 {
-                    await authRolesAdminService.UpdateRoleToPermissionsAsync(
+                    status = await authRolesAdminService.UpdateRoleToPermissionsAsync(
                         model.Name,
                         model.Permissions,
                         sanitizer.Sanitize(description),
                         // Use a known valid role type to avoid NullReferenceException
                         RoleTypes.Normal);
                 }
-                
+
+                // AuthP finds the role by name; a renamed role does not exist and nothing is saved.
+                if (status.HasErrors)
+                {
+                    return BadRequest(status.GetAllErrors());
+                }
+
                 return NoContent();
             }
             return BadRequest("Invalid model state");

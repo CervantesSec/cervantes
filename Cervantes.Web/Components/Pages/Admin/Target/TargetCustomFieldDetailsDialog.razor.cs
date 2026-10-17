@@ -68,6 +68,7 @@ public partial class TargetCustomFieldDetailsDialog : ComponentBase
         model.IsUnique = customFieldSelected.IsUnique;
         model.IsSearchable = customFieldSelected.IsSearchable;
         model.IsVisible = customFieldSelected.IsVisible;
+        model.IsActive = customFieldSelected.IsActive;
         model.Order = customFieldSelected.Order;
         
         // Convert options to text for editing

@@ -140,7 +140,7 @@ public partial class Index: ComponentBase
             ms.Close();
         
         var response = await _UserController.UploadAvatar(avatar);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["avatarUploaded"], Severity.Success);
             StateHasChanged();
@@ -153,7 +153,7 @@ public partial class Index: ComponentBase
     private async Task DeleteAvatar(string id)
     {
         var response = await _UserController.DeleteAvatar(id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["logoDeleted"], Severity.Success);
             user.Avatar = null;

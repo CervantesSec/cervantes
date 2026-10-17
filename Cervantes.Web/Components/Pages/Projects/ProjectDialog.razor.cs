@@ -310,11 +310,12 @@ protected override async Task OnInitializedAsync()
         }
     }
 
-    void EditMode()
+    async Task EditMode()
     {
         if (editMode)
         {
             editMode = false;
+            await LoadProjectCustomFields();
         }
         else
         {

@@ -100,7 +100,22 @@ public partial class CreateVulnDialog: ComponentBase
 		    LoadTemplate();
 	    }
     }
-    private Guid SelectedProject { get; set; } = Guid.Empty;
+    private Guid selectedProject = Guid.Empty;
+    private Guid SelectedProject
+    {
+        get => selectedProject;
+        set
+        {
+            if (selectedProject == value)
+            {
+                return;
+            }
+
+            selectedProject = value;
+            // Targets belong to one project: a selection made for the previous project is meaningless now.
+            SelectedTargets = new HashSet<Guid>();
+        }
+    }
     private Guid SelectedCategory { get; set; } = Guid.Empty;
     private IEnumerable<int> SelectedCwes { get; set; } = new HashSet<int>();
     private IEnumerable<Guid> SelectedTargets { get; set; } = new HashSet<Guid>();
@@ -300,18 +315,6 @@ public partial class CreateVulnDialog: ComponentBase
 	    model.OWASPRisk = vuln.OWASPRisk;
 	    model.OWASPVector = vuln.OWASPVector;
 	    
-	    var cwesVuln = VulnController.GetVulnCwes(model.Id);
-	    foreach (var cwe in cwesVuln)
-	    {
-		    SelectedCwes.Append(cwe.CweId);
-	    }
-	    
-	    var vulnTargets = VulnController.GetVulnTargets(model.Id);
-	    foreach (var tar in vulnTargets)
-	    {
-		    SelectedTargets.Append(tar.TargetId);
-	    }
-
         StateHasChanged();
     }
     

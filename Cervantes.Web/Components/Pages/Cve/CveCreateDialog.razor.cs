@@ -75,8 +75,8 @@ public partial class CveCreateDialog
                 CveId = model.CveId,
                 Title = model.Title,
                 Description = model.Description,
-                PublishedDate = model.PublishedDate,
-                LastModifiedDate = model.LastModifiedDate ?? model.PublishedDate,
+                PublishedDate = model.PublishedDate.ToUniversalTime(),
+                LastModifiedDate = (model.LastModifiedDate ?? model.PublishedDate).ToUniversalTime(),
                 CvssV3BaseScore = model.CvssV3BaseScore,
                 CvssV3Vector = model.CvssV3Vector,
                 CvssV3Severity = model.CvssV3Severity,
@@ -86,7 +86,7 @@ public partial class CveCreateDialog
                 EpssScore = model.EpssScore,
                 EpssPercentile = model.EpssPercentile,
                 IsKnownExploited = model.IsKnownExploited,
-                KevDueDate = model.KevDueDate,
+                KevDueDate = model.KevDueDate?.ToUniversalTime(),
                 PrimaryCweId = model.PrimaryCweId,
                 PrimaryCweName = model.PrimaryCweName,
                 State = model.State,
@@ -99,6 +99,16 @@ public partial class CveCreateDialog
             };
 
             await CveManager.AddAsync(cve);
+            try
+            {
+                await CveManager.Context.SaveChangesAsync();
+            }
+            catch
+            {
+                // Remove() on an Added entity stops tracking it. Otherwise every later save in this circuit retries the failed insert.
+                CveManager.Remove(cve);
+                throw;
+            }
             MudDialog.Close(DialogResult.Ok(cve));
         }
         catch (Exception ex)

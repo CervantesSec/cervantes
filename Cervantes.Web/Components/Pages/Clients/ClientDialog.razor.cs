@@ -222,7 +222,7 @@ public partial class ClientDialog: ComponentBase
     private async Task DeleteLogo(Guid id)
     {
         var response = await _clientsController.DeleteAvatar(id);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["logoDeleted"], Severity.Success);
             client.ImagePath = "None";
@@ -235,11 +235,12 @@ public partial class ClientDialog: ComponentBase
 
     }
     
-    void EditMode()
+    async Task EditMode()
     {
         if (editMode)
         {
             editMode = false;
+            await LoadClientCustomFields();
         }
         else
         {

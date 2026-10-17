@@ -517,6 +517,11 @@ public class ChecklistController : ControllerBase
         try
         {
             var result = wstgManager.GetById(checklistId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
             if (result.Id != Guid.Empty)
             {
                 var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
@@ -558,6 +563,11 @@ public class ChecklistController : ControllerBase
         try
         {
             var result = mastgManager.GetById(checklistId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
             if (result.Id != Guid.Empty)
             {
                 var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
@@ -1146,9 +1156,10 @@ public class ChecklistController : ControllerBase
                 scriptObject.Add("ClientPhone", Client.ContactPhone);
                 scriptObject.Add("Year", DateTime.Now.Year.ToString());
                 //scriptObject.Add("CreatedDate", DateTime.Now.ToUniversalTime().ToShortDateString());
-                scriptObject.Add("TargetName", wstg.Target.Name);
-                scriptObject.Add("TargetDescription", wstg.Target.Description);
-                scriptObject.Add("TargetType", wstg.Target.Type.ToString());
+                var target = targetManager.GetById(wstg.TargetId);
+                scriptObject.Add("TargetName", target.Name);
+                scriptObject.Add("TargetDescription", target.Description);
+                scriptObject.Add("TargetType", target.Type.ToString());
                 scriptObject.Add("PageBreak", @"<span style=""page-break-after: always;""></span>");
                 scriptObject.Add("Today", DateTime.Now.ToShortDateString());
                 scriptObject.Add("ProjectName", pro.Name);

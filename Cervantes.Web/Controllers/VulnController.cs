@@ -335,7 +335,8 @@ public class VulnController: ControllerBase
                 }
                 
                 var vuln = new Vuln();
-                vuln.Template = model.Template;
+                // Only a vuln without a project can be a template.
+                vuln.Template = model.Template && (model.ProjectId == null || model.ProjectId == Guid.Empty);
                 vuln.UserId = aspNetUserId;
                 vuln.ProjectId = model.ProjectId;
                 if (model.ProjectId != null)
@@ -354,7 +355,6 @@ public class VulnController: ControllerBase
                 vuln.Description = Sanitizer.Sanitize(model.Description);
                 vuln.Risk = model.Risk;
                 vuln.Status = model.Status;
-                vuln.Template = model.Template;
                 vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                 vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                 vuln.cve = Sanitizer.Sanitize(model.cve);
@@ -529,13 +529,15 @@ public class VulnController: ControllerBase
                 vuln.Description = Sanitizer.Sanitize(model.Description);
                 vuln.Risk = model.Risk;
                 vuln.Status = model.Status;
-                vuln.Template = model.Template;
-                vuln.CreatedDate = DateTime.Now.ToUniversalTime();
+                // A project vuln is never a template; only a vuln without a project may switch the flag.
+                if (vuln.ProjectId == null)
+                {
+                    vuln.Template = model.Template;
+                }
                 vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                 vuln.cve = Sanitizer.Sanitize(model.cve);
                 vuln.Language = model.Language;
                 vuln.Remediation = Sanitizer.Sanitize(model.Remediation);
-                vuln.JiraCreated = false;
                 vuln.RemediationComplexity = model.RemediationComplexity;
                 vuln.RemediationPriority = model.RemediationPriority;
                 vuln.ProofOfConcept = Sanitizer.Sanitize(model.ProofOfConcept);

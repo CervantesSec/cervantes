@@ -9,6 +9,7 @@ using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
 using Microsoft.SemanticKernel;
 using MudBlazor;
@@ -190,6 +191,7 @@ public partial class ReportDialog : ComponentBase
             model.Name = report.Name;
             model.Description = report.Description;
             model.Language = report.Language;
+            model.ReportType = report.ReportType;
         }
 
         MudDialog.StateHasChanged();
@@ -212,7 +214,7 @@ public partial class ReportDialog : ComponentBase
             }
 
             var response = await _reportController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["reportTemplateEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

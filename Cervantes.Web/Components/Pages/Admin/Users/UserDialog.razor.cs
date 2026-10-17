@@ -8,6 +8,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
@@ -211,7 +212,7 @@ public partial class UserDialog: ComponentBase
             }
 
             var response = await _UserController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(localizer["userEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
@@ -267,7 +268,7 @@ public partial class UserDialog: ComponentBase
     private async Task DeleteAvatar()
     {
             var response = await _UserController.DeleteAvatar(model.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(localizer["userEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
