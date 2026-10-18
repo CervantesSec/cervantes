@@ -371,10 +371,12 @@ else
 
 app.UseHttpsRedirection();
 
-// Attachments are not served statically: they go through the authenticated FileController.
-app.UseWhen(
-    ctx => !ctx.Request.Path.StartsWithSegments("/Attachments", StringComparison.OrdinalIgnoreCase),
-    branch => branch.UseStaticFiles());
+// Attachments are not served statically: they go through the authenticated FileController. The provider refuses any
+// file whose resolved path is inside wwwroot/Attachments, whatever the URL looks like.
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new AttachmentExcludingFileProvider(app.Environment.WebRootFileProvider, app.Environment.WebRootPath)
+});
 var supportedCultures = new[] { "en-US", "es-ES","pt-PT", "tr-TR", "fr-FR", "de-DE", "it-IT", "cs-CZ" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture(supportedCultures[0])
