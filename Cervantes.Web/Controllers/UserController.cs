@@ -363,7 +363,7 @@ public class UserController: ControllerBase
                 
                 if (model.FileContent != null)
                 {
-                    if (fileCheck.CheckFile(model.FileContent))
+                    if (fileCheck.CheckImage(model.FileContent))
                     {
                         unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Users/{unique}";
@@ -454,7 +454,7 @@ public class UserController: ControllerBase
                 {
                     
                     
-                    if (fileCheck.CheckFile(model.FileContent))
+                    if (fileCheck.CheckImage(model.FileContent))
                     {
                         unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Users/{unique}";
@@ -722,7 +722,7 @@ public class UserController: ControllerBase
 
                     }
                     
-                    if (fileCheck.CheckFile(model.FileContent))
+                    if (fileCheck.CheckImage(model.FileContent))
                     {
                         unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Users/{unique}";

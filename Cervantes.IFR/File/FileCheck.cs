@@ -18,6 +18,12 @@ public class FileCheck: IFileCheck
         "pcap", "pcapng", "cap"
     };
 
+    // Uploads that are rendered as <img> (user avatars) accept only these image types.
+    private static readonly HashSet<string> allowedImageExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff"
+    };
+
     public FileCheck()
     {
     }
@@ -34,7 +40,12 @@ public class FileCheck: IFileCheck
             Console.WriteLine(e);
             throw;
         }
-        
+
+    }
+
+    public bool CheckImage(byte[] file)
+    {
+        return allowedImageExtensions.Contains(GetExtension(file));
     }
     
     public string GetExtension(byte[] file)
