@@ -277,6 +277,7 @@ public class QualysParser : IQualysParser
                     vulnerability.CVSSVector = cvssVector;
                 }
 
+                vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
                 vulnManager.Add(vulnerability);
                 vulnManager.Context.SaveChanges();
 

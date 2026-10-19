@@ -226,6 +226,7 @@ public class TrivyParser : ITrivyParser
             }
         }
 
+        vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
         vulnManager.Add(vulnerability);
         vulnManager.Context.SaveChanges();
 
@@ -326,6 +327,7 @@ public class TrivyParser : ITrivyParser
             CreatedDate = DateTime.Now.ToUniversalTime()
         };
 
+        vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
         vulnManager.Add(vulnerability);
         vulnManager.Context.SaveChanges();
 

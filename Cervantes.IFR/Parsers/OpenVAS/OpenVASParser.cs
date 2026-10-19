@@ -242,6 +242,7 @@ public class OpenVASParser : IOpenVASParser
                     vuln.CVSS3 = cvssScore;
                 }
 
+                vuln.FindingId = FindingIdGenerator.Next(vulnManager, vuln.Project);
                 vulnManager.Add(vuln);
                 vulnManager.Context.SaveChanges();
 

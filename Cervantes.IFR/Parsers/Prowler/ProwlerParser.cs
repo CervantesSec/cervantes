@@ -306,6 +306,7 @@ public class ProwlerParser : IProwlerParser
             CreatedDate = DateTime.Now.ToUniversalTime()
         };
 
+        vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
         vulnManager.Add(vulnerability);
         vulnManager.Context.SaveChanges();
 

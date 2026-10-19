@@ -270,6 +270,7 @@ public class AcunetixParser : IAcunetixParser
                     vulnerability.cve = cwe;
                 }
 
+                vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
                 vulnManager.Add(vulnerability);
                 vulnManager.Context.SaveChanges();
 

@@ -204,6 +204,7 @@ public class ZapParser : IZapParser
                     CreatedDate = DateTime.Now.ToUniversalTime()
                 };
 
+                vuln.FindingId = FindingIdGenerator.Next(vulnManager, vuln.Project);
                 vulnManager.Add(vuln);
                 vulnManager.Context.SaveChanges();
 

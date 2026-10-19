@@ -245,6 +245,7 @@ public class DependencyCheckParser : IDependencyCheckParser
             }
         }
 
+        vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
         vulnManager.Add(vulnerability);
         vulnManager.Context.SaveChanges();
 
@@ -325,6 +326,7 @@ public class DependencyCheckParser : IDependencyCheckParser
             vulnerability.CVSS3 = parsedScore;
         }
 
+        vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
         vulnManager.Add(vulnerability);
         vulnManager.Context.SaveChanges();
 

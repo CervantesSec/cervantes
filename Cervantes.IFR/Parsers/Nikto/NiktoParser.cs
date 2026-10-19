@@ -274,6 +274,7 @@ public class NiktoParser : INiktoParser
             CreatedDate = DateTime.Now.ToUniversalTime()
         };
 
+        vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
         vulnManager.Add(vulnerability);
         vulnManager.Context.SaveChanges();
 

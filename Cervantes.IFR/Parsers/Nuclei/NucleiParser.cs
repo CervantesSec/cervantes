@@ -204,6 +204,7 @@ public class NucleiParser : INucleiParser
                         vuln.CVSSVector = nucleiResult.Info.Classification.CvssVector;
                     }
 
+                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, vuln.Project);
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
 
