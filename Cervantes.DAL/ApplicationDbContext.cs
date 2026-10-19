@@ -26,15 +26,43 @@ namespace Cervantes.DAL;
     /// Implemnt save async method
     /// </summary>
     /// <returns></returns>
-    public Task<int> SaveChangesAsync()
+    public async Task<int> SaveChangesAsync()
     {
         BeforeSaveChanges();
-        return base.SaveChangesAsync();
+        try
+        {
+            return await base.SaveChangesAsync();
+        }
+        catch
+        {
+            DiscardPendingAudits();
+            throw;
+        }
     }
     public override int SaveChanges()
     {
         BeforeSaveChanges();
-        return base.SaveChanges();
+        try
+        {
+            return base.SaveChanges();
+        }
+        catch
+        {
+            DiscardPendingAudits();
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Drops the audit rows queued by a save that failed. The context outlives the save (a Blazor circuit, or the
+    /// next block of a restore), so otherwise the next successful save would write audit rows for changes that never happened.
+    /// </summary>
+    private void DiscardPendingAudits()
+    {
+        foreach (var entry in ChangeTracker.Entries<Audit>().Where(e => e.State == EntityState.Added).ToList())
+        {
+            entry.State = EntityState.Detached;
+        }
     }
     
     public Task<int> SaveChangesNoAuditAsync()
