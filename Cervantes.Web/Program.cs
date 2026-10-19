@@ -320,6 +320,10 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// PreMailer (report Generate, the only caller) downloads <link> stylesheets through this process-wide downloader;
+// report generation must not fetch anything, so it gets one that returns no CSS.
+PreMailer.Net.Downloaders.WebDownloader.SharedDownloader = new OfflineCssDownloader();
+
 // Content-Security-Policy, Report-Only for now: the browser logs violations to the DevTools console and blocks
 // nothing. Rename the header to "Content-Security-Policy" to enforce, once the UI runs without violations.
 // script-src has no 'unsafe-inline' on purpose: that is what stops an injected <script> or inline handler.

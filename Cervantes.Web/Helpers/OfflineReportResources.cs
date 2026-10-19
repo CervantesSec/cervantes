@@ -1,5 +1,6 @@
 using HtmlToOpenXml.IO;
 using iText.StyledXmlParser.Resolver.Resource;
+using PreMailer.Net.Downloaders;
 
 namespace Cervantes.Web.Helpers;
 
@@ -23,4 +24,13 @@ public sealed class OfflineWebRequest : IWebRequest
     public bool SupportsProtocol(string protocol) => false;
 
     public Task<Resource?> FetchAsync(Uri requestUri, CancellationToken cancellationToken) => Task.FromResult<Resource?>(null);
+}
+
+/// <summary>
+/// PreMailer stylesheet loader for report generation: components are inlined only with the CSS they carry themselves
+/// (their own CSS and inline style blocks). Every linked stylesheet, remote or local file, is refused.
+/// </summary>
+public sealed class OfflineCssDownloader : IWebDownloader
+{
+    public string DownloadString(Uri uri) => "";
 }
