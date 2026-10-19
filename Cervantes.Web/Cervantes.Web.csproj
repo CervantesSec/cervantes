@@ -230,4 +230,8 @@
       </Compile>
     </ItemGroup>
     
+    <ItemGroup>
+        <InternalsVisibleTo Include="Cervantes.Tests" />
+    </ItemGroup>
+
 </Project>

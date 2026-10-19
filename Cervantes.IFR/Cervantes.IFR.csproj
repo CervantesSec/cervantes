@@ -66,4 +66,8 @@
       <Folder Include="CveServices\Extensions\" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Cervantes.Tests" />
+    </ItemGroup>
+
 </Project>
