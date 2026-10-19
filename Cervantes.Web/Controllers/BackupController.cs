@@ -1046,7 +1046,12 @@ public class BackupController : ControllerBase
                     // are not used (there is no "User" Identity role to add the user to).
                     await userManager.AddAsync(user);
                     await userManager.Context.SaveChangesAsync();
-                    await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, new List<string> { role });
+                    var status = await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, new List<string> { role });
+                    if (status.HasErrors)
+                    {
+                        // The user is restored without permissions; an admin has to give it a role by hand.
+                        _logger.LogWarning("Restore could not give user {UserId} a role: {Errors}", user.Id, status.GetAllErrors());
+                    }
                 }
 
                 await userManager.Context.SaveChangesAsync();
