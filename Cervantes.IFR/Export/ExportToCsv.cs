@@ -94,10 +94,31 @@ public class ExportToCsv : IExportToCsv
         }
     }
     
+    /// <summary>
+    /// How long an export stays on disk after the page asked for it to be removed.
+    /// </summary>
+    internal static TimeSpan DeleteDelay = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// Removes an export once the browser has had time to download it. Callers hand the path to the browser
+    /// (downloadFile, which only starts a navigation) and call this right away, so deleting at once would make
+    /// the download request find nothing.
+    /// </summary>
     public void DeleteFile(string path)
     {
-        var imagePath = $"{env.WebRootPath}/{path}";
-        System.IO.File.Delete(imagePath);
+        var exportPath = $"{env.WebRootPath}/{path}";
+        _ = System.Threading.Tasks.Task.Run(async () =>
+        {
+            await System.Threading.Tasks.Task.Delay(DeleteDelay);
+            try
+            {
+                System.IO.File.Delete(exportPath);
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                // Still open or already gone: a leftover export is harmless, it only takes disk space.
+            }
+        });
     }
     
     
