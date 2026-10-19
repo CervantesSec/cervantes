@@ -763,6 +763,33 @@ public class ProjectController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Removes an attachment's file once its row is gone. Only files inside the projects attachments directory are
+    /// deleted, because an old restore may have stored a path that points elsewhere. A file that cannot be deleted
+    /// is left behind: the attachment is already gone for the user, and a stray file only takes disk space.
+    /// </summary>
+    private void DeleteAttachmentFile(string? storedPath, Guid id)
+    {
+        if (!AttachmentPath.TryResolve(env.WebRootPath, storedPath, "Projects", out var path))
+        {
+            _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
+                "ProjectAttachment", id, aspNetUserId);
+            return;
+        }
+
+        try
+        {
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            _logger.LogWarning(e, "File of {Entity} {Id} could not be deleted. User: {UserId}", "ProjectAttachment", id, aspNetUserId);
+        }
+    }
+
     [HttpDelete]
     [Route("Attachment/{attachmentId}")]
     [HasPermission(Permissions.ProjectAttachmentsDelete)]
@@ -783,12 +810,13 @@ public class ProjectController : ControllerBase
 
                     projectAttachmentManager.Remove(result);
                     await projectAttachmentManager.Context.SaveChangesAsync();
+                    DeleteAttachmentFile(result.FilePath, result.Id);
                     _logger.LogInformation("Project attachment deleted successfully. User: {0}",
                         aspNetUserId);
                     return NoContent();
                 }
 
-                return BadRequest("Invalid request");
+                return NotFound("Project attachment not found");
             }
 
             _logger.LogError("An error ocurred deleting project attachments. User: {0}",
