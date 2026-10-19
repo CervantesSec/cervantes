@@ -35,17 +35,19 @@ public class StoredHtmlResanitizer
     public async Task<int> RunAsync()
     {
         var changed = 0;
-        changed += await Resanitize<Vuln>(x => x.Description, (x, v) => x.Description = v);
-        changed += await Resanitize<Vuln>(x => x.Impact, (x, v) => x.Impact = v);
-        changed += await Resanitize<Vuln>(x => x.ProofOfConcept, (x, v) => x.ProofOfConcept = v);
-        changed += await Resanitize<Vuln>(x => x.Remediation, (x, v) => x.Remediation = v);
+        changed += await Resanitize<Vuln>(
+            (x => x.Description, (x, v) => x.Description = v),
+            (x => x.Impact, (x, v) => x.Impact = v),
+            (x => x.ProofOfConcept, (x, v) => x.ProofOfConcept = v),
+            (x => x.Remediation, (x, v) => x.Remediation = v));
         changed += await Resanitize<VulnCustomFieldValue>(x => x.Value, (x, v) => x.Value = v);
         changed += await Resanitize<VulnNote>(x => x.Description, (x, v) => x.Description = v);
         changed += await Resanitize<VulnCategory>(x => x.Description, (x, v) => x.Description = v);
         changed += await Resanitize<Client>(x => x.Description, (x, v) => x.Description = v);
         changed += await Resanitize<Document>(x => x.Description, (x, v) => x.Description = v);
-        changed += await Resanitize<Project>(x => x.Description, (x, v) => x.Description = v);
-        changed += await Resanitize<Project>(x => x.ExecutiveSummary, (x, v) => x.ExecutiveSummary = v);
+        changed += await Resanitize<Project>(
+            (x => x.Description, (x, v) => x.Description = v),
+            (x => x.ExecutiveSummary, (x, v) => x.ExecutiveSummary = v));
         changed += await Resanitize<ProjectNote>(x => x.Description, (x, v) => x.Description = v);
         changed += await Resanitize<CORE.Entities.Task>(x => x.Description, (x, v) => x.Description = v);
         changed += await Resanitize<TaskNote>(x => x.Description, (x, v) => x.Description = v);
@@ -68,11 +70,19 @@ public class StoredHtmlResanitizer
 
     // Every entity except ApplicationUser (string key, from IdentityUser) has a Guid Id.
     private Task<int> Resanitize<T>(Func<T, string?> get, Action<T, string> set) where T : class
-        => Resanitize<T, Guid>(get, set);
+        => Resanitize<T, Guid>((get, set));
+
+    // Several fields of one table are cleaned in the same pass, so the table is read once instead of once per field.
+    private Task<int> Resanitize<T>(params (Func<T, string?> Get, Action<T, string> Set)[] fields) where T : class
+        => Resanitize<T, Guid>(fields);
+
+    private Task<int> Resanitize<T, TKey>(Func<T, string?> get, Action<T, string> set)
+        where T : class where TKey : IComparable<TKey>
+        => Resanitize<T, TKey>((get, set));
 
     // Keyset pagination on "Id": WHERE Id > last ORDER BY Id LIMIT BatchSize. Cleaned rows are saved and detached
     // after each batch, so the change tracker never holds more than BatchSize entities. A second run changes nothing.
-    private async Task<int> Resanitize<T, TKey>(Func<T, string?> get, Action<T, string> set)
+    private async Task<int> Resanitize<T, TKey>(params (Func<T, string?> Get, Action<T, string> Set)[] fields)
         where T : class where TKey : IComparable<TKey>
     {
         var changed = 0;
@@ -99,17 +109,20 @@ public class StoredHtmlResanitizer
             var batchChanged = 0;
             foreach (var entity in batch)
             {
-                var value = get(entity);
-                if (string.IsNullOrEmpty(value))
+                foreach (var (get, set) in fields)
                 {
-                    continue;
-                }
+                    var value = get(entity);
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        continue;
+                    }
 
-                var clean = sanitizer.Sanitize(value);
-                if (clean != value)
-                {
-                    set(entity, clean);
-                    batchChanged++;
+                    var clean = sanitizer.Sanitize(value);
+                    if (clean != value)
+                    {
+                        set(entity, clean);
+                        batchChanged++;
+                    }
                 }
             }
 
