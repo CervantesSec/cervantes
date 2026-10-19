@@ -32,7 +32,8 @@ public partial class Index: ComponentBase
     private List<BreadcrumbItem> _items;
     [Inject] private UserController _UserController { get; set; }
 
-    private ILogger<UserController> Logger { get; set; }
+    [Inject] private ILogger<Index> Logger { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
     private ProfileEdit modelEdit { get; set; } = new ProfileEdit();
     MudForm formEdit;
@@ -212,10 +213,9 @@ public partial class Index: ComponentBase
     private async Task DeletePersonalData()
     {
         var result = await userController.Delete(user.Id);
-        await SignInManager.SignOutAsync();
-
         Logger.LogInformation("User with ID '{UserId}' deleted themselves.", user.Id);
-        RedirectManager.RedirectTo("/Account/Login");
+        // The circuit cannot remove the cookie; the endpoint signs out a user that no longer exists.
+        Navigation.NavigateTo("Account/Manage/RefreshSignIn", forceLoad: true);
     }
     
 
@@ -350,8 +350,8 @@ public partial class Index: ComponentBase
         
         Logger.LogInformation("User with ID '{UserId}' has reset their authentication app key.", userId);
 
-        await SignInManager.RefreshSignInAsync(user);
         Snackbar.Add("resetedAuthenticator", Severity.Success);
+        Navigation.NavigateTo("Account/Manage/RefreshSignIn?returnUrl=/Account/Profile", forceLoad: true);
 
         /*RedirectManager.RedirectToWithStatus(
             "Account/Manage/EnableAuthenticator",
@@ -406,9 +406,9 @@ public partial class Index: ComponentBase
         }
         Snackbar.Add(@localizer["passwordChanged"], Severity.Success);
 
-        await SignInManager.RefreshSignInAsync(user);
         Logger.LogInformation("User changed their password successfully.");
-        RedirectManager.RedirectToCurrentPageWithStatus("Your password has been changed", HttpContext);
+        // The password change rotated the security stamp, so the cookie must be reissued from a real HTTP request.
+        Navigation.NavigateTo("Account/Manage/RefreshSignIn?returnUrl=/Account/Profile", forceLoad: true);
     }
     #endregion
 

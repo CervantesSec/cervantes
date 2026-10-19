@@ -178,6 +178,26 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
         var loggerFactory = endpoints.ServiceProvider.GetRequiredService<ILoggerFactory>();
         var downloadLogger = loggerFactory.CreateLogger("DownloadPersonalData");
 
+        // The Profile page runs in an interactive circuit, which has no HTTP response to carry a cookie. After a change
+        // that needs a new sign-in cookie it navigates here with a full page load: the cookie is refreshed for a user
+        // that still exists, and removed for one that was deleted.
+        manageGroup.MapGet("/RefreshSignIn", async (
+            HttpContext context,
+            [FromServices] UserManager<ApplicationUser> userManager,
+            [FromServices] SignInManager<ApplicationUser> signInManager,
+            [FromQuery] string? returnUrl) =>
+        {
+            var user = await userManager.GetUserAsync(context.User);
+            if (user is null)
+            {
+                await signInManager.SignOutAsync();
+                return TypedResults.LocalRedirect("~/Account/Login");
+            }
+
+            await signInManager.RefreshSignInAsync(user);
+            return TypedResults.LocalRedirect(LocalUrl.IsLocal(returnUrl) ? returnUrl! : "~/Account/Profile");
+        });
+
         manageGroup.MapPost("/DownloadPersonalData", async (
             HttpContext context,
             [FromServices] UserManager<ApplicationUser> userManager,
