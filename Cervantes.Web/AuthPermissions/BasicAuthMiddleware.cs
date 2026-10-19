@@ -16,6 +16,8 @@ using AuthPermissions.BaseCode.PermissionsCode;
 using Cervantes.CORE.Entities;
 using Task = System.Threading.Tasks.Task;
 
+namespace Cervantes.Web.AuthPermissions;
+
 public class BasicAuthMiddleware
 {
     private readonly RequestDelegate _next;
@@ -90,7 +92,7 @@ public class BasicAuthMiddleware
     catch (Exception ex)
     {
         _logger.LogError(ex, "Error in BasicAuthMiddleware for {Method} {Path}", context.Request.Method, context.Request.Path);
-        await HandleAuthError(context, ex);
+        await HandleAuthError(context);
     }
 }
 
@@ -217,16 +219,15 @@ private ClaimsPrincipal CreateClaimsPrincipal(IEnumerable<Claim> claims, string 
     return new ClaimsPrincipal(identity);
 }
 
-private async Task HandleAuthError(HttpContext context, Exception ex = null)
+private async Task HandleAuthError(HttpContext context)
 {
-    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-    var errorMessage = "Authentication error";
-    if (ex != null && context.Request.Path.Value != null)
+    // The exception is already logged by the caller; the client only gets a fixed text, never its details.
+    if (context.Response.HasStarted)
     {
-        errorMessage = $"Authentication error: {ex.Message} for {context.Request.Method} {context.Request.Path}";
-        _logger.LogError(ex, "Detailed error in BasicAuth middleware");
+        return;
     }
-    await context.Response.WriteAsync(errorMessage);
+    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+    await context.Response.WriteAsync("An unexpected error occurred.");
 }
 
     private async Task ChallengeAsync(HttpContext context)
