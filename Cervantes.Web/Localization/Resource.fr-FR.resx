@@ -2771,4 +2771,10 @@
     <data name="draftSavedAgo" xml:space="preserve"><value>Brouillon enregistré il y a {0}s</value></data>
     <data name="draftError" xml:space="preserve"><value>Erreur lors de l’enregistrement du brouillon</value></data>
     <data name="draftReady" xml:space="preserve"><value>Brouillon prêt</value></data>
+  <data name="vulnUpdated" xml:space="preserve">
+    <value>Vulnérabilité mise à jour avec succès !</value>
+  </data>
+  <data name="vulnsUpdatedError" xml:space="preserve">
+    <value>Une erreur s'est produite lors de la mise à jour des vulnérabilités !</value>
+  </data>
 </root>

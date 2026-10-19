@@ -169,9 +169,13 @@ public partial class TasksKanban : ComponentBase
         model.TaskId = id;
         model.UserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         var response = await _taskController.AssignToMe(model);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["taskAssigned"], Severity.Success);
+        }
+        else if (response is ObjectResult { StatusCode: 403 })
+        {
+            Snackbar.Add(@localizer["noInProject"], Severity.Warning);
         }
         else
         {

@@ -3333,4 +3333,10 @@ Option 3</value>
     <data name="draftSavedAgo" xml:space="preserve"><value>Draft saved {0}s ago</value></data>
     <data name="draftError" xml:space="preserve"><value>Error saving draft</value></data>
     <data name="draftReady" xml:space="preserve"><value>Draft ready</value></data>
+  <data name="vulnUpdated" xml:space="preserve">
+    <value>Vuln updated successfully !</value>
+  </data>
+  <data name="vulnsUpdatedError" xml:space="preserve">
+    <value>An error occurred updating the vulns!</value>
+  </data>
 </root>

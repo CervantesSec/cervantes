@@ -3355,4 +3355,10 @@ Opción 3</value>
     <data name="draftSavedAgo" xml:space="preserve"><value>Borrador guardado hace {0}s</value></data>
     <data name="draftError" xml:space="preserve"><value>Error guardando borrador</value></data>
     <data name="draftReady" xml:space="preserve"><value>Borrador listo</value></data>
+  <data name="vulnUpdated" xml:space="preserve">
+    <value>Vulnerabilidad actualizada correctamente!</value>
+  </data>
+  <data name="vulnsUpdatedError" xml:space="preserve">
+    <value>Se ha producido un error al actualizar las vulnerabilidades.</value>
+  </data>
 </root>

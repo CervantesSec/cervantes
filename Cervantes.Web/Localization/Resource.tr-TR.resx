@@ -2775,4 +2775,10 @@
     <data name="draftSavedAgo" xml:space="preserve"><value>Taslak {0} sn önce kaydedildi</value></data>
     <data name="draftError" xml:space="preserve"><value>Taslak kaydedilirken hata oluştu</value></data>
     <data name="draftReady" xml:space="preserve"><value>Taslak hazır</value></data>
+  <data name="vulnUpdated" xml:space="preserve">
+    <value>Güvenlik açığı başarıyla güncellendi!</value>
+  </data>
+  <data name="vulnsUpdatedError" xml:space="preserve">
+    <value>Güvenlik açıkları güncellenirken bir hata oluştu!</value>
+  </data>
 </root>

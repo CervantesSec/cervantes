@@ -2776,4 +2776,10 @@
     <data name="draftSavedAgo" xml:space="preserve"><value>Bozza salvata {0}s fa</value></data>
     <data name="draftError" xml:space="preserve"><value>Errore durante il salvataggio della bozza</value></data>
     <data name="draftReady" xml:space="preserve"><value>Bozza pronta</value></data>
+  <data name="vulnUpdated" xml:space="preserve">
+    <value>Vulnerabilità aggiornata con successo!</value>
+  </data>
+  <data name="vulnsUpdatedError" xml:space="preserve">
+    <value>Si è verificato un errore durante l'aggiornamento delle vulnerabilità!</value>
+  </data>
 </root>

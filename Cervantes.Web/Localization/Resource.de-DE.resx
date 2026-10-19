@@ -2771,4 +2771,10 @@
     <data name="draftSavedAgo" xml:space="preserve"><value>Entwurf vor {0}s gespeichert</value></data>
     <data name="draftError" xml:space="preserve"><value>Fehler beim Speichern des Entwurfs</value></data>
     <data name="draftReady" xml:space="preserve"><value>Entwurf bereit</value></data>
+  <data name="vulnUpdated" xml:space="preserve">
+    <value>Sicherheitslücke erfolgreich aktualisiert!</value>
+  </data>
+  <data name="vulnsUpdatedError" xml:space="preserve">
+    <value>Beim Aktualisieren der Schwachstellen ist ein Fehler aufgetreten!</value>
+  </data>
 </root>

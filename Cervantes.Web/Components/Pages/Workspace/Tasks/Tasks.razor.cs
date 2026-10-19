@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,7 +116,7 @@ public partial class Tasks: ComponentBase
         update.Id = dropItem.Item.Id;
         update.Status = dropItem.Item.Status;
         var response = await _taskController.UpdateStatus(update);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["taskUpdated"], Severity.Success);
         }
@@ -123,7 +124,10 @@ public partial class Tasks: ComponentBase
         {
             // The card shares the tracked entity with the controller: undo the in-memory status change.
             dropItem.Item.Status = status;
-            Snackbar.Add(@localizer["taskUpdatedError"], Severity.Error);
+            if (response is ObjectResult { StatusCode: 403 })
+                Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+            else
+                Snackbar.Add(@localizer["taskUpdatedError"], Severity.Error);
         }
     }
     
@@ -286,9 +290,13 @@ public partial class Tasks: ComponentBase
         model.TaskId = id;
         model.UserId = _accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         var response = await _taskController.AssignToMe(model);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["taskAssigned"], Severity.Success);
+        }
+        else if (response is ObjectResult { StatusCode: 403 })
+        {
+            Snackbar.Add(@localizer["noInProject"], Severity.Warning);
         }
         else
         {

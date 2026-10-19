@@ -103,7 +103,8 @@ public partial class JiraDialog: ComponentBase
         if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["jiraDeleted"], Severity.Success);
-            StateHasChanged();
+            // Close with a result so the list reloads without the deleted issue.
+            MudDialog.Close(DialogResult.Ok(true));
         }
         else
         {

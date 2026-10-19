@@ -101,6 +101,8 @@ public partial class Jira: ComponentBase
 
         if (!result.Canceled)
         {
+            // The rows are reloaded, so a selection of the old row objects would point at nothing.
+            seleJiras = new HashSet<CORE.Entities.Jira>();
             await Update();
             StateHasChanged();
         }
@@ -123,15 +125,10 @@ public partial class Jira: ComponentBase
                         Snackbar.Add(@localizer["jiraDeletedError"], Severity.Error);
                     }
                 }
-                seleJiras.Clear();
+                seleJiras = new HashSet<CORE.Entities.Jira>();
                 await Update();
                 StateHasChanged();
                 break;
         }
-    }
-    void SelectedItemsChanged(HashSet<CORE.Entities.Jira> items)
-    {
-        
-        seleJiras = items;
     }
 }

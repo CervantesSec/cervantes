@@ -2771,4 +2771,10 @@
     <data name="draftSavedAgo" xml:space="preserve"><value>Koncept uložen před {0}s</value></data>
     <data name="draftError" xml:space="preserve"><value>Chyba při ukládání konceptu</value></data>
     <data name="draftReady" xml:space="preserve"><value>Koncept připraven</value></data>
+  <data name="vulnUpdated" xml:space="preserve">
+    <value>Zranitelnost byla úspěšně aktualizována!</value>
+  </data>
+  <data name="vulnsUpdatedError" xml:space="preserve">
+    <value>Při aktualizaci zranitelností došlo k chybě!</value>
+  </data>
 </root>

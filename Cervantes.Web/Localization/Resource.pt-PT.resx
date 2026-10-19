@@ -2740,4 +2740,10 @@
     <data name="draftSavedAgo" xml:space="preserve"><value>Rascunho guardado há {0}s</value></data>
     <data name="draftError" xml:space="preserve"><value>Erro ao guardar o rascunho</value></data>
     <data name="draftReady" xml:space="preserve"><value>Rascunho pronto</value></data>
+  <data name="vulnUpdated" xml:space="preserve">
+    <value>Vuln atualizado com sucesso!</value>
+  </data>
+  <data name="vulnsUpdatedError" xml:space="preserve">
+    <value>Ocorreu um erro ao atualizar as vulnerabilidades!</value>
+  </data>
 </root>
