@@ -975,8 +975,8 @@ public class BackupController : ControllerBase
             }
 
             BackupViewModel backupViewModel;
-            // Read the upload from memory: it holds password hashes, so it is never written to disk. The stream
-            // overload, unlike the span one, accepts a file saved with a UTF-8 BOM.
+            // Read the upload from memory; it is never written to disk. The stream overload, unlike the span one,
+            // accepts a file saved with a UTF-8 BOM.
             using (var stream = new MemoryStream(model.FileContent))
             {
                 backupViewModel = JsonSerializer.Deserialize<BackupViewModel>(stream);

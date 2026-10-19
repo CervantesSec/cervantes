@@ -334,7 +334,15 @@ PreMailer.Net.Downloaders.WebDownloader.SharedDownloader = new OfflineCssDownloa
 // gets a socket. blob: in img-src/connect-src is required by TinyMCE.
 // object-src 'self' keeps the <embed> attachment previews working (the files come from FileController).
 // form-action does not fall back to default-src, so it is explicit: a stored <form action="https://evil"> cannot post offsite.
-const string contentSecurityPolicy =
+// With OpenID Connect, the external login form is answered with a redirect to the provider, and browsers check
+// form-action on that redirect too, so the Authority's origin is allowed as well.
+var formActionSources = "'self'";
+if (app.Configuration.GetValue<bool>("OpenIdConnect:Enabled")
+    && Uri.TryCreate(app.Configuration["OpenIdConnect:Authority"], UriKind.Absolute, out var oidcAuthority))
+{
+    formActionSources += " " + oidcAuthority.GetLeftPart(UriPartial.Authority);
+}
+var contentSecurityPolicy =
     "default-src 'self'; " +
     "script-src 'self' 'unsafe-eval'; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
@@ -342,14 +350,14 @@ const string contentSecurityPolicy =
     "font-src 'self' data: https://fonts.gstatic.com; " +
     "connect-src 'self' blob:; " +
     "frame-ancestors 'self'; " +
-    "form-action 'self'; " +
+    $"form-action {formActionSources}; " +
     "object-src 'self'; " +
     "base-uri 'self'";
 app.Use((context, next) =>
 {
     // OnStarting, not a plain assignment: UseExceptionHandler clears the response (headers included) before it
     // re-executes /Error, and this middleware sits before it, so a header set up front is lost on error pages.
-    context.Response.OnStarting(static state =>
+    context.Response.OnStarting(state =>
     {
         ((HttpResponse)state).Headers["Content-Security-Policy"] = contentSecurityPolicy;
         return Task.CompletedTask;
@@ -476,8 +484,8 @@ using (var scope = app.Services.CreateScope())
         {
             System.IO.Directory.CreateDirectory($"{env.WebRootPath}/Attachments/Temp");
         }
-        // Older versions wrote uploaded backups here (<guid>.json and <guid>.zip) and left them behind when a restore
-        // failed; nothing writes here any more. Other files, such as the folder's .gitignore, are kept.
+        // Older versions used this folder for backup uploads (<guid>.json and <guid>.zip); nothing writes here any
+        // more, so those files are cleaned up. Other files, such as the folder's .gitignore, are kept.
         foreach (var leftover in System.IO.Directory.EnumerateFiles($"{env.WebRootPath}/Attachments/Temp")
                      .Where(f => f.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
                                  || f.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)))
