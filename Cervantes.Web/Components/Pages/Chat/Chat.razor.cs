@@ -132,7 +132,15 @@ public partial class Chat: ComponentBase
         if (form.IsValid)
         {
             _isCreating = true;
-            var response =  await _chatController.CreateChat(CreateChatViewModel);
+            CORE.Entities.Chat? response;
+            try
+            {
+                response = await _chatController.CreateChat(CreateChatViewModel);
+            }
+            catch (Exception)
+            {
+                response = null;
+            }
             if (response != null)
             {
                 Snackbar.Add(@localizer["chatCreated"], Severity.Success);

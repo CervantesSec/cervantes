@@ -116,8 +116,15 @@ public class ChatController : ControllerBase
         string? documentPath = null;
         if (model.Type == "Document")
         {
+            // Everything that would make the import fail is checked before the chat row exists, so a failed import
+            // never leaves a chat without its document.
             var doc = documentManager.GetById(model.DocumentId);
-            if (doc != null && !AttachmentPath.TryResolve(env.WebRootPath, doc.FilePath, "Documents", out documentPath))
+            if (doc == null)
+            {
+                return null;
+            }
+            if (!AttachmentPath.TryResolve(env.WebRootPath, doc.FilePath, "Documents", out documentPath)
+                || !System.IO.File.Exists(documentPath))
             {
                 _logger.LogWarning("Document {DocumentId} has no file inside the documents folder, AI chat not created. User: {UserId}",
                     model.DocumentId, aspNetUserId);
@@ -136,23 +143,31 @@ public class ChatController : ControllerBase
 
         await chatManager.AddAsync(chat);
         await chatManager.Context.SaveChangesAsync();
-        switch (model.Type)
+        try
         {
-            case "Project":
-                var project = projectManager.GetById(model.ProjectId);
-                if (project != null)
-                {
-                    await _aiService.AddProject(chat.Id, project.Id);
-                }
-                break;
-            case "Document":
-                if (documentPath != null)
-                {
-                    await _aiService.AddDocument(chat.Id, documentPath);
-                }
-                break;
+            switch (model.Type)
+            {
+                case "Project":
+                    var project = projectManager.GetById(model.ProjectId);
+                    if (project != null)
+                    {
+                        await _aiService.AddProject(chat.Id, project.Id);
+                    }
+                    break;
+                case "Document":
+                    await _aiService.AddDocument(chat.Id, documentPath!);
+                    break;
+            }
         }
-        
+        catch (Exception e)
+        {
+            // The chat is useless without its context: remove it rather than leave an empty chat behind.
+            _logger.LogError(e, "Loading the context of AI chat {ChatId} failed, chat removed. User: {UserId}", chat.Id, aspNetUserId);
+            chatManager.Remove(chat);
+            await chatManager.Context.SaveChangesAsync();
+            return null;
+        }
+
         return chat;
     }
     
