@@ -34,9 +34,9 @@ public class CveSubscriptionViewModel
     
     public bool OnlyKnownExploited { get; set; } = false;
     
-    public List<string> Keywords { get; set; } = new();
+    public List<string>? Keywords { get; set; } = new();
     
-    public List<string> CweFilter { get; set; } = new();
+    public List<string>? CweFilter { get; set; } = new();
     
     [Required]
     public string NotificationFrequency { get; set; } = "Daily";
@@ -83,8 +83,8 @@ public class CveSubscriptionViewModel
             MaxCvssScore = MaxCvssScore,
             MinEpssScore = MinEpssScore,
             OnlyKnownExploited = OnlyKnownExploited,
-            Keywords = Keywords.Any() ? JsonSerializer.Serialize(Keywords) : "[]",
-            CweFilter = CweFilter.Any() ? JsonSerializer.Serialize(CweFilter) : "[]",
+            Keywords = Keywords is { Count: > 0 } ? JsonSerializer.Serialize(Keywords) : "[]",
+            CweFilter = CweFilter is { Count: > 0 } ? JsonSerializer.Serialize(CweFilter) : "[]",
             NotificationFrequency = NotificationFrequency ?? "Daily",
             NotificationMethod = NotificationMethod ?? "Email",
             WebhookUrl = WebhookUrl ?? "",
