@@ -469,7 +469,22 @@ using (var scope = app.Services.CreateScope())
         {
             System.IO.Directory.CreateDirectory($"{env.WebRootPath}/Attachments/Temp");
         }
-        
+        // Older versions wrote uploaded backups here (<guid>.json and <guid>.zip) and left them behind when a restore
+        // failed; nothing writes here any more. Other files, such as the folder's .gitignore, are kept.
+        foreach (var leftover in System.IO.Directory.EnumerateFiles($"{env.WebRootPath}/Attachments/Temp")
+                     .Where(f => f.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
+                                 || f.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)))
+        {
+            try
+            {
+                System.IO.File.Delete(leftover);
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                app.Logger.LogWarning(e, "Could not delete the leftover backup upload {File}", leftover);
+            }
+        }
+
         if (System.IO.Directory.Exists($"{env.WebRootPath}/Attachments/Vulns") == false)
         {
             System.IO.Directory.CreateDirectory($"{env.WebRootPath}/Attachments/Vulns");

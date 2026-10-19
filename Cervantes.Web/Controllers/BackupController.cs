@@ -926,31 +926,23 @@ public class BackupController : ControllerBase
         try
         {
             string extractPath = env.WebRootPath + "/Attachments/";
-            var path = "";
-            var unique = "";
-            if (model.FileContent != null)
+            if (model.FileContent == null)
             {
-                if (fileCheck.CheckFile(model.FileContent))
-                {
-                    unique = Guid.NewGuid().ToString() + ".zip";
-                    path = $"{env.WebRootPath}/Attachments/Temp/{unique}";
-                    var fs = System.IO.File.Create(path);
-                    fs.Write(model.FileContent, 0,
-                        model.FileContent.Length);
-                    fs.Close();
-                }
-                else
-                {
-                    _logger.LogError("An error ocurred adding a client. User: {0}",
-                        aspNetUserId);
-                    return BadRequest("Invalid file type");
-                }
+                return BadRequest("Invalid request");
+            }
+            if (!fileCheck.CheckFile(model.FileContent))
+            {
+                _logger.LogError("An error ocurred adding a client. User: {0}",
+                    aspNetUserId);
+                return BadRequest("Invalid file type");
             }
 
+            // Extract straight from memory, so a failed restore leaves no copy of the upload on disk.
+            using (var archive = new ZipArchive(new MemoryStream(model.FileContent), ZipArchiveMode.Read))
+            {
+                archive.ExtractToDirectory(extractPath, overwriteFiles: true);
+            }
 
-            ZipFile.ExtractToDirectory(path, extractPath, true);
-
-            System.IO.File.Delete(Path.Combine(path));
             _logger.LogInformation("Attachments restored successfully. User: {0}",
                 aspNetUserId);
             return Ok();
@@ -971,32 +963,23 @@ public class BackupController : ControllerBase
         try
         {
 
-            var path = "";
-            var unique = "";
-            if (model.FileContent != null)
+            if (model.FileContent == null)
             {
-                if (fileCheck.CheckFile(model.FileContent))
-                {
-                    unique = Guid.NewGuid().ToString() + ".json";
-                    path = $"{env.WebRootPath}/Attachments/Temp/{unique}";
-                    var fs = System.IO.File.Create(path);
-                    fs.Write(model.FileContent, 0,
-                        model.FileContent.Length);
-                    fs.Close();
-                }
-                else
-                {
-                    _logger.LogError("An error ocurred adding a client. User: {0}",
-                        aspNetUserId);
-                    return await System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest("Invalid file type"));
-                }
+                return BadRequest();
+            }
+            if (!fileCheck.CheckFile(model.FileContent))
+            {
+                _logger.LogError("An error ocurred adding a client. User: {0}",
+                    aspNetUserId);
+                return await System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest("Invalid file type"));
             }
 
             BackupViewModel backupViewModel;
-            // Close the file before the restore runs: it is deleted at the end, and Windows cannot delete an open file.
-            using (var openStream = System.IO.File.OpenRead(path))
+            // Read the upload from memory: it holds password hashes, so it is never written to disk. The stream
+            // overload, unlike the span one, accepts a file saved with a UTF-8 BOM.
+            using (var stream = new MemoryStream(model.FileContent))
             {
-                backupViewModel = JsonSerializer.Deserialize<BackupViewModel>(openStream);
+                backupViewModel = JsonSerializer.Deserialize<BackupViewModel>(stream);
             }
 
             string oldUserId = "";
@@ -1673,7 +1656,6 @@ public class BackupController : ControllerBase
                 QueueResanitize();
             }
 
-            System.IO.File.Delete(path);
             _logger.LogInformation("Data restored successfully. User: {0}",
                 aspNetUserId);
             return await System.Threading.Tasks.Task.FromResult<IActionResult>(Ok());
