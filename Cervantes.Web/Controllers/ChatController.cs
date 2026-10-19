@@ -143,32 +143,48 @@ public class ChatController : ControllerBase
 
         await chatManager.AddAsync(chat);
         await chatManager.Context.SaveChangesAsync();
+        bool loaded;
         try
         {
             switch (model.Type)
             {
                 case "Project":
                     var project = projectManager.GetById(model.ProjectId);
-                    if (project != null)
-                    {
-                        await _aiService.AddProject(chat.Id, project.Id);
-                    }
+                    loaded = project != null && await _aiService.AddProject(chat.Id, project.Id);
                     break;
                 case "Document":
-                    await _aiService.AddDocument(chat.Id, documentPath!);
+                    loaded = await _aiService.AddDocument(chat.Id, documentPath!);
+                    break;
+                default:
+                    loaded = true;
                     break;
             }
         }
         catch (Exception e)
         {
-            // The chat is useless without its context: remove it rather than leave an empty chat behind.
             _logger.LogError(e, "Loading the context of AI chat {ChatId} failed, chat removed. User: {UserId}", chat.Id, aspNetUserId);
-            chatManager.Remove(chat);
-            await chatManager.Context.SaveChangesAsync();
+            await RemoveChatWithoutContext(chat);
+            return null;
+        }
+
+        if (!loaded)
+        {
+            // The AI service answers false when it is turned off, so nothing was loaded.
+            _logger.LogWarning("The context of AI chat {ChatId} could not be loaded, chat removed. User: {UserId}", chat.Id, aspNetUserId);
+            await RemoveChatWithoutContext(chat);
             return null;
         }
 
         return chat;
+    }
+
+    /// <summary>
+    /// The chat is useless without its context: remove it rather than leave an empty chat behind.
+    /// </summary>
+    private async System.Threading.Tasks.Task RemoveChatWithoutContext(Chat chat)
+    {
+        chatManager.Remove(chat);
+        await chatManager.Context.SaveChangesAsync();
     }
     
     public async Task<Chat> EditChat(Guid chatId, string title)
