@@ -83,8 +83,7 @@ public class CsvParser: ICsvParser
                     {
                         continue;
                     }
-                    var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
-                    vuln.FindingId = pro.FindingsId + "-" + vulNum.ToString("D2");
+                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, pro);
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                 }

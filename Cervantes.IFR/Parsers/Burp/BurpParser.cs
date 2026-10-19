@@ -99,8 +99,7 @@ public class BurpParser: IBurpParser
 
 
                 var vuln = new Vuln();
-                var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
-                vuln.FindingId = pro.FindingsId + "-" + vulNum.ToString("D2");
+                vuln.FindingId = FindingIdGenerator.Next(vulnManager, pro);
                 vuln.Template = false;
                 vuln.Name = sanitizer.Sanitize(name);
                 vuln.CreatedDate = DateTime.Now.ToUniversalTime();

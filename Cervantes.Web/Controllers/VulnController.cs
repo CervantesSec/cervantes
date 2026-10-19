@@ -8,6 +8,7 @@ using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.File;
 using Cervantes.IFR.Jira;
+using Cervantes.IFR.Parsers;
 using Cervantes.IFR.Parsers.Acunetix;
 using Cervantes.IFR.Parsers.Bandit;
 using Cervantes.IFR.Parsers.Burp;
@@ -339,9 +340,7 @@ public class VulnController: ControllerBase
                 vuln.ProjectId = model.ProjectId;
                 if (model.ProjectId != null)
                 {
-                    var number = vulnManager.GetAll().Where(x => x.ProjectId == model.ProjectId).Count() + 1;
-                    var fin = projectManager.GetById(model.ProjectId.Value).FindingsId;
-                    vuln.FindingId = fin+"-"+number.ToString();
+                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, projectManager.GetById(model.ProjectId.Value));
                 }
                 else
                 {

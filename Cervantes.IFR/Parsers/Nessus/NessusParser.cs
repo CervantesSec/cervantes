@@ -96,8 +96,7 @@ public class NessusParser: INessusParser
                     if(item.SelectSingleNode("see_also") != null){refrences = item.SelectSingleNode("see_also").InnerText;}
                     
                     var vuln = new Vuln();
-                    var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
-                    vuln.FindingId = pro.FindingsId + "-" + vulNum.ToString("D2");
+                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, pro);
                     vuln.Template = false;
                     vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginName));
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();

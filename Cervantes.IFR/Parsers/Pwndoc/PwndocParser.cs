@@ -103,8 +103,7 @@ public class PwndocParser: IPwndocParser
                     vuln.ProofOfConcept = "No Data";
                     vuln.UserId = user;
                     vuln.CVSSVector = vul.Cvssv3 == null ? "No Data" : vul.Cvssv3;
-                    var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
-                    vuln.FindingId = pro.FindingsId + "-" + vulNum.ToString("D2");
+                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, pro);
                     vuln.OWASPRisk = "No Data";
                     vuln.OWASPImpact = "No Data";
                     vuln.OWASPLikehood = "No Data";
