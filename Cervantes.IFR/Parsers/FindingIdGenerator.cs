@@ -19,12 +19,13 @@ public static class FindingIdGenerator
             return string.Empty;
         }
 
-        var existingIds = vulnManager.GetAll()
-            .Where(x => x.ProjectId == project.Id && x.Template == false)
-            .Select(x => x.FindingId)
-            .ToList();
-        return Next(existingIds, project.FindingsId);
+        return Next(ProjectFindingIds(vulnManager.GetAll(), project.Id), project.FindingsId);
     }
+
+    // Template rows count too: older builds let a project vuln be a template and numbered it, and the flag can be
+    // turned off later, which would bring a reused number into the report.
+    internal static List<string?> ProjectFindingIds(IQueryable<Vuln> vulns, Guid projectId)
+        => vulns.Where(x => x.ProjectId == projectId).Select(x => x.FindingId).ToList()!;
 
     /// <summary>
     /// The next finding id after the highest "&lt;prefix&gt;-N" in <paramref name="existingIds"/>. Ids written by hand or

@@ -31,6 +31,23 @@ public class FindingIdGeneratorTests
     }
 
     [Fact]
+    public void ProjectFindingIds_CountsOldTemplateRowsInTheProject()
+    {
+        // Older builds let a project vuln be a template and numbered it; unticking the flag later brings its number back.
+        var project = Guid.NewGuid();
+        var vulns = new List<Cervantes.CORE.Entities.Vuln>
+        {
+            new() { ProjectId = project, FindingId = "P-01", Template = false },
+            new() { ProjectId = project, FindingId = "P-02", Template = true },
+            new() { ProjectId = Guid.NewGuid(), FindingId = "P-09", Template = false },
+        };
+
+        var ids = FindingIdGenerator.ProjectFindingIds(vulns.AsQueryable(), project);
+
+        Assert.Equal("P-03", FindingIdGenerator.Next(ids, "P"));
+    }
+
+    [Fact]
     public void Next_PrefixWithDash()
     {
         Assert.Equal("ACME-2026-05", FindingIdGenerator.Next(new[] { "ACME-2026-04" }, "ACME-2026"));
