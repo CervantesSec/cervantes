@@ -873,13 +873,13 @@ public class ChecklistController : ControllerBase
     [HttpPost]
     [Route("MASTG/Report")]
     [HasPermission(Permissions.ReportsAdd)]
-    public async Task<IActionResult> GenerateMastgReport(ReportChecklistCreateModel model)
+    public async Task<IActionResult> GenerateMastgReport([FromBody] ReportChecklistCreateModel model)
     {
        try
        {
 
            var mastg = mastgManager.GetById(model.ChecklistId);
-           if (mastg.Id != Guid.Empty)
+           if (mastg != null)
            {
 
                var user = projectUserManager.VerifyUser(mastg.ProjectId, aspNetUserId);
@@ -1031,7 +1031,7 @@ public class ChecklistController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred making backup data. User: {0}",
+            _logger.LogError(ex, "An error occurred generating a MASTG report. User: {0}",
                 aspNetUserId);
             return StatusCode(500, "An error occurred while generating the MASTG report. Please try again later.");
         }

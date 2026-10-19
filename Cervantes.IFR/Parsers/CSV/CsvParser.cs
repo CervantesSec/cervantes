@@ -39,7 +39,8 @@ public class CsvParser: ICsvParser
         using (var csv = new CsvReader(reader, config))
         {
                     
-            var records = csv.GetRecords<VulnImportCsv>();
+            // Read every row before saving any: a malformed row then fails the import without leaving part of it.
+            var records = csv.GetRecords<VulnImportCsv>().ToList();
 
             if (project != null)
             {
