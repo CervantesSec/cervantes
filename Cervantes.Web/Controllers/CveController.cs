@@ -280,8 +280,8 @@ public class CveController : ControllerBase
                 CveId = _sanitizer.Sanitize(model.CveId),
                 Title = _sanitizer.Sanitize(model.Title),
                 Description = _sanitizer.Sanitize(model.Description),
-                PublishedDate = model.PublishedDate,
-                LastModifiedDate = model.LastModifiedDate ?? model.PublishedDate,
+                PublishedDate = ToUtc(model.PublishedDate),
+                LastModifiedDate = ToUtc(model.LastModifiedDate ?? model.PublishedDate),
                 CvssV3BaseScore = model.CvssV3BaseScore,
                 CvssV3Vector = _sanitizer.Sanitize(model.CvssV3Vector),
                 CvssV3Severity = _sanitizer.Sanitize(model.CvssV3Severity),
@@ -291,7 +291,7 @@ public class CveController : ControllerBase
                 EpssScore = model.EpssScore,
                 EpssPercentile = model.EpssPercentile,
                 IsKnownExploited = model.IsKnownExploited,
-                KevDueDate = model.KevDueDate,
+                KevDueDate = model.KevDueDate.HasValue ? ToUtc(model.KevDueDate.Value) : null,
                 PrimaryCweId = _sanitizer.Sanitize(model.PrimaryCweId),
                 PrimaryCweName = _sanitizer.Sanitize(model.PrimaryCweName),
                 State = _sanitizer.Sanitize(model.State),
@@ -468,25 +468,22 @@ public class CveController : ControllerBase
     /// <returns>Created subscription</returns>
     [HttpPost("subscriptions")]
     [HasPermission(Permissions.CveCreate)]
-    public async Task<ActionResult<CveSubscription>> CreateSubscription([FromBody] CveSubscription subscription)
+    public async Task<ActionResult<CveSubscription>> CreateSubscription([FromBody] CveSubscriptionViewModel model)
     {
         try
         {
-            if (subscription == null)
+            if (model == null)
             {
                 return BadRequest("Subscription model is required");
             }
 
-            subscription.Id = Guid.NewGuid();
+            var subscription = model.ToEntity();
             subscription.UserId = _aspNetUserId;
             subscription.CreatedDate = DateTime.UtcNow;
             subscription.ModifiedDate = DateTime.UtcNow;
 
-            // The entity is bound straight from the body: drop relations the caller must not set.
+            // A REST subscription is personal: the caller cannot attach it to a project.
             subscription.ProjectId = null;
-            subscription.Project = null;
-            subscription.User = null;
-            subscription.Notifications = new List<CveNotification>();
 
             // Sanitize input
             subscription.Name = _sanitizer.Sanitize(subscription.Name);
@@ -521,6 +518,17 @@ public class CveController : ControllerBase
             return StatusCode(500, "An error occurred while creating the subscription");
         }
     }
+
+    /// <summary>
+    /// Npgsql stores timestamptz values only as UTC. A date sent without an offset is taken as UTC; one with an
+    /// offset is converted.
+    /// </summary>
+    private static DateTime ToUtc(DateTime value) => value.Kind switch
+    {
+        DateTimeKind.Utc => value,
+        DateTimeKind.Local => value.ToUniversalTime(),
+        _ => DateTime.SpecifyKind(value, DateTimeKind.Utc)
+    };
 
     /// <summary>
     /// Get CVE subscription by ID
@@ -563,14 +571,15 @@ public class CveController : ControllerBase
     /// <returns>Updated subscription</returns>
     [HttpPut("subscriptions/{id}")]
     [HasPermission(Permissions.CveEdit)]
-    public async Task<ActionResult<CveSubscription>> UpdateSubscription(Guid id, [FromBody] CveSubscription subscription)
+    public async Task<ActionResult<CveSubscription>> UpdateSubscription(Guid id, [FromBody] CveSubscriptionViewModel model)
     {
         try
         {
-            if (subscription == null)
+            if (model == null)
             {
                 return BadRequest("Subscription model is required");
             }
+            var subscription = model.ToEntity(id);
 
             var existingSubscription = _cveSubscriptionManager.GetById(id);
             if (existingSubscription == null)
