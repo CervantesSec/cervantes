@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Security.Claims;
 using System.Text.Json;
 using Cervantes.CORE.Entities;
@@ -149,7 +150,9 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
             [FromForm] string returnUrl) =>
         {
             await signInManager.SignOutAsync();
-            return TypedResults.LocalRedirect($"~/{returnUrl}");
+            // The sign-out already happened, so an off-site or malformed target just goes home.
+            var target = $"~/{returnUrl}";
+            return TypedResults.LocalRedirect(LocalUrl.IsLocal(target) ? target : "~/");
         });
 
         var manageGroup = accountGroup.MapGroup("/Manage").RequireAuthorization();

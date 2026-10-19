@@ -392,7 +392,7 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new AttachmentExcludingFileProvider(app.Environment.WebRootFileProvider, app.Environment.WebRootPath)
 });
-var supportedCultures = new[] { "en-US", "es-ES","pt-PT", "tr-TR", "fr-FR", "de-DE", "it-IT", "cs-CZ" };
+var supportedCultures = SupportedCultures.Names;
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture(supportedCultures[0])
     .AddSupportedCultures(supportedCultures)
