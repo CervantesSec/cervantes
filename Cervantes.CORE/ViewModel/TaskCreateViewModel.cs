@@ -18,12 +18,12 @@ public class TaskCreateViewModel
     /// <summary>
     /// task created by
     /// </summary>
-    public string CreatedUserId { get; set; }
+    public string? CreatedUserId { get; set; }
 
     /// <summary>
     /// Asined user id
     /// </summary>
-    public string AsignedUserId { get; set; }
+    public string? AsignedUserId { get; set; }
 
     /// <summary>
     /// Id Project

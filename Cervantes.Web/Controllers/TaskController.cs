@@ -182,7 +182,9 @@ public class TaskController: ControllerBase
                     }
                 }
 
-                if (!CanBeAssigned(model.ProjectId, model.AsignedUserId))
+                // Null and "" both mean "unassigned" (the UI and older API clients send "").
+                var asignedUserId = string.IsNullOrEmpty(model.AsignedUserId) ? null : model.AsignedUserId;
+                if (!CanBeAssigned(model.ProjectId, asignedUserId))
                 {
                     return BadRequest("The assigned user must be a member of the project");
                 }
@@ -207,7 +209,7 @@ public class TaskController: ControllerBase
                 {
                     task.ClosedDate = DateTime.Today.ToUniversalTime();
                 }
-                task.AsignedUserId = model.AsignedUserId;
+                task.AsignedUserId = asignedUserId;
                 // The creator is whoever makes the request; the request cannot attribute the task to someone else.
                 task.CreatedUserId = aspNetUserId;
                 
@@ -216,7 +218,7 @@ public class TaskController: ControllerBase
                 _logger.LogInformation("Task added successfully. User: {0}",
                     aspNetUserId);
                 
-                if (emailService.IsEnabled())
+                if (emailService.IsEnabled() && task.AsignedUserId != null)
                 {
                     if (task.ProjectId != null)
                     {
@@ -280,14 +282,15 @@ public class TaskController: ControllerBase
                         return BadRequest("A task cannot be moved to another project");
                     }
 
-                    if (task.AsignedUserId != result.AsignedUserId && !CanBeAssigned(result.ProjectId, task.AsignedUserId))
+                    var asignedUserId = string.IsNullOrEmpty(task.AsignedUserId) ? null : task.AsignedUserId;
+                    if (asignedUserId != result.AsignedUserId && !CanBeAssigned(result.ProjectId, asignedUserId))
                     {
                         return BadRequest("The assigned user must be a member of the project");
                     }
 
                     result.Name = sanitizer.Sanitize(task.Name);
                     result.Description = sanitizer.Sanitize(task.Description);
-                    result.AsignedUserId = task.AsignedUserId;
+                    result.AsignedUserId = asignedUserId;
                     result.Status = task.Status;
                     result.StartDate = task.StartDate.ToUniversalTime();
                     result.EndDate = task.EndDate.ToUniversalTime();
