@@ -11,9 +11,7 @@ namespace Cervantes.Web.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly ILogger<AccountController> _logger = null;
-    private IHttpContextAccessor HttpContextAccessor;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private string aspNetUserId;
     private IAuditManager auditManager;
     
     public AccountController(ILogger<AccountController> logger, SignInManager<ApplicationUser> signInManager, IAuditManager auditManager)
@@ -32,21 +30,9 @@ public class AccountController : ControllerBase
         if (result.Succeeded)
         {
             _logger.LogInformation("User logged in. User: {0}", parameters.UserName);
-            var audit = new Audit
-            {
-                UserId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
-                Type = "Login",
-                TableName = "ApplicationUser",
-                DateTime = DateTime.Now.ToUniversalTime(),
-                OldValues = "",
-                NewValues = "",
-                AffectedColumns = "",
-                PrimaryKey = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
-                IpAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                Browser = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString(),
-                
-            };
-            await auditManager.AddAsync(audit);
+            // HttpContext.User is still the principal the request came in with, not the user who just signed in.
+            var user = await _signInManager.UserManager.FindByNameAsync(parameters.UserName);
+            await auditManager.AddAsync(BuildAudit("Login", user?.Id));
             await auditManager.Context.SaveChangesAsync();
             return Ok();
         }
@@ -61,32 +47,24 @@ public class AccountController : ControllerBase
     [Route("Logout")]
     public async Task<IActionResult> Logout()
     {
-        try
-        {
-            await _signInManager.SignOutAsync();
-            var audit = new Audit
-            {
-                UserId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
-                Type = "Logout",
-                TableName = "ApplicationUser",
-                DateTime = DateTime.Now.ToUniversalTime(),
-                OldValues = "",
-                NewValues = "",
-                AffectedColumns = "",
-                PrimaryKey = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier),
-                IpAddress = HttpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                Browser = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString(),
-                
-            };
-            await auditManager.AddAsync(audit);
-            await auditManager.Context.SaveChangesAsync();
-            return NoContent();
-        }
-        catch
-        {
-            return Unauthorized();
-        }
-        
+        var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        await _signInManager.SignOutAsync();
+        await auditManager.AddAsync(BuildAudit("Logout", userId));
+        await auditManager.Context.SaveChangesAsync();
+        return NoContent();
     }
-    
+
+    private Audit BuildAudit(string type, string? userId) => new Audit
+    {
+        UserId = userId,
+        Type = type,
+        TableName = "ApplicationUser",
+        DateTime = DateTime.UtcNow,
+        OldValues = "",
+        NewValues = "",
+        AffectedColumns = "",
+        PrimaryKey = userId,
+        IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString(),
+        Browser = HttpContext.Request.Headers["User-Agent"].ToString(),
+    };
 }
