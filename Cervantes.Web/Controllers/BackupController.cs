@@ -62,6 +62,7 @@ public class BackupController : ControllerBase
     private IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager;
     private readonly StoredHtmlResanitizer resanitizer;
     private readonly IAuthUsersAdminService authUsersAdminService;
+    private readonly Sanitizer sanitizer;
 
     public BackupController(IUserManager userManager,
         Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> usrManager, IClientManager clientManager,
@@ -81,10 +82,11 @@ public class BackupController : ControllerBase
         IFileCheck fileCheck, IReportComponentsManager reportComponentsManager,
         IReportsPartsManager reportsPartsManager, IKnowledgeBaseManager knowledgeBaseManager,
         IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager, StoredHtmlResanitizer resanitizer,
-        IAuthUsersAdminService authUsersAdminService)
+        IAuthUsersAdminService authUsersAdminService, Sanitizer sanitizer)
     {
         this.resanitizer = resanitizer;
         this.authUsersAdminService = authUsersAdminService;
+        this.sanitizer = sanitizer;
         this.userManager = userManager;
         _userManager = usrManager;
         this.clientManager = clientManager;
@@ -990,14 +992,46 @@ public class BackupController : ControllerBase
             var pendingClientLinks = new Dictionary<string, Guid>();
             if (backupViewModel.Users != null)
             {
-                foreach (var user in backupViewModel.Users)
+                foreach (var backupUser in backupViewModel.Users)
                 {
                     // Only users this instance does not have are restored; the default admin always exists.
-                    if (user.Email == "admin@cervantes.local"
-                        || await _userManager.FindByIdAsync(user.Id) != null
-                        || (user.Email != null && await _userManager.FindByEmailAsync(user.Email) != null))
+                    if (string.IsNullOrEmpty(backupUser.Email) || string.IsNullOrEmpty(backupUser.UserName)
+                        || backupUser.Email == "admin@cervantes.local"
+                        || await _userManager.FindByIdAsync(backupUser.Id) != null
+                        || await _userManager.FindByEmailAsync(backupUser.Email) != null
+                        || await _userManager.FindByNameAsync(backupUser.UserName) != null)
                     {
                         continue;
+                    }
+
+                    // Built from an explicit list of fields: related rows (API keys, chat messages) are never taken
+                    // from the file, and the normalized names are computed here, not trusted. The password hash is
+                    // restored so the account keeps its password; two-factor is turned off because the backup does
+                    // not carry the authenticator keys.
+                    var user = new ApplicationUser
+                    {
+                        Id = backupUser.Id,
+                        UserName = backupUser.UserName,
+                        NormalizedUserName = _userManager.NormalizeName(backupUser.UserName),
+                        Email = backupUser.Email,
+                        NormalizedEmail = _userManager.NormalizeEmail(backupUser.Email),
+                        EmailConfirmed = backupUser.EmailConfirmed,
+                        PasswordHash = backupUser.PasswordHash,
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        ConcurrencyStamp = Guid.NewGuid().ToString(),
+                        PhoneNumber = backupUser.PhoneNumber,
+                        LockoutEnabled = true,
+                        TwoFactorEnabled = false,
+                        FullName = sanitizer.Sanitize(backupUser.FullName),
+                        Description = sanitizer.Sanitize(backupUser.Description),
+                        Position = sanitizer.Sanitize(backupUser.Position),
+                        Avatar = AttachmentPath.TryResolve(env.WebRootPath, backupUser.Avatar, "Users", out _) ? backupUser.Avatar : null,
+                        ClientId = backupUser.ClientId,
+                        ExternalLogin = backupUser.ExternalLogin,
+                    };
+                    if (backupUser.Avatar != null && user.Avatar == null)
+                    {
+                        LogDiscardedPath("User", backupUser.Id);
                     }
 
                     // The backup has no AuthPermissions data, so the user gets the default role for its kind.
