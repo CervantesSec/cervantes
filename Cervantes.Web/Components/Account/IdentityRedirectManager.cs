@@ -19,6 +19,14 @@ internal sealed class IdentityRedirectManager(NavigationManager navigationManage
     public void RedirectTo(string? uri)
     {
         // Prevent open redirects: only follow targets under the app base, otherwise go to the app root.
+        // Uri.IsBaseOf compares parsed URIs, so a Host header in another case or with an explicit :443 still matches.
+        // Do not "simplify" this to NavigationManager.ToBaseRelativePath: it compares ordinally against
+        // BaseUri.OriginalString, so those same requests would fail it, and code that then falls back to the raw
+        // target reopens the open redirect.
+        // Known limits: the path part of the comparison is case-sensitive, so an app behind a PathBase reached with
+        // a different path case would send users to the root; and Unicode (IDN) hosts are only compared in the form
+        // the browser sends, which is punycode. Neither matters today: Program.cs does not call UsePathBase, and
+        // browsers always send punycode hosts.
         var baseUri = new Uri(navigationManager.BaseUri);
         uri = Uri.TryCreate(baseUri, uri ?? "", out var target) && baseUri.IsBaseOf(target) ? target.AbsoluteUri : "";
 
