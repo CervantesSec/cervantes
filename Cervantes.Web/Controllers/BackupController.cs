@@ -1042,8 +1042,10 @@ public class BackupController : ControllerBase
                         user.ClientId = null;
                     }
 
+                    // Permissions come from AuthPermissions roles, as in UserController.Add; ASP.NET Identity roles
+                    // are not used (there is no "User" Identity role to add the user to).
                     await userManager.AddAsync(user);
-                    await _userManager.AddToRoleAsync(user, role);
+                    await userManager.Context.SaveChangesAsync();
                     await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, new List<string> { role });
                 }
 
