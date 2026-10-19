@@ -34,8 +34,20 @@ window.downloadFileFromStream = async (fileName, contentStreamReference) => {
 }
 
 window.downloadFile = async (path) =>{
-    location.href = path;
-    
+    // Stored attachment paths reach this function, so it must never navigate to another scheme or site:
+    // javascript:, data: and vbscript: URLs have the origin "null", and //host or https://host another origin.
+    let url;
+    try {
+        url = new URL(path, document.baseURI);
+    } catch {
+        console.warn("downloadFile: invalid path", path);
+        return;
+    }
+    if (url.origin !== location.origin) {
+        console.warn("downloadFile: refused a path outside the application", path);
+        return;
+    }
+    location.href = url.href;
 }
 
 window.saveAsFile = (fileName, base64Data, contentType) => {

@@ -1073,6 +1073,11 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
+                    if (!AttachmentPath.TryResolve(env.WebRootPath, attachment.FilePath, "Projects", out _))
+                    {
+                        LogDiscardedPath("ProjectAttachment", attachment.Id);
+                        continue;
+                    }
                     // Check if the CreatedUserId exists in the AspNetUsers table
                     var userExists = await _userManager.FindByIdAsync(attachment.UserId);
                     if (userExists == null)
@@ -1293,12 +1298,12 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
                     if (!AttachmentPath.TryResolve(env.WebRootPath, att.FilePath, "Task", out _))
                     {
                         LogDiscardedPath("TaskAttachment", att.Id);
                         continue;
                     }
+                    // Check if the CreatedUserId exists in the AspNetUsers table
                     var userExists = await _userManager.FindByIdAsync(att.UserId);
                     if (userExists == null)
                     {
@@ -1408,6 +1413,11 @@ public class BackupController : ControllerBase
                     var attResult = vulnAttachmentManager.GetById(att.Id);
                     if (attResult != null)
                     {
+                        continue;
+                    }
+                    if (!AttachmentPath.TryResolve(env.WebRootPath, att.FilePath, "Vuln", out _))
+                    {
+                        LogDiscardedPath("VulnAttachment", att.Id);
                         continue;
                     }
                     // Check if the CreatedUserId exists in the AspNetUsers table
