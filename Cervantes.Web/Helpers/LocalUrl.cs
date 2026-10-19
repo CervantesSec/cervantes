@@ -5,11 +5,12 @@ public static class LocalUrl
     /// <summary>
     /// The same rule as ASP.NET Core's IsLocalUrl, for places without an IUrlHelper (minimal API endpoints): a path
     /// that starts with "/" or "~/" and is not protocol-relative ("//host", "/\host"). LocalRedirect throws for
-    /// anything else, so redirect targets are checked with this first.
+    /// anything else, so redirect targets are checked with this first. Like IsLocalUrl, it also rejects control
+    /// characters, which LocalRedirect would refuse too.
     /// </summary>
     public static bool IsLocal(string? url)
     {
-        if (string.IsNullOrEmpty(url))
+        if (string.IsNullOrEmpty(url) || url.Any(char.IsControl))
         {
             return false;
         }
