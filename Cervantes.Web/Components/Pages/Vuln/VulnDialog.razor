@@ -96,7 +96,7 @@
                             DebounceMs="1500"
                             InitDelayMs="200"
                             RehydrateNotify="false"
-                            BaselineStamp="@vuln.ModifiedDate.Ticks.ToString()"
+                            BaselineStamp="@((vuln.ModifiedDate.Ticks / 10).ToString())"
                             OnRehydrated="DraftRestored"
                             ChipClass="ml-2"
                             IncludeFields="@(new[] { "Name", "Language", "Description", "Impact", "Remediation", "ProofOfConcept", "Risk", "Status", "CVSSVector", "CVSS3", "OWASPVector", "OWASPRisk", "OWASPImpact", "OWASPLikehood", "cve" })" />

@@ -40,6 +40,8 @@ public partial class VulnDialog: ComponentBase
         MudDialog.Cancel();
     }
 
+    // The draft stamp uses microseconds (Ticks / 10): Postgres stores ModifiedDate at that precision, so the value an
+    // open circuit still holds after a save and the value a reload reads back give the same stamp.
     private void DraftRestored()
     {
         // The draft was applied to the model: re-render so the fields show it, and say where it came from.
