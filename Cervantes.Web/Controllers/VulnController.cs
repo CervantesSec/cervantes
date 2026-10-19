@@ -1675,6 +1675,8 @@ public class VulnController: ControllerBase
                 foreach (var vuln in vulns)
                 {
                     vuln.Status = model.Status;
+                    // A status change is an edit: an open draft of this vuln is older than it now.
+                    vuln.ModifiedDate = DateTime.UtcNow;
                 }
                 await vulnManager.Context.SaveChangesAsync();
                 return NoContent();
