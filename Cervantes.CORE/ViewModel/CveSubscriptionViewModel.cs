@@ -44,8 +44,9 @@ public class CveSubscriptionViewModel
     [Required]
     public string NotificationMethod { get; set; } = "Email";
     
+    // Null when the request has no webhook: [Url] rejects an empty string. ToEntity stores it as "".
     [Url]
-    public string WebhookUrl { get; set; } = "";
+    public string? WebhookUrl { get; set; }
     
     public Guid? ProjectId { get; set; }
 
