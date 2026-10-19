@@ -5,6 +5,7 @@
 @inject NavigationManager Nav
 @inject IAutosaveStorage Storage
 @inject IStringLocalizer<Resource> L
+@implements IDisposable
 
 @if (ShowWhenIdle || State != AutosaveState.Idle || LastSavedAt.HasValue)
 {
@@ -41,6 +42,13 @@
     [Parameter] public int InitDelayMs { get; set; } = 0;
     [Parameter] public bool RehydrateNotify { get; set; } = false;
     [Parameter] public bool DisableRehydrateWhenNoKeySuffix { get; set; } = false;
+    /// <summary>
+    /// Identifies the saved version the draft was started from (for a vuln, its ModifiedDate). A draft whose stamp
+    /// differs, or that has none, is stale: it is discarded instead of being applied over newer data.
+    /// </summary>
+    [Parameter] public string? BaselineStamp { get; set; }
+    /// <summary>Raised after a draft was applied to the model, so the form can re-render and tell the user.</summary>
+    [Parameter] public EventCallback OnRehydrated { get; set; }
 
     private readonly Dictionary<string, object?> _snapshot = new();
     private CancellationTokenSource? _debounceCts;
@@ -103,6 +111,11 @@
         try
         {
             var record = System.Text.Json.JsonSerializer.Deserialize<AutosaveRecord>(json);
+            if (record is not null && BaselineStamp is not null && record.BaselineStamp != BaselineStamp)
+            {
+                await Storage.RemoveAsync(key);
+                return;
+            }
             if (record?.Payload is not null && Model is not null)
             {
                 ApplyPayloadToModel(record.Payload, Model);
@@ -111,6 +124,7 @@
                 State = AutosaveState.Saved;
                 LastSavedAt = record.UpdatedAt;
                 StateHasChanged();
+                await OnRehydrated.InvokeAsync();
             }
         }
         catch
@@ -217,6 +231,7 @@
                 };
             }
 
+            record.BaselineStamp = BaselineStamp;
             var json = System.Text.Json.JsonSerializer.Serialize(record);
             await Storage.SetAsync(key, json);
 
@@ -384,6 +399,16 @@
         public int Version { get; set; }
         public DateTimeOffset UpdatedAt { get; set; }
         public Dictionary<string, object?> Payload { get; set; } = new();
+        public string? BaselineStamp { get; set; }
+    }
+
+    public void Dispose()
+    {
+        if (EditContext is not null)
+        {
+            EditContext.OnFieldChanged -= OnFieldChanged;
+        }
+        _debounceCts?.Cancel();
     }
 
     private string GetStatusText()

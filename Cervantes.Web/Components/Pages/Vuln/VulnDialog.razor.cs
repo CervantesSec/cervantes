@@ -30,7 +30,22 @@ public partial class VulnDialog: ComponentBase
     [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     
     private bool editMode = false;
-    void Cancel() => MudDialog.Cancel();
+    async Task Cancel()
+    {
+        // Cancelling an edit discards its draft; it must not come back the next time the vuln is edited.
+        if (autosave is not null)
+        {
+            await autosave.ClearAsync();
+        }
+        MudDialog.Cancel();
+    }
+
+    private void DraftRestored()
+    {
+        // The draft was applied to the model: re-render so the fields show it, and say where it came from.
+        Snackbar.Add(localizer["draftRestored"], Severity.Info);
+        StateHasChanged();
+    }
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
     DialogOptions medium = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
     [Inject] ISnackbar Snackbar { get; set; }
@@ -253,7 +268,10 @@ public partial class VulnDialog: ComponentBase
         if (editMode)
         {
             editMode = false;
-
+            if (autosave is not null)
+            {
+                await autosave.ClearAsync();
+            }
         }
         else
         {

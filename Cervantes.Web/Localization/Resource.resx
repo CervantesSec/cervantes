@@ -3339,4 +3339,7 @@ Option 3</value>
   <data name="vulnsUpdatedError" xml:space="preserve">
     <value>An error occurred updating the vulns!</value>
   </data>
+  <data name="draftRestored" xml:space="preserve">
+    <value>Unsaved changes from your previous edit were restored.</value>
+  </data>
 </root>

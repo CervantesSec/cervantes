@@ -96,6 +96,8 @@
                             DebounceMs="1500"
                             InitDelayMs="200"
                             RehydrateNotify="false"
+                            BaselineStamp="@vuln.ModifiedDate.Ticks.ToString()"
+                            OnRehydrated="DraftRestored"
                             ChipClass="ml-2"
                             IncludeFields="@(new[] { "Name", "Language", "Description", "Impact", "Remediation", "ProofOfConcept", "Risk", "Status", "CVSSVector", "CVSS3", "OWASPVector", "OWASPRisk", "OWASPImpact", "OWASPLikehood", "cve" })" />
                     </MudStack>
@@ -249,13 +251,6 @@
                             </MudTabPanel>
                         }
                     </MudForm>
-                    <Cervantes.Web.Components.Shared.AutosaveScope
-                        @ref="autosave"
-                        FormFingerprint="vuln-edit-v1"
-                        KeySuffix="@vuln.Id.ToString()"
-                        Model="@model"
-                        Prominent="true"
-                        IncludeFields="@(new[] { "Name", "Language", "Description", "Impact", "Remediation", "ProofOfConcept", "Risk", "Status", "CVSSVector", "CVSS3", "OWASPVector", "OWASPRisk", "OWASPImpact", "OWASPLikehood", "cve" })" />
                     </EditForm>
                 </MudTabs>
                 <MudStack Row="true" Justify="Justify.FlexEnd">

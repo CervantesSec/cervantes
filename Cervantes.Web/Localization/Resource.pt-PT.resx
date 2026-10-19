@@ -2746,4 +2746,7 @@
   <data name="vulnsUpdatedError" xml:space="preserve">
     <value>Ocorreu um erro ao atualizar as vulnerabilidades!</value>
   </data>
+  <data name="draftRestored" xml:space="preserve">
+    <value>As alterações não guardadas da sua edição anterior foram restauradas.</value>
+  </data>
 </root>

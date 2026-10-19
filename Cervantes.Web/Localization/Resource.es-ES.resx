@@ -3361,4 +3361,7 @@ Opción 3</value>
   <data name="vulnsUpdatedError" xml:space="preserve">
     <value>Se ha producido un error al actualizar las vulnerabilidades.</value>
   </data>
+  <data name="draftRestored" xml:space="preserve">
+    <value>Se han restaurado los cambios sin guardar de tu edición anterior.</value>
+  </data>
 </root>

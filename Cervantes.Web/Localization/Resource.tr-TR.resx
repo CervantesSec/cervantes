@@ -2781,4 +2781,7 @@
   <data name="vulnsUpdatedError" xml:space="preserve">
     <value>Güvenlik açıkları güncellenirken bir hata oluştu!</value>
   </data>
+  <data name="draftRestored" xml:space="preserve">
+    <value>Önceki düzenlemenizdeki kaydedilmemiş değişiklikler geri yüklendi.</value>
+  </data>
 </root>

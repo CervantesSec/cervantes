@@ -2777,4 +2777,7 @@
   <data name="vulnsUpdatedError" xml:space="preserve">
     <value>Beim Aktualisieren der Schwachstellen ist ein Fehler aufgetreten!</value>
   </data>
+  <data name="draftRestored" xml:space="preserve">
+    <value>Nicht gespeicherte Änderungen aus Ihrer letzten Bearbeitung wurden wiederhergestellt.</value>
+  </data>
 </root>

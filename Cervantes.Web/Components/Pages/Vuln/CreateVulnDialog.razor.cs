@@ -70,7 +70,14 @@ public partial class CreateVulnDialog: ComponentBase
             };
          [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 		[Parameter] public Guid project { get; set; }
-     void Cancel() => MudDialog.Cancel();
+     async Task Cancel()
+     {
+         if (autosave is not null)
+         {
+             await autosave.ClearAsync();
+         }
+         MudDialog.Cancel();
+     }
      
      [Inject] ISnackbar Snackbar { get; set; }
 

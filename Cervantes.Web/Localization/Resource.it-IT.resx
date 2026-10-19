@@ -2782,4 +2782,7 @@
   <data name="vulnsUpdatedError" xml:space="preserve">
     <value>Si è verificato un errore durante l'aggiornamento delle vulnerabilità!</value>
   </data>
+  <data name="draftRestored" xml:space="preserve">
+    <value>Le modifiche non salvate della modifica precedente sono state ripristinate.</value>
+  </data>
 </root>

@@ -2777,4 +2777,7 @@
   <data name="vulnsUpdatedError" xml:space="preserve">
     <value>Při aktualizaci zranitelností došlo k chybě!</value>
   </data>
+  <data name="draftRestored" xml:space="preserve">
+    <value>Neuložené změny z vaší předchozí úpravy byly obnoveny.</value>
+  </data>
 </root>
