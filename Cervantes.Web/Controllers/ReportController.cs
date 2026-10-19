@@ -1611,6 +1611,13 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                             }
 
                             string mainContent = htmlDoc2.DocumentNode.OuterHtml;
+                            // An edited report is stored as a body fragment (the editor drops <html>, <head> and
+                            // <body>), so it gets a document skeleton: the page layout, header and footer below are
+                            // injected relative to <body>.
+                            if (!Regex.IsMatch(mainContent, @"<body[\s>]", RegexOptions.IgnoreCase))
+                            {
+                                mainContent = "<html><head></head><body>" + mainContent + "</body></html>";
+                            }
 
                             string cssStyle = @"
                                 <style>
@@ -1736,17 +1743,17 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                             h2 { bookmark-level: 2; bookmark-state: open; }
                             h3 { bookmark-level: 3; bookmark-state: open; }
                             </style>";
-                            Match footerMatch = Regex.Match(mainContent, @"<footer>(.*?)</footer>", RegexOptions.Singleline);
+                            Match footerMatch = Regex.Match(mainContent, @"<footer[^>]*>(.*?)</footer>", RegexOptions.Singleline);
                             string footerContent = footerMatch.Success ? footerMatch.Groups[1].Value : string.Empty;
 
-                            mainContent = Regex.Replace(mainContent, @"<footer>.*?</footer>", "", RegexOptions.Singleline);
+                            mainContent = Regex.Replace(mainContent, @"<footer[^>]*>.*?</footer>", "", RegexOptions.Singleline);
 
-                            string pattern = @"(<body>)";
+                            string pattern = @"(<body[^>]*>)";
                             string replacement = "$1" + cssStyle2;
 
                             mainContent = Regex.Replace(mainContent, pattern, replacement, RegexOptions.Singleline);
 
-                            string headerPattern = @"<header>(.*?)</header>";
+                            string headerPattern = @"<header[^>]*>(.*?)</header>";
                             string headerReplacement = "<div id=\"header\">$1</div>";
                             mainContent = Regex.Replace(mainContent, headerPattern, headerReplacement, RegexOptions.Singleline);
 
