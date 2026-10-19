@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using System.Configuration;
 using System.Security.Claims;
 using System.Text.Json.Serialization.Metadata;
@@ -242,6 +243,26 @@ MudExtensions.Services.ExtensionServiceCollectionExtensions.AddMudExtensions(bui
 MudBlazor.Extensions.ServiceCollectionExtensions.AddMudExtensions(builder.Services,c => c.WithoutAutomaticCssLoading());
 builder.Services.AddTransient<MudLocalizer, ResXMudLocalizer>();
 builder.Services.AddLocalization();
+
+// Behind a reverse proxy (TLS offload), X-Forwarded-For/-Proto give the client IP (audit logs) and the original scheme
+// (redirect URLs, OpenID Connect callbacks). Off by default: the headers are only honoured from the proxies listed
+// here, plus loopback, so a client talking to the app directly cannot spoof them. X-Forwarded-Host is never trusted.
+var forwardedHeadersEnabled = builder.Configuration.GetValue<bool>("ForwardedHeaders:Enabled");
+if (forwardedHeadersEnabled)
+{
+    builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        foreach (var proxy in builder.Configuration.GetSection("ForwardedHeaders:KnownProxies").Get<string[]>() ?? Array.Empty<string>())
+        {
+            options.KnownProxies.Add(System.Net.IPAddress.Parse(proxy));
+        }
+        foreach (var network in builder.Configuration.GetSection("ForwardedHeaders:KnownNetworks").Get<string[]>() ?? Array.Empty<string>())
+        {
+            options.KnownNetworks.Add(Microsoft.AspNetCore.HttpOverrides.IPNetwork.Parse(network));
+        }
+    });
+}
 builder.Services.AddAntiforgery();
 builder.Services.AddBlazoredLocalStorage();
 
@@ -319,6 +340,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+if (forwardedHeadersEnabled)
+{
+    // First in the pipeline, so everything after it sees the client's IP and scheme.
+    app.UseForwardedHeaders();
+}
 
 // PreMailer (report Generate, the only caller) downloads <link> stylesheets through this process-wide downloader;
 // report generation must not fetch anything, so it gets one that returns no CSS.
