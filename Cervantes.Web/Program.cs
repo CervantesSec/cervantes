@@ -324,20 +324,23 @@ var app = builder.Build();
 // report generation must not fetch anything, so it gets one that returns no CSS.
 PreMailer.Net.Downloaders.WebDownloader.SharedDownloader = new OfflineCssDownloader();
 
-// Content-Security-Policy, Report-Only for now: the browser logs violations to the DevTools console and blocks
-// nothing. Rename the header to "Content-Security-Policy" to enforce, once the UI runs without violations.
+// Content-Security-Policy, enforced. Before changing it, try the new policy under the header name
+// "Content-Security-Policy-Report-Only" and walk the UI: the browser then logs violations and blocks nothing.
 // script-src has no 'unsafe-inline' on purpose: that is what stops an injected <script> or inline handler.
+// script-src 'unsafe-eval': BlazorJS, used by MudBlazor.Extensions, calls eval("typeof MudBlazorExtensions !== 'undefined'")
+// through JS interop when a dialog opens. It cannot run injected markup, so the protection above stays.
 // style-src 'unsafe-inline': MudBlazor and TinyMCE inject inline styles. The Google Fonts hosts serve Roboto (App.razor).
-// connect-src ws:/wss: is the Blazor Server SignalR circuit. blob: in img-src/connect-src is required by TinyMCE.
+// connect-src 'self' also covers the same-origin ws:/wss: Blazor Server SignalR circuit (CSP Level 3); no other host
+// gets a socket. blob: in img-src/connect-src is required by TinyMCE.
 // object-src 'self' keeps the <embed> attachment previews working (the files come from FileController).
 // form-action does not fall back to default-src, so it is explicit: a stored <form action="https://evil"> cannot post offsite.
 const string contentSecurityPolicy =
     "default-src 'self'; " +
-    "script-src 'self'; " +
+    "script-src 'self' 'unsafe-eval'; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "img-src 'self' data: blob:; " +
     "font-src 'self' data: https://fonts.gstatic.com; " +
-    "connect-src 'self' blob: wss: ws:; " +
+    "connect-src 'self' blob:; " +
     "frame-ancestors 'self'; " +
     "form-action 'self'; " +
     "object-src 'self'; " +
@@ -348,7 +351,7 @@ app.Use((context, next) =>
     // re-executes /Error, and this middleware sits before it, so a header set up front is lost on error pages.
     context.Response.OnStarting(static state =>
     {
-        ((HttpResponse)state).Headers["Content-Security-Policy-Report-Only"] = contentSecurityPolicy;
+        ((HttpResponse)state).Headers["Content-Security-Policy"] = contentSecurityPolicy;
         return Task.CompletedTask;
     }, context.Response);
     return next();
