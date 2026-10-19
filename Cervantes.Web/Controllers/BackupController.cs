@@ -2,6 +2,7 @@ using System.IO.Compression;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using AuthPermissions.AdminCode;
 using AuthPermissions.AspNetCore;
 using Cervantes.Contracts;
 using Cervantes.CORE;
@@ -60,6 +61,7 @@ public class BackupController : ControllerBase
     private IKnowledgeBaseManager knowledgeBaseManager;
     private IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager;
     private readonly StoredHtmlResanitizer resanitizer;
+    private readonly IAuthUsersAdminService authUsersAdminService;
 
     public BackupController(IUserManager userManager,
         Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> usrManager, IClientManager clientManager,
@@ -78,9 +80,11 @@ public class BackupController : ControllerBase
         IJiraCommentManager jiraCommentManager, IHttpContextAccessor HttpContextAccessor,
         IFileCheck fileCheck, IReportComponentsManager reportComponentsManager,
         IReportsPartsManager reportsPartsManager, IKnowledgeBaseManager knowledgeBaseManager,
-        IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager, StoredHtmlResanitizer resanitizer)
+        IKnowledgeBaseCategoryManager knowledgeBaseCategoryManager, StoredHtmlResanitizer resanitizer,
+        IAuthUsersAdminService authUsersAdminService)
     {
         this.resanitizer = resanitizer;
+        this.authUsersAdminService = authUsersAdminService;
         this.userManager = userManager;
         _userManager = usrManager;
         this.clientManager = clientManager;
@@ -982,34 +986,33 @@ public class BackupController : ControllerBase
                 backupViewModel = JsonSerializer.Deserialize<BackupViewModel>(stream);
             }
 
-            string oldUserId = "";
+            // Users are restored before clients, so a client user's link is set once its client exists.
+            var pendingClientLinks = new Dictionary<string, Guid>();
             if (backupViewModel.Users != null)
             {
                 foreach (var user in backupViewModel.Users)
                 {
-                    var userExists = await _userManager.FindByIdAsync(user.Id);
-                    if (userExists == null)
+                    // Only users this instance does not have are restored; the default admin always exists.
+                    if (user.Email == "admin@cervantes.local"
+                        || await _userManager.FindByIdAsync(user.Id) != null
+                        || (user.Email != null && await _userManager.FindByEmailAsync(user.Email) != null))
                     {
-                        // Skip this user if it does not exist
                         continue;
                     }
-                    
-                    if (user.Email == "admin@cervantes.local")
+
+                    // The backup has no AuthPermissions data, so the user gets the default role for its kind.
+                    var role = user.ClientId != null ? "Client" : "User";
+                    if (user.ClientId != null && clientManager.GetById(user.ClientId.Value) == null)
                     {
-                        oldUserId = user.Id;
-                        continue;
+                        pendingClientLinks[user.Id] = user.ClientId.Value;
+                        user.ClientId = null;
                     }
 
                     await userManager.AddAsync(user);
-
-                    if (user.ClientId != null)
-                    {
-                        await _userManager.AddToRoleAsync(user, "Client");
-                        continue;
-                    }
-
-                    await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddToRoleAsync(user, role);
+                    await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, new List<string> { role });
                 }
+
                 await userManager.Context.SaveChangesAsync();
 
             }
@@ -1041,6 +1044,16 @@ public class BackupController : ControllerBase
                 }
 
                 await clientManager.Context.SaveChangesAsync();
+            }
+
+            foreach (var (userId, clientId) in pendingClientLinks)
+            {
+                var restoredUser = await _userManager.FindByIdAsync(userId);
+                if (restoredUser != null && clientManager.GetById(clientId) != null)
+                {
+                    restoredUser.ClientId = clientId;
+                    await _userManager.UpdateAsync(restoredUser);
+                }
             }
 
             if (backupViewModel.Projects != null)
