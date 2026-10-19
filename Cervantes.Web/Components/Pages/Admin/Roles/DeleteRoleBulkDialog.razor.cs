@@ -2,6 +2,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Roles;
 
@@ -27,7 +28,7 @@ public partial class DeleteRoleBulkDialog : ComponentBase
             foreach (var item in roles)
             {
                 var response = await _UserController.DeleteRole(item.Name);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["roleDeleted"], Severity.Success);
                 }

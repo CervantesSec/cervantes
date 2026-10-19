@@ -246,7 +246,7 @@ public partial class CreateVulnDialog: ComponentBase
             }
             
         var response = await VulnController.Add(model);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+        if (response is CreatedResult)
         {
                 Snackbar.Add(@localizer["vulnCreated"], Severity.Success);
                 if (autosave is not null)

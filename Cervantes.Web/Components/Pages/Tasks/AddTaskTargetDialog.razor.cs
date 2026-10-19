@@ -11,6 +11,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
 
@@ -48,12 +49,12 @@ public partial class AddTaskTargetDialog : ComponentBase
             model.TaskId = task.Id;
 
             var response = await _taskController.AddTarget(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+            if (response is CreatedResult)
             {
                     Snackbar.Add(@localizer["targetAdded"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));
             }
-            else if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkObjectResult")
+            else if (response is OkObjectResult)
             {
                 Snackbar.Add(@localizer["targetExists"], Severity.Info);
                 MudDialog.Close(DialogResult.Ok(true));

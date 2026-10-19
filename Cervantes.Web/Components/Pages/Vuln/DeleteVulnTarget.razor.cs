@@ -3,6 +3,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -26,7 +27,7 @@ public partial class DeleteVulnTarget: ComponentBase
         if (form.IsValid)
         {
             var response = await _VulnController.DeleteVulnTarget(target.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")  
+            if (response is NoContentResult)  
             {
                 Snackbar.Add(@localizer["deletedTarget"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

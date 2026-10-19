@@ -2,6 +2,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -26,7 +27,7 @@ public partial class ChangeVulnStatus : ComponentBase
         {
             
                 var response = await _VulnController.VulnStatusUpdate(vulns);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")            
+                if (response is NoContentResult)            
                 {
                     Snackbar.Add(@localizer["vulnsUpdated"], Severity.Success);
                 }

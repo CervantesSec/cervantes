@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -86,7 +87,7 @@ public partial class AddVulnAttachment: ComponentBase
 
 
                 var response = await _VulnController.AddAttachment(attachment);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")            
+                if (response is CreatedResult)            
                 {
 
                     Snackbar.Add(@localizer["addAttachment"], Severity.Success);

@@ -3,6 +3,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Backup;
 
@@ -40,7 +41,7 @@ public partial class RestoreAttachments: ComponentBase
                 file = null;
                 
                 var response = await backupController.RestoreAttachments(model);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response is OkResult)
                 {
                     Snackbar.Add(@localizer["restoredAttachments"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));

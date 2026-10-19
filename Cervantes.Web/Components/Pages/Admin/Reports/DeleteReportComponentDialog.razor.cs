@@ -1,6 +1,7 @@
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
@@ -24,7 +25,7 @@ public partial class DeleteReportComponentDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _reportController.DeleteComponent(component.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["reportComponentDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

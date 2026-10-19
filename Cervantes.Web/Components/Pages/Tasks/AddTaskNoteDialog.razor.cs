@@ -4,6 +4,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
 
@@ -75,7 +76,7 @@ public partial class AddTaskNoteDialog: ComponentBase
 
             model.TaskId = task.Id;
             var response = await _taskController.AddNote(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+            if (response is CreatedResult)
             {
 
                     Snackbar.Add(@localizer["noteAdded"], Severity.Success);

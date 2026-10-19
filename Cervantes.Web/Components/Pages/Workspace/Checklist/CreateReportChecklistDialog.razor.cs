@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Checklist;
 
@@ -94,7 +95,7 @@ public partial class CreateReportChecklistDialog: ComponentBase
 		    if (checklistType == "OWASPWSTG")
 		    {
 			    var response = await _ChecklistController.GenerateWstgReport(model);
-			    if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+			    if (response is CreatedResult)
 			    {
 				    Snackbar.Add(@localizer["reportCreated"], Severity.Success);
 				    MudDialog.Close(DialogResult.Ok(true));
@@ -107,7 +108,7 @@ public partial class CreateReportChecklistDialog: ComponentBase
 		    else
 		    {
 			    var response = await _ChecklistController.GenerateMastgReport(model);
-			    if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+			    if (response is CreatedResult)
 			    {
 				    Snackbar.Add(@localizer["reportCreated"], Severity.Success);
 				    MudDialog.Close(DialogResult.Ok(true));
@@ -132,7 +133,7 @@ public partial class CreateReportChecklistDialog: ComponentBase
 			model.ProjectId = project;
 
 	        var response = await _ReportController.GenerateReport(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+	        if (response is OkResult)
 	        {
 		        Snackbar.Add(@localizer["reportCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

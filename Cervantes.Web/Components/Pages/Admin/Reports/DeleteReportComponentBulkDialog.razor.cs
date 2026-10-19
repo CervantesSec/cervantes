@@ -1,6 +1,7 @@
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
@@ -26,7 +27,7 @@ public partial class DeleteReportComponentBulkDialog: ComponentBase
             foreach (var component in components)
             {
                 var response = await _reportController.DeleteComponent(component.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["reportComponentDeleted"], Severity.Success);
                 }

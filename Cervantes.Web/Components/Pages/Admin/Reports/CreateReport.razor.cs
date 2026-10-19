@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
@@ -108,7 +109,7 @@ public partial class CreateReport: ComponentBase
             }
             
 	        var response = await _reportController.CreateTemplate(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+	        if (response is CreatedResult)
 	        {
 		        Snackbar.Add(@localizer["reportTemplateCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

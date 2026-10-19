@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Projects;
 
@@ -115,7 +116,7 @@ public partial class AddProjectAttachmentDialog: ComponentBase
                 file = null;
 
                 var response = await _projectController.AddAttachment(attachment);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+                if (response is CreatedResult)
                 {
 
                     Snackbar.Add(@localizer["addAttachment"], Severity.Success);

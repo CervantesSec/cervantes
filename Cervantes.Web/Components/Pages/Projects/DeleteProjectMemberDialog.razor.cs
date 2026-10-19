@@ -5,6 +5,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Projects;
 
@@ -29,7 +30,7 @@ public partial class DeleteProjectMemberDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _projectController.DeleteMember(user.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")            
+            if (response is NoContentResult)            
             {
                 Snackbar.Add(@localizer["memberDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

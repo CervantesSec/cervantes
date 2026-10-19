@@ -12,6 +12,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
@@ -157,7 +158,7 @@ public partial class ReportComponentsDialog: ComponentBase
             }
 
             var response = await _reportController.EditComponent(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["reportComponentEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

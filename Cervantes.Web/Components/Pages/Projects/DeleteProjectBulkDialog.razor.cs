@@ -1,6 +1,7 @@
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Projects;
 
@@ -26,7 +27,7 @@ public partial class DeleteProjectBulkDialog: ComponentBase
             foreach (var project in projects)
             {
                 var response = await _ProjectController.Delete(project.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["projectDeleted"], Severity.Success);
                 }

@@ -12,6 +12,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Documents;
 
@@ -140,7 +141,7 @@ public partial class DocumentDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _DocumentController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["documentEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

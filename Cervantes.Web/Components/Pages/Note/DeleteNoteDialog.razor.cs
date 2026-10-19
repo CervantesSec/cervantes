@@ -3,6 +3,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Note;
 
@@ -27,7 +28,7 @@ public partial class DeleteNoteDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _NoteController.Delete(note.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["noteDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

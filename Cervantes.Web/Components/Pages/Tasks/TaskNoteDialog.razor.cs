@@ -8,6 +8,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
 
@@ -128,7 +129,7 @@ public partial class TaskNoteDialog: ComponentBase
         {
 
             var response = await _taskController.EditNote(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
 
                 Snackbar.Add(@localizer["noteEdited"], Severity.Success);

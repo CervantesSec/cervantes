@@ -15,6 +15,7 @@ using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using TinyMCE.Blazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
@@ -118,7 +119,7 @@ public partial class CreateReportComponentDialog: ComponentBase
             model.CssContent = await _editor.GetValue();
 
             var response = await _reportController.CreateComponent(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+            if (response is CreatedResult)
             {
                 Snackbar.Add(@localizer["reportComponentCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Target;
 
@@ -50,7 +51,7 @@ public partial class ImportDialog: ComponentBase
                 model.Project = project;
 
                 var response = await _targetController.Import(model);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response is OkResult)
                 {
 
                     Snackbar.Add(@localizer["targetImported"], Severity.Success);

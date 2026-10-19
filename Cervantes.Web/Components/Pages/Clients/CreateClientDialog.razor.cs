@@ -12,6 +12,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components.Forms;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Clients;
 
@@ -119,7 +120,7 @@ public partial class CreateClientDialog: ComponentBase
 	        }
 	        
 	        var response =  await _clientsController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+	        if (response is CreatedAtActionResult)
 	        {
 		        Snackbar.Add(@localizer["clientCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

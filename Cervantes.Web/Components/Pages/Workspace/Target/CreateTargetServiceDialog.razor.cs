@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Target;
 
@@ -103,7 +104,7 @@ public partial class CreateTargetServiceDialog: ComponentBase
         {
             service.TargetId = target;
             var response = await _targetController.AddService(service);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+            if (response is CreatedResult)
             {
 
                 Snackbar.Add(@localizer["serviceAdded"], Severity.Success);

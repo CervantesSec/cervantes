@@ -2,6 +2,7 @@ using Cervantes.CORE.Entities;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Projects;
 
@@ -27,7 +28,7 @@ public partial class DeleteProjectAttachment: ComponentBase
         {
 
             var response = await _ProjectController.DeleteAttahcment(attachment.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["attachmentDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

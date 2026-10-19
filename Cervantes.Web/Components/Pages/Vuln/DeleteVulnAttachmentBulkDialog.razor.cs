@@ -3,6 +3,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -28,7 +29,7 @@ public partial class DeleteVulnAttachmentBulkDialog: ComponentBase
             foreach (var attachment in attachments)
             {
                 var response = await _VulnController.DeleteAttahcment(attachment.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")            
+                if (response is NoContentResult)            
                 {
                     Snackbar.Add(@localizer["attachmentDeleted"], Severity.Success);
                 }

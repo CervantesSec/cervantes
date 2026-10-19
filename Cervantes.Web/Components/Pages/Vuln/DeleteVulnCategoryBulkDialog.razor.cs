@@ -1,6 +1,7 @@
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -26,7 +27,7 @@ public partial class DeleteVulnCategoryBulkDialog: ComponentBase
             foreach (var cat in categories)
             {
                 var response = await _vulnController.DeleteCategory(cat.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["deletedCategory"], Severity.Success);
                 }

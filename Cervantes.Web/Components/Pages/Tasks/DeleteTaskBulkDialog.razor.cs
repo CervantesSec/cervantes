@@ -1,6 +1,7 @@
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
 
@@ -27,7 +28,7 @@ public partial class DeleteTaskBulkDialog: ComponentBase
             foreach (var task in tasks)
             {
                 var response = await _taskController.Delete(task.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["taskDeleted"], Severity.Success);
                 

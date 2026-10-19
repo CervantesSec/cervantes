@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Task = Cervantes.CORE.Entities.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
 
@@ -43,7 +44,7 @@ public partial class AddTaskAttachmentDialog: ComponentBase
             
                 model.TaskId = task.Id;
                 var response = await _taskController.AddAttachment(model);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+                if (response is CreatedResult)
                 {
 
                     Snackbar.Add(@localizer["attachmentAdded"], Severity.Success);

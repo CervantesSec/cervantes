@@ -257,7 +257,7 @@ protected override async Task OnInitializedAsync()
             );
             
             var response = await _projectController.UpdateCustomFieldValues(project.Id, customFieldData);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+            if (response is OkResult)
             {
                 Snackbar.Add("Custom fields saved successfully", Severity.Success);
             }
@@ -285,7 +285,7 @@ protected override async Task OnInitializedAsync()
 
             executive.Project = project.Id;
             var response = await _projectController.ExecutiveSumamry(executive);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["executiveSummarySaved"], Severity.Success);
             }
@@ -353,7 +353,7 @@ protected override async Task OnInitializedAsync()
             model.StartDate = dateStart.Value;
             model.EndDate = dateEnd.Value;
             var response = await _projectController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 // Save custom fields
                 await SaveProjectCustomFields();

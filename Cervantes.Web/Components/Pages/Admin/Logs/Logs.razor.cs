@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Logs;
 
@@ -76,7 +77,7 @@ public partial class Logs: ComponentBase
     private async Task DeleteAll()
     {
         var response = await _logController.DeleteAll();
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["logsDeleted"], Severity.Success);
             await Update();

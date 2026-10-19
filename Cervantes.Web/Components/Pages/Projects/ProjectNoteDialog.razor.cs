@@ -13,6 +13,7 @@ using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Projects;
 
@@ -187,7 +188,7 @@ public partial class ProjectNoteDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await ProjectController.EditNote(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["noteEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

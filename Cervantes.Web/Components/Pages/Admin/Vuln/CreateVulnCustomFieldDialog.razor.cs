@@ -6,6 +6,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using Microsoft.Extensions.Localization;
 using Cervantes.Web.Localization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Vuln;
 
@@ -55,7 +56,7 @@ public partial class CreateVulnCustomFieldDialog : ComponentBase
             try
             {
                 var response = await VulnCustomFieldController.Add(model);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+                if (response is CreatedAtActionResult)
                 {
                     Snackbar.Add(localizer["customFieldCreated"], MudBlazor.Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));

@@ -1,6 +1,7 @@
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
 
@@ -25,7 +26,7 @@ public partial class DeleteKnowledgePageDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _KnowledgeBaseController.DeletePage(category.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["pageDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -9,6 +9,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -74,7 +75,7 @@ public partial class VulnCategoryDialog: ComponentBase
         {
 
             var response = await _vulnController.EditCategory(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
 
                 Snackbar.Add(@localizer["categoryEdited"], Severity.Success);

@@ -4,6 +4,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Checklist;
 
@@ -29,7 +30,7 @@ public partial class DeleteChecklistDialog: ComponentBase
             if (checklist.Type == ChecklistType.OWASPWSTG)
             {
                 var response = await _ChecklistController.DeleteWstg(checklist.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["deletedChecklist"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));
@@ -42,7 +43,7 @@ public partial class DeleteChecklistDialog: ComponentBase
             else
             {
                 var response = await _ChecklistController.DeleteMastg(checklist.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["deletedChecklist"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));

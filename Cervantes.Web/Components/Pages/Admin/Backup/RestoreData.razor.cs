@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Backup;
    
@@ -40,7 +41,7 @@ public partial class RestoreData: ComponentBase
                 
                 var response = await backupController.RestoreData(model);
                 
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")
+                if (response is OkResult)
                 {
                     Snackbar.Add(@localizer["restoredData"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));

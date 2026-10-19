@@ -7,6 +7,7 @@ using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -126,7 +127,7 @@ public partial class VulnNoteDialog: ComponentBase
         {
 
             var response = await _vulnController.EditNote(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
 
                 Snackbar.Add(@localizer["noteEdited"], Severity.Success);

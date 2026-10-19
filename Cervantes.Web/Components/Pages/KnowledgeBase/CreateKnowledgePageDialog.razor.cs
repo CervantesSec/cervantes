@@ -12,6 +12,7 @@ using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
 
@@ -113,7 +114,7 @@ public partial class CreateKnowledgePageDialog: ComponentBase
         if (form.IsValid)
         {
             var response =  await _KnowledgeBaseController.AddPage(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+            if (response is CreatedResult)
             {
                 Snackbar.Add(@localizer["pageCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

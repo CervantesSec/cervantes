@@ -5,6 +5,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Users;
 
@@ -28,7 +29,7 @@ public partial class DeleteUserDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _UserController.Delete(user.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["userDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

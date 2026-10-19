@@ -5,6 +5,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Checklist;
 
@@ -42,7 +43,7 @@ public partial class CreateChecklistDialog: ComponentBase
         {
 	        model.ProjectId = project;
 	        var response = await _ChecklistController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+	        if (response is CreatedAtActionResult)
 	        {
 		        Snackbar.Add(@localizer["checklistCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

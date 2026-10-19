@@ -6,6 +6,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Reports;
 
@@ -29,7 +30,7 @@ public partial class DeleteReportDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _reportController.Delete(report.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["reportTemplateDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Documents;
 
@@ -99,7 +100,7 @@ public partial class DocumentCreateDialog: ComponentBase
 		        file = null;
 
 		         var response =  await _DocumentController.Add(model);
-		        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+		        if (response is CreatedResult)
 		        {
 			        Snackbar.Add(@localizer["documentCreated"], Severity.Success);
 			        MudDialog.Close(DialogResult.Ok(true));

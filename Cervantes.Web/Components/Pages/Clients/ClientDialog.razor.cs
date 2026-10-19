@@ -192,7 +192,7 @@ public partial class ClientDialog: ComponentBase
             }
 
             var response = await _clientsController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 // Save custom fields
                 await SaveClientCustomFields();

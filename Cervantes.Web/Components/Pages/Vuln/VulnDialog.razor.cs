@@ -386,7 +386,7 @@ public partial class VulnDialog: ComponentBase
             }
             
             var response = await _vulnController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["vulnUpdated"], Severity.Success);
                 if (autosave is not null)

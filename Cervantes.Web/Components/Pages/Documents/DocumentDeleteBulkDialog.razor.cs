@@ -3,6 +3,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Documents;
 
@@ -28,7 +29,7 @@ public partial class DocumentDeleteBulkDialog: ComponentBase
             foreach (var docs in documents)
             {
                 var response = await _documentController.Delete(docs.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["documentDeleted"], Severity.Success);
                 }

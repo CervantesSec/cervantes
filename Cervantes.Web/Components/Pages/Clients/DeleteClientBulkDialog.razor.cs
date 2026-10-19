@@ -1,6 +1,7 @@
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Clients;
 
@@ -28,7 +29,7 @@ public partial class DeleteClientBulkDialog: ComponentBase
             foreach (var client in clients)
             {
                 var response = await _clientsController.Delete(client.Id);
-                if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+                if (response is NoContentResult)
                 {
                     Snackbar.Add(@localizer["clientDeleted"], Severity.Success);
                 }

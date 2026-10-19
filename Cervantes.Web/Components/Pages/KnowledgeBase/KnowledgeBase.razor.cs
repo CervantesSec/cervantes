@@ -12,6 +12,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
 
@@ -224,7 +225,7 @@ public partial class KnowledgeBase: ComponentBase
         if (form.IsValid)
         {
             var response =  await _KnowledgeBaseController.EditPage(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 editMode = false;
                 Snackbar.Add(@localizer["pageEdited"], Severity.Success);

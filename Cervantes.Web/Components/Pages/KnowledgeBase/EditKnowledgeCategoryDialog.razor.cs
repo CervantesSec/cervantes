@@ -8,6 +8,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.KnowledgeBase;
 
@@ -56,7 +57,7 @@ public partial class EditKnowledgeCategoryDialog: ComponentBase
         if (form.IsValid)
         {
             var response =  await _KnowledgeBaseController.EditCategory(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["categoryEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

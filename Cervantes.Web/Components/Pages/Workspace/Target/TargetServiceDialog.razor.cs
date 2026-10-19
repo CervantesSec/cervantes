@@ -9,6 +9,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Target;
 
@@ -126,7 +127,7 @@ public partial class TargetServiceDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _TargetController.EditService(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["serviceEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

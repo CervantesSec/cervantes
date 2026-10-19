@@ -9,6 +9,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Note;
 
@@ -122,7 +123,7 @@ public partial class NoteDialog: ComponentBase
         {
 	   
             var response = await _NoteController.Edit(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["noteEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

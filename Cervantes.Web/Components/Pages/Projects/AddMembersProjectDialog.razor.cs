@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Projects;
 
@@ -70,7 +71,7 @@ public partial class AddMembersProjectDialog: ComponentBase
 
 
             var response = await _projectController.AddMember(member);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")            
+            if (response is CreatedResult)            
             {
                     Snackbar.Add(@localizer["userAdded"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));

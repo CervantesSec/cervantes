@@ -11,6 +11,7 @@ using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Note;
 
@@ -88,7 +89,7 @@ public partial class CreateNoteDialog: ComponentBase
         {
 	   
 		        var response = await _noteController.Add(model);
-		        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+		        if (response is CreatedResult)
 		        {
 			        Snackbar.Add(@localizer["noteAdded"], Severity.Success);
 			        MudDialog.Close(DialogResult.Ok(true));

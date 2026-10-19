@@ -9,6 +9,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Roles;
 
@@ -110,7 +111,7 @@ public partial class RoleDialog : ComponentBase
         {
 
             var response = await _UserController.EditRole(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(localizer["roleEdited"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

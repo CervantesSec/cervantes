@@ -74,7 +74,7 @@ public partial class TasksKanban : ComponentBase
         update.Id = dropItem.Item.Id;
         update.Status = dropItem.Item.Status;
         var response = await _taskController.UpdateStatus(update);
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["taskUpdated"], Severity.Success);
         }

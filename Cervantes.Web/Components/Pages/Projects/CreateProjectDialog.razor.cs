@@ -14,6 +14,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components.Forms;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Projects;
 
@@ -125,7 +126,7 @@ public partial class CreateProjectDialog: ComponentBase
             }
 
 	        var response = await _projectController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+	        if (response is CreatedAtActionResult)
 	        {
 		        Snackbar.Add(@localizer["projectCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

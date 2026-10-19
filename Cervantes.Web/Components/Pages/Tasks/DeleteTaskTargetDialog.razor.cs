@@ -5,6 +5,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
 
@@ -30,7 +31,7 @@ public partial class DeleteTaskTargetDialog: ComponentBase
 		{
 
 			var response = await _taskController.DeleteTarget(target.Id);
-			if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+			if (response is NoContentResult)
 			{
 				Snackbar.Add(@localizer["targetDeleted"], Severity.Success);
 				MudDialog.Close(DialogResult.Ok(true));

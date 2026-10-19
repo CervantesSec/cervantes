@@ -12,6 +12,7 @@ using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin.Users;
 
@@ -113,7 +114,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
 	        
 	        var response = await _UserController.Add(model);
 	        response2 = response.ToString();
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedAtActionResult")
+	        if (response is CreatedAtActionResult)
 	        {
 		        Snackbar.Add("User created successfully!", Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

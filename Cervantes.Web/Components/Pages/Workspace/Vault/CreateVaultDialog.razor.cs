@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Vault;
 
@@ -81,7 +82,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
         {
 	        model.ProjectId = project;
 	        var response = await _VaultController.Add(model);
-	        if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedResult")
+	        if (response is CreatedResult)
 	        {
 		        Snackbar.Add(@localizer["vaultCreated"], Severity.Success);
 		        MudDialog.Close(DialogResult.Ok(true));

@@ -1,6 +1,7 @@
 using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Workspace.Target;
 
@@ -23,7 +24,7 @@ public partial class DeleteTargetServiceDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await _TargetController.DeleteService(service.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["deletedService"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

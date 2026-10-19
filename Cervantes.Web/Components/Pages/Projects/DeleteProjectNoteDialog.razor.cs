@@ -4,6 +4,7 @@ using Cervantes.Web.Controllers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Projects;
 
@@ -26,7 +27,7 @@ public partial class DeleteProjectNoteDialog: ComponentBase
         if (form.IsValid)
         {
             var response = await ProjectController.DeleteNote(note.Id);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["deletedNote"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));

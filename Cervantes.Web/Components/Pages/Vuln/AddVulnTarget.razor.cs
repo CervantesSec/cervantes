@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Vuln;
 
@@ -60,13 +61,13 @@ public partial class AddVulnTarget: ComponentBase
 
 
             var response = await _VulnController.AddVulnTarget(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkResult")            
+            if (response is OkResult)            
             {
                 Snackbar.Add(@localizer["targetAdded"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
                 
             }
-            else if (response.ToString() == "Microsoft.AspNetCore.Mvc.OkObjectResult")
+            else if (response is OkObjectResult)
             {
                 Snackbar.Add(@localizer["targetExists"], Severity.Info);
                 MudDialog.Close(DialogResult.Ok(true));

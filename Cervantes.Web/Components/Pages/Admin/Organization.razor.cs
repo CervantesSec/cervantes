@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Severity = MudBlazor.Severity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cervantes.Web.Components.Pages.Admin;
 
@@ -142,7 +143,7 @@ public partial class Organization: ComponentBase
 	        
 	        
             var response = await _organizationController.Save(model);
-            if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+            if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["orgSaved"], Severity.Success);
                 await Update();
@@ -159,7 +160,7 @@ public partial class Organization: ComponentBase
     private async Task DeleteLogo(int id)
     {
         var response = await _organizationController.DeleteAvatar();
-        if (response.ToString() == "Microsoft.AspNetCore.Mvc.NoContentResult")
+        if (response is NoContentResult)
         {
             Snackbar.Add(@localizer["logoDeleted"], Severity.Success);
             model.ImagePath = null;
