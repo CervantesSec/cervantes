@@ -44,6 +44,7 @@
     <form method="post" action="Account/PerformLdapLogin">
         <MudGrid>
             <AntiforgeryToken/>
+            <input type="hidden" name="ReturnUrl" value="@ReturnUrl"/>
 
             <MudItem xs="12" Class="d-flex justify-center">
                 <div class="mud-grid-item mud-grid-item-xs-12">

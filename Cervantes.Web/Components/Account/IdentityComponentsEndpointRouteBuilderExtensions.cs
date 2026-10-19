@@ -24,6 +24,29 @@ namespace Microsoft.AspNetCore.Routing;
 
 internal static class IdentityComponentsEndpointRouteBuilderExtensions
 {
+    /// <summary>
+    /// The LDAP handler sends the user to the login page with the external-login callback as return URL
+    /// ("/Account/ExternalLogin?ReturnUrl=...&amp;Action=LoginCallback"). The page the user asked for is that URL's
+    /// ReturnUrl. The caller still checks the result with <see cref="LocalUrl.IsLocal"/>.
+    /// </summary>
+    internal static string UnwrapLdapReturnUrl(string? returnUrl)
+    {
+        if (string.IsNullOrEmpty(returnUrl))
+        {
+            return "~/";
+        }
+
+        var queryStart = returnUrl.IndexOf('?');
+        var path = queryStart < 0 ? returnUrl : returnUrl[..queryStart];
+        if (path.Equals("/Account/ExternalLogin", StringComparison.OrdinalIgnoreCase))
+        {
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(queryStart < 0 ? "" : returnUrl[queryStart..]);
+            return query.TryGetValue("ReturnUrl", out var inner) && !string.IsNullOrEmpty(inner) ? inner.ToString() : "~/";
+        }
+
+        return returnUrl;
+    }
+
 
     public const string LoginCallbackAction = "LoginCallback";
 
@@ -62,22 +85,30 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
             [FromServices] IAuthUsersAdminService authUsersAdminService,
             [FromServices] ILogger<Program> logger,
             [FromForm] string username,
-            [FromForm] string password) =>
+            [FromForm] string password,
+            [FromForm] string? returnUrl) =>
         {
+            var target = UnwrapLdapReturnUrl(returnUrl);
+            if (!LocalUrl.IsLocal(target))
+            {
+                target = "~/";
+            }
+            // Error redirects keep the return URL so a second attempt still lands on the page the user asked for.
+            var returnQuery = "&returnUrl=" + Uri.EscapeDataString(target);
             try
             {
                 // Validate LDAP credentials
                 var isValid = await ldapService.ValidateUserAsync(username, password);
                 if (!isValid)
                 {
-                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Invalid%20LDAP%20credentials");
+                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Invalid%20LDAP%20credentials" + returnQuery);
                 }
 
                 // Get user information from LDAP
                 var ldapUser = await ldapService.GetUserInfoAsync(username);
                 if (ldapUser == null)
                 {
-                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Could%20not%20retrieve%20user%20information%20from%20LDAP");
+                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Could%20not%20retrieve%20user%20information%20from%20LDAP" + returnQuery);
                 }
 
                 // Try to find existing user
@@ -101,15 +132,14 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
 
                     await signInManager.SignInAsync(existingUser, isPersistent: true);
                     
-                    // Always redirect to home page to avoid redirection issues
-                    logger.LogInformation("LDAP Login successful for user {Username}, redirecting to home", username);
-                    return TypedResults.LocalRedirect("~/");
+                    logger.LogInformation("LDAP Login successful for user {Username}", username);
+                    return TypedResults.LocalRedirect(target);
                 }
 
                 // Create new user
                 if (string.IsNullOrEmpty(ldapUser.Email))
                 {
-                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=No%20email%20address%20found%20in%20LDAP");
+                    return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=No%20email%20address%20found%20in%20LDAP" + returnQuery);
                 }
 
                 var user = new ApplicationUser
@@ -130,17 +160,16 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
 
                     await signInManager.SignInAsync(user, isPersistent: true);
                     
-                    // Always redirect to home page to avoid redirection issues
-                    logger.LogInformation("LDAP Login successful for new user {Username}, redirecting to home", username);
-                    return TypedResults.LocalRedirect("~/");
+                    logger.LogInformation("LDAP Login successful for new user {Username}", username);
+                    return TypedResults.LocalRedirect(target);
                 }
 
-                return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Error%20creating%20user%20account");
+                return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=Error%20creating%20user%20account" + returnQuery);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error during LDAP login for user {Username}", username);
-                return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=An%20error%20occurred%20during%20authentication");
+                return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=An%20error%20occurred%20during%20authentication" + returnQuery);
             }
         });
 
