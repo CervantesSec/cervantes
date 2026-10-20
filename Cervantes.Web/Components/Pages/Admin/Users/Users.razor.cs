@@ -106,15 +106,16 @@ public partial class Users: ComponentBase
 
     
     
-    private Func<UserViewModel, bool> _quickFilter => element =>
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (element.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
+    private Func<UserViewModel, bool> _quickFilter => element => MatchesSearch(element, searchString);
 
-        return false;
-    };
+    // Users created by an external login or a restore can lack a name or an e-mail, so both are null-checked.
+    internal static bool MatchesSearch(UserViewModel user, string? search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+            return true;
+        return (user.FullName?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false)
+               || (user.Email?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false);
+    }
     
     private async Task OpenDialogCreate(DialogOptionsEx options)
     {
