@@ -106,8 +106,14 @@ public class ExportToCsv : IExportToCsv
     /// </summary>
     public void DeleteFile(string path)
     {
+        _ = DeleteFileLater(path);
+    }
+
+    // The delayed delete itself, returned so that a test can observe how it ends.
+    internal System.Threading.Tasks.Task DeleteFileLater(string path)
+    {
         var exportPath = $"{env.WebRootPath}/{path}";
-        _ = System.Threading.Tasks.Task.Run(async () =>
+        return System.Threading.Tasks.Task.Run(async () =>
         {
             await System.Threading.Tasks.Task.Delay(DeleteDelay);
             try

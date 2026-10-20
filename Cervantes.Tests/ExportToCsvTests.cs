@@ -41,13 +41,10 @@ public class ExportToCsvTests : IDisposable
     }
 
     [Fact]
-    public async Task DeleteFile_IgnoresAMissingExport()
+    public async Task DeleteFileLater_IgnoresAMissingFolder()
     {
-        exporter.DeleteFile("Attachments/Export/does-not-exist.csv");
-
-        // The delete runs in the background; an exception there would only surface as an unobserved task.
-        await Task.Delay(ExportToCsv.DeleteDelay * 3);
-        Assert.False(File.Exists(Path.Combine(root, "Attachments/Export/does-not-exist.csv")));
+        // A missing folder makes File.Delete throw DirectoryNotFoundException; the delayed delete must swallow it.
+        await exporter.DeleteFileLater("Attachments/Export/missing-dir/x.csv");
     }
 
     private static async Task WaitUntil(Func<bool> condition, TimeSpan timeout)
