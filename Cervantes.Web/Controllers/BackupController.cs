@@ -1006,18 +1006,34 @@ public class BackupController : ControllerBase
             // their roles only once the restore has committed.
             var pendingRoles = new List<(ApplicationUser User, string Role)>();
 
+            // Every user id in the backup goes through this map. On this instance the same person may have another id
+            // (the default admin always does), so a backup user whose email or user name exists here is mapped to that
+            // user, and their memberships and authorship follow them.
+            var users = new BackupUserMap(aspNetUserId, async id => await _userManager.FindByIdAsync(id) != null);
+
             // Users are restored before clients, so a client user's link is set once its client exists.
             var pendingClientLinks = new Dictionary<string, Guid>();
             if (backupViewModel.Users != null)
             {
                 foreach (var backupUser in backupViewModel.Users)
                 {
-                    // Only users this instance does not have are restored; the default admin always exists.
+                    // Only users this instance does not have are restored.
                     if (string.IsNullOrEmpty(backupUser.Email) || string.IsNullOrEmpty(backupUser.UserName)
-                        || backupUser.Email == "admin@cervantes.local"
-                        || await _userManager.FindByIdAsync(backupUser.Id) != null
-                        || await _userManager.FindByEmailAsync(backupUser.Email) != null
-                        || await _userManager.FindByNameAsync(backupUser.UserName) != null)
+                        || await _userManager.FindByIdAsync(backupUser.Id) != null)
+                    {
+                        continue;
+                    }
+
+                    var sameUser = await _userManager.FindByEmailAsync(backupUser.Email)
+                                   ?? await _userManager.FindByNameAsync(backupUser.UserName);
+                    if (sameUser != null)
+                    {
+                        users.Map(backupUser.Id, sameUser.Id);
+                        continue;
+                    }
+
+                    // The default admin is never created from a backup.
+                    if (backupUser.Email == "admin@cervantes.local")
                     {
                         continue;
                     }
@@ -1080,12 +1096,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(client.UserId);
-                    if (userExists == null)
-                    {
-                        client.UserId = aspNetUserId;
-                    }
+                    client.UserId = await users.ResolveAsync(client.UserId);
                     if (!AttachmentPath.TryResolve(env.WebRootPath, client.ImagePath, "Clients", out _))
                     {
                         if (client.ImagePath != null && client.ImagePath != "None")
@@ -1119,12 +1130,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(project.UserId);
-                    if (userExists == null)
-                    {
-                        project.UserId = aspNetUserId;
-                    }
+                    project.UserId = await users.ResolveAsync(project.UserId);
                     await projectManager.AddAsync(project);
                 }
 
@@ -1145,12 +1151,7 @@ public class BackupController : ControllerBase
                         LogDiscardedPath("ProjectAttachment", attachment.Id);
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(attachment.UserId);
-                    if (userExists == null)
-                    {
-                        attachment.UserId = aspNetUserId;
-                    }
+                    attachment.UserId = await users.ResolveAsync(attachment.UserId);
                     await projectAttachmentManager.AddAsync(attachment);
                 }
 
@@ -1166,12 +1167,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(note.UserId);
-                    if (userExists == null)
-                    {
-                        note.UserId = aspNetUserId;
-                    }
+                    note.UserId = await users.ResolveAsync(note.UserId);
                     await projectNoteManager.AddAsync(note);
                 }
 
@@ -1183,13 +1179,14 @@ public class BackupController : ControllerBase
             {
                 foreach (var member in backupViewModel.ProjectUsers)
                 {
+                    member.UserId = await users.ResolveOptionalAsync(member.UserId);
                     if (projectUserManager.GetById(member.Id) != null
                         || projectUserManager.GetAll().Any(x => x.ProjectId == member.ProjectId && x.UserId == member.UserId))
                     {
                         continue;
                     }
 
-                    if (projectManager.GetById(member.ProjectId) == null || await _userManager.FindByIdAsync(member.UserId) == null)
+                    if (projectManager.GetById(member.ProjectId) == null || member.UserId == null)
                     {
                         _logger.LogWarning("Restore skipped project member {MemberId}: its project or user is missing. User: {UserId}",
                             member.Id, aspNetUserId);
@@ -1211,12 +1208,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(doc.UserId);
-                    if (userExists == null)
-                    {
-                        doc.UserId = aspNetUserId;
-                    }
+                    doc.UserId = await users.ResolveAsync(doc.UserId);
                     if (!AttachmentPath.TryResolve(env.WebRootPath, doc.FilePath, "Documents", out _))
                     {
                         // "Attachments/Documents/" is what a document without a file stores.
@@ -1241,12 +1233,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(note.UserId);
-                    if (userExists == null)
-                    {
-                        note.UserId = aspNetUserId;
-                    }
+                    note.UserId = await users.ResolveAsync(note.UserId);
                     await noteManager.AddAsync(note);
                 }
 
@@ -1287,12 +1274,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(rep.UserId);
-                    if (userExists == null)
-                    {
-                        rep.UserId = aspNetUserId;
-                    }
+                    rep.UserId = await users.ResolveAsync(rep.UserId);
                     await reportManager.AddAsync(rep);
                 }
 
@@ -1308,12 +1290,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(target.UserId);
-                    if (userExists == null)
-                    {
-                        target.UserId = aspNetUserId;
-                    }
+                    target.UserId = await users.ResolveAsync(target.UserId);
                     await targetManager.AddAsync(target);
                 }
 
@@ -1329,12 +1306,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(services.UserId);
-                    if (userExists == null)
-                    {
-                        services.UserId = aspNetUserId;
-                    }
+                    services.UserId = await users.ResolveAsync(services.UserId);
                     await targetServicesManager.AddAsync(services);
                 }
 
@@ -1354,14 +1326,10 @@ public class BackupController : ControllerBase
                     }
                     
                     // The creator and the assignee are kept when they exist here; a task with no assignee stays so.
-                    if (string.IsNullOrEmpty(task.CreatedUserId) || await _userManager.FindByIdAsync(task.CreatedUserId) == null)
+                    task.CreatedUserId = await users.ResolveAsync(task.CreatedUserId);
+                    if (!string.IsNullOrEmpty(task.AsignedUserId))
                     {
-                        task.CreatedUserId = aspNetUserId;
-                    }
-
-                    if (!string.IsNullOrEmpty(task.AsignedUserId) && await _userManager.FindByIdAsync(task.AsignedUserId) == null)
-                    {
-                        task.AsignedUserId = aspNetUserId;
+                        task.AsignedUserId = await users.ResolveAsync(task.AsignedUserId);
                     }
 
 
@@ -1385,12 +1353,7 @@ public class BackupController : ControllerBase
                         LogDiscardedPath("TaskAttachment", att.Id);
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(att.UserId);
-                    if (userExists == null)
-                    {
-                        att.UserId = aspNetUserId;
-                    }
+                    att.UserId = await users.ResolveAsync(att.UserId);
                     await taskAttachmentManager.AddAsync(att);
                 }
 
@@ -1406,12 +1369,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(note.UserId);
-                    if (userExists == null)
-                    {
-                        note.UserId = aspNetUserId;
-                    }
+                    note.UserId = await users.ResolveAsync(note.UserId);
                     await taskNoteManager.AddAsync(note);
                 }
 
@@ -1442,12 +1400,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(vault.UserId);
-                    if (userExists == null)
-                    {
-                        vault.UserId = aspNetUserId;
-                    }
+                    vault.UserId = await users.ResolveAsync(vault.UserId);
                     await vaultManager.AddAsync(vault);
                 }
 
@@ -1486,12 +1439,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(vulns.UserId);
-                    if (userExists == null)
-                    {
-                        vulns.UserId = aspNetUserId;
-                    }
+                    vulns.UserId = await users.ResolveAsync(vulns.UserId);
                     if (vulns.VulnCategoryId != null && categoryMap.TryGetValue(vulns.VulnCategoryId.Value, out var categoryId))
                     {
                         vulns.VulnCategoryId = categoryId;
@@ -1516,12 +1464,7 @@ public class BackupController : ControllerBase
                         LogDiscardedPath("VulnAttachment", att.Id);
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(att.UserId);
-                    if (userExists == null)
-                    {
-                        att.UserId = aspNetUserId;
-                    }
+                    att.UserId = await users.ResolveAsync(att.UserId);
                     await vulnAttachmentManager.AddAsync(att);
                 }
 
@@ -1537,12 +1480,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(note.UserId);
-                    if (userExists == null)
-                    {
-                        note.UserId = aspNetUserId;
-                    }
+                    note.UserId = await users.ResolveAsync(note.UserId);
                     await vulnNoteManager.AddAsync(note);
                 }
 
@@ -1573,12 +1511,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(jira.UserId);
-                    if (userExists == null)
-                    {
-                        jira.UserId = aspNetUserId;
-                    }
+                    jira.UserId = await users.ResolveAsync(jira.UserId);
                     await jiraManager.AddAsync(jira);
                 }
 
@@ -1609,12 +1542,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(wstg.UserId);
-                    if (userExists == null)
-                    {
-                        wstg.UserId = aspNetUserId;
-                    }
+                    wstg.UserId = await users.ResolveAsync(wstg.UserId);
                     await wstgManager.AddAsync(wstg);
                 }
 
@@ -1630,12 +1558,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(mastg.UserId);
-                    if (userExists == null)
-                    {
-                        mastg.UserId = aspNetUserId;
-                    }
+                    mastg.UserId = await users.ResolveAsync(mastg.UserId);
                     
                     await mastgManager.AddAsync(mastg);
                 }
@@ -1677,12 +1600,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(comp.UserId);
-                    if (userExists == null)
-                    {
-                        comp.UserId = aspNetUserId;
-                    }
+                    comp.UserId = await users.ResolveAsync(comp.UserId);
                     await reportTemplateManager.AddAsync(comp);
                 }
                 
@@ -1717,12 +1635,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(cat.UserId);
-                    if (userExists == null)
-                    {
-                        cat.UserId = aspNetUserId;
-                    }
+                    cat.UserId = await users.ResolveAsync(cat.UserId);
                     
                     await knowledgeBaseCategoryManager.AddAsync(cat);
                 }
@@ -1740,18 +1653,9 @@ public class BackupController : ControllerBase
                         continue;
                     }
                     
-                    // Check if the CreatedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(cat.CreatedUserId);
-                    if (userExists == null)
-                    {
-                        cat.CreatedUserId = aspNetUserId;
-                    }
+                    cat.CreatedUserId = await users.ResolveAsync(cat.CreatedUserId);
                     
-                    var userExists2 = await _userManager.FindByIdAsync(cat.UpdatedUserId);
-                    if (userExists2 == null)
-                    {
-                        cat.UpdatedUserId = aspNetUserId;
-                    }
+                    cat.UpdatedUserId = await users.ResolveAsync(cat.UpdatedUserId);
                     
                     await knowledgeBaseManager.AddAsync(cat);
                 }
