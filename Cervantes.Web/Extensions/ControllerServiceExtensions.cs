@@ -45,6 +45,8 @@ public static class ControllerServiceExtensions
     public static IServiceCollection AddCoreBusinessControllers(this IServiceCollection services)
     {
         services.AddScoped<ClientsController>();
+        // Not a controller: used by the project and client deletes, in the same scope as their DbContext.
+        services.AddScoped<Cervantes.Web.Helpers.ProjectTreeDeleter>();
         services.AddScoped<ClientCustomFieldController>();
         services.AddScoped<UserController>();
         services.AddScoped<OrganizationController>();

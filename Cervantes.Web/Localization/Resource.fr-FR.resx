@@ -2780,4 +2780,7 @@
   <data name="draftRestored" xml:space="preserve">
     <value>Les modifications non enregistrées de votre précédente édition ont été restaurées.</value>
   </data>
+  <data name="deleteProjectWarning" xml:space="preserve">
+    <value>Cela supprime aussi définitivement les vulnérabilités, tâches, cibles, rapports, coffre, checklists, notes et pièces jointes du projet. Cette action est irréversible.</value>
+  </data>
 </root>

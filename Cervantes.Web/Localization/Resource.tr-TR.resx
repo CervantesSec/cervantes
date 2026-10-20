@@ -2784,4 +2784,7 @@
   <data name="draftRestored" xml:space="preserve">
     <value>Önceki düzenlemenizdeki kaydedilmemiş değişiklikler geri yüklendi.</value>
   </data>
+  <data name="deleteProjectWarning" xml:space="preserve">
+    <value>Bu işlem projenin zafiyetlerini, görevlerini, hedeflerini, raporlarını, kasasını, kontrol listelerini, notlarını ve eklerini de kalıcı olarak siler. Bu işlem geri alınamaz.</value>
+  </data>
 </root>

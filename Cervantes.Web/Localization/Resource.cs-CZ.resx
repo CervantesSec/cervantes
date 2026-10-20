@@ -2780,4 +2780,7 @@
   <data name="draftRestored" xml:space="preserve">
     <value>Neuložené změny z vaší předchozí úpravy byly obnoveny.</value>
   </data>
+  <data name="deleteProjectWarning" xml:space="preserve">
+    <value>Tím se trvale smažou také zranitelnosti, úkoly, cíle, reporty, trezor, checklisty, poznámky a přílohy projektu. Tuto akci nelze vrátit zpět.</value>
+  </data>
 </root>

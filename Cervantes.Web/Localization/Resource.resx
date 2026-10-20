@@ -3342,4 +3342,7 @@ Option 3</value>
   <data name="draftRestored" xml:space="preserve">
     <value>Unsaved changes from your previous edit were restored.</value>
   </data>
+  <data name="deleteProjectWarning" xml:space="preserve">
+    <value>This also permanently deletes the project's vulnerabilities, tasks, targets, reports, vault, checklists, notes and attachments. This action cannot be undone.</value>
+  </data>
 </root>

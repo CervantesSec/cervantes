@@ -40,6 +40,7 @@ public class ProjectController : ControllerBase
     private IProjectCustomFieldManager projectCustomFieldManager = null;
     private IProjectCustomFieldValueManager projectCustomFieldValueManager = null;
     private readonly IWebHostEnvironment env;
+    private readonly ProjectTreeDeleter projectTreeDeleter;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private readonly ILogger<ProjectController> _logger = null;
@@ -61,8 +62,9 @@ public class ProjectController : ControllerBase
         IReportTemplateManager reportTemplateManager, IProjectCustomFieldManager projectCustomFieldManager,
         IProjectCustomFieldValueManager projectCustomFieldValueManager,
         IWebHostEnvironment env, IHttpContextAccessor HttpContextAccessor, ILogger<ProjectController> logger,
-        IFileCheck fileCheck,Sanitizer sanitizer)
+        IFileCheck fileCheck,Sanitizer sanitizer, ProjectTreeDeleter projectTreeDeleter)
     {
+        this.projectTreeDeleter = projectTreeDeleter;
         this.projectManager = projectManager;
         this.clientManager = clientManager;
         this.projectUserManager = projectUserManager;
@@ -317,18 +319,15 @@ public class ProjectController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var project = projectManager.GetById(projectId);
-                if (project != null)
-                {
-                    projectManager.Remove(project);
-                }
-                else
+                if (projectManager.GetById(projectId) == null)
                 {
                     return NotFound($"Project with ID {projectId} not found");
                 }
 
+                var tree = projectTreeDeleter.Stage(new[] { projectId });
+                // One save: EF runs it in a single transaction, so the project and its content go together or not at all.
                 await projectManager.Context.SaveChangesAsync();
-                AttachmentFiles.DeleteOwnerFolder(env.WebRootPath, "Projects", projectId, _logger, "Project", aspNetUserId);
+                projectTreeDeleter.DeleteFolders(tree, aspNetUserId);
                 _logger.LogInformation("Project deleted successfully. User: {0}",
                     aspNetUserId);
                 return NoContent();

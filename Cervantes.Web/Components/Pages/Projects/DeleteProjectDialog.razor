@@ -13,10 +13,11 @@
 
 <MudDialog Class="mud-ex-dialog-initial">
 	<TitleContent>
-		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Folder" /> @localizer["deleteClient"]: @project.Name</MudText>
+		<MudText Typo="Typo.h4"><MudIcon Icon="@Icons.Material.Filled.Folder" /> @localizer["deleteProject"]: @project.Name</MudText>
 	</TitleContent>
 	<DialogContent>
 		<MudForm Model="@project" @ref="@form"  ValidationDelay="0">
+			<MudAlert Severity="MudBlazor.Severity.Warning" Class="mb-4">@localizer["deleteProjectWarning"]</MudAlert>
 			<MudText>@localizer["deleteMessageIntro"] @project.Name ?</MudText>
 		</MudForm>
 	</DialogContent>

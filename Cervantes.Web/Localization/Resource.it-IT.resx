@@ -2785,4 +2785,7 @@
   <data name="draftRestored" xml:space="preserve">
     <value>Le modifiche non salvate della modifica precedente sono state ripristinate.</value>
   </data>
+  <data name="deleteProjectWarning" xml:space="preserve">
+    <value>Elimina anche in modo definitivo vulnerabilità, attività, target, report, vault, checklist, note e allegati del progetto. Questa azione non può essere annullata.</value>
+  </data>
 </root>

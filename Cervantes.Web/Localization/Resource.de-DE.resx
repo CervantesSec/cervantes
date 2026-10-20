@@ -2780,4 +2780,7 @@
   <data name="draftRestored" xml:space="preserve">
     <value>Nicht gespeicherte Änderungen aus Ihrer letzten Bearbeitung wurden wiederhergestellt.</value>
   </data>
+  <data name="deleteProjectWarning" xml:space="preserve">
+    <value>Dabei werden auch die Schwachstellen, Aufgaben, Ziele, Berichte, der Tresor, Checklisten, Notizen und Anhänge des Projekts endgültig gelöscht. Dies kann nicht rückgängig gemacht werden.</value>
+  </data>
 </root>

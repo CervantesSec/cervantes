@@ -2749,4 +2749,7 @@
   <data name="draftRestored" xml:space="preserve">
     <value>As alterações não guardadas da sua edição anterior foram restauradas.</value>
   </data>
+  <data name="deleteProjectWarning" xml:space="preserve">
+    <value>Também elimina permanentemente as vulnerabilidades, tarefas, alvos, relatórios, cofre, checklists, notas e anexos do projeto. Esta ação não pode ser desfeita.</value>
+  </data>
 </root>

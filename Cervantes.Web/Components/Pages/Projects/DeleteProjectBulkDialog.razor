@@ -16,6 +16,7 @@
 	</TitleContent>
 	<DialogContent>
 		<MudForm Model="@projects" @ref="@form" >
+			<MudAlert Severity="MudBlazor.Severity.Warning" Class="mb-4">@localizer["deleteProjectWarning"]</MudAlert>
 			<MudText>@localizer["deleteMessageIntro"] ?</MudText>
 		</MudForm>
 	</DialogContent>

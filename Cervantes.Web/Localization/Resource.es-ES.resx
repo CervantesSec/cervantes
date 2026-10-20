@@ -3364,4 +3364,7 @@ Opción 3</value>
   <data name="draftRestored" xml:space="preserve">
     <value>Se han restaurado los cambios sin guardar de tu edición anterior.</value>
   </data>
+  <data name="deleteProjectWarning" xml:space="preserve">
+    <value>También se eliminarán para siempre las vulnerabilidades, tareas, objetivos, informes, vault, checklists, notas y adjuntos del proyecto. Esta acción no se puede deshacer.</value>
+  </data>
 </root>
