@@ -527,9 +527,9 @@ using (var scope = app.Services.CreateScope())
             }
         }
 
-        if (System.IO.Directory.Exists($"{env.WebRootPath}/Attachments/Vulns") == false)
+        if (System.IO.Directory.Exists($"{env.WebRootPath}/Attachments/Vuln") == false)
         {
-            System.IO.Directory.CreateDirectory($"{env.WebRootPath}/Attachments/Vulns");
+            System.IO.Directory.CreateDirectory($"{env.WebRootPath}/Attachments/Vuln");
         }
         if (System.IO.Directory.Exists($"{env.WebRootPath}/Attachments/Imports") == false)
         {

@@ -328,6 +328,7 @@ public class ProjectController : ControllerBase
                 }
 
                 await projectManager.Context.SaveChangesAsync();
+                AttachmentFiles.DeleteOwnerFolder(env.WebRootPath, "Projects", projectId, _logger, "Project", aspNetUserId);
                 _logger.LogInformation("Project deleted successfully. User: {0}",
                     aspNetUserId);
                 return NoContent();

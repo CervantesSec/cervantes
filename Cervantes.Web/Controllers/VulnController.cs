@@ -747,7 +747,7 @@ public class VulnController: ControllerBase
         {
             var vuln = vulnManager.GetById(id);
             
-            if (vuln.Name != null)
+            if (vuln != null)
             {
                 if (vuln.ProjectId != null && vuln.ProjectId != Guid.Empty)
                 {
@@ -760,6 +760,7 @@ public class VulnController: ControllerBase
                 
                  vulnManager.Remove(vuln);
                  await vulnManager.Context.SaveChangesAsync();
+                AttachmentFiles.DeleteOwnerFolder(env.WebRootPath, "Vuln", id, _logger, "Vuln", aspNetUserId);
                 _logger.LogInformation("Vuln deleted successfully. User: {0}",
                     aspNetUserId);
                 return NoContent();

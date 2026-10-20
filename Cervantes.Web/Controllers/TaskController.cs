@@ -350,6 +350,7 @@ public class TaskController: ControllerBase
                     
                     taskManager.Remove(result);
                     await taskManager.Context.SaveChangesAsync();
+                    AttachmentFiles.DeleteOwnerFolder(env.WebRootPath, "Task", taskId, _logger, "Task", aspNetUserId);
                     _logger.LogInformation("Task deleted successfully. User: {0}",
                         aspNetUserId);
                     return NoContent();

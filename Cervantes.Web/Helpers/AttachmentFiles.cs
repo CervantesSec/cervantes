@@ -33,4 +33,26 @@ public static class AttachmentFiles
             logger.LogWarning(e, "File of {Entity} {Id} could not be deleted. User: {UserId}", entity, id, userId);
         }
     }
+
+    /// <summary>
+    /// Removes the attachments folder of a deleted vuln, task or project. The attachment rows go with the owner by
+    /// cascade, so nothing points at these files any more. A folder that cannot be deleted is left behind, as with
+    /// a single file.
+    /// </summary>
+    public static void DeleteOwnerFolder(string webRootPath, string folder, Guid ownerId, ILogger logger, string entity,
+        string userId)
+    {
+        var path = Path.Combine(webRootPath, "Attachments", folder, ownerId.ToString());
+        try
+        {
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            logger.LogWarning(e, "Attachments folder of {Entity} {Id} could not be deleted. User: {UserId}", entity, ownerId, userId);
+        }
+    }
 }

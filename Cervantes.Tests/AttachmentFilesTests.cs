@@ -64,4 +64,55 @@ public class AttachmentFilesTests : IDisposable
 
         Delete($"Attachments/Vuln/{ownerA}/missing.png");
     }
+    private void DeleteFolder(Guid owner)
+    {
+        AttachmentFiles.DeleteOwnerFolder(root, "Vuln", owner, NullLogger.Instance, "Vuln", "user");
+    }
+
+    [Fact]
+    public void DeleteOwnerFolder_RemovesNestedFiles()
+    {
+        Write($"Attachments/Vuln/{ownerA}/f.png");
+        Write($"Attachments/Vuln/{ownerA}/sub/g.png");
+
+        DeleteFolder(ownerA);
+
+        Assert.False(Directory.Exists(Path.Combine(root, $"Attachments/Vuln/{ownerA}")));
+    }
+
+    [Fact]
+    public void DeleteOwnerFolder_IgnoresAMissingFolder()
+    {
+        Directory.CreateDirectory(root);
+
+        DeleteFolder(ownerA);
+    }
+
+    [Fact]
+    public void DeleteOwnerFolder_KeepsSiblingOwners()
+    {
+        Write($"Attachments/Vuln/{ownerA}/f.png");
+        var other = Write($"Attachments/Vuln/{ownerB}/f.png");
+
+        DeleteFolder(ownerA);
+
+        Assert.True(File.Exists(other));
+    }
+
+    [Fact]
+    public void DeleteOwnerFolder_LeavesALockedFolder()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return; // Only Windows refuses to delete a file that is open.
+        }
+
+        var full = Write($"Attachments/Vuln/{ownerA}/f.png");
+        using (new FileStream(full, FileMode.Open, FileAccess.Read, FileShare.None))
+        {
+            DeleteFolder(ownerA);
+        }
+
+        Assert.True(File.Exists(full));
+    }
 }
