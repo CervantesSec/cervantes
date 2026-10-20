@@ -52,4 +52,53 @@ public class FindingIdGeneratorTests
     {
         Assert.Equal("ACME-2026-05", FindingIdGenerator.Next(new[] { "ACME-2026-04" }, "ACME-2026"));
     }
+    [Fact]
+    public void Next_AfterIntMax()
+    {
+        // A restored backup can hold any number; the next one must still be larger.
+        Assert.Equal("P-2147483648", FindingIdGenerator.Next(new[] { "P-2147483647" }, "P"));
+    }
+
+    [Fact]
+    public void Next_IgnoresLongMax()
+    {
+        Assert.Equal("P-04", FindingIdGenerator.Next(new[] { "P-9223372036854775807", "P-03" }, "P"));
+    }
+
+    [Fact]
+    public void Next_NullPrefix()
+    {
+        Assert.Equal("-04", FindingIdGenerator.Next(new[] { "-03" }, null));
+    }
+
+    [Fact]
+    public void Next_LeadingZeros()
+    {
+        Assert.Equal("P-08", FindingIdGenerator.Next(new[] { "P-007" }, "P"));
+    }
+
+    [Fact]
+    public void Next_IgnoresSignAndSpaces()
+    {
+        Assert.Equal("P-01", FindingIdGenerator.Next(new[] { "P-+5", "P- 6", "P-7 " }, "P"));
+    }
+
+    [Fact]
+    public void Sequence_NumbersConsecutively()
+    {
+        var sequence = FindingIdGenerator.Start(new[] { "P-03" }, "P");
+
+        Assert.Equal("P-04", sequence.Next());
+        Assert.Equal("P-05", sequence.Next());
+    }
+
+    [Fact]
+    public void Sequence_WithoutProjectIsEmpty()
+    {
+        // The manager is not touched when there is no project, so null stands in for it.
+        var sequence = FindingIdGenerator.Start(vulnManager: null!, project: null);
+
+        Assert.Equal("", sequence.Next());
+        Assert.Equal("", sequence.Next());
+    }
 }

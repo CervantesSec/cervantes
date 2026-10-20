@@ -14,6 +14,8 @@ public class AcunetixParser : IAcunetixParser
 {
     private ITargetManager targetManager = null;
     private IVulnManager vulnManager = null;
+    // The finding ids of the import in progress; the project's ids are read once per import, not once per vuln.
+    private FindingIdSequence findingIds = FindingIdSequence.Empty;
     private IVulnTargetManager vulnTargetManager = null;
     private IProjectManager projectManager = null;
 
@@ -28,6 +30,7 @@ public class AcunetixParser : IAcunetixParser
 
     public void Parse(Guid? project, string user, string path)
     {
+        findingIds = FindingIdSequence.Empty;
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
 
@@ -43,6 +46,7 @@ public class AcunetixParser : IAcunetixParser
         if (project != null)
         {
             var pro = projectManager.GetById((Guid)project);
+            findingIds = FindingIdGenerator.Start(vulnManager, pro);
             
             foreach (XmlNode vuln in vulnerabilities)
             {
@@ -270,7 +274,7 @@ public class AcunetixParser : IAcunetixParser
                     vulnerability.cve = cwe;
                 }
 
-                vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
+                vulnerability.FindingId = findingIds.Next();
                 vulnManager.Add(vulnerability);
                 vulnManager.Context.SaveChanges();
 

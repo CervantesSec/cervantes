@@ -14,6 +14,8 @@ public class NessusParser: INessusParser
 {
     private ITargetManager targetManager = null;
     private IVulnManager vulnManager = null;
+    // The finding ids of the import in progress; the project's ids are read once per import, not once per vuln.
+    private FindingIdSequence findingIds = FindingIdSequence.Empty;
     private IVulnTargetManager vulnTargetManager = null;
     private IProjectManager projectManager = null;
     public NessusParser(ITargetManager targetManager, IVulnManager vulnManager, 
@@ -26,6 +28,7 @@ public class NessusParser: INessusParser
     }
     public void Parse(Guid? project, string user, string path)
     {
+        findingIds = FindingIdSequence.Empty;
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
 
@@ -34,6 +37,7 @@ public class NessusParser: INessusParser
         if (project != null)
         {
             var pro = projectManager.GetById((Guid) project);
+            findingIds = FindingIdGenerator.Start(vulnManager, pro);
             foreach (XmlNode host in hosts)
             {
 
@@ -96,7 +100,7 @@ public class NessusParser: INessusParser
                     if(item.SelectSingleNode("see_also") != null){refrences = item.SelectSingleNode("see_also").InnerText;}
                     
                     var vuln = new Vuln();
-                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, pro);
+                    vuln.FindingId = findingIds.Next();
                     vuln.Template = false;
                     vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginName));
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();

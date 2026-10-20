@@ -15,6 +15,8 @@ public class NucleiParser : INucleiParser
 {
     private ITargetManager targetManager = null;
     private IVulnManager vulnManager = null;
+    // The finding ids of the import in progress; the project's ids are read once per import, not once per vuln.
+    private FindingIdSequence findingIds = FindingIdSequence.Empty;
     private IVulnTargetManager vulnTargetManager = null;
     private IProjectManager projectManager = null;
 
@@ -29,11 +31,13 @@ public class NucleiParser : INucleiParser
 
     public void Parse(Guid? project, string user, string path)
     {
+        findingIds = FindingIdSequence.Empty;
         var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
         if (project != null)
         {
             var pro = projectManager.GetById((Guid)project);
+            findingIds = FindingIdGenerator.Start(vulnManager, pro);
             var fileContent = System.IO.File.ReadAllText(path);
             
             // Nuclei puede generar múltiples líneas JSON (JSONL) o un array JSON
@@ -204,7 +208,7 @@ public class NucleiParser : INucleiParser
                         vuln.CVSSVector = nucleiResult.Info.Classification.CvssVector;
                     }
 
-                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, vuln.Project);
+                    vuln.FindingId = findingIds.Next();
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
 

@@ -15,6 +15,8 @@ public class NiktoParser : INiktoParser
 {
     private ITargetManager targetManager = null;
     private IVulnManager vulnManager = null;
+    // The finding ids of the import in progress; the project's ids are read once per import, not once per vuln.
+    private FindingIdSequence findingIds = FindingIdSequence.Empty;
     private IVulnTargetManager vulnTargetManager = null;
     private IProjectManager projectManager = null;
 
@@ -29,11 +31,13 @@ public class NiktoParser : INiktoParser
 
     public void Parse(Guid? project, string user, string path)
     {
+        findingIds = FindingIdSequence.Empty;
         var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
         if (project != null)
         {
             var pro = projectManager.GetById((Guid)project);
+            findingIds = FindingIdGenerator.Start(vulnManager, pro);
             
             // Detectar formato (XML o JSON)
             var fileContent = System.IO.File.ReadAllText(path);
@@ -274,7 +278,7 @@ public class NiktoParser : INiktoParser
             CreatedDate = DateTime.Now.ToUniversalTime()
         };
 
-        vulnerability.FindingId = FindingIdGenerator.Next(vulnManager, vulnerability.Project);
+        vulnerability.FindingId = findingIds.Next();
         vulnManager.Add(vulnerability);
         vulnManager.Context.SaveChanges();
 

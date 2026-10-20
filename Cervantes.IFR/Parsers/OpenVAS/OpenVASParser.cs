@@ -14,6 +14,8 @@ public class OpenVASParser : IOpenVASParser
 {
     private ITargetManager targetManager = null;
     private IVulnManager vulnManager = null;
+    // The finding ids of the import in progress; the project's ids are read once per import, not once per vuln.
+    private FindingIdSequence findingIds = FindingIdSequence.Empty;
     private IVulnTargetManager vulnTargetManager = null;
     private IProjectManager projectManager = null;
 
@@ -28,6 +30,7 @@ public class OpenVASParser : IOpenVASParser
 
     public void Parse(Guid? project, string user, string path)
     {
+        findingIds = FindingIdSequence.Empty;
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
 
@@ -37,6 +40,7 @@ public class OpenVASParser : IOpenVASParser
         if (project != null)
         {
             var pro = projectManager.GetById((Guid)project);
+            findingIds = FindingIdGenerator.Start(vulnManager, pro);
             foreach (XmlNode result in results)
             {
                 string name = "";
@@ -242,7 +246,7 @@ public class OpenVASParser : IOpenVASParser
                     vuln.CVSS3 = cvssScore;
                 }
 
-                vuln.FindingId = FindingIdGenerator.Next(vulnManager, vuln.Project);
+                vuln.FindingId = findingIds.Next();
                 vulnManager.Add(vuln);
                 vulnManager.Context.SaveChanges();
 

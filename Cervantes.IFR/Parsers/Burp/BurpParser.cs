@@ -13,6 +13,8 @@ public class BurpParser: IBurpParser
 {
     private ITargetManager targetManager = null;
     private IVulnManager vulnManager = null;
+    // The finding ids of the import in progress; the project's ids are read once per import, not once per vuln.
+    private FindingIdSequence findingIds = FindingIdSequence.Empty;
     private IVulnTargetManager vulnTargetManager = null;
     //private readonly IHostingEnvironment _appEnvironment;
     private IProjectManager projectManager = null;
@@ -28,6 +30,7 @@ public class BurpParser: IBurpParser
     }
     public void Parse(Guid? project, string user, string path)
     {
+        findingIds = FindingIdSequence.Empty;
         // Burp stores HTML in CDATA, so InnerText is markup. Sanitize it, and do not HtmlDecode first:
         // payloads quoted in issueDetail are entity-encoded on purpose and must stay text.
         var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
@@ -40,6 +43,7 @@ public class BurpParser: IBurpParser
         if (project != null)
         {
             var pro = projectManager.GetById((Guid) project);
+            findingIds = FindingIdGenerator.Start(vulnManager, pro);
             foreach (XmlNode issue in issues)
             {
                 string name = "";
@@ -99,7 +103,7 @@ public class BurpParser: IBurpParser
 
 
                 var vuln = new Vuln();
-                vuln.FindingId = FindingIdGenerator.Next(vulnManager, pro);
+                vuln.FindingId = findingIds.Next();
                 vuln.Template = false;
                 vuln.Name = sanitizer.Sanitize(name);
                 vuln.CreatedDate = DateTime.Now.ToUniversalTime();
@@ -216,7 +220,6 @@ public class BurpParser: IBurpParser
                 if(issue.SelectSingleNode("poc") != null){poc = issue.SelectSingleNode("poc").InnerText;}
                 
                 var vuln = new Vuln();
-                var vulNum = vulnManager.GetAll().Count(x => x.ProjectId == project && x.Template == false) + 1;
                 vuln.Template = false;
                 vuln.Name = sanitizer.Sanitize(name);
                 vuln.FindingId = "No Project";

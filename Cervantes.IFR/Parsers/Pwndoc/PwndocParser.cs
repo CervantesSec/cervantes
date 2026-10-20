@@ -16,6 +16,8 @@ namespace Cervantes.IFR.Parsers.Pwndoc;
 public class PwndocParser: IPwndocParser
 {
     private IVulnManager vulnManager = null;
+    // The finding ids of the import in progress; the project's ids are read once per import, not once per vuln.
+    private FindingIdSequence findingIds = FindingIdSequence.Empty;
     private IProjectManager projectManager = null;
 
     public PwndocParser(IVulnManager vulnManager, IProjectManager projectManager )
@@ -26,6 +28,7 @@ public class PwndocParser: IPwndocParser
 
     public void Parse(Guid? project, string user, string path)
     {
+        findingIds = FindingIdSequence.Empty;
         using (var reader = new StreamReader(path)) {
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance) 
@@ -38,6 +41,7 @@ public class PwndocParser: IPwndocParser
             if (project != null)
             {
                 var pro = projectManager.GetById((Guid) project);
+                findingIds = FindingIdGenerator.Start(vulnManager, pro);
                 foreach (var vul in vulns)
                 {
                     int i = 0;
@@ -103,7 +107,7 @@ public class PwndocParser: IPwndocParser
                     vuln.ProofOfConcept = "No Data";
                     vuln.UserId = user;
                     vuln.CVSSVector = vul.Cvssv3 == null ? "No Data" : vul.Cvssv3;
-                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, pro);
+                    vuln.FindingId = findingIds.Next();
                     vuln.OWASPRisk = "No Data";
                     vuln.OWASPImpact = "No Data";
                     vuln.OWASPLikehood = "No Data";

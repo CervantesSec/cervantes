@@ -16,6 +16,8 @@ namespace Cervantes.IFR.Parsers.CSV;
 public class CsvParser: ICsvParser
 {
     private IVulnManager vulnManager = null;
+    // The finding ids of the import in progress; the project's ids are read once per import, not once per vuln.
+    private FindingIdSequence findingIds = FindingIdSequence.Empty;
     private IVulnCategoryManager vulnCategoryManager = null;
     private IProjectManager projectManager = null;
 
@@ -29,6 +31,7 @@ public class CsvParser: ICsvParser
 
     public void Parse(Guid? project, string user, string path)
     {
+        findingIds = FindingIdSequence.Empty;
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             Delimiter = ";"
@@ -45,6 +48,7 @@ public class CsvParser: ICsvParser
             if (project != null)
             {
                 var pro = projectManager.GetById((Guid) project);
+                findingIds = FindingIdGenerator.Start(vulnManager, pro);
                     
                 foreach (var vul in records)
                 {
@@ -83,7 +87,7 @@ public class CsvParser: ICsvParser
                     {
                         continue;
                     }
-                    vuln.FindingId = FindingIdGenerator.Next(vulnManager, pro);
+                    vuln.FindingId = findingIds.Next();
                     vulnManager.Add(vuln);
                     vulnManager.Context.SaveChanges();
                 }
