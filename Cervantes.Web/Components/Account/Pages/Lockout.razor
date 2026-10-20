@@ -1,0 +1,13 @@
+@page "/Account/Lockout"
+@using Cervantes.Web.Components.Layout
+@using Cervantes.Web.Localization
+@using Microsoft.Extensions.Localization
+@layout LoginLayout
+@inject IStringLocalizer<Resource> localizer
+
+@* The external, two-factor and LDAP logins, and RefreshSignIn, send a locked user here. *@
+<MudContainer>
+    <MudText Typo="Typo.h4" Color="Color.Error" Class="my-4"><MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Error" Size="Size.Medium"></MudIcon> @localizer["locked"]</MudText>
+    <MudText Typo="Typo.body1" Class="my-4">@localizer["accountLocked"]</MudText>
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" Href="Account/Login">@localizer["login"]</MudButton>
+</MudContainer>
