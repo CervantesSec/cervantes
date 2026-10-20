@@ -742,9 +742,9 @@ public class ReportController : ControllerBase
                 <head>
                     <meta charset='utf-8'/>
                     <title></title>
-                    <style>" + prismCss + @"</style>
                 </head>
                 <body>
+                    <style>" + prismCss + @"</style>
                     <header>
                         {{HeaderComponents}}
                     </header>
@@ -1572,6 +1572,18 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                             // Reconstruir el atributo style
                                             img.SetAttributeValue("style", 
                                                 string.Join("; ", styleDict.Select(kv => $"{kv.Key}: {kv.Value}")));
+                                        }
+                                    }
+
+                                    // HtmlToOpenXml writes a <style> in the body as document text, and Word ignores
+                                    // stylesheets anyway; the report's style now lives in the body (it used to sit in
+                                    // the head, which the converter skipped).
+                                    var styleNodes = htmlDoc3.DocumentNode.SelectNodes("//style");
+                                    if (styleNodes != null)
+                                    {
+                                        foreach (var styleNode in styleNodes)
+                                        {
+                                            styleNode.Remove();
                                         }
                                     }
 

@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Security.Claims;
 using System.Web;
 using BlazorMonaco.Editor;
@@ -152,7 +153,8 @@ public partial class ReportDialog: ComponentBase
             model.Description = report.Description;
             model.Language = report.Language;
             model.Version = report.Version;
-            model.HtmlCode = report.HtmlCode;
+            // Reports generated before the style moved into the body would lose it on the editor's first save.
+            model.HtmlCode = ReportHtml.MoveHeadStylesToBody(report.HtmlCode);
         }
         MudDialog.StateHasChanged();
 
