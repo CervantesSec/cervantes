@@ -381,6 +381,7 @@ public class ProjectController : ControllerBase
         {
             if (ModelState.IsValid)
             {
+                var added = 0;
                 foreach (var item in model.MemberId)
                 {
                     var result = projectUserManager.GetAll()
@@ -395,6 +396,7 @@ public class ProjectController : ControllerBase
                         };
                         await projectUserManager.AddAsync(user);
                         await projectUserManager.Context.SaveChangesAsync();
+                        added++;
 
 
                         _logger.LogInformation("Project member added successfully. User: {0}",
@@ -409,6 +411,12 @@ public class ProjectController : ControllerBase
                         }
                         
                     }
+                }
+
+                // Existing members are skipped, so a request that only names them changed nothing; the caller is told.
+                if (added == 0 && model.MemberId.Any())
+                {
+                    return Conflict("All selected users are already members of the project");
                 }
                 
                 return Created();

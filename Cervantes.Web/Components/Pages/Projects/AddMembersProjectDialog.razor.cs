@@ -77,7 +77,7 @@ public partial class AddMembersProjectDialog: ComponentBase
                     MudDialog.Close(DialogResult.Ok(true));
                 
             }
-            else if (response.ToString() == "Microsoft.AspNetCore.Mvc.CreatedObjectResult")
+            else if (response is ConflictObjectResult)
             {
                 Snackbar.Add(@localizer["userExists"], Severity.Info);
                 MudDialog.Close(DialogResult.Ok(true));
