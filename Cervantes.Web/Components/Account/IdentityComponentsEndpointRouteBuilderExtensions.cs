@@ -56,6 +56,8 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
         ArgumentNullException.ThrowIfNull(endpoints);
 
         var accountGroup = endpoints.MapGroup("/Account");
+        // nlog.config only stores "Cervantes.*" categories; an ILogger<Program> would drop the LDAP login events.
+        var ldapLogger = endpoints.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Cervantes.Web.Ldap");
 
         accountGroup.MapPost("/PerformExternalLogin", (
             HttpContext context,
@@ -83,7 +85,6 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
             [FromServices] ILdapService ldapService,
             [FromServices] ILdapConfiguration ldapConfiguration,
             [FromServices] IAuthUsersAdminService authUsersAdminService,
-            [FromServices] ILogger<Program> logger,
             [FromForm] string username,
             [FromForm] string password,
             [FromForm] string? returnUrl) =>
@@ -115,6 +116,14 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
                 var existingUser = await userManager.FindByNameAsync(username);
                 if (existingUser != null)
                 {
+                    // LDAP only proves the directory password; a user locked in Cervantes stays out, as the password,
+                    // 2FA and external logins already do. Nothing is updated for a locked user.
+                    if (await userManager.IsLockedOutAsync(existingUser))
+                    {
+                        ldapLogger.LogWarning("LDAP login refused: user {UserId} is locked", existingUser.Id);
+                        return TypedResults.LocalRedirect("~/Account/Lockout");
+                    }
+
                     // Mark as external and assign roles if needed
                     if (!existingUser.ExternalLogin)
                     {
@@ -132,7 +141,7 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
 
                     await signInManager.SignInAsync(existingUser, isPersistent: true);
                     
-                    logger.LogInformation("LDAP Login successful for user {Username}", username);
+                    ldapLogger.LogInformation("LDAP Login successful for user {Username}", username);
                     return TypedResults.LocalRedirect(target);
                 }
 
@@ -160,7 +169,7 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
 
                     await signInManager.SignInAsync(user, isPersistent: true);
                     
-                    logger.LogInformation("LDAP Login successful for new user {Username}", username);
+                    ldapLogger.LogInformation("LDAP Login successful for new user {Username}", username);
                     return TypedResults.LocalRedirect(target);
                 }
 
@@ -168,7 +177,7 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error during LDAP login for user {Username}", username);
+                ldapLogger.LogError(ex, "Error during LDAP login for user {Username}", username);
                 return TypedResults.LocalRedirect("~/Account/LdapLogin?errorMessage=An%20error%20occurred%20during%20authentication" + returnQuery);
             }
         });
