@@ -1424,8 +1424,9 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                         case ReportFileType.Html:
                             string fileName = report.Name + "_" + report.Version + ".html";
 
-                            var fileBytes = Encoding.ASCII.GetBytes(report.HtmlCode);
-                            var mimeType = "text/html";
+                            // UTF-8, not ASCII: ASCII turned every accented letter into '?'.
+                            var fileBytes = Encoding.UTF8.GetBytes(ReportHtml.EnsureDocument(report.HtmlCode));
+                            var mimeType = "text/html; charset=utf-8";
                             _logger.LogInformation("Report downloaded successfully. User: {0}",
                                 aspNetUserId);
                             return new FileContentResult(fileBytes, mimeType)
@@ -1610,14 +1611,9 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                 }
                             }
 
-                            string mainContent = htmlDoc2.DocumentNode.OuterHtml;
-                            // An edited report is stored as a body fragment (the editor drops <html>, <head> and
-                            // <body>), so it gets a document skeleton: the page layout, header and footer below are
-                            // injected relative to <body>.
-                            if (!Regex.IsMatch(mainContent, @"<body[\s>]", RegexOptions.IgnoreCase))
-                            {
-                                mainContent = "<html><head></head><body>" + mainContent + "</body></html>";
-                            }
+                            // The page layout, header and footer below are injected relative to <body>, which an
+                            // edited report no longer has.
+                            string mainContent = ReportHtml.EnsureDocument(htmlDoc2.DocumentNode.OuterHtml);
 
                             string cssStyle = @"
                                 <style>
