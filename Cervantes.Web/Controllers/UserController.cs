@@ -478,8 +478,13 @@ public class UserController: ControllerBase
                     user.Avatar = "Attachments/Users/" + unique;
                     
                 }
-                user.UserName = sanitizer.Sanitize(model.Email);
-                user.NormalizedUserName = sanitizer.Sanitize(model.Email.ToUpper());
+                // A local account signs in with its email, so its user name follows the email. An LDAP account's user name
+                // is its directory uid, which the LDAP login looks it up by; renaming it would lock the user out.
+                if (string.Equals(user.UserName, user.Email, StringComparison.OrdinalIgnoreCase))
+                {
+                    user.UserName = sanitizer.Sanitize(model.Email);
+                    user.NormalizedUserName = sanitizer.Sanitize(model.Email.ToUpper());
+                }
                 user.Email = sanitizer.Sanitize(model.Email);
                 user.NormalizedEmail = sanitizer.Sanitize(model.Email.ToUpper());
                 // A new stamp signs the user out of every session within the validation interval, so only an edit that
