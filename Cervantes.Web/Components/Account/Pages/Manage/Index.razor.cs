@@ -46,7 +46,14 @@ public partial class Index: ComponentBase
     private async Task<bool> SessionIsCurrent()
     {
         var principal = (await AuthState.GetAuthenticationStateAsync()).User;
-        return await SignInManager.ValidateSecurityStampAsync(principal) != null;
+        if (await SignInManager.ValidateSecurityStampAsync(principal) != null)
+        {
+            return true;
+        }
+
+        // This circuit's own change (enabling two-factor, before the user leaves the recovery codes) leaves its
+        // principal with the old stamp; the session is still current while the stored stamp is the one that change made.
+        return ownStamp != null && await StoredStampAsync() == ownStamp;
     }
 
     // Set after this session's own two-factor change, whose new stamp still needs a cookie once the recovery codes
