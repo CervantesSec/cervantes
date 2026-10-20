@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -172,16 +173,9 @@ public partial class UserDialog: ComponentBase
             model.ImagePath = user.Avatar;
             model.TwoFactorEnabled = user.TwoFactorEnabled;
             model.ExternalLogin = user.ExternalLogin;
-            bool locked = false;
-            if (user.LockoutEnd != null)
-            {
-                locked = true;
-            }
-            else
-            {
-                locked = false;
-            }
-            model.Lockout = locked;
+            // An expired lock (from failed logins) is not shown as locked: saving the form would otherwise lock the user
+            // for good and sign them out.
+            model.Lockout = UserSecurity.IsLocked(user, DateTimeOffset.UtcNow);
             if (user.ClientId != null)
             {
                 model.ClientId = user.ClientId;

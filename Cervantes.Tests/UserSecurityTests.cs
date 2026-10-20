@@ -135,4 +135,28 @@ public class UserSecurityTests
 
         Assert.False(Changes(User(), model));
     }
+
+    [Fact]
+    public void IsLocked_ExpiredLockIsNotLocked()
+    {
+        var user = User();
+        user.LockoutEnd = Now.AddMinutes(-1);
+
+        Assert.False(UserSecurity.IsLocked(user, Now));
+    }
+
+    [Fact]
+    public void IsLocked_FutureLockIsLocked()
+    {
+        var user = User();
+        user.LockoutEnd = Now.AddMinutes(1);
+
+        Assert.True(UserSecurity.IsLocked(user, Now));
+    }
+
+    [Fact]
+    public void IsLocked_NoLock()
+    {
+        Assert.False(UserSecurity.IsLocked(User(), Now));
+    }
 }

@@ -13,7 +13,7 @@ public static class UserSecurity
     public static bool ChangesSignIn(ApplicationUser user, UserEditViewModel model, IReadOnlyCollection<string> currentRoles,
         DateTimeOffset now)
     {
-        var locked = user.LockoutEnd != null && user.LockoutEnd > now;
+        var locked = IsLocked(user, now);
         return !string.Equals(user.Email, model.Email, StringComparison.OrdinalIgnoreCase)
                || !string.IsNullOrWhiteSpace(model.Password)
                || user.TwoFactorEnabled != model.TwoFactorEnabled
@@ -21,4 +21,10 @@ public static class UserSecurity
                || locked != model.Lockout
                || (!string.IsNullOrEmpty(model.Role) && !currentRoles.Contains(model.Role));
     }
+
+    /// <summary>
+    /// Whether the user is locked now. A lock from failed logins leaves its past end date behind, so a set LockoutEnd
+    /// alone does not mean locked.
+    /// </summary>
+    public static bool IsLocked(ApplicationUser user, DateTimeOffset now) => user.LockoutEnd != null && user.LockoutEnd > now;
 }
