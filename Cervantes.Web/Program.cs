@@ -79,8 +79,24 @@ builder.Services.AddAuthentication(options =>
         o.ExpireTimeSpan = TimeSpan.FromMinutes(240);
     })
     .AddCookie(IdentityConstants.ExternalScheme)
-    // SecurityStampValidator signs this scheme out when it rejects a cookie; without it the rejection throws.
-    .AddCookie(IdentityConstants.TwoFactorRememberMeScheme);
+    // The two-factor cookies, as AddIdentityCookies registers them. The login stores the half-signed-in user in the
+    // user id cookie between the password and the code (without it a two-factor user was sent back to the login), and
+    // "remember this machine" uses the remember-me cookie, which a password change must end. SecurityStampValidator
+    // also signs the remember-me scheme out when it rejects an application cookie.
+    .AddCookie(IdentityConstants.TwoFactorRememberMeScheme, o =>
+    {
+        o.Cookie.Name = IdentityConstants.TwoFactorRememberMeScheme;
+        o.Events = new CookieAuthenticationEvents
+        {
+            OnValidatePrincipal = SecurityStampValidator.ValidateAsync<ITwoFactorSecurityStampValidator>
+        };
+    })
+    .AddCookie(IdentityConstants.TwoFactorUserIdScheme, o =>
+    {
+        o.Cookie.Name = IdentityConstants.TwoFactorUserIdScheme;
+        o.Events = new CookieAuthenticationEvents { OnRedirectToReturnUrl = _ => Task.CompletedTask };
+        o.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    });
 
 if (builder.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
 {
