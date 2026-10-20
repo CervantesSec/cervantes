@@ -38,7 +38,9 @@ public static class PeriodicCookieEvent
             var identity = new ClaimsIdentity(newClaims, "Cookie");
             var newPrincipal = new ClaimsPrincipal(identity);
             context.ReplacePrincipal(newPrincipal);
-            context.ShouldRenew = true;
+            // The cookie is not renewed here. No code adds the refresh-time claim, so this runs on every request, and a
+            // renewal on every request would keep resetting the cookie's issue time, which is what the security stamp
+            // validator measures its interval from: a locked user who kept browsing would never be checked.
         }
     }
 
