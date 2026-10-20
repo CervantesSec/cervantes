@@ -164,7 +164,8 @@ public class BackupController : ControllerBase
                     EndDate = x.EndDate,
                     Score = x.Score,
                     ExecutiveSummary = x.ExecutiveSummary,
-                    FindingsId = x.FindingsId
+                    FindingsId = x.FindingsId,
+                    BusinessImpact = x.BusinessImpact
                 }).ToList(),
                 ProjectUsers = projectUserManager.GetAll().Select(x => new ProjectUser
                 {
@@ -286,7 +287,8 @@ public class BackupController : ControllerBase
                     EndDate = X.EndDate,
                     Name = X.Name,
                     Description = X.Description,
-                    Status = X.Status
+                    Status = X.Status,
+                    ClosedDate = X.ClosedDate
                 }).ToList(),
                 TaskAttachments = taskAttachmentManager.GetAll().Select(x => new TaskAttachment
                 {
@@ -348,7 +350,11 @@ public class BackupController : ControllerBase
                     OWASPImpact = x.OWASPImpact,
                     OWASPRisk = x.OWASPRisk,
                     OWASPVector = x.OWASPVector,
-                    JiraCreated = x.JiraCreated
+                    JiraCreated = x.JiraCreated,
+                    Language = x.Language,
+                    ModifiedDate = x.ModifiedDate,
+                    MitreValues = x.MitreValues,
+                    MitreTechniques = x.MitreTechniques
                 }).ToList(),
                 VulnAttachments = vulnAttachmentManager.GetAll().Select(x => new VulnAttachment
                 {
@@ -364,7 +370,8 @@ public class BackupController : ControllerBase
                     Name = x.Name,
                     Description = x.Description,
                     UserId = x.UserId,
-                    VulnId = x.VulnId
+                    VulnId = x.VulnId,
+                    Visibility = x.Visibility
                 }).ToList(),
                 VulnTargets = vulnTargetManager.GetAll().Select(x => new VulnTargets
                 {
@@ -414,6 +421,7 @@ public class BackupController : ControllerBase
                 Mastgs = mastgManager.GetAll().Select(mastg => new MASTG
                 {
                     Id = mastg.Id,
+                    MobilePlatform = mastg.MobilePlatform,
                     TargetId = mastg.TargetId,
                     UserId = mastg.UserId,
                     ProjectId = mastg.ProjectId,
@@ -1170,15 +1178,29 @@ public class BackupController : ControllerBase
                 await projectNoteManager.Context.SaveChangesAsync();
             }
 
-            /*if (backupViewModel.ProjectUsers != null)
+            // Members who are not admins only reach a project through these rows.
+            if (backupViewModel.ProjectUsers != null)
             {
-                foreach (var user in backupViewModel.ProjectUsers)
+                foreach (var member in backupViewModel.ProjectUsers)
                 {
-                    projectUserManager.Add(user);
-                }
-                projectUserManager.Context.SaveChanges();
+                    if (projectUserManager.GetById(member.Id) != null
+                        || projectUserManager.GetAll().Any(x => x.ProjectId == member.ProjectId && x.UserId == member.UserId))
+                    {
+                        continue;
+                    }
 
-            }*/
+                    if (projectManager.GetById(member.ProjectId) == null || await _userManager.FindByIdAsync(member.UserId) == null)
+                    {
+                        _logger.LogWarning("Restore skipped project member {MemberId}: its project or user is missing. User: {UserId}",
+                            member.Id, aspNetUserId);
+                        continue;
+                    }
+
+                    await projectUserManager.AddAsync(member);
+                }
+
+                await projectUserManager.Context.SaveChangesAsync();
+            }
 
             if (backupViewModel.Documents != null)
             {
@@ -1331,14 +1353,15 @@ public class BackupController : ControllerBase
                         continue;
                     }
                     
-                    task.CreatedUserId = aspNetUserId;
+                    // The creator and the assignee are kept when they exist here; a task with no assignee stays so.
+                    if (string.IsNullOrEmpty(task.CreatedUserId) || await _userManager.FindByIdAsync(task.CreatedUserId) == null)
+                    {
+                        task.CreatedUserId = aspNetUserId;
+                    }
 
-                    // Check if the AsignedUserId exists in the AspNetUsers table
-                    var userExists = await _userManager.FindByIdAsync(task.AsignedUserId);
-                    if (userExists == null)
+                    if (!string.IsNullOrEmpty(task.AsignedUserId) && await _userManager.FindByIdAsync(task.AsignedUserId) == null)
                     {
                         task.AsignedUserId = aspNetUserId;
-
                     }
 
 
