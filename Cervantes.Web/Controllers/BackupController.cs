@@ -936,7 +936,25 @@ public class BackupController : ControllerBase
             var zipTmpDir = Directory.CreateTempSubdirectory();
             string zipPath = zipTmpDir.FullName + "/" + @"result" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".zip";
 
-            ZipFile.CreateFromDirectory(startPath, zipPath);
+            // Only the folders that keep user files; entry names are relative to Attachments with "/", the layout the
+            // whole-folder zip had, so older attachment backups still restore.
+            using (var archive = ZipFile.Open(zipPath, ZipArchiveMode.Create))
+            {
+                foreach (var folder in AttachmentArchive.Folders)
+                {
+                    var folderPath = Path.Combine(startPath, folder);
+                    if (!Directory.Exists(folderPath))
+                    {
+                        continue;
+                    }
+
+                    foreach (var file in Directory.EnumerateFiles(folderPath, "*", SearchOption.AllDirectories))
+                    {
+                        var entryName = Path.GetRelativePath(startPath, file).Replace('\\', '/');
+                        archive.CreateEntryFromFile(file, entryName);
+                    }
+                }
+            }
 
             /*const string contentType ="application/zip";
             HttpContext.Response.ContentType = "application/zip";*/
@@ -977,10 +995,35 @@ public class BackupController : ControllerBase
                 return BadRequest("Invalid file type");
             }
 
-            // Extract straight from memory, so a failed restore leaves no copy of the upload on disk.
+            // Extract straight from memory, so a failed restore leaves no copy of the upload on disk. Only files inside
+            // the attachment folders are written; anything else in the zip is skipped.
+            var root = Path.GetFullPath(extractPath);
+            var skipped = 0;
             using (var archive = new ZipArchive(new MemoryStream(model.FileContent), ZipArchiveMode.Read))
             {
-                archive.ExtractToDirectory(extractPath, overwriteFiles: true);
+                foreach (var entry in archive.Entries)
+                {
+                    if (entry.FullName.EndsWith('/') || entry.FullName.EndsWith('\\'))
+                    {
+                        continue;
+                    }
+
+                    var destination = Path.GetFullPath(Path.Combine(root, entry.FullName.Replace('\\', '/')));
+                    if (!AttachmentArchive.IsRestorable(entry.FullName) || !destination.StartsWith(root, StringComparison.Ordinal))
+                    {
+                        skipped++;
+                        continue;
+                    }
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                    entry.ExtractToFile(destination, overwrite: true);
+                }
+            }
+
+            if (skipped > 0)
+            {
+                _logger.LogWarning("Attachment restore skipped {Count} entries outside the attachment folders. User: {UserId}",
+                    skipped, aspNetUserId);
             }
 
             _logger.LogInformation("Attachments restored successfully. User: {0}",
