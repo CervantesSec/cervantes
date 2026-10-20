@@ -8,7 +8,7 @@ namespace Cervantes.CORE.Entities;
 /// <summary>
 /// Defines a custom field schema that can be used for targets
 /// </summary>
-public class TargetCustomField
+public class TargetCustomField : ICustomFieldDefinition
 {
     /// <summary>
     /// Unique identifier for the custom field

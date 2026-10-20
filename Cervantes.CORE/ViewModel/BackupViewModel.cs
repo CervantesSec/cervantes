@@ -40,5 +40,20 @@ public class BackupViewModel
     public IEnumerable<KnowledgeBaseCategories> KnowledgeBaseCategories { get; set; }
     public IEnumerable<KnowledgeBase> KnowledgeBase { get; set; }
 
+    // Added after the first backups: older files leave these null.
+    public IEnumerable<VulnCustomField>? VulnCustomFields { get; set; }
+    public IEnumerable<VulnCustomFieldValue>? VulnCustomFieldValues { get; set; }
+    public IEnumerable<ProjectCustomField>? ProjectCustomFields { get; set; }
+    public IEnumerable<ProjectCustomFieldValue>? ProjectCustomFieldValues { get; set; }
+    public IEnumerable<TargetCustomField>? TargetCustomFields { get; set; }
+    public IEnumerable<TargetCustomFieldValue>? TargetCustomFieldValues { get; set; }
+    public IEnumerable<ClientCustomField>? ClientCustomFields { get; set; }
+    public IEnumerable<ClientCustomFieldValue>? ClientCustomFieldValues { get; set; }
+    public IEnumerable<VulnCwe>? VulnCwes { get; set; }
+    public IEnumerable<RssCategory>? RssCategories { get; set; }
+    public IEnumerable<RssSource>? RssSources { get; set; }
+    public IEnumerable<KnowledgeBaseTags>? KnowledgeBaseTags { get; set; }
+    public IEnumerable<KnowledgeBaseTagLink>? KnowledgeBaseTagLinks { get; set; }
+
 
 }

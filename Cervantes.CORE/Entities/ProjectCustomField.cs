@@ -8,7 +8,7 @@ namespace Cervantes.CORE.Entities;
 /// <summary>
 /// Defines a custom field schema that can be used for projects
 /// </summary>
-public class ProjectCustomField
+public class ProjectCustomField : ICustomFieldDefinition
 {
     /// <summary>
     /// Unique identifier for the custom field

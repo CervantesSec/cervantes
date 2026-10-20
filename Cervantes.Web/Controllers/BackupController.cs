@@ -14,6 +14,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Task = Cervantes.CORE.Entities.Task;
 
@@ -133,6 +134,7 @@ public class BackupController : ControllerBase
     {
         try
         {
+            var db = userManager.Context;
             BackupViewModel model = new BackupViewModel
             {
                 Users = userManager.GetAll().ToList(),
@@ -877,6 +879,22 @@ public class BackupController : ControllerBase
                     UpdatedUserId = x.UpdatedUserId,
                     CategoryId = x.CategoryId,
                 }),
+                // The context has no lazy loading, so untracked rows serialize without their navigations.
+                VulnCustomFields = db.Set<VulnCustomField>().AsNoTracking().ToList(),
+                VulnCustomFieldValues = db.Set<VulnCustomFieldValue>().AsNoTracking().ToList(),
+                ProjectCustomFields = db.Set<ProjectCustomField>().AsNoTracking().ToList(),
+                ProjectCustomFieldValues = db.Set<ProjectCustomFieldValue>().AsNoTracking().ToList(),
+                TargetCustomFields = db.Set<TargetCustomField>().AsNoTracking().ToList(),
+                TargetCustomFieldValues = db.Set<TargetCustomFieldValue>().AsNoTracking().ToList(),
+                ClientCustomFields = db.Set<ClientCustomField>().AsNoTracking().ToList(),
+                ClientCustomFieldValues = db.Set<ClientCustomFieldValue>().AsNoTracking().ToList(),
+                VulnCwes = db.Set<VulnCwe>().AsNoTracking().ToList(),
+                RssCategories = db.Set<RssCategory>().AsNoTracking().ToList(),
+                // News is fetched again from the sources, so it is not kept.
+                RssSources = db.Set<RssSource>().AsNoTracking().ToList(),
+                KnowledgeBaseTags = db.Set<KnowledgeBaseTags>().AsNoTracking().Select(x => new KnowledgeBaseTags { Id = x.Id, Name = x.Name }).ToList(),
+                KnowledgeBaseTagLinks = db.Set<KnowledgeBase>().AsNoTracking()
+                    .SelectMany(k => k.Tags.Select(t => new KnowledgeBaseTagLink { NoteId = k.Id, TagId = t.Id })).ToList(),
             };
 
             var options = new JsonSerializerOptions { WriteIndented = true };
@@ -1663,6 +1681,22 @@ public class BackupController : ControllerBase
                 await knowledgeBaseManager.Context.SaveChangesAsync();
             }
 
+            var vulnFieldMap = await RestoreCustomFieldsAsync(backupViewModel.VulnCustomFields, users);
+            await RestoreCustomFieldValuesAsync<VulnCustomFieldValue, Vuln, VulnCustomField>(backupViewModel.VulnCustomFieldValues,
+                vulnFieldMap, x => x.VulnId, x => x.VulnCustomFieldId, (x, id) => x.VulnCustomFieldId = id, users);
+            var projectFieldMap = await RestoreCustomFieldsAsync(backupViewModel.ProjectCustomFields, users);
+            await RestoreCustomFieldValuesAsync<ProjectCustomFieldValue, Project, ProjectCustomField>(backupViewModel.ProjectCustomFieldValues,
+                projectFieldMap, x => x.ProjectId, x => x.ProjectCustomFieldId, (x, id) => x.ProjectCustomFieldId = id, users);
+            var targetFieldMap = await RestoreCustomFieldsAsync(backupViewModel.TargetCustomFields, users);
+            await RestoreCustomFieldValuesAsync<TargetCustomFieldValue, Target, TargetCustomField>(backupViewModel.TargetCustomFieldValues,
+                targetFieldMap, x => x.TargetId, x => x.TargetCustomFieldId, (x, id) => x.TargetCustomFieldId = id, users);
+            var clientFieldMap = await RestoreCustomFieldsAsync(backupViewModel.ClientCustomFields, users);
+            await RestoreCustomFieldValuesAsync<ClientCustomFieldValue, CORE.Entities.Client, ClientCustomField>(backupViewModel.ClientCustomFieldValues,
+                clientFieldMap, x => x.ClientId, x => x.ClientCustomFieldId, (x, id) => x.ClientCustomFieldId = id, users);
+            await RestoreVulnCwesAsync(backupViewModel.VulnCwes);
+            await RestoreRssAsync(backupViewModel.RssCategories, backupViewModel.RssSources, users);
+            await RestoreKnowledgeBaseTagsAsync(backupViewModel.KnowledgeBaseTags, backupViewModel.KnowledgeBaseTagLinks);
+
             await transaction.CommitAsync();
             // From here the data is in: nothing below may roll back or turn the restore into an error.
             await transaction.DisposeAsync();
@@ -1734,6 +1768,220 @@ public class BackupController : ControllerBase
                 await transaction.DisposeAsync();
             }
         }
+    }
+
+    /// <summary>
+    /// Restores one kind of custom field definition. The name is unique, so a definition whose name already exists here
+    /// is not inserted: the returned map sends its values to the existing definition.
+    /// </summary>
+    private async Task<Dictionary<Guid, Guid>> RestoreCustomFieldsAsync<TField>(IEnumerable<TField>? rows, BackupUserMap users)
+        where TField : class, ICustomFieldDefinition
+    {
+        if (rows == null)
+        {
+            return new Dictionary<Guid, Guid>();
+        }
+
+        var db = userManager.Context;
+        var existing = db.Set<TField>().AsNoTracking().ToList();
+        var map = BackupKeyMatch.Match(rows, existing, x => x.Id, x => x.Name);
+        var existingIds = existing.Select(x => x.Id).ToHashSet();
+        foreach (var field in rows)
+        {
+            if (existingIds.Contains(field.Id) || map.ContainsKey(field.Id))
+            {
+                continue;
+            }
+
+            field.Name = sanitizer.Sanitize(field.Name);
+            field.Label = sanitizer.Sanitize(field.Label);
+            field.Options = sanitizer.Sanitize(field.Options);
+            field.DefaultValue = sanitizer.Sanitize(field.DefaultValue);
+            field.Description = sanitizer.Sanitize(field.Description);
+            field.UserId = await users.ResolveAsync(field.UserId);
+            db.Set<TField>().Add(field);
+        }
+
+        await db.SaveChangesAsync();
+        return map;
+    }
+
+    /// <summary>
+    /// Restores the values of one kind of custom field. A value is skipped when its row, its field or its owner is
+    /// missing, or when the owner already has a value for that field (the pair is unique).
+    /// </summary>
+    private async System.Threading.Tasks.Task RestoreCustomFieldValuesAsync<TValue, TOwner, TField>(IEnumerable<TValue>? rows,
+        Dictionary<Guid, Guid> fieldMap, Func<TValue, Guid> ownerId, Func<TValue, Guid> fieldId, Action<TValue, Guid> setFieldId,
+        BackupUserMap users)
+        where TValue : class, ICustomFieldValue where TOwner : class where TField : class
+    {
+        if (rows == null)
+        {
+            return;
+        }
+
+        var db = userManager.Context;
+        var existing = db.Set<TValue>().AsNoTracking().ToList();
+        var existingIds = existing.Select(x => x.Id).ToHashSet();
+        var pairs = existing.Select(x => (ownerId(x), fieldId(x))).ToHashSet();
+        foreach (var value in rows)
+        {
+            if (existingIds.Contains(value.Id))
+            {
+                continue;
+            }
+
+            if (fieldMap.TryGetValue(fieldId(value), out var mapped))
+            {
+                setFieldId(value, mapped);
+            }
+
+            if (await db.Set<TOwner>().FindAsync(ownerId(value)) == null || await db.Set<TField>().FindAsync(fieldId(value)) == null
+                || !pairs.Add((ownerId(value), fieldId(value))))
+            {
+                continue;
+            }
+
+            value.Value = sanitizer.Sanitize(value.Value);
+            value.UserId = await users.ResolveAsync(value.UserId);
+            db.Set<TValue>().Add(value);
+        }
+
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>Restores the vuln-CWE links. The CWE ids are the CWE numbers, the same on every instance.</summary>
+    private async System.Threading.Tasks.Task RestoreVulnCwesAsync(IEnumerable<VulnCwe>? rows)
+    {
+        if (rows == null)
+        {
+            return;
+        }
+
+        var db = userManager.Context;
+        var existing = db.Set<VulnCwe>().AsNoTracking().ToList();
+        var existingIds = existing.Select(x => x.Id).ToHashSet();
+        var pairs = existing.Select(x => (x.VulnId, x.CweId)).ToHashSet();
+        foreach (var link in rows)
+        {
+            if (existingIds.Contains(link.Id) || await db.Set<Vuln>().FindAsync(link.VulnId) == null
+                || await db.Set<Cwe>().FindAsync(link.CweId) == null || !pairs.Add((link.VulnId, link.CweId)))
+            {
+                continue;
+            }
+
+            db.Set<VulnCwe>().Add(link);
+        }
+
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Restores the RSS categories (matched by name) and sources. A source's image is stored as base64 data, not as a
+    /// file path, so it is kept as it is.
+    /// </summary>
+    private async System.Threading.Tasks.Task RestoreRssAsync(IEnumerable<RssCategory>? categories, IEnumerable<RssSource>? sources,
+        BackupUserMap users)
+    {
+        var db = userManager.Context;
+        var categoryMap = new Dictionary<Guid, Guid>();
+        if (categories != null)
+        {
+            var existing = db.Set<RssCategory>().AsNoTracking().ToList();
+            categoryMap = BackupKeyMatch.Match(categories, existing, x => x.Id, x => x.Name);
+            var existingIds = existing.Select(x => x.Id).ToHashSet();
+            foreach (var category in categories)
+            {
+                if (existingIds.Contains(category.Id) || categoryMap.ContainsKey(category.Id))
+                {
+                    continue;
+                }
+
+                category.Name = sanitizer.Sanitize(category.Name);
+                category.Description = sanitizer.Sanitize(category.Description);
+                db.Set<RssCategory>().Add(category);
+            }
+
+            await db.SaveChangesAsync();
+        }
+
+        if (sources == null)
+        {
+            return;
+        }
+
+        foreach (var source in sources)
+        {
+            if (await db.Set<RssSource>().FindAsync(source.Id) != null)
+            {
+                continue;
+            }
+
+            if (categoryMap.TryGetValue(source.CategoryId, out var mapped))
+            {
+                source.CategoryId = mapped;
+            }
+
+            if (await db.Set<RssCategory>().FindAsync(source.CategoryId) == null)
+            {
+                continue;
+            }
+
+            source.Name = sanitizer.Sanitize(source.Name);
+            source.UserId = await users.ResolveAsync(source.UserId);
+            db.Set<RssSource>().Add(source);
+        }
+
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>Restores the knowledge base tags (matched by name) and their links to pages.</summary>
+    private async System.Threading.Tasks.Task RestoreKnowledgeBaseTagsAsync(IEnumerable<KnowledgeBaseTags>? tags,
+        IEnumerable<KnowledgeBaseTagLink>? links)
+    {
+        var db = userManager.Context;
+        var tagMap = new Dictionary<Guid, Guid>();
+        if (tags != null)
+        {
+            var existing = db.Set<KnowledgeBaseTags>().AsNoTracking().ToList();
+            tagMap = BackupKeyMatch.Match(tags, existing, x => x.Id, x => x.Name);
+            var existingIds = existing.Select(x => x.Id).ToHashSet();
+            foreach (var tag in tags)
+            {
+                if (existingIds.Contains(tag.Id) || tagMap.ContainsKey(tag.Id))
+                {
+                    continue;
+                }
+
+                db.Set<KnowledgeBaseTags>().Add(new KnowledgeBaseTags { Id = tag.Id, Name = sanitizer.Sanitize(tag.Name) });
+            }
+
+            await db.SaveChangesAsync();
+        }
+
+        if (links == null)
+        {
+            return;
+        }
+
+        foreach (var link in links)
+        {
+            var tagId = tagMap.TryGetValue(link.TagId, out var mapped) ? mapped : link.TagId;
+            var page = await db.Set<KnowledgeBase>().Include(x => x.Tags).FirstOrDefaultAsync(x => x.Id == link.NoteId);
+            var tag = await db.Set<KnowledgeBaseTags>().FindAsync(tagId);
+            if (page == null || tag == null)
+            {
+                continue;
+            }
+
+            page.Tags ??= new List<KnowledgeBaseTags>();
+            if (page.Tags.All(x => x.Id != tagId))
+            {
+                page.Tags.Add(tag);
+            }
+        }
+
+        await db.SaveChangesAsync();
     }
 
     /// <summary>

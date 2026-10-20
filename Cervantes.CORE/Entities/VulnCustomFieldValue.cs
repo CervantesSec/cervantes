@@ -8,7 +8,7 @@ namespace Cervantes.CORE.Entities;
 /// <summary>
 /// Stores the actual value of a custom field for a specific vulnerability
 /// </summary>
-public class VulnCustomFieldValue
+public class VulnCustomFieldValue : ICustomFieldValue
 {
     /// <summary>
     /// Unique identifier for the custom field value

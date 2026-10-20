@@ -8,7 +8,7 @@ namespace Cervantes.CORE.Entities;
 /// <summary>
 /// Defines a custom field schema that can be used for vulnerabilities
 /// </summary>
-public class VulnCustomField
+public class VulnCustomField : ICustomFieldDefinition
 {
     /// <summary>
     /// Unique identifier for the custom field

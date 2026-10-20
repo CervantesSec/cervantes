@@ -8,7 +8,7 @@ namespace Cervantes.CORE.Entities;
 /// <summary>
 /// Stores the actual value of a custom field for a specific target
 /// </summary>
-public class TargetCustomFieldValue
+public class TargetCustomFieldValue : ICustomFieldValue
 {
     /// <summary>
     /// Unique identifier for the custom field value
