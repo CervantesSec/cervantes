@@ -47,4 +47,32 @@ public class AttachmentPathTests
         Assert.False(AttachmentPath.TryResolve(Root, stored, folder, out var fullPath));
         Assert.Equal("", fullPath);
     }
+    private static readonly Guid OwnerA = Guid.Parse("3f2c9a1e-0000-0000-0000-00000000000a");
+    private static readonly Guid OwnerB = Guid.Parse("3f2c9a1e-0000-0000-0000-00000000000b");
+
+    [Fact]
+    public void TryResolve_AcceptsOwnFolder()
+    {
+        Assert.True(AttachmentPath.TryResolve(Root, $"Attachments/Vuln/{OwnerA}/f.png", AttachmentPath.OwnerFolder("Vuln", OwnerA), out _));
+    }
+
+    [Fact]
+    public void TryResolve_RejectsOtherOwner()
+    {
+        Assert.False(AttachmentPath.TryResolve(Root, $"Attachments/Vuln/{OwnerB}/f.png", AttachmentPath.OwnerFolder("Vuln", OwnerA), out _));
+    }
+
+    [Fact]
+    public void TryResolve_RejectsOwnerFolderItself()
+    {
+        Assert.False(AttachmentPath.TryResolve(Root, $"Attachments/Vuln/{OwnerA}/", AttachmentPath.OwnerFolder("Vuln", OwnerA), out _));
+    }
+
+    [Fact]
+    public void TryResolve_RejectsOwnerGuidInOtherCase()
+    {
+        // Writers store Guid.ToString(), which is lower case, so a legitimate row never has an upper-case id.
+        var stored = $"Attachments/Vuln/{OwnerA.ToString().ToUpperInvariant()}/f.png";
+        Assert.False(AttachmentPath.TryResolve(Root, stored, AttachmentPath.OwnerFolder("Vuln", OwnerA), out _));
+    }
 }

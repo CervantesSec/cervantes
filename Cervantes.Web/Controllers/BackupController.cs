@@ -1127,7 +1127,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    if (!AttachmentPath.TryResolve(env.WebRootPath, attachment.FilePath, "Projects", out _))
+                    if (!AttachmentPath.TryResolve(env.WebRootPath, attachment.FilePath, AttachmentPath.OwnerFolder("Projects", attachment.ProjectId), out _))
                     {
                         LogDiscardedPath("ProjectAttachment", attachment.Id);
                         continue;
@@ -1352,7 +1352,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    if (!AttachmentPath.TryResolve(env.WebRootPath, att.FilePath, "Task", out _))
+                    if (!AttachmentPath.TryResolve(env.WebRootPath, att.FilePath, AttachmentPath.OwnerFolder("Task", att.TaskId), out _))
                     {
                         LogDiscardedPath("TaskAttachment", att.Id);
                         continue;
@@ -1469,7 +1469,7 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
-                    if (!AttachmentPath.TryResolve(env.WebRootPath, att.FilePath, "Vuln", out _))
+                    if (!AttachmentPath.TryResolve(env.WebRootPath, att.FilePath, AttachmentPath.OwnerFolder("Vuln", att.VulnId), out _))
                     {
                         LogDiscardedPath("VulnAttachment", att.Id);
                         continue;

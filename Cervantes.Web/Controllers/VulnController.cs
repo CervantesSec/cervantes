@@ -1207,33 +1207,6 @@ public class VulnController: ControllerBase
             return StatusCode(500, "An error occurred while adding the vulnerability attachment. Please try again later.");
         }
     }
-    /// <summary>
-    /// Removes an attachment's file once its row is gone. Only files inside the vuln attachments directory are
-    /// deleted, because an old restore may have stored a path that points elsewhere. A file that cannot be deleted
-    /// is left behind: the attachment is already gone for the user, and a stray file only takes disk space.
-    /// </summary>
-    private void DeleteAttachmentFile(string? storedPath, Guid id)
-    {
-        if (!AttachmentPath.TryResolve(env.WebRootPath, storedPath, "Vuln", out var path))
-        {
-            _logger.LogWarning("Stored file of {Entity} {Id} is outside its attachments folder, file not deleted. User: {UserId}",
-                "VulnAttachment", id, aspNetUserId);
-            return;
-        }
-
-        try
-        {
-            if (System.IO.File.Exists(path))
-            {
-                System.IO.File.Delete(path);
-            }
-        }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
-        {
-            _logger.LogWarning(e, "File of {Entity} {Id} could not be deleted. User: {UserId}", "VulnAttachment", id, aspNetUserId);
-        }
-    }
-
     [HttpDelete]
     [Route("Attachment/{id}")]
     [HasPermission(Permissions.VulnAttachmentsDelete)]
@@ -1258,7 +1231,7 @@ public class VulnController: ControllerBase
                     
                     vulnAttachmentManager.Remove(attachment);
                     await vulnAttachmentManager.Context.SaveChangesAsync();
-                    DeleteAttachmentFile(attachment.FilePath, attachment.Id);
+                    AttachmentFiles.DeleteFile(env.WebRootPath, attachment.FilePath, "Vuln", attachment.VulnId, _logger, "VulnAttachment", attachment.Id, aspNetUserId);
                     _logger.LogInformation("Vuln Attachment deleted successfully. User: {0}",
                         aspNetUserId);
                     return NoContent();
