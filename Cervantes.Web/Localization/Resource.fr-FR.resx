@@ -550,10 +550,10 @@
         <value>Données</value>
     </data>
     <data name="backupDataMessage" xml:space="preserve">
-        <value>Sauvegarder toutes les pièces jointes (Images, Rapports,...)</value>
+        <value>Sauvegarder toutes les données (Projets, Vulnérabilités, Clients,...)</value>
     </data>
     <data name="backupAttachmentsMessage" xml:space="preserve">
-        <value>Sauvegarder toutes les données (Projets, Vulnérabilités, Clients,...)</value>
+        <value>Sauvegarder toutes les pièces jointes (Images, Rapports,...)</value>
     </data>
     <data name="backupSuccessfull" xml:space="preserve">
         <value>Sauvegarde effectuée avec succès !</value>
@@ -562,10 +562,10 @@
         <value>Une erreur s'est produite lors de la sauvegarde !</value>
     </data>
     <data name="restoreDataMessage" xml:space="preserve">
-        <value>Restaurer toutes les pièces jointes (Images, Rapports,...)</value>
+        <value>Restaurer toutes les données (Projets, Vulnérabilités, Clients,...)</value>
     </data>
     <data name="restoreAttachmentsMessage" xml:space="preserve">
-        <value>Restaurer toutes les données (Projets, Vulnérabilités, Clients,...)</value>
+        <value>Restaurer toutes les pièces jointes (Images, Rapports,...)</value>
     </data>
     <data name="export" xml:space="preserve">
         <value>Exporter</value>

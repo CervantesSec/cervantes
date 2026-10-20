@@ -550,10 +550,10 @@
         <value>Daten</value>
     </data>
     <data name="backupDataMessage" xml:space="preserve">
-        <value>Alle Anhänge sichern (Bilder, Berichte, ...)</value>
+        <value>Alle Daten sichern (Projekte, Sicherheitslücken, Kunden, ...)</value>
     </data>
     <data name="backupAttachmentsMessage" xml:space="preserve">
-        <value>Alle Daten sichern (Projekte, Sicherheitslücken, Kunden, ...)</value>
+        <value>Alle Anhänge sichern (Bilder, Berichte, ...)</value>
     </data>
     <data name="backupSuccessfull" xml:space="preserve">
         <value>Sicherung erfolgreich erstellt!</value>
@@ -562,10 +562,10 @@
         <value>Fehler beim Erstellen der Sicherung!</value>
     </data>
     <data name="restoreDataMessage" xml:space="preserve">
-        <value>Alle Anhänge wiederherstellen (Bilder, Berichte, ...)</value>
+        <value>Alle Daten wiederherstellen (Projekte, Sicherheitslücken, Kunden, ...)</value>
     </data>
     <data name="restoreAttachmentsMessage" xml:space="preserve">
-        <value>Alle Daten wiederherstellen (Projekte, Sicherheitslücken, Kunden, ...)</value>
+        <value>Alle Anhänge wiederherstellen (Bilder, Berichte, ...)</value>
     </data>
     <data name="export" xml:space="preserve">
         <value>Exportieren</value>

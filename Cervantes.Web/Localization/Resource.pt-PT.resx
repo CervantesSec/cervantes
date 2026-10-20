@@ -162,10 +162,10 @@
         <value>Cópia de segurança</value>
     </data>
     <data name="backupAttachmentsMessage" xml:space="preserve">
-        <value>Cópia de segurança de todos os dados (Projectos, Vulnerabilidades, Clientes,...)</value>
+        <value>Cópia de segurança de todos os anexos (imagens, relatórios,...)</value>
     </data>
     <data name="backupDataMessage" xml:space="preserve">
-        <value>Cópia de segurança de todos os anexos (imagens, relatórios,...)</value>
+        <value>Cópia de segurança de todos os dados (Projectos, Vulnerabilidades, Clientes,...)</value>
     </data>
     <data name="backupError" xml:space="preserve">
         <value>Ocorreu um erro ao efetuar a cópia de segurança!</value>
@@ -759,7 +759,7 @@
         <value>Anexos restaurados com sucesso!</value>
     </data>
     <data name="restoreDataMessage" xml:space="preserve">
-        <value>Restaurar todos os anexos (Imagens, Relatórios,...)</value>
+        <value>Restaurar todos os dados (Projectos, Vulnerabilidades, Clientes,...)</value>
     </data>
     <data name="restoreDataError" xml:space="preserve">
         <value>Ocorreu um erro ao restaurar os dados!</value>
@@ -768,7 +768,7 @@
         <value>Restaurar dados</value>
     </data>
     <data name="restoreAttachmentsMessage" xml:space="preserve">
-        <value>Restaurar todos os dados (Projectos, Vulnerabilidades, Clientes,...)</value>
+        <value>Restaurar todos os anexos (Imagens, Relatórios,...)</value>
     </data>
     <data name="restoreAttachmentsError" xml:space="preserve">
         <value>Ocorreu um erro ao restaurar os anexos!</value>

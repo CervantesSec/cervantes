@@ -550,10 +550,10 @@
         <value>Data</value>
     </data>
     <data name="backupDataMessage" xml:space="preserve">
-        <value>Zálohovat všechny přílohy (obrázky, zprávy,...)</value>
+        <value>Zálohovat všechna data (projekty, zranitelnosti, klienti,...)</value>
     </data>
     <data name="backupAttachmentsMessage" xml:space="preserve">
-        <value>Zálohovat všechna data (projekty, zranitelnosti, klienti,...)</value>
+        <value>Zálohovat všechny přílohy (obrázky, zprávy,...)</value>
     </data>
     <data name="backupSuccessfull" xml:space="preserve">
         <value>Záloha byla úspěšně vytvořena!</value>
@@ -562,10 +562,10 @@
         <value>Při vytváření zálohy došlo k chybě!</value>
     </data>
     <data name="restoreDataMessage" xml:space="preserve">
-        <value>Obnovit všechny přílohy (obrázky, zprávy,...)</value>
+        <value>Obnovit všechna data (projekty, zranitelnosti, klienti,...)</value>
     </data>
     <data name="restoreAttachmentsMessage" xml:space="preserve">
-        <value>Obnovit všechna data (projekty, zranitelnosti, klienti,...)</value>
+        <value>Obnovit všechny přílohy (obrázky, zprávy,...)</value>
     </data>
     <data name="export" xml:space="preserve">
         <value>Exportovat</value>

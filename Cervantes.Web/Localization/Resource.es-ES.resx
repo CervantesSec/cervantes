@@ -550,10 +550,10 @@
         <value>Datos</value>
     </data>
     <data name="backupAttachmentsMessage" xml:space="preserve">
-        <value>Haz una copia de seguridad de todos los datos (Proyectos, Vulnerabilidades, Clientes,...)</value>
+        <value>Haz una copia de seguridad de todos los adjuntos (Imágenes, Informes,...)</value>
     </data>
     <data name="backupDataMessage" xml:space="preserve">
-        <value>Haz una copia de seguridad de todos los adjuntos (Imágenes, Informes,...)</value>
+        <value>Haz una copia de seguridad de todos los datos (Proyectos, Vulnerabilidades, Clientes,...)</value>
     </data>
     <data name="backupError" xml:space="preserve">
         <value>Se ha producido un error al hacer la copia de seguridad!</value>
@@ -562,10 +562,10 @@
         <value>Copia de seguridad hecha correctamente!</value>
     </data>
     <data name="restoreAttachmentsMessage" xml:space="preserve">
-        <value>Restaura todos los datos (Proyectos, Vulnerabilidades, Clientes, ...)</value>
+        <value>Restaura todos los adjuntos (Imágenes, Informes, ...)</value>
     </data>
     <data name="restoreDataMessage" xml:space="preserve">
-        <value>Restaura todos los adjuntos (Imágenes, Informes, ...)</value>
+        <value>Restaura todos los datos (Proyectos, Vulnerabilidades, Clientes, ...)</value>
     </data>
     <data name="export" xml:space="preserve">
         <value>Exportar</value>

@@ -550,10 +550,10 @@
         <value>Data</value>
     </data>
     <data name="backupDataMessage" xml:space="preserve">
-        <value>Backup all the attachments (Images, Reports,...)</value>
+        <value>Backup all the data (Projects, Vulnerabilities, Clients,...)</value>
     </data>
     <data name="backupAttachmentsMessage" xml:space="preserve">
-        <value>Backup all the data (Projects, Vulnerabilities, Clients,...)</value>
+        <value>Backup all the attachments (Images, Reports,...)</value>
     </data>
     <data name="backupSuccessfull" xml:space="preserve">
         <value>Backup made successfully!</value>
@@ -562,10 +562,10 @@
         <value>An error occurred making the backup!</value>
     </data>
     <data name="restoreDataMessage" xml:space="preserve">
-        <value>Restore all the attachments (Images, Reports,...)</value>
+        <value>Restore all the data (Projects, Vulnerabilities, Clients,...)</value>
     </data>
     <data name="restoreAttachmentsMessage" xml:space="preserve">
-        <value>Restore all the data (Projects, Vulnerabilities, Clients,...)</value>
+        <value>Restore all the attachments (Images, Reports,...)</value>
     </data>
     <data name="export" xml:space="preserve">
         <value>Export</value>

@@ -550,10 +550,10 @@
         <value>Dati</value>
     </data>
     <data name="backupDataMessage" xml:space="preserve">
-        <value>Backup di tutti gli allegati (Immagini, Rapporti,...)</value>
+        <value>Backup di tutti i dati (Progetti, Vulnerabilità, Clienti,...)</value>
     </data>
     <data name="backupAttachmentsMessage" xml:space="preserve">
-        <value>Backup di tutti i dati (Progetti, Vulnerabilità, Clienti,...)</value>
+        <value>Backup di tutti gli allegati (Immagini, Rapporti,...)</value>
     </data>
     <data name="backupSuccessfull" xml:space="preserve">
         <value>Backup eseguito con successo!</value>
@@ -562,10 +562,10 @@
         <value>Si è verificato un errore durante il backup!</value>
     </data>
     <data name="restoreDataMessage" xml:space="preserve">
-        <value>Ripristina tutti gli allegati (Immagini, Rapporti,...)</value>
+        <value>Ripristina tutti i dati (Progetti, Vulnerabilità, Clienti,...)</value>
     </data>
     <data name="restoreAttachmentsMessage" xml:space="preserve">
-        <value>Ripristina tutti i dati (Progetti, Vulnerabilità, Clienti,...)</value>
+        <value>Ripristina tutti gli allegati (Immagini, Rapporti,...)</value>
     </data>
     <data name="export" xml:space="preserve">
         <value>Esporta</value>
