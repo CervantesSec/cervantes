@@ -558,7 +558,7 @@ public class AiService : IAiService
                 // Store the interaction in memory
                 await _memory.ImportTextAsync(
                     text: $"User: {message.Content}\nAssistant: {response}",
-                    documentId: Guid.NewGuid().ToString(),
+                    documentId: ChatMemoryIds.Message(message.ChatId, message.Id),
                     tags: new TagCollection {
                         { "chatId", message.ChatId.ToString() },
                         { "messageId", message.Id.ToString() }
@@ -899,7 +899,7 @@ public class AiService : IAiService
                 // Store the interaction in memory
                 await _memory.ImportDocumentAsync(
                     path ,
-                    documentId: Guid.NewGuid().ToString(),
+                    documentId: ChatMemoryIds.Context(chatId),
                     tags: new TagCollection {
                         { "chatId", chatId.ToString() },
                         { "messageId", Guid.NewGuid().ToString() }
@@ -1148,7 +1148,7 @@ public class AiService : IAiService
                 // Store the interaction in memory
                 await _memory.ImportTextAsync(
                     text: info,
-                    documentId: Guid.NewGuid().ToString(),
+                    documentId: ChatMemoryIds.Context(chatId),
                     tags: new TagCollection {
                         { "chatId", chatId.ToString() },
                         { "messageId", Guid.NewGuid().ToString() }
@@ -1166,7 +1166,7 @@ public class AiService : IAiService
         }
     }
     
-    public async Task<bool> DeleteContext(Guid chatId)
+    public async Task<bool> DeleteContext(Guid chatId, IEnumerable<Guid> messageIds)
     {
         try
         {
@@ -1176,7 +1176,14 @@ public class AiService : IAiService
                 var memory = MemoryBuilder(_aiConfiguration.TextEmbedding.TextEmbeddingType);
                 var kernel = builder.Build();
                 var _memory = memory.Build();
-                // Store the interaction in memory
+                // Records written by this version have ids derived from the chat, so they go by id.
+                await _memory.DeleteDocumentAsync(ChatMemoryIds.Context(chatId));
+                foreach (var messageId in messageIds)
+                {
+                    await _memory.DeleteDocumentAsync(ChatMemoryIds.Message(chatId, messageId));
+                }
+
+                // Older versions gave records random ids, so those can only be found by the chat tag.
                 var filter = MemoryFilters.ByTag("chatId", chatId.ToString());
                 var records = await _memory.SearchAsync(
                     query: "", // Empty query to get all records

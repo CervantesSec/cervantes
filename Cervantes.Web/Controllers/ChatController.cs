@@ -185,6 +185,15 @@ public class ChatController : ControllerBase
     {
         chatManager.Remove(chat);
         await chatManager.Context.SaveChangesAsync();
+        // An import that failed halfway may have stored part of the context already.
+        try
+        {
+            await _aiService.DeleteContext(chat.Id, Array.Empty<Guid>());
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Memory records of removed chat {ChatId} could not be deleted", chat.Id);
+        }
     }
     
     public async Task<Chat> EditChat(Guid chatId, string title)
@@ -212,13 +221,14 @@ public class ChatController : ControllerBase
             }
             chatManager.Remove(chat);
             await chatManager.Context.SaveChangesAsync();
-            var messages = chatMessageManager.GetAll().Where(x => x.ChatId == chatId);
+            var messages = chatMessageManager.GetAll().Where(x => x.ChatId == chatId).ToList();
+            var messageIds = messages.Select(x => x.Id).ToList();
             foreach (var item in messages)
             {
                 chatMessageManager.Remove(item);
             }
             await chatMessageManager.Context.SaveChangesAsync();
-            await _aiService.DeleteContext(chatId);
+            await _aiService.DeleteContext(chatId, messageIds);
             return true;
         }
         catch (Exception ex)

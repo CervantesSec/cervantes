@@ -13,5 +13,5 @@ public interface IAiService
     Task<string> SendMessage(ChatMessageCreateViewModel message);
     Task<bool> AddDocument(Guid chatId, string path);
     Task<bool> AddProject(Guid chatId, Guid projectId);
-    Task<bool> DeleteContext(Guid chatId);
+    Task<bool> DeleteContext(Guid chatId, IEnumerable<Guid> messageIds);
 }
