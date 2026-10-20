@@ -122,15 +122,21 @@ public class TargetController : ControllerBase
     }
 
     /// <summary>
-    /// Returns true when the current user is a member of the project that owns the target.
-    /// Every target belongs to a project, so a missing target or project is denied.
+    /// Returns true when the current user may change the target: a member of its project, or anyone with the
+    /// permission when the target has no project (left by older data or by a project delete before the project tree
+    /// was removed with it), as for vulns and tasks without a project. A missing target is denied.
     /// </summary>
     [NonAction]
     private bool CanWriteTarget(CORE.Entities.Target target)
     {
-        if (target?.ProjectId == null || target.ProjectId == Guid.Empty)
+        if (target == null)
         {
             return false;
+        }
+
+        if (target.ProjectId == null || target.ProjectId == Guid.Empty)
+        {
+            return true;
         }
 
         return projectUserManager.VerifyUser(target.ProjectId.Value, aspNetUserId) != null;
@@ -150,6 +156,11 @@ public class TargetController : ControllerBase
         {
             if (ModelState.IsValid)
             {
+                if (model.ProjectId == null || model.ProjectId == Guid.Empty)
+                {
+                    return BadRequest("A target needs a project");
+                }
+
                 var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                 if (user == null)
                 {
@@ -325,10 +336,9 @@ public class TargetController : ControllerBase
                 var result = targetManager.GetById(targetId);
                 if (result != null)
                 {
-                    var user = projectUserManager.VerifyUser(result.ProjectId.Value, aspNetUserId);
-                    if (user == null)
+                    if (!CanWriteTarget(result))
                     {
-                        return BadRequest("Access denied: User does not have permission to access this project");
+                        return StatusCode(403, "You do not have permission to access this project");
                     }
 
                     targetManager.Remove(result);
