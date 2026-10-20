@@ -78,6 +78,15 @@ public class ApiKeyMiddleware
             return;
         }
 
+        // Locking a user must stop every way in, as it already does for login and Basic auth; the key itself stays
+        // valid and works again once the user is unlocked.
+        if (await userManager.IsLockedOutAsync(user))
+        {
+            _logger.LogWarning("API key refused: user {UserId} is locked", user.Id);
+            await WriteUnauthorized(context, "User is locked");
+            return;
+        }
+
         // Construir claims: Identity + AuthPermissions
         var identityClaims = new List<Claim>
         {
