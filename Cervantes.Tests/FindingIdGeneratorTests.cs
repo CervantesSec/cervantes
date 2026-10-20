@@ -101,4 +101,66 @@ public class FindingIdGeneratorTests
         Assert.Equal("", sequence.Next());
         Assert.Equal("", sequence.Next());
     }
+    [Fact]
+    public async Task LockProject_SecondWaitsForFirst()
+    {
+        var project = Guid.NewGuid();
+        var first = await FindingIdGenerator.LockProjectAsync(project);
+
+        var second = FindingIdGenerator.LockProjectAsync(project);
+        await Task.Delay(200);
+        Assert.False(second.IsCompleted);
+
+        first.Dispose();
+        Assert.Same(second, await Task.WhenAny(second, Task.Delay(1000)));
+        (await second).Dispose();
+    }
+
+    [Fact]
+    public async Task LockProject_OtherProjectDoesNotWait()
+    {
+        using var held = await FindingIdGenerator.LockProjectAsync(Guid.NewGuid());
+
+        var other = FindingIdGenerator.LockProjectAsync(Guid.NewGuid());
+
+        Assert.True(other.IsCompleted);
+        (await other).Dispose();
+    }
+
+    [Fact]
+    public async Task LockProject_IsReleasedWhenTheHolderThrows()
+    {
+        var project = Guid.NewGuid();
+        try
+        {
+            using (await FindingIdGenerator.LockProjectAsync(project))
+            {
+                throw new InvalidOperationException("import failed");
+            }
+        }
+        catch (InvalidOperationException)
+        {
+        }
+
+        var next = FindingIdGenerator.LockProjectAsync(project);
+
+        Assert.True(next.IsCompleted);
+        (await next).Dispose();
+    }
+
+    [Fact]
+    public async Task LockProject_DisposingTwiceReleasesOnce()
+    {
+        var project = Guid.NewGuid();
+        var first = await FindingIdGenerator.LockProjectAsync(project);
+        first.Dispose();
+        first.Dispose();
+
+        using var second = await FindingIdGenerator.LockProjectAsync(project);
+        var third = FindingIdGenerator.LockProjectAsync(project);
+
+        Assert.False(third.IsCompleted);
+        second.Dispose();
+        (await third).Dispose();
+    }
 }

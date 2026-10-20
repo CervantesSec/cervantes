@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Globalization;
 using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
@@ -26,6 +27,34 @@ public static class FindingIdGenerator
         }
 
         return Start(ProjectFindingIds(vulnManager.GetAll(), project.Id), project.FindingsId);
+    }
+
+    private static readonly ConcurrentDictionary<Guid, SemaphoreSlim> ProjectLocks = new();
+
+    /// <summary>
+    /// Lets one caller at a time number and save findings of a project. There is no unique index on the finding id,
+    /// because databases from the old count-based numbering may already hold duplicates, so two imports that read the
+    /// highest number at the same time would hand out the same ones. The lock only covers this app instance.
+    /// </summary>
+    public static async Task<IDisposable> LockProjectAsync(Guid projectId)
+    {
+        // One semaphore per project, kept for the life of the process: a few bytes per project that was numbered.
+        var semaphore = ProjectLocks.GetOrAdd(projectId, _ => new SemaphoreSlim(1, 1));
+        await semaphore.WaitAsync();
+        return new Release(semaphore);
+    }
+
+    private sealed class Release(SemaphoreSlim semaphore) : IDisposable
+    {
+        private int released;
+
+        public void Dispose()
+        {
+            if (Interlocked.Exchange(ref released, 1) == 0)
+            {
+                semaphore.Release();
+            }
+        }
     }
 
     // Template rows count too: older builds let a project vuln be a template and numbered it, and the flag can be

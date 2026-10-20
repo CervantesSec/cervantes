@@ -338,6 +338,8 @@ public class VulnController: ControllerBase
                 vuln.Template = model.Template && (model.ProjectId == null || model.ProjectId == Guid.Empty);
                 vuln.UserId = aspNetUserId;
                 vuln.ProjectId = model.ProjectId;
+                // Held until the vuln is saved, so an import running at the same time cannot hand out the same number.
+                using var numbering = model.ProjectId != null ? await FindingIdGenerator.LockProjectAsync(model.ProjectId.Value) : null;
                 if (model.ProjectId != null)
                 {
                     vuln.FindingId = FindingIdGenerator.Next(vulnManager, projectManager.GetById(model.ProjectId.Value));
@@ -1315,6 +1317,9 @@ public class VulnController: ControllerBase
                     
                     if (model.Project != null)
                     {
+                        // The parsers number findings from the highest id they read at the start, so a second import or a
+                        // manual vuln in the same project waits until this import has saved its findings.
+                        using var numbering = await FindingIdGenerator.LockProjectAsync(model.Project.Value);
                         switch (model.Type)
                         {
                             case VulnImportType.CSV:
