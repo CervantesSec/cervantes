@@ -52,13 +52,29 @@ public partial class Index: ComponentBase
     // have been read.
     private bool signInRefreshPending;
 
+    // The stamp this session's own change produced. A ticket is only issued while the stored stamp still equals it, so
+    // a lock, delete or password change by someone else in between ends the session instead of renewing it.
+    private string? ownStamp;
+
+    private Task<string?> StoredStampAsync() =>
+        UserManager.Users.AsNoTracking().Where(x => x.Id == user.Id).Select(x => x.SecurityStamp).FirstOrDefaultAsync();
+
+    private async Task CaptureOwnStampAsync() => ownStamp = await StoredStampAsync();
+
     /// <summary>
     /// After the user's own security change, which rotated the security stamp, gets a new sign-in cookie through
-    /// RefreshSignIn with a one-time ticket, so the session goes on.
+    /// RefreshSignIn with a one-time ticket, so the session goes on. Without a matching stamp it navigates without a
+    /// ticket, which signs the session out.
     /// </summary>
-    private void RefreshSignInWithTicket()
+    private async Task RefreshSignInWithTicket()
     {
-        Navigation.NavigateTo($"Account/Manage/RefreshSignIn?ticket={Uri.EscapeDataString(Tickets.Issue(user.Id))}&returnUrl=/Account/Profile", forceLoad: true);
+        var current = await StoredStampAsync();
+        var stampMatches = ownStamp != null && current == ownStamp;
+        signInRefreshPending = false;
+        ownStamp = null;
+        Navigation.NavigateTo(stampMatches
+            ? $"Account/Manage/RefreshSignIn?ticket={Uri.EscapeDataString(Tickets.Issue(user.Id))}&returnUrl=/Account/Profile"
+            : "Account/Manage/RefreshSignIn", forceLoad: true);
     }
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
     private ProfileEdit modelEdit { get; set; } = new ProfileEdit();
@@ -292,6 +308,7 @@ public partial class Index: ComponentBase
                     recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
                 }
                 // Enabling two-factor rotated the stamp; the cookie is renewed when the user leaves the codes.
+                await CaptureOwnStampAsync();
                 signInRefreshPending = true;
                 StateHasChanged();
         }
@@ -379,7 +396,8 @@ public partial class Index: ComponentBase
         Snackbar.Add("disabled2fa", Severity.Success);
         
         // Disabling two-factor rotated the stamp.
-        RefreshSignInWithTicket();
+        await CaptureOwnStampAsync();
+        await RefreshSignInWithTicket();
     }
     
     private async Task ResetAuthenticatorSubmit()
@@ -398,7 +416,8 @@ public partial class Index: ComponentBase
 
         Snackbar.Add("resetedAuthenticator", Severity.Success);
         // The reset rotated the security stamp.
-        RefreshSignInWithTicket();
+        await CaptureOwnStampAsync();
+        await RefreshSignInWithTicket();
 
         /*RedirectManager.RedirectToWithStatus(
             "Account/Manage/EnableAuthenticator",
@@ -460,7 +479,8 @@ public partial class Index: ComponentBase
 
         Logger.LogInformation("User changed their password successfully.");
         // The password change rotated the security stamp.
-        RefreshSignInWithTicket();
+        await CaptureOwnStampAsync();
+        await RefreshSignInWithTicket();
     }
     #endregion
 
@@ -598,7 +618,8 @@ public partial class Index: ComponentBase
         await UserManager.UpdateAsync(user);
         Snackbar.Add(@localizer["emailChanged"], Severity.Success);
         // Changing the email rotated the stamp.
-        RefreshSignInWithTicket();
+        await CaptureOwnStampAsync();
+        await RefreshSignInWithTicket();
     }
     private sealed class EmailModel
     {
