@@ -300,6 +300,11 @@
                                     <kbd>@codes</kbd>
                                     <br/>
                                 }
+                                @if (signInRefreshPending)
+                                {
+                                    <MudButton Variant="Variant.Filled" Color="@Color.Primary" OnClick="RefreshSignInWithTicket">@localizer["done"]</MudButton>
+                                    <br/>
+                                }
                             }
                             <MudText>
                                 <strong>@localizer["disable2faAction"]</strong>

@@ -47,6 +47,19 @@ public partial class Index: ComponentBase
         var principal = (await AuthState.GetAuthenticationStateAsync()).User;
         return await SignInManager.ValidateSecurityStampAsync(principal) != null;
     }
+
+    // Set after this session's own two-factor change, whose new stamp still needs a cookie once the recovery codes
+    // have been read.
+    private bool signInRefreshPending;
+
+    /// <summary>
+    /// After the user's own security change, which rotated the security stamp, gets a new sign-in cookie through
+    /// RefreshSignIn with a one-time ticket, so the session goes on.
+    /// </summary>
+    private void RefreshSignInWithTicket()
+    {
+        Navigation.NavigateTo($"Account/Manage/RefreshSignIn?ticket={Uri.EscapeDataString(Tickets.Issue(user.Id))}&returnUrl=/Account/Profile", forceLoad: true);
+    }
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
     private ProfileEdit modelEdit { get; set; } = new ProfileEdit();
     MudForm formEdit;
@@ -250,6 +263,11 @@ public partial class Index: ComponentBase
 
     private async Task TwoFactorSubmit()
     {
+        if (!await SessionIsCurrent())
+        {
+            Navigation.NavigateTo("Account/Manage/RefreshSignIn", forceLoad: true);
+            return;
+        }
         try
         {
             recoveryCodes = new [] { "" };
@@ -273,6 +291,8 @@ public partial class Index: ComponentBase
                 {
                     recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
                 }
+                // Enabling two-factor rotated the stamp; the cookie is renewed when the user leaves the codes.
+                signInRefreshPending = true;
                 StateHasChanged();
         }
         catch (Exception e)
@@ -342,6 +362,11 @@ public partial class Index: ComponentBase
     
     private async Task Disable2faSubmit()
     {
+        if (!await SessionIsCurrent())
+        {
+            Navigation.NavigateTo("Account/Manage/RefreshSignIn", forceLoad: true);
+            return;
+        }
         var disable2faResult = await UserManager.SetTwoFactorEnabledAsync(user, false);
         if (!disable2faResult.Succeeded)
         {
@@ -353,12 +378,8 @@ public partial class Index: ComponentBase
         Logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", userId);
         Snackbar.Add("disabled2fa", Severity.Success);
         
-        /*RedirectManager.RedirectToWithStatus(
-            "Account/Manage/TwoFactorAuthentication",
-            "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
-            HttpContext);*/
-        user = await UserManager.GetUserAsync(_accessor.HttpContext.User);
-        StateHasChanged();
+        // Disabling two-factor rotated the stamp.
+        RefreshSignInWithTicket();
     }
     
     private async Task ResetAuthenticatorSubmit()
@@ -376,8 +397,8 @@ public partial class Index: ComponentBase
         Logger.LogInformation("User with ID '{UserId}' has reset their authentication app key.", userId);
 
         Snackbar.Add("resetedAuthenticator", Severity.Success);
-        // The reset rotated the security stamp; the ticket lets RefreshSignIn issue the new cookie.
-        Navigation.NavigateTo($"Account/Manage/RefreshSignIn?ticket={Uri.EscapeDataString(Tickets.Issue(user.Id))}&returnUrl=/Account/Profile", forceLoad: true);
+        // The reset rotated the security stamp.
+        RefreshSignInWithTicket();
 
         /*RedirectManager.RedirectToWithStatus(
             "Account/Manage/EnableAuthenticator",
@@ -438,9 +459,8 @@ public partial class Index: ComponentBase
         Snackbar.Add(@localizer["passwordChanged"], Severity.Success);
 
         Logger.LogInformation("User changed their password successfully.");
-        // The password change rotated the security stamp, so the cookie must be reissued from a real HTTP request; the
-        // ticket proves the request comes from this page.
-        Navigation.NavigateTo($"Account/Manage/RefreshSignIn?ticket={Uri.EscapeDataString(Tickets.Issue(user.Id))}&returnUrl=/Account/Profile", forceLoad: true);
+        // The password change rotated the security stamp.
+        RefreshSignInWithTicket();
     }
     #endregion
 
@@ -559,6 +579,11 @@ public partial class Index: ComponentBase
     
     private async Task EmailSubmit()
     {
+        if (!await SessionIsCurrent())
+        {
+            Navigation.NavigateTo("Account/Manage/RefreshSignIn", forceLoad: true);
+            return;
+        }
         if (emailModel.NewEmail is null || emailModel.NewEmail == user.Email)
         {
             Snackbar.Add(@localizer["sameEmail"], Severity.Warning);
@@ -572,8 +597,8 @@ public partial class Index: ComponentBase
         user.NormalizedUserName = emailModel.NewEmail.ToUpper();
         await UserManager.UpdateAsync(user);
         Snackbar.Add(@localizer["emailChanged"], Severity.Success);
-
-        StateHasChanged();
+        // Changing the email rotated the stamp.
+        RefreshSignInWithTicket();
     }
     private sealed class EmailModel
     {
