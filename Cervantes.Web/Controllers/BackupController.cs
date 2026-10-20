@@ -1454,10 +1454,20 @@ public class BackupController : ControllerBase
                 await vaultManager.Context.SaveChangesAsync();
             }
 
+            // Seeded categories, report components and templates get random ids on each instance. A backup from another
+            // instance would insert a second copy of each, so rows that match an existing one by name are not inserted
+            // and the rows pointing at them are rewritten to the existing id.
+            var categoryMap = new Dictionary<Guid, Guid>();
             if (backupViewModel.VulnCategories != null)
             {
+                categoryMap = BackupKeyMatch.Match(backupViewModel.VulnCategories, vulnCategoryManager.GetAll().ToList(),
+                    x => x.Id, x => $"{x.Name}|{x.Type}");
                 foreach (var cat in backupViewModel.VulnCategories)
                 {
+                    if (categoryMap.ContainsKey(cat.Id))
+                    {
+                        continue;
+                    }
                     var result = vulnCategoryManager.GetById(cat.Id);
                     if (result == null)
                     {
@@ -1481,6 +1491,10 @@ public class BackupController : ControllerBase
                     if (userExists == null)
                     {
                         vulns.UserId = aspNetUserId;
+                    }
+                    if (vulns.VulnCategoryId != null && categoryMap.TryGetValue(vulns.VulnCategoryId.Value, out var categoryId))
+                    {
+                        vulns.VulnCategoryId = categoryId;
                     }
                     await vulnManager.AddAsync(vulns);
                 }
@@ -1629,12 +1643,15 @@ public class BackupController : ControllerBase
                 await mastgManager.Context.SaveChangesAsync();
             }
             
+            var componentMap = new Dictionary<Guid, Guid>();
             if (backupViewModel.ReportComponents != null)
             {
+                componentMap = BackupKeyMatch.Match(backupViewModel.ReportComponents, reportComponentsManager.GetAll().ToList(),
+                    x => x.Id, x => $"{x.Name}|{x.Language}|{x.ComponentType}");
                 foreach (var comp in backupViewModel.ReportComponents)
                 {
                     var compResult = reportComponentsManager.GetById(comp.Id);
-                    if (compResult != null)
+                    if (compResult != null || componentMap.ContainsKey(comp.Id))
                     {
                         continue;
                     }
@@ -1648,12 +1665,15 @@ public class BackupController : ControllerBase
             
   
             
+            var templateMap = new Dictionary<Guid, Guid>();
             if (backupViewModel.ReportTemplates != null)
             {
+                templateMap = BackupKeyMatch.Match(backupViewModel.ReportTemplates, reportTemplateManager.GetAll().ToList(),
+                    x => x.Id, x => $"{x.Name}|{x.Language}|{x.ReportType}");
                 foreach (var comp in backupViewModel.ReportTemplates)
                 {
                     var compResult = reportTemplateManager.GetById(comp.Id);
-                    if (compResult != null)
+                    if (compResult != null || templateMap.ContainsKey(comp.Id))
                     {
                         continue;
                     }
@@ -1674,9 +1694,14 @@ public class BackupController : ControllerBase
                 foreach (var comp in backupViewModel.ReportParts)
                 {
                     var compResult = reportsPartsManager.GetById(comp.Id);
-                    if (compResult != null)
+                    // A matched template already has its parts here; copying the backup's would double them.
+                    if (compResult != null || templateMap.ContainsKey(comp.TemplateId))
                     {
                         continue;
+                    }
+                    if (componentMap.TryGetValue(comp.ComponentId, out var componentId))
+                    {
+                        comp.ComponentId = componentId;
                     }
                     await reportsPartsManager.AddAsync(comp);
                 }
