@@ -895,6 +895,12 @@ public class BackupController : ControllerBase
                 KnowledgeBaseTags = db.Set<KnowledgeBaseTags>().AsNoTracking().Select(x => new KnowledgeBaseTags { Id = x.Id, Name = x.Name }).ToList(),
                 KnowledgeBaseTagLinks = db.Set<KnowledgeBase>().AsNoTracking()
                     .SelectMany(k => k.Tags.Select(t => new KnowledgeBaseTagLink { NoteId = k.Id, TagId = t.Id })).ToList(),
+                // System templates go too: their item codes are what moves the executions to this instance's items.
+                ChecklistTemplates = db.Set<ChecklistTemplate>().AsNoTracking().ToList(),
+                ChecklistCategories = db.Set<ChecklistCategory>().AsNoTracking().ToList(),
+                ChecklistItems = db.Set<ChecklistItem>().AsNoTracking().ToList(),
+                Checklists = db.Set<Checklist>().AsNoTracking().ToList(),
+                ChecklistExecutions = db.Set<ChecklistExecution>().AsNoTracking().ToList(),
             };
 
             var options = new JsonSerializerOptions { WriteIndented = true };
@@ -1696,6 +1702,8 @@ public class BackupController : ControllerBase
             await RestoreVulnCwesAsync(backupViewModel.VulnCwes);
             await RestoreRssAsync(backupViewModel.RssCategories, backupViewModel.RssSources, users);
             await RestoreKnowledgeBaseTagsAsync(backupViewModel.KnowledgeBaseTags, backupViewModel.KnowledgeBaseTagLinks);
+            await RestoreChecklistsAsync(backupViewModel.ChecklistTemplates, backupViewModel.ChecklistCategories,
+                backupViewModel.ChecklistItems, backupViewModel.Checklists, backupViewModel.ChecklistExecutions, users);
 
             await transaction.CommitAsync();
             // From here the data is in: nothing below may roll back or turn the restore into an error.
@@ -1979,6 +1987,165 @@ public class BackupController : ControllerBase
             {
                 page.Tags.Add(tag);
             }
+        }
+
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Restores checklist templates, their categories and items, checklists and executions. The WSTG and MASTG system
+    /// templates are created at startup with random ids on every instance, so a system template is matched by name and
+    /// its items by category name, code and name (WSTG repeats one code); executions are moved to the matched items.
+    /// Custom templates are matched by id only.
+    /// </summary>
+    private async System.Threading.Tasks.Task RestoreChecklistsAsync(IEnumerable<ChecklistTemplate>? templates,
+        IEnumerable<ChecklistCategory>? categories, IEnumerable<ChecklistItem>? items, IEnumerable<Checklist>? checklists,
+        IEnumerable<ChecklistExecution>? executions, BackupUserMap users)
+    {
+        if (templates == null)
+        {
+            return;
+        }
+
+        var db = userManager.Context;
+        var existingTemplates = db.Set<ChecklistTemplate>().AsNoTracking().ToList();
+        var templateMap = BackupKeyMatch.Match(templates.Where(x => x.IsSystemTemplate),
+            existingTemplates.Where(x => x.IsSystemTemplate), x => x.Id, x => x.Name);
+        var existingTemplateIds = existingTemplates.Select(x => x.Id).ToHashSet();
+        foreach (var template in templates)
+        {
+            if (existingTemplateIds.Contains(template.Id) || templateMap.ContainsKey(template.Id))
+            {
+                continue;
+            }
+
+            template.Name = sanitizer.Sanitize(template.Name);
+            template.Description = sanitizer.Sanitize(template.Description);
+            template.Version = sanitizer.Sanitize(template.Version);
+            template.UserId = await users.ResolveAsync(template.UserId);
+            if (template.OrganizationId != null && await db.Set<Organization>().FindAsync(template.OrganizationId) == null)
+            {
+                template.OrganizationId = null;
+            }
+
+            db.Set<ChecklistTemplate>().Add(template);
+        }
+
+        await db.SaveChangesAsync();
+
+        var backupCategories = (categories ?? Enumerable.Empty<ChecklistCategory>()).ToDictionary(x => x.Id);
+        foreach (var category in backupCategories.Values)
+        {
+            if (templateMap.ContainsKey(category.ChecklistTemplateId)
+                || await db.Set<ChecklistCategory>().FindAsync(category.Id) != null
+                || await db.Set<ChecklistTemplate>().FindAsync(category.ChecklistTemplateId) == null)
+            {
+                continue;
+            }
+
+            category.Name = sanitizer.Sanitize(category.Name);
+            category.Description = sanitizer.Sanitize(category.Description);
+            db.Set<ChecklistCategory>().Add(category);
+        }
+
+        await db.SaveChangesAsync();
+
+        // Items of a matched system template are not inserted: each one is paired with this instance's item.
+        var mappedTemplateIds = templateMap.Values.ToHashSet();
+        var targetItems = db.Set<ChecklistItem>().AsNoTracking()
+            .Where(x => mappedTemplateIds.Contains(x.ChecklistCategory.ChecklistTemplateId))
+            .Select(x => new { x.Id, x.Code, x.Name, Category = x.ChecklistCategory.Name, Template = x.ChecklistCategory.ChecklistTemplateId })
+            .ToList()
+            .GroupBy(x => $"{x.Template}|{x.Category}|{x.Code}|{x.Name}")
+            .ToDictionary(x => x.Key, x => x.Min(y => y.Id));
+        var itemMap = new Dictionary<Guid, Guid>();
+        foreach (var item in items ?? Enumerable.Empty<ChecklistItem>())
+        {
+            if (backupCategories.TryGetValue(item.ChecklistCategoryId, out var category)
+                && templateMap.TryGetValue(category.ChecklistTemplateId, out var mappedTemplate))
+            {
+                if (targetItems.TryGetValue($"{mappedTemplate}|{category.Name}|{item.Code}|{item.Name}", out var targetItem))
+                {
+                    itemMap[item.Id] = targetItem;
+                }
+
+                continue;
+            }
+
+            if (await db.Set<ChecklistItem>().FindAsync(item.Id) != null
+                || await db.Set<ChecklistCategory>().FindAsync(item.ChecklistCategoryId) == null)
+            {
+                continue;
+            }
+
+            item.Code = sanitizer.Sanitize(item.Code);
+            item.Name = sanitizer.Sanitize(item.Name);
+            item.Description = sanitizer.Sanitize(item.Description);
+            item.Objectives = sanitizer.Sanitize(item.Objectives);
+            item.TestProcedure = sanitizer.Sanitize(item.TestProcedure);
+            item.PassCriteria = sanitizer.Sanitize(item.PassCriteria);
+            item.References = sanitizer.Sanitize(item.References);
+            db.Set<ChecklistItem>().Add(item);
+        }
+
+        await db.SaveChangesAsync();
+
+        foreach (var checklist in checklists ?? Enumerable.Empty<Checklist>())
+        {
+            if (templateMap.TryGetValue(checklist.ChecklistTemplateId, out var mappedTemplate))
+            {
+                checklist.ChecklistTemplateId = mappedTemplate;
+            }
+
+            if (await db.Set<Checklist>().FindAsync(checklist.Id) != null
+                || await db.Set<Project>().FindAsync(checklist.ProjectId) == null
+                || await db.Set<ChecklistTemplate>().FindAsync(checklist.ChecklistTemplateId) == null)
+            {
+                continue;
+            }
+
+            if (checklist.TargetId != null && await db.Set<Target>().FindAsync(checklist.TargetId) == null)
+            {
+                checklist.TargetId = null;
+            }
+
+            checklist.Name = sanitizer.Sanitize(checklist.Name);
+            checklist.Notes = sanitizer.Sanitize(checklist.Notes);
+            checklist.UserId = await users.ResolveAsync(checklist.UserId);
+            db.Set<Checklist>().Add(checklist);
+        }
+
+        await db.SaveChangesAsync();
+
+        foreach (var execution in executions ?? Enumerable.Empty<ChecklistExecution>())
+        {
+            if (await db.Set<ChecklistExecution>().FindAsync(execution.Id) != null
+                || await db.Set<Checklist>().FindAsync(execution.ChecklistId) == null)
+            {
+                continue;
+            }
+
+            if (itemMap.TryGetValue(execution.ChecklistItemId, out var mappedItem))
+            {
+                execution.ChecklistItemId = mappedItem;
+            }
+
+            if (await db.Set<ChecklistItem>().FindAsync(execution.ChecklistItemId) == null)
+            {
+                _logger.LogWarning("Restore skipped checklist execution {ExecutionId}: its item does not exist here. User: {UserId}",
+                    execution.Id, aspNetUserId);
+                continue;
+            }
+
+            if (execution.VulnId != null && await db.Set<Vuln>().FindAsync(execution.VulnId) == null)
+            {
+                execution.VulnId = null;
+            }
+
+            execution.Notes = sanitizer.Sanitize(execution.Notes);
+            execution.Evidence = sanitizer.Sanitize(execution.Evidence);
+            execution.TestedByUserId = await users.ResolveOptionalAsync(execution.TestedByUserId);
+            db.Set<ChecklistExecution>().Add(execution);
         }
 
         await db.SaveChangesAsync();

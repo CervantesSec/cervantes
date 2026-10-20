@@ -54,6 +54,11 @@ public class BackupViewModel
     public IEnumerable<RssSource>? RssSources { get; set; }
     public IEnumerable<KnowledgeBaseTags>? KnowledgeBaseTags { get; set; }
     public IEnumerable<KnowledgeBaseTagLink>? KnowledgeBaseTagLinks { get; set; }
+    public IEnumerable<ChecklistTemplate>? ChecklistTemplates { get; set; }
+    public IEnumerable<ChecklistCategory>? ChecklistCategories { get; set; }
+    public IEnumerable<ChecklistItem>? ChecklistItems { get; set; }
+    public IEnumerable<Checklist>? Checklists { get; set; }
+    public IEnumerable<ChecklistExecution>? ChecklistExecutions { get; set; }
 
 
 }
