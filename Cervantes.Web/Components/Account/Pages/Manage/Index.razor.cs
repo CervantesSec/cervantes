@@ -37,6 +37,7 @@ public partial class Index: ComponentBase
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private RefreshSignInTickets Tickets { get; set; } = default!;
     [Inject] private AuthenticationStateProvider AuthState { get; set; } = default!;
+    [Inject] private IUserStore<ApplicationUser> UserStore { get; set; } = default!;
 
     /// <summary>
     /// Whether this circuit's session still matches the user's security stamp. A security change made from a session
@@ -326,7 +327,11 @@ public partial class Index: ComponentBase
         var unformattedKey = await UserManager.GetAuthenticatorKeyAsync(user);
         if (string.IsNullOrEmpty(unformattedKey))
         {
-            await UserManager.ResetAuthenticatorKeyAsync(user);
+            // The first key is stored without ResetAuthenticatorKeyAsync, which would also change the security stamp
+            // and end this session just for opening the page: two-factor is not on until the user verifies a code.
+            await ((IUserAuthenticatorKeyStore<ApplicationUser>)UserStore).SetAuthenticatorKeyAsync(user,
+                UserManager.GenerateNewAuthenticatorKey(), CancellationToken.None);
+            await UserManager.UpdateAsync(user);
             unformattedKey = await UserManager.GetAuthenticatorKeyAsync(user);
         }
 
