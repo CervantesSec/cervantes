@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
@@ -182,8 +183,8 @@ public partial class Projects: ComponentBase
                     Description = e.Description,
                     Client = e.Client.Name,
                     CreatedUser = e.User.FullName,
-                    StartDate = e.StartDate.ToShortDateString(),
-                    EndDate = e.EndDate.ToShortDateString(),
+                    StartDate = e.StartDate.ToLocalDate().ToShortDateString(),
+                    EndDate = e.EndDate.ToLocalDate().ToShortDateString(),
                     Template = e.Template,
                     Status = e.Status.ToString(),
                     ProjectType = e.ProjectType.ToString(),

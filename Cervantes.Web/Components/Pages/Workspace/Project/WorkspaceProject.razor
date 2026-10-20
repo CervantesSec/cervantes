@@ -112,8 +112,8 @@
 									<MudListItem T="string" Text="@pro.Language.ToString()" Icon="@Icons.Material.Filled.ContactPage"/>
 									<MudListItem T="string" Text="@pro.ProjectType.ToString()" Icon="@Icons.Material.Filled.ContactMail"/>
 									<MudListItem T="string" Text="@pro.Status.ToString()" Icon="@Icons.Material.Filled.ContactPhone" />
-									<MudListItem T="string" Text="@pro.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
-									<MudListItem T="string" Text="@pro.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
+									<MudListItem T="string" Text="@pro.StartDate.ToLocalDate().ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
+									<MudListItem T="string" Text="@pro.EndDate.ToLocalDate().ToShortDateString()" Icon="@Icons.Material.Filled.DateRange" />
 								</MudList>
 							</MudCardContent>
 						</MudCard>
@@ -318,7 +318,7 @@
 									<MudStack Row="true">
 										<MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
 										<MudStack Justify="Justify.Center" Spacing="0">
-											<MudText Typo="Typo.body1">@context.Item.StartDate.ToShortDateString()</MudText>
+											<MudText Typo="Typo.body1">@context.Item.StartDate.ToLocalDate().ToShortDateString()</MudText>
 										</MudStack>
 									</MudStack>
 
@@ -329,7 +329,7 @@
 									<MudStack Row="true">
 										<MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small"/>
 										<MudStack Justify="Justify.Center" Spacing="0">
-											<MudText Typo="Typo.body1">@context.Item.EndDate.ToShortDateString()</MudText>
+											<MudText Typo="Typo.body1">@context.Item.EndDate.ToLocalDate().ToShortDateString()</MudText>
 										</MudStack>
 									</MudStack>
 

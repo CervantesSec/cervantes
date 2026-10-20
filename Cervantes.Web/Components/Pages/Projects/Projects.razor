@@ -176,7 +176,7 @@
                         <MudStack Row="true">
                             <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
                             <MudStack Justify="Justify.Center" Spacing="0">
-                                <MudText Typo="Typo.body1">@context.Item.StartDate.ToShortDateString()</MudText>
+                                <MudText Typo="Typo.body1">@context.Item.StartDate.ToLocalDate().ToShortDateString()</MudText>
                             </MudStack>
                         </MudStack>
     
@@ -187,7 +187,7 @@
                         <MudStack Row="true">
                             <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small"/>
                             <MudStack Justify="Justify.Center" Spacing="0">
-                                <MudText Typo="Typo.body1">@context.Item.EndDate.ToShortDateString()</MudText>
+                                <MudText Typo="Typo.body1">@context.Item.EndDate.ToLocalDate().ToShortDateString()</MudText>
                             </MudStack>
                         </MudStack>
     

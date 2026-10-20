@@ -177,11 +177,11 @@
                                                         double totalDaysDone;
                                                         if (@context.ClosedDate.HasValue)
                                                         {
-                                                            totalDaysDone = (@context.EndDate - @context.ClosedDate.Value.Date).TotalDays;
+                                                            totalDaysDone = (@context.EndDate.ToLocalDate() - @context.ClosedDate.Value.ToLocalDate()).TotalDays;
                                                         }
                                                         else
                                                         {
-                                                            totalDaysDone = (@context.EndDate - DateTime.Now).TotalDays;
+                                                            totalDaysDone = (@context.EndDate.ToLocalDate() - DateTime.Now).TotalDays;
                                                         }
                                                         
 
@@ -197,7 +197,7 @@
                                                     }
                                                     else
                                                     {
-                                                        var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
+                                                        var totalDays = (@context.EndDate.ToLocalDate() - DateTime.Today).TotalDays;
                                                         @if (@Math.Truncate(totalDays) < 0)
                                                         {
                                                         

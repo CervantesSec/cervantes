@@ -252,8 +252,8 @@ else
                             <MudListItem T="string" Text="@project.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
                             <MudListItem T="string" Text="@project.ProjectType.ToString()" Icon="@Icons.Material.Filled.Category"/>
                             <MudListItem T="string" Text="@project.Status.ToString()" Icon="@Icons.Material.Filled.AddTask"/>
-                            <MudListItem T="string" Text="@project.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
-                            <MudListItem T="string" Text="@project.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth"/>
+                            <MudListItem T="string" Text="@project.StartDate.ToLocalDate().ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
+                            <MudListItem T="string" Text="@project.EndDate.ToLocalDate().ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth"/>
                             
                         </MudList>
                     </MudCardContent>
@@ -545,7 +545,7 @@ else
                             <MudStack Row="true">
                                 <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
                                 <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudText Typo="Typo.body1">@context.Item.StartDate.ToShortDateString()</MudText>
+                                    <MudText Typo="Typo.body1">@context.Item.StartDate.ToLocalDate().ToShortDateString()</MudText>
                                 </MudStack>
                             </MudStack>
 
@@ -556,7 +556,7 @@ else
                             <MudStack Row="true">
                                 <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small"/>
                                 <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudText Typo="Typo.body1">@context.Item.EndDate.ToShortDateString()</MudText>
+                                    <MudText Typo="Typo.body1">@context.Item.EndDate.ToLocalDate().ToShortDateString()</MudText>
                                 </MudStack>
                             </MudStack>
 

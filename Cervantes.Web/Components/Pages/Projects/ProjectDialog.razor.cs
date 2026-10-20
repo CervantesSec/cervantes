@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using AuthPermissions.BaseCode.PermissionsCode;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
@@ -333,8 +334,8 @@ protected override async Task OnInitializedAsync()
             model.FindingsId = project.FindingsId;
             model.StartDate = project.StartDate;
             model.EndDate = project.EndDate;
-            dateStart = model.StartDate;
-            dateEnd = model.EndDate;
+            dateStart = model.StartDate.ToLocalDate();
+            dateEnd = model.EndDate.ToLocalDate();
             model.BusinessImpact = project.BusinessImpact;
         }
 

@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -160,8 +161,8 @@ public partial class TaskDialog: ComponentBase
             }
             model.Description = task.Description;
             model.Status = task.Status;
-            dateStart = task.StartDate;
-            dateEnd = task.EndDate;
+            dateStart = task.StartDate.ToLocalDate();
+            dateEnd = task.EndDate.ToLocalDate();
             if (task.ProjectId != null)
             {
                 SelectedProject = (Guid) task.ProjectId;

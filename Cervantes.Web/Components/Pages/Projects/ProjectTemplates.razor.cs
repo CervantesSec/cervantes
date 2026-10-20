@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.IFR.Export;
@@ -162,8 +163,8 @@ public partial class ProjectTemplates : ComponentBase
                     Description = e.Description,
                     Client = e.Client.Name,
                     CreatedUser = e.User.FullName,
-                    StartDate = e.StartDate.ToShortDateString(),
-                    EndDate = e.EndDate.ToShortDateString(),
+                    StartDate = e.StartDate.ToLocalDate().ToShortDateString(),
+                    EndDate = e.EndDate.ToLocalDate().ToShortDateString(),
                     Template = e.Template,
                     Status = e.Status.ToString(),
                     ProjectType = e.ProjectType.ToString(),

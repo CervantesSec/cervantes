@@ -126,7 +126,7 @@
                             <MudStack Row="true">
                                 <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Small"/>
                                 <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudText Typo="Typo.body1">@context.Item.StartDate.ToShortDateString()</MudText>
+                                    <MudText Typo="Typo.body1">@context.Item.StartDate.ToLocalDate().ToShortDateString()</MudText>
                                 </MudStack>
                             </MudStack>
 
@@ -137,7 +137,7 @@
                             <MudStack Row="true">
                                 <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small"/>
                                 <MudStack Justify="Justify.Center" Spacing="0">
-                                    <MudText Typo="Typo.body1">@context.Item.EndDate.ToShortDateString()</MudText>
+                                    <MudText Typo="Typo.body1">@context.Item.EndDate.ToLocalDate().ToShortDateString()</MudText>
                                 </MudStack>
                             </MudStack>
 
@@ -269,11 +269,11 @@
                                                         double totalDaysDone;
                                                         if (@context.ClosedDate.HasValue)
                                                         {
-                                                            totalDaysDone = (@context.EndDate - @context.ClosedDate.Value.Date).TotalDays;
+                                                            totalDaysDone = (@context.EndDate.ToLocalDate() - @context.ClosedDate.Value.ToLocalDate()).TotalDays;
                                                         }
                                                         else
                                                         {
-                                                            totalDaysDone = (@context.EndDate - DateTime.Now).TotalDays;
+                                                            totalDaysDone = (@context.EndDate.ToLocalDate() - DateTime.Now).TotalDays;
                                                         }
 
                                                         if (@Math.Truncate(totalDaysDone) < 0)
@@ -288,7 +288,7 @@
                                                     }
                                                     else
                                                     {
-                                                        var totalDays = (@context.EndDate - DateTime.Today).TotalDays;
+                                                        var totalDays = (@context.EndDate.ToLocalDate() - DateTime.Today).TotalDays;
                                                         @if (@Math.Truncate(totalDays) < 0)
                                                         {
                                                         

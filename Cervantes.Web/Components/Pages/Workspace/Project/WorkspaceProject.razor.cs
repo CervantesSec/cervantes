@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net;
 using System.Net.Http.Json;
 using System.Security.Claims;
@@ -246,8 +247,8 @@ protected override async Task OnInitializedAsync()
             model.StartDate = pro.StartDate;
             model.EndDate = pro.EndDate;
             model.BusinessImpact = pro.BusinessImpact;
-            dateStart = model.StartDate;
-            dateEnd = model.EndDate;
+            dateStart = model.StartDate.ToLocalDate();
+            dateEnd = model.EndDate.ToLocalDate();
         }
 
         StateHasChanged();

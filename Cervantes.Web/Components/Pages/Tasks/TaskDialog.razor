@@ -132,8 +132,8 @@
 									<MudList T="string" Dense="true">
 										<MudListItem T="string" Text="@task.Name" Icon="@Icons.Material.Filled.Task" />
 										<MudListItem T="string" Text="@task.Status.ToString()" Icon="@Icons.Material.Filled.AddTask" />
-										<MudListItem T="string" Text="@task.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday" />
-										<MudListItem T="string" Text="@task.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth" />
+										<MudListItem T="string" Text="@task.StartDate.ToLocalDate().ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday" />
+										<MudListItem T="string" Text="@task.EndDate.ToLocalDate().ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth" />
 									</MudList>
 								</MudCardContent>
 							</MudCard>

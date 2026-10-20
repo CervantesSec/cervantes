@@ -42,8 +42,8 @@
 
                     <MudListItemExtended T="string" Text="@Project.Name" Icon="@Icons.Material.Filled.Folder"/>
                     <MudListItemExtended T="string" Text="@Project.Client.Name" Icon="@Icons.Material.Filled.Business"/>
-                    <MudListItemExtended T="string" Text="@Project.StartDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
-                    <MudListItemExtended T="string" Text="@Project.EndDate.ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth"/>
+                    <MudListItemExtended T="string" Text="@Project.StartDate.ToLocalDate().ToShortDateString()" Icon="@Icons.Material.Filled.CalendarToday"/>
+                    <MudListItemExtended T="string" Text="@Project.EndDate.ToLocalDate().ToShortDateString()" Icon="@Icons.Material.Filled.CalendarMonth"/>
                     <MudListItemExtended T="string" Text="@Project.Language.ToString()" Icon="@Icons.Material.Filled.Language"/>
                     <MudListItemExtended T="string" Text="@Project.ProjectType.ToString()" Icon="@Icons.Material.Filled.Category"/>
                     <MudListItemExtended T="string" Text="@Project.Score.ToString()" Icon="@Icons.Material.Filled.Polyline"/>
