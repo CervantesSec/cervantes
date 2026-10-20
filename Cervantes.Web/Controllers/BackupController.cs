@@ -1712,14 +1712,24 @@ public class BackupController : ControllerBase
             }
 
             await transaction.CommitAsync();
+            // From here the data is in: nothing below may roll back or turn the restore into an error.
+            await transaction.DisposeAsync();
+            transaction = null;
 
             foreach (var (user, role) in pendingRoles)
             {
-                var status = await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, new List<string> { role });
-                if (status.HasErrors)
+                try
                 {
-                    // The user is restored without permissions; an admin has to give it a role by hand.
-                    _logger.LogWarning("Restore could not give user {UserId} a role: {Errors}", user.Id, status.GetAllErrors());
+                    var status = await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, new List<string> { role });
+                    if (status.HasErrors)
+                    {
+                        // The user is restored without permissions; an admin has to give it a role by hand.
+                        _logger.LogWarning("Restore could not give user {UserId} a role: {Errors}", user.Id, status.GetAllErrors());
+                    }
+                }
+                catch (Exception roleEx)
+                {
+                    _logger.LogError(roleEx, "Restore could not give user {UserId} a role", user.Id);
                 }
             }
 
@@ -1751,7 +1761,15 @@ public class BackupController : ControllerBase
             {
                 // Nothing of this restore is kept. The failed entries stay tracked, so later work in the same scope
                 // (a Blazor circuit) would try to save them again.
-                await transaction.RollbackAsync();
+                try
+                {
+                    await transaction.RollbackAsync();
+                }
+                catch (Exception rollbackEx)
+                {
+                    // A failed commit can leave the transaction unusable; the database rolls it back on its own.
+                    _logger.LogError(rollbackEx, "Rolling back the restore failed. User: {UserId}", aspNetUserId);
+                }
                 userManager.Context.ChangeTracker.Clear();
             }
             QueueResanitize();
