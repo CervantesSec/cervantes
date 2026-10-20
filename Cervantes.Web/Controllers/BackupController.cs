@@ -14,6 +14,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
 using Task = Cervantes.CORE.Entities.Task;
 
 namespace Cervantes.Web.Controllers;
@@ -213,6 +214,7 @@ public class BackupController : ControllerBase
                     Id = x.Id,
                     Name = x.Name,
                     Content = x.Content,
+                    ContentCss = x.ContentCss,
                     Language = x.Language,
                     ComponentType = x.ComponentType,
                     Created = x.Created,
@@ -966,6 +968,7 @@ public class BackupController : ControllerBase
     [HasPermission(Permissions.BackupRestore)]
     public async Task<IActionResult> RestoreData(BackupFormViewModel model)
     {
+        IDbContextTransaction? transaction = null;
         try
         {
 
@@ -987,6 +990,13 @@ public class BackupController : ControllerBase
             {
                 backupViewModel = JsonSerializer.Deserialize<BackupViewModel>(stream);
             }
+
+            // All blocks go in one transaction: a row that fails late must not leave the earlier blocks restored.
+            // Every manager shares this request's DbContext, so their SaveChangesAsync calls all join it.
+            transaction = await userManager.Context.Database.BeginTransactionAsync();
+            // AuthPermissions writes through its own DbContext and connection, outside the transaction, so users get
+            // their roles only once the restore has committed.
+            var pendingRoles = new List<(ApplicationUser User, string Role)>();
 
             // Users are restored before clients, so a client user's link is set once its client exists.
             var pendingClientLinks = new Dictionary<string, Guid>();
@@ -1046,12 +1056,7 @@ public class BackupController : ControllerBase
                     // are not used (there is no "User" Identity role to add the user to).
                     await userManager.AddAsync(user);
                     await userManager.Context.SaveChangesAsync();
-                    var status = await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, new List<string> { role });
-                    if (status.HasErrors)
-                    {
-                        // The user is restored without permissions; an admin has to give it a role by hand.
-                        _logger.LogWarning("Restore could not give user {UserId} a role: {Errors}", user.Id, status.GetAllErrors());
-                    }
+                    pendingRoles.Add((user, role));
                 }
 
                 await userManager.Context.SaveChangesAsync();
@@ -1610,6 +1615,8 @@ public class BackupController : ControllerBase
                     {
                         continue;
                     }
+                    // Backups made before ContentCss was exported carry null; the column is NOT NULL.
+                    comp.ContentCss ??= string.Empty;
                     await reportComponentsManager.AddAsync(comp);
                 }
 
@@ -1704,6 +1711,18 @@ public class BackupController : ControllerBase
                 await knowledgeBaseManager.Context.SaveChangesAsync();
             }
 
+            await transaction.CommitAsync();
+
+            foreach (var (user, role) in pendingRoles)
+            {
+                var status = await authUsersAdminService.AddNewUserAsync(user.Id, user.Email, user.UserName, new List<string> { role });
+                if (status.HasErrors)
+                {
+                    // The user is restored without permissions; an admin has to give it a role by hand.
+                    _logger.LogWarning("Restore could not give user {UserId} a role: {Errors}", user.Id, status.GetAllErrors());
+                }
+            }
+
             // A backup can carry HTML stored before a sanitizer fix (or crafted by hand); clean it like any write.
             // The rows are already committed here, so a failure must not turn the restore into a 400: queue the
             // same pass in a fresh scope instead.
@@ -1728,10 +1747,22 @@ public class BackupController : ControllerBase
         {
             _logger.LogError(ex, "An error ocurred restoring data. User: {0}",
                 aspNetUserId);
-            // Earlier entity blocks were already committed with their own SaveChangesAsync; clean them in a fresh
-            // scope, since this request's DbContext may hold failed entries.
+            if (transaction != null)
+            {
+                // Nothing of this restore is kept. The failed entries stay tracked, so later work in the same scope
+                // (a Blazor circuit) would try to save them again.
+                await transaction.RollbackAsync();
+                userManager.Context.ChangeTracker.Clear();
+            }
             QueueResanitize();
             return await System.Threading.Tasks.Task.FromResult<IActionResult>(BadRequest());
+        }
+        finally
+        {
+            if (transaction != null)
+            {
+                await transaction.DisposeAsync();
+            }
         }
     }
 

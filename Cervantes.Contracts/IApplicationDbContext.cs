@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 
 namespace Cervantes.Contracts;
@@ -20,4 +21,9 @@ public interface IApplicationDbContext
     //DbSet Set(Type entityType);
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
+
+    // For work that must be all or nothing across several SaveChanges calls (a data restore).
+    DatabaseFacade Database { get; }
+
+    ChangeTracker ChangeTracker { get; }
 }
