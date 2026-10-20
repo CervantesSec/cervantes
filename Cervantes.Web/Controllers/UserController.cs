@@ -448,6 +448,10 @@ public class UserController: ControllerBase
                 }
 
                 var user = usrManager.GetByUserId(model.Id);
+                // Read before any field changes: the stamp decision compares the stored user with the request.
+                var authUser = await authUsersAdminService.FindAuthUserByUserIdAsync(user.Id);
+                var currentRoles = authUser.Result?.UserRoles.Select(x => x.RoleName).ToList() ?? new List<string>();
+                var changesSignIn = UserSecurity.ChangesSignIn(user, model, currentRoles, DateTimeOffset.UtcNow);
                 var path = "";
                 var unique = "";
                 if (model.FileContent != null)
@@ -478,7 +482,12 @@ public class UserController: ControllerBase
                 user.NormalizedUserName = sanitizer.Sanitize(model.Email.ToUpper());
                 user.Email = sanitizer.Sanitize(model.Email);
                 user.NormalizedEmail = sanitizer.Sanitize(model.Email.ToUpper());
-                user.SecurityStamp = Guid.NewGuid().ToString();
+                // A new stamp signs the user out of every session within the validation interval, so only an edit that
+                // changes how they sign in gets one.
+                if (changesSignIn)
+                {
+                    user.SecurityStamp = Guid.NewGuid().ToString();
+                }
                 user.ConcurrencyStamp = Guid.NewGuid().ToString();
                 user.FullName = sanitizer.Sanitize(model.FullName);
                 // Optional profile fields: an omitted (null) value keeps the stored one.
@@ -525,11 +534,7 @@ public class UserController: ControllerBase
                 }
                 else
                 {
-                    var authUser = await authUsersAdminService.FindAuthUserByUserIdAsync(user.Id);
-                    if (authUser.Result != null)
-                    {
-                        roles.AddRange(authUser.Result.UserRoles.Select(x => x.RoleName));
-                    }
+                    roles.AddRange(currentRoles);
                 }
 
                 if (roles.Count > 0)
