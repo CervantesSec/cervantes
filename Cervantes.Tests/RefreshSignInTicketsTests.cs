@@ -16,8 +16,8 @@ public class RefreshSignInTicketsTests
         var tickets = new RefreshSignInTickets(new Clock());
         var ticket = tickets.Issue("u1");
 
-        Assert.Equal("u1", tickets.Redeem(ticket));
-        Assert.Null(tickets.Redeem(ticket));
+        Assert.Equal("u1", tickets.Redeem(ticket, "u1"));
+        Assert.Null(tickets.Redeem(ticket, "u1"));
     }
 
     [Fact]
@@ -26,13 +26,13 @@ public class RefreshSignInTicketsTests
         var tickets = new RefreshSignInTickets(new Clock());
         tickets.Issue("u1");
 
-        Assert.Null(tickets.Redeem("not-a-ticket"));
+        Assert.Null(tickets.Redeem("not-a-ticket", "u1"));
     }
 
     [Fact]
     public void Redeem_Null()
     {
-        Assert.Null(new RefreshSignInTickets(new Clock()).Redeem(null));
+        Assert.Null(new RefreshSignInTickets(new Clock()).Redeem(null, "u1"));
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class RefreshSignInTicketsTests
 
         clock.Now = clock.Now.AddMinutes(2).AddSeconds(1);
 
-        Assert.Null(tickets.Redeem(ticket));
+        Assert.Null(tickets.Redeem(ticket, "u1"));
     }
 
     [Fact]
@@ -55,7 +55,25 @@ public class RefreshSignInTicketsTests
         var second = tickets.Issue("u1");
 
         Assert.NotEqual(first, second);
-        Assert.Equal("u1", tickets.Redeem(first));
-        Assert.Equal("u1", tickets.Redeem(second));
+        Assert.Equal("u1", tickets.Redeem(first, "u1"));
+        Assert.Equal("u1", tickets.Redeem(second, "u1"));
+    }
+
+    [Fact]
+    public void Redeem_OtherRequester()
+    {
+        var tickets = new RefreshSignInTickets(new Clock());
+        var ticket = tickets.Issue("u1");
+
+        Assert.Null(tickets.Redeem(ticket, "u2"));
+        Assert.Null(tickets.Redeem(ticket, "u1"));
+    }
+
+    [Fact]
+    public void Redeem_NoRequester()
+    {
+        var tickets = new RefreshSignInTickets(new Clock());
+
+        Assert.Null(tickets.Redeem(tickets.Issue("u1"), null));
     }
 }

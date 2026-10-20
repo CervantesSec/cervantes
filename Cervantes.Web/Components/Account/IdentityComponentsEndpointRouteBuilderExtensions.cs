@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Cervantes.Web.Components.Account.Pages;
 using Cervantes.Web.Components.Account.Pages.Manage;
@@ -227,13 +228,22 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
             [FromServices] UserManager<ApplicationUser> userManager,
             [FromServices] SignInManager<ApplicationUser> signInManager,
             [FromServices] RefreshSignInTickets tickets,
+            [FromServices] IOptionsMonitor<CookieAuthenticationOptions> cookieOptions,
             [FromQuery] string? ticket,
             [FromQuery] string? returnUrl) =>
         {
             var target = LocalUrl.IsLocal(returnUrl) ? returnUrl! : "~/Account/Profile";
             if (!string.IsNullOrEmpty(ticket))
             {
-                var ticketUserId = tickets.Redeem(ticket);
+                // The browser's own sign-in cookie says who is asking. It is read without the stamp check, which the
+                // user's own change has just made it fail, but it must still be unexpired and belong to the ticket's user.
+                var options = cookieOptions.Get(IdentityConstants.ApplicationScheme);
+                var rawCookie = options.CookieManager.GetRequestCookie(context, options.Cookie.Name!);
+                var cookieTicket = rawCookie == null ? null : options.TicketDataFormat.Unprotect(rawCookie);
+                var cookieUserId = cookieTicket?.Properties.ExpiresUtc > DateTimeOffset.UtcNow
+                    ? cookieTicket.Principal.FindFirstValue(ClaimTypes.NameIdentifier)
+                    : null;
+                var ticketUserId = tickets.Redeem(ticket, cookieUserId);
                 var ticketUser = ticketUserId == null ? null : await userManager.FindByIdAsync(ticketUserId);
                 if (ticketUser is null)
                 {
@@ -247,8 +257,7 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
                     return TypedResults.LocalRedirect("~/Account/Lockout");
                 }
 
-                var current = await context.AuthenticateAsync(IdentityConstants.ApplicationScheme);
-                await signInManager.SignInAsync(ticketUser, current.Properties?.IsPersistent ?? false);
+                await signInManager.SignInAsync(ticketUser, cookieTicket!.Properties.IsPersistent);
                 return TypedResults.LocalRedirect(target);
             }
 

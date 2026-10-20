@@ -11,6 +11,7 @@ using FluentValidation;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -35,6 +36,17 @@ public partial class Index: ComponentBase
     [Inject] private ILogger<Index> Logger { get; set; } = default!;
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private RefreshSignInTickets Tickets { get; set; } = default!;
+    [Inject] private AuthenticationStateProvider AuthState { get; set; } = default!;
+
+    /// <summary>
+    /// Whether this circuit's session still matches the user's security stamp. A security change made from a session
+    /// that was already ended (by a lock or another password change) must not hand it a fresh cookie through a ticket.
+    /// </summary>
+    private async Task<bool> SessionIsCurrent()
+    {
+        var principal = (await AuthState.GetAuthenticationStateAsync()).User;
+        return await SignInManager.ValidateSecurityStampAsync(principal) != null;
+    }
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
     private ProfileEdit modelEdit { get; set; } = new ProfileEdit();
     MudForm formEdit;
@@ -351,6 +363,12 @@ public partial class Index: ComponentBase
     
     private async Task ResetAuthenticatorSubmit()
     {
+        if (!await SessionIsCurrent())
+        {
+            // Without a ticket, RefreshSignIn signs an outdated session out.
+            Navigation.NavigateTo("Account/Manage/RefreshSignIn", forceLoad: true);
+            return;
+        }
         await UserManager.SetTwoFactorEnabledAsync(user, false);
         await UserManager.ResetAuthenticatorKeyAsync(user);
         var userId = await UserManager.GetUserIdAsync(user);
@@ -406,6 +424,11 @@ public partial class Index: ComponentBase
     
     private async Task SubmitPasswordAsync()
     {
+        if (!await SessionIsCurrent())
+        {
+            Navigation.NavigateTo("Account/Manage/RefreshSignIn", forceLoad: true);
+            return;
+        }
         var changePasswordResult = await UserManager.ChangePasswordAsync(user, changePasswordModel.OldPassword, changePasswordModel.NewPassword);
         if (!changePasswordResult.Succeeded)
         {
