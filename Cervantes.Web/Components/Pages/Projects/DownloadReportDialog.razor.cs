@@ -43,7 +43,7 @@ public partial class DownloadReportDialog: ComponentBase
             {
                 Snackbar.Add(@localizer["reportDownloadError"], Severity.Error);
             }
-            switch (response.ContentType)
+            switch (MediaType(response.ContentType))
             {
                 case "text/html":
                     Snackbar.Add(@localizer["reportDownloaded"], Severity.Success);
@@ -85,4 +85,7 @@ public partial class DownloadReportDialog: ComponentBase
             
         }
     }
+
+    // The report's Content-Type carries a charset for HTML ("text/html; charset=utf-8"); only the media type picks the file.
+    internal static string MediaType(string contentType) => contentType.Split(';')[0].Trim().ToLowerInvariant();
 }
