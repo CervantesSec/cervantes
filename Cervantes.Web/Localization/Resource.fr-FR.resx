@@ -2786,4 +2786,7 @@
   <data name="deleteClientWarning" xml:space="preserve">
     <value>Cela supprime aussi définitivement les projets du client avec toutes leurs vulnérabilités, tâches, cibles, rapports et pièces jointes. Cette action est irréversible.</value>
   </data>
+  <data name="userHasContent" xml:space="preserve">
+    <value>Cet utilisateur possède des projets, des vulnérabilités ou d'autres contenus partagés : il ne peut pas être supprimé. Verrouillez-le plutôt.</value>
+  </data>
 </root>

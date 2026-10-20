@@ -2786,4 +2786,7 @@
   <data name="deleteClientWarning" xml:space="preserve">
     <value>Dabei werden auch die Projekte des Kunden mit allen Schwachstellen, Aufgaben, Zielen, Berichten und Anhängen endgültig gelöscht. Dies kann nicht rückgängig gemacht werden.</value>
   </data>
+  <data name="userHasContent" xml:space="preserve">
+    <value>Dieser Benutzer besitzt Projekte, Schwachstellen oder andere geteilte Inhalte und kann daher nicht gelöscht werden. Sperren Sie ihn stattdessen.</value>
+  </data>
 </root>

@@ -3348,4 +3348,7 @@ Option 3</value>
   <data name="deleteClientWarning" xml:space="preserve">
     <value>This also permanently deletes the client's projects with all their vulnerabilities, tasks, targets, reports and attachments. This action cannot be undone.</value>
   </data>
+  <data name="userHasContent" xml:space="preserve">
+    <value>This user owns projects, vulnerabilities or other shared content, so it cannot be deleted. Lock the user instead.</value>
+  </data>
 </root>

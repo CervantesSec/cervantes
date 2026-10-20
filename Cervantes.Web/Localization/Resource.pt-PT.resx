@@ -2755,4 +2755,7 @@
   <data name="deleteClientWarning" xml:space="preserve">
     <value>Também elimina permanentemente os projetos do cliente com todas as suas vulnerabilidades, tarefas, alvos, relatórios e anexos. Esta ação não pode ser desfeita.</value>
   </data>
+  <data name="userHasContent" xml:space="preserve">
+    <value>Este utilizador tem projetos, vulnerabilidades ou outro conteúdo partilhado, por isso não pode ser eliminado. Bloqueie-o em vez disso.</value>
+  </data>
 </root>

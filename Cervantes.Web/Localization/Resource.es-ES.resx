@@ -3370,4 +3370,7 @@ Opción 3</value>
   <data name="deleteClientWarning" xml:space="preserve">
     <value>También se eliminarán para siempre los proyectos del cliente con todas sus vulnerabilidades, tareas, objetivos, informes y adjuntos. Esta acción no se puede deshacer.</value>
   </data>
+  <data name="userHasContent" xml:space="preserve">
+    <value>Este usuario tiene proyectos, vulnerabilidades u otro contenido compartido, así que no se puede eliminar. Bloquéalo en su lugar.</value>
+  </data>
 </root>

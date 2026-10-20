@@ -2791,4 +2791,7 @@
   <data name="deleteClientWarning" xml:space="preserve">
     <value>Elimina anche in modo definitivo i progetti del cliente con tutte le loro vulnerabilità, attività, target, report e allegati. Questa azione non può essere annullata.</value>
   </data>
+  <data name="userHasContent" xml:space="preserve">
+    <value>Questo utente possiede progetti, vulnerabilità o altri contenuti condivisi, quindi non può essere eliminato. Bloccalo invece.</value>
+  </data>
 </root>

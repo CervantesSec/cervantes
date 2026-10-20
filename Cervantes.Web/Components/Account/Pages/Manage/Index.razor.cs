@@ -213,6 +213,12 @@ public partial class Index: ComponentBase
     private async Task DeletePersonalData()
     {
         var result = await userController.Delete(user.Id);
+        if (result is not NoContentResult)
+        {
+            // A user who owns shared content keeps the account (409); anything else is a failed delete.
+            Snackbar.Add(result is ConflictObjectResult ? localizer["userHasContent"] : localizer["userDeletedError"], Severity.Warning);
+            return;
+        }
         Logger.LogInformation("User with ID '{UserId}' deleted themselves.", user.Id);
         // The circuit cannot remove the cookie; the endpoint signs out a user that no longer exists.
         Navigation.NavigateTo("Account/Manage/RefreshSignIn", forceLoad: true);

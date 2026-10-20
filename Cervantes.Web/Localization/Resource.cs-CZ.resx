@@ -2786,4 +2786,7 @@
   <data name="deleteClientWarning" xml:space="preserve">
     <value>Tím se trvale smažou také projekty klienta se všemi zranitelnostmi, úkoly, cíli, reporty a přílohami. Tuto akci nelze vrátit zpět.</value>
   </data>
+  <data name="userHasContent" xml:space="preserve">
+    <value>Tento uživatel vlastní projekty, zranitelnosti nebo jiný sdílený obsah, a proto jej nelze smazat. Místo toho jej zablokujte.</value>
+  </data>
 </root>

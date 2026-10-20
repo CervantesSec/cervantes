@@ -2790,4 +2790,7 @@
   <data name="deleteClientWarning" xml:space="preserve">
     <value>Bu işlem müşterinin projelerini tüm zafiyetleri, görevleri, hedefleri, raporları ve ekleriyle birlikte kalıcı olarak siler. Bu işlem geri alınamaz.</value>
   </data>
+  <data name="userHasContent" xml:space="preserve">
+    <value>Bu kullanıcının projeleri, zafiyetleri veya başka paylaşılan içerikleri olduğu için silinemez. Bunun yerine kullanıcıyı kilitleyin.</value>
+  </data>
 </root>

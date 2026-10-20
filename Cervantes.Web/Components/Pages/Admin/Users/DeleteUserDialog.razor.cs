@@ -34,6 +34,10 @@ public partial class DeleteUserDialog: ComponentBase
                 Snackbar.Add(@localizer["userDeleted"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }
+            else if (response is ConflictObjectResult)
+            {
+                Snackbar.Add(@localizer["userHasContent"], Severity.Warning);
+            }
             else
             {
                 Snackbar.Add(@localizer["userDeletedError"], Severity.Error);

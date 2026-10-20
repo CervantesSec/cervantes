@@ -633,9 +633,24 @@ public class UserController: ControllerBase
                 var user = usrManager.GetByUserId(userId);
                 if (user != null)
                 {
+                    // Deleting the user would cascade through everything they created (other people's work under
+                    // their clients and KB categories included) or fail on the rows that block it, so a user who owns
+                    // shared content is refused; locking the user is the way to take away access.
+                    var content = SharedContent(user.Id);
+                    if (content.Count > 0)
+                    {
+                        _logger.LogWarning("User {TargetUserId} owns shared content and was not deleted. User: {UserId}", user.Id, aspNetUserId);
+                        return Conflict(new { message = "The user owns content; lock the user instead of deleting it.", content });
+                    }
+
                     usrManager.Remove(user);
                     await usrManager.Context.SaveChangesAsync();
-                    await authUsersAdminService.DeleteUserAsync(user.Id);
+                    var authStatus = await authUsersAdminService.DeleteUserAsync(user.Id);
+                    if (authStatus.HasErrors)
+                    {
+                        _logger.LogWarning("User {TargetUserId} was deleted but its AuthPermissions user was not: {Errors}",
+                            user.Id, authStatus.GetAllErrors());
+                    }
                     _logger.LogInformation("User deleted successfully. User: {0}",
                         aspNetUserId);
                     return NoContent();
@@ -663,6 +678,50 @@ public class UserController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// What a user owns that other people work with, by kind, leaving out zero counts. Personal data (API keys, chats,
+    /// notifications, RSS feeds, Identity rows) is not counted: it goes with the user.
+    /// </summary>
+    internal Dictionary<string, int> SharedContent(string userId)
+    {
+        var db = usrManager.Context;
+        var counts = new Dictionary<string, int>
+        {
+            ["projects"] = db.Set<Project>().Count(x => x.UserId == userId),
+            ["clients"] = db.Set<Client>().Count(x => x.UserId == userId),
+            ["vulns"] = db.Set<Vuln>().Count(x => x.UserId == userId),
+            ["tasks"] = db.Set<CORE.Entities.Task>().Count(x => x.CreatedUserId == userId || x.AsignedUserId == userId),
+            ["targets"] = db.Set<Target>().Count(x => x.UserId == userId),
+            ["targetServices"] = db.Set<TargetServices>().Count(x => x.UserId == userId),
+            ["documents"] = db.Set<Document>().Count(x => x.UserId == userId),
+            ["notes"] = db.Set<Note>().Count(x => x.UserId == userId),
+            ["reports"] = db.Set<Report>().Count(x => x.UserId == userId),
+            ["reportTemplates"] = db.Set<ReportTemplate>().Count(x => x.UserId == userId),
+            ["vaults"] = db.Set<Vault>().Count(x => x.UserId == userId),
+            ["knowledgeBase"] = db.Set<KnowledgeBase>().Count(x => x.CreatedUserId == userId || x.UpdatedUserId == userId)
+                                + db.Set<KnowledgeBaseCategories>().Count(x => x.UserId == userId),
+            ["checklists"] = db.Set<Checklist>().Count(x => x.UserId == userId) + db.Set<ChecklistTemplate>().Count(x => x.UserId == userId),
+            ["wstg"] = db.Set<WSTG>().Count(x => x.UserId == userId),
+            ["mastg"] = db.Set<MASTG>().Count(x => x.UserId == userId),
+            ["jira"] = db.Set<Jira>().Count(x => x.UserId == userId),
+            ["projectNotes"] = db.Set<ProjectNote>().Count(x => x.UserId == userId),
+            ["vulnNotes"] = db.Set<VulnNote>().Count(x => x.UserId == userId),
+            ["taskNotes"] = db.Set<TaskNote>().Count(x => x.UserId == userId),
+            ["attachments"] = db.Set<ProjectAttachment>().Count(x => x.UserId == userId)
+                              + db.Set<VulnAttachment>().Count(x => x.UserId == userId)
+                              + db.Set<TaskAttachment>().Count(x => x.UserId == userId),
+            ["customFields"] = db.Set<VulnCustomField>().Count(x => x.UserId == userId)
+                               + db.Set<VulnCustomFieldValue>().Count(x => x.UserId == userId)
+                               + db.Set<ProjectCustomField>().Count(x => x.UserId == userId)
+                               + db.Set<ProjectCustomFieldValue>().Count(x => x.UserId == userId)
+                               + db.Set<ClientCustomField>().Count(x => x.UserId == userId)
+                               + db.Set<ClientCustomFieldValue>().Count(x => x.UserId == userId)
+                               + db.Set<TargetCustomField>().Count(x => x.UserId == userId)
+                               + db.Set<TargetCustomFieldValue>().Count(x => x.UserId == userId),
+        };
+        return counts.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+    }
+
     [HttpDelete]
     [Route("Logo/{id}")]
     [HasPermission(Permissions.UsersEdit)]
