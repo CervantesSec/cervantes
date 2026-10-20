@@ -704,6 +704,8 @@ public class UserController: ControllerBase
             ["wstg"] = db.Set<WSTG>().Count(x => x.UserId == userId),
             ["mastg"] = db.Set<MASTG>().Count(x => x.UserId == userId),
             ["jira"] = db.Set<Jira>().Count(x => x.UserId == userId),
+            // CVEs are shared: deleting their creator would cascade them, with their links and others' notifications.
+            ["cves"] = db.Set<Cve>().Count(x => x.UserId == userId),
             ["projectNotes"] = db.Set<ProjectNote>().Count(x => x.UserId == userId),
             ["vulnNotes"] = db.Set<VulnNote>().Count(x => x.UserId == userId),
             ["taskNotes"] = db.Set<TaskNote>().Count(x => x.UserId == userId),
