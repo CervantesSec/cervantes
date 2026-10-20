@@ -78,7 +78,9 @@ builder.Services.AddAuthentication(options =>
         o.SlidingExpiration = true;
         o.ExpireTimeSpan = TimeSpan.FromMinutes(240);
     })
-    .AddCookie(IdentityConstants.ExternalScheme);
+    .AddCookie(IdentityConstants.ExternalScheme)
+    // SecurityStampValidator signs this scheme out when it rejects a cookie; without it the rejection throws.
+    .AddCookie(IdentityConstants.TwoFactorRememberMeScheme);
 
 if (builder.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
 {
@@ -122,9 +124,26 @@ if (builder.Configuration.GetValue<bool>("LdapConfiguration:Enabled"))
     options.Events.OnValidatePrincipal = PeriodicCookieEvent.PeriodicRefreshUsersClaims;
 });*/
 
+// Sessions end within this interval of a lock, a delete or an edit that changes how the user signs in (all of which
+// change the security stamp). The interactive circuit revalidates on the same interval.
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+    options.ValidationInterval = TimeSpan.FromMinutes(builder.Configuration.GetValue("SecurityStamp:ValidationIntervalMinutes", 30)));
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddSingleton<RefreshSignInTickets>();
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Events.OnValidatePrincipal = PeriodicCookieEvent.PeriodicRefreshUsersClaims;
+    // AddIdentityCore registers the security stamp validator but does not hook it into the cookie, and this event
+    // replaces the handler anyway, so it runs the validator first. Only a principal that survives it gets its AuthP
+    // claims refreshed.
+    options.Events.OnValidatePrincipal = async context =>
+    {
+        await SecurityStampValidator.ValidatePrincipalAsync(context);
+        if (context.Principal?.Identity?.IsAuthenticated == true)
+        {
+            await PeriodicCookieEvent.PeriodicRefreshUsersClaims(context);
+        }
+    };
     options.Events.OnRedirectToLogin = context =>
     {
         // Check if the request is for the API

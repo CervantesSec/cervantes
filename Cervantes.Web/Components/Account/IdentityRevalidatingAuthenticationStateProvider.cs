@@ -8,14 +8,18 @@ using Microsoft.Extensions.Options;
 namespace Cervantes.Web.Components.Account;
 
 // This is a server-side AuthenticationStateProvider that revalidates the security stamp for the connected user
-// every 30 minutes an interactive circuit is connected.
+// while an interactive circuit is connected, on the same interval as the cookie.
 internal sealed class IdentityRevalidatingAuthenticationStateProvider(
         ILoggerFactory loggerFactory,
         IServiceScopeFactory scopeFactory,
-        IOptions<IdentityOptions> options)
+        IOptions<IdentityOptions> options,
+        IOptions<SecurityStampValidatorOptions> stampOptions)
     : RevalidatingServerAuthenticationStateProvider(loggerFactory)
 {
-    protected override TimeSpan RevalidationInterval => TimeSpan.FromMinutes(30);
+    // The base class waits this long between checks in a loop, so a zero interval (allowed for the cookie) would poll
+    // without pause; a minute is the floor.
+    protected override TimeSpan RevalidationInterval =>
+        stampOptions.Value.ValidationInterval < TimeSpan.FromMinutes(1) ? TimeSpan.FromMinutes(1) : stampOptions.Value.ValidationInterval;
 
     protected override async Task<bool> ValidateAuthenticationStateAsync(
         AuthenticationState authenticationState, CancellationToken cancellationToken)

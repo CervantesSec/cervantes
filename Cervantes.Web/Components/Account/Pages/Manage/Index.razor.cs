@@ -34,6 +34,7 @@ public partial class Index: ComponentBase
 
     [Inject] private ILogger<Index> Logger { get; set; } = default!;
     [Inject] private NavigationManager Navigation { get; set; } = default!;
+    [Inject] private RefreshSignInTickets Tickets { get; set; } = default!;
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
     private ProfileEdit modelEdit { get; set; } = new ProfileEdit();
     MudForm formEdit;
@@ -357,7 +358,8 @@ public partial class Index: ComponentBase
         Logger.LogInformation("User with ID '{UserId}' has reset their authentication app key.", userId);
 
         Snackbar.Add("resetedAuthenticator", Severity.Success);
-        Navigation.NavigateTo("Account/Manage/RefreshSignIn?returnUrl=/Account/Profile", forceLoad: true);
+        // The reset rotated the security stamp; the ticket lets RefreshSignIn issue the new cookie.
+        Navigation.NavigateTo($"Account/Manage/RefreshSignIn?ticket={Uri.EscapeDataString(Tickets.Issue(user.Id))}&returnUrl=/Account/Profile", forceLoad: true);
 
         /*RedirectManager.RedirectToWithStatus(
             "Account/Manage/EnableAuthenticator",
@@ -413,8 +415,9 @@ public partial class Index: ComponentBase
         Snackbar.Add(@localizer["passwordChanged"], Severity.Success);
 
         Logger.LogInformation("User changed their password successfully.");
-        // The password change rotated the security stamp, so the cookie must be reissued from a real HTTP request.
-        Navigation.NavigateTo("Account/Manage/RefreshSignIn?returnUrl=/Account/Profile", forceLoad: true);
+        // The password change rotated the security stamp, so the cookie must be reissued from a real HTTP request; the
+        // ticket proves the request comes from this page.
+        Navigation.NavigateTo($"Account/Manage/RefreshSignIn?ticket={Uri.EscapeDataString(Tickets.Issue(user.Id))}&returnUrl=/Account/Profile", forceLoad: true);
     }
     #endregion
 
