@@ -37,4 +37,20 @@ public class CalendarDateTests
         Assert.Equal(new DateTime(2026, 10, 19), date);
         Assert.Equal(DateTimeKind.Unspecified, date.Kind);
     }
+    [Fact]
+    public void LocalDays_CoversThePickedDays()
+    {
+        // Picked 19 to 21 October in Madrid: stored from 18 October 22:00 UTC to 20 October 22:00 UTC.
+        var days = CalendarDate.LocalDays(new DateTime(2026, 10, 18, 22, 0, 0, DateTimeKind.Utc),
+            new DateTime(2026, 10, 20, 22, 0, 0, DateTimeKind.Utc), Zone(2)).ToList();
+
+        Assert.Equal(new[] { new DateTime(2026, 10, 19), new DateTime(2026, 10, 20), new DateTime(2026, 10, 21) }, days);
+    }
+
+    [Fact]
+    public void LocalDays_EndBeforeStartIsEmpty()
+    {
+        Assert.Empty(CalendarDate.LocalDays(new DateTime(2026, 10, 20, 0, 0, 0, DateTimeKind.Utc),
+            new DateTime(2026, 10, 18, 0, 0, 0, DateTimeKind.Utc), TimeZoneInfo.Utc));
+    }
 }

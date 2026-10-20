@@ -1055,8 +1055,8 @@ public class ReportController : ControllerBase
                         {"TaskName", tas.Name},
                         {"TaskDescription", tas.Description},
                         {"TaskStatus", tas.Status.ToString()},
-                        {"TaskStartDate", tas.StartDate.ToString("dd/MM/yyyy")},
-                        {"TaskEndDate", tas.EndDate.ToString("dd/MM/yyyy")},
+                        {"TaskStartDate", tas.StartDate.ToLocalDate().ToString("dd/MM/yyyy")},
+                        {"TaskEndDate", tas.EndDate.ToLocalDate().ToString("dd/MM/yyyy")},
                         {"TaskAssignedTo", asigned},
                         {"TaskCreatedBy", tas.CreatedUser.FullName},
                     });
@@ -1220,8 +1220,8 @@ public class ReportController : ControllerBase
                 scriptObject.Add("ProjectLanguage", Project.Language);
                 scriptObject.Add("ProjecStatus", Project.Status);
                 scriptObject.Add("ProjectBusinessImpact", Project.BusinessImpact);
-                scriptObject.Add("StartDate", Project.StartDate.ToString("dd/MM/yyyy"));
-                scriptObject.Add("EndDate", Project.EndDate.ToString("dd/MM/yyyy"));
+                scriptObject.Add("StartDate", Project.StartDate.ToLocalDate().ToString("dd/MM/yyyy"));
+                scriptObject.Add("EndDate", Project.EndDate.ToLocalDate().ToString("dd/MM/yyyy"));
                 scriptObject.Add("ProjectType", Project.ProjectType.ToString());
                 scriptObject.Add("ProjectScore", Project.Score);
                 scriptObject.Add("ProjectExecutiveSummary", Project.ExecutiveSummary);

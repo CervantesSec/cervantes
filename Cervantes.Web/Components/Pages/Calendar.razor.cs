@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net;
 using System.Net.Http.Json;
 using System.Security.Claims;
@@ -33,7 +34,7 @@ public partial class Calendar: ComponentBase
         foreach (var pro in model.Projects)
         {
             
-            for(DateTime counter = pro.StartDate; counter <= pro.EndDate; counter = counter.AddDays(1))
+            foreach (var counter in CalendarDate.LocalDays(pro.StartDate, pro.EndDate))
             {
                 var item = new CustomItem
                 {
@@ -51,7 +52,7 @@ public partial class Calendar: ComponentBase
         foreach (var task in model.Tasks)
         {
             
-            for(DateTime counter = task.StartDate; counter <= task.EndDate; counter = counter.AddDays(1))
+            foreach (var counter in CalendarDate.LocalDays(task.StartDate, task.EndDate))
             {
                 var item = new CustomItem();
                 item.Start = counter;

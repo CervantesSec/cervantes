@@ -12,4 +12,16 @@ public static class CalendarDate
     internal static DateTime ToLocalDate(DateTime stored, TimeZoneInfo zone)
         => DateTime.SpecifyKind(TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(stored, DateTimeKind.Utc), zone).Date,
             DateTimeKind.Unspecified);
+
+    /// <summary>The calendar days from a stored start date to a stored end date, both included.</summary>
+    public static IEnumerable<DateTime> LocalDays(DateTime start, DateTime end) => LocalDays(start, end, TimeZoneInfo.Local);
+
+    internal static IEnumerable<DateTime> LocalDays(DateTime start, DateTime end, TimeZoneInfo zone)
+    {
+        var last = ToLocalDate(end, zone);
+        for (var day = ToLocalDate(start, zone); day <= last; day = day.AddDays(1))
+        {
+            yield return day;
+        }
+    }
 }
