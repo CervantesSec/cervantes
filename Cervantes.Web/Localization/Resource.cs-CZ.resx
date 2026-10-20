@@ -2783,4 +2783,7 @@
   <data name="deleteProjectWarning" xml:space="preserve">
     <value>Tím se trvale smažou také zranitelnosti, úkoly, cíle, reporty, trezor, checklisty, poznámky a přílohy projektu. Tuto akci nelze vrátit zpět.</value>
   </data>
+  <data name="deleteClientWarning" xml:space="preserve">
+    <value>Tím se trvale smažou také projekty klienta se všemi zranitelnostmi, úkoly, cíli, reporty a přílohami. Tuto akci nelze vrátit zpět.</value>
+  </data>
 </root>

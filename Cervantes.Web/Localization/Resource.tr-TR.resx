@@ -2787,4 +2787,7 @@
   <data name="deleteProjectWarning" xml:space="preserve">
     <value>Bu işlem projenin zafiyetlerini, görevlerini, hedeflerini, raporlarını, kasasını, kontrol listelerini, notlarını ve eklerini de kalıcı olarak siler. Bu işlem geri alınamaz.</value>
   </data>
+  <data name="deleteClientWarning" xml:space="preserve">
+    <value>Bu işlem müşterinin projelerini tüm zafiyetleri, görevleri, hedefleri, raporları ve ekleriyle birlikte kalıcı olarak siler. Bu işlem geri alınamaz.</value>
+  </data>
 </root>

@@ -2752,4 +2752,7 @@
   <data name="deleteProjectWarning" xml:space="preserve">
     <value>Também elimina permanentemente as vulnerabilidades, tarefas, alvos, relatórios, cofre, checklists, notas e anexos do projeto. Esta ação não pode ser desfeita.</value>
   </data>
+  <data name="deleteClientWarning" xml:space="preserve">
+    <value>Também elimina permanentemente os projetos do cliente com todas as suas vulnerabilidades, tarefas, alvos, relatórios e anexos. Esta ação não pode ser desfeita.</value>
+  </data>
 </root>

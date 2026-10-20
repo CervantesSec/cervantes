@@ -27,6 +27,7 @@ public class ClientsController : ControllerBase
     private IClientCustomFieldManager clientCustomFieldManager = null;
     private IClientCustomFieldValueManager clientCustomFieldValueManager = null;
     private readonly IWebHostEnvironment env;
+    private readonly ProjectTreeDeleter projectTreeDeleter;
     private readonly ILogger<ClientsController> _logger = null;
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
@@ -39,8 +40,9 @@ public class ClientsController : ControllerBase
     public ClientsController(IClientManager clientManager, IUserManager userManager, IProjectManager projectManager,
         IWebHostEnvironment env, ILogger<ClientsController> logger,IHttpContextAccessor HttpContextAccessor, 
         IFileCheck fileCheck, Sanitizer sanitizer, IClientCustomFieldManager clientCustomFieldManager,
-        IClientCustomFieldValueManager clientCustomFieldValueManager)
+        IClientCustomFieldValueManager clientCustomFieldValueManager, ProjectTreeDeleter projectTreeDeleter)
     {
+        this.projectTreeDeleter = projectTreeDeleter;
         this.clientManager = clientManager;
         this.projectManager = projectManager;
         this.userManager = userManager;
@@ -219,10 +221,17 @@ public class ClientsController : ControllerBase
             {
 
                 var client = clientManager.GetById(clientId);
-                if (client.Name != null)
+                if (client != null)
                 {
+                    // The client's projects go by cascade, but their vulns, tasks and targets block that cascade, so
+                    // the whole tree is removed in the same save.
+                    var projectIds = projectManager.GetAll().Where(x => x.ClientId == clientId).Select(x => x.Id).ToList();
+                    var tree = projectTreeDeleter.Stage(projectIds);
+                    var imagePath = client.ImagePath;
                     clientManager.Remove(client);
-                    clientManager.Context.SaveChanges();
+                    await clientManager.Context.SaveChangesAsync();
+                    projectTreeDeleter.DeleteFolders(tree, aspNetUserId);
+                    DeleteClientImage(imagePath, clientId);
                     _logger.LogInformation("Client deleted successfully. User: {0}",
                         aspNetUserId);
                     return NoContent();
@@ -254,6 +263,27 @@ public class ClientsController : ControllerBase
         
     }
     
+    /// <summary>Removes a deleted client's image. A file that cannot go is only logged; the client is already gone.</summary>
+    private void DeleteClientImage(string? storedPath, Guid clientId)
+    {
+        if (!AttachmentPath.TryResolve(env.WebRootPath, storedPath, "Clients", out var path))
+        {
+            return; // "None" or no image.
+        }
+
+        try
+        {
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            _logger.LogWarning(e, "Image of client {Id} could not be deleted. User: {UserId}", clientId, aspNetUserId);
+        }
+    }
+
     [HasPermission(Permissions.ClientsEdit)]
     [HttpDelete]
     [Route("Avatar/{id}")]

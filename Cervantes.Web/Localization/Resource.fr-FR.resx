@@ -2783,4 +2783,7 @@
   <data name="deleteProjectWarning" xml:space="preserve">
     <value>Cela supprime aussi définitivement les vulnérabilités, tâches, cibles, rapports, coffre, checklists, notes et pièces jointes du projet. Cette action est irréversible.</value>
   </data>
+  <data name="deleteClientWarning" xml:space="preserve">
+    <value>Cela supprime aussi définitivement les projets du client avec toutes leurs vulnérabilités, tâches, cibles, rapports et pièces jointes. Cette action est irréversible.</value>
+  </data>
 </root>

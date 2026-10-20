@@ -16,6 +16,7 @@
 	</TitleContent>
 	<DialogContent>
 		<MudForm Model="@client" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
+			<MudAlert Severity="MudBlazor.Severity.Warning" Class="mb-4">@localizer["deleteClientWarning"]</MudAlert>
 			<MudText>@localizer["deleteMessageIntro"] @client.Name ?</MudText>
 		</MudForm>
 	</DialogContent>

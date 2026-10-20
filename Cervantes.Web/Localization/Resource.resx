@@ -3345,4 +3345,7 @@ Option 3</value>
   <data name="deleteProjectWarning" xml:space="preserve">
     <value>This also permanently deletes the project's vulnerabilities, tasks, targets, reports, vault, checklists, notes and attachments. This action cannot be undone.</value>
   </data>
+  <data name="deleteClientWarning" xml:space="preserve">
+    <value>This also permanently deletes the client's projects with all their vulnerabilities, tasks, targets, reports and attachments. This action cannot be undone.</value>
+  </data>
 </root>

@@ -3367,4 +3367,7 @@ Opción 3</value>
   <data name="deleteProjectWarning" xml:space="preserve">
     <value>También se eliminarán para siempre las vulnerabilidades, tareas, objetivos, informes, vault, checklists, notas y adjuntos del proyecto. Esta acción no se puede deshacer.</value>
   </data>
+  <data name="deleteClientWarning" xml:space="preserve">
+    <value>También se eliminarán para siempre los proyectos del cliente con todas sus vulnerabilidades, tareas, objetivos, informes y adjuntos. Esta acción no se puede deshacer.</value>
+  </data>
 </root>
