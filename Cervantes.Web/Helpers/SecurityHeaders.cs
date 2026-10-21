@@ -1,0 +1,46 @@
+namespace Cervantes.Web.Helpers;
+
+/// <summary>
+/// Security headers sent on every response: the Content-Security-Policy, X-Content-Type-Options and Referrer-Policy.
+/// </summary>
+public static class SecurityHeaders
+{
+    // Content-Security-Policy, enforced. Before changing it, try the new policy under the header name
+    // "Content-Security-Policy-Report-Only" and walk the UI: the browser then logs violations and blocks nothing.
+    // script-src has no 'unsafe-inline' on purpose: that is what stops an injected <script> or inline handler.
+    // script-src has no 'unsafe-eval' either. MudBlazor.Extensions runs eval("typeof MudBlazorExtensions !== 'undefined'")
+    // (through BlazorJS) on every ShowExAsync, inside a try/catch, so blocking it changes nothing (checked 2026-10-21).
+    // These need 'unsafe-eval' or a new check before they are used: MudBlazor.Extensions components built on BlazorJS
+    // DInvoke* (MudExHtmlEdit, MudExCodeView, MudExUploadEdit, ...), Blazored.LocalStorage KeysAsync/LengthAsync, and
+    // Monaco's official AMD loader.js.
+    // style-src 'unsafe-inline': MudBlazor and TinyMCE inject inline styles. The Google Fonts hosts serve Roboto (App.razor).
+    // connect-src 'self' also covers the same-origin ws:/wss: Blazor Server SignalR circuit (CSP Level 3); no other host
+    // gets a socket. blob: in img-src/connect-src is required by TinyMCE.
+    // object-src 'self' keeps the <embed> attachment previews working (the files come from FileController).
+    // form-action does not fall back to default-src, so it is explicit: a stored <form action="https://evil"> cannot post offsite.
+    // With OpenID Connect, the external login form is answered with a redirect to the provider, and browsers check
+    // form-action on that redirect too, so the Authority's origin is allowed as well.
+    public static string ContentSecurityPolicy(string? openIdAuthorityOrigin)
+    {
+        var formActionSources = openIdAuthorityOrigin == null ? "'self'" : "'self' " + openIdAuthorityOrigin;
+        return "default-src 'self'; " +
+               "script-src 'self'; " +
+               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+               "img-src 'self' data: blob:; " +
+               "font-src 'self' data: https://fonts.gstatic.com; " +
+               "connect-src 'self' blob:; " +
+               "frame-ancestors 'self'; " +
+               $"form-action {formActionSources}; " +
+               "object-src 'self'; " +
+               "base-uri 'self'";
+    }
+
+    // nosniff: every script and style the app serves has the right Content-Type (checked 2026-10-21).
+    // same-origin: links to external sites do not learn the instance's origin, often an internal hostname.
+    public static void Apply(IHeaderDictionary headers, string contentSecurityPolicy)
+    {
+        headers["Content-Security-Policy"] = contentSecurityPolicy;
+        headers["X-Content-Type-Options"] = "nosniff";
+        headers["Referrer-Policy"] = "same-origin";
+    }
+}

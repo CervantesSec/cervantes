@@ -386,42 +386,22 @@ if (forwardedHeadersEnabled)
 // report generation must not fetch anything, so it gets one that returns no CSS.
 PreMailer.Net.Downloaders.WebDownloader.SharedDownloader = new OfflineCssDownloader();
 
-// Content-Security-Policy, enforced. Before changing it, try the new policy under the header name
-// "Content-Security-Policy-Report-Only" and walk the UI: the browser then logs violations and blocks nothing.
-// script-src has no 'unsafe-inline' on purpose: that is what stops an injected <script> or inline handler.
-// script-src 'unsafe-eval': BlazorJS, used by MudBlazor.Extensions, calls eval("typeof MudBlazorExtensions !== 'undefined'")
-// through JS interop when a dialog opens. It cannot run injected markup, so the protection above stays.
-// style-src 'unsafe-inline': MudBlazor and TinyMCE inject inline styles. The Google Fonts hosts serve Roboto (App.razor).
-// connect-src 'self' also covers the same-origin ws:/wss: Blazor Server SignalR circuit (CSP Level 3); no other host
-// gets a socket. blob: in img-src/connect-src is required by TinyMCE.
-// object-src 'self' keeps the <embed> attachment previews working (the files come from FileController).
-// form-action does not fall back to default-src, so it is explicit: a stored <form action="https://evil"> cannot post offsite.
-// With OpenID Connect, the external login form is answered with a redirect to the provider, and browsers check
-// form-action on that redirect too, so the Authority's origin is allowed as well.
-var formActionSources = "'self'";
+// Security headers (CSP, nosniff, Referrer-Policy): see SecurityHeaders for what each directive allows and why.
+// With OpenID Connect, the provider's origin is added to form-action.
+string? openIdAuthorityOrigin = null;
 if (app.Configuration.GetValue<bool>("OpenIdConnect:Enabled")
     && Uri.TryCreate(app.Configuration["OpenIdConnect:Authority"], UriKind.Absolute, out var oidcAuthority))
 {
-    formActionSources += " " + oidcAuthority.GetLeftPart(UriPartial.Authority);
+    openIdAuthorityOrigin = oidcAuthority.GetLeftPart(UriPartial.Authority);
 }
-var contentSecurityPolicy =
-    "default-src 'self'; " +
-    "script-src 'self' 'unsafe-eval'; " +
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-    "img-src 'self' data: blob:; " +
-    "font-src 'self' data: https://fonts.gstatic.com; " +
-    "connect-src 'self' blob:; " +
-    "frame-ancestors 'self'; " +
-    $"form-action {formActionSources}; " +
-    "object-src 'self'; " +
-    "base-uri 'self'";
+var contentSecurityPolicy = SecurityHeaders.ContentSecurityPolicy(openIdAuthorityOrigin);
 app.Use((context, next) =>
 {
     // OnStarting, not a plain assignment: UseExceptionHandler clears the response (headers included) before it
     // re-executes /Error, and this middleware sits before it, so a header set up front is lost on error pages.
     context.Response.OnStarting(state =>
     {
-        ((HttpResponse)state).Headers["Content-Security-Policy"] = contentSecurityPolicy;
+        SecurityHeaders.Apply(((HttpResponse)state).Headers, contentSecurityPolicy);
         return Task.CompletedTask;
     }, context.Response);
     return next();
