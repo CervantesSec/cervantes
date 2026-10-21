@@ -306,11 +306,25 @@ var cspReportingEnabled = builder.Configuration.GetValue<bool>("CspReporting:Ena
 if (cspReportingEnabled)
 {
     var cspReportPermitPerMinute = builder.Configuration.GetValue("CspReporting:PermitPerMinute", 30);
+    if (cspReportPermitPerMinute < 1)
+    {
+        cspReportPermitPerMinute = 30;
+    }
     builder.Services.AddRateLimiter(options =>
     {
         options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+        // One overall limit for the endpoint on top of the per-client one, so a spread-out flood cannot fill the Logs table.
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+            httpContext.Request.Path.Equals(CspReports.Path, StringComparison.OrdinalIgnoreCase)
+                ? RateLimitPartition.GetFixedWindowLimiter("csp-report-global", _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = cspReportPermitPerMinute * 10,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueLimit = 0
+                })
+                : RateLimitPartition.GetNoLimiter("other"));
         options.AddPolicy("csp-report", httpContext => RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            CspReports.PartitionKey(httpContext.Connection.RemoteIpAddress),
             _ => new FixedWindowRateLimiterOptions
             {
                 PermitLimit = cspReportPermitPerMinute,
@@ -495,15 +509,22 @@ app.MapControllers();
 if (cspReportingEnabled)
 {
     // Always 204: the reporter must not learn what was kept. Reports are logged as warnings, not stored elsewhere.
-    app.MapPost(CspReports.Path, async (HttpRequest request, ILoggerFactory loggerFactory) =>
+    app.MapPost(CspReports.Path, async (HttpContext httpContext, ILoggerFactory loggerFactory) =>
     {
-        var body = await CspReports.ReadLimitedAsync(request.Body, CspReports.MaxBodyBytes);
-        var violation = body == null ? null : CspReports.Parse(body);
-        if (violation != null && !CspReports.IsIgnored(violation))
+        try
         {
-            loggerFactory.CreateLogger("Cervantes.Web.CspReports").LogWarning(
-                "CSP violation: {Directive} blocked {BlockedUri} on {DocumentPath} ({SourceFile}:{Line})",
-                violation.Directive, violation.BlockedUri, violation.DocumentPath, violation.SourceFile, violation.Line);
+            var body = await CspReports.ReadLimitedAsync(httpContext.Request.Body, CspReports.MaxBodyBytes, httpContext.RequestAborted);
+            var violation = body == null ? null : CspReports.Parse(body);
+            if (violation != null && !CspReports.IsIgnored(violation))
+            {
+                loggerFactory.CreateLogger("Cervantes.Web.CspReports").LogWarning(
+                    "CSP violation: {Directive} blocked {BlockedUri} on {DocumentPath} ({SourceFile}:{Line})",
+                    violation.Directive, violation.BlockedUri, violation.DocumentPath, violation.SourceFile, violation.Line);
+            }
+        }
+        catch (Exception)
+        {
+            // A bad or aborted report is not worth a 500 and a stack trace in Logs.
         }
         return Results.NoContent();
     }).AllowAnonymous().DisableAntiforgery().RequireRateLimiting("csp-report");

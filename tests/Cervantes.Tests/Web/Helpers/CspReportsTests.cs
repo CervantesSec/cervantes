@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using Cervantes.Web.Helpers;
 
@@ -44,5 +45,79 @@ public class CspReportsTests
 
         using var small = new MemoryStream(Encoding.UTF8.GetBytes("hello"));
         Assert.Equal("hello", await CspReports.ReadLimitedAsync(small, CspReports.MaxBodyBytes));
+    }
+
+    private static string Report(string fields) => "{\"csp-report\":{" + fields + "}}";
+
+    [Fact]
+    public void Parse_ReturnsNullForLoneSurrogate()
+    {
+        Assert.Null(CspReports.Parse(Report("\"effective-directive\":\"img-src\",\"blocked-uri\":\"\\ud800\"")));
+    }
+
+    [Fact]
+    public void Parse_CutsLongFieldsTo500()
+    {
+        var violation = CspReports.Parse(Report("\"effective-directive\":\"img-src\",\"blocked-uri\":\"" + new string('a', 900) + "\""));
+        Assert.NotNull(violation);
+        Assert.Equal(500, violation.BlockedUri.Length);
+    }
+
+    [Fact]
+    public void Parse_DoesNotSplitASurrogatePairWhenCutting()
+    {
+        var violation = CspReports.Parse(Report("\"effective-directive\":\"img-src\",\"blocked-uri\":\"" + new string('a', 499) + "\\ud83d\\ude00\""));
+        Assert.NotNull(violation);
+        Assert.Equal(499, violation.BlockedUri.Length);
+    }
+
+    [Fact]
+    public void Parse_UsesViolatedDirectiveFirstToken()
+    {
+        var violation = CspReports.Parse(Report("\"violated-directive\":\"script-src 'self'\",\"blocked-uri\":\"x\""));
+        Assert.NotNull(violation);
+        Assert.Equal("script-src", violation.Directive);
+    }
+
+    [Fact]
+    public void Parse_RelativeDocumentUriGivesEmptyPath()
+    {
+        var violation = CspReports.Parse(Report("\"effective-directive\":\"img-src\",\"document-uri\":\"/vulns?id=1\",\"blocked-uri\":\"x\""));
+        Assert.NotNull(violation);
+        Assert.Equal("", violation.DocumentPath);
+    }
+
+    [Fact]
+    public void Parse_ReplacesControlCharacters()
+    {
+        var violation = CspReports.Parse(Report("\"effective-directive\":\"img-src\",\"blocked-uri\":\"a\\nb\\u001bc\""));
+        Assert.NotNull(violation);
+        Assert.Equal("a?b?c", violation.BlockedUri);
+    }
+
+    [Fact]
+    public void PartitionKey_Ipv4()
+    {
+        Assert.Equal("203.0.113.7", CspReports.PartitionKey(IPAddress.Parse("203.0.113.7")));
+    }
+
+    [Fact]
+    public void PartitionKey_Ipv6UsesSlash64()
+    {
+        var key = CspReports.PartitionKey(IPAddress.Parse("2001:db8:1:2::1"));
+        Assert.Equal(key, CspReports.PartitionKey(IPAddress.Parse("2001:db8:1:2:ffff:ffff:ffff:ffff")));
+        Assert.NotEqual(key, CspReports.PartitionKey(IPAddress.Parse("2001:db8:1:3::1")));
+    }
+
+    [Fact]
+    public void PartitionKey_MappedIpv4()
+    {
+        Assert.Equal("203.0.113.7", CspReports.PartitionKey(IPAddress.Parse("::ffff:203.0.113.7")));
+    }
+
+    [Fact]
+    public void PartitionKey_Null()
+    {
+        Assert.Equal("unknown", CspReports.PartitionKey(null));
     }
 }

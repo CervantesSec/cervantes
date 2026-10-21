@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 
@@ -15,6 +17,7 @@ public static class CspReports
 
     public sealed record CspViolation(string Directive, string BlockedUri, string DocumentPath, string? SourceFile, int? Line);
 
+    /// <summary>Total: any body that cannot be read as a report (bad JSON, lone surrogates, wrong types) gives null.</summary>
     public static CspViolation? Parse(string body)
     {
         try
@@ -50,23 +53,26 @@ public static class CspReports
             return new CspViolation(Cut(directive), Cut(GetString(report, "blocked-uri") ?? ""), documentPath,
                 GetString(report, "source-file") is { } source ? Cut(source) : null, line);
         }
-        catch (JsonException)
+        catch (Exception)
         {
             return null;
         }
     }
 
-    /// <summary>MudBlazor.Extensions needs eval, which the CSP allows by report only; that noise is dropped.</summary>
+    /// <summary>
+    /// MudBlazor.Extensions tries eval, which the CSP blocks (there is no 'unsafe-eval') and the browser reports. It is
+    /// expected noise from our own pages, so it is dropped.
+    /// </summary>
     public static bool IsIgnored(CspViolation violation) =>
         violation.BlockedUri == "eval" && violation.Directive.StartsWith("script-src", StringComparison.Ordinal);
 
-    public static async Task<string?> ReadLimitedAsync(Stream body, int maxBytes)
+    public static async Task<string?> ReadLimitedAsync(Stream body, int maxBytes, CancellationToken cancellationToken = default)
     {
         var buffer = new byte[maxBytes + 1];
         var total = 0;
         while (total < buffer.Length)
         {
-            var read = await body.ReadAsync(buffer.AsMemory(total));
+            var read = await body.ReadAsync(buffer.AsMemory(total), cancellationToken);
             if (read == 0)
             {
                 break;
@@ -76,11 +82,43 @@ public static class CspReports
         return total > maxBytes ? null : Encoding.UTF8.GetString(buffer, 0, total);
     }
 
+    /// <summary>
+    /// Rate-limit partition of a client: IPv4 (and IPv4-mapped IPv6) by address, other IPv6 by its /64 prefix, because
+    /// a client usually controls a whole /64 and would otherwise get a fresh bucket per address.
+    /// </summary>
+    public static string PartitionKey(IPAddress? address)
+    {
+        if (address == null)
+        {
+            return "unknown";
+        }
+        if (address.IsIPv4MappedToIPv6)
+        {
+            address = address.MapToIPv4();
+        }
+        if (address.AddressFamily == AddressFamily.InterNetworkV6)
+        {
+            return new IPAddress(address.GetAddressBytes().Take(8).Concat(new byte[8]).ToArray()) + "/64";
+        }
+        return address.ToString();
+    }
+
     private static string? GetString(JsonElement element, string name) =>
         element.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
 
     private static string? FirstToken(string? value) =>
         value?.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
 
-    private static string Cut(string value) => value.Length > MaxFieldLength ? value[..MaxFieldLength] : value;
+    private static string Cut(string value)
+    {
+        if (value.Length > MaxFieldLength)
+        {
+            // Do not split a surrogate pair.
+            var length = char.IsHighSurrogate(value[MaxFieldLength - 1]) ? MaxFieldLength - 1 : MaxFieldLength;
+            value = value[..length];
+        }
+        return value.Any(char.IsControl)
+            ? new string(value.Select(c => char.IsControl(c) ? '?' : c).ToArray())
+            : value;
+    }
 }
