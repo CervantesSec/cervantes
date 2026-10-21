@@ -14,11 +14,11 @@
     <link href="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.css" rel="stylesheet" />
     <link href="_content/Blazor.Flags/flags.css" rel="stylesheet" />
     <link href="lib/prism/prism.css" rel="stylesheet" />
-    <HeadOutlet/>
+    <HeadOutlet @rendermode="RenderModeForPage"/>
 </head>
 
 <body>
-<Routes @rendermode="InteractiveServer" />
+<Routes @rendermode="RenderModeForPage" />
 <script src="_framework/blazor.web.js"></script>
 <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 <script src="_content/TinyMCE.Blazor/tinymce-blazor.js"></script>
@@ -32,3 +32,18 @@
 </body>
 
 </html>
+
+@code {
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    // Account pages read HttpContext and set cookies, so they render statically. A null check in Login is not enough:
+    // a live circuit would run LoginUser, where no cookie can be set. Profile, built as an interactive page, keeps the
+    // interactive router: as an island under a static router it renders before its user loads and crashes.
+    private static readonly string[] InteractiveAccountPages = { "/Account/Profile" };
+
+    private IComponentRenderMode? RenderModeForPage =>
+        HttpContext.Request.Path.StartsWithSegments("/Account")
+        && !InteractiveAccountPages.Any(page => HttpContext.Request.Path.Equals(page, StringComparison.OrdinalIgnoreCase))
+            ? null
+            : InteractiveServer;
+}
