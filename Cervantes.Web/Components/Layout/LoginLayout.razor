@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 
 <MudThemeProvider Theme="CervantesTheme.Theme" @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
 <MudDialogProvider/>
@@ -7,7 +8,14 @@
 
 <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 100vh;">
     <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">
-        @Body
+        @if (HttpContext is null)
+        {
+            <MudProgressCircular Indeterminate="true"/>
+        }
+        else
+        {
+            @Body
+        }
     </MudPaper>
 </MudContainer>
 
@@ -15,5 +23,17 @@
 {
     bool _isDarkMode { get; set; } = true;
     private MudThemeProvider _mudThemeProvider;
+
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
+    // Account pages render statically (App.razor). A link or NavigateTo inside a circuit still reaches them through
+    // the interactive router, where HttpContext is null; reload so the page renders statically instead of crashing.
+    protected override void OnParametersSet()
+    {
+        if (HttpContext is null)
+        {
+            NavigationManager.Refresh(forceReload: true);
+        }
+    }
 
 }
