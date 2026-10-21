@@ -401,9 +401,11 @@ app.Use((context, next) =>
     // re-executes /Error, and this middleware sits before it, so a header set up front is lost on error pages.
     context.Response.OnStarting(state =>
     {
-        SecurityHeaders.Apply(((HttpResponse)state).Headers, contentSecurityPolicy);
+        var httpContext = (HttpContext)state;
+        SecurityHeaders.Apply(httpContext.Response.Headers, contentSecurityPolicy,
+            httpContext.Items.ContainsKey(SecurityHeaders.SandboxItem));
         return Task.CompletedTask;
-    }, context.Response);
+    }, context);
     return next();
 });
 

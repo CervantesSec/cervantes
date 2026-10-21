@@ -1,4 +1,5 @@
 using System.IO;
+using Cervantes.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -59,6 +60,13 @@ public class FileController : Controller
         }
 
         Response.Headers["X-Content-Type-Options"] = "nosniff";
+
+        // Everything but a PDF is served under CSP "sandbox" (the global OnStarting callback reads this flag; setting
+        // the header here would be overwritten). PDFs are left out because Chrome does not render a PDF in a sandbox.
+        if (!string.Equals(Path.GetExtension(full), ".pdf", StringComparison.OrdinalIgnoreCase))
+        {
+            HttpContext.Items[SecurityHeaders.SandboxItem] = true;
+        }
 
         if (InlineSafe.Contains(Path.GetExtension(full)))
         {

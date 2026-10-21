@@ -46,4 +46,24 @@ public class SecurityHeadersTests
         Assert.Equal("nosniff", headers["X-Content-Type-Options"]);
         Assert.Equal("same-origin", headers["Referrer-Policy"]);
     }
+
+    [Fact]
+    public void Apply_WithSandbox_AppendsIt()
+    {
+        var headers = new HeaderDictionary();
+
+        SecurityHeaders.Apply(headers, "default-src 'self'", sandbox: true);
+
+        Assert.Equal("default-src 'self'; sandbox", headers["Content-Security-Policy"]);
+    }
+
+    [Fact]
+    public void Apply_WithoutSandbox_KeepsThePolicy()
+    {
+        var headers = new HeaderDictionary();
+
+        SecurityHeaders.Apply(headers, "default-src 'self'");
+
+        Assert.Equal("default-src 'self'", headers["Content-Security-Policy"]);
+    }
 }

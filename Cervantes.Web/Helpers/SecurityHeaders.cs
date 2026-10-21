@@ -37,9 +37,14 @@ public static class SecurityHeaders
 
     // nosniff: every script and style the app serves has the right Content-Type (checked 2026-10-21).
     // same-origin: links to external sites do not learn the instance's origin, often an internal hostname.
-    public static void Apply(IHeaderDictionary headers, string contentSecurityPolicy)
+    // sandbox: attachments that are not PDFs are served with "; sandbox", so even a file the browser would render
+    // (or a user opens in its own tab) runs in an opaque origin with no scripts. FileController raises the flag in
+    // HttpContext.Items[SandboxItem] instead of writing the header, because this runs last (OnStarting is LIFO).
+    public const string SandboxItem = "Cervantes.CspSandbox";
+
+    public static void Apply(IHeaderDictionary headers, string contentSecurityPolicy, bool sandbox = false)
     {
-        headers["Content-Security-Policy"] = contentSecurityPolicy;
+        headers["Content-Security-Policy"] = sandbox ? contentSecurityPolicy + "; sandbox" : contentSecurityPolicy;
         headers["X-Content-Type-Options"] = "nosniff";
         headers["Referrer-Policy"] = "same-origin";
     }
