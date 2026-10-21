@@ -36,6 +36,58 @@ public class SecurityHeadersTests
     }
 
     [Fact]
+    public void ParseOrigins_ReducesToTheOrigin()
+    {
+        var (origins, invalid) = SecurityHeaders.ParseOrigins(new[] { "https://login.example/oauth2/authorize", "http://127.0.0.1:5556/dex" });
+
+        Assert.Equal(new[] { "https://login.example", "http://127.0.0.1:5556" }, origins);
+        Assert.Empty(invalid);
+    }
+
+    [Theory]
+    [InlineData("/dex")]
+    [InlineData("https://*.example")]
+    [InlineData("ftp://x.example")]
+    [InlineData("not a url")]
+    [InlineData("")]
+    public void ParseOrigins_RejectsInvalid(string entry)
+    {
+        var (origins, invalid) = SecurityHeaders.ParseOrigins(new[] { entry });
+
+        Assert.Empty(origins);
+        Assert.Equal(new[] { entry }, invalid);
+    }
+
+    [Fact]
+    public void ParseOrigins_DropsDuplicates()
+    {
+        var (origins, _) = SecurityHeaders.ParseOrigins(new[] { "https://a.example/x", "HTTPS://A.example/y" });
+
+        Assert.Single(origins);
+    }
+
+    [Fact]
+    public void Policy_AddsExtraFormActionOrigins()
+    {
+        var policy = SecurityHeaders.ContentSecurityPolicy("https://idp.example",
+            new[] { "https://login.example", "https://idp.example" });
+
+        Assert.Contains("form-action 'self' https://idp.example https://login.example;", policy);
+    }
+
+    [Fact]
+    public void Policy_AddsReportUri()
+    {
+        Assert.EndsWith("report-uri /csp-report", SecurityHeaders.ContentSecurityPolicy(null, reportUri: "/csp-report"));
+    }
+
+    [Fact]
+    public void Policy_HasNoReportUriByDefault()
+    {
+        Assert.DoesNotContain("report-uri", SecurityHeaders.ContentSecurityPolicy(null));
+    }
+
+    [Fact]
     public void Apply_SetsTheThreeHeaders()
     {
         var headers = new HeaderDictionary();

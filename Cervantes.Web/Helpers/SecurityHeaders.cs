@@ -21,19 +21,54 @@ public static class SecurityHeaders
     // form-action does not fall back to default-src, so it is explicit: a stored <form action="https://evil"> cannot post offsite.
     // With OpenID Connect, the external login form is answered with a redirect to the provider, and browsers check
     // form-action on that redirect too, so the Authority's origin is allowed as well.
-    public static string ContentSecurityPolicy(string? openIdAuthorityOrigin)
+    // OpenIdConnect:FormActionOrigins lists provider origins other than the Authority that the login redirect passes
+    // through (a hosted login page, federation hops); Chrome checks form-action on every redirect of the form's navigation.
+    // reportUri, when set, is appended as report-uri (violation reports).
+    public static string ContentSecurityPolicy(string? openIdAuthorityOrigin,
+        IEnumerable<string>? extraFormActionOrigins = null, string? reportUri = null)
     {
-        var formActionSources = openIdAuthorityOrigin == null ? "'self'" : "'self' " + openIdAuthorityOrigin;
-        return "default-src 'self'; " +
-               "script-src 'self'; " +
-               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-               "img-src 'self' data: blob:; " +
-               "font-src 'self' data: https://fonts.gstatic.com; " +
-               "connect-src 'self' blob:; " +
-               "frame-ancestors 'self'; " +
-               $"form-action {formActionSources}; " +
-               "object-src 'none'; " +
-               "base-uri 'self'";
+        var sources = new List<string> { "'self'" };
+        if (openIdAuthorityOrigin != null) sources.Add(openIdAuthorityOrigin);
+        if (extraFormActionOrigins != null)
+        {
+            foreach (var origin in extraFormActionOrigins)
+            {
+                if (!sources.Contains(origin, StringComparer.OrdinalIgnoreCase)) sources.Add(origin);
+            }
+        }
+        var policy = "default-src 'self'; " +
+                     "script-src 'self'; " +
+                     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+                     "img-src 'self' data: blob:; " +
+                     "font-src 'self' data: https://fonts.gstatic.com; " +
+                     "connect-src 'self' blob:; " +
+                     "frame-ancestors 'self'; " +
+                     $"form-action {string.Join(' ', sources)}; " +
+                     "object-src 'none'; " +
+                     "base-uri 'self'";
+        return reportUri == null ? policy : policy + "; report-uri " + reportUri;
+    }
+
+    // Valid entry: absolute http(s) URI without '*' in the host; it is reduced to its origin. Anything else is returned in Invalid.
+    public static (IReadOnlyList<string> Origins, IReadOnlyList<string> Invalid) ParseOrigins(IEnumerable<string?>? entries)
+    {
+        var origins = new List<string>();
+        var invalid = new List<string>();
+        foreach (var entry in entries ?? Array.Empty<string?>())
+        {
+            if (entry != null && Uri.TryCreate(entry, UriKind.Absolute, out var uri)
+                && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+                && !uri.Host.Contains('*') && !entry.Contains('*'))
+            {
+                var origin = uri.GetLeftPart(UriPartial.Authority);
+                if (!origins.Contains(origin, StringComparer.OrdinalIgnoreCase)) origins.Add(origin);
+            }
+            else
+            {
+                invalid.Add(entry ?? "");
+            }
+        }
+        return (origins, invalid);
     }
 
     // nosniff: every script and style the app serves has the right Content-Type (checked 2026-10-21).

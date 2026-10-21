@@ -389,12 +389,22 @@ PreMailer.Net.Downloaders.WebDownloader.SharedDownloader = new OfflineCssDownloa
 // Security headers (CSP, nosniff, Referrer-Policy): see SecurityHeaders for what each directive allows and why.
 // With OpenID Connect, the provider's origin is added to form-action.
 string? openIdAuthorityOrigin = null;
+IReadOnlyList<string> openIdFormActionOrigins = Array.Empty<string>();
 if (app.Configuration.GetValue<bool>("OpenIdConnect:Enabled")
     && Uri.TryCreate(app.Configuration["OpenIdConnect:Authority"], UriKind.Absolute, out var oidcAuthority))
 {
     openIdAuthorityOrigin = oidcAuthority.GetLeftPart(UriPartial.Authority);
 }
-var contentSecurityPolicy = SecurityHeaders.ContentSecurityPolicy(openIdAuthorityOrigin);
+if (app.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
+{
+    var parsedOrigins = SecurityHeaders.ParseOrigins(app.Configuration.GetSection("OpenIdConnect:FormActionOrigins").Get<string[]>());
+    foreach (var entry in parsedOrigins.Invalid)
+    {
+        app.Logger.LogWarning("OpenIdConnect:FormActionOrigins entry ignored, it is not an absolute http(s) URL: {Entry}", entry);
+    }
+    openIdFormActionOrigins = parsedOrigins.Origins;
+}
+var contentSecurityPolicy = SecurityHeaders.ContentSecurityPolicy(openIdAuthorityOrigin, openIdFormActionOrigins);
 app.Use((context, next) =>
 {
     // OnStarting, not a plain assignment: UseExceptionHandler clears the response (headers included) before it
