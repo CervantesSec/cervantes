@@ -59,9 +59,13 @@ public class ApiKeyManager : GenericManager<ApiKey>, IApiKeyManager
         if (key.IsExpired)
             return new ApiKeyValidationResult(false, null, key, "Expired");
 
+        return new ApiKeyValidationResult(true, key.UserId, key, null);
+    }
+
+    public async System.Threading.Tasks.Task MarkUsedAsync(ApiKey key)
+    {
         key.LastUsedAt = DateTimeOffset.UtcNow;
         await Context.SaveChangesAsync();
-        return new ApiKeyValidationResult(true, key.UserId, key, null);
     }
 
     public async Task<bool> RevokeAsync(Guid id)

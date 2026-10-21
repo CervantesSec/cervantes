@@ -10,6 +10,7 @@ public interface IApiKeyManager : IGenericManager<ApiKey>
 {
     Task<(string Plaintext, ApiKey Created)> GenerateAsync(string userId, string? name = null, DateTimeOffset? expiresAt = null);
     Task<ApiKeyValidationResult> ValidateAsync(string rawKey);
+    System.Threading.Tasks.Task MarkUsedAsync(ApiKey key);
     Task<bool> RevokeAsync(Guid id);
     Task<(string Plaintext, ApiKey Rotated)?> RotateAsync(Guid id, DateTimeOffset? newExpiresAt = null);
 }

@@ -87,6 +87,9 @@ public class ApiKeyMiddleware
             return;
         }
 
+        // Only a key whose owner passed the lockout check counts as used.
+        await apiKeyManager.MarkUsedAsync(result.ApiKey!);
+
         // Construir claims: Identity + AuthPermissions
         var identityClaims = new List<Claim>
         {
