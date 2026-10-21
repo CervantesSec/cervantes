@@ -111,17 +111,17 @@
 									@((MarkupString)document.Description)
 
 							@switch (Cervantes.Web.Helpers.AttachmentPreview.KindOf(document.FilePath))
-{
-	case Cervantes.Web.Helpers.AttachmentPreviewKind.Image:
-		<img src="@document.FilePath" alt="" style="max-width:100%" />
-		break;
-	case Cervantes.Web.Helpers.AttachmentPreviewKind.Pdf:
-		<iframe src="@document.FilePath" title="@System.IO.Path.GetFileName(document.FilePath)" style="width:100%;height:70vh;border:0"></iframe>
-		break;
-	case Cervantes.Web.Helpers.AttachmentPreviewKind.Video:
-		<video src="@document.FilePath" controls style="max-width:100%"></video>
-		break;
-}
+							{
+								case Cervantes.Web.Helpers.AttachmentPreviewKind.Image:
+									<img src="@document.FilePath" alt="" style="max-width:100%" />
+									break;
+								case Cervantes.Web.Helpers.AttachmentPreviewKind.Pdf:
+									<iframe src="@document.FilePath" title="@System.IO.Path.GetFileName(document.FilePath)" style="width:100%;height:70vh;border:0"></iframe>
+									break;
+								case Cervantes.Web.Helpers.AttachmentPreviewKind.Video:
+									<video src="@document.FilePath" controls style="max-width:100%"></video>
+									break;
+							}
 
 						</MudCardContent>
 					</MudCard>
