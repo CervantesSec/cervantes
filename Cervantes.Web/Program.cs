@@ -325,12 +325,7 @@ if (cspReportingEnabled)
             }));
     });
     // Overall cap for the endpoint, shared by all clients: a flood spread over many networks cannot fill the Logs table.
-    builder.Services.AddSingleton(new FixedWindowRateLimiter(new FixedWindowRateLimiterOptions
-    {
-        PermitLimit = cspReportPermitPerMinute * 10,
-        Window = TimeSpan.FromMinutes(1),
-        QueueLimit = 0
-    }));
+    builder.Services.AddSingleton(new CspReportGlobalLimiter(cspReportPermitPerMinute));
 }
 builder.Services.AddBlazoredLocalStorage();
 
@@ -508,7 +503,7 @@ app.MapControllers();
 if (cspReportingEnabled)
 {
     // Always 204: the reporter must not learn what was kept. Reports are logged as warnings, not stored elsewhere.
-    app.MapPost(CspReports.Path, async (HttpContext httpContext, ILoggerFactory loggerFactory, FixedWindowRateLimiter globalLimiter) =>
+    app.MapPost(CspReports.Path, async (HttpContext httpContext, ILoggerFactory loggerFactory, CspReportGlobalLimiter globalLimiter) =>
     {
         // Order: per-client limit (middleware policy, already passed), then the overall cap here.
         using var lease = globalLimiter.AttemptAcquire();
