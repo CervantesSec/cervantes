@@ -347,6 +347,12 @@ public class UserController: ControllerBase
     [HasPermission(Permissions.UsersAdd)]
     public async Task<IActionResult> Add([FromBody] UserCreateViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.UsersAdd))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -437,6 +443,13 @@ public class UserController: ControllerBase
     [HasPermission(Permissions.UsersEdit)]
     public async Task<IActionResult> Edit([FromBody] UserEditViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        // Not CanActOnUser: this edit can change the role, so editing yourself needs the permission too.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.UsersEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
