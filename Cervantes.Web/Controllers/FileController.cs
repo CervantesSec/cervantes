@@ -54,7 +54,7 @@ public class FileController : Controller
 
         // Everything but a PDF is served under CSP "sandbox" (the global OnStarting callback reads this flag; setting
         // the header here would be overwritten). PDFs are left out because Chrome does not render a PDF in a sandbox.
-        var kind = AttachmentPreview.KindOf(full);
+        var kind = AttachmentPreview.KindOfFile(full);
         if (kind != AttachmentPreviewKind.Pdf)
         {
             HttpContext.Items[SecurityHeaders.SandboxItem] = true;

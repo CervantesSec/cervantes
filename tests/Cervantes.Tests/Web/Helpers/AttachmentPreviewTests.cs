@@ -29,4 +29,12 @@ public class AttachmentPreviewTests
     [Fact]
     public void KindOf_IgnoresQuery() =>
         Assert.Equal(AttachmentPreviewKind.Pdf, AttachmentPreview.KindOf("a.pdf?x=1"));
+
+    [Fact]
+    public void KindOfFile_DoesNotStripQuestionMark() =>
+        Assert.Equal(AttachmentPreviewKind.None, AttachmentPreview.KindOfFile("/srv/Attachments/Vuln/1/x.pdf?.html"));
+
+    [Fact]
+    public void KindOfFile_Pdf() =>
+        Assert.Equal(AttachmentPreviewKind.Pdf, AttachmentPreview.KindOfFile("/srv/Attachments/Vuln/1/a.PDF"));
 }

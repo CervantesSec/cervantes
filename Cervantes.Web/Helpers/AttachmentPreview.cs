@@ -20,6 +20,7 @@ public static class AttachmentPreview
         ".mp4", ".m4v", ".webm", ".mov", ".mkv"
     };
 
+    /// <summary>Classifies a URL-like path (FilePath as stored); anything after a '?' is ignored.</summary>
     public static AttachmentPreviewKind KindOf(string? path)
     {
         if (string.IsNullOrEmpty(path)) return AttachmentPreviewKind.None;
@@ -27,6 +28,15 @@ public static class AttachmentPreview
         var query = path.IndexOf('?');
         if (query >= 0) path = path[..query];
 
+        return ByExtension(path);
+    }
+
+    /// <summary>Classifies a filesystem path by its real extension, with no query handling ("x.pdf?.html" is .html).</summary>
+    public static AttachmentPreviewKind KindOfFile(string? fullPath) =>
+        string.IsNullOrEmpty(fullPath) ? AttachmentPreviewKind.None : ByExtension(fullPath);
+
+    private static AttachmentPreviewKind ByExtension(string path)
+    {
         var ext = Path.GetExtension(path);
         if (Images.Contains(ext)) return AttachmentPreviewKind.Image;
         if (string.Equals(ext, ".pdf", StringComparison.OrdinalIgnoreCase)) return AttachmentPreviewKind.Pdf;
