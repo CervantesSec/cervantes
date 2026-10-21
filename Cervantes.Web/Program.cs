@@ -29,6 +29,7 @@ using Cervantes.Web.Controllers;
 using Cervantes.Web.Helpers;
 using Cervantes.Web.Localization;
 using Microsoft.AspNetCore.Antiforgery;
+using System.Threading.RateLimiting;
 using MudBlazor.Services;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
@@ -299,6 +300,25 @@ if (forwardedHeadersEnabled)
     });
 }
 builder.Services.AddAntiforgery();
+
+// Optional CSP violation reporting (off by default): /csp-report is anonymous, so it is rate-limited per client IP.
+var cspReportingEnabled = builder.Configuration.GetValue<bool>("CspReporting:Enabled");
+if (cspReportingEnabled)
+{
+    var cspReportPermitPerMinute = builder.Configuration.GetValue("CspReporting:PermitPerMinute", 30);
+    builder.Services.AddRateLimiter(options =>
+    {
+        options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+        options.AddPolicy("csp-report", httpContext => RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = cspReportPermitPerMinute,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0
+            }));
+    });
+}
 builder.Services.AddBlazoredLocalStorage();
 
 //builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
@@ -406,7 +426,8 @@ if (app.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
     }
     openIdFormActionOrigins = parsedOrigins.Origins;
 }
-var contentSecurityPolicy = SecurityHeaders.ContentSecurityPolicy(openIdAuthorityOrigin, openIdFormActionOrigins);
+var contentSecurityPolicy = SecurityHeaders.ContentSecurityPolicy(openIdAuthorityOrigin, openIdFormActionOrigins,
+    cspReportingEnabled ? CspReports.Path : null);
 app.Use((context, next) =>
 {
     // OnStarting, not a plain assignment: UseExceptionHandler clears the response (headers included) before it
@@ -456,6 +477,11 @@ var localizationOptions = new RequestLocalizationOptions()
 
 app.UseRequestLocalization(localizationOptions);
 app.UseRouting();
+// After UseRouting: the endpoint-specific "csp-report" policy needs the selected endpoint.
+if (cspReportingEnabled)
+{
+    app.UseRateLimiter();
+}
 app.UseApiKeyAuthForApi();
 app.UseBasicAuthForApi();
 app.UseAuthentication();
@@ -465,6 +491,23 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 app.MapControllers();
+
+if (cspReportingEnabled)
+{
+    // Always 204: the reporter must not learn what was kept. Reports are logged as warnings, not stored elsewhere.
+    app.MapPost(CspReports.Path, async (HttpRequest request, ILoggerFactory loggerFactory) =>
+    {
+        var body = await CspReports.ReadLimitedAsync(request.Body, CspReports.MaxBodyBytes);
+        var violation = body == null ? null : CspReports.Parse(body);
+        if (violation != null && !CspReports.IsIgnored(violation))
+        {
+            loggerFactory.CreateLogger("Cervantes.Web.CspReports").LogWarning(
+                "CSP violation: {Directive} blocked {BlockedUri} on {DocumentPath} ({SourceFile}:{Line})",
+                violation.Directive, violation.BlockedUri, violation.DocumentPath, violation.SourceFile, violation.Line);
+        }
+        return Results.NoContent();
+    }).AllowAnonymous().DisableAntiforgery().RequireRateLimiting("csp-report");
+}
 
 // Map SignalR Hub
 app.MapHub<Cervantes.Web.Hubs.CveNotificationHub>("/cvehub");
