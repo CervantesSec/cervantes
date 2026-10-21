@@ -50,7 +50,7 @@ public class UserControllerGuardTests
             var result = await Controller(Permissions.UsersEdit).Edit(new UserEditViewModel { Id = CallerId });
             Assert.False(result is ObjectResult { StatusCode: 403 });
         }
-        catch (Exception)
+        catch (Exception e) when (e is not Xunit.Sdk.XunitException)
         {
             // Past the guard, the action reaches the null dependencies; the guard itself returns, it never throws.
         }
