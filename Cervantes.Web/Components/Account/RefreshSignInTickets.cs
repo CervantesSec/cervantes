@@ -16,10 +16,21 @@ public sealed class RefreshSignInTickets(TimeProvider time)
     private static readonly TimeSpan Lifetime = TimeSpan.FromMinutes(2);
     private readonly ConcurrentDictionary<string, (string UserId, DateTimeOffset Expires)> tickets = new();
 
+    public int Count => tickets.Count;
+
     public string Issue(string userId)
     {
+        var now = time.GetUtcNow();
+        foreach (var stored in tickets)
+        {
+            if (stored.Value.Expires <= now)
+            {
+                tickets.TryRemove(stored.Key, out _);
+            }
+        }
+
         var ticket = WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(32));
-        tickets[ticket] = (userId, time.GetUtcNow() + Lifetime);
+        tickets[ticket] = (userId, now + Lifetime);
         return ticket;
     }
 

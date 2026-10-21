@@ -76,4 +76,17 @@ public class RefreshSignInTicketsTests
 
         Assert.Null(tickets.Redeem(tickets.Issue("u1"), null));
     }
+
+    [Fact]
+    public void Issue_DropsExpiredTickets()
+    {
+        var clock = new Clock();
+        var tickets = new RefreshSignInTickets(clock);
+        tickets.Issue("u1");
+
+        clock.Now = clock.Now.AddMinutes(3);
+        tickets.Issue("u2");
+
+        Assert.Equal(1, tickets.Count);
+    }
 }

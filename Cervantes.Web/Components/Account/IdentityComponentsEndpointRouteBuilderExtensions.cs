@@ -222,6 +222,8 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
         // (password, authenticator) rotated the stamp, so the old cookie may already fail validation: the page sends a
         // one-time ticket that signs the user in again. Without a ticket, only a cookie whose stamp is still current is
         // renewed, so a locked user, or a session the password change was meant to end, never gets a fresh cookie here.
+        // An unusable ticket (unknown, used, expired, someone else's) is treated as no ticket, so a cross-site request
+        // with a made-up ticket cannot end a valid session.
         // Mapped outside manageGroup because a ticket must work when the old cookie no longer authenticates.
         accountGroup.MapGet("/Manage/RefreshSignIn", async (
             HttpContext context,
@@ -245,20 +247,17 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
                     : null;
                 var ticketUserId = tickets.Redeem(ticket, cookieUserId);
                 var ticketUser = ticketUserId == null ? null : await userManager.FindByIdAsync(ticketUserId);
-                if (ticketUser is null)
+                if (ticketUser is not null)
                 {
-                    await signInManager.SignOutAsync();
-                    return TypedResults.LocalRedirect("~/Account/Login");
-                }
+                    if (await userManager.IsLockedOutAsync(ticketUser))
+                    {
+                        await signInManager.SignOutAsync();
+                        return TypedResults.LocalRedirect("~/Account/Lockout");
+                    }
 
-                if (await userManager.IsLockedOutAsync(ticketUser))
-                {
-                    await signInManager.SignOutAsync();
-                    return TypedResults.LocalRedirect("~/Account/Lockout");
+                    await signInManager.SignInAsync(ticketUser, cookieTicket!.Properties.IsPersistent);
+                    return TypedResults.LocalRedirect(target);
                 }
-
-                await signInManager.SignInAsync(ticketUser, cookieTicket!.Properties.IsPersistent);
-                return TypedResults.LocalRedirect(target);
             }
 
             var user = await userManager.GetUserAsync(context.User);
