@@ -70,10 +70,6 @@ public partial class Roles : ComponentBase
             new BreadcrumbItem(@localizer["roles"], href: null, disabled: true,icon: Icons.Material.Filled.Group)
         };
         await Update();
-        if (navigationManager.Uri.Contains("/roles/create") && userAth.HasPermission(Cervantes.CORE.Permissions.RolesAdd))
-        {
-             await OpenDialogCreate(maxWidthEx);
-        }
     }
     
     protected async Task Update()

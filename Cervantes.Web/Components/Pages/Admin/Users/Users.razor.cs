@@ -71,10 +71,6 @@ public partial class Users: ComponentBase
             new BreadcrumbItem(@localizer["users"], href: null, disabled: true,icon: Icons.Material.Filled.Group)
         };
         await Update();
-        if (navigationManager.Uri.Contains("/users/create"))
-        {
-             await OpenDialogCreate(maxWidthEx);
-        }
     }
     
     protected async Task Update()
