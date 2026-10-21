@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Routing;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.Web.Components;
 
 public class LdapReturnUrlTests
 {

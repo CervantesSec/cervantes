@@ -1,6 +1,6 @@
 using Cervantes.Web.Components.Pages.Projects;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.Web.Components;
 
 public class DownloadReportDialogTests
 {

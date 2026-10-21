@@ -1,7 +1,7 @@
 using Cervantes.Web.Helpers;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.Web.Helpers;
 
 public class AttachmentFilesTests : IDisposable
 {

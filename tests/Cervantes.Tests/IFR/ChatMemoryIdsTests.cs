@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using Cervantes.IFR.CervantesAI;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.IFR;
 
 public class ChatMemoryIdsTests
 {

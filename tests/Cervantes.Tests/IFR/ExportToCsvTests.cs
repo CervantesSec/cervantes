@@ -2,7 +2,7 @@ using Cervantes.IFR.Export;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.IFR;
 
 // DeleteDelay is static, so these tests must not run in parallel with anything else that changes it.
 [Collection(nameof(ExportToCsvTests))]

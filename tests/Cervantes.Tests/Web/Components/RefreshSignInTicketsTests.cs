@@ -1,6 +1,6 @@
 using Cervantes.Web.Components.Account;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.Web.Components;
 
 public class RefreshSignInTicketsTests
 {

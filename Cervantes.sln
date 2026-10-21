@@ -12,7 +12,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cervantes.Application", "Ce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cervantes.Contracts", "Cervantes.Contracts\Cervantes.Contracts.csproj", "{4534F2A9-9B07-407E-A847-58467B4C0B4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cervantes.Tests", "Cervantes.Tests\Cervantes.Tests.csproj", "{63B02EF6-0B77-4253-9B52-CB143B93944E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cervantes.Tests", "tests\Cervantes.Tests\Cervantes.Tests.csproj", "{63B02EF6-0B77-4253-9B52-CB143B93944E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9B1C4E27-5D3A-4F8E-A6B2-7C0D19E3F542}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +50,8 @@ Global
 		{63B02EF6-0B77-4253-9B52-CB143B93944E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63B02EF6-0B77-4253-9B52-CB143B93944E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63B02EF6-0B77-4253-9B52-CB143B93944E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63B02EF6-0B77-4253-9B52-CB143B93944E} = {9B1C4E27-5D3A-4F8E-A6B2-7C0D19E3F542}
 	EndGlobalSection
 EndGlobal

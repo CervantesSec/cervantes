@@ -2,7 +2,7 @@ using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Helpers;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.Web.Helpers;
 
 public class UserSecurityTests
 {

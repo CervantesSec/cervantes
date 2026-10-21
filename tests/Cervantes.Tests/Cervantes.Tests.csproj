@@ -19,8 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Cervantes.Web\Cervantes.Web.csproj" />
-        <ProjectReference Include="..\Cervantes.IFR\Cervantes.IFR.csproj" />
+        <ProjectReference Include="..\..\Cervantes.Web\Cervantes.Web.csproj" />
+        <ProjectReference Include="..\..\Cervantes.IFR\Cervantes.IFR.csproj" />
     </ItemGroup>
 
 </Project>

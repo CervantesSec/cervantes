@@ -1,6 +1,6 @@
 using Cervantes.IFR.Parsers;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.IFR;
 
 public class FindingIdGeneratorTests
 {

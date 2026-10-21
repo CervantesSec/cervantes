@@ -1,7 +1,7 @@
 using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Components.Pages.Admin.Users;
 
-namespace Cervantes.Tests;
+namespace Cervantes.Tests.Web.Components;
 
 public class UserSearchTests
 {
