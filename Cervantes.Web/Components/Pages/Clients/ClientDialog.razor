@@ -57,7 +57,7 @@
                             <MudForm Model="@model" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
                                 <MudStack>
                         
-                                    @if (client.ImagePath != "None")
+                                    @if (ImagePaths.IsSet(client.ImagePath))
                                     {
                                         <MudImage Src="@client.ImagePath" Width="300" Height="150" ObjectFit="ObjectFit.ScaleDown" Alt="Client Logo" Elevation="25" Class="rounded-lg ma-4"/>
                                         <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => DeleteLogo(@model.Id))">@localizer["deleteLogo"]</MudButton>
@@ -158,7 +158,7 @@
                                     <MudCard Elevation="25">
                                         <MudCardContent>
                                             <div class="d-flex justify-center mb-4">
-                                                @if(client.ImagePath != "None")
+                                                @if (ImagePaths.IsSet(client.ImagePath))
                                                 {
                                                     <MudImage Fluid="true" Src="@client.ImagePath" Width="200" Height="200" Class="rounded-lg">
                                                     </MudImage>

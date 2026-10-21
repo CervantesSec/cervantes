@@ -94,7 +94,7 @@
                             <PropertyColumn Property="x => x.Client.Name" Title="@localizer["client"]">
                                 <CellTemplate>
                                     <MudStack Row="true">
-                                        @if (@context.Item.Client.ImagePath != null)
+                                        @if (ImagePaths.IsSet(context.Item.Client.ImagePath))
                                         {
                                         <MudImage Src="@context.Item.Client.ImagePath" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="30" Width="30"/>
                                         }

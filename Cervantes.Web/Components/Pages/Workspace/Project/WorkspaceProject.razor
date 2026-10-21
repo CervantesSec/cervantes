@@ -99,12 +99,14 @@
 						<MudCard Elevation="25">
 							<MudCardContent>
 								<div class="d-flex justify-center mb-4">
-									<MudImage Fluid="true" Src="@pro.Client.ImagePath" Width="200" Height="200" Class="rounded-lg">
-										@if(@pro.Client.ImagePath == "")
-										{
-											<MudIcon Color="Color.Dark" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Large" />
-										}
-									</MudImage>
+									@if (ImagePaths.IsSet(pro.Client.ImagePath))
+									{
+										<MudImage Fluid="true" Src="@pro.Client.ImagePath" Width="200" Height="200" Class="rounded-lg"/>
+									}
+									else
+									{
+										<MudIcon Color="Color.Dark" Icon="@Icons.Material.Filled.BusinessCenter" Size="Size.Large" />
+									}
                                                     
 								</div>
 								<MudList T="string" Dense="true">

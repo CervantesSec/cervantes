@@ -208,7 +208,7 @@
                         {
                             <MudListItem T="string">
                                 <div class="d-flex flex-row">
-                                    @if (client.ImagePath != "None")
+                                    @if (ImagePaths.IsSet(client.ImagePath))
                                     {
                                         <MudImage Src="@client.ImagePath" Class="mx-4" ObjectFit="ObjectFit.ScaleDown" Height="50" Width="50"/>
                                     }

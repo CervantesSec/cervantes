@@ -29,7 +29,7 @@
                 <MudListExtended T="string" Dense="true">
                     <div class="d-flex justify-center mb-4">
 
-                        @if (@Project.Client.ImagePath != "None")
+                        @if (ImagePaths.IsSet(Project.Client.ImagePath))
                         {
                             <MudImage Fluid="true" Src="@Project.Client.ImagePath" Width="200" Height="200" Class="rounded-lg">
                             </MudImage>
