@@ -16,7 +16,8 @@ public static class SecurityHeaders
     // style-src 'unsafe-inline': MudBlazor and TinyMCE inject inline styles. The Google Fonts hosts serve Roboto (App.razor).
     // connect-src 'self' also covers the same-origin ws:/wss: Blazor Server SignalR circuit (CSP Level 3); no other host
     // gets a socket. blob: in img-src/connect-src is required by TinyMCE.
-    // object-src 'self' keeps the <embed> attachment previews working (the files come from FileController).
+    // object-src 'none': attachment previews use <img>, <iframe> and <video>, never <embed>/<object>. The PDF <iframe> is
+    // governed by frame-src, which falls back to default-src 'self' (the files come from FileController).
     // form-action does not fall back to default-src, so it is explicit: a stored <form action="https://evil"> cannot post offsite.
     // With OpenID Connect, the external login form is answered with a redirect to the provider, and browsers check
     // form-action on that redirect too, so the Authority's origin is allowed as well.
@@ -31,7 +32,7 @@ public static class SecurityHeaders
                "connect-src 'self' blob:; " +
                "frame-ancestors 'self'; " +
                $"form-action {formActionSources}; " +
-               "object-src 'self'; " +
+               "object-src 'none'; " +
                "base-uri 'self'";
     }
 

@@ -21,7 +21,7 @@ public class SecurityHeadersTests
     [InlineData("font-src 'self' data: https://fonts.gstatic.com")]
     [InlineData("connect-src 'self' blob:")]
     [InlineData("frame-ancestors 'self'")]
-    [InlineData("object-src 'self'")]
+    [InlineData("object-src 'none'")]
     [InlineData("base-uri 'self'")]
     public void Policy_KeepsTheOtherDirectives(string directive)
     {

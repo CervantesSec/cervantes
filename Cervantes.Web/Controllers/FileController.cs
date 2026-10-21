@@ -17,15 +17,6 @@ public class FileController : Controller
 {
     private readonly IWebHostEnvironment env;
 
-    // Only passive content types are rendered inline. Everything else (html, svg, xml, ...)
-    // is sent as an octet-stream download so the browser never executes it in our origin.
-    private static readonly HashSet<string> InlineSafe = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".ico", ".tif", ".tiff",
-        ".heic", ".heif", ".avif", ".pdf",
-        ".mp4", ".m4v", ".webm", ".mov", ".mkv"
-    };
-
     private static readonly string[] PrivateFolders = { "Temp", "Imports" };
 
     private static readonly FileExtensionContentTypeProvider ContentTypeProvider = new();
@@ -63,12 +54,15 @@ public class FileController : Controller
 
         // Everything but a PDF is served under CSP "sandbox" (the global OnStarting callback reads this flag; setting
         // the header here would be overwritten). PDFs are left out because Chrome does not render a PDF in a sandbox.
-        if (!string.Equals(Path.GetExtension(full), ".pdf", StringComparison.OrdinalIgnoreCase))
+        var kind = AttachmentPreview.KindOf(full);
+        if (kind != AttachmentPreviewKind.Pdf)
         {
             HttpContext.Items[SecurityHeaders.SandboxItem] = true;
         }
 
-        if (InlineSafe.Contains(Path.GetExtension(full)))
+        // Only passive content types (see AttachmentPreview) are rendered inline. Everything else (html, svg, xml, ...)
+        // is sent as an octet-stream download so the browser never executes it in our origin.
+        if (kind != AttachmentPreviewKind.None)
         {
             var contentType = ContentTypeProvider.TryGetContentType(full, out var mime)
                 ? mime

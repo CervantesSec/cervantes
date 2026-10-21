@@ -67,7 +67,18 @@
 							</CardHeaderContent>
 						</MudCardHeader>
 						<MudCardContent>
-							<embed src="@attachment.FilePath" />
+							@switch (Cervantes.Web.Helpers.AttachmentPreview.KindOf(attachment.FilePath))
+{
+	case Cervantes.Web.Helpers.AttachmentPreviewKind.Image:
+		<img src="@attachment.FilePath" alt="" style="max-width:100%" />
+		break;
+	case Cervantes.Web.Helpers.AttachmentPreviewKind.Pdf:
+		<iframe src="@attachment.FilePath" title="@System.IO.Path.GetFileName(attachment.FilePath)" style="width:100%;height:70vh;border:0"></iframe>
+		break;
+	case Cervantes.Web.Helpers.AttachmentPreviewKind.Video:
+		<video src="@attachment.FilePath" controls style="max-width:100%"></video>
+		break;
+}
 
 						</MudCardContent>
 					</MudCard>
