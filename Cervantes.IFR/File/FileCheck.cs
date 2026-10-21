@@ -1,3 +1,4 @@
+using System.Xml;
 using MimeDetective;
 
 namespace Cervantes.IFR.File;
@@ -41,6 +42,55 @@ public class FileCheck: IFileCheck
             throw;
         }
 
+    }
+
+    // Stricter than CheckFile, for files users upload as attachments and that are served back from
+    // /Attachments: an XML document whose root is XHTML or SVG would execute script when opened.
+    // Scanner imports keep CheckFile because they legitimately carry markup (Nmap NSE output).
+    public bool CheckAttachment(byte[] file)
+    {
+        if (!CheckFile(file))
+        {
+            return false;
+        }
+
+        if (!GetExtension(file).Equals("xml", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        try
+        {
+            var settings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Ignore,
+                XmlResolver = null
+            };
+            using var stream = new MemoryStream(file);
+            using var reader = XmlReader.Create(stream, settings);
+            while (reader.Read())
+            {
+                if (reader.NodeType != XmlNodeType.Element)
+                {
+                    continue;
+                }
+
+                if (reader.NamespaceURI is "http://www.w3.org/1999/xhtml" or "http://www.w3.org/2000/svg")
+                {
+                    return false;
+                }
+
+                return !(reader.NamespaceURI.Length == 0 &&
+                         (reader.LocalName.Equals("html", StringComparison.OrdinalIgnoreCase) ||
+                          reader.LocalName.Equals("svg", StringComparison.OrdinalIgnoreCase)));
+            }
+        }
+        catch (XmlException)
+        {
+            // Not well-formed XML: the CheckFile result stands.
+        }
+
+        return true;
     }
 
     public bool CheckImage(byte[] file)

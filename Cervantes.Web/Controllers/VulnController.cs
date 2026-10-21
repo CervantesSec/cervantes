@@ -1149,7 +1149,7 @@ public class VulnController: ControllerBase
                 var file = "";
                 if (model.FileContent != null)
                 {
-                    if (fileCheck.CheckFile(model.FileContent))
+                    if (fileCheck.CheckAttachment(model.FileContent))
                     {
                         unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Vuln/{model.VulnId}";
