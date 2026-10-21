@@ -83,8 +83,6 @@ public class BasicAuthMiddleware
             
             // 7. Crear identidad autenticada
             context.User = CreateClaimsPrincipal(claims, "BasicAuth");
-            
-            _logger.LogInformation($"User {username} authenticated successfully with {claims.Count} claims");
         }
 
         await _next(context);
@@ -92,6 +90,8 @@ public class BasicAuthMiddleware
     catch (Exception ex)
     {
         _logger.LogError(ex, "Error in BasicAuthMiddleware for {Method} {Path}", context.Request.Method, context.Request.Path);
+        // Once the response has started, a 500 cannot be written; abort it instead of leaving a truncated 200.
+        if (context.Response.HasStarted) throw;
         await HandleAuthError(context);
     }
 }
@@ -183,7 +183,6 @@ private async Task AddAuthPermissionClaims(IServiceScope scope, ApplicationUser 
         if (authClaims != null)
         {
             claims.AddRange(authClaims);
-            _logger.LogInformation($"Added {authClaims.Count} AuthPermission claims");
         }
 
         // 3. Asegurar DataKey claim
@@ -203,8 +202,6 @@ private async Task EnsureDataKeyClaim(AuthUser authUser, List<Claim> claims)
     // Obtener DataKey del tenant si existe
     var dataKey = authUser.UserTenant?.GetTenantDataKey() ?? await GetDefaultDataKey();
     claims.Add(new Claim(PermissionConstants.DataKeyClaimType, dataKey));
-    
-    _logger.LogInformation($"Added DataKey claim: {dataKey}");
 }
 
 private async Task<string> GetDefaultDataKey()
@@ -221,11 +218,7 @@ private ClaimsPrincipal CreateClaimsPrincipal(IEnumerable<Claim> claims, string 
 
 private async Task HandleAuthError(HttpContext context)
 {
-    // The exception is already logged by the caller; the client only gets a fixed text, never its details.
-    if (context.Response.HasStarted)
-    {
-        return;
-    }
+    // The exception is already logged by the caller and the caller rethrows when the response has started; the client only gets a fixed text, never its details.
     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
     await context.Response.WriteAsync("An unexpected error occurred.");
 }
