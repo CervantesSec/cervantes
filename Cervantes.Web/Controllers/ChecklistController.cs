@@ -198,7 +198,7 @@ public class ChecklistController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
                 }
 
                 if (!TargetBelongsToProject(model.TargetId, model.ProjectId))
@@ -271,7 +271,7 @@ public class ChecklistController : ControllerBase
                    var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                    if (user == null)
                    {
-                       return BadRequest("Access denied: User does not have permission to access this project");
+                       return StatusCode(403, "Access denied: User does not have permission to access this project");
                    }
                    
                    result.Apit01Note = Sanitizer.Sanitize(model.Apit.Apit01Note);
@@ -527,7 +527,7 @@ public class ChecklistController : ControllerBase
                 var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
                 }
                 
                 wstgManager.Remove(result);
@@ -573,7 +573,7 @@ public class ChecklistController : ControllerBase
                 var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
                 }
                 
                 mastgManager.Remove(result);
@@ -612,7 +612,7 @@ public class ChecklistController : ControllerBase
                    var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                    if (user == null)
                    {
-                       return BadRequest("Access denied: User does not have permission to access this project");
+                       return StatusCode(403, "Access denied: User does not have permission to access this project");
                    }
                    
                    result.Storage1Note = Sanitizer.Sanitize(model.Storage.Storage1Note);
@@ -885,7 +885,7 @@ public class ChecklistController : ControllerBase
                var user = projectUserManager.VerifyUser(mastg.ProjectId, aspNetUserId);
                if (user == null)
                {
-                   return BadRequest("Access denied: User does not have permission to access this project");
+                   return StatusCode(403, "Access denied: User does not have permission to access this project");
                }
                var pro = projectManager.GetById(mastg.ProjectId);
 
@@ -1053,7 +1053,7 @@ public class ChecklistController : ControllerBase
                     var user = projectUserManager.VerifyUser(wstg.ProjectId, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("Access denied: User does not have permission to access this project");
+                        return StatusCode(403, "Access denied: User does not have permission to access this project");
                     }
                     
                     var pro = projectManager.GetById(wstg.ProjectId);

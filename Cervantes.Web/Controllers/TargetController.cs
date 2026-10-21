@@ -228,6 +228,12 @@ public class TargetController : ControllerBase
     [HasPermission(Permissions.TargetsEdit)]
     public async Task<IActionResult> Edit([FromBody] TargetEditViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TargetsEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -329,6 +335,12 @@ public class TargetController : ControllerBase
     [HasPermission(Permissions.TargetsDelete)]
     public async Task<IActionResult> Delete(Guid targetId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TargetsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -643,6 +655,12 @@ public class TargetController : ControllerBase
     [HasPermission(Permissions.TargetsServicesEdit)]
     public async Task<IActionResult> EditService([FromBody] TargetServiceEditViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TargetsServicesEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -831,6 +849,12 @@ public class TargetController : ControllerBase
     [HasPermission(Permissions.TargetCustomFieldsEdit)]
     public async Task<IActionResult> UpdateCustomFieldValues(Guid targetId, [FromBody] Dictionary<Guid, string> customFieldData)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.TargetCustomFieldsEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             var target = targetManager.GetById(targetId);

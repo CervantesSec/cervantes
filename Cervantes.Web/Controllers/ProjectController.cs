@@ -261,6 +261,12 @@ public class ProjectController : ControllerBase
     [HasPermission(Permissions.ProjectsEdit)]
     public async Task<IActionResult> Edit([FromBody] ProjectEditViewModel model)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ProjectsEdit))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
@@ -315,6 +321,12 @@ public class ProjectController : ControllerBase
     [HasPermission(Permissions.ProjectsDelete)]
     public async Task<IActionResult> Delete(Guid projectId)
     {
+        // [HasPermission] is not evaluated when a Blazor component calls this action in-process.
+        if (!HttpContextAccessor.CurrentUserHas(Permissions.ProjectsDelete))
+        {
+            return StatusCode(403, "You do not have permission to perform this action");
+        }
+
         try
         {
             if (ModelState.IsValid)
