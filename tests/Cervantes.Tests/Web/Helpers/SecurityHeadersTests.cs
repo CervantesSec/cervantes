@@ -49,6 +49,8 @@ public class SecurityHeadersTests
     [InlineData("https://*.example")]
     [InlineData("ftp://x.example")]
     [InlineData("not a url")]
+    [InlineData("https://a;b@x.example")]
+    [InlineData("https://user@x.example")]
     [InlineData("")]
     public void ParseOrigins_RejectsInvalid(string entry)
     {
@@ -56,6 +58,14 @@ public class SecurityHeadersTests
 
         Assert.Empty(origins);
         Assert.Equal(new[] { entry }, invalid);
+    }
+
+    [Fact]
+    public void ParseOrigins_KeepsNonDefaultPort()
+    {
+        var (origins, _) = SecurityHeaders.ParseOrigins(new[] { "http://127.0.0.1:5556/dex", "https://x.example:443/" });
+
+        Assert.Equal(new[] { "http://127.0.0.1:5556", "https://x.example" }, origins);
     }
 
     [Fact]

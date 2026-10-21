@@ -390,13 +390,15 @@ PreMailer.Net.Downloaders.WebDownloader.SharedDownloader = new OfflineCssDownloa
 // With OpenID Connect, the provider's origin is added to form-action.
 string? openIdAuthorityOrigin = null;
 IReadOnlyList<string> openIdFormActionOrigins = Array.Empty<string>();
-if (app.Configuration.GetValue<bool>("OpenIdConnect:Enabled")
-    && Uri.TryCreate(app.Configuration["OpenIdConnect:Authority"], UriKind.Absolute, out var oidcAuthority))
-{
-    openIdAuthorityOrigin = oidcAuthority.GetLeftPart(UriPartial.Authority);
-}
 if (app.Configuration.GetValue<bool>("OpenIdConnect:Enabled"))
 {
+    var authorityEntry = app.Configuration["OpenIdConnect:Authority"];
+    var parsedAuthority = SecurityHeaders.ParseOrigins(new[] { authorityEntry });
+    openIdAuthorityOrigin = parsedAuthority.Origins.FirstOrDefault();
+    if (openIdAuthorityOrigin == null)
+    {
+        app.Logger.LogWarning("OpenIdConnect:Authority is not an absolute http(s) URL, it is not added to form-action: {Entry}", authorityEntry);
+    }
     var parsedOrigins = SecurityHeaders.ParseOrigins(app.Configuration.GetSection("OpenIdConnect:FormActionOrigins").Get<string[]>());
     foreach (var entry in parsedOrigins.Invalid)
     {

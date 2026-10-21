@@ -23,7 +23,7 @@ public static class SecurityHeaders
     // form-action on that redirect too, so the Authority's origin is allowed as well.
     // OpenIdConnect:FormActionOrigins lists provider origins other than the Authority that the login redirect passes
     // through (a hosted login page, federation hops); Chrome checks form-action on every redirect of the form's navigation.
-    // reportUri, when set, is appended as report-uri (violation reports).
+    // reportUri, when set, is appended as report-uri (violation reports); it must be a trusted constant, it is not validated.
     public static string ContentSecurityPolicy(string? openIdAuthorityOrigin,
         IEnumerable<string>? extraFormActionOrigins = null, string? reportUri = null)
     {
@@ -58,9 +58,15 @@ public static class SecurityHeaders
         {
             if (entry != null && Uri.TryCreate(entry, UriKind.Absolute, out var uri)
                 && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
-                && !uri.Host.Contains('*') && !entry.Contains('*'))
+                && uri.UserInfo.Length == 0 && !uri.Host.Contains('*') && !entry.Contains('*'))
             {
-                var origin = uri.GetLeftPart(UriPartial.Authority);
+                // SchemeAndServer: scheme, host and non-default port, never userinfo or path.
+                var origin = uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
+                if (origin.IndexOfAny(new[] { ';', ',', '\'', '"' }) >= 0 || origin.Any(char.IsWhiteSpace))
+                {
+                    invalid.Add(entry);
+                    continue;
+                }
                 if (!origins.Contains(origin, StringComparer.OrdinalIgnoreCase)) origins.Add(origin);
             }
             else
