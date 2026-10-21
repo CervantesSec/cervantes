@@ -313,16 +313,8 @@ if (cspReportingEnabled)
     builder.Services.AddRateLimiter(options =>
     {
         options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-        // One overall limit for the endpoint on top of the per-client one, so a spread-out flood cannot fill the Logs table.
-        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-            httpContext.Request.Path.Equals(CspReports.Path, StringComparison.OrdinalIgnoreCase)
-                ? RateLimitPartition.GetFixedWindowLimiter("csp-report-global", _ => new FixedWindowRateLimiterOptions
-                {
-                    PermitLimit = cspReportPermitPerMinute * 10,
-                    Window = TimeSpan.FromMinutes(1),
-                    QueueLimit = 0
-                })
-                : RateLimitPartition.GetNoLimiter("other"));
+        // Per-client limit, applied by the rate limiter middleware before the handler runs. The overall cap comes
+        // after it, in the handler, so a client already rejected here does not use up the shared window.
         options.AddPolicy("csp-report", httpContext => RateLimitPartition.GetFixedWindowLimiter(
             CspReports.PartitionKey(httpContext.Connection.RemoteIpAddress),
             _ => new FixedWindowRateLimiterOptions
@@ -332,6 +324,13 @@ if (cspReportingEnabled)
                 QueueLimit = 0
             }));
     });
+    // Overall cap for the endpoint, shared by all clients: a flood spread over many networks cannot fill the Logs table.
+    builder.Services.AddSingleton(new FixedWindowRateLimiter(new FixedWindowRateLimiterOptions
+    {
+        PermitLimit = cspReportPermitPerMinute * 10,
+        Window = TimeSpan.FromMinutes(1),
+        QueueLimit = 0
+    }));
 }
 builder.Services.AddBlazoredLocalStorage();
 
@@ -509,8 +508,14 @@ app.MapControllers();
 if (cspReportingEnabled)
 {
     // Always 204: the reporter must not learn what was kept. Reports are logged as warnings, not stored elsewhere.
-    app.MapPost(CspReports.Path, async (HttpContext httpContext, ILoggerFactory loggerFactory) =>
+    app.MapPost(CspReports.Path, async (HttpContext httpContext, ILoggerFactory loggerFactory, FixedWindowRateLimiter globalLimiter) =>
     {
+        // Order: per-client limit (middleware policy, already passed), then the overall cap here.
+        using var lease = globalLimiter.AttemptAcquire();
+        if (!lease.IsAcquired)
+        {
+            return Results.StatusCode(StatusCodes.Status429TooManyRequests);
+        }
         try
         {
             var body = await CspReports.ReadLimitedAsync(httpContext.Request.Body, CspReports.MaxBodyBytes, httpContext.RequestAborted);
