@@ -15,12 +15,13 @@ Produced on 2026-10-22 by running the tools in Docker against throwaway local co
 | `Masscan` | Masscan 1.3.2, Alpine 3.20 package (`-oJ`, `-oX`, `-oL`, with and without `--banners`) |
 | `Zap` | ZAP 2.17.0 (`zap-baseline.py -x`) |
 
+Notes on these files: `Trivy/trivy-image.json` keeps three of the 260 vulnerabilities and was re-serialized after trimming (same keys and values, new indentation); `Nuclei/nuclei.jsonl` puts together single lines from three runs (an IP target, a host name target and a local CVE template); `Nikto/nikto-2.5-broken.json` is the invalid JSON Nikto 2.5.0 writes, kept as a negative case.
+
 Files whose structure was copied from a public report but whose content is ours (the source is not redistributed):
 
 - `Prowler/prowler-v3.csv`: header and column layout of a Prowler v3 CSV report (`;`-separated); rows written for Cervantes.
-- `DependencyCheck/dependency-check.json`: structure of a Dependency-Check 8.2 JSON report, plus a `cvssv4` block shaped as in the official `jsonReport.vsl` template; content written for Cervantes.
+- `DependencyCheck/dependency-check.json`: structure of a Dependency-Check 8.2.1 JSON report (the `engineVersion` value in the file is ours), plus a `cvssv4` block shaped as in the official `jsonReport.vsl` template; content written for Cervantes.
 - `Pwndoc/vulnerabilities.yml`: structure of real Pwndoc vulnerability exports (`vulnerabilities.yml`) and of the `customField` schema in Pwndoc `backend/src/models/vulnerability.js`; content written for Cervantes.
-<!-- filled in by the tasks that add them -->
 
 ## Files from DefectDojo
 
@@ -42,7 +43,6 @@ The files listed below come from the test samples of DefectDojo (`https://github
 - `Burp/burp-cwe.xml`: `burp/one_finding_with_cwe.xml`
 - `DependencyCheck/dependency-check.xml`: `dependency_check/version-6.5.3.xml` (only the first two `evidence` items kept; the user name in `filePath` replaced by `user`)
 - `DependencyCheck/dependency-check-1.3.xml`: `dependency_check/single_vuln.xml`
-<!-- filled in by the tasks that add them -->
 
 > Copyright (c) 2015-2023 DefectDojo, Inc. All rights reserved.
 >
