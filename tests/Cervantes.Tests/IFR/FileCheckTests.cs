@@ -57,4 +57,33 @@ public class FileCheckTests
         Assert.Equal("xml", check.GetExtension(bytes), ignoreCase: true);
         Assert.True(check.CheckFile(bytes));
     }
+
+    [Fact]
+    public void CheckImport_AcceptsXmlReportsTheMimeLibraryMisreads()
+    {
+        // A real Acunetix export: MimeDetective calls it GPX, so CheckFile alone refuses it
+        var bytes = File.ReadAllBytes(ParserFixtures.Path("Acunetix", "acunetix.xml"));
+
+        Assert.NotEqual("xml", check.GetExtension(bytes), StringComparer.OrdinalIgnoreCase);
+        Assert.True(check.CheckImport(bytes));
+    }
+
+    [Theory]
+    [InlineData(Xhtml)]
+    [InlineData(Svg)]
+    [InlineData(HtmlNoNs)]
+    [InlineData("<html><body><script>alert(1)</script></body></html>")]
+    public void CheckImport_RejectsActiveDocuments(string content)
+    {
+        Assert.False(check.CheckImport(Bytes(content)));
+    }
+
+    [Theory]
+    [InlineData(NmapXml)]
+    [InlineData("{\"results\": []}")]
+    [InlineData("Name;Template\nXSS;False\n")]
+    public void CheckImport_AcceptsWhatCheckFileAccepts(string content)
+    {
+        Assert.True(check.CheckImport(Bytes(content)));
+    }
 }

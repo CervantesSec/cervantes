@@ -1319,9 +1319,11 @@ public class VulnController: ControllerBase
                 var file = "";
                 if (model.FileContent != null)
                 {
-                    if (fileCheck.CheckFile(model.FileContent))
+                    if (fileCheck.CheckImport(model.FileContent))
                     {
-                        unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
+                        // A report the MIME detection misreads (GPX, HTML) is still XML: store it under .xml
+                        var extension = fileCheck.CheckFile(model.FileContent) ? fileCheck.GetExtension(model.FileContent) : "xml";
+                        unique = Guid.NewGuid().ToString()+"."+extension;
                         path = $"{env.WebRootPath}/Attachments/Imports";
                         file = $"{env.WebRootPath}/Attachments/Imports/{unique}";
                         importFile = file;

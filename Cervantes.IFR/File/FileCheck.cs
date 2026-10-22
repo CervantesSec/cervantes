@@ -93,6 +93,58 @@ public class FileCheck: IFileCheck
         return true;
     }
 
+    // For scanner reports given to the import parsers. MimeDetective reads some real XML reports as other formats
+    // (Acunetix and Nessus exports as GPX, an OpenVAS report with HTML in its descriptions as HTML), so a well-formed
+    // XML document is accepted whatever the detection says, unless its root is XHTML, SVG or html.
+    public bool CheckImport(byte[] file)
+    {
+        var root = XmlRoot(file, readToEnd: true);
+        if (root != null)
+        {
+            return !IsActiveRoot(root.Value.Namespace, root.Value.Name);
+        }
+        return CheckFile(file);
+    }
+
+    // The root element of a well-formed XML document, or null when the bytes are not one.
+    private static (string Namespace, string Name)? XmlRoot(byte[] file, bool readToEnd)
+    {
+        try
+        {
+            var settings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Ignore,
+                XmlResolver = null
+            };
+            using var stream = new MemoryStream(file);
+            using var reader = XmlReader.Create(stream, settings);
+            (string, string)? root = null;
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element && root == null)
+                {
+                    root = (reader.NamespaceURI, reader.LocalName);
+                    if (!readToEnd)
+                    {
+                        break;
+                    }
+                }
+            }
+            return root;
+        }
+        catch (XmlException)
+        {
+            return null;
+        }
+    }
+
+    private static bool IsActiveRoot(string ns, string name)
+    {
+        return ns is "http://www.w3.org/1999/xhtml" or "http://www.w3.org/2000/svg"
+               || (ns.Length == 0 && (name.Equals("html", StringComparison.OrdinalIgnoreCase) ||
+                                      name.Equals("svg", StringComparison.OrdinalIgnoreCase)));
+    }
+
     public bool CheckImage(byte[] file)
     {
         return allowedImageExtensions.Contains(GetExtension(file));
