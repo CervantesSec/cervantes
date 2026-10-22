@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<!DOCTYPE niktoscans SYSTEM "docs/nikto.dtd">
+<niktoscans>
+<niktoscan hoststest="0" options="-h http://172.19.0.2/ -Format xml -o /out/nikto.xml -ask no -maxtime 300 -nointeractive" version="2.5.0" scanstart="Thu Oct 22 19:00:56 2026" scanend="Thu Jan  1 00:00:00 1970" scanelapsed=" seconds" nxmlversion="1.2">
+
+<scandetails targetip="172.19.0.2" targethostname="172.19.0.2" targetport="80" targetbanner="Apache/2.4.49 (Unix)" starttime="2026-10-22 19:00:56" sitename="http://172.19.0.2:80/" siteip="http://172.19.0.2:80/" hostheader="172.19.0.2" errors="0" checks="6951">
+
+
+<item id="999957" method="GET">
+<description><![CDATA[/: The anti-clickjacking X-Frame-Options header is not present.]]></description>
+<uri><![CDATA[/]]></uri>
+<namelink><![CDATA[http://172.19.0.2:80/]]></namelink>
+<iplink><![CDATA[http://172.19.0.2:80/]]></iplink>
+<references><![CDATA[https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options]]></references>
+</item>
+
+<item id="999103" method="GET">
+<description><![CDATA[/: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type.]]></description>
+<uri><![CDATA[/]]></uri>
+<namelink><![CDATA[http://172.19.0.2:80/]]></namelink>
+<iplink><![CDATA[http://172.19.0.2:80/]]></iplink>
+<references><![CDATA[https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/]]></references>
+</item>
+
+<item id="600050" method="HEAD">
+<description><![CDATA[Apache/2.4.49 appears to be outdated (current is at least 2.4.57). Apache 2.2.34 is the EOL for the 2.x branch.]]></description>
+<uri><![CDATA[/]]></uri>
+<namelink><![CDATA[http://172.19.0.2:80/]]></namelink>
+<iplink><![CDATA[http://172.19.0.2:80/]]></iplink>
+<references><![CDATA[]]></references>
+</item>
+
+<item id="999990" method="OPTIONS">
+<description><![CDATA[OPTIONS: Allowed HTTP Methods: GET, POST, OPTIONS, HEAD, TRACE .]]></description>
+<uri><![CDATA[/]]></uri>
+<namelink><![CDATA[http://172.19.0.2:80/]]></namelink>
+<iplink><![CDATA[http://172.19.0.2:80/]]></iplink>
+<references><![CDATA[]]></references>
+</item>
+
+<item id="000434" method="TRACE">
+<description><![CDATA[/: HTTP TRACE method is active which suggests the host is vulnerable to XST.]]></description>
+<uri><![CDATA[/]]></uri>
+<namelink><![CDATA[http://172.19.0.2:80/]]></namelink>
+<iplink><![CDATA[http://172.19.0.2:80/]]></iplink>
+<references><![CDATA[https://owasp.org/www-community/attacks/Cross_Site_Tracing]]></references>
+</item>
+
+<statistics elapsed="9" itemsfound="5" itemstested="6951" endtime="2026-10-22 19:01:05" />
+</scandetails>
+</niktoscan>
+
+
+</niktoscans>

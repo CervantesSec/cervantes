@@ -231,11 +231,43 @@ public class ParserJsonTests
     {
         var host = Assert.Single(NiktoParser.Read(Fixture("Nikto", "nikto.json")));
 
-        Assert.Equal("app.example", host.Host);
-        Assert.Equal("10.3.3.3", host.Ip);
-        Assert.Equal(8080, host.Port);
-        Assert.Equal(2, host.Vulnerabilities.Length);
-        Assert.Equal("999986", host.Vulnerabilities[0].Id);
+        Assert.Equal("172.19.0.2", host.Host);
+        Assert.Equal("172.19.0.2", host.Ip);
+        Assert.Equal(80, host.Port);
+        Assert.Equal(10, host.Vulnerabilities.Length);
+        Assert.Equal("999990", host.Vulnerabilities[0].Id);
+        Assert.StartsWith("OPTIONS: Allowed HTTP Methods", host.Vulnerabilities[0].Msg);
+    }
+
+    [Fact]
+    public void Nikto_Broken25JsonThrows()
+    {
+        // Nikto 2.5.0 writes msg as ""/: text"", which is not JSON
+        Assert.ThrowsAny<JsonException>(() => NiktoParser.Read(Fixture("Nikto", "nikto-2.5-broken.json")));
+    }
+
+    [Fact]
+    public void Nikto_ReadXml25()
+    {
+        var items = NiktoParser.ReadXml(ParserFixtures.Xml("Nikto", "nikto.xml"));
+
+        Assert.Equal(5, items.Count);
+        Assert.Equal("999957", items[0].Id);
+        Assert.Equal("GET", items[0].Method);
+        Assert.Equal("/", items[0].Uri);
+        Assert.Equal("The anti-clickjacking X-Frame-Options header is not present.", items[0].Description);
+        Assert.Equal("172.19.0.2", items[0].Ip);
+        Assert.Equal("80", items[0].Port);
+    }
+
+    [Fact]
+    public void Nikto_ReadXml26()
+    {
+        var items = NiktoParser.ReadXml(ParserFixtures.Xml("Nikto", "nikto-2.6.xml"));
+
+        Assert.Equal(10, items.Count);
+        Assert.StartsWith("OPTIONS: Allowed HTTP Methods", items[0].Description);
+        Assert.StartsWith("HTTP TRACE method is active", items[1].Description);
     }
 
     [Theory]

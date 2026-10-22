@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE niktoscans PUBLIC "SYSTEM" "/nikto/program/templates/nikto.dtd">
+
+<niktoscans>
+  <niktoscan hoststest="0" options="-h http://172.19.0.2/ -Format xml -o /out/nikto-master.xml -ask no -maxtime 300 -nointeractive" version="2.6.1" scanstart="Thu Oct 22 19:01:48 2026" scanend="Thu Oct 22 19:01:48 2026" scanelapsed="0" nxmlversion="1.2">
+    <scandetails targetip="172.19.0.2" targethostname="172.19.0.2" targetport="80" targetbanner="" starttime="2026-10-22 19:01:48" sitename="http://172.19.0.2:80/" siteip="http://172.19.0.2:80/" hostheader="172.19.0.2" errors="0" checks="7240">
+      <item id="999990" method="OPTIONS">
+        <description>OPTIONS: Allowed HTTP Methods: GET, POST, OPTIONS, HEAD, TRACE .</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references></references>
+      </item>
+      <item id="000434" method="TRACE">
+        <description>/: HTTP TRACE method is active and replies which suggests the host is vulnerable to XST.</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references>https://owasp.org/www-community/attacks/Cross_Site_Tracing</references>
+      </item>
+      <item id="013587" method="GET">
+        <description>/: Suggested security header missing: content-security-policy.</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references>https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP</references>
+      </item>
+      <item id="013587" method="GET">
+        <description>/: Suggested security header missing: strict-transport-security.</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security</references>
+      </item>
+      <item id="013587" method="GET">
+        <description>/: Suggested security header missing: x-content-type-options.</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options</references>
+      </item>
+      <item id="013587" method="GET">
+        <description>/: Suggested security header missing: permissions-policy.</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy</references>
+      </item>
+      <item id="013587" method="GET">
+        <description>/: Suggested security header missing: referrer-policy.</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy</references>
+      </item>
+      <item id="600050" method="HEAD">
+        <description>Apache/2.4.49 appears to be outdated (current is at least 2.4.68).</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references></references>
+      </item>
+      <item id="007342" method="GET">
+        <description>/: X-Frame-Options header is deprecated and was replaced with the Content-Security-Policy HTTP header with the frame-ancestors directive.</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options</references>
+      </item>
+      <item id="007352" method="GET">
+        <description>/: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type.</description>
+        <uri>/</uri>
+        <namelink></namelink>
+        <iplink></iplink>
+        <references>https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/</references>
+      </item>
+      <statistics elapsed="9" itemsfound="10" itemstested="7240" endtime="2026-10-22 19:01:57" />
+    </scandetails>
+  </niktoscan>
+</niktoscans>

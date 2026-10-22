@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Xml;
 using Cervantes.Contracts;
@@ -60,23 +61,43 @@ public class NiktoParser : INiktoParser
 
     private void ParseJsonFormat(string fileContent, Project pro, string user, HtmlSanitizer sanitizer)
     {
-        try
+        // Content that starts like JSON but is not (Nikto 2.5.0 writes broken JSON) throws and answers 400;
+        // the text report never starts with { or [, so falling back to it would only import nothing
+        foreach (var host in Read(fileContent))
         {
-            foreach (var host in Read(fileContent))
+            foreach (var vulnerability in host.Vulnerabilities ?? Array.Empty<NiktoVulnerability>())
             {
-                foreach (var vulnerability in host.Vulnerabilities ?? Array.Empty<NiktoVulnerability>())
-                {
-                    ProcessVulnerability(vulnerability.Id, vulnerability.Method, vulnerability.Url,
-                                       vulnerability.Msg, host.Ip, host.Host,
-                                       host.Port.ToString(), pro, user, sanitizer);
-                }
+                ProcessVulnerability(vulnerability.Id, vulnerability.Method, vulnerability.Url,
+                                   vulnerability.Msg, host.Ip, host.Host,
+                                   host.Port.ToString(), pro, user, sanitizer);
             }
         }
-        catch (JsonException)
+    }
+
+    /// <summary>
+    /// Reads the items of a Nikto XML report (2.5 and 2.6): test id, method, URI, description and the scan's target IP,
+    /// host name and port. Nikto 2.6 starts some descriptions with "&lt;uri&gt;: "; that prefix is removed.
+    /// </summary>
+    public static System.Collections.Generic.IReadOnlyList<(string Id, string Method, string Uri, string Description, string Ip, string Host, string Port)> ReadXml(XmlDocument doc)
+    {
+        var items = new System.Collections.Generic.List<(string, string, string, string, string, string, string)>();
+        foreach (XmlNode scanDetail in doc.GetElementsByTagName("scandetails"))
         {
-            // Si falla JSON, intentar como texto plano
-            ParseTextFormat(fileContent, pro, user, sanitizer);
+            string ip = scanDetail.Attributes?["targetip"]?.Value ?? "";
+            string host = scanDetail.Attributes?["targethostname"]?.Value ?? "";
+            string port = scanDetail.Attributes?["targetport"]?.Value ?? "80";
+            foreach (XmlNode item in scanDetail.SelectNodes(".//item")!)
+            {
+                string uri = item.SelectSingleNode("uri")?.InnerText.Trim() ?? "";
+                string description = item.SelectSingleNode("description")?.InnerText.Trim() ?? "";
+                if (uri.Length > 0 && description.StartsWith(uri + ": ", StringComparison.Ordinal))
+                {
+                    description = description[(uri.Length + 2)..];
+                }
+                items.Add((item.Attributes?["id"]?.Value ?? "", item.Attributes?["method"]?.Value ?? "", uri, description, ip, host, port));
+            }
         }
+        return items;
     }
 
     /// <summary>
@@ -98,25 +119,10 @@ public class NiktoParser : INiktoParser
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
 
-        XmlNodeList scanDetails = doc.GetElementsByTagName("scandetails");
-        
-        foreach (XmlNode scanDetail in scanDetails)
+        foreach (var item in ReadXml(doc))
         {
-            string targetHost = scanDetail.Attributes?["targetip"]?.Value ?? "";
-            string targetHostname = scanDetail.Attributes?["targethostname"]?.Value ?? "";
-            string targetPort = scanDetail.Attributes?["targetport"]?.Value ?? "80";
-
-            XmlNodeList items = scanDetail.SelectNodes(".//item");
-            foreach (XmlNode item in items)
-            {
-                string id = item.Attributes?["id"]?.Value ?? "";
-                string method = item.Attributes?["method"]?.Value ?? "";
-                string uri = item.SelectSingleNode("uri")?.InnerText ?? "";
-                string description = item.SelectSingleNode("description")?.InnerText ?? "";
-
-                ProcessVulnerability(id, method, uri, description, targetHost, 
-                                   targetHostname, targetPort, pro, user, sanitizer);
-            }
+            ProcessVulnerability(item.Id, item.Method, item.Uri, item.Description, item.Ip,
+                               item.Host, item.Port, pro, user, sanitizer);
         }
     }
 
@@ -276,14 +282,14 @@ public class NiktoParser : INiktoParser
         {
             Id = Guid.NewGuid(),
             Name = sanitizer.Sanitize(vulnName),
-            Description = sanitizer.Sanitize(detailedDescription),
+            Description = sanitizer.Sanitize(WebUtility.HtmlEncode(detailedDescription)),
             Risk = risk,
             Status = VulnStatus.Open,
             Remediation = sanitizer.Sanitize("Review and remediate the identified web vulnerability"),
             RemediationComplexity = RemediationComplexity.Medium,
             RemediationPriority = RemediationPriority.Medium,
-            Impact = sanitizer.Sanitize(description),
-            ProofOfConcept = sanitizer.Sanitize(poc),
+            Impact = sanitizer.Sanitize(WebUtility.HtmlEncode(description)),
+            ProofOfConcept = sanitizer.Sanitize(WebUtility.HtmlEncode(poc)),
             Project = pro,
             UserId = user,
             Template = false,
@@ -317,6 +323,9 @@ public class NiktoJsonResult
     public string Ip { get; set; } = "";
     public int Port { get; set; } = 80;
     public string Banner { get; set; } = "";
+    // Nikto 2.6 writes the banner as server_banner (often null)
+    [System.Text.Json.Serialization.JsonPropertyName("server_banner")]
+    public string? ServerBanner { get; set; }
     public NiktoVulnerability[] Vulnerabilities { get; set; } = Array.Empty<NiktoVulnerability>();
 }
 

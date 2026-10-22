@@ -1,12 +1,82 @@
 [
-  {
-    "host": "app.example",
-    "ip": "10.3.3.3",
-    "port": "8080",
-    "banner": "nginx",
-    "vulnerabilities": [
-      { "id": "999986", "references": "", "method": "GET", "url": "/", "msg": "The anti-clickjacking X-Frame-Options header is not present." },
-      { "id": "000726", "references": "https://cve.example/CVE-2026-0004", "method": "GET", "url": "/backup/", "msg": "Directory indexing found." }
-    ]
-  }
+   {
+      "end_time" : "2026-10-22 19:01:48 +0000",
+      "host" : "172.19.0.2",
+      "ip" : "172.19.0.2",
+      "port" : 80,
+      "server_banner" : null,
+      "start_time" : "2026-10-22 19:01:39 +0000",
+      "vulnerabilities" : [
+         {
+            "id" : "999990",
+            "method" : "OPTIONS",
+            "msg" : "OPTIONS: Allowed HTTP Methods: GET, POST, OPTIONS, HEAD, TRACE .",
+            "references" : "",
+            "url" : "/"
+         },
+         {
+            "id" : "000434",
+            "method" : "TRACE",
+            "msg" : "HTTP TRACE method is active and replies which suggests the host is vulnerable to XST.",
+            "references" : "https://owasp.org/www-community/attacks/Cross_Site_Tracing",
+            "url" : "/"
+         },
+         {
+            "id" : "013587",
+            "method" : "GET",
+            "msg" : "Suggested security header missing: x-content-type-options.",
+            "references" : "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options",
+            "url" : "/"
+         },
+         {
+            "id" : "013587",
+            "method" : "GET",
+            "msg" : "Suggested security header missing: permissions-policy.",
+            "references" : "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy",
+            "url" : "/"
+         },
+         {
+            "id" : "013587",
+            "method" : "GET",
+            "msg" : "Suggested security header missing: strict-transport-security.",
+            "references" : "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security",
+            "url" : "/"
+         },
+         {
+            "id" : "013587",
+            "method" : "GET",
+            "msg" : "Suggested security header missing: content-security-policy.",
+            "references" : "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP",
+            "url" : "/"
+         },
+         {
+            "id" : "013587",
+            "method" : "GET",
+            "msg" : "Suggested security header missing: referrer-policy.",
+            "references" : "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy",
+            "url" : "/"
+         },
+         {
+            "id" : "600050",
+            "method" : "HEAD",
+            "msg" : "Apache/2.4.49 appears to be outdated (current is at least 2.4.68).",
+            "references" : "",
+            "url" : "/"
+         },
+         {
+            "id" : "007342",
+            "method" : "GET",
+            "msg" : "X-Frame-Options header is deprecated and was replaced with the Content-Security-Policy HTTP header with the frame-ancestors directive.",
+            "references" : "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options",
+            "url" : "/"
+         },
+         {
+            "id" : "007352",
+            "method" : "GET",
+            "msg" : "The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type.",
+            "references" : "https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/",
+            "url" : "/"
+         }
+      ]
+   }
 ]
