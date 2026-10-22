@@ -1643,6 +1643,11 @@ public class BackupController : ControllerBase
                     var compResult = reportComponentsManager.GetById(comp.Id);
                     if (compResult != null || componentMap.ContainsKey(comp.Id))
                     {
+                        if (compResult == null)
+                        {
+                            _logger.LogWarning("Restore discarded report component {Name} ({Language}, {ComponentType}): this instance already has one. User: {UserId}",
+                                comp.Name, comp.Language, comp.ComponentType, aspNetUserId);
+                        }
                         continue;
                     }
                     // Backups made before ContentCss was exported carry null; the column is NOT NULL.
@@ -1665,6 +1670,11 @@ public class BackupController : ControllerBase
                     var compResult = reportTemplateManager.GetById(comp.Id);
                     if (compResult != null || templateMap.ContainsKey(comp.Id))
                     {
+                        if (compResult == null)
+                        {
+                            _logger.LogWarning("Restore discarded report template {Name} ({Language}, {ReportType}): this instance already has one. User: {UserId}",
+                                comp.Name, comp.Language, comp.ReportType, aspNetUserId);
+                        }
                         continue;
                     }
                     comp.UserId = await users.ResolveAsync(comp.UserId);
@@ -1986,6 +1996,9 @@ public class BackupController : ControllerBase
         await db.SaveChangesAsync();
     }
 
+    /// <summary>Sanitizes an optional text; a null stays null instead of becoming an empty string.</summary>
+    private string? SanitizeKeepNull(string? value) => value == null ? null : sanitizer.Sanitize(value);
+
     /// <summary>Restores the knowledge base tags (matched by name) and their links to pages.</summary>
     private async System.Threading.Tasks.Task RestoreKnowledgeBaseTagsAsync(IEnumerable<KnowledgeBaseTags>? tags,
         IEnumerable<KnowledgeBaseTagLink>? links)
@@ -2015,11 +2028,14 @@ public class BackupController : ControllerBase
             return;
         }
 
-        foreach (var link in links)
+        var linkList = links.ToList();
+        var neededTagIds = linkList.Select(l => tagMap.TryGetValue(l.TagId, out var m) ? m : l.TagId).ToHashSet();
+        var tagsById = await db.Set<KnowledgeBaseTags>().Where(x => neededTagIds.Contains(x.Id)).ToDictionaryAsync(x => x.Id);
+        foreach (var link in linkList)
         {
             var tagId = tagMap.TryGetValue(link.TagId, out var mapped) ? mapped : link.TagId;
             var page = await db.Set<KnowledgeBase>().Include(x => x.Tags).FirstOrDefaultAsync(x => x.Id == link.NoteId);
-            var tag = await db.Set<KnowledgeBaseTags>().FindAsync(tagId);
+            tagsById.TryGetValue(tagId, out var tag);
             if (page == null || tag == null)
             {
                 continue;
@@ -2063,8 +2079,8 @@ public class BackupController : ControllerBase
             }
 
             template.Name = sanitizer.Sanitize(template.Name);
-            template.Description = sanitizer.Sanitize(template.Description);
-            template.Version = sanitizer.Sanitize(template.Version);
+            template.Description = SanitizeKeepNull(template.Description);
+            template.Version = SanitizeKeepNull(template.Version);
             template.UserId = await users.ResolveAsync(template.UserId);
             if (template.OrganizationId != null && await db.Set<Organization>().FindAsync(template.OrganizationId) == null)
             {
@@ -2087,7 +2103,7 @@ public class BackupController : ControllerBase
             }
 
             category.Name = sanitizer.Sanitize(category.Name);
-            category.Description = sanitizer.Sanitize(category.Description);
+            category.Description = SanitizeKeepNull(category.Description);
             db.Set<ChecklistCategory>().Add(category);
         }
 
@@ -2123,11 +2139,11 @@ public class BackupController : ControllerBase
 
             item.Code = sanitizer.Sanitize(item.Code);
             item.Name = sanitizer.Sanitize(item.Name);
-            item.Description = sanitizer.Sanitize(item.Description);
-            item.Objectives = sanitizer.Sanitize(item.Objectives);
-            item.TestProcedure = sanitizer.Sanitize(item.TestProcedure);
-            item.PassCriteria = sanitizer.Sanitize(item.PassCriteria);
-            item.References = sanitizer.Sanitize(item.References);
+            item.Description = SanitizeKeepNull(item.Description);
+            item.Objectives = SanitizeKeepNull(item.Objectives);
+            item.TestProcedure = SanitizeKeepNull(item.TestProcedure);
+            item.PassCriteria = SanitizeKeepNull(item.PassCriteria);
+            item.References = SanitizeKeepNull(item.References);
             db.Set<ChecklistItem>().Add(item);
         }
 
@@ -2153,7 +2169,7 @@ public class BackupController : ControllerBase
             }
 
             checklist.Name = sanitizer.Sanitize(checklist.Name);
-            checklist.Notes = sanitizer.Sanitize(checklist.Notes);
+            checklist.Notes = SanitizeKeepNull(checklist.Notes);
             checklist.UserId = await users.ResolveAsync(checklist.UserId);
             db.Set<Checklist>().Add(checklist);
         }
@@ -2185,8 +2201,8 @@ public class BackupController : ControllerBase
                 execution.VulnId = null;
             }
 
-            execution.Notes = sanitizer.Sanitize(execution.Notes);
-            execution.Evidence = sanitizer.Sanitize(execution.Evidence);
+            execution.Notes = SanitizeKeepNull(execution.Notes);
+            execution.Evidence = SanitizeKeepNull(execution.Evidence);
             execution.TestedByUserId = await users.ResolveOptionalAsync(execution.TestedByUserId);
             db.Set<ChecklistExecution>().Add(execution);
         }

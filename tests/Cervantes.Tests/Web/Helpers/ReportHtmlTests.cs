@@ -62,6 +62,14 @@ public class ReportHtmlTests
     }
 
     [Fact]
+    public void MoveHeadStylesToBody_IgnoresStyleInComment()
+    {
+        Assert.Equal(
+            "<html><head><!-- <style>.x{}</style> --></head><body><style>.y{}</style><p>x</p></body></html>",
+            ReportHtml.MoveHeadStylesToBody("<html><head><!-- <style>.x{}</style> --><style>.y{}</style></head><body><p>x</p></body></html>"));
+    }
+
+    [Fact]
     public void MoveHeadStylesToBody_NoHeadStyleUnchanged()
     {
         const string html = "<html><head><title>t</title></head><body><style>a{}</style><p>x</p></body></html>";
