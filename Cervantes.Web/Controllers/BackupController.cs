@@ -1276,14 +1276,16 @@ public class BackupController : ControllerBase
                         continue;
                     }
                     doc.UserId = await users.ResolveAsync(doc.UserId);
-                    if (!AttachmentPath.TryResolve(env.WebRootPath, doc.FilePath, "Documents", out _))
+                    // "Attachments/Documents/" is what a document without a file stores; any other path outside the
+                    // documents folder is discarded with its row, as for vuln attachments.
+                    if (string.IsNullOrEmpty(doc.FilePath))
                     {
-                        // "Attachments/Documents/" is what a document without a file stores.
-                        if (doc.FilePath != "Attachments/Documents/")
-                        {
-                            LogDiscardedPath("Document", doc.Id);
-                        }
                         doc.FilePath = "Attachments/Documents/";
+                    }
+                    if (doc.FilePath != "Attachments/Documents/" && !AttachmentPath.TryResolve(env.WebRootPath, doc.FilePath, "Documents", out _))
+                    {
+                        LogDiscardedPath("Document", doc.Id);
+                        continue;
                     }
                     await documentManager.AddAsync(doc);
                 }
@@ -1643,7 +1645,9 @@ public class BackupController : ControllerBase
                     var compResult = reportComponentsManager.GetById(comp.Id);
                     if (compResult != null || componentMap.ContainsKey(comp.Id))
                     {
-                        if (compResult == null)
+                        // Seeded components match by name with the same content: only a changed one is worth a warning.
+                        var kept = compResult == null ? reportComponentsManager.GetById(componentMap[comp.Id]) : null;
+                        if (kept != null && !BackupKeyMatch.SameComponentContent(comp.Content, comp.ContentCss, kept.Content, kept.ContentCss))
                         {
                             _logger.LogWarning("Restore discarded report component {Name} ({Language}, {ComponentType}): this instance already has one. User: {UserId}",
                                 comp.Name, comp.Language, comp.ComponentType, aspNetUserId);
@@ -1670,7 +1674,8 @@ public class BackupController : ControllerBase
                     var compResult = reportTemplateManager.GetById(comp.Id);
                     if (compResult != null || templateMap.ContainsKey(comp.Id))
                     {
-                        if (compResult == null)
+                        var kept = compResult == null ? reportTemplateManager.GetById(templateMap[comp.Id]) : null;
+                        if (kept != null && (kept.Description ?? "").Trim() != (comp.Description ?? "").Trim())
                         {
                             _logger.LogWarning("Restore discarded report template {Name} ({Language}, {ReportType}): this instance already has one. User: {UserId}",
                                 comp.Name, comp.Language, comp.ReportType, aspNetUserId);

@@ -42,4 +42,18 @@ public class BackupKeyMatchTests
 
         Assert.Equal(low.Id, Match(new[] { b }, new[] { high, low })[b.Id]);
     }
+
+    [Fact]
+    public void SameComponentContent_IgnoresLineEndings()
+    {
+        Assert.True(BackupKeyMatch.SameComponentContent("<p>a</p>\r\n<p>b</p> ", "p{}", "<p>a</p>\n<p>b</p>", "p{}\n"));
+        Assert.True(BackupKeyMatch.SameComponentContent("<p>a</p>", null, "<p>a</p>", ""));
+    }
+
+    [Fact]
+    public void SameComponentContent_DifferentCss()
+    {
+        Assert.False(BackupKeyMatch.SameComponentContent("<p>a</p>", "p{color:red}", "<p>a</p>", "p{}"));
+        Assert.False(BackupKeyMatch.SameComponentContent("<p>a</p>", "", "<p>b</p>", ""));
+    }
 }

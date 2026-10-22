@@ -30,4 +30,14 @@ public static class BackupKeyMatch
 
         return map;
     }
+
+    /// <summary>
+    /// Whether a report component in the backup has the same HTML and CSS as the one this instance already has
+    /// (ignoring line endings and surrounding whitespace). A restore only warns about discarding a component that differs.
+    /// </summary>
+    public static bool SameComponentContent(string? contentA, string? cssA, string? contentB, string? cssB)
+    {
+        static string Normalize(string? value) => (value ?? "").Replace("\r\n", "\n").Trim();
+        return Normalize(contentA) == Normalize(contentB) && Normalize(cssA) == Normalize(cssB);
+    }
 }
