@@ -32,6 +32,13 @@ public class OpenVASTests
     }
 
     [Fact]
+    public void VectorOf_Gmp22Severities()
+    {
+        Assert.Equal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", OpenVASParser.VectorOf(Result("openvas.xml")));
+        Assert.Equal("", OpenVASParser.VectorOf(Result("openvas-gmp9.xml")));
+    }
+
+    [Fact]
     public void CvesOf_FromRefs()
     {
         var gmp22 = OpenVASParser.CvesOf(Result("openvas.xml"));

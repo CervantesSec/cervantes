@@ -61,6 +61,22 @@ public class OpenVASParser : IOpenVASParser
         return result.SelectSingleNode("solution")?.InnerText?.Trim() ?? "";
     }
 
+    /// <summary>
+    /// The CVSS vector of a result (GMP 20+): the <c>cvss_base_v3</c> entry of <c>nvt/severities</c>, else the
+    /// <c>cvss_base_vector=</c> tag when it is a "CVSS:" vector; "" for older reports, which carry only a score.
+    /// </summary>
+    public static string VectorOf(XmlNode result)
+    {
+        var fromSeverities = result.SelectSingleNode("nvt/severities/severity[@type='cvss_base_v3']/value")?.InnerText?.Trim();
+        if (!string.IsNullOrEmpty(fromSeverities))
+        {
+            return fromSeverities;
+        }
+        var fromTags = (result.SelectSingleNode("nvt/tags")?.InnerText ?? "").Split('|')
+            .FirstOrDefault(x => x.StartsWith("cvss_base_vector=", StringComparison.Ordinal))?["cvss_base_vector=".Length..].Trim();
+        return fromTags != null && fromTags.StartsWith("CVSS:", StringComparison.Ordinal) ? fromTags : "";
+    }
+
     /// <summary>The CVEs of a result: every <c>ref type="cve"</c> (under the NVT or the result) and a legacy <c>nvt/cve</c>.</summary>
     public static string CvesOf(XmlNode result)
     {
@@ -283,6 +299,10 @@ public class OpenVASParser : IOpenVASParser
                 if (!string.IsNullOrEmpty(cvss) && double.TryParse(cvss, NumberStyles.Float, CultureInfo.InvariantCulture, out double cvssScore))
                 {
                     vuln.CVSS3 = cvssScore;
+                }
+                if (VectorOf(result) is { Length: > 0 } vector)
+                {
+                    vuln.CVSSVector = sanitizer.Sanitize(vector);
                 }
 
                 vuln.FindingId = findingIds.Next();
