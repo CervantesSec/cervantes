@@ -27,8 +27,8 @@ public sealed class OfflineWebRequest : IWebRequest
 }
 
 /// <summary>
-/// PreMailer stylesheet loader for report generation: components are inlined only with the CSS they carry themselves
-/// (their own CSS and inline style blocks). Every linked stylesheet, remote or local file, is refused.
+/// PreMailer stylesheet loader for the DOCX report export: the report is inlined only with the CSS it carries itself
+/// (its &lt;style&gt; blocks, component CSS included). Every linked stylesheet, remote or local file, is refused.
 /// </summary>
 public sealed class OfflineCssDownloader : IWebDownloader
 {

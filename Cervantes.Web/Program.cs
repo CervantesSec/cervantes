@@ -410,8 +410,8 @@ if (forwardedHeadersEnabled)
     app.UseForwardedHeaders();
 }
 
-// PreMailer (report Generate, the only caller) downloads <link> stylesheets through this process-wide downloader;
-// report generation must not fetch anything, so it gets one that returns no CSS.
+// PreMailer (the DOCX report export, which inlines the stored report) downloads <link> stylesheets through this process-wide downloader;
+// exports must not fetch anything, so it gets one that returns no CSS.
 PreMailer.Net.Downloaders.WebDownloader.SharedDownloader = new OfflineCssDownloader();
 
 // Security headers (CSP, nosniff, Referrer-Policy): see SecurityHeaders for what each directive allows and why.

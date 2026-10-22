@@ -33,6 +33,7 @@ public partial class WorkspaceIndex: ComponentBase
     private List<CORE.Entities.Vault> Vaults = new List<CORE.Entities.Vault>();
     private List<CORE.Entities.Target> Targets = new List<CORE.Entities.Target>();
     private bool canReadMembers;
+    private bool loaded;
     [Inject] private AuthenticationStateProvider authenticationStateProvider { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -61,6 +62,7 @@ public partial class WorkspaceIndex: ComponentBase
             new BreadcrumbItem("Dashboard", href: null, disabled: true, icon: Icons.Material.Filled.Dashboard)
         };
         await Update();
+        loaded = true;
 
        
 

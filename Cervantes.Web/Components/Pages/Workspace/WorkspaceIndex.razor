@@ -22,6 +22,9 @@
 </SectionContent>
 
   
+@* Nothing renders until OnInitializedAsync has loaded the project: a non-member is redirected first. *@
+@if (loaded)
+{
 <MudGrid>
 <MudItem xs="12" sm="3" md="3">
     <MudStack>
@@ -300,3 +303,4 @@
 
 </MudItem>
 </MudGrid>
+}

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Cervantes.Web.Helpers;
 using Cervantes.Contracts;
 using Cervantes.CORE.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +34,7 @@ public class WorkspacesController : ControllerBase
         {
          
                 var projects = projectUserManager.GetAll().Where(x => x.UserId == aspNetUserId).Select(y => y.ProjectId).ToList();
-                var model = projectManager.GetAll().Where(x => projects.Contains(x.Id) && x.Status == ProjectStatus.Active || x.Status == ProjectStatus.PendingReview).Include(x => x.Client).ToList();
+                var model = projectManager.GetAll().Where(WorkspaceProjects.ListedFor(projects)).Include(x => x.Client).ToList();
                 return model;
             
         }

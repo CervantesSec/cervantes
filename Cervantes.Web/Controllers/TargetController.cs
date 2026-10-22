@@ -248,18 +248,20 @@ public class TargetController : ControllerBase
                 if (result != null)
                 {
                     // Authorize against the project stored in the database, never the one sent in the request.
+                    if (!CanWriteTarget(result))
+                    {
+                        _logger.LogWarning("Access denied editing target {TargetId}. User: {UserId}",
+                            result.Id, aspNetUserId);
+                        return StatusCode(403, "Access denied: User does not have permission to access this project");
+                    }
+
+                    // Checked after authorization, so a non-member cannot probe a target's project.
                     // Edit never moves a target: a different project is refused, like the other modules do.
                     var requestedProject = model.ProjectId == Guid.Empty ? null : model.ProjectId;
                     var storedProject = result.ProjectId == Guid.Empty ? null : result.ProjectId;
                     if (model.ProjectId != null && requestedProject != storedProject)
                     {
                         return BadRequest("A target cannot be moved to another project");
-                    }
-                    if (!CanWriteTarget(result))
-                    {
-                        _logger.LogWarning("Access denied editing target {TargetId}. User: {UserId}",
-                            result.Id, aspNetUserId);
-                        return StatusCode(403, "Access denied: User does not have permission to access this project");
                     }
 
                     result.Name = sanitizer.Sanitize(model.Name);

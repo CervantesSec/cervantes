@@ -18,6 +18,15 @@ public static class ReportCss
         return "<style>" + css.Replace("<", "\\3C ") + "</style>";
     }
 
+    /// <summary>
+    /// The style blocks of a report's components, each distinct CSS once, for the start of the report body. Kept out of
+    /// &lt;header&gt; and &lt;footer&gt;, where the report editor does not allow &lt;style&gt; and drops it on the first save.
+    /// </summary>
+    public static string StyleBlocks(IEnumerable<string?> componentCss)
+    {
+        return string.Concat(componentCss.Where(c => !string.IsNullOrWhiteSpace(c)).Distinct().Select(ToStyleBlock));
+    }
+
     /// <summary>The parse errors of a report template, each with its line and column.</summary>
     public static IReadOnlyList<string> TemplateErrors(Template template)
     {

@@ -746,6 +746,7 @@ public class ReportController : ControllerBase
                 </head>
                 <body>
                     <style>" + prismCss + @"</style>
+                    {{ComponentStyles}}
                     <header>
                         {{HeaderComponents}}
                     </header>
@@ -760,13 +761,15 @@ public class ReportController : ControllerBase
                     </footer>
                 </body>
                 </html>";
+                // The component CSS goes in as stylesheets so selectors that depend on the rendered report
+                // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
+                source = source.Replace("{{ComponentStyles}}", ReportCss.StyleBlocks(reportParts.Select(x => x.Component.ContentCss)));
+
                 StringBuilder sbHeader = new StringBuilder();
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Header)
                              .OrderBy(x => x.Order))
                 {
-                    // The component CSS goes in as a stylesheet so selectors that depend on the rendered report
-                    // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
-                    var componentHtml = ReportCss.ToStyleBlock(part.Component.ContentCss) + part.Component.Content;
+                    var componentHtml = part.Component.Content;
                     string pattern = @"<html\s*(?:[^>]*)\s*>";
                     string pattern2 = @"<body\s*(?:[^>]*)\s*>";
                     string pattern3 = @"<head\s*(?:[^>]*)\s*>";
@@ -787,9 +790,7 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Cover)
                              .OrderBy(x => x.Order))
                 {
-                    // The component CSS goes in as a stylesheet so selectors that depend on the rendered report
-                    // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
-                    var componentHtml = ReportCss.ToStyleBlock(part.Component.ContentCss) + part.Component.Content;
+                    var componentHtml = part.Component.Content;
                     string pattern = @"<html\s*(?:[^>]*)\s*>";
                     string pattern2 = @"<body\s*(?:[^>]*)\s*>";
                     string pattern3 = @"<head\s*(?:[^>]*)\s*>";
@@ -809,9 +810,7 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Body)
                              .OrderBy(x => x.Order))
                 {
-                    // The component CSS goes in as a stylesheet so selectors that depend on the rendered report
-                    // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
-                    var componentHtml = ReportCss.ToStyleBlock(part.Component.ContentCss) + part.Component.Content;
+                    var componentHtml = part.Component.Content;
                     string pattern = @"<html\s*(?:[^>]*)\s*>";
                     string pattern2 = @"<body\s*(?:[^>]*)\s*>";
                     string pattern3 = @"<head\s*(?:[^>]*)\s*>";
@@ -850,9 +849,7 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Footer)
                              .OrderBy(x => x.Order))
                 {
-                    // The component CSS goes in as a stylesheet so selectors that depend on the rendered report
-                    // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
-                    var componentHtml = ReportCss.ToStyleBlock(part.Component.ContentCss) + part.Component.Content;
+                    var componentHtml = part.Component.Content;
                     string pattern = @"<html\s*(?:[^>]*)\s*>";
                     string pattern2 = @"<body\s*(?:[^>]*)\s*>";
                     string pattern3 = @"<head\s*(?:[^>]*)\s*>";

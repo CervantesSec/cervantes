@@ -37,4 +37,12 @@ public class ReportCssTests
         Assert.NotEmpty(errors);
         Assert.Contains("(2,", errors[0]);
     }
+
+    [Fact]
+    public void StyleBlocks_OncePerDistinctCss()
+    {
+        var blocks = ReportCss.StyleBlocks(new[] { ".hdr{}", null, ".cover{}", ".hdr{}", " " });
+
+        Assert.Equal("<style>.hdr{}</style><style>.cover{}</style>", blocks);
+    }
 }
