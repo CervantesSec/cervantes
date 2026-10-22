@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- masscan v1.0 scan -->
+<nmaprun scanner="masscan" start="1792695758" version="1.0-BETA"  xmloutputversion="1.03">
+<scaninfo type="syn" protocol="tcp" />
+<host endtime="1792695758"><address addr="172.19.0.2" addrtype="ipv4"/><ports><port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="64"/></port></ports></host>
+<host endtime="1792695758"><address addr="172.19.0.3" addrtype="ipv4"/><ports><port protocol="tcp" portid="8080"><state state="open" reason="syn-ack" reason_ttl="64"/></port></ports></host>
+<host endtime="1792695765"><address addr="172.19.0.3" addrtype="ipv4"/><ports><port protocol="tcp" portid="8080"><state state="open" reason="response" reason_ttl="64" /><service name="http.server" banner="SimpleHTTP/0.6 Python/3.12.15"></service></port></ports></host>
+<host endtime="1792695765"><address addr="172.19.0.3" addrtype="ipv4"/><ports><port protocol="tcp" portid="8080"><state state="open" reason="response" reason_ttl="64" /><service name="title" banner="Directory listing for /"></service></port></ports></host>
+<host endtime="1792695765"><address addr="172.19.0.3" addrtype="ipv4"/><ports><port protocol="tcp" portid="8080"><state state="open" reason="response" reason_ttl="64" /><service name="http" banner="HTTP/1.0 200 OK\x0d\x0aServer: SimpleHTTP/0.6 Python/3.12.15\x0d\x0aDate: Thu, 22 Oct 2026 19:02:41 GMT\x0d\x0aContent-type: text/html; charset=utf-8\x0d\x0aContent-Length: 805\x0d\x0a\x0d"></service></port></ports></host>
+<runstats>
+<finished time="1792695766" timestr="2026-10-22 19:02:46" elapsed="8" />
+<hosts up="2" down="0" total="2" />
+</runstats>
+</nmaprun>

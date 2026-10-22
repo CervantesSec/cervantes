@@ -164,9 +164,51 @@ public class ParserJsonTests
         var results = MasscanParser.Read(Fixture("Masscan", "masscan.json"));
 
         Assert.Equal(2, results.Count);
-        Assert.Equal("10.2.2.2", results[0].Ip);
-        Assert.Equal(443, results[0].Ports[0].Port);
+        Assert.Equal("172.19.0.2", results[0].Ip);
+        Assert.Equal(80, results[0].Ports[0].Port);
         Assert.Equal("open", results[0].Ports[0].Status);
+    }
+
+    [Fact]
+    public void Masscan_BannerJsonReads()
+    {
+        var results = MasscanParser.Read(Fixture("Masscan", "masscan-banners.json"));
+
+        Assert.Equal(5, results.Count);
+        Assert.Equal("http.server", results[2].Ports[0].Service!.Name);
+        Assert.Equal("SimpleHTTP/0.6 Python/3.12.15", results[2].Ports[0].Service!.Banner);
+    }
+
+    [Fact]
+    public void Masscan_StringServiceStillReads()
+    {
+        var result = Assert.Single(MasscanParser.Read("{\"ip\": \"10.0.0.1\", \"ports\": [{\"port\": 22, \"proto\": \"tcp\", \"status\": \"open\", \"service\": \"ssh\"}]}"));
+
+        Assert.Equal("ssh", result.Ports[0].Service!.Name);
+    }
+
+    [Fact]
+    public void Masscan_OpenPortsMergesBannerRecords()
+    {
+        var ports = MasscanParser.OpenPorts(MasscanParser.Read(Fixture("Masscan", "masscan-banners.json")));
+
+        Assert.Equal(2, ports.Count);
+        Assert.Equal(new MasscanOpenPort("172.19.0.2", 80, "tcp", null, null), ports[0]);
+        var http = ports[1];
+        Assert.Equal(("172.19.0.3", 8080, "tcp", "http.server"), (http.Ip, http.Port, http.Proto, http.Service));
+        Assert.Contains("SimpleHTTP/0.6 Python/3.12.15", http.Banner);
+        Assert.Contains("Directory listing for /", http.Banner);
+    }
+
+    [Fact]
+    public void Masscan_ReadXmlMergesBannerHosts()
+    {
+        var ports = MasscanParser.ReadXml(ParserFixtures.Xml("Masscan", "masscan-banners.xml"));
+
+        Assert.Equal(2, ports.Count);
+        Assert.Equal(8080, ports[1].Port);
+        Assert.Equal("http.server", ports[1].Service);
+        Assert.Contains("Directory listing for /", ports[1].Banner);
     }
 
     [Fact]

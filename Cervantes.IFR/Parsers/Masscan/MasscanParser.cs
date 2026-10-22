@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Xml;
@@ -60,18 +61,62 @@ public class MasscanParser : IMasscanParser
 
     private void ParseJsonFormat(string fileContent, Project pro, string user, HtmlSanitizer sanitizer)
     {
-        try
+        // Content that starts like JSON but is not throws and answers 400; the list format never starts with { or [
+        foreach (var open in OpenPorts(Read(fileContent)))
         {
-            foreach (var result in Read(fileContent))
+            ProcessOpenPort(open.Ip, open.Port.ToString(), open.Proto, "open", open.Service ?? "", pro, user, sanitizer, open.Banner);
+        }
+    }
+
+    /// <summary>
+    /// One entry per open ip/port/protocol. With <c>--banners</c> Masscan writes each grabbed banner as another record
+    /// for the same port (without a status); those are merged into the open port: the first service name, and every
+    /// banner as a "name: banner" line.
+    /// </summary>
+    public static IReadOnlyList<MasscanOpenPort> OpenPorts(IEnumerable<MasscanJsonResult> results)
+    {
+        var records = results
+            .Where(x => !string.IsNullOrEmpty(x.Ip))
+            .SelectMany(x => (x.Ports ?? Array.Empty<MasscanPort>()).Select(p => (x.Ip, p.Port, Proto: string.IsNullOrEmpty(p.Proto) ? "tcp" : p.Proto,
+                Open: p.Status == "open" || p.Service != null, ServiceName: p.Service?.Name, p.Service?.Banner)));
+        return Merge(records);
+    }
+
+    /// <summary>The open ports of a Masscan XML report, merged as <see cref="OpenPorts"/> does (banner hosts repeat the port).</summary>
+    public static IReadOnlyList<MasscanOpenPort> ReadXml(XmlDocument doc)
+    {
+        var records = new List<(string Ip, int Port, string Proto, bool Open, string? ServiceName, string? Banner)>();
+        foreach (XmlNode host in doc.GetElementsByTagName("host"))
+        {
+            var ip = host.SelectSingleNode("address[@addrtype='ipv4']")?.Attributes?["addr"]?.Value ?? "";
+            foreach (XmlNode port in host.SelectNodes(".//port")!)
             {
-                ProcessMasscanResult(result, pro, user, sanitizer);
+                if (!int.TryParse(port.Attributes?["portid"]?.Value, out var portId) || ip.Length == 0)
+                {
+                    continue;
+                }
+                var service = port.SelectSingleNode("service");
+                records.Add((ip, portId, port.Attributes?["protocol"]?.Value ?? "tcp",
+                    port.SelectSingleNode("state")?.Attributes?["state"]?.Value == "open",
+                    service?.Attributes?["name"]?.Value, service?.Attributes?["banner"]?.Value));
             }
         }
-        catch (JsonException)
-        {
-            // Si falla JSON, intentar como texto plano
-            ParseTextFormat(fileContent, pro, user, sanitizer);
-        }
+        return Merge(records);
+    }
+
+    private static IReadOnlyList<MasscanOpenPort> Merge(IEnumerable<(string Ip, int Port, string Proto, bool Open, string? ServiceName, string? Banner)> records)
+    {
+        return records
+            .GroupBy(x => (x.Ip, x.Port, x.Proto))
+            .Where(g => g.Any(x => x.Open))
+            .Select(g =>
+            {
+                var services = g.Where(x => !string.IsNullOrEmpty(x.ServiceName)).ToList();
+                var banners = services.Where(x => !string.IsNullOrEmpty(x.Banner)).Select(x => $"{x.ServiceName}: {x.Banner}").ToList();
+                return new MasscanOpenPort(g.Key.Ip, g.Key.Port, g.Key.Proto, services.FirstOrDefault().ServiceName,
+                    banners.Count > 0 ? string.Join("\n", banners) : null);
+            })
+            .ToList();
     }
 
     /// <summary>
@@ -93,31 +138,9 @@ public class MasscanParser : IMasscanParser
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
 
-        XmlNodeList hosts = doc.GetElementsByTagName("host");
-        
-        foreach (XmlNode host in hosts)
+        foreach (var open in ReadXml(doc))
         {
-            string ip = "";
-            var addressNode = host.SelectSingleNode("address[@addrtype='ipv4']");
-            if (addressNode != null)
-            {
-                ip = addressNode.Attributes?["addr"]?.Value ?? "";
-            }
-
-            XmlNodeList ports = host.SelectNodes(".//port");
-            foreach (XmlNode port in ports)
-            {
-                string portId = port.Attributes?["portid"]?.Value ?? "";
-                string protocol = port.Attributes?["protocol"]?.Value ?? "tcp";
-                
-                var stateNode = port.SelectSingleNode("state");
-                string state = stateNode?.Attributes?["state"]?.Value ?? "";
-
-                if (state == "open" && !string.IsNullOrEmpty(ip) && !string.IsNullOrEmpty(portId))
-                {
-                    ProcessOpenPort(ip, portId, protocol, state, "", pro, user, sanitizer);
-                }
-            }
+            ProcessOpenPort(open.Ip, open.Port.ToString(), open.Proto, "open", open.Service ?? "", pro, user, sanitizer, open.Banner);
         }
     }
 
@@ -190,21 +213,8 @@ public class MasscanParser : IMasscanParser
         }
     }
 
-    private void ProcessMasscanResult(MasscanJsonResult result, Project pro, string user, HtmlSanitizer sanitizer)
-    {
-        if (string.IsNullOrEmpty(result.Ip)) return;
-
-        foreach (var port in result.Ports ?? new MasscanPort[0])
-        {
-            if (port.Status == "open")
-            {
-                ProcessOpenPort(result.Ip, port.Port.ToString(), port.Proto, port.Status, port.Service, pro, user, sanitizer);
-            }
-        }
-    }
-
-    private void ProcessOpenPort(string ip, string portNumber, string protocol, string state, string service, 
-                                Project pro, string user, HtmlSanitizer sanitizer)
+    private void ProcessOpenPort(string ip, string portNumber, string protocol, string state, string service,
+                                Project pro, string user, HtmlSanitizer sanitizer, string? banner = null)
     {
         // Crear o encontrar target
         Target target = null;
@@ -251,6 +261,12 @@ public class MasscanParser : IMasscanParser
         {
             poc += $"\nService: {service}";
         }
+        if (!string.IsNullOrEmpty(banner))
+        {
+            poc += $"\nBanners:\n{banner}";
+        }
+        // Service names and banners come from the scanned host: plain text
+        poc = WebUtility.HtmlEncode(poc);
 
         // Construir remediación
         string remediation = GeneratePortRemediationAdvice(portNumber, service);
@@ -412,5 +428,41 @@ public class MasscanPort
     [System.Text.Json.Serialization.JsonConverter(typeof(FlexibleStringConverter))]
     public string Reason { get; set; } = "";
     public int Ttl { get; set; }
-    public string Service { get; set; } = "";
+    // With --banners Masscan writes {"name": ..., "banner": ...}; a plain string is read as the name
+    [System.Text.Json.Serialization.JsonConverter(typeof(MasscanServiceConverter))]
+    public MasscanService? Service { get; set; }
+}
+
+public class MasscanService
+{
+    public string Name { get; set; } = "";
+    public string Banner { get; set; } = "";
+}
+
+// One open port of a host, with the banners Masscan grabbed for it merged in.
+public sealed record MasscanOpenPort(string Ip, int Port, string Proto, string? Service, string? Banner);
+
+public class MasscanServiceConverter : System.Text.Json.Serialization.JsonConverter<MasscanService?>
+{
+    public override MasscanService? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        switch (reader.TokenType)
+        {
+            case JsonTokenType.Null:
+                return null;
+            case JsonTokenType.String:
+                return new MasscanService { Name = reader.GetString() ?? "" };
+            case JsonTokenType.StartObject:
+                using (var doc = JsonDocument.ParseValue(ref reader))
+                {
+                    string Text(string name) => doc.RootElement.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString() ?? "" : "";
+                    return new MasscanService { Name = Text("name"), Banner = Text("banner") };
+                }
+            default:
+                throw new JsonException("Masscan service must be a string or an object");
+        }
+    }
+
+    public override void Write(Utf8JsonWriter writer, MasscanService? value, JsonSerializerOptions options) =>
+        JsonSerializer.Serialize(writer, value, options);
 }

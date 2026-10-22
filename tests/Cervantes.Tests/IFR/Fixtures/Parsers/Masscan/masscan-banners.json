@@ -1,0 +1,11 @@
+[
+{   "ip": "172.19.0.2",   "timestamp": "1792695752", "ports": [ {"port": 80, "proto": "tcp", "status": "open", "reason": "syn-ack", "ttl": 64} ] }
+,
+{   "ip": "172.19.0.3",   "timestamp": "1792695752", "ports": [ {"port": 8080, "proto": "tcp", "status": "open", "reason": "syn-ack", "ttl": 64} ] }
+,
+{   "ip": "172.19.0.3",   "timestamp": "1792695758", "ports": [ {"port": 8080, "proto": "tcp", "service": {"name": "http.server", "banner": "SimpleHTTP/0.6 Python/3.12.15"} } ] }
+,
+{   "ip": "172.19.0.3",   "timestamp": "1792695758", "ports": [ {"port": 8080, "proto": "tcp", "service": {"name": "title", "banner": "Directory listing for /"} } ] }
+,
+{   "ip": "172.19.0.3",   "timestamp": "1792695758", "ports": [ {"port": 8080, "proto": "tcp", "service": {"name": "http", "banner": "HTTP/1.0 200 OK\u000d\u000aServer: SimpleHTTP/0.6 Python/3.12.15\u000d\u000aDate: Thu, 22 Oct 2026 19:02:35 GMT\u000d\u000aContent-type: text/html; charset=utf-8\u000d\u000aContent-Length: 805\u000d\u000a\u000d"} } ] }
+]
