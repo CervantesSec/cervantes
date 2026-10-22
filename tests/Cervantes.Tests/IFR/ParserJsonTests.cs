@@ -9,7 +9,7 @@ using Cervantes.IFR.Parsers.Trivy;
 
 namespace Cervantes.Tests.IFR;
 
-// Fixtures are handwritten in each tool's real output format (field names, nesting and types).
+// Real tool output (see Fixtures/Parsers/NOTICE.md); inline JSON only for legacy shapes and edge cases.
 public class ParserJsonTests
 {
     private static string Fixture(string tool, string file) => ParserFixtures.Text(tool, file);

@@ -30,10 +30,11 @@ public class ZapParser : IZapParser
     }
 
     /// <summary>
-    /// The places an alert was found: <c>instances/instance</c> since ZAP 2.10, or the <c>uri</c>, <c>param</c> and
-    /// <c>evidence</c> written directly on the alert by older versions.
+    /// The places an alert was found: <c>instances/instance</c> since ZAP 2.10 (URI, method, parameter, attack, evidence
+    /// and the instance's other info), or the same fields written directly on the alert by older versions. Empty
+    /// elements are null.
     /// </summary>
-    public static IReadOnlyList<(string Uri, string? Param, string? Evidence)> InstancesOf(XmlNode alertItem)
+    public static IReadOnlyList<ZapInstance> InstancesOf(XmlNode alertItem)
     {
         static string? Text(XmlNode node, string name)
         {
@@ -41,13 +42,17 @@ public class ZapParser : IZapParser
             return string.IsNullOrEmpty(text) ? null : text;
         }
 
+        static ZapInstance Read(XmlNode node, string uri) =>
+            new(uri, Text(node, "method"), Text(node, "param"), Text(node, "attack"), Text(node, "evidence"), Text(node, "otherinfo"));
+
         var instances = alertItem.SelectNodes("instances/instance")!.Cast<XmlNode>()
-            .Select(x => (Text(x, "uri") ?? "", Text(x, "param"), Text(x, "evidence")))
-            .Where(x => x.Item1.Length > 0)
+            .Where(x => Text(x, "uri") != null)
+            .Select(x => Read(x, Text(x, "uri")!))
             .ToList();
         if (instances.Count == 0 && Text(alertItem, "uri") is { } uri)
         {
-            instances.Add((uri, Text(alertItem, "param"), Text(alertItem, "evidence")));
+            // Older reports: the fields are on the alert; its otherinfo is the alert's, shown once by Parse
+            instances.Add(Read(alertItem, uri) with { OtherInfo = null });
         }
         return instances;
     }
@@ -84,9 +89,6 @@ public class ZapParser : IZapParser
 
                 var instances = InstancesOf(alert);
                 string uri = instances.Count > 0 ? instances[0].Uri : "";
-
-                string attack = "";
-                if (alert.SelectSingleNode("attack") != null) { attack = alert.SelectSingleNode("attack").InnerText; }
 
                 string otherinfo = "";
                 if (alert.SelectSingleNode("otherinfo") != null) { otherinfo = alert.SelectSingleNode("otherinfo").InnerText; }
@@ -190,24 +192,30 @@ public class ZapParser : IZapParser
                 foreach (var instance in instances)
                 {
                     detailedDescription += "\n\nURL: " + HttpUtility.HtmlEncode(instance.Uri);
-                    poc += "URL: " + instance.Uri + "\n";
+                    poc += "URL: " + HttpUtility.HtmlEncode(instance.Uri) + "\n";
+                    if (!string.IsNullOrEmpty(instance.Method))
+                    {
+                        detailedDescription += "\nMethod: " + HttpUtility.HtmlEncode(instance.Method);
+                        poc += "Method: " + HttpUtility.HtmlEncode(instance.Method) + "\n";
+                    }
                     if (!string.IsNullOrEmpty(instance.Param))
                     {
                         detailedDescription += "\nParameter: " + HttpUtility.HtmlEncode(instance.Param);
-                        poc += "Parameter: " + instance.Param + "\n";
+                        poc += "Parameter: " + HttpUtility.HtmlEncode(instance.Param) + "\n";
+                    }
+                    if (!string.IsNullOrEmpty(instance.Attack))
+                    {
+                        detailedDescription += "\nAttack: " + HttpUtility.HtmlEncode(instance.Attack);
+                        poc += "Attack Vector: " + HttpUtility.HtmlEncode(instance.Attack) + "\n";
                     }
                     if (!string.IsNullOrEmpty(instance.Evidence))
                     {
                         detailedDescription += "\nEvidence: " + HttpUtility.HtmlEncode(instance.Evidence);
                     }
-                }
-                if (!string.IsNullOrEmpty(attack))
-                {
-                    detailedDescription += "\n\nAttack: " + attack;
-                }
-                if (!string.IsNullOrEmpty(attack))
-                {
-                    poc += "Attack Vector: " + attack + "\n";
+                    if (!string.IsNullOrEmpty(instance.OtherInfo))
+                    {
+                        detailedDescription += "\nOther Information: " + HttpUtility.HtmlEncode(instance.OtherInfo);
+                    }
                 }
 
 
@@ -251,3 +259,5 @@ public class ZapParser : IZapParser
         }
     }
 }
+// One place a ZAP alert was found
+public sealed record ZapInstance(string Uri, string? Method, string? Param, string? Attack, string? Evidence, string? OtherInfo);

@@ -6,7 +6,7 @@ using Cervantes.IFR.Parsers.Zap;
 
 namespace Cervantes.Tests.IFR;
 
-// Fixtures are handwritten in each tool's real report format (element names, attributes and nesting).
+// Real reports and tool output (see Fixtures/Parsers/NOTICE.md); inline XML only for elements the samples leave empty.
 public class ParserXmlTests
 {
     private static XmlDocument Fixture(string tool, string file) => ParserFixtures.Xml(tool, file);
@@ -14,14 +14,47 @@ public class ParserXmlTests
     [Fact]
     public void InstancesOf_ReadsZap210Instances()
     {
-        var alert = Fixture("Zap", "zap-2.14.xml").SelectSingleNode("//alertitem")!;
+        var alerts = Fixture("Zap", "zap-baseline.xml").SelectNodes("//alertitem")!;
 
-        var instances = ZapParser.InstancesOf(alert);
+        var csrf = ZapParser.InstancesOf(alerts[0]!);
+        var server = ZapParser.InstancesOf(alerts[1]!);
+        var login = Assert.Single(ZapParser.InstancesOf(alerts[2]!));
 
-        Assert.Equal(2, instances.Count);
-        Assert.Equal("https://app.example/login", instances[0].Uri);
-        Assert.Equal("<form action=\"/login\" method=\"post\">", instances[0].Evidence);
-        Assert.Equal("q", instances[1].Param);
+        var form = Assert.Single(csrf);
+        Assert.Equal("http://rs-target/", form.Uri);
+        Assert.Equal("GET", form.Method);
+        Assert.Equal("<form method=\"post\" action=\"/login.html\">", form.Evidence);
+        Assert.Null(form.Param);
+        Assert.Null(form.Attack);
+        Assert.Equal(5, server.Count);
+        Assert.Equal("POST", server[4].Method);
+        Assert.Equal("user", login.Param);
+        Assert.Equal("userParam=user\nuserValue=ZAP\npasswordParam=pass\nreferer=http://rs-target/", login.OtherInfo?.Replace("\r\n", "\n").Trim());
+    }
+
+    [Fact]
+    public void InstancesOf_ReadsAttack()
+    {
+        // Active scans fill the instance's <attack>; the baseline (passive) report leaves it empty
+        var doc = new XmlDocument();
+        doc.LoadXml("<alertitem><instances><instance><uri>http://rs-target/search?q=1</uri><method>GET</method><param>q</param>" +
+                    "<attack>&lt;script&gt;alert(1)&lt;/script&gt;</attack><evidence>&lt;script&gt;alert(1)&lt;/script&gt;</evidence>" +
+                    "<otherinfo></otherinfo></instance></instances></alertitem>");
+
+        var instance = Assert.Single(ZapParser.InstancesOf(doc.DocumentElement!));
+
+        Assert.Equal("<script>alert(1)</script>", instance.Attack);
+    }
+
+    [Fact]
+    public void InstancesOf_LegacyAlertLevelFields()
+    {
+        var doc = new XmlDocument();
+        doc.LoadXml("<alertitem><uri>http://old.example/a</uri><param>id</param><attack>1'</attack><evidence>SQL error</evidence></alertitem>");
+
+        var instance = Assert.Single(ZapParser.InstancesOf(doc.DocumentElement!));
+
+        Assert.Equal(("http://old.example/a", "id", "1'", "SQL error"), (instance.Uri, instance.Param, instance.Attack, instance.Evidence));
     }
 
     [Fact]
