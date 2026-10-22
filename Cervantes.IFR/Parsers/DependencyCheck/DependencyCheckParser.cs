@@ -78,10 +78,15 @@ public class DependencyCheckParser : IDependencyCheckParser
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
 
-        // Crear target para dependencias
+        // A report without vulnerabilities imports nothing, not even the target
+        var findings = ReadXml(doc);
+        if (findings.Count == 0)
+        {
+            return;
+        }
         Target target = CreateDependenciesTarget(pro, user);
 
-        foreach (var finding in ReadXml(doc))
+        foreach (var finding in findings)
         {
             ProcessXmlVulnerability(finding, target, pro, user, sanitizer);
         }
@@ -191,7 +196,11 @@ public class DependencyCheckParser : IDependencyCheckParser
 
     private void ProcessDependencyCheckReport(DependencyCheckReport report, Project pro, string user, HtmlSanitizer sanitizer)
     {
-        // Crear target para dependencias
+        // A report without vulnerabilities imports nothing, not even the target
+        if (!(report.Dependencies ?? Array.Empty<DependencyCheckDependency>()).Any(x => x.Vulnerabilities?.Length > 0))
+        {
+            return;
+        }
         Target target = CreateDependenciesTarget(pro, user);
 
         foreach (var dependency in report.Dependencies ?? new DependencyCheckDependency[0])

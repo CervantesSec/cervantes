@@ -1,47 +1,399 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2026-10-22T10:00:00.000000000Z",
-  "ArtifactName": "registry.example/app:1.0",
+  "CreatedAt": "2026-10-22T18:50:44.689160739Z",
+  "ArtifactName": "httpd:2.4.49",
   "ArtifactType": "container_image",
   "Metadata": {
-    "OS": { "Family": "alpine", "Name": "3.18.4" },
-    "ImageID": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    "OS": {
+      "Family": "debian",
+      "Name": "10.10",
+      "EOSL": true
+    },
+    "ImageID": "sha256:dcba0d12e2362fb0c50ec524ae8aa1cca4a4ba7216617a57e7bbca20767e79cc",
+    "DiffIDs": [
+      "sha256:476baebdfbf7a68c50e979971fcd47d799d1b194bcf1f03c1c979e9262bcd364",
+      "sha256:f78c692f3e8a56b7c25ed2f812d99807c74a0e0bbe70e167d265676def264e3a",
+      "sha256:5a4dfe5de0fd98040778ff8feaeef07fc875a3de432e734610a1d030b11a1d89",
+      "sha256:07691779c08b36d14ab68fce793f11267431e59a7f690c26757716fda2d45fbd",
+      "sha256:5a28409590bcb5132b3e487d121496877aea3b797573bde35cf8686111ef016c"
+    ],
+    "RepoTags": [
+      "httpd:2.4.49"
+    ],
+    "RepoDigests": [
+      "httpd@sha256:dcba0d12e2362fb0c50ec524ae8aa1cca4a4ba7216617a57e7bbca20767e79cc"
+    ],
+    "ImageConfig": {
+      "architecture": "amd64",
+      "created": "2021-09-28T07:49:04.175642223Z",
+      "history": [
+        {
+          "created": "2021-09-28T01:23:09Z",
+          "created_by": "/bin/sh -c #(nop) ADD file:99db7cfe7952a1c7a7959cc3457af37c1d6facdd43a946bd72313d8b5ede0029 in / "
+        },
+        {
+          "created": "2021-09-28T01:23:10Z",
+          "created_by": "/bin/sh -c #(nop)  CMD [\"bash\"]",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:45:31Z",
+          "created_by": "/bin/sh -c #(nop)  ENV HTTPD_PREFIX=/usr/local/apache2",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:45:31Z",
+          "created_by": "/bin/sh -c #(nop)  ENV PATH=/usr/local/apache2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:45:32Z",
+          "created_by": "/bin/sh -c mkdir -p \"$HTTPD_PREFIX\" \t&& chown www-data:www-data \"$HTTPD_PREFIX\""
+        },
+        {
+          "created": "2021-09-28T07:45:32Z",
+          "created_by": "/bin/sh -c #(nop) WORKDIR /usr/local/apache2",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:45:37Z",
+          "created_by": "/bin/sh -c set -eux; \tapt-get update; \tapt-get install -y --no-install-recommends \t\tlibaprutil1-ldap \t; \trm -rf /var/lib/apt/lists/*"
+        },
+        {
+          "created": "2021-09-28T07:45:37Z",
+          "created_by": "/bin/sh -c #(nop)  ENV HTTPD_VERSION=2.4.49",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:45:37Z",
+          "created_by": "/bin/sh -c #(nop)  ENV HTTPD_SHA256=65b965d6890ea90d9706595e4b7b9365b5060bec8ea723449480b4769974133b",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:45:37Z",
+          "created_by": "/bin/sh -c #(nop)  ENV HTTPD_PATCHES=",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:49:03Z",
+          "created_by": "/bin/sh -c set -eux; \t\tsavedAptMark=\"$(apt-mark showmanual)\"; \tapt-get update; \tapt-get install -y --no-install-recommends \t\tbzip2 \t\tca-certificates \t\tdirmngr \t\tdpkg-dev \t\tgcc \t\tgnupg \t\tlibapr1-dev \t\tlibaprutil1-dev \t\tlibbrotli-dev \t\tlibcurl4-openssl-dev \t\tlibjansson-dev \t\tliblua5.2-dev \t\tlibnghttp2-dev \t\tlibpcre3-dev \t\tlibssl-dev \t\tlibxml2-dev \t\tmake \t\twget \t\tzlib1g-dev \t; \trm -r /var/lib/apt/lists/*; \t\tddist() { \t\tlocal f=\"$1\"; shift; \t\tlocal distFile=\"$1\"; shift; \t\tlocal success=; \t\tlocal distUrl=; \t\tfor distUrl in \t\t\t'https://www.apache.org/dyn/closer.cgi?action=download&filename=' \t\t\thttps://downloads.apache.org/ \t\t\thttps://www-us.apache.org/dist/ \t\t\thttps://www.apache.org/dist/ \t\t\thttps://archive.apache.org/dist/ \t\t; do \t\t\tif wget -O \"$f\" \"$distUrl$distFile\" && [ -s \"$f\" ]; then \t\t\t\tsuccess=1; \t\t\t\tbreak; \t\t\tfi; \t\tdone; \t\t[ -n \"$success\" ]; \t}; \t\tddist 'httpd.tar.bz2' \"httpd/httpd-$HTTPD_VERSION.tar.bz2\"; \techo \"$HTTPD_SHA256 *httpd.tar.bz2\" | sha256sum -c -; \t\tddist 'httpd.tar.bz2.asc' \"httpd/httpd-$HTTPD_VERSION.tar.bz2.asc\"; \texport GNUPGHOME=\"$(mktemp -d)\"; \tfor key in \t\tDE29FB3971E71543FD2DC049508EAEC5302DA568 \t\t13155B0E9E634F42BF6C163FDDBA64BA2C312D2F \t\t8B39757B1D8A994DF2433ED58B3A601F08C975E5 \t\t31EE1A81B8D066548156D37B7D6DBFD1F08E012A \t\tA10208FEC3152DD7C0C9B59B361522D782AB7BD1 \t\t3DE024AFDA7A4B15CB6C14410F81AA8AB0D5F771 \t\tEB138C6AF0FC691001B16D93344A844D751D7F27 \t\tCBA5A7C21EC143314C41393E5B968010E04F9A89 \t\t3C016F2B764621BB549C66B516A96495E2226795 \t\t937FB3994A242BA9BF49E93021454AF0CC8B0F7E \t\tEAD1359A4C0F2D37472AAF28F55DF0293A4E7AC9 \t\t4C1EADADB4EF5007579C919C6635B6C0DE885DD3 \t\t01E475360FCCF1D0F24B9D145D414AE1E005C9CB \t\t92CCEF0AA7DD46AC3A0F498BCA6939748103A37E \t\tD395C7573A68B9796D38C258153FA0CD75A67692 \t\tFA39B617B61493FD283503E7EED1EA392261D073 \t\t984FB3350C1D5C7A3282255BB31B213D208F5064 \t\tFE7A49DAA875E890B4167F76CCB2EB46E76CF6D0 \t\t39F6691A0ECF0C50E8BB849CF78875F642721F00 \t\t29A2BA848177B73878277FA475CAA2A3F39B3750 \t\t120A8667241AEDD4A78B46104C042818311A3DE5 \t\t453510BDA6C5855624E009236D0BC73A40581837 \t\t0DE5C55C6BF3B2352DABB89E13249B4FEC88A0BF \t\t7CDBED100806552182F98844E8E7E00B4DAA1988 \t\tA8BA9617EF3BCCAC3B29B869EDB105896F9522D8 \t\t3E6AC004854F3A7F03566B592FF06894E55B0D0E \t\t5B5181C2C0AB13E59DA3F7A3EC582EB639FF092C \t\tA93D62ECC3C8EA12DB220EC934EA76E6791485A8 \t\t65B2D44FE74BD5E3DE3AC3F082781DE46D5954FA \t\t8935926745E1CE7E3ED748F6EC99EE267EB5F61A \t\tE3480043595621FE56105F112AB12A7ADC55C003 \t\t93525CFCF6FDFFB3FD9700DD5A4B10AE43B56A27 \t\tC55AB7B9139EB2263CD1AABC19B033D1760C227B \t\t26F51EF9A82F4ACB43F1903ED377C9E7D1944C66\t; do \t\tgpg --batch --keyserver keyserver.ubuntu.com --recv-keys \"$key\"; \tdone; \tgpg --batch --verify httpd.tar.bz2.asc httpd.tar.bz2; \tcommand -v gpgconf && gpgconf --kill all || :; \trm -rf \"$GNUPGHOME\" httpd.tar.bz2.asc; \t\tmkdir -p src; \ttar -xf httpd.tar.bz2 -C src --strip-components=1; \trm httpd.tar.bz2; \tcd src; \t\tpatches() { \t\twhile [ \"$#\" -gt 0 ]; do \t\t\tlocal patchFile=\"$1\"; shift; \t\t\tlocal patchSha256=\"$1\"; shift; \t\t\tddist \"$patchFile\" \"httpd/patches/apply_to_$HTTPD_VERSION/$patchFile\"; \t\t\techo \"$patchSha256 *$patchFile\" | sha256sum -c -; \t\t\tpatch -p0 < \"$patchFile\"; \t\t\trm -f \"$patchFile\"; \t\tdone; \t}; \tpatches $HTTPD_PATCHES; \t\tgnuArch=\"$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)\"; \tCFLAGS=\"$(dpkg-buildflags --get CFLAGS)\"; \tCPPFLAGS=\"$(dpkg-buildflags --get CPPFLAGS)\"; \tLDFLAGS=\"$(dpkg-buildflags --get LDFLAGS)\"; \t./configure \t\t--build=\"$gnuArch\" \t\t--prefix=\"$HTTPD_PREFIX\" \t\t--enable-mods-shared=reallyall \t\t--enable-mpms-shared=all \t\t--enable-pie \t\tCFLAGS=\"-pipe $CFLAGS\" \t\tCPPFLAGS=\"$CPPFLAGS\" \t\tLDFLAGS=\"-Wl,--as-needed $LDFLAGS\" \t; \tmake -j \"$(nproc)\"; \tmake install; \t\tcd ..; \trm -r src man manual; \t\tsed -ri \t\t-e 's!^(\\s*CustomLog)\\s+\\S+!\\1 /proc/self/fd/1!g' \t\t-e 's!^(\\s*ErrorLog)\\s+\\S+!\\1 /proc/self/fd/2!g' \t\t-e 's!^(\\s*TransferLog)\\s+\\S+!\\1 /proc/self/fd/1!g' \t\t\"$HTTPD_PREFIX/conf/httpd.conf\" \t\t\"$HTTPD_PREFIX/conf/extra/httpd-ssl.conf\" \t; \t\tapt-mark auto '.*' > /dev/null; \t[ -z \"$savedAptMark\" ] || apt-mark manual $savedAptMark; \tfind /usr/local -type f -executable -exec ldd '{}' ';' \t\t| awk '/=>/ { print $(NF-1) }' \t\t| sort -u \t\t| xargs -r dpkg-query --search \t\t| cut -d: -f1 \t\t| sort -u \t\t| xargs -r apt-mark manual \t; \tapt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \t\thttpd -v"
+        },
+        {
+          "created": "2021-09-28T07:49:03Z",
+          "created_by": "/bin/sh -c #(nop)  STOPSIGNAL SIGWINCH",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:49:03Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:c432ff61c4993ecdef4786f48d91a96f8f0707f6179816ccb98db661bfb96b90 in /usr/local/bin/ "
+        },
+        {
+          "created": "2021-09-28T07:49:03Z",
+          "created_by": "/bin/sh -c #(nop)  EXPOSE 80",
+          "empty_layer": true
+        },
+        {
+          "created": "2021-09-28T07:49:04Z",
+          "created_by": "/bin/sh -c #(nop)  CMD [\"httpd-foreground\"]",
+          "empty_layer": true
+        }
+      ],
+      "os": "linux",
+      "rootfs": {
+        "type": "layers",
+        "diff_ids": [
+          "sha256:476baebdfbf7a68c50e979971fcd47d799d1b194bcf1f03c1c979e9262bcd364",
+          "sha256:f78c692f3e8a56b7c25ed2f812d99807c74a0e0bbe70e167d265676def264e3a",
+          "sha256:5a4dfe5de0fd98040778ff8feaeef07fc875a3de432e734610a1d030b11a1d89",
+          "sha256:07691779c08b36d14ab68fce793f11267431e59a7f690c26757716fda2d45fbd",
+          "sha256:5a28409590bcb5132b3e487d121496877aea3b797573bde35cf8686111ef016c"
+        ]
+      },
+      "config": {
+        "Cmd": [
+          "httpd-foreground"
+        ],
+        "Env": [
+          "PATH=/usr/local/apache2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "HTTPD_PREFIX=/usr/local/apache2",
+          "HTTPD_VERSION=2.4.49",
+          "HTTPD_SHA256=65b965d6890ea90d9706595e4b7b9365b5060bec8ea723449480b4769974133b",
+          "HTTPD_PATCHES="
+        ],
+        "WorkingDir": "/usr/local/apache2",
+        "StopSignal": "SIGWINCH"
+      }
+    }
   },
   "Results": [
     {
-      "Target": "registry.example/app:1.0 (alpine 3.18.4)",
+      "Target": "httpd:2.4.49 (debian 10.10)",
       "Class": "os-pkgs",
-      "Type": "alpine",
+      "Type": "debian",
       "Vulnerabilities": [
         {
-          "VulnerabilityID": "CVE-2026-0001",
-          "PkgID": "libcrypto3@3.1.3-r0",
-          "PkgName": "libcrypto3",
-          "InstalledVersion": "3.1.3-r0",
-          "FixedVersion": "3.1.4-r0",
-          "Status": "fixed",
-          "Layer": { "DiffID": "sha256:1111111111111111111111111111111111111111111111111111111111111111" },
-          "SeveritySource": "nvd",
-          "PrimaryURL": "https://avd.example/nvd/cve-2026-0001",
-          "DataSource": { "ID": "alpine", "Name": "Alpine Secdb", "URL": "https://secdb.example/" },
-          "Title": "openssl: example flaw in a test fixture",
-          "Description": "Example description written for a test fixture.",
-          "Severity": "HIGH",
-          "CweIDs": [ "CWE-325" ],
-          "VendorSeverity": { "nvd": 3, "redhat": 2 },
-          "CVSS": {
-            "nvd": { "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", "V3Score": 7.5 }
+          "VulnerabilityID": "CVE-2021-37600",
+          "VendorIDs": [
+            "DLA-3782-1"
+          ],
+          "PkgID": "bsdutils@1:2.33.1-0.1",
+          "PkgName": "bsdutils",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/bsdutils@2.33.1-0.1?arch=amd64&distro=debian-10.10&epoch=1",
+            "UID": "af9a94224e8ff53c"
           },
-          "References": [ "https://advisories.example/CVE-2026-0001" ],
-          "PublishedDate": "2026-01-10T00:00:00Z",
-          "LastModifiedDate": "2026-02-01T00:00:00Z"
+          "InstalledVersion": "1:2.33.1-0.1",
+          "FixedVersion": "2.33.1-0.1+deb10u1",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:07aded7c29c6011dfdf02fc98e087c941d3c2661c4e73d134c6491e25231d16c",
+            "DiffID": "sha256:476baebdfbf7a68c50e979971fcd47d799d1b194bcf1f03c1c979e9262bcd364"
+          },
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2021-37600",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Title": "util-linux: integer overflow can lead to buffer overflow in get_sem_elements() in sys-utils/ipcutils.c",
+          "Description": "An integer overflow in util-linux through 2.37.1 can potentially cause a buffer overflow if an attacker were able to use system resources in a way that leads to a large number in the /proc/sysvipc/sem file. NOTE: this is unexploitable in GNU C Library environments, and possibly in all realistic environments.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-190"
+          ],
+          "VendorSeverity": {
+            "amazon": 1,
+            "cbl-mariner": 2,
+            "nvd": 2,
+            "photon": 2,
+            "redhat": 1,
+            "ubuntu": 1
+          },
+          "CVSS": {
+            "nvd": {
+              "V2Vector": "AV:L/AC:H/Au:N/C:N/I:N/A:P",
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+              "V2Score": 1.2,
+              "V3Score": 5.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:H",
+              "V3Score": 4.7
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2021-37600",
+            "https://cert-portal.siemens.com/productcert/html/ssa-398330.html",
+            "https://github.com/karelzak/util-linux/commit/1c9143d0c1f979c3daf10e1c37b5b1e916c22a1c",
+            "https://github.com/karelzak/util-linux/issues/1395",
+            "https://lists.debian.org/debian-lts-announce/2024/04/msg00005.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2021-37600",
+            "https://security.gentoo.org/glsa/202401-08",
+            "https://security.netapp.com/advisory/ntap-20210902-0002/",
+            "https://www.cve.org/CVERecord?id=CVE-2021-37600"
+          ],
+          "PublishedDate": "2021-07-30T14:15:18.737Z",
+          "LastModifiedDate": "2026-10-14T12:17:15.117Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-28085",
+          "VendorIDs": [
+            "DLA-3782-1"
+          ],
+          "PkgID": "bsdutils@1:2.33.1-0.1",
+          "PkgName": "bsdutils",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/bsdutils@2.33.1-0.1?arch=amd64&distro=debian-10.10&epoch=1",
+            "UID": "af9a94224e8ff53c"
+          },
+          "InstalledVersion": "1:2.33.1-0.1",
+          "FixedVersion": "2.33.1-0.1+deb10u1",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:07aded7c29c6011dfdf02fc98e087c941d3c2661c4e73d134c6491e25231d16c",
+            "DiffID": "sha256:476baebdfbf7a68c50e979971fcd47d799d1b194bcf1f03c1c979e9262bcd364"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-28085",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Title": "util-linux: CVE-2024-28085: wall: escape sequence injection",
+          "Description": "wall in util-linux through 2.40, often installed with setgid tty permissions, allows escape sequences to be sent to other users' terminals through argv. (Specifically, escape sequences received from stdin are blocked, but escape sequences received from argv are not blocked.) There may be plausible scenarios where this leads to account takeover.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-150"
+          ],
+          "VendorSeverity": {
+            "azure": 1,
+            "cbl-mariner": 1,
+            "julia": 1,
+            "photon": 1,
+            "redhat": 1,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "julia": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 3.3
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N",
+              "V3Score": 4.4
+            }
+          },
+          "References": [
+            "http://seclists.org/fulldisclosure/2024/Mar/35",
+            "http://www.openwall.com/lists/oss-security/2024/03/27/5",
+            "http://www.openwall.com/lists/oss-security/2024/03/27/6",
+            "http://www.openwall.com/lists/oss-security/2024/03/27/7",
+            "http://www.openwall.com/lists/oss-security/2024/03/27/8",
+            "http://www.openwall.com/lists/oss-security/2024/03/27/9",
+            "http://www.openwall.com/lists/oss-security/2024/03/28/1",
+            "http://www.openwall.com/lists/oss-security/2024/03/28/2",
+            "http://www.openwall.com/lists/oss-security/2024/03/28/3",
+            "https://access.redhat.com/security/cve/CVE-2024-28085",
+            "https://cert-portal.siemens.com/productcert/html/ssa-082556.html",
+            "https://cert-portal.siemens.com/productcert/html/ssa-202008.html",
+            "https://github.com/skyler-ferrante/CVE-2024-28085",
+            "https://github.com/util-linux/util-linux/security/advisories/GHSA-xv2h-c6ww-mrjq",
+            "https://lists.debian.org/debian-lts-announce/2024/04/msg00005.html",
+            "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-28085",
+            "https://people.rit.edu/sjf5462/6831711781/wall_2_27_2024.txt",
+            "https://security.netapp.com/advisory/ntap-20240531-0003/",
+            "https://ubuntu.com/security/notices/USN-6719-1",
+            "https://ubuntu.com/security/notices/USN-6719-2",
+            "https://www.cve.org/CVERecord?id=CVE-2024-28085",
+            "https://www.openwall.com/lists/oss-security/2024/03/27/5"
+          ],
+          "PublishedDate": "2024-03-27T19:15:48.367Z",
+          "LastModifiedDate": "2026-06-17T07:20:56.09Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2022-2097",
+          "VendorIDs": [
+            "DLA-3325-1"
+          ],
+          "PkgID": "libssl1.1@1.1.1d-0+deb10u7",
+          "PkgName": "libssl1.1",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl1.1@1.1.1d-0%2Bdeb10u7?arch=amd64&distro=debian-10.10",
+            "UID": "eb3c4f5cdc0b0716"
+          },
+          "InstalledVersion": "1.1.1d-0+deb10u7",
+          "FixedVersion": "1.1.1n-0+deb10u4",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:0827b74117da10c400a8a41c2e650dda3f544df711daf005dce881af60877955",
+            "DiffID": "sha256:5a4dfe5de0fd98040778ff8feaeef07fc875a3de432e734610a1d030b11a1d89"
+          },
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2022-2097",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Title": "openssl: AES OCB fails to encrypt some bytes",
+          "Description": "AES OCB mode for 32-bit x86 platforms using the AES-NI assembly optimised implementation will not encrypt the entirety of the data under some circumstances. This could reveal sixteen bytes of data that was preexisting in the memory that wasn't written. In the special case of \"in place\" encryption, sixteen bytes of the plaintext would be revealed. Since OpenSSL does not support OCB based cipher suites for TLS and DTLS, they are both unaffected. Fixed in OpenSSL 3.0.5 (Affected 3.0.0-3.0.4). Fixed in OpenSSL 1.1.1q (Affected 1.1.1-1.1.1p).",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-327"
+          ],
+          "VendorSeverity": {
+            "alma": 2,
+            "amazon": 2,
+            "azure": 2,
+            "cbl-mariner": 2,
+            "ghsa": 3,
+            "julia": 2,
+            "nvd": 2,
+            "oracle-oval": 3,
+            "photon": 2,
+            "redhat": 2,
+            "rocky": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            },
+            "julia": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V3Score": 5.3
+            },
+            "nvd": {
+              "V2Vector": "AV:N/AC:L/Au:N/C:P/I:N/A:N",
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V2Score": 5,
+              "V3Score": 5.3
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V3Score": 5.3
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2022:6224",
+            "https://access.redhat.com/security/cve/CVE-2022-2097",
+            "https://bugzilla.redhat.com/2081494",
+            "https://bugzilla.redhat.com/2087911",
+            "https://bugzilla.redhat.com/2087913",
+            "https://bugzilla.redhat.com/2097310",
+            "https://bugzilla.redhat.com/2104905",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2081494",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2097310",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2100554",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2104905",
+            "https://cert-portal.siemens.com/productcert/html/ssa-332410.html",
+            "https://cert-portal.siemens.com/productcert/html/ssa-398330.html",
+            "https://cert-portal.siemens.com/productcert/html/ssa-625862.html",
+            "https://cert-portal.siemens.com/productcert/html/ssa-794697.html",
+            "https://cert-portal.siemens.com/productcert/html/ssa-879734.html",
+            "https://cert-portal.siemens.com/productcert/pdf/ssa-332410.pdf",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1292",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-2068",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-2097",
+            "https://errata.almalinux.org/9/ALSA-2022-6224.html",
+            "https://errata.rockylinux.org/RLSA-2022:5818",
+            "https://git.openssl.org/gitweb/?p=openssl.git%3Ba=commitdiff%3Bh=919925673d6c9cfed3c1085497f5dfbbed5fc431",
+            "https://git.openssl.org/gitweb/?p=openssl.git%3Ba=commitdiff%3Bh=a98f339ddd7e8f487d6e0088d4a9a42324885a93",
+            "https://git.openssl.org/gitweb/?p=openssl.git;a=commitdiff;h=919925673d6c9cfed3c1085497f5dfbbed5fc431",
+            "https://git.openssl.org/gitweb/?p=openssl.git;a=commitdiff;h=a98f339ddd7e8f487d6e0088d4a9a42324885a93",
+            "https://github.com/advisories/GHSA-3wx7-46ch-7rq2",
+            "https://github.com/alexcrichton/openssl-src-rs",
+            "https://linux.oracle.com/cve/CVE-2022-2097.html",
+            "https://linux.oracle.com/errata/ELSA-2022-9955.html",
+            "https://lists.debian.org/debian-lts-announce/2023/02/msg00019.html",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/R6CK57NBQFTPUMXAPJURCGXUYT76NQAK",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/R6CK57NBQFTPUMXAPJURCGXUYT76NQAK/",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/V6567JERRHHJW2GNGJGKDRNHR7SNPZK7",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/V6567JERRHHJW2GNGJGKDRNHR7SNPZK7/",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/VCMNWKERPBKOEBNL7CLTTX3ZZCZLH7XA",
+            "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/VCMNWKERPBKOEBNL7CLTTX3ZZCZLH7XA/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2022-2097",
+            "https://rustsec.org/advisories/RUSTSEC-2022-0032.html",
+            "https://security.gentoo.org/glsa/202210-02",
+            "https://security.netapp.com/advisory/ntap-20220715-0011",
+            "https://security.netapp.com/advisory/ntap-20220715-0011/",
+            "https://security.netapp.com/advisory/ntap-20230420-0008",
+            "https://security.netapp.com/advisory/ntap-20230420-0008/",
+            "https://security.netapp.com/advisory/ntap-20240621-0006",
+            "https://security.netapp.com/advisory/ntap-20240621-0006/",
+            "https://ubuntu.com/security/notices/USN-5502-1",
+            "https://ubuntu.com/security/notices/USN-6457-1",
+            "https://www.cve.org/CVERecord?id=CVE-2022-2097",
+            "https://www.debian.org/security/2023/dsa-5343",
+            "https://www.openssl.org/news/secadv/20220705.txt"
+          ],
+          "PublishedDate": "2022-07-05T11:15:08.34Z",
+          "LastModifiedDate": "2026-10-14T13:17:20.523Z"
         }
       ]
-    },
-    {
-      "Target": "app/package-lock.json",
-      "Class": "lang-pkgs",
-      "Type": "npm"
     }
   ]
 }

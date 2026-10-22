@@ -57,26 +57,28 @@ public class BanditParser : IBanditParser
         return report == null ? Array.Empty<BanditReport>() : new[] { report };
     }
 
+    /// <summary>
+    /// The target of a Bandit scan: the first folder of a scanned file's path (<c>/src/app.py</c> gives
+    /// <c>src (Source Code)</c>), or <c>Source Code Analysis</c> for a file with no folder.
+    /// </summary>
+    public static string TargetNameOf(string? filename)
+    {
+        var parts = (filename ?? "").Split('/', '\\');
+        var folder = parts.Length > 1 ? parts.Take(parts.Length - 1).FirstOrDefault(x => x.Length > 0 && x != ".") : null;
+        return folder != null ? folder + " (Source Code)" : "Source Code Analysis";
+    }
+
     private void ProcessBanditReport(BanditReport report, Project pro, string user, HtmlSanitizer sanitizer)
     {
+        // A report without findings imports nothing, not even the target
+        if (report.Results == null || report.Results.Length == 0)
+        {
+            return;
+        }
+
         // Crear target basado en el proyecto de código
         Target target = null;
-        string targetName = "Source Code Analysis";
-        
-        // Si tenemos archivos escaneados, usar el directorio base como nombre del target
-        if (report.Results?.Any() == true)
-        {
-            var firstFile = report.Results.First().Filename;
-            if (!string.IsNullOrEmpty(firstFile))
-            {
-                // Extraer el directorio base del proyecto
-                var pathParts = firstFile.Split('/', '\\');
-                if (pathParts.Length > 1)
-                {
-                    targetName = pathParts[0] + " (Source Code)";
-                }
-            }
-        }
+        string targetName = TargetNameOf(report.Results.First().Filename);
 
         var targets = targetManager.GetAll().Where(x => x.Project.Id == pro.Id).ToList();
         target = targets.FirstOrDefault(x => x.Name == targetName);

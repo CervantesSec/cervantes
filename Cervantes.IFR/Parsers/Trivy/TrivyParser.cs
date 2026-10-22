@@ -55,8 +55,35 @@ public class TrivyParser : ITrivyParser
         return report == null ? Array.Empty<TrivyReport>() : new[] { report };
     }
 
+    /// <summary>
+    /// The CVSS entry of a vulnerability: the one of its <c>SeveritySource</c>, else NVD's, else the first entry with a
+    /// v3 score. Trivy lists the vendors alphabetically, so the first entry is often GHSA or Julia, not the severity source.
+    /// </summary>
+    public static TrivyCVSS? CvssOf(TrivyVulnerability vuln)
+    {
+        if (vuln.CVSS == null || vuln.CVSS.Count == 0)
+        {
+            return null;
+        }
+        if (!string.IsNullOrEmpty(vuln.SeveritySource) && vuln.CVSS.TryGetValue(vuln.SeveritySource, out var source) && source.V3Score != null)
+        {
+            return source;
+        }
+        if (vuln.CVSS.TryGetValue("nvd", out var nvd) && nvd.V3Score != null)
+        {
+            return nvd;
+        }
+        return vuln.CVSS.Values.FirstOrDefault(x => x.V3Score != null);
+    }
+
     private void ProcessTrivyReport(TrivyReport report, Project pro, string user, HtmlSanitizer sanitizer)
     {
+        // A report without findings imports nothing, not even the target
+        if (!(report.Results ?? Array.Empty<TrivyResult>()).Any(x => (x.Vulnerabilities?.Length ?? 0) + (x.Misconfigurations?.Length ?? 0) > 0))
+        {
+            return;
+        }
+
         // Crear target basado en el artefacto escaneado
         Target target = null;
         string targetName = report.ArtifactName ?? "Unknown Container";
@@ -219,7 +246,7 @@ public class TrivyParser : ITrivyParser
         // Agregar CVSS si está disponible
         if (vuln.CVSS != null && vuln.CVSS.Count > 0)
         {
-            var cvssInfo = vuln.CVSS.Values.FirstOrDefault();
+            var cvssInfo = CvssOf(vuln);
             if (cvssInfo != null && cvssInfo.V3Score.HasValue)
             {
                 vulnerability.CVSS3 = cvssInfo.V3Score.Value;
@@ -377,6 +404,8 @@ public class TrivyVulnerability
     public string InstalledVersion { get; set; } = "";
     public string FixedVersion { get; set; } = "";
     public string Severity { get; set; } = "";
+    // The vendor whose severity Trivy reports (nvd, redhat, ghsa, ...)
+    public string SeveritySource { get; set; } = "";
     public string Title { get; set; } = "";
     public string Description { get; set; } = "";
     public Dictionary<string, TrivyCVSS> CVSS { get; set; } = new();

@@ -19,11 +19,33 @@ public class ParserJsonTests
     {
         var report = Assert.Single(TrivyParser.Read(Fixture("Trivy", "trivy-image.json")));
 
+        Assert.Equal("httpd:2.4.49", report.ArtifactName);
+        Assert.Equal(3, report.Results[0].Vulnerabilities.Length);
         var vuln = report.Results[0].Vulnerabilities[0];
-        Assert.Equal("CVE-2026-0001", vuln.VulnerabilityID);
-        Assert.Equal("HIGH", vuln.Severity);
-        Assert.Equal(7.5, vuln.CVSS["nvd"].V3Score);
-        Assert.Empty(report.Results[1].Vulnerabilities);
+        Assert.Equal("CVE-2021-37600", vuln.VulnerabilityID);
+        Assert.Equal("bsdutils", vuln.PkgName);
+        Assert.Equal("MEDIUM", vuln.Severity);
+    }
+
+    [Fact]
+    public void Trivy_CvssOfUsesSeveritySource()
+    {
+        var report = Assert.Single(TrivyParser.Read(Fixture("Trivy", "trivy-image.json")));
+        var openssl = report.Results[0].Vulnerabilities.Single(x => x.VulnerabilityID == "CVE-2022-2097");
+
+        var cvss = TrivyParser.CvssOf(openssl);
+
+        Assert.Equal(5.3, cvss!.V3Score);
+        Assert.Equal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N", cvss.V3Vector);
+    }
+
+    [Fact]
+    public void Trivy_CvssOfWithoutSourceOrNvdTakesFirstScored()
+    {
+        var report = Assert.Single(TrivyParser.Read(Fixture("Trivy", "trivy-image.json")));
+        var util = report.Results[0].Vulnerabilities.Single(x => x.VulnerabilityID == "CVE-2024-28085");
+
+        Assert.Same(util.CVSS.Values.First(x => x.V3Score != null), TrivyParser.CvssOf(util));
     }
 
     [Fact]
@@ -66,12 +88,21 @@ public class ParserJsonTests
     {
         var report = Assert.Single(BanditParser.Read(Fixture("Bandit", "bandit.json")));
 
-        var result = Assert.Single(report.Results);
-        Assert.Equal("B602", result.TestId);
+        Assert.Equal(7, report.Results.Length);
+        var result = report.Results.Single(x => x.TestId == "B602");
         Assert.Equal("HIGH", result.IssueSeverity);
         Assert.Equal("subprocess call with shell=True identified, security issue.", result.Issue);
-        Assert.Equal(10, result.LineNumber);
-        Assert.Equal("app/views.py", result.Filename);
+        Assert.Equal(8, result.LineNumber);
+        Assert.Equal("/src/app.py", result.Filename);
+    }
+
+    [Theory]
+    [InlineData("/src/app.py", "src (Source Code)")]
+    [InlineData("app/views.py", "app (Source Code)")]
+    [InlineData("main.py", "Source Code Analysis")]
+    public void Bandit_TargetNameOf(string filename, string expected)
+    {
+        Assert.Equal(expected, BanditParser.TargetNameOf(filename));
     }
 
     [Fact]
