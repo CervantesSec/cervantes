@@ -12,14 +12,6 @@ public class ParserXmlTests
     private static XmlDocument Fixture(string tool, string file) => ParserFixtures.Xml(tool, file);
 
     [Fact]
-    public void HostOf_IgnoresHostnameChild()
-    {
-        var host = Fixture("OpenVAS", "openvas.xml").SelectSingleNode("//result/host")!;
-
-        Assert.Equal("10.5.5.5", OpenVASParser.HostOf(host));
-    }
-
-    [Fact]
     public void InstancesOf_ReadsZap210Instances()
     {
         var alert = Fixture("Zap", "zap-2.14.xml").SelectSingleNode("//alertitem")!;

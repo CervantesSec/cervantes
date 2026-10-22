@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Xml;
 using Cervantes.Contracts;
@@ -40,6 +41,37 @@ public class OpenVASParser : IOpenVASParser
         return text.Length > 0 ? text : host.SelectSingleNode("hostname")?.InnerText.Trim() ?? "";
     }
 
+    /// <summary>
+    /// The remediation of a result: <c>nvt/solution</c> (GMP 20+), else the <c>solution=</c> part of the
+    /// <c>|</c>-separated <c>nvt/tags</c> (older GMP), else a <c>solution</c> on the result itself, else "".
+    /// </summary>
+    public static string SolutionOf(XmlNode result)
+    {
+        var solution = result.SelectSingleNode("nvt/solution")?.InnerText;
+        if (!string.IsNullOrWhiteSpace(solution))
+        {
+            return solution.Trim();
+        }
+        var fromTags = (result.SelectSingleNode("nvt/tags")?.InnerText ?? "").Split('|')
+            .FirstOrDefault(x => x.StartsWith("solution=", StringComparison.Ordinal));
+        if (fromTags != null && fromTags.Length > "solution=".Length)
+        {
+            return fromTags.Substring("solution=".Length).Trim();
+        }
+        return result.SelectSingleNode("solution")?.InnerText?.Trim() ?? "";
+    }
+
+    /// <summary>The CVEs of a result: every <c>ref type="cve"</c> (under the NVT or the result) and a legacy <c>nvt/cve</c>.</summary>
+    public static string CvesOf(XmlNode result)
+    {
+        var fromRefs = result.SelectNodes("nvt/refs/ref[@type='cve'] | refs/ref[@type='cve']")!.Cast<XmlNode>()
+            .Select(x => x.Attributes?["id"]?.Value ?? "");
+        var legacy = (result.SelectSingleNode("nvt/cve")?.InnerText ?? "").Split(',', StringSplitOptions.TrimEntries);
+        return string.Join(", ", fromRefs.Concat(legacy)
+            .Where(x => x.StartsWith("CVE-", StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase));
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -61,11 +93,11 @@ public class OpenVASParser : IOpenVASParser
                 string description = "";
                 if (result.SelectSingleNode("description") != null) { description = result.SelectSingleNode("description").InnerText; }
 
-                string solution = "";
-                if (result.SelectSingleNode("solution") != null) { solution = result.SelectSingleNode("solution").InnerText; }
+                string solution = SolutionOf(result);
 
+                // GVM writes the references under the NVT; older reports had them on the result
                 string references = "";
-                XmlNodeList refs = result.SelectNodes("refs/ref");
+                XmlNodeList refs = result.SelectNodes("nvt/refs/ref | refs/ref");
                 foreach (XmlNode refNode in refs)
                 {
                     string refType = refNode.Attributes["type"]?.Value ?? "";
@@ -105,8 +137,7 @@ public class OpenVASParser : IOpenVASParser
                 string cvss = "";
                 if (nvtNode?.SelectSingleNode("cvss_base") != null) { cvss = nvtNode.SelectSingleNode("cvss_base").InnerText; }
 
-                string cve = "";
-                if (nvtNode?.SelectSingleNode("cve") != null) { cve = nvtNode.SelectSingleNode("cve").InnerText; }
+                string cve = CvesOf(result);
 
                 string tags = "";
                 if (nvtNode?.SelectSingleNode("tags") != null) { tags = nvtNode.SelectSingleNode("tags").InnerText; }
@@ -227,14 +258,14 @@ public class OpenVASParser : IOpenVASParser
                 {
                     Id = Guid.NewGuid(),
                     Name = sanitizer.Sanitize(name),
-                    Description = sanitizer.Sanitize(detailedDescription),
+                    Description = sanitizer.Sanitize(WebUtility.HtmlEncode(detailedDescription)),
                     Risk = risk,
                     Status = VulnStatus.Open,
-                    Remediation = sanitizer.Sanitize(solution),
+                    Remediation = sanitizer.Sanitize(WebUtility.HtmlEncode(solution)),
                     RemediationComplexity = RemediationComplexity.Medium,
                     RemediationPriority = RemediationPriority.Medium,
-                    Impact = sanitizer.Sanitize(description),
-                    ProofOfConcept = sanitizer.Sanitize(poc),
+                    Impact = sanitizer.Sanitize(WebUtility.HtmlEncode(description)),
+                    ProofOfConcept = sanitizer.Sanitize(WebUtility.HtmlEncode(poc)),
                     Project = pro,
                     UserId = user,
                     Template = false,
