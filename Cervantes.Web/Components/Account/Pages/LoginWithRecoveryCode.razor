@@ -12,7 +12,6 @@
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<LoginWithRecoveryCode> Logger
 @inject IStringLocalizer<Resource> localizer
-@inject ISnackbar Snackbar
 
 <PageTitle>@localizer["recoverCodeVerification"] | Cervantes</PageTitle>
 <div class="mud-grid mud-grid-spacing-xs-3 justify-start">
@@ -24,6 +23,10 @@
     </p>
     <div class="row">
         <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Class="mb-4">@errorMessage</MudAlert>
+            }
             <EditForm Model="Input" FormName="login-with-recovery-code" OnValidSubmit="OnValidSubmitAsync" method="post">
                 <DataAnnotationsValidator/>
                 <ValidationSummary class="text-danger" role="alert"/>
@@ -50,6 +53,7 @@
 
 @code {
     private string? message;
+    private string? errorMessage;
     private ApplicationUser user = default!;
 
     [SupplyParameterFromForm]
@@ -81,12 +85,12 @@
         else if (result.IsLockedOut)
         {
             Logger.LogWarning("User account locked out.");
-            Snackbar.Add(@localizer["accountLocked"], Severity.Error);
+            errorMessage = localizer["accountLocked"];
         }
         else
         {
             Logger.LogWarning("Invalid recovery code entered for user with ID '{UserId}' ", userId);
-            Snackbar.Add(@localizer["recoverCodeInvalid"], Severity.Error);
+            errorMessage = localizer["recoverCodeInvalid"];
 
             //message = "Error: Invalid recovery code entered.";
         }
