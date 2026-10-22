@@ -20,6 +20,63 @@ public static class ReportHtml
     }
 
     /// <summary>
+    /// The body the PDF export converts: <paramref name="pageCss"/> first, then the report's &lt;header&gt; and &lt;footer&gt;
+    /// content as <c>div#header</c> and <c>div#footer</c> (the page CSS runs them into the page margins), then everything
+    /// else in <c>div#document-body-container</c>. &lt;cover&gt; is dropped: the export renders it on its own page. Built on
+    /// the parsed document, so header and footer markup with nested elements keeps the rest of the report in the body.
+    /// </summary>
+    public static string BuildPdfBody(string html, string pageCss)
+    {
+        var doc = new HtmlAgilityPack.HtmlDocument();
+        doc.LoadHtml(EnsureDocument(html));
+        var body = doc.DocumentNode.SelectSingleNode("//body");
+
+        foreach (var cover in body.SelectNodes(".//cover")?.ToList() ?? new List<HtmlAgilityPack.HtmlNode>())
+        {
+            cover.Remove();
+        }
+
+        var header = Collect(doc, body, "header");
+        var footer = Collect(doc, body, "footer");
+
+        var container = doc.CreateElement("div");
+        container.Id = "document-body-container";
+        foreach (var child in body.ChildNodes.ToList())
+        {
+            child.Remove();
+            container.AppendChild(child);
+        }
+
+        var css = new HtmlAgilityPack.HtmlDocument();
+        css.LoadHtml(pageCss);
+        foreach (var node in css.DocumentNode.ChildNodes.ToList())
+        {
+            body.AppendChild(node);
+        }
+        body.AppendChild(header);
+        body.AppendChild(footer);
+        body.AppendChild(container);
+        return doc.DocumentNode.OuterHtml;
+    }
+
+    // Moves the content of every <tag> element into one div#tag and removes the elements.
+    private static HtmlAgilityPack.HtmlNode Collect(HtmlAgilityPack.HtmlDocument doc, HtmlAgilityPack.HtmlNode body, string tag)
+    {
+        var target = doc.CreateElement("div");
+        target.Id = tag;
+        foreach (var element in body.SelectNodes(".//" + tag)?.ToList() ?? new List<HtmlAgilityPack.HtmlNode>())
+        {
+            foreach (var child in element.ChildNodes.ToList())
+            {
+                child.Remove();
+                target.AppendChild(child);
+            }
+            element.Remove();
+        }
+        return target;
+    }
+
+    /// <summary>
     /// Moves the &lt;style&gt; blocks of &lt;head&gt; to the start of &lt;body&gt;, in order. The report editor (TinyMCE) keeps
     /// only the body of a full document, so a style left in the head is lost on the first save; one in the body
     /// survives the editor and the sanitizer. A fragment, or a document without head styles, is returned unchanged.

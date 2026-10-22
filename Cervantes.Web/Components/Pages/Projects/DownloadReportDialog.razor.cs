@@ -38,10 +38,11 @@ public partial class DownloadReportDialog: ComponentBase
         if (form.IsValid)
         {
             model.Id = report.Id;
-            var response =  await _ReportController.DownloadReport(model);
+            var response = (await _ReportController.DownloadReport(model)).Value;
             if (response == null)
             {
                 Snackbar.Add(@localizer["reportDownloadError"], Severity.Error);
+                return;
             }
             switch (MediaType(response.ContentType))
             {

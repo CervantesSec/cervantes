@@ -75,4 +75,49 @@ public class ReportHtmlTests
         const string html = "<html><head><title>t</title></head><body><style>a{}</style><p>x</p></body></html>";
         Assert.Equal(html, ReportHtml.MoveHeadStylesToBody(html));
     }
+
+    private const string PageCss = "<style>#header { position: running(header); }</style>";
+
+    private static HtmlAgilityPack.HtmlNode Body(string html)
+    {
+        var doc = new HtmlAgilityPack.HtmlDocument();
+        doc.LoadHtml(html);
+        return doc.DocumentNode.SelectSingleNode("//body");
+    }
+
+    [Fact]
+    public void BuildPdfBody_NestedDivsStayInside()
+    {
+        const string report = "<html><head></head><body><header><div class=\"hdr\"><div>a</div></div></header>"
+                              + "<cover><p>cover</p></cover><h1>Document Control</h1><p>x</p>"
+                              + "<footer><div class=\"ftr\">b</div></footer></body></html>";
+
+        var body = Body(ReportHtml.BuildPdfBody(report, PageCss));
+        var children = body.ChildNodes.Where(n => n.NodeType == HtmlAgilityPack.HtmlNodeType.Element).ToList();
+
+        Assert.Equal(new[] { "style", "div", "div", "div" }, children.Select(n => n.Name));
+        Assert.Equal(new[] { "header", "footer", "document-body-container" }, children.Skip(1).Select(n => n.Id));
+        Assert.NotNull(children[1].SelectSingleNode(".//div[@class='hdr']"));
+        Assert.NotNull(children[2].SelectSingleNode(".//div[@class='ftr']"));
+        Assert.NotNull(children[3].SelectSingleNode("./h1"));
+        Assert.Null(body.SelectSingleNode("//cover"));
+    }
+
+    [Fact]
+    public void BuildPdfBody_WithoutBodyTag()
+    {
+        var body = Body(ReportHtml.BuildPdfBody("<header><p>h</p></header><p>edited</p><footer><p>f</p></footer>", PageCss));
+
+        Assert.Equal("edited", body.SelectSingleNode("./div[@id='document-body-container']/p").InnerText);
+        Assert.NotNull(body.SelectSingleNode("./div[@id='header']"));
+    }
+
+    [Fact]
+    public void BuildPdfBody_NoHeaderOrFooter()
+    {
+        var body = Body(ReportHtml.BuildPdfBody("<html><body><p>only</p></body></html>", PageCss));
+
+        Assert.Equal("only", body.SelectSingleNode("./div[@id='document-body-container']/p").InnerText);
+        Assert.Equal("style", body.ChildNodes.First(n => n.NodeType == HtmlAgilityPack.HtmlNodeType.Element).Name);
+    }
 }
