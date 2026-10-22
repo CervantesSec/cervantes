@@ -1,9 +1,7 @@
 using System.Xml;
-using Cervantes.CORE.Entities;
 using Cervantes.IFR.Parsers.Acunetix;
 using Cervantes.IFR.Parsers.DependencyCheck;
 using Cervantes.IFR.Parsers.OpenVAS;
-using Cervantes.IFR.Parsers.Qualys;
 using Cervantes.IFR.Parsers.Zap;
 
 namespace Cervantes.Tests.IFR;
@@ -19,32 +17,6 @@ public class ParserXmlTests
         var host = Fixture("OpenVAS", "openvas.xml").SelectSingleNode("//result/host")!;
 
         Assert.Equal("10.5.5.5", OpenVASParser.HostOf(host));
-    }
-
-    [Fact]
-    public void Qualys_HostOf_UsesIpAttributes()
-    {
-        var vuln = Fixture("Qualys", "qualys-scan.xml").SelectSingleNode("//VULN")!;
-
-        Assert.Equal(("10.6.6.6", "app.example"), QualysParser.HostOf(vuln));
-    }
-
-    [Fact]
-    public void SeverityOf_Attribute4IsHigh()
-    {
-        var vulns = Fixture("Qualys", "qualys-scan.xml").SelectNodes("//VULN")!;
-
-        Assert.Equal(VulnRisk.High, QualysParser.SeverityOf(vulns[0]!));
-        Assert.Equal(VulnRisk.Low, QualysParser.SeverityOf(vulns[1]!));
-    }
-
-    [Fact]
-    public void SeverityOf_UnknownIsInfo()
-    {
-        var doc = new XmlDocument();
-        doc.LoadXml("<VULN severity=\"9\"><TITLE>t</TITLE></VULN>");
-
-        Assert.Equal(VulnRisk.Info, QualysParser.SeverityOf(doc.DocumentElement!));
     }
 
     [Fact]

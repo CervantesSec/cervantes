@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
 using Cervantes.Contracts;
@@ -29,17 +30,18 @@ public class QualysParser : IQualysParser
     }
 
     /// <summary>
-    /// The host of a vulnerability: the nearest <c>&lt;IP value="…" name="…"&gt;</c> ancestor of a scan report, or the
+    /// The host of a vulnerability: the nearest <c>&lt;IP value="…" name="…"&gt;</c> (or <c>IPV6</c>) ancestor of a scan report, or the
     /// <c>IP</c>/<c>DNS</c> children (or <c>ip</c>/<c>hostname</c> attributes) of the host element in other exports.
     /// </summary>
     public static (string Ip, string? Name) HostOf(XmlNode vuln)
     {
         for (var node = vuln.ParentNode; node is XmlElement element; node = node.ParentNode)
         {
-            if (element.Name == "IP" && element.HasAttribute("value"))
+            if (element.Name is "IP" or "IPV6" && element.HasAttribute("value"))
             {
-                var name = element.GetAttribute("name");
-                return (element.GetAttribute("value"), name.Length > 0 ? name : null);
+                // Qualys writes this text, not an empty name, for hosts without a DNS name
+                var name = element.GetAttribute("name").Trim();
+                return (element.GetAttribute("value"), name.Length > 0 && name != "No registered hostname" ? name : null);
             }
 
             var ip = element.SelectSingleNode("IP")?.InnerText ?? element.Attributes["ip"]?.Value;
@@ -65,6 +67,66 @@ public class QualysParser : IQualysParser
         };
     }
 
+    /// <summary>
+    /// Refuses Qualys reports this parser does not read: asset data reports (<c>ASSET_DATA_REPORT</c>), web application
+    /// scans (<c>WAS_SCAN_REPORT</c>) and any other root without vulnerability elements. Scan reports (<c>SCAN</c>) pass.
+    /// </summary>
+    public static void EnsureSupported(XmlDocument doc)
+    {
+        var root = doc.DocumentElement?.Name ?? "";
+        if (root is "ASSET_DATA_REPORT" or "WAS_SCAN_REPORT"
+            || (root != "SCAN" && FindingsOf(doc).Count == 0))
+        {
+            throw new InvalidDataException("Unsupported Qualys report: " + root);
+        }
+    }
+
+    /// <summary>
+    /// The findings of a scan report in document order: confirmed vulnerabilities (<c>VULN</c>) and potential ones
+    /// (<c>PRACTICE</c>). Information gathered (<c>INFO</c>) and services (<c>SERVICE</c>) are not findings.
+    /// </summary>
+    public static IReadOnlyList<XmlNode> FindingsOf(XmlDocument doc)
+    {
+        var findings = doc.SelectNodes("//VULN | //PRACTICE")!.Cast<XmlNode>().ToList();
+        return findings.Count > 0 ? findings : doc.GetElementsByTagName("vulnerability").Cast<XmlNode>().ToList();
+    }
+
+    /// <summary>True for a potential vulnerability (<c>PRACTICE</c>), which Qualys could not confirm.</summary>
+    public static bool IsPotential(XmlNode finding) => finding.Name == "PRACTICE";
+
+    /// <summary>
+    /// The scores of a finding: <c>CVSS3_BASE</c>, <c>CVSS_BASE</c> (version 2) and <c>CVSS4_BASE</c>. Empty values and
+    /// "-" are null; text after the number (some reports append the vector) is ignored.
+    /// </summary>
+    public static (double? Cvss3, double? Cvss2, double? Cvss4) CvssOf(XmlNode vuln)
+    {
+        static double? Score(XmlNode? node)
+        {
+            var match = Regex.Match(node?.InnerText ?? "", @"^\s*(\d+(?:\.\d+)?)");
+            return match.Success ? double.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture) : null;
+        }
+
+        return (Score(vuln.SelectSingleNode("CVSS3_BASE")), Score(vuln.SelectSingleNode("CVSS_BASE") ?? vuln.SelectSingleNode("cvss_base")),
+            Score(vuln.SelectSingleNode("CVSS4_BASE")));
+    }
+
+    /// <summary>The CVEs of a finding, from the <c>cveid</c> attribute (comma-separated) and <c>CVE_ID_LIST/CVE_ID/ID</c>.</summary>
+    public static string CvesOf(XmlNode vuln)
+    {
+        var fromAttribute = (vuln.Attributes?["cveid"]?.Value ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var fromList = vuln.SelectNodes("CVE_ID_LIST/CVE_ID/ID")!.Cast<XmlNode>().Select(x => x.InnerText.Trim());
+        return string.Join(", ", fromAttribute.Concat(fromList).Where(x => x.Length > 0).Distinct(StringComparer.OrdinalIgnoreCase));
+    }
+
+    // One line per COMPLIANCE_INFO: "TYPE SECTION: DESCRIPTION".
+    private static string ComplianceOf(XmlNode compliance)
+    {
+        var lines = compliance.SelectNodes("COMPLIANCE_INFO")!.Cast<XmlNode>()
+            .Select(x => $"{x.SelectSingleNode("COMPLIANCE_TYPE")?.InnerText} {x.SelectSingleNode("COMPLIANCE_SECTION")?.InnerText}: {x.SelectSingleNode("COMPLIANCE_DESCRIPTION")?.InnerText}".Trim())
+            .ToList();
+        return lines.Count > 0 ? string.Join("\n", lines) : compliance.InnerText;
+    }
+
     private static string SeverityText(XmlNode vuln)
     {
         return vuln.Attributes?["severity"]?.Value
@@ -79,12 +141,9 @@ public class QualysParser : IQualysParser
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
 
-        // Qualys can have different XML structures, try both common formats
-        XmlNodeList vulnerabilities = doc.GetElementsByTagName("VULN");
-        if (vulnerabilities.Count == 0)
-        {
-            vulnerabilities = doc.GetElementsByTagName("vulnerability");
-        }
+        // Only scan reports are read; other Qualys reports answer 400 instead of importing nothing
+        EnsureSupported(doc);
+        var vulnerabilities = FindingsOf(doc);
 
         var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
@@ -101,16 +160,14 @@ public class QualysParser : IQualysParser
                 string title = "";
                 if (vuln.SelectSingleNode("TITLE") != null) { title = vuln.SelectSingleNode("TITLE").InnerText; }
                 else if (vuln.SelectSingleNode("title") != null) { title = vuln.SelectSingleNode("title").InnerText; }
+                if (IsPotential(vuln) && !string.IsNullOrEmpty(title)) { title = "Potential: " + title; }
 
                 string category = "";
                 if (vuln.SelectSingleNode("CATEGORY") != null) { category = vuln.SelectSingleNode("CATEGORY").InnerText; }
                 else if (vuln.SelectSingleNode("category") != null) { category = vuln.SelectSingleNode("category").InnerText; }
+                else if (vuln.ParentNode?.Name == "CAT" && vuln.ParentNode.Attributes?["value"] != null) { category = vuln.ParentNode.Attributes["value"].Value; }
 
                 string severity = SeverityText(vuln);
-
-                string cvssBase = "";
-                if (vuln.SelectSingleNode("CVSS_BASE") != null) { cvssBase = vuln.SelectSingleNode("CVSS_BASE").InnerText; }
-                else if (vuln.SelectSingleNode("cvss_base") != null) { cvssBase = vuln.SelectSingleNode("cvss_base").InnerText; }
 
                 string cvssVector = "";
                 if (vuln.SelectSingleNode("CVSS_VECTOR") != null) { cvssVector = vuln.SelectSingleNode("CVSS_VECTOR").InnerText; }
@@ -130,7 +187,7 @@ public class QualysParser : IQualysParser
                 else if (vuln.SelectSingleNode("solution") != null) { solution = vuln.SelectSingleNode("solution").InnerText; }
 
                 string compliance = "";
-                if (vuln.SelectSingleNode("COMPLIANCE") != null) { compliance = vuln.SelectSingleNode("COMPLIANCE").InnerText; }
+                if (vuln.SelectSingleNode("COMPLIANCE") is { } complianceNode) { compliance = ComplianceOf(complianceNode); }
                 else if (vuln.SelectSingleNode("compliance") != null) { compliance = vuln.SelectSingleNode("compliance").InnerText; }
 
                 var (hostIp, ipName) = HostOf(vuln);
@@ -151,15 +208,19 @@ public class QualysParser : IQualysParser
 
                 if (vuln.SelectSingleNode("SERVICE") != null) { service = vuln.SelectSingleNode("SERVICE").InnerText; }
 
+                // CVSS_BASE is the version 2 score; only a v3 (or v4) score goes into CVSS3
+                var cvss = CvssOf(vuln);
+                var cves = CvesOf(vuln);
+
                 // Parse risk level from Qualys format
                 VulnRisk risk = VulnRisk.Info;
                 if (!string.IsNullOrEmpty(severity))
                 {
                     risk = SeverityOf(vuln);
                 }
-                else if (!string.IsNullOrEmpty(cvssBase))
+                else
                 {
-                    if (double.TryParse(cvssBase, NumberStyles.Float, CultureInfo.InvariantCulture, out double parsedCvssScore))
+                    if ((cvss.Cvss3 ?? cvss.Cvss4 ?? cvss.Cvss2) is { } parsedCvssScore)
                     {
                         if (parsedCvssScore >= 9.0)
                             risk = VulnRisk.Critical;
@@ -246,9 +307,21 @@ public class QualysParser : IQualysParser
 
                 // Build references
                 string refs = "";
-                if (!string.IsNullOrEmpty(cvssBase))
+                if (cvss.Cvss3 is { } v3)
                 {
-                    refs += "CVSS Base Score: " + cvssBase + "\n";
+                    refs += "CVSS v3 Base Score: " + v3.ToString(CultureInfo.InvariantCulture) + "\n";
+                }
+                if (cvss.Cvss2 is { } v2)
+                {
+                    refs += "CVSS v2 Base Score: " + v2.ToString(CultureInfo.InvariantCulture) + "\n";
+                }
+                if (cvss.Cvss4 is { } v4)
+                {
+                    refs += "CVSS v4 Base Score: " + v4.ToString(CultureInfo.InvariantCulture) + "\n";
+                }
+                if (!string.IsNullOrEmpty(cves))
+                {
+                    refs += "CVE: " + cves + "\n";
                 }
                 if (!string.IsNullOrEmpty(cvssVector))
                 {
@@ -257,6 +330,11 @@ public class QualysParser : IQualysParser
                 if (!string.IsNullOrEmpty(qid))
                 {
                     refs += "Qualys QID: " + qid + "\n";
+                }
+
+                if (!string.IsNullOrEmpty(refs))
+                {
+                    detailedDescription += "\n\n" + refs.TrimEnd('\n');
                 }
 
                 // Skip if no title or description
@@ -286,9 +364,13 @@ public class QualysParser : IQualysParser
                 };
 
                 // Set CVSS if available
-                if (!string.IsNullOrEmpty(cvssBase) && double.TryParse(cvssBase, NumberStyles.Float, CultureInfo.InvariantCulture, out double finalCvssScore))
+                if ((cvss.Cvss3 ?? cvss.Cvss4) is { } finalCvssScore)
                 {
                     vulnerability.CVSS3 = finalCvssScore;
+                }
+                if (!string.IsNullOrEmpty(cves))
+                {
+                    vulnerability.cve = sanitizer.Sanitize(cves);
                 }
 
                 if (!string.IsNullOrEmpty(cvssVector))

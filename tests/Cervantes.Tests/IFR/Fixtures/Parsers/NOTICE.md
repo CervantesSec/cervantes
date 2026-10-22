@@ -27,6 +27,10 @@ The files listed below come from the test samples of DefectDojo (`https://github
 - `Prowler/prowler-v3.json`: `aws_prowler_v3plus/many_vuln.json`
 - `Prowler/prowler-v4.ocsf.json`: `prowler/example_output_aws.ocsf.json`
 - `Prowler/prowler-v4.csv`: `prowler/example_output_aws.csv`
+- `Qualys/qualys-scan.xml`: `qualys_infrascan_webgui/qualys_infrascan_webgui_3.xml`
+- `Qualys/qualys-scan-multiple.xml`: `qualys_infrascan_webgui/qualys_infrascan_webgui_multiple.xml`
+- `Qualys/qualys-asset-data.xml`: `qualys/empty.xml`
+- `Qualys/qualys-was.xml`: `qualys_webapp/qualys_webapp_one_vuln.xml`
 <!-- filled in by the tasks that add them -->
 
 > Copyright (c) 2015-2023 DefectDojo, Inc. All rights reserved.
