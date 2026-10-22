@@ -34,6 +34,10 @@ public partial class DeleteProjectAttachmentBulk: ComponentBase
                 {
                     Snackbar.Add(@localizer["attachmentDeleted"], Severity.Success);
                 }
+                else if (response is Microsoft.AspNetCore.Mvc.ObjectResult { StatusCode: 403 })
+                {
+                    Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+                }
                 else
                 {
                     Snackbar.Add(@localizer["attachmentDeletedError"], Severity.Error);

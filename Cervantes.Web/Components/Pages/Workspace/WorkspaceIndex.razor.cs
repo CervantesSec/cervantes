@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Components.Authorization;
+using Cervantes.CORE;
+using AuthPermissions.BaseCode.PermissionsCode;
 using System.Net.Http.Json;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -29,6 +32,8 @@ public partial class WorkspaceIndex: ComponentBase
     private List<CORE.Entities.Vuln> Vulns = new List<CORE.Entities.Vuln>();
     private List<CORE.Entities.Vault> Vaults = new List<CORE.Entities.Vault>();
     private List<CORE.Entities.Target> Targets = new List<CORE.Entities.Target>();
+    private bool canReadMembers;
+    [Inject] private AuthenticationStateProvider authenticationStateProvider { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,13 +42,17 @@ public partial class WorkspaceIndex: ComponentBase
         {
             Snackbar.Add(@localizer["noRolePermission"], Severity.Warning);
             navigationManager.NavigateTo("workspaces");
+            return;
         }
-        
+
+        // Membership opens the dashboard; each card still needs the read permission of its module.
+        var userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
         Project = _ProjectController.GetById(project);
-        Tasks = _TaskController.GetByUser(project).ToList();
-        Vulns = _VulnController.GetByProject(project).ToList();
-        Vaults = _VaultController.GetByProject(project).ToList();
-        Targets = _TargetController.GetByProjectId(project).ToList();
+        Tasks = userAth.HasPermission(Permissions.TasksRead) ? _TaskController.GetByUser(project).ToList() : new List<CORE.Entities.Task>();
+        Vulns = userAth.HasPermission(Permissions.VulnsRead) ? _VulnController.GetByProject(project).ToList() : new List<CORE.Entities.Vuln>();
+        Vaults = userAth.HasPermission(Permissions.VaultRead) ? _VaultController.GetByProject(project).ToList() : new List<CORE.Entities.Vault>();
+        Targets = userAth.HasPermission(Permissions.TargetsRead) ? _TargetController.GetByProjectId(project).ToList() : new List<CORE.Entities.Target>();
+        canReadMembers = userAth.HasPermission(Permissions.ProjectMembersRead);
         _items = new List<BreadcrumbItem>
         {
             new BreadcrumbItem(localizer["home"], href: "/",icon: Icons.Material.Filled.Home),
@@ -62,7 +71,7 @@ public partial class WorkspaceIndex: ComponentBase
     protected async Task Update()
     {
 
-        Members = _ProjectController.GetMembers(project).ToList();
+        Members = canReadMembers ? _ProjectController.GetMembers(project).ToList() : new List<ProjectUser>();
 
     }
     

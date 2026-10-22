@@ -52,7 +52,7 @@
         {
            <MudNavLink Icon="@cveSVG" Href="/cve">CVE</MudNavLink>
         }
-        @if (jiraEnabled)
+        @if (jiraEnabled && user.HasPermission(Permissions.JiraRead))
         {
             <MudNavLink Href="/jira" Icon="@jiraSVG" Match="NavLinkMatch.Prefix">@localizer["jira"]</MudNavLink>
         }

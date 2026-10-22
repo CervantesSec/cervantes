@@ -164,7 +164,7 @@ public class TargetController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId.Value, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
                 }
                 
                 var missingFields = MissingRequiredCustomFields(model.CustomFieldValues, null);
@@ -248,7 +248,13 @@ public class TargetController : ControllerBase
                 if (result != null)
                 {
                     // Authorize against the project stored in the database, never the one sent in the request.
-                    // Edit never moves a target, so model.ProjectId is ignored.
+                    // Edit never moves a target: a different project is refused, like the other modules do.
+                    var requestedProject = model.ProjectId == Guid.Empty ? null : model.ProjectId;
+                    var storedProject = result.ProjectId == Guid.Empty ? null : result.ProjectId;
+                    if (model.ProjectId != null && requestedProject != storedProject)
+                    {
+                        return BadRequest("A target cannot be moved to another project");
+                    }
                     if (!CanWriteTarget(result))
                     {
                         _logger.LogWarning("Access denied editing target {TargetId}. User: {UserId}",
@@ -403,7 +409,7 @@ public class TargetController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.Project, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
                 }
                 var path = "";
                 var unique = "";

@@ -537,7 +537,7 @@ public class ProjectController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
                 }
                 var note = new CORE.Entities.ProjectNote();
                 note.Id = Guid.NewGuid();
@@ -651,7 +651,7 @@ public class ProjectController : ControllerBase
                     var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("Invalid request");
+                        return StatusCode(403, "Access denied: User does not have permission to access this project");
                     }
 
                     projectNoteManager.Remove(result);
@@ -725,7 +725,7 @@ public class ProjectController : ControllerBase
                 var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
                 if (user == null)
                 {
-                    return BadRequest("Access denied: User does not have permission to access this project");
+                    return StatusCode(403, "Access denied: User does not have permission to access this project");
                 }
 
                 var path = "";
@@ -804,7 +804,7 @@ public class ProjectController : ControllerBase
                     var user = projectUserManager.VerifyUser(result.ProjectId, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("Invalid request");
+                        return StatusCode(403, "Access denied: User does not have permission to access this project");
                     }
 
                     projectAttachmentManager.Remove(result);
@@ -846,7 +846,7 @@ public class ProjectController : ControllerBase
                     var user = projectUserManager.VerifyUser(project.Id, aspNetUserId);
                     if (user == null)
                     {
-                        return BadRequest("Invalid request");
+                        return StatusCode(403, "Access denied: User does not have permission to access this project");
                     }
 
                     project.ExecutiveSummary = sanitizer.Sanitize(model.ExecutiveSummary);

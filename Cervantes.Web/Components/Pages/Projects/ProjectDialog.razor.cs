@@ -291,6 +291,10 @@ protected override async Task OnInitializedAsync()
             {
                 Snackbar.Add(@localizer["executiveSummarySaved"], Severity.Success);
             }
+            else if (response is Microsoft.AspNetCore.Mvc.ObjectResult { StatusCode: 403 })
+            {
+                Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+            }
             else
             {
                 Snackbar.Add(@localizer["executiveSummarySavedError"], Severity.Error);

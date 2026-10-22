@@ -32,6 +32,10 @@ public partial class DeleteProjectNoteBulkDialog : ComponentBase
                 {
                     Snackbar.Add(@localizer["deletedNote"], Severity.Success);
                 }
+                else if (response is Microsoft.AspNetCore.Mvc.ObjectResult { StatusCode: 403 })
+                {
+                    Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+                }
                 else
                 {
                     Snackbar.Add(@localizer["deletedNoteError"], Severity.Error);

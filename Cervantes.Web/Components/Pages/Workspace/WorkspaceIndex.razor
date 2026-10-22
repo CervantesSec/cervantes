@@ -1,4 +1,7 @@
 @page "/workspace/{project:guid}"
+@using Cervantes.CORE
+@using global::AuthPermissions.AspNetCore
+@attribute [HasPermission(Permissions.WorkspacesRead)]
 @rendermode InteractiveServer
 @using MudExtensions
 @using Cervantes.Web.Components.Layout

@@ -57,6 +57,10 @@ public partial class ImportDialog: ComponentBase
                     Snackbar.Add(@localizer["targetImported"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));
                 }
+                else if (response is Microsoft.AspNetCore.Mvc.ObjectResult { StatusCode: 403 })
+                {
+                    Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+                }
                 else
                 {
                     Snackbar.Add(@localizer["targetImportedError"], Severity.Error);

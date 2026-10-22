@@ -32,6 +32,10 @@ public partial class DeleteProjectNoteDialog: ComponentBase
                 Snackbar.Add(@localizer["deletedNote"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }
+            else if (response is Microsoft.AspNetCore.Mvc.ObjectResult { StatusCode: 403 })
+            {
+                Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+            }
             else
             {
                 Snackbar.Add(@localizer["deletedNoteError"], Severity.Error);

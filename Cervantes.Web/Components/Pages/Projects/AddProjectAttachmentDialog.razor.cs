@@ -123,6 +123,10 @@ public partial class AddProjectAttachmentDialog: ComponentBase
                     Snackbar.Add(@localizer["addAttachment"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));
                 }
+                else if (response is Microsoft.AspNetCore.Mvc.ObjectResult { StatusCode: 403 })
+                {
+                    Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+                }
                 else
                 {
                     Snackbar.Add(@localizer["addAttachmentError"], Severity.Error);

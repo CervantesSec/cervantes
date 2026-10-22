@@ -172,6 +172,10 @@ public partial class CreateTargetDialog: ComponentBase
                 Snackbar.Add(@localizer["targetCreated"], Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
             }
+            else if (response is Microsoft.AspNetCore.Mvc.ObjectResult { StatusCode: 403 })
+            {
+                Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+            }
             else
             {
                 Snackbar.Add(@localizer["targetCreatedError"], Severity.Error);
