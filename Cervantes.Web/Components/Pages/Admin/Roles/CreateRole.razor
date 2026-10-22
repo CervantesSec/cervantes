@@ -28,16 +28,16 @@
             <MudStack AlignItems="AlignItems.Stretch">
                
 
-                <MudTextField Placeholder="John Doe" @bind-Value="model.Name"
+                <MudTextField Placeholder="@localizer["roleNamePlaceholder"]" @bind-Value="model.Name"
                               For="@(() => model.Name)"
                               Immediate="true"
                               Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Badge"/>
 
 
-                <MudTextField Placeholder="john.doe@foobar.com" @bind-Value="model.Description"
+                <MudTextField Placeholder="@localizer["roleDescriptionPlaceholder"]" @bind-Value="model.Description"
                               For="@(() => model.Description)"
                               Immediate="true"
-                              Label="@localizer["description"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Description" InputType="InputType.Email"/>
+                              Label="@localizer["description"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Description"/>
 
                 <MudDataGrid T="PermissionsViewModel" Items="@_permissionsViewModels" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
                              Hideable="true" Hover="true" Groupable="true" GroupExpanded="false" SelectedItemsChanged="@SelectedItemsChanged" MultiSelection="true" Virtualize="true" DragDropColumnReordering="true" RowsPerPage="50">

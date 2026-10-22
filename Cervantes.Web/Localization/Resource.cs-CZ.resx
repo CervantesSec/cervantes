@@ -2804,4 +2804,10 @@
   <data name="requiredFieldsMissing" xml:space="preserve">
     <value>Vyplňte povinná pole: {0}</value>
   </data>
+  <data name="roleNamePlaceholder" xml:space="preserve">
+    <value>Pentester</value>
+  </data>
+  <data name="roleDescriptionPlaceholder" xml:space="preserve">
+    <value>Provádí testy v projektech, jejichž je členem</value>
+  </data>
 </root>

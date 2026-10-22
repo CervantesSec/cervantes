@@ -3388,4 +3388,10 @@ Opción 3</value>
   <data name="requiredFieldsMissing" xml:space="preserve">
     <value>Rellena los campos obligatorios: {0}</value>
   </data>
+  <data name="roleNamePlaceholder" xml:space="preserve">
+    <value>Pentester</value>
+  </data>
+  <data name="roleDescriptionPlaceholder" xml:space="preserve">
+    <value>Realiza pruebas en los proyectos de los que es miembro</value>
+  </data>
 </root>

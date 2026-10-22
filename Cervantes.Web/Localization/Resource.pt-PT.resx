@@ -2773,4 +2773,10 @@
   <data name="requiredFieldsMissing" xml:space="preserve">
     <value>Preencha os campos obrigatórios: {0}</value>
   </data>
+  <data name="roleNamePlaceholder" xml:space="preserve">
+    <value>Pentester</value>
+  </data>
+  <data name="roleDescriptionPlaceholder" xml:space="preserve">
+    <value>Realiza testes nos projetos de que é membro</value>
+  </data>
 </root>

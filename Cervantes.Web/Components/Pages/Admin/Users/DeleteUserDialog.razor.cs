@@ -37,6 +37,8 @@ public partial class DeleteUserDialog: ComponentBase
             else if (response is ConflictObjectResult)
             {
                 Snackbar.Add(@localizer["userHasContent"], Severity.Error);
+                // Back to the user dialog, where the account can be locked instead.
+                MudDialog.Cancel();
             }
             else
             {

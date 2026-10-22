@@ -3366,4 +3366,10 @@ Option 3</value>
   <data name="requiredFieldsMissing" xml:space="preserve">
     <value>Fill in the required fields: {0}</value>
   </data>
+  <data name="roleNamePlaceholder" xml:space="preserve">
+    <value>Pentester</value>
+  </data>
+  <data name="roleDescriptionPlaceholder" xml:space="preserve">
+    <value>Runs tests in the projects they are a member of</value>
+  </data>
 </root>

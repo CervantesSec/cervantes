@@ -129,6 +129,23 @@
 							@((MarkupString)role.Description)
 						</MudCardContent>
 					</MudCard>
+					<MudCard Elevation="25" Class="mt-4">
+						<MudCardHeader>
+							<CardHeaderContent>
+								<MudText>@localizer["permissions"]</MudText>
+							</CardHeaderContent>
+						</MudCardHeader>
+						<MudCardContent>
+							@foreach (var group in GroupPermissions(role.PermissionNames))
+							{
+								<MudText Typo="Typo.subtitle2" Class="mt-2">@group.Group</MudText>
+								@foreach (var name in group.Names)
+								{
+									<MudChip T="string" Size="Size.Small" Text="@name"/>
+								}
+							}
+						</MudCardContent>
+					</MudCard>
 				</MudItem>
 			</MudGrid>
 		}

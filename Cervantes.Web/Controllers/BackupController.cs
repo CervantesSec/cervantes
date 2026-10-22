@@ -1135,8 +1135,8 @@ public class BackupController : ControllerBase
                         LogDiscardedPath("User", backupUser.Id);
                     }
 
-                    // The backup has no AuthPermissions data, so the user gets the default role for its kind.
-                    var role = user.ClientId != null ? "Client" : "User";
+                    // The backup has no AuthPermissions data, so the user gets the default role, User (AuthP has no Client role).
+                    var role = "User";
                     if (user.ClientId != null && clientManager.GetById(user.ClientId.Value) == null)
                     {
                         pendingClientLinks[user.Id] = user.ClientId.Value;

@@ -2804,4 +2804,10 @@
   <data name="requiredFieldsMissing" xml:space="preserve">
     <value>Füllen Sie die Pflichtfelder aus: {0}</value>
   </data>
+  <data name="roleNamePlaceholder" xml:space="preserve">
+    <value>Pentester</value>
+  </data>
+  <data name="roleDescriptionPlaceholder" xml:space="preserve">
+    <value>Führt Tests in den eigenen Projekten durch</value>
+  </data>
 </root>

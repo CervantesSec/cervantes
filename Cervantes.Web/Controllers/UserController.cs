@@ -363,6 +363,12 @@ public class UserController: ControllerBase
                     return BadRequest("A password and a matching confirmation are required for local accounts");
                 }
 
+                // AddNewUserAsync with an unknown role creates the user without any AuthP role (and no permissions).
+                if (!authRolesAdminService.QueryRoleToPermissions().Any(r => r.RoleName == model.Role))
+                {
+                    return BadRequest("Unknown role");
+                }
+
                 var user = new ApplicationUser();
                 var path = "";
                 var unique = "";
@@ -761,7 +767,11 @@ public class UserController: ControllerBase
         try
         {
             var user = usrManager.GetByUserId(id);
-            if (AttachmentPath.TryResolve(env.WebRootPath, user.Avatar, "Users", out var imagePath))
+            if (UserAvatar.IsDefault(user.Avatar))
+            {
+                // The shipped default avatar is shared: clear the field, keep the file.
+            }
+            else if (AttachmentPath.TryResolve(env.WebRootPath, user.Avatar, "Users", out var imagePath))
             {
                 System.IO.File.Delete(imagePath);
             }

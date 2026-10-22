@@ -2808,4 +2808,10 @@
   <data name="requiredFieldsMissing" xml:space="preserve">
     <value>Zorunlu alanları doldurun: {0}</value>
   </data>
+  <data name="roleNamePlaceholder" xml:space="preserve">
+    <value>Sızma testi uzmanı</value>
+  </data>
+  <data name="roleDescriptionPlaceholder" xml:space="preserve">
+    <value>Üyesi olduğu projelerde test yapar</value>
+  </data>
 </root>

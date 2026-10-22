@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Security.Claims;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Components.Pages.Admin.Users;
@@ -162,4 +163,14 @@ public partial class RoleDialog : ComponentBase
 
         return false;
     };
+
+    /// <summary>The role's permission names grouped by the Permissions enum's Display group, in enum order.</summary>
+    internal static List<(string Group, List<string> Names)> GroupPermissions(IEnumerable<string>? names)
+    {
+        return (names ?? Enumerable.Empty<string>())
+            .Select(name => (Name: name, Member: typeof(Cervantes.CORE.Permissions).GetField(name)))
+            .GroupBy(x => x.Member?.GetCustomAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>()?.GroupName ?? "Other")
+            .Select(g => (g.Key, g.Select(x => x.Name).ToList()))
+            .ToList();
+    }
 }
