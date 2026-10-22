@@ -11,6 +11,7 @@ using MudBlazor.Extensions;
 using MudBlazor.Extensions.Core;
 using MudBlazor.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
+using Cervantes.Web.Helpers;
 
 namespace Cervantes.Web.Components.Pages.Tasks;
 
@@ -94,23 +95,22 @@ public partial class TasksKanban : ComponentBase
     
     private void Filter()
     {
-        if (selectedUser != string.Empty)
-        {
-           tasks = tasks.Where(x => x.AsignedUserId == selectedUser).ToList();
-        }
-        if (selectedProject != Guid.Empty)
-        {
-            tasks = tasks.Where(x => x.ProjectId == selectedProject).ToList();
-        }
+        Reload();
         StateHasChanged();
+    }
+
+    // Reload from the database and re-apply the selected filters, so a deleted task disappears and the filters never stack.
+    private void Reload()
+    {
+        tasks = TaskFilter.Apply(_taskController.Get(), selectedUser, selectedProject);
     }
     
     private void ClearFilter()
     {
-        tasks = _taskController.Get().ToList();
-            selectedProject = Guid.Empty;
-            selectedUser = string.Empty;
-            StateHasChanged();
+        selectedProject = Guid.Empty;
+        selectedUser = string.Empty;
+        Reload();
+        StateHasChanged();
     }
     
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
@@ -157,6 +157,7 @@ public partial class TasksKanban : ComponentBase
 
         if (!result.Canceled)
         {
+            Reload();
             StateHasChanged();
         }
     }

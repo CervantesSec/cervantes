@@ -134,23 +134,22 @@ public partial class Tasks: ComponentBase
     
     private void Filter()
     {
-        if (selectedUser != string.Empty)
-        {
-           tasks = tasks.Where(x => x.AsignedUserId == selectedUser).ToList();
-        }
-        if (selectedProject != Guid.Empty)
-        {
-            tasks = tasks.Where(x => x.ProjectId == selectedProject).ToList();
-        }
+        Reload();
         StateHasChanged();
+    }
+
+    // Reload from the database and re-apply the selected filters, so a deleted task disappears and the filters never stack.
+    private void Reload()
+    {
+        tasks = TaskFilter.Apply(_taskController.GetByProject(project), selectedUser, selectedProject);
     }
     
     private void ClearFilter()
     {
-        tasks = _taskController.Get().ToList();
-            selectedProject = Guid.Empty;
-            selectedUser = string.Empty;
-            StateHasChanged();
+        selectedProject = Guid.Empty;
+        selectedUser = string.Empty;
+        Reload();
+        StateHasChanged();
     }
     
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
@@ -194,6 +193,7 @@ public partial class Tasks: ComponentBase
 
         if (!result.Canceled)
         {
+            Reload();
             StateHasChanged();
         }
     }
