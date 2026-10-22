@@ -49,4 +49,24 @@ public class OpenVASTests
         Assert.StartsWith("CVE-2023-4573, ", gmp9);
         Assert.Equal(12, gmp9.Split(", ").Length);
     }
+
+    [Theory]
+    [InlineData("High", true)]
+    [InlineData("Low", true)]
+    [InlineData("Log", false)]
+    [InlineData("Debug", false)]
+    [InlineData("False Positive", false)]
+    public void IsFinding_SkipsLogDebugAndFalsePositive(string threat, bool expected)
+    {
+        var doc = new XmlDocument();
+        doc.LoadXml($"<result><threat>{threat}</threat><severity>0.0</severity></result>");
+
+        Assert.Equal(expected, OpenVASParser.IsFinding(doc.DocumentElement!));
+    }
+
+    [Fact]
+    public void IsFinding_RealResults()
+    {
+        Assert.True(OpenVASParser.IsFinding(Result("openvas.xml")));
+    }
 }

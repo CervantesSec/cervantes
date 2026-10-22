@@ -77,6 +77,13 @@ public class OpenVASParser : IOpenVASParser
         return fromTags != null && fromTags.StartsWith("CVSS:", StringComparison.Ordinal) ? fromTags : "";
     }
 
+    /// <summary>False for results GVM marks as <c>Log</c>, <c>Debug</c> or <c>False Positive</c>: they are not findings.</summary>
+    public static bool IsFinding(XmlNode result)
+    {
+        var threat = result.SelectSingleNode("threat")?.InnerText?.Trim() ?? "";
+        return threat is not ("Log" or "Debug" or "False Positive");
+    }
+
     /// <summary>The CVEs of a result: every <c>ref type="cve"</c> (under the NVT or the result) and a legacy <c>nvt/cve</c>.</summary>
     public static string CvesOf(XmlNode result)
     {
@@ -195,6 +202,12 @@ public class OpenVASParser : IOpenVASParser
                     }
                 }
 
+                // Log, debug and false-positive results are not findings: skip them before a target is created
+                if (!IsFinding(result))
+                {
+                    continue;
+                }
+
                 // Create or find target
                 Target target = null;
                 if (!string.IsNullOrEmpty(host))
@@ -261,12 +274,6 @@ public class OpenVASParser : IOpenVASParser
                 if (!string.IsNullOrEmpty(cvss))
                 {
                     referencesText += "\nCVSS Base Score: " + cvss;
-                }
-
-                // Skip non-vulnerability entries (informational only)
-                if (risk == VulnRisk.Info && (threat == "Log" || threat == "Debug" || threat == "False Positive"))
-                {
-                    continue;
                 }
 
                 // Create vulnerability
