@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -147,9 +148,9 @@ public partial class Tasks: ComponentBase
             return true;
         if (element.Status.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.StartDate.ToString().Contains(searchString))
+        if (DateSearch.MatchesCalendarDate(element.StartDate, "d", searchString))
             return true;
-        if (element.EndDate.ToString().Contains(searchString))
+        if (DateSearch.MatchesCalendarDate(element.EndDate, "d", searchString))
             return true;
         return false;
     };

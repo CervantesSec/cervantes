@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
@@ -140,7 +141,7 @@ public partial class Checklists: ComponentBase
             return true;
         if (element.Target.Contains(legacySearchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.CreatedDate.ToString().Contains(legacySearchString, StringComparison.OrdinalIgnoreCase))
+        if (DateSearch.Matches(element.CreatedDate, "d", legacySearchString))
             return true;
         if (element.Type.ToString().Contains(legacySearchString, StringComparison.OrdinalIgnoreCase))
             return true;

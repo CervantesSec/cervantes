@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using Cervantes.CORE.ViewModels;
@@ -96,7 +97,7 @@ public partial class Notes: ComponentBase
             return true;
         if (x.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (x.CreatedDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (DateSearch.Matches(x.CreatedDate, "d", searchString))
             return true;
         return false;
     };

@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -222,9 +223,9 @@ public partial class Tasks: ComponentBase
             return true;
         if (element.Project.Name.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.StartDate.ToString().Contains(searchString))
+        if (DateSearch.MatchesCalendarDate(element.StartDate, "d", searchString))
             return true;
-        if (element.EndDate.ToString().Contains(searchString))
+        if (DateSearch.MatchesCalendarDate(element.EndDate, "d", searchString))
             return true;
         return false;
     };

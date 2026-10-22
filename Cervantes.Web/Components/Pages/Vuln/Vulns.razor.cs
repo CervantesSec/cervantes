@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using Blazor.Flags;
@@ -222,9 +223,9 @@ private async Task Update()
             return true;
         if (element.Status.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.CreatedDate.ToString().Contains(searchString))
+        if (DateSearch.Matches(element.CreatedDate, "d", searchString))
             return true;
-        if (element.ModifiedDate.ToString().Contains(searchString))
+        if (DateSearch.Matches(element.ModifiedDate, "d", searchString))
             return true;
         
         // Search in custom field values

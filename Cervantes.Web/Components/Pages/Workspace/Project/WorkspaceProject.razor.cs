@@ -419,9 +419,9 @@ protected override async Task OnInitializedAsync()
             return true;
         if (element.Status.ToString().Contains(searchStringTask, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.StartDate.ToString().Contains(searchStringTask))
+        if (DateSearch.MatchesCalendarDate(element.StartDate, "d", searchStringTask))
             return true;
-        if (element.EndDate.ToString().Contains(searchStringTask))
+        if (DateSearch.MatchesCalendarDate(element.EndDate, "d", searchStringTask))
             return true;
         return false;
     };
@@ -524,7 +524,7 @@ protected override async Task OnInitializedAsync()
             return true;
         if (x.Status.ToString().Contains(searchStringVuln, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (x.CreatedDate.ToString().Contains(searchStringVuln, StringComparison.OrdinalIgnoreCase))
+        if (DateSearch.Matches(x.CreatedDate, "d", searchStringVuln))
             return true;
         if (x.Project.Name.Contains(searchStringVuln))
             return true;

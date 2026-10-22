@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -213,9 +214,9 @@ private async Task Update()
             return true;
         if (element.Status.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.CreatedDate.ToString().Contains(searchString))
+        if (DateSearch.Matches(element.CreatedDate, "d", searchString))
             return true;
-        if (element.ModifiedDate.ToString().Contains(searchString))
+        if (DateSearch.Matches(element.ModifiedDate, "d", searchString))
             return true;
         return false;
     };

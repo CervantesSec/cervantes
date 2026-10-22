@@ -9,7 +9,7 @@ public static class CalendarDate
     /// </summary>
     public static DateTime ToLocalDate(this DateTime stored) => ToLocalDate(stored, TimeZoneInfo.Local);
 
-    internal static DateTime ToLocalDate(DateTime stored, TimeZoneInfo zone)
+    public static DateTime ToLocalDate(DateTime stored, TimeZoneInfo zone)
     {
         // A value already in local time is the calendar day itself; anything else is taken as UTC.
         if (stored.Kind == DateTimeKind.Local)

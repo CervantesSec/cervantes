@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
@@ -51,7 +52,7 @@ public partial class Documents: ComponentBase
             return true;
         if (element.Description.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.CreatedDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (DateSearch.Matches(element.CreatedDate, "d", searchString))
             return true;
         return false;
     };

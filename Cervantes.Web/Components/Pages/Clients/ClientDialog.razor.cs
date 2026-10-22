@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -306,9 +307,9 @@ public partial class ClientDialog: ComponentBase
             return true;
         if (x.Status.ToString().Contains(searchStringPro, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (x.StartDate.ToString().Contains(searchStringPro, StringComparison.OrdinalIgnoreCase))
+        if (DateSearch.MatchesCalendarDate(x.StartDate, "d", searchStringPro))
             return true;
-        if (x.EndDate.ToString().Contains(searchStringPro))
+        if (DateSearch.MatchesCalendarDate(x.EndDate, "d", searchStringPro))
             return true;
         return false;
     };
@@ -324,7 +325,7 @@ public partial class ClientDialog: ComponentBase
             return true;
         if (x.Status.ToString().Contains(searchStringVuln, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (x.CreatedDate.ToString().Contains(searchStringVuln, StringComparison.OrdinalIgnoreCase))
+        if (DateSearch.Matches(x.CreatedDate, "d", searchStringVuln))
             return true;
         if (x.Project.Name.Contains(searchStringVuln))
             return true;

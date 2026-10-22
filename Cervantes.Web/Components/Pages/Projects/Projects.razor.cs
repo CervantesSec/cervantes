@@ -98,9 +98,9 @@ public partial class Projects: ComponentBase
             return true;
         if (element.ProjectType.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.StartDate.ToString().Contains(searchString))
+        if (DateSearch.MatchesCalendarDate(element.StartDate, "d", searchString))
             return true;
-        if (element.EndDate.ToString().Contains(searchString))
+        if (DateSearch.MatchesCalendarDate(element.EndDate, "d", searchString))
             return true;
         return false;
     };
@@ -117,9 +117,9 @@ public partial class Projects: ComponentBase
             return true;
         if (element.ProjectType.ToString().Contains(searchStringTemp, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.StartDate.ToString().Contains(searchStringTemp))
+        if (DateSearch.MatchesCalendarDate(element.StartDate, "d", searchStringTemp))
             return true;
-        if (element.EndDate.ToString().Contains(searchStringTemp))
+        if (DateSearch.MatchesCalendarDate(element.EndDate, "d", searchStringTemp))
             return true;
         return false;
     };

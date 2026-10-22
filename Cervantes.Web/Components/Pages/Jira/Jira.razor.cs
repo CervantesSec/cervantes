@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Security.Claims;
 using Cervantes.Web.Components.Pages.Vuln;
 using Cervantes.Web.Controllers;
@@ -81,7 +82,7 @@ public partial class Jira: ComponentBase
             return true;
         if (element.User.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.CreatedDate.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (DateSearch.Matches(element.CreatedDate, "G", searchString))
             return true;
         if (element.JiraKey.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
