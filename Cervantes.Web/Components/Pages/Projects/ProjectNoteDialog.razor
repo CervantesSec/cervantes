@@ -62,10 +62,7 @@
 			        <MudButton OnClick="Cancel">@localizer["cancel"]</MudButton>
 			        @if(userAth.HasPermission(Permissions.ProjectNotesEdit))
 			        {
-				        @if (!editMode)
-				        {
-					        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Color="@Color.Warning" OnClick="@((e) => EditMode())">@localizer["edit"]</MudButton>
-				        }
+				        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="@Color.Primary" OnClick="Submit">@localizer["save"]</MudButton>
 			        }
 				</MudContainer>
         	}
