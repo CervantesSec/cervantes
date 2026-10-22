@@ -2790,6 +2790,6 @@
     <value>Dieser Benutzer besitzt Projekte, Schwachstellen oder andere geteilte Inhalte und kann daher nicht gelöscht werden. Sperren Sie ihn stattdessen.</value>
   </data>
   <data name="findingId" xml:space="preserve">
-    <value>Befund-ID</value>
+    <value>Schwachstellen-ID</value>
   </data>
 </root>

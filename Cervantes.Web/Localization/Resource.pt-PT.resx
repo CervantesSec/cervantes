@@ -2759,6 +2759,6 @@
     <value>Este utilizador tem projetos, vulnerabilidades ou outro conteúdo partilhado, por isso não pode ser eliminado. Bloqueie-o em vez disso.</value>
   </data>
   <data name="findingId" xml:space="preserve">
-    <value>ID da vulnerabilidade</value>
+    <value>ID da descoberta</value>
   </data>
 </root>

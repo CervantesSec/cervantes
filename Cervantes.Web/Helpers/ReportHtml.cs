@@ -35,7 +35,7 @@ public static class ReportHtml
         // Comments are matched too so a style inside one is skipped and the comment is kept as it is.
         const string commentOrStyle = @"<!--.*?-->|<style\b[^>]*>.*?</style>";
         var styles = Regex.Matches(head.Groups[1].Value, commentOrStyle, RegexOptions.IgnoreCase | RegexOptions.Singleline)
-            .Where(x => !x.Value.StartsWith("<!--")).ToList();
+            .Where(x => !x.Value.StartsWith("<!--", StringComparison.Ordinal)).ToList();
         var body = Regex.Match(html[(head.Index + head.Length)..], @"<body\b[^>]*>", RegexOptions.IgnoreCase);
         if (styles.Count == 0 || !body.Success)
         {
@@ -43,7 +43,7 @@ public static class ReportHtml
         }
 
         var headContent = Regex.Replace(head.Groups[1].Value, commentOrStyle,
-            m => m.Value.StartsWith("<!--") ? m.Value : "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            m => m.Value.StartsWith("<!--", StringComparison.Ordinal) ? m.Value : "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         var bodyTagEnd = head.Index + head.Length + body.Index + body.Length;
         return html[..head.Groups[1].Index] + headContent + html[(head.Groups[1].Index + head.Groups[1].Length)..bodyTagEnd]
                + string.Concat(styles.Select(x => x.Value)) + html[bodyTagEnd..];

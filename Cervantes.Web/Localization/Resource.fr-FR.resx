@@ -2790,6 +2790,6 @@
     <value>Cet utilisateur possède des projets, des vulnérabilités ou d'autres contenus partagés : il ne peut pas être supprimé. Verrouillez-le plutôt.</value>
   </data>
   <data name="findingId" xml:space="preserve">
-    <value>ID de la constatation</value>
+    <value>ID du résultat</value>
   </data>
 </root>
