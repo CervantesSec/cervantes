@@ -352,7 +352,7 @@
 			{
 				<MudTabPanel Text="@localizer["targets"]" Icon="@Icons.Material.Filled.Adjust" BadgeData="@Targets.Count()" BadgeColor="Color.Primary">
 					<MudDataGrid T="Target" Items="@Targets" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterTarget"
-					             Hideable="true" Hover="true" RowClick="@RowClickedTarget" MultiSelection="true" SelectedItemsChanged="@SelectedTargetChanged" Virtualize="true" DragDropColumnReordering="true">
+					             Hideable="true" Hover="true" RowClick="@RowClickedTarget" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@SelectedTargetChanged" Virtualize="true" DragDropColumnReordering="true">
 						<ToolBarContent>
 							<MudStack Row="true">
 								@if (userAth.HasPermission(Permissions.TargetsAdd))
@@ -640,7 +640,7 @@
 				<MudTabPanel Text="@localizer["notes"]" Icon="@Icons.Material.Filled.Notes" BadgeData="@Notes.Count()" BadgeColor="Color.Primary">
 
 					<MudDataGrid T="ProjectNote" Items="@Notes" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterNotes"
-					             Hideable="true" Hover="true" RowClick="@RowClickedNote" MultiSelection="true" SelectedItemsChanged="@SelectedNotesChanged" Virtualize="true" DragDropColumnReordering="true">
+					             Hideable="true" Hover="true" RowClick="@RowClickedNote" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@SelectedNotesChanged" Virtualize="true" DragDropColumnReordering="true">
 						<ToolBarContent>
 							<MudStack Row="true">
 								@if (userAth.HasPermission(Permissions.ProjectNotesAdd))
@@ -700,7 +700,7 @@
 			{
 				<MudTabPanel Text="@localizer["attachments"]" Icon="@Icons.Material.Filled.Attachment" BadgeData="@Attachments.Count()" BadgeColor="Color.Primary" Style="min-width: 260px;">
 					<MudDataGrid T="ProjectAttachment" Items="@Attachments" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterAttachments"
-					             Hideable="true" Hover="true" RowClick="@RowClickedAttachment" MultiSelection="true" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
+					             Hideable="true" Hover="true" RowClick="@RowClickedAttachment" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
 						<ToolBarContent>
 							<MudStack Row="true">
 								@if (userAth.HasPermission(Permissions.ProjectAttachmentsAdd))

@@ -95,7 +95,7 @@ public class OrganizationController: ControllerBase
                     }
                     else
                     {
-                        _logger.LogError("An error ocurred saving a organization filetype not admitted. User: {0}",
+                        _logger.LogWarning("An error ocurred saving a organization filetype not admitted. User: {0}",
                             aspNetUserId);
                         return BadRequest("Invalid file type");
                     }

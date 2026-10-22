@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using Cervantes.CORE.ViewModel;
 using Cervantes.Web.Controllers;
 using FluentValidation;
@@ -105,6 +106,10 @@ public partial class DocumentCreateDialog: ComponentBase
 		        {
 			        Snackbar.Add(@localizer["documentCreated"], Severity.Success);
 			        MudDialog.Close(DialogResult.Ok(true));
+		        }
+		        else if (UploadResult.IsRejectedFileType(response))
+		        {
+		            Snackbar.Add(@localizer["fileTypeNotAllowed"], Severity.Warning);
 		        }
 		        else
 		        {

@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net;
 using System.Net.Http.Json;
 using Cervantes.CORE.ViewModel;
@@ -49,6 +50,10 @@ public partial class AddTaskAttachmentDialog: ComponentBase
 
                     Snackbar.Add(@localizer["attachmentAdded"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));
+                }
+                else if (UploadResult.IsRejectedFileType(response))
+                {
+                    Snackbar.Add(@localizer["fileTypeNotAllowed"], Severity.Warning);
                 }
                 else
                 {

@@ -18,7 +18,7 @@
 	</TitleContent>
 	<DialogContent>
 		<MudForm Model="@targets" @ref="@form"  ValidationDelay="0">
-			<MudText>@localizer["deleteMessageIntro"] ?</MudText>
+			<MudText>@localizer["deleteSelectedCount", targets.Count()]</MudText>
 		</MudForm>
 	</DialogContent>
 	<DialogActions>

@@ -461,7 +461,7 @@ public class TargetController : ControllerBase
                             }
                             else
                             {
-                                _logger.LogError("An error ocurred importing a nmap filetype not admitted. User: {0}",
+                                _logger.LogWarning("An error ocurred importing a nmap filetype not admitted. User: {0}",
                                     aspNetUserId);
                                 return BadRequest("Invalid file type");
                             }
@@ -533,7 +533,7 @@ public class TargetController : ControllerBase
                             }
                             else
                             {
-                                _logger.LogError("An error ocurred importing a csv filetype not admitted. User: {0}",
+                                _logger.LogWarning("An error ocurred importing a csv filetype not admitted. User: {0}",
                                     aspNetUserId);
                                 return BadRequest("Invalid file type");
                             }

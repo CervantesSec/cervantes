@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net.Http.Json;
 using Cervantes.CORE.ViewModels;
 using Cervantes.Web.Controllers;
@@ -126,6 +127,10 @@ public partial class AddProjectAttachmentDialog: ComponentBase
                 else if (response is Microsoft.AspNetCore.Mvc.ObjectResult { StatusCode: 403 })
                 {
                     Snackbar.Add(@localizer["noInProject"], Severity.Warning);
+                }
+                else if (UploadResult.IsRejectedFileType(response))
+                {
+                    Snackbar.Add(@localizer["fileTypeNotAllowed"], Severity.Warning);
                 }
                 else
                 {

@@ -17,7 +17,7 @@
 	<DialogContent>
 		<MudForm Model="@clients" @ref="@form" Validation="@(clientValidator.ValidateValue)" ValidationDelay="0">
 			<MudAlert Severity="MudBlazor.Severity.Warning" Class="mb-4">@localizer["deleteClientWarning"]</MudAlert>
-			<MudText>@localizer["deleteMessageIntro"] ?</MudText>
+			<MudText>@localizer["deleteSelectedCount", clients.Count()]</MudText>
 		</MudForm>
 	</DialogContent>
 	<DialogActions>

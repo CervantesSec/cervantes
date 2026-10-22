@@ -756,7 +756,7 @@ public class ProjectController : ControllerBase
                     }
                     else
                     {
-                        _logger.LogError("An error ocurred adding a attachment filetype not admitted. User: {0}",
+                        _logger.LogWarning("An error ocurred adding a attachment filetype not admitted. User: {0}",
                             aspNetUserId);
                         return BadRequest("Invalid file type");
                     }

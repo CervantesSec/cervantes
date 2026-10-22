@@ -37,7 +37,7 @@
                 {
                 <MudTabPanel Text="@localizer["vulns"]" Icon="@Icons.Material.Filled.BugReport" Style="min-width: 260px;">
                     <MudDataGrid T="VulnCustomFieldViewModel" Items="@vulnModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_vulnQuickFilter"
-                                 Hideable="true" Hover="true" RowClick="@VulnRowClicked" MultiSelection="true" SelectedItemsChanged="@VulnSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                                 Hideable="true" Hover="true" RowClick="@VulnRowClicked" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@VulnSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                         <ToolBarContent>
                             <MudStack Row="true">
                             @if (userAuth.HasPermission(Permissions.VulnCustomFieldsAdd))
@@ -119,7 +119,7 @@
                 {
                 <MudTabPanel Text="@localizer["projects"]" Icon="@Icons.Material.Filled.Folder" Style="min-width: 260px;">
                     <MudDataGrid T="ProjectCustomFieldViewModel" Items="@projectModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_projectQuickFilter"
-                                 Hideable="true" Hover="true" RowClick="@ProjectRowClicked" MultiSelection="true" SelectedItemsChanged="@ProjectSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                                 Hideable="true" Hover="true" RowClick="@ProjectRowClicked" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@ProjectSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                         <ToolBarContent>
                             <MudStack Row="true">
                             @if (userAuth.HasPermission(Permissions.ProjectCustomFieldsAdd))
@@ -215,7 +215,7 @@
                 {
                 <MudTabPanel Text="@localizer["clients"]" Icon="@Icons.Material.Filled.Person" Style="min-width: 260px;">
                     <MudDataGrid T="ClientCustomFieldViewModel" Items="@clientModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_clientQuickFilter"
-                                 Hideable="true" Hover="true" RowClick="@ClientRowClicked" MultiSelection="true" SelectedItemsChanged="@ClientSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                                 Hideable="true" Hover="true" RowClick="@ClientRowClicked" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@ClientSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                         <ToolBarContent>
                             <MudStack Row="true">
                             @if (userAuth.HasPermission(Permissions.ClientCustomFieldsAdd))
@@ -311,7 +311,7 @@
                 {
                 <MudTabPanel Text="@localizer["targets"]" Icon="@Icons.Material.Filled.GpsFixed" Style="min-width: 260px;">
                     <MudDataGrid T="TargetCustomFieldViewModel" Items="@targetModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_targetQuickFilter"
-                                 Hideable="true" Hover="true" RowClick="@TargetRowClicked" MultiSelection="true" SelectedItemsChanged="@TargetSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                                 Hideable="true" Hover="true" RowClick="@TargetRowClicked" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@TargetSelectedItemsChanged" Virtualize="true" DragDropColumnReordering="true">
                         <ToolBarContent>
                             <MudStack Row="true">
                             @if (userAuth.HasPermission(Permissions.TargetCustomFieldsAdd))

@@ -55,7 +55,7 @@
     <MudItem xs="12" sm="12" md="12">
         <!-- Legacy Checklists (WSTG/MASTG) -->
         <MudDataGrid T="ChecklistViewModel" Items="@legacyModel" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_legacyQuickFilter"
-                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedLegacyItemsChanged" Virtualize="true" DragDropColumnReordering="true">
+                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@SelectedLegacyItemsChanged" Virtualize="true" DragDropColumnReordering="true">
             <ToolBarContent>
                 <MudStack Row="true">
                     @if (userAth.HasPermission(Permissions.ChecklistsAdd))

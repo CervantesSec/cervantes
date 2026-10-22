@@ -1199,7 +1199,7 @@ public class VulnController: ControllerBase
                     }
                     else
                     {
-                        _logger.LogError("An error ocurred adding a Vuln Attachment filetype not admitted. User: {0}",
+                        _logger.LogWarning("An error ocurred adding a Vuln Attachment filetype not admitted. User: {0}",
                             aspNetUserId);
                         return BadRequest("Invalid file type");
                     }

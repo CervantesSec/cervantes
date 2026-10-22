@@ -93,7 +93,8 @@ private ClaimsPrincipal userAth;
                 var pro = model.FirstOrDefault(x => x.Id == vuln);
                 if (pro != null)
                 {
-                    //await DetailsDialog(pro ,maxWidth);
+                    // A dialog cannot open while prerendering; OnAfterRenderAsync opens it.
+                    deepLinkVuln = pro;
                 }
 
             }
@@ -102,6 +103,18 @@ private ClaimsPrincipal userAth;
         user = userController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier)); 
         jiraEnabled = JiraService.JiraEnabled();
 
+    }
+
+    private CORE.Entities.Vuln? deepLinkVuln;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (deepLinkVuln != null)
+        {
+            var item = deepLinkVuln;
+            deepLinkVuln = null;
+            await OpenDetails(item);
+        }
     }
 
 
@@ -221,9 +234,11 @@ private async Task Update()
         return false;
     };
     
-    async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Vuln> args)
+    async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Vuln> args) => await OpenDetails(args.Item);
+
+    async Task OpenDetails(CORE.Entities.Vuln item)
     {
-        var parameters = new DialogParameters { ["vuln"]=args.Item };
+        var parameters = new DialogParameters { ["vuln"]=item };
 
         var dialog =  DialogService.Show<VulnDialog>("Edit", parameters, maxWidth);
         var result = await dialog.Result;

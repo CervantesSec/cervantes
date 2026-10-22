@@ -13,7 +13,7 @@
     </TitleContent>
     <DialogContent>
         <MudForm Model="@documents" @ref="@form"  ValidationDelay="0">
-            <MudText>@localizer["deleteMessageIntro"]?</MudText>
+            <MudText>@localizer["deleteSelectedCount", documents.Count()]</MudText>
         </MudForm>
     </DialogContent>
     <DialogActions>

@@ -431,7 +431,7 @@ public class UserController: ControllerBase
 
                 return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, user);
             }
-            _logger.LogError("An error ocurred adding User filetype not admitted. User: {0}",
+            _logger.LogWarning("An error ocurred adding User filetype not admitted. User: {0}",
                 aspNetUserId);
             return BadRequest("Invalid request");
         }
@@ -488,7 +488,7 @@ public class UserController: ControllerBase
                     }
                     else
                     {
-                        _logger.LogError("An error ocurred editing User filetype not admitted. User: {{0}}",
+                        _logger.LogWarning("An error ocurred editing User filetype not admitted. User: {{0}}",
                             aspNetUserId);
                         return BadRequest("Invalid file type");
                     }
@@ -826,7 +826,7 @@ public class UserController: ControllerBase
                     }
                     else
                     {
-                        _logger.LogError("An error ocurred adding User filetype not admitted. User: {0}",
+                        _logger.LogWarning("An error ocurred adding User filetype not admitted. User: {0}",
                             aspNetUserId);
                         return BadRequest("Invalid file type");
                     }

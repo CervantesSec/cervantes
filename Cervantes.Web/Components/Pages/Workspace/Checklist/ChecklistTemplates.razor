@@ -53,7 +53,7 @@
     </MudItem>
     <MudItem xs="12" sm="12" md="12">
         <MudDataGrid T="ChecklistTemplate" Items="@model" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilter"
-                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" 
+                     Hideable="true" Hover="true" RowClick="@RowClicked" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@SelectedItemsChanged" 
                      Virtualize="true" DragDropColumnReordering="true" RowsPerPage="10">
             <ToolBarContent>
                 <MudStack Row="true">

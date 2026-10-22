@@ -1,3 +1,4 @@
+using Cervantes.Web.Helpers;
 using System.Net.Http.Json;
 using Cervantes.CORE.ViewModel;
 using Cervantes.CORE.ViewModels;
@@ -93,6 +94,10 @@ public partial class AddVulnAttachment: ComponentBase
 
                     Snackbar.Add(@localizer["addAttachment"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));
+                }
+                else if (UploadResult.IsRejectedFileType(response))
+                {
+                    Snackbar.Add(@localizer["fileTypeNotAllowed"], Severity.Warning);
                 }
                 else
                 {

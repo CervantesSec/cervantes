@@ -16,7 +16,7 @@
 	</TitleContent>
 	<DialogContent>
 		<MudForm Model="@note" @ref="@form" ValidationDelay="0">
-			<MudText>@localizer["deleteMessageIntro"] ?</MudText>
+			<MudText>@localizer["deleteMessageIntro"] @note.Name ?</MudText>
 		</MudForm>
 	</DialogContent>
 	<DialogActions>

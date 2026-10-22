@@ -101,7 +101,8 @@ private ClaimsPrincipal userAth;
                 var pro = model.FirstOrDefault(x => x.Id == vuln);
                 if (pro != null)
                 {
-                    //await DetailsDialog(pro ,maxWidth);
+                    // A dialog cannot open while prerendering; OnAfterRenderAsync opens it.
+                    deepLinkVuln = pro;
                 }
 
             }
@@ -110,6 +111,18 @@ private ClaimsPrincipal userAth;
         user = userController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier)); 
         jiraEnabled = JiraService.JiraEnabled();
 
+    }
+
+    private CORE.Entities.Vuln? deepLinkVuln;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (deepLinkVuln != null)
+        {
+            var item = deepLinkVuln;
+            deepLinkVuln = null;
+            await OpenDetails(item);
+        }
     }
 
 
@@ -245,20 +258,22 @@ private async Task Update()
         return false;
     };
     
-    async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Vuln> args)
+    async Task RowClicked(DataGridRowClickEventArgs<CORE.Entities.Vuln> args) => await OpenDetails(args.Item);
+
+    async Task OpenDetails(CORE.Entities.Vuln item)
     {
         // Check if dialog is already open for this vulnerability
-        if (openDialogs.Contains(args.Item.Id))
+        if (openDialogs.Contains(item.Id))
         {
             return;
         }
         
         // Add to tracking set
-        openDialogs.Add(args.Item.Id);
+        openDialogs.Add(item.Id);
         
         try
         {
-            var parameters = new DialogParameters { ["vuln"]=args.Item };
+            var parameters = new DialogParameters { ["vuln"]=item };
             IMudExDialogReference<VulnDialog>? dlgReference = await DialogService.ShowExAsync<VulnDialog>("Simple Dialog", parameters, maxWidthEx);
             var result = await dlgReference.Result;
 
@@ -271,7 +286,7 @@ private async Task Update()
         finally
         {
             // Remove from tracking set when dialog is closed
-            openDialogs.Remove(args.Item.Id);
+            openDialogs.Remove(item.Id);
         }
     }
     
