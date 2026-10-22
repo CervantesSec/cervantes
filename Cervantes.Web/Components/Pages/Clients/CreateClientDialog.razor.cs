@@ -69,7 +69,7 @@ public partial class CreateClientDialog: ComponentBase
          [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
      void Cancel() => MudDialog.Cancel();
-     private static IBrowserFile file;
+     private IBrowserFile file;
 
      [Inject] ISnackbar Snackbar { get; set; }
      [Inject] private ClientsController _clientsController { get; set; }

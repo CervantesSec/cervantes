@@ -22,7 +22,7 @@ public partial class ImportVulnDialog: ComponentBase
     [Inject] private VulnController _vulnController { get; set; }
     [Inject] private ProjectController _projectController { get; set; }
     VulnImportViewModel model = new VulnImportViewModel();
-    private static IBrowserFile file;
+    private IBrowserFile file;
     private List<Project> Projects = new List<Project>();
     private Guid Project { get; set; }
     private long maxFileSize = 1024 * 1024 * 5;

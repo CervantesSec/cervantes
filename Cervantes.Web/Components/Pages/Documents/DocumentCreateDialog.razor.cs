@@ -63,7 +63,7 @@ public partial class DocumentCreateDialog: ComponentBase
          [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
  
      void Cancel() => MudDialog.Cancel();
-     private static IBrowserFile file;
+     private IBrowserFile file;
      private long maxFileSize = 50 * 1024 * 1024;
 
      [Inject] ISnackbar Snackbar { get; set; }

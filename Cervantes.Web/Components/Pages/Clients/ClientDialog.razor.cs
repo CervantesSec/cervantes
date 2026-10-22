@@ -47,7 +47,7 @@ public partial class ClientDialog: ComponentBase
 
 
     MudForm form;
-    private static IBrowserFile file;
+    private IBrowserFile file;
     
 
     ClientModelFluentValidator clientValidator = new ClientModelFluentValidator();

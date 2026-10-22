@@ -23,7 +23,7 @@ public partial class ImportReport : ComponentBase
         };
     }
     
-     private static IBrowserFile file;
+     private IBrowserFile file;
      private bool showHtml = false;
      [Inject] ISnackbar Snackbar { get; set; }
      [Inject] private ReportController _ReportController { get; set; }

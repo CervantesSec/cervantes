@@ -34,7 +34,6 @@ public partial class ReportDialog : ComponentBase
     [Inject] ISnackbar Snackbar { get; set; }
     [Inject] private ReportController _reportController { get; set; }
     MudForm form;
-    private static IBrowserFile file;
     [Parameter] public EditReportTemplateModel model { get; set; } = new EditReportTemplateModel();
     ReportTemplateModelFluentValidator templateValidator = new ReportTemplateModelFluentValidator();
 

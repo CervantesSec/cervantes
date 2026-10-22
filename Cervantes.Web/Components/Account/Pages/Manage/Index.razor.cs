@@ -174,7 +174,6 @@ public partial class Index: ComponentBase
     }
 
     #region Profile
-    private static IBrowserFile File;
     private long maxFileSize = 1024 * 1024 * 5;
     private ProfileUploadAvatar avatar { get; set; } = new ProfileUploadAvatar();
     private async Task UploadFile(IBrowserFile file)

@@ -54,7 +54,6 @@ private List<CORE.Entities.Project> projects = new List<CORE.Entities.Project>()
 
 
     MudForm form;
-    private static IBrowserFile file;
     ProjectEditModelFluentValidator projectEditValidator = new ProjectEditModelFluentValidator();
     private ProjectEditViewModel model { get; set; } = new ProjectEditViewModel();
     private List<CORE.Entities.Client> Clients = new List<CORE.Entities.Client>();

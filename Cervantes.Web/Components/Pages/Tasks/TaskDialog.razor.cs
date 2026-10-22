@@ -40,7 +40,6 @@ public partial class TaskDialog: ComponentBase
     TaskModelFluentValidator taskValidator = new TaskModelFluentValidator();
 
     MudForm form;
-    private static IBrowserFile file;
     private DateTime? dateStart;
     private DateTime? dateEnd;
     private List<Project> Projects = new List<Project>();

@@ -81,7 +81,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
     UserCreateViewModel model = new UserCreateViewModel();
     private List<RolesViewModel> Roles = new List<RolesViewModel>();
     private List<CORE.Entities.Client> Clients = new List<CORE.Entities.Client>();
-    private static IBrowserFile File;
+    private IBrowserFile File;
     private string response2;
     private Guid clientId = Guid.Empty;
 	 private async Task Submit()

@@ -36,7 +36,7 @@ public partial class UserDialog: ComponentBase
     MudForm form;
     private List<RolesViewModel> Roles = new List<RolesViewModel>();
     private List<CORE.Entities.Client> Clients = new List<CORE.Entities.Client>();
-    private static IBrowserFile File;
+    private IBrowserFile File;
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"plugins", "preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"},
                 {"menubar", "file edit view insert format tools table help"},
