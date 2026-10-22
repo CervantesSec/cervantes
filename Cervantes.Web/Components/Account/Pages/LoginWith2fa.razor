@@ -13,7 +13,6 @@
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<LoginWith2fa> Logger
 @inject IStringLocalizer<Resource> localizer
-@inject ISnackbar Snackbar
 
 <PageTitle>@localizer["twoFactor"] | Cervantes</PageTitle>
 
@@ -24,6 +23,10 @@
     <p class="mud-typography mud-typography-body1">@localizer["loginProtected"]</p>
     <div class="row">
         <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Class="mb-4">@errorMessage</MudAlert>
+            }
             <EditForm Model="Input" FormName="login-with-2fa" OnValidSubmit="OnValidSubmitAsync" method="post" class="mud-form">
                 <input type="hidden" name="ReturnUrl" value="@ReturnUrl"/>
                 <input type="hidden" name="RememberMe" value="@RememberMe"/>
@@ -82,6 +85,8 @@
                throw new InvalidOperationException("Unable to load two-factor authentication user.");
     }
 
+    private string? errorMessage;
+
     private async Task OnValidSubmitAsync()
     {
         var authenticatorCode = Input.TwoFactorCode!.Replace(" ", string.Empty).Replace("-", string.Empty);
@@ -96,14 +101,14 @@
         else if (result.IsLockedOut)
         {
             Logger.LogWarning("User with ID '{UserId}' account locked out.", userId);
-            Snackbar.Add(@localizer["accountLocked"], Severity.Error);
+            errorMessage = localizer["accountLocked"];
 
 
         }
         else
         {
             Logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", userId);
-            Snackbar.Add(@localizer["invalidCode"], Severity.Error);
+            errorMessage = localizer["invalidCode"];
 
             //message = "Error: Invalid authenticator code.";
         }

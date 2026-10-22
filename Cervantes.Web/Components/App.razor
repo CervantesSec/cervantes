@@ -35,14 +35,9 @@
 @code {
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
-    // Account pages read HttpContext and set cookies, so they render statically. A null check in Login is not enough:
-    // a live circuit would run LoginUser, where no cookie can be set. Profile, built as an interactive page, keeps the
-    // interactive router: as an island under a static router it renders before its user loads and crashes.
-    private static readonly string[] InteractiveAccountPages = { "/Account/Profile" };
-
+    // Static vs interactive rendering of /Account pages: see AccountPages.
     private IComponentRenderMode? RenderModeForPage =>
-        HttpContext.Request.Path.StartsWithSegments("/Account")
-        && !InteractiveAccountPages.Any(page => HttpContext.Request.Path.Equals(page, StringComparison.OrdinalIgnoreCase))
+        Cervantes.Web.Helpers.AccountPages.UsesStaticRender(HttpContext.Request.Path)
             ? null
             : InteractiveServer;
 }

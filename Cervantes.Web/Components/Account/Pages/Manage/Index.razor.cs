@@ -302,19 +302,16 @@ public partial class Index: ComponentBase
         
                 if (is2faTokenValid == false)
                 {
-                    Snackbar.Add("twoFactorSetError", Severity.Error);
+                    Snackbar.Add(localizer["twoFactorSetError"], Severity.Error);
                     return;
                 }
 
                 await UserManager.SetTwoFactorEnabledAsync(user, true);
                 //Logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", user.Id);
 
-                Snackbar.Add("twoFactorSetted", Severity.Success);
+                Snackbar.Add(localizer["twoFactorSetted"], Severity.Success);
                 user = userController.GetUser(user.Id);
-                if (await UserManager.CountRecoveryCodesAsync(user) == 0)
-                {
-                    recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-                }
+                recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
                 // Enabling two-factor rotated the stamp; the cookie is renewed when the user leaves the codes.
                 await CaptureOwnStampAsync();
                 signInRefreshPending = true;
@@ -484,7 +481,8 @@ public partial class Index: ComponentBase
         var changePasswordResult = await UserManager.ChangePasswordAsync(user, changePasswordModel.OldPassword, changePasswordModel.NewPassword);
         if (!changePasswordResult.Succeeded)
         {
-            Snackbar.Add(@localizer["passwordChangedError"], Severity.Error);
+            var reasons = string.Join(" ", changePasswordResult.Errors.Select(e => e.Description));
+            Snackbar.Add($"{localizer["passwordChangedError"]} {reasons}".TrimEnd(), Severity.Error);
             return;
         }
         Snackbar.Add(@localizer["passwordChanged"], Severity.Success);

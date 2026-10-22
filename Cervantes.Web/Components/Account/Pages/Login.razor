@@ -16,7 +16,6 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 @inject IStringLocalizer<Resource> localizer
-@inject ISnackbar Snackbar
 @inject IAuditManager AuditManager
 @inject IHttpContextAccessor HttpContextAccessor
 
@@ -47,7 +46,7 @@
         @if (!string.IsNullOrEmpty(errorMessage))
         {
             <div class="d-flex justify-center">
-                <MudAlert Severity="Severity.Error">@errorMessage</MudAlert>
+                <MudAlert Severity="Severity.Error" Class="mb-4">@errorMessage</MudAlert>
             </div>
         }
 
@@ -186,11 +185,11 @@
         else if (result.IsLockedOut)
         {
             Logger.LogWarning("User account locked out.");
-            Snackbar.Add(@localizer["accountLocked"], Severity.Error);
+            errorMessage = localizer["accountLocked"];
         }
         else
         {
-            Snackbar.Add(@localizer["invalidLogin"], Severity.Error);
+            errorMessage = localizer["invalidLogin"];
         }
     }
 
