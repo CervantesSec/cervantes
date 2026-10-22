@@ -703,7 +703,7 @@ public class UserController: ControllerBase
     
     /// <summary>
     /// What a user owns that other people work with, by kind, leaving out zero counts. Personal data (API keys, chats,
-    /// notifications, RSS feeds, Identity rows) is not counted: it goes with the user.
+    /// notifications, RSS feeds, personal notes, Identity rows) is not counted: it goes with the user.
     /// </summary>
     internal Dictionary<string, int> SharedContent(string userId)
     {
@@ -717,7 +717,6 @@ public class UserController: ControllerBase
             ["targets"] = db.Set<Target>().Count(x => x.UserId == userId),
             ["targetServices"] = db.Set<TargetServices>().Count(x => x.UserId == userId),
             ["documents"] = db.Set<Document>().Count(x => x.UserId == userId),
-            ["notes"] = db.Set<Note>().Count(x => x.UserId == userId),
             ["reports"] = db.Set<Report>().Count(x => x.UserId == userId),
             ["reportTemplates"] = db.Set<ReportTemplate>().Count(x => x.UserId == userId),
             ["vaults"] = db.Set<Vault>().Count(x => x.UserId == userId),

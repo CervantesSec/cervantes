@@ -36,7 +36,7 @@ public partial class DeleteUserDialog: ComponentBase
             }
             else if (response is ConflictObjectResult)
             {
-                Snackbar.Add(@localizer["userHasContent"], Severity.Warning);
+                Snackbar.Add(@localizer["userHasContent"], Severity.Error);
             }
             else
             {

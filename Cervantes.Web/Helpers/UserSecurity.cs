@@ -7,7 +7,7 @@ public static class UserSecurity
 {
     /// <summary>
     /// Whether an admin edit changes how the user signs in: email, password, two-factor, external login, lock state or
-    /// role. Only those edits change the security stamp, because a new stamp signs the user out of every session within
+    /// role (adding, changing or dropping one of several). Only those edits change the security stamp, because a new stamp signs the user out of every session within
     /// the validation interval; a profile edit (name, position, avatar) must not.
     /// </summary>
     public static bool ChangesSignIn(ApplicationUser user, UserEditViewModel model, IReadOnlyCollection<string> currentRoles,
@@ -19,7 +19,7 @@ public static class UserSecurity
                || user.TwoFactorEnabled != model.TwoFactorEnabled
                || user.ExternalLogin != model.ExternalLogin
                || locked != model.Lockout
-               || (!string.IsNullOrEmpty(model.Role) && !currentRoles.Contains(model.Role));
+               || (!string.IsNullOrEmpty(model.Role) && !(currentRoles.Contains(model.Role) && currentRoles.All(x => x == model.Role)));
     }
 
     /// <summary>

@@ -128,6 +128,15 @@ public class UserSecurityTests
     }
 
     [Fact]
+    public void ChangesSignIn_DroppingOneOfSeveralRoles()
+    {
+        var model = Model();
+        model.Role = "User";
+
+        Assert.True(UserSecurity.ChangesSignIn(User(), model, new[] { "User", "Manager" }, Now));
+    }
+
+    [Fact]
     public void ChangesSignIn_EmptyRole()
     {
         var model = Model();
