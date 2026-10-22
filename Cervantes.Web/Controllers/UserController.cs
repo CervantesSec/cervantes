@@ -207,7 +207,7 @@ public class UserController: ControllerBase
             if (ModelState.IsValid)
             {
                 await authRolesAdminService.CreateRoleToPermissionsAsync(model.Name, model.Permissions, sanitizer.Sanitize(model.Description));
-                return Created();
+                return Created((string?)null, new { name = model.Name });
             }
             var errors = ModelState
                 .Where(x => x.Value.Errors.Count > 0)

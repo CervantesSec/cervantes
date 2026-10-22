@@ -351,7 +351,7 @@ public class JiraController : Controller
             }
 
             _logger.LogInformation( "Jira comment added successfully on Vuln {0} User {1}", model.VulnId,aspNetUserId);
-            return Created();
+            return Created((string?)null, new { vulnId = model.VulnId, jiraKey = jira.JiraKey });
         }
         catch (Exception e)
         {
