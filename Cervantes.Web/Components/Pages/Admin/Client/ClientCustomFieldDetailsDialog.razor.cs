@@ -23,7 +23,8 @@ public partial class ClientCustomFieldDetailsDialog : ComponentBase
     [Inject] private AuthenticationStateProvider authenticationStateProvider { get; set; }
     
     MudForm form;
-    ClientCustomFieldEditValidator validator = new ClientCustomFieldEditValidator();
+    private ClientCustomFieldEditValidator? _validator;
+    ClientCustomFieldEditValidator validator => _validator ??= new ClientCustomFieldEditValidator(localizer);
     
     private ClientCustomFieldEditViewModel model = new ClientCustomFieldEditViewModel();
     private string optionsText = string.Empty;
@@ -146,23 +147,23 @@ public partial class ClientCustomFieldDetailsDialog : ComponentBase
 
 public class ClientCustomFieldEditValidator : AbstractValidator<ClientCustomFieldEditViewModel>
 {
-    public ClientCustomFieldEditValidator()
+    public ClientCustomFieldEditValidator(IStringLocalizer? localizer = null)
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage("Name is required")
+            .WithMessage(localizer?["nameRequired"] ?? "Name is required")
             .MaximumLength(100)
             .WithMessage("Name cannot exceed 100 characters");
 
         RuleFor(x => x.Label)
             .NotEmpty()
-            .WithMessage("Label is required")
+            .WithMessage(localizer?["labelRequired"] ?? "Label is required")
             .MaximumLength(200)
             .WithMessage("Label cannot exceed 200 characters");
 
         RuleFor(x => x.Type)
             .NotNull()
-            .WithMessage("Type is required");
+            .WithMessage(localizer?["typeRequired"] ?? "Type is required");
 
         RuleFor(x => x.Order)
             .GreaterThanOrEqualTo(0)

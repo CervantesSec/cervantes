@@ -17,7 +17,8 @@ public partial class CreateClientCustomFieldDialog : ComponentBase
     [Inject] private ISnackbar Snackbar { get; set; }
     
     MudForm form;
-    ClientCustomFieldCreateValidator validator = new ClientCustomFieldCreateValidator();
+    private ClientCustomFieldCreateValidator? _validator;
+    ClientCustomFieldCreateValidator validator => _validator ??= new ClientCustomFieldCreateValidator(localizer);
     
     private ClientCustomFieldCreateViewModel model = new ClientCustomFieldCreateViewModel();
     private string optionsText = string.Empty;
@@ -92,23 +93,23 @@ public partial class CreateClientCustomFieldDialog : ComponentBase
 
 public class ClientCustomFieldCreateValidator : AbstractValidator<ClientCustomFieldCreateViewModel>
 {
-    public ClientCustomFieldCreateValidator()
+    public ClientCustomFieldCreateValidator(IStringLocalizer? localizer = null)
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage("Name is required")
+            .WithMessage(localizer?["nameRequired"] ?? "Name is required")
             .MaximumLength(100)
             .WithMessage("Name cannot exceed 100 characters");
 
         RuleFor(x => x.Label)
             .NotEmpty()
-            .WithMessage("Label is required")
+            .WithMessage(localizer?["labelRequired"] ?? "Label is required")
             .MaximumLength(200)
             .WithMessage("Label cannot exceed 200 characters");
 
         RuleFor(x => x.Type)
             .NotNull()
-            .WithMessage("Type is required");
+            .WithMessage(localizer?["typeRequired"] ?? "Type is required");
 
         RuleFor(x => x.Order)
             .GreaterThanOrEqualTo(0)

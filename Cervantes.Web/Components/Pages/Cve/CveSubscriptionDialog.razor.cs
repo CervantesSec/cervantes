@@ -181,7 +181,7 @@ public partial class CveSubscriptionDialog
         {
             if (string.IsNullOrEmpty(subscriptionModel.Name))
             {
-                errors.Add("Name is required");
+                errors.Add(localizer["nameRequired"]);
             }
         }
 
@@ -191,7 +191,7 @@ public partial class CveSubscriptionDialog
             {
                 if (subscriptionModel.MinCvssScore > subscriptionModel.MaxCvssScore)
                 {
-                    errors.Add("Minimum CVSS score cannot be greater than maximum CVSS score");
+                    errors.Add(localizer["cvssRangeInvalid"]);
                 }
             }
         }

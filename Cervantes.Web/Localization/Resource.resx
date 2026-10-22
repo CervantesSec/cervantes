@@ -3372,4 +3372,238 @@ Option 3</value>
   <data name="roleDescriptionPlaceholder" xml:space="preserve">
     <value>Runs tests in the projects they are a member of</value>
   </data>
+  <data name="labelRequired" xml:space="preserve">
+    <value>Label is required</value>
+  </data>
+  <data name="typeRequired" xml:space="preserve">
+    <value>Type is required</value>
+  </data>
+  <data name="cvssRangeInvalid" xml:space="preserve">
+    <value>The minimum CVSS score cannot be greater than the maximum</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="areYouSureDelete" xml:space="preserve">
+    <value>Are you sure you want to delete</value>
+  </data>
+  <data name="areYouSureDeleteBulk" xml:space="preserve">
+    <value>Are you sure you want to delete</value>
+  </data>
+  <data name="areYouSureDeleteMultiple" xml:space="preserve">
+    <value>Are you sure you want to delete</value>
+  </data>
+  <data name="attachmentAddedError" xml:space="preserve">
+    <value>An error occurred adding the attachment!</value>
+  </data>
+  <data name="boolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="cannotDeleteSystemTemplate" xml:space="preserve">
+    <value>System templates cannot be deleted</value>
+  </data>
+  <data name="categoryDeletedError" xml:space="preserve">
+    <value>An error occurred deleting the category!</value>
+  </data>
+  <data name="checklistCreatedSuccessfully" xml:space="preserve">
+    <value>Checklist created successfully</value>
+  </data>
+  <data name="checklistDeletedSuccessfully" xml:space="preserve">
+    <value>Checklist deleted successfully</value>
+  </data>
+  <data name="checklists" xml:space="preserve">
+    <value>Checklists</value>
+  </data>
+  <data name="checklistsDeleted" xml:space="preserve">
+    <value>checklists deleted</value>
+  </data>
+  <data name="checklistsDeletedSuccessfully" xml:space="preserve">
+    <value>checklists deleted successfully</value>
+  </data>
+  <data name="criticalSeverity" xml:space="preserve">
+    <value>Critical (9.0-10.0)</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="deleteBulk" xml:space="preserve">
+    <value>Bulk delete</value>
+  </data>
+  <data name="deleteCustomChecklists" xml:space="preserve">
+    <value>Delete custom checklists</value>
+  </data>
+  <data name="deleteCustomField" xml:space="preserve">
+    <value>Delete Custom Field</value>
+  </data>
+  <data name="deleteWarning" xml:space="preserve">
+    <value>This action cannot be undone.</value>
+  </data>
+  <data name="errorCreatingChecklist" xml:space="preserve">
+    <value>Error creating checklist</value>
+  </data>
+  <data name="errorCreatingTemplate" xml:space="preserve">
+    <value>Error creating template</value>
+  </data>
+  <data name="errorDeletingChecklist" xml:space="preserve">
+    <value>Error deleting checklist</value>
+  </data>
+  <data name="errorDeletingChecklists" xml:space="preserve">
+    <value>Error deleting checklists</value>
+  </data>
+  <data name="errorDeletingTemplate" xml:space="preserve">
+    <value>Error deleting template</value>
+  </data>
+  <data name="errorLoadingTargets" xml:space="preserve">
+    <value>Error loading targets</value>
+  </data>
+  <data name="errorLoadingTemplates" xml:space="preserve">
+    <value>Error loading templates</value>
+  </data>
+  <data name="errorOccurred" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="errors" xml:space="preserve">
+    <value>Errors</value>
+  </data>
+  <data name="failed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="highSeverity" xml:space="preserve">
+    <value>High (7.0-8.9)</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="insert" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="jira" xml:space="preserve">
+    <value>Jira</value>
+  </data>
+  <data name="kanban" xml:space="preserve">
+    <value>Kanban</value>
+  </data>
+  <data name="load" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="lowSeverity" xml:space="preserve">
+    <value>Low (0.1-3.9)</value>
+  </data>
+  <data name="mediumSeverity" xml:space="preserve">
+    <value>Medium (4.0-6.9)</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="noDescription" xml:space="preserve">
+    <value>No description</value>
+  </data>
+  <data name="noFile" xml:space="preserve">
+    <value>No file selected</value>
+  </data>
+  <data name="noObjectives" xml:space="preserve">
+    <value>No objectives</value>
+  </data>
+  <data name="noPassCriteria" xml:space="preserve">
+    <value>No pass criteria</value>
+  </data>
+  <data name="noTestProcedure" xml:space="preserve">
+    <value>No test procedure</value>
+  </data>
+  <data name="nonCompliance" xml:space="preserve">
+    <value>Non-compliance</value>
+  </data>
+  <data name="number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="optionsHelp" xml:space="preserve">
+    <value>One option per line for select fields</value>
+  </data>
+  <data name="other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="outofScope" xml:space="preserve">
+    <value>Out of scope</value>
+  </data>
+  <data name="privacyViolation" xml:space="preserve">
+    <value>Privacy violation</value>
+  </data>
+  <data name="reportDownloadError" xml:space="preserve">
+    <value>An error occurred downloading the report!</value>
+  </data>
+  <data name="reputationDamage" xml:space="preserve">
+    <value>Reputation damage</value>
+  </data>
+  <data name="restoreError" xml:space="preserve">
+    <value>An error occurred restoring the backup!</value>
+  </data>
+  <data name="select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="services" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="skipped" xml:space="preserve">
+    <value>Skipped</value>
+  </data>
+  <data name="someTemplatesCouldNotBeDeleted" xml:space="preserve">
+    <value>{count} templates could not be deleted</value>
+  </data>
+  <data name="syncCompleted" xml:space="preserve">
+    <value>Sync completed</value>
+  </data>
+  <data name="syncError" xml:space="preserve">
+    <value>Sync error</value>
+  </data>
+  <data name="syncFailed" xml:space="preserve">
+    <value>Sync failed</value>
+  </data>
+  <data name="taskStatus" xml:space="preserve">
+    <value>Task status</value>
+  </data>
+  <data name="templateCreatedSuccessfully" xml:space="preserve">
+    <value>Template created successfully</value>
+  </data>
+  <data name="templateDeletedSuccessfully" xml:space="preserve">
+    <value>Template deleted successfully</value>
+  </data>
+  <data name="templateUpdated" xml:space="preserve">
+    <value>Template updated successfully</value>
+  </data>
+  <data name="templatesDeletedSuccessfully" xml:space="preserve">
+    <value>{count} templates deleted successfully</value>
+  </data>
+  <data name="textarea" xml:space="preserve">
+    <value>Text area</value>
+  </data>
+  <data name="todo" xml:space="preserve">
+    <value>To do</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="validationFailed" xml:space="preserve">
+    <value>Validation failed</value>
+  </data>
+  <data name="viewCustomChecklist" xml:space="preserve">
+    <value>View custom checklist</value>
+  </data>
+  <data name="visible" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="deleteSelectedCount" xml:space="preserve">
+    <value>Are you sure you want to delete the {0} selected items?</value>
+  </data>
+  <data name="fileTypeNotAllowed" xml:space="preserve">
+    <value>This file type is not allowed.</value>
+  </data>
 </root>

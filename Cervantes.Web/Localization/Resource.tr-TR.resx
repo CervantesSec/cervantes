@@ -2814,4 +2814,580 @@
   <data name="roleDescriptionPlaceholder" xml:space="preserve">
     <value>Üyesi olduğu projelerde test yapar</value>
   </data>
+  <data name="labelRequired" xml:space="preserve">
+    <value>Etiket zorunludur</value>
+  </data>
+  <data name="typeRequired" xml:space="preserve">
+    <value>Tür zorunludur</value>
+  </data>
+  <data name="cvssRangeInvalid" xml:space="preserve">
+    <value>Minimum CVSS puanı maksimumdan büyük olamaz</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Yönetim</value>
+  </data>
+  <data name="actualTimeMinutes" xml:space="preserve">
+    <value>Gerçek süre (dakika)</value>
+  </data>
+  <data name="addCategory" xml:space="preserve">
+    <value>Kategori ekle</value>
+  </data>
+  <data name="addCustomKeyword" xml:space="preserve">
+    <value>Özel anahtar kelime ekle</value>
+  </data>
+  <data name="addNotesPlaceholder" xml:space="preserve">
+    <value>Bu CVE hakkındaki notlarınızı ekleyin...</value>
+  </data>
+  <data name="addedToFavorites" xml:space="preserve">
+    <value>Favorilere eklendi</value>
+  </data>
+  <data name="additionalNotesPlaceholder" xml:space="preserve">
+    <value>Bu CVE hakkında ek notlar...</value>
+  </data>
+  <data name="archive" xml:space="preserve">
+    <value>Arşivle</value>
+  </data>
+  <data name="areYouSureDelete" xml:space="preserve">
+    <value>Şunu silmek istediğinizden emin misiniz:</value>
+  </data>
+  <data name="areYouSureDeleteBulk" xml:space="preserve">
+    <value>Şunları silmek istediğinizden emin misiniz:</value>
+  </data>
+  <data name="areYouSureDeleteMultiple" xml:space="preserve">
+    <value>Şunları silmek istediğinizden emin misiniz:</value>
+  </data>
+  <data name="assignerOrganization" xml:space="preserve">
+    <value>Atayan kuruluş</value>
+  </data>
+  <data name="associatedVulnerability" xml:space="preserve">
+    <value>İlişkili güvenlik açığı</value>
+  </data>
+  <data name="attachmentAddedError" xml:space="preserve">
+    <value>Ek eklenirken bir hata oluştu!</value>
+  </data>
+  <data name="boolean" xml:space="preserve">
+    <value>Mantıksal</value>
+  </data>
+  <data name="briefDescriptionPlaceholder" xml:space="preserve">
+    <value>Bu aboneliğin kısa açıklaması...</value>
+  </data>
+  <data name="cannotDeleteSystemTemplate" xml:space="preserve">
+    <value>Sistem şablonları silinemez</value>
+  </data>
+  <data name="categoryDeletedError" xml:space="preserve">
+    <value>Kategori silinirken bir hata oluştu!</value>
+  </data>
+  <data name="checklistCreatedSuccessfully" xml:space="preserve">
+    <value>Kontrol listesi başarıyla oluşturuldu</value>
+  </data>
+  <data name="checklistDeletedSuccessfully" xml:space="preserve">
+    <value>Kontrol listesi başarıyla silindi</value>
+  </data>
+  <data name="checklistItem" xml:space="preserve">
+    <value>Kontrol listesi öğesi</value>
+  </data>
+  <data name="checklists" xml:space="preserve">
+    <value>Kontrol listeleri</value>
+  </data>
+  <data name="checklistsDeleted" xml:space="preserve">
+    <value>kontrol listesi silindi</value>
+  </data>
+  <data name="checklistsDeletedSuccessfully" xml:space="preserve">
+    <value>kontrol listesi başarıyla silindi</value>
+  </data>
+  <data name="cisaKevInformation" xml:space="preserve">
+    <value>CISA KEV bilgileri</value>
+  </data>
+  <data name="confirmDeleteCustomField" xml:space="preserve">
+    <value>Bu özel alanı silmek istediğinizden emin misiniz</value>
+  </data>
+  <data name="confirmDeleteCustomFields" xml:space="preserve">
+    <value>Bu özel alanları silmek istediğinizden emin misiniz</value>
+  </data>
+  <data name="createCve" xml:space="preserve">
+    <value>CVE oluştur</value>
+  </data>
+  <data name="customFieldCreateError" xml:space="preserve">
+    <value>Özel alan oluşturulurken hata oluştu</value>
+  </data>
+  <data name="customFieldDeleteError" xml:space="preserve">
+    <value>Özel alan silinirken hata oluştu</value>
+  </data>
+  <data name="customFieldUpdateError" xml:space="preserve">
+    <value>Özel alan güncellenirken hata oluştu</value>
+  </data>
+  <data name="customFieldsDeleteError" xml:space="preserve">
+    <value>özel alan silinemedi</value>
+  </data>
+  <data name="customFieldsDeleted" xml:space="preserve">
+    <value>özel alan başarıyla silindi</value>
+  </data>
+  <data name="cveArchived" xml:space="preserve">
+    <value>CVE arşivlendi</value>
+  </data>
+  <data name="cveCreatedSuccessfully" xml:space="preserve">
+    <value>CVE başarıyla oluşturuldu</value>
+  </data>
+  <data name="cveDatabase" xml:space="preserve">
+    <value>CVE veritabanı</value>
+  </data>
+  <data name="cveDetails" xml:space="preserve">
+    <value>CVE ayrıntıları</value>
+  </data>
+  <data name="cveId" xml:space="preserve">
+    <value>CVE kimliği</value>
+  </data>
+  <data name="cveIdRequired" xml:space="preserve">
+    <value>CVE kimliği gerekli</value>
+  </data>
+  <data name="cveNotFound" xml:space="preserve">
+    <value>CVE bulunamadı</value>
+  </data>
+  <data name="cveNotes" xml:space="preserve">
+    <value>CVE notları</value>
+  </data>
+  <data name="cveUnarchived" xml:space="preserve">
+    <value>CVE arşivden çıkarıldı</value>
+  </data>
+  <data name="cves" xml:space="preserve">
+    <value>CVE'ler</value>
+  </data>
+  <data name="cvssScore" xml:space="preserve">
+    <value>CVSS puanı</value>
+  </data>
+  <data name="cvssV3BaseScore" xml:space="preserve">
+    <value>CVSS v3.1 temel puanı</value>
+  </data>
+  <data name="cvssV3Information" xml:space="preserve">
+    <value>CVSS v3.1 bilgileri</value>
+  </data>
+  <data name="cvssV3Severity" xml:space="preserve">
+    <value>CVSS v3.1 önem derecesi</value>
+  </data>
+  <data name="cvssV3Vector" xml:space="preserve">
+    <value>CVSS v3.1 vektörü</value>
+  </data>
+  <data name="cweInformation" xml:space="preserve">
+    <value>CWE bilgileri</value>
+  </data>
+  <data name="czech" xml:space="preserve">
+    <value>Çekçe</value>
+  </data>
+  <data name="daily" xml:space="preserve">
+    <value>Günlük</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Varsayılan</value>
+  </data>
+  <data name="deleteBulk" xml:space="preserve">
+    <value>Toplu silme</value>
+  </data>
+  <data name="deleteCustomChecklists" xml:space="preserve">
+    <value>Özel kontrol listelerini sil</value>
+  </data>
+  <data name="deleteCustomFieldWarning" xml:space="preserve">
+    <value>Bu işlem özel alanı ve tüm değerlerini kalıcı olarak silecektir. Bu işlem geri alınamaz.</value>
+  </data>
+  <data name="deleteCustomFieldsWarning" xml:space="preserve">
+    <value>Bu işlem seçili özel alanları ve tüm değerlerini kalıcı olarak silecektir. Bu işlem geri alınamaz.</value>
+  </data>
+  <data name="deleteWarning" xml:space="preserve">
+    <value>Bu işlem geri alınamaz.</value>
+  </data>
+  <data name="descriptionRequired" xml:space="preserve">
+    <value>Açıklama gerekli</value>
+  </data>
+  <data name="difficultyRating" xml:space="preserve">
+    <value>Zorluk derecesi</value>
+  </data>
+  <data name="editChecklistNote" xml:space="preserve">
+    <value>Kontrol listesi adını ve notlarını düzenleyebilirsiniz. Şablon ve hedef değiştirilemez.</value>
+  </data>
+  <data name="editExecution" xml:space="preserve">
+    <value>Yürütmeyi düzenle</value>
+  </data>
+  <data name="enterEvidenceLinksOrDescription" xml:space="preserve">
+    <value>Kanıt bağlantılarını veya açıklamasını girin</value>
+  </data>
+  <data name="enterKeywordPlaceholder" xml:space="preserve">
+    <value>Anahtar kelimeyi girip Enter'a basın</value>
+  </data>
+  <data name="enterNotesAboutExecution" xml:space="preserve">
+    <value>Yürütme hakkında notlar girin</value>
+  </data>
+  <data name="epssInformation" xml:space="preserve">
+    <value>EPSS bilgileri</value>
+  </data>
+  <data name="epssPercentile" xml:space="preserve">
+    <value>EPSS yüzdelik dilimi</value>
+  </data>
+  <data name="epssScore" xml:space="preserve">
+    <value>EPSS puanı</value>
+  </data>
+  <data name="errorArchivingCve" xml:space="preserve">
+    <value>CVE arşivlenirken hata oluştu</value>
+  </data>
+  <data name="errorCreatingChecklist" xml:space="preserve">
+    <value>Kontrol listesi oluşturulurken hata oluştu</value>
+  </data>
+  <data name="errorCreatingTemplate" xml:space="preserve">
+    <value>Şablon oluşturulurken hata oluştu</value>
+  </data>
+  <data name="errorDeletingChecklist" xml:space="preserve">
+    <value>Kontrol listesi silinirken hata oluştu</value>
+  </data>
+  <data name="errorDeletingChecklists" xml:space="preserve">
+    <value>Kontrol listeleri silinirken hata oluştu</value>
+  </data>
+  <data name="errorDeletingTemplate" xml:space="preserve">
+    <value>Şablon silinirken hata oluştu</value>
+  </data>
+  <data name="errorLoadingChecklistDetails" xml:space="preserve">
+    <value>Kontrol listesi ayrıntıları yüklenirken hata oluştu</value>
+  </data>
+  <data name="errorLoadingCves" xml:space="preserve">
+    <value>CVE'ler yüklenirken hata oluştu</value>
+  </data>
+  <data name="errorLoadingTargets" xml:space="preserve">
+    <value>Hedefler yüklenirken hata oluştu</value>
+  </data>
+  <data name="errorLoadingTemplates" xml:space="preserve">
+    <value>Şablonlar yüklenirken hata oluştu</value>
+  </data>
+  <data name="errorLoadingVulnerabilities" xml:space="preserve">
+    <value>Güvenlik açıkları yüklenirken hata oluştu</value>
+  </data>
+  <data name="errorOccurred" xml:space="preserve">
+    <value>Bir hata oluştu</value>
+  </data>
+  <data name="errorSearchingCves" xml:space="preserve">
+    <value>CVE'ler aranırken hata oluştu</value>
+  </data>
+  <data name="errorUpdatingExecution" xml:space="preserve">
+    <value>Yürütme güncellenirken hata oluştu</value>
+  </data>
+  <data name="errorUpdatingExecutionStatus" xml:space="preserve">
+    <value>Yürütme durumu güncellenirken hata oluştu</value>
+  </data>
+  <data name="errorUpdatingFavorite" xml:space="preserve">
+    <value>Favori güncellenirken hata oluştu</value>
+  </data>
+  <data name="errors" xml:space="preserve">
+    <value>Hata</value>
+  </data>
+  <data name="estimatedTimeMinutes" xml:space="preserve">
+    <value>Tahmini süre (dakika)</value>
+  </data>
+  <data name="evidence" xml:space="preserve">
+    <value>Kanıt</value>
+  </data>
+  <data name="executionStatusUpdated" xml:space="preserve">
+    <value>Yürütme durumu başarıyla güncellendi</value>
+  </data>
+  <data name="executionUpdatedSuccessfully" xml:space="preserve">
+    <value>Yürütme başarıyla güncellendi</value>
+  </data>
+  <data name="failed" xml:space="preserve">
+    <value>Başarısız</value>
+  </data>
+  <data name="filters" xml:space="preserve">
+    <value>Filtreler</value>
+  </data>
+  <data name="finished" xml:space="preserve">
+    <value>Tamamlandı</value>
+  </data>
+  <data name="generate" xml:space="preserve">
+    <value>Oluştur</value>
+  </data>
+  <data name="german" xml:space="preserve">
+    <value>Almanca</value>
+  </data>
+  <data name="hard" xml:space="preserve">
+    <value>Zor</value>
+  </data>
+  <data name="immediate" xml:space="preserve">
+    <value>Anında</value>
+  </data>
+  <data name="inApp" xml:space="preserve">
+    <value>Uygulama içi</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="insert" xml:space="preserve">
+    <value>Ekle</value>
+  </data>
+  <data name="italian" xml:space="preserve">
+    <value>İtalyanca</value>
+  </data>
+  <data name="items" xml:space="preserve">
+    <value>Öğeler</value>
+  </data>
+  <data name="jira" xml:space="preserve">
+    <value>Jira</value>
+  </data>
+  <data name="kanban" xml:space="preserve">
+    <value>Kanban</value>
+  </data>
+  <data name="kev" xml:space="preserve">
+    <value>KEV</value>
+  </data>
+  <data name="kevDueDate" xml:space="preserve">
+    <value>KEV son tarihi</value>
+  </data>
+  <data name="knownExploited" xml:space="preserve">
+    <value>Bilinen istismar</value>
+  </data>
+  <data name="knownExploitedVulnerability" xml:space="preserve">
+    <value>Bilinen istismar edilen güvenlik açığı</value>
+  </data>
+  <data name="lastModifiedDate" xml:space="preserve">
+    <value>Son değişiklik tarihi</value>
+  </data>
+  <data name="load" xml:space="preserve">
+    <value>Yükle</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>Yükleniyor...</value>
+  </data>
+  <data name="maxCvssScore" xml:space="preserve">
+    <value>Maksimum CVSS puanı</value>
+  </data>
+  <data name="minCvssScore" xml:space="preserve">
+    <value>Minimum CVSS puanı</value>
+  </data>
+  <data name="minEpssScore" xml:space="preserve">
+    <value>Minimum EPSS puanı</value>
+  </data>
+  <data name="modified" xml:space="preserve">
+    <value>Değiştirildi</value>
+  </data>
+  <data name="nameRequired" xml:space="preserve">
+    <value>Ad gerekli</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Yeni</value>
+  </data>
+  <data name="noDescription" xml:space="preserve">
+    <value>Açıklama yok</value>
+  </data>
+  <data name="noFile" xml:space="preserve">
+    <value>Dosya seçilmedi</value>
+  </data>
+  <data name="noNotes" xml:space="preserve">
+    <value>Not yok</value>
+  </data>
+  <data name="noObjectives" xml:space="preserve">
+    <value>Amaç yok</value>
+  </data>
+  <data name="noPassCriteria" xml:space="preserve">
+    <value>Geçme kriteri yok</value>
+  </data>
+  <data name="noTarget" xml:space="preserve">
+    <value>Hedef yok</value>
+  </data>
+  <data name="noTestProcedure" xml:space="preserve">
+    <value>Test prosedürü yok</value>
+  </data>
+  <data name="noVulnerability" xml:space="preserve">
+    <value>Güvenlik açığı yok</value>
+  </data>
+  <data name="nonCompliance" xml:space="preserve">
+    <value>Uyumsuzluk</value>
+  </data>
+  <data name="notApplicable" xml:space="preserve">
+    <value>Uygulanamaz</value>
+  </data>
+  <data name="notesHelperText" xml:space="preserve">
+    <value>Bu notlar yalnızca size ve ekibinize görünür</value>
+  </data>
+  <data name="notificationFrequency" xml:space="preserve">
+    <value>Bildirim sıklığı</value>
+  </data>
+  <data name="notificationMethod" xml:space="preserve">
+    <value>Bildirim yöntemi</value>
+  </data>
+  <data name="notificationSettings" xml:space="preserve">
+    <value>Bildirim ayarları</value>
+  </data>
+  <data name="number" xml:space="preserve">
+    <value>Sayı</value>
+  </data>
+  <data name="onHold" xml:space="preserve">
+    <value>Beklemede</value>
+  </data>
+  <data name="optionsHelp" xml:space="preserve">
+    <value>Seçim alanları için seçenekler (her satırda bir tane)</value>
+  </data>
+  <data name="other" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="outofScope" xml:space="preserve">
+    <value>Kapsam Dışı</value>
+  </data>
+  <data name="passed" xml:space="preserve">
+    <value>Başarılı</value>
+  </data>
+  <data name="primaryCweId" xml:space="preserve">
+    <value>Birincil CWE kimliği</value>
+  </data>
+  <data name="primaryCweName" xml:space="preserve">
+    <value>Birincil CWE adı</value>
+  </data>
+  <data name="privacyViolation" xml:space="preserve">
+    <value>Gizlilik ihlali</value>
+  </data>
+  <data name="published" xml:space="preserve">
+    <value>Yayımlandı</value>
+  </data>
+  <data name="publishedDate" xml:space="preserve">
+    <value>Yayın tarihi</value>
+  </data>
+  <data name="quickSearch" xml:space="preserve">
+    <value>Hızlı arama</value>
+  </data>
+  <data name="rejected" xml:space="preserve">
+    <value>Reddedildi</value>
+  </data>
+  <data name="removedFromFavorites" xml:space="preserve">
+    <value>Favorilerden kaldırıldı</value>
+  </data>
+  <data name="reportDownloadError" xml:space="preserve">
+    <value>Rapor indirilirken bir hata oluştu!</value>
+  </data>
+  <data name="reputationDamage" xml:space="preserve">
+    <value>İtibar kaybı</value>
+  </data>
+  <data name="restoreError" xml:space="preserve">
+    <value>Yedek geri yüklenirken bir hata oluştu!</value>
+  </data>
+  <data name="saveNotes" xml:space="preserve">
+    <value>Notları kaydet</value>
+  </data>
+  <data name="searchAndFilters" xml:space="preserve">
+    <value>Arama ve filtreler</value>
+  </data>
+  <data name="searchByCveId" xml:space="preserve">
+    <value>CVE kimliği, başlık veya açıklamaya göre ara</value>
+  </data>
+  <data name="searchCves" xml:space="preserve">
+    <value>CVE ara</value>
+  </data>
+  <data name="select" xml:space="preserve">
+    <value>Seçim listesi</value>
+  </data>
+  <data name="selectOption" xml:space="preserve">
+    <value>Bir seçenek seçin</value>
+  </data>
+  <data name="services" xml:space="preserve">
+    <value>Hizmetler</value>
+  </data>
+  <data name="skipped" xml:space="preserve">
+    <value>Atlanan</value>
+  </data>
+  <data name="someTemplatesCouldNotBeDeleted" xml:space="preserve">
+    <value>{count} şablon silinemedi</value>
+  </data>
+  <data name="sourceIdentifier" xml:space="preserve">
+    <value>Kaynak tanımlayıcı</value>
+  </data>
+  <data name="sourceInformation" xml:space="preserve">
+    <value>Kaynak bilgileri</value>
+  </data>
+  <data name="state" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="subscriptionName" xml:space="preserve">
+    <value>Abonelik adı</value>
+  </data>
+  <data name="syncCompleted" xml:space="preserve">
+    <value>Senkronizasyon tamamlandı</value>
+  </data>
+  <data name="syncCves" xml:space="preserve">
+    <value>CVE'leri senkronize et</value>
+  </data>
+  <data name="syncError" xml:space="preserve">
+    <value>Senkronizasyon hatası</value>
+  </data>
+  <data name="syncFailed" xml:space="preserve">
+    <value>Senkronizasyon başarısız oldu</value>
+  </data>
+  <data name="taskStatus" xml:space="preserve">
+    <value>Görev durumu</value>
+  </data>
+  <data name="templateCreatedSuccessfully" xml:space="preserve">
+    <value>Şablon başarıyla oluşturuldu</value>
+  </data>
+  <data name="templateDeletedSuccessfully" xml:space="preserve">
+    <value>Şablon başarıyla silindi</value>
+  </data>
+  <data name="templateUpdated" xml:space="preserve">
+    <value>Şablon başarıyla güncellendi</value>
+  </data>
+  <data name="templates" xml:space="preserve">
+    <value>Şablonlar</value>
+  </data>
+  <data name="templatesDeletedSuccessfully" xml:space="preserve">
+    <value>{count} şablon başarıyla silindi</value>
+  </data>
+  <data name="testedBy" xml:space="preserve">
+    <value>Test eden</value>
+  </data>
+  <data name="textarea" xml:space="preserve">
+    <value>Metin alanı</value>
+  </data>
+  <data name="titleRequired" xml:space="preserve">
+    <value>Başlık gerekli</value>
+  </data>
+  <data name="todo" xml:space="preserve">
+    <value>Yapılacak</value>
+  </data>
+  <data name="toggleFavorite" xml:space="preserve">
+    <value>Favori durumunu değiştir</value>
+  </data>
+  <data name="unsupportedFieldType" xml:space="preserve">
+    <value>Desteklenmeyen alan türü</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Güncelle</value>
+  </data>
+  <data name="updateSubscription" xml:space="preserve">
+    <value>Aboneliği güncelle</value>
+  </data>
+  <data name="updated" xml:space="preserve">
+    <value>Güncellenen</value>
+  </data>
+  <data name="validationFailed" xml:space="preserve">
+    <value>Doğrulama başarısız oldu</value>
+  </data>
+  <data name="veryEasy" xml:space="preserve">
+    <value>Çok kolay</value>
+  </data>
+  <data name="veryHard" xml:space="preserve">
+    <value>Çok zor</value>
+  </data>
+  <data name="viewCustomChecklist" xml:space="preserve">
+    <value>Özel kontrol listesini görüntüle</value>
+  </data>
+  <data name="viewDetails" xml:space="preserve">
+    <value>Ayrıntıları görüntüle</value>
+  </data>
+  <data name="viewStatistics" xml:space="preserve">
+    <value>İstatistikleri görüntüle</value>
+  </data>
+  <data name="visible" xml:space="preserve">
+    <value>Görünür</value>
+  </data>
+  <data name="weekly" xml:space="preserve">
+    <value>Haftalık</value>
+  </data>
+  <data name="withdrawn" xml:space="preserve">
+    <value>Geri çekildi</value>
+  </data>
+  <data name="deleteSelectedCount" xml:space="preserve">
+    <value>Seçili {0} öğeyi silmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="fileTypeNotAllowed" xml:space="preserve">
+    <value>Bu dosya türüne izin verilmiyor.</value>
+  </data>
 </root>

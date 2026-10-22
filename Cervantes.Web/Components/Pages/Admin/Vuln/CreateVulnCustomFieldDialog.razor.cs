@@ -18,7 +18,8 @@ public partial class CreateVulnCustomFieldDialog : ComponentBase
     [Inject] private ISnackbar Snackbar { get; set; }
     
     MudForm form;
-    VulnCustomFieldValidator validator = new VulnCustomFieldValidator();
+    private VulnCustomFieldValidator? _validator;
+    VulnCustomFieldValidator validator => _validator ??= new VulnCustomFieldValidator(localizer);
     
     private VulnCustomFieldCreateViewModel model = new VulnCustomFieldCreateViewModel();
     private string optionsText = string.Empty;
@@ -89,15 +90,15 @@ public partial class CreateVulnCustomFieldDialog : ComponentBase
 
     public class VulnCustomFieldValidator : AbstractValidator<VulnCustomFieldCreateViewModel>
     {
-        public VulnCustomFieldValidator()
+        public VulnCustomFieldValidator(IStringLocalizer? localizer = null)
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("Name is required")
+                .NotEmpty().WithMessage(localizer?["nameRequired"] ?? "Name is required")
                 .Length(1, 100).WithMessage("Name must be between 1 and 100 characters")
                 .Matches(@"^[a-zA-Z0-9\s_]+$").WithMessage("Name can only contain alphanumeric characters, spaces, and underscores");
                 
             RuleFor(x => x.Label)
-                .NotEmpty().WithMessage("Label is required")
+                .NotEmpty().WithMessage(localizer?["labelRequired"] ?? "Label is required")
                 .Length(1, 200).WithMessage("Label must be between 1 and 200 characters");
                 
             RuleFor(x => x.Order)

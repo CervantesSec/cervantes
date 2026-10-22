@@ -807,5 +807,12 @@ public partial class VulnDialog: ComponentBase
         // We could add validation here if needed
         await Task.CompletedTask;
     }
-    
+
+    // Enum values shown in the detail view, translated through their camelCase resource key when one exists.
+    private string EnumText(Enum value)
+    {
+        var name = value.ToString();
+        var text = localizer[char.ToLowerInvariant(name[0]) + name[1..]];
+        return text.ResourceNotFound ? name : text.Value;
+    }
 }

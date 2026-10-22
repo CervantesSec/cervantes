@@ -3394,4 +3394,250 @@ Opción 3</value>
   <data name="roleDescriptionPlaceholder" xml:space="preserve">
     <value>Realiza pruebas en los proyectos de los que es miembro</value>
   </data>
+  <data name="labelRequired" xml:space="preserve">
+    <value>La etiqueta es obligatoria</value>
+  </data>
+  <data name="typeRequired" xml:space="preserve">
+    <value>El tipo es obligatorio</value>
+  </data>
+  <data name="cvssRangeInvalid" xml:space="preserve">
+    <value>La puntuación CVSS mínima no puede ser mayor que la máxima</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Administración</value>
+  </data>
+  <data name="areYouSureDelete" xml:space="preserve">
+    <value>¿Seguro que desea eliminar</value>
+  </data>
+  <data name="areYouSureDeleteBulk" xml:space="preserve">
+    <value>¿Seguro que desea eliminar</value>
+  </data>
+  <data name="areYouSureDeleteMultiple" xml:space="preserve">
+    <value>¿Seguro que desea eliminar</value>
+  </data>
+  <data name="attachmentAddedError" xml:space="preserve">
+    <value>Se ha producido un error al añadir el adjunto!</value>
+  </data>
+  <data name="boolean" xml:space="preserve">
+    <value>Booleano</value>
+  </data>
+  <data name="cannotDeleteSystemTemplate" xml:space="preserve">
+    <value>Las plantillas del sistema no se pueden eliminar</value>
+  </data>
+  <data name="categoryDeletedError" xml:space="preserve">
+    <value>Se ha producido un error al eliminar la categoría!</value>
+  </data>
+  <data name="checklistCreatedSuccessfully" xml:space="preserve">
+    <value>Lista de control creada exitosamente</value>
+  </data>
+  <data name="checklistDeletedSuccessfully" xml:space="preserve">
+    <value>Lista de control eliminada exitosamente</value>
+  </data>
+  <data name="checklists" xml:space="preserve">
+    <value>Listas de control</value>
+  </data>
+  <data name="checklistsDeleted" xml:space="preserve">
+    <value>listas de control eliminadas</value>
+  </data>
+  <data name="checklistsDeletedSuccessfully" xml:space="preserve">
+    <value>listas de control eliminadas exitosamente</value>
+  </data>
+  <data name="criticalSeverity" xml:space="preserve">
+    <value>Crítico (9.0-10.0)</value>
+  </data>
+  <data name="czech" xml:space="preserve">
+    <value>Checo</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Predeterminado</value>
+  </data>
+  <data name="deleteBulk" xml:space="preserve">
+    <value>Eliminación masiva</value>
+  </data>
+  <data name="deleteCustomChecklists" xml:space="preserve">
+    <value>Eliminar listas de control personalizadas</value>
+  </data>
+  <data name="deleteCustomField" xml:space="preserve">
+    <value>Eliminar Campo Personalizado</value>
+  </data>
+  <data name="deleteWarning" xml:space="preserve">
+    <value>Esta acción no se puede deshacer.</value>
+  </data>
+  <data name="errorCreatingChecklist" xml:space="preserve">
+    <value>Error al crear la lista de control</value>
+  </data>
+  <data name="errorCreatingTemplate" xml:space="preserve">
+    <value>Error al crear la plantilla</value>
+  </data>
+  <data name="errorDeletingChecklist" xml:space="preserve">
+    <value>Error al eliminar la lista de control</value>
+  </data>
+  <data name="errorDeletingChecklists" xml:space="preserve">
+    <value>Error al eliminar las listas de control</value>
+  </data>
+  <data name="errorDeletingTemplate" xml:space="preserve">
+    <value>Error al eliminar la plantilla</value>
+  </data>
+  <data name="errorLoadingTargets" xml:space="preserve">
+    <value>Error al cargar los objetivos</value>
+  </data>
+  <data name="errorLoadingTemplates" xml:space="preserve">
+    <value>Error al cargar las plantillas</value>
+  </data>
+  <data name="errorOccurred" xml:space="preserve">
+    <value>Se ha producido un error</value>
+  </data>
+  <data name="errors" xml:space="preserve">
+    <value>Errores</value>
+  </data>
+  <data name="failed" xml:space="preserve">
+    <value>Fallido</value>
+  </data>
+  <data name="finished" xml:space="preserve">
+    <value>Finalizado</value>
+  </data>
+  <data name="generate" xml:space="preserve">
+    <value>Generar</value>
+  </data>
+  <data name="german" xml:space="preserve">
+    <value>Alemán</value>
+  </data>
+  <data name="highSeverity" xml:space="preserve">
+    <value>Alto (7.0-8.9)</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Entrada</value>
+  </data>
+  <data name="insert" xml:space="preserve">
+    <value>Insertar</value>
+  </data>
+  <data name="italian" xml:space="preserve">
+    <value>Italiano</value>
+  </data>
+  <data name="jira" xml:space="preserve">
+    <value>Jira</value>
+  </data>
+  <data name="kanban" xml:space="preserve">
+    <value>Kanban</value>
+  </data>
+  <data name="load" xml:space="preserve">
+    <value>Cargar</value>
+  </data>
+  <data name="lowSeverity" xml:space="preserve">
+    <value>Bajo (0.1-3.9)</value>
+  </data>
+  <data name="mediumSeverity" xml:space="preserve">
+    <value>Medio (4.0-6.9)</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Nuevos</value>
+  </data>
+  <data name="noDescription" xml:space="preserve">
+    <value>Sin descripción</value>
+  </data>
+  <data name="noFile" xml:space="preserve">
+    <value>No se ha seleccionado ningún archivo</value>
+  </data>
+  <data name="noObjectives" xml:space="preserve">
+    <value>Sin objetivos</value>
+  </data>
+  <data name="noPassCriteria" xml:space="preserve">
+    <value>Sin criterios de aprobación</value>
+  </data>
+  <data name="noTestProcedure" xml:space="preserve">
+    <value>Sin procedimiento de prueba</value>
+  </data>
+  <data name="nonCompliance" xml:space="preserve">
+    <value>Incumplimiento normativo</value>
+  </data>
+  <data name="number" xml:space="preserve">
+    <value>Número</value>
+  </data>
+  <data name="optionsHelp" xml:space="preserve">
+    <value>Una opción por línea para campos de selección</value>
+  </data>
+  <data name="other" xml:space="preserve">
+    <value>Otro</value>
+  </data>
+  <data name="outofScope" xml:space="preserve">
+    <value>Fuera de alcance</value>
+  </data>
+  <data name="privacyViolation" xml:space="preserve">
+    <value>Violación de la privacidad</value>
+  </data>
+  <data name="reportDownloadError" xml:space="preserve">
+    <value>Se ha producido un error al descargar el informe!</value>
+  </data>
+  <data name="reputationDamage" xml:space="preserve">
+    <value>Daño a la reputación</value>
+  </data>
+  <data name="restoreError" xml:space="preserve">
+    <value>Se ha producido un error al restaurar la copia de seguridad!</value>
+  </data>
+  <data name="select" xml:space="preserve">
+    <value>Selección</value>
+  </data>
+  <data name="services" xml:space="preserve">
+    <value>Servicios</value>
+  </data>
+  <data name="skipped" xml:space="preserve">
+    <value>Omitidos</value>
+  </data>
+  <data name="someTemplatesCouldNotBeDeleted" xml:space="preserve">
+    <value>No se pudieron eliminar {count} plantillas</value>
+  </data>
+  <data name="syncCompleted" xml:space="preserve">
+    <value>Sincronización completada</value>
+  </data>
+  <data name="syncError" xml:space="preserve">
+    <value>Error de sincronización</value>
+  </data>
+  <data name="syncFailed" xml:space="preserve">
+    <value>La sincronización ha fallado</value>
+  </data>
+  <data name="taskStatus" xml:space="preserve">
+    <value>Estado de la tarea</value>
+  </data>
+  <data name="templateCreatedSuccessfully" xml:space="preserve">
+    <value>Plantilla creada exitosamente</value>
+  </data>
+  <data name="templateDeletedSuccessfully" xml:space="preserve">
+    <value>Plantilla eliminada exitosamente</value>
+  </data>
+  <data name="templateUpdated" xml:space="preserve">
+    <value>Plantilla actualizada exitosamente</value>
+  </data>
+  <data name="templatesDeletedSuccessfully" xml:space="preserve">
+    <value>{count} plantillas eliminadas exitosamente</value>
+  </data>
+  <data name="textarea" xml:space="preserve">
+    <value>Área de texto</value>
+  </data>
+  <data name="todo" xml:space="preserve">
+    <value>Por hacer</value>
+  </data>
+  <data name="turkish" xml:space="preserve">
+    <value>Turco</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>Actualizar</value>
+  </data>
+  <data name="updated" xml:space="preserve">
+    <value>Actualizados</value>
+  </data>
+  <data name="validationFailed" xml:space="preserve">
+    <value>La validación ha fallado</value>
+  </data>
+  <data name="viewCustomChecklist" xml:space="preserve">
+    <value>Ver lista de control personalizada</value>
+  </data>
+  <data name="visible" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="deleteSelectedCount" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar los {0} elementos seleccionados?</value>
+  </data>
+  <data name="fileTypeNotAllowed" xml:space="preserve">
+    <value>Este tipo de fichero no está permitido.</value>
+  </data>
 </root>

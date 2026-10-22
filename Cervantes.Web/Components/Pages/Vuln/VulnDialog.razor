@@ -284,7 +284,7 @@
 										{
 											<MudListItem T="string" Text="@($"{localizer["findingId"]}: {vuln.FindingId}")" Icon="@Icons.Material.Filled.Tag"/>
 										}
-										<MudListItem T="string" Text="@vuln.Risk.ToString()" Icon="@Icons.Material.Filled.CrisisAlert"/>
+										<MudListItem T="string" Text="@EnumText(vuln.Risk)" Icon="@Icons.Material.Filled.CrisisAlert"/>
 										@if (vuln.VulnCategory != null)
 										{
 											<MudListItem T="string" Text="@vuln.VulnCategory.Name.ToString()" Icon="@Icons.Material.Filled.List"/>
@@ -297,7 +297,7 @@
 										}
 												
 												
-											<MudListItem T="string" Text="@vuln.Status.ToString()" Icon="@Icons.Material.Filled.TaskAlt"/>
+											<MudListItem T="string" Text="@EnumText(vuln.Status)" Icon="@Icons.Material.Filled.TaskAlt"/>
 												
 											<MudListItem T="string" Text="@vuln.cve.ToString()" Icon="@Icons.Material.Filled.Search"/>
 											<MudListItem T="string" Icon="@Icons.Material.Filled.SavedSearch">
@@ -752,7 +752,7 @@
 
 							<MudTabPanel Text="@localizer["targets"]" Icon="@Icons.Material.Filled.Adjust" BadgeData="@VulnTargets.Count()" BadgeColor="Color.Primary">
 								<MudDataGrid T="VulnTargets" Items="@VulnTargets" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterTargets"
-								             Hideable="true" Hover="true" Elevation="25" RowClick="@RowClickedTargets" MultiSelection="true" SelectedItemsChanged="@SelectedTargetsChanged" Virtualize="true" DragDropColumnReordering="true">
+								             Hideable="true" Hover="true" Elevation="25" RowClick="@RowClickedTargets" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@SelectedTargetsChanged" Virtualize="true" DragDropColumnReordering="true">
 									<ToolBarContent>
 										<MudStack Row="true">
 											@if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
@@ -823,7 +823,7 @@
 				{
 					<MudTabPanel Text="@localizer["notes"]" Icon="@Icons.Material.Filled.Notes" BadgeData="@VulnNotes.Count()" BadgeColor="Color.Primary">
 						<MudDataGrid T="VulnNote" Items="@VulnNotes" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterNotes"
-						             Hideable="true" Hover="true" RowClick="@RowClickedNotes" MultiSelection="true" SelectedItemsChanged="@SelectedNotesChanged" Virtualize="true" DragDropColumnReordering="true">
+						             Hideable="true" Hover="true" RowClick="@RowClickedNotes" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@SelectedNotesChanged" Virtualize="true" DragDropColumnReordering="true">
 							<ToolBarContent>
 								<MudStack Row="true">
 									<MudStack Row="true">
@@ -889,7 +889,7 @@
 				{
 					<MudTabPanel Text="@localizer["attachments"]" Icon="@Icons.Material.Filled.Attachment" BadgeData="@VulnAttachments.Count()" BadgeColor="Color.Primary" Style="min-width: 260px;">
 						<MudDataGrid T="VulnAttachment" Items="@VulnAttachments" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="_quickFilterAttachments"
-						             Hideable="true" Hover="true" Elevation="25" RowClick="@RowClickedAttachments" MultiSelection="true" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
+						             Hideable="true" Hover="true" Elevation="25" RowClick="@RowClickedAttachments" MultiSelection="true" SelectOnRowClick="false" SelectedItemsChanged="@SelectedAttachmentsChanged" Virtualize="true" DragDropColumnReordering="true">
 							<ToolBarContent>
 								<MudStack Row="true">
 									@if (inProject || vuln.Project == null || vuln.ProjectId == Guid.Empty)
