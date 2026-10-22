@@ -7,7 +7,6 @@ using Cervantes.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.SemanticKernel.Services;
-using Markdig;
 
 namespace Cervantes.Web.Controllers;
 
@@ -20,9 +19,6 @@ public class ChatController : ControllerBase
     private IHttpContextAccessor HttpContextAccessor;
     private string aspNetUserId;
     private Sanitizer Sanitizer;
-    // AI replies are Markdown. HTML the model writes is shown as text (DisableHtml), and the generated HTML is
-    // sanitized because Markdown links can still carry javascript: URLs. The reply is rendered via MarkupString.
-    private static readonly MarkdownPipeline AiReplyPipeline = new MarkdownPipelineBuilder().DisableHtml().Build();
     private readonly IAiService _aiService = null;
     private IDocumentManager documentManager = null;
     private IProjectManager projectManager = null;
@@ -265,7 +261,8 @@ public class ChatController : ControllerBase
         var msgId = Guid.NewGuid();
         model.Id = msgId;
         var msg = await _aiService.SendMessage(model);
-        var msgConverted = Sanitizer.Sanitize(Markdown.ToHtml(msg, AiReplyPipeline));
+        // The reply is rendered via MarkupString.
+        var msgConverted = AiMarkdown.ToSafeHtml(msg);
         var chatMessage2 = new ChatMessage()
         {
             Id = msgId,

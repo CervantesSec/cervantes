@@ -1,4 +1,5 @@
 using Cervantes.CORE.Entities;
+using Cervantes.Web.Helpers;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
 using FluentValidation;
@@ -31,7 +32,7 @@ public partial class ExecutiveAiDialog: ComponentBase
     {
 
             _isBusy = true;
-            result = await aiService.GenerateExecutive(project);
+            result = AiMarkdown.ToSafeHtml(await aiService.GenerateExecutive(project));
             MudDialog.Close<string>(result);  
         
     } 
@@ -70,7 +71,7 @@ public partial class ExecutiveAiDialog: ComponentBase
         {
             result = null;
             _isBusy = true;
-            var gen = await aiService.GenerateCustom(customModel.Prompt);
+            var gen = AiMarkdown.ToSafeHtml(await aiService.GenerateCustom(customModel.Prompt));
             result = gen;
             _isBusy = false;
 

@@ -36,7 +36,7 @@
                             </MudText>
                             <MudText Class="mt-1" Style="color: #ffffffb3;word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;">@((MarkupString)message.Content)</MudText>
                             <MudText Typo="Typo.caption" Class="mt-1 d-flex justify-end" Style="color: #ffffffb3;">
-                                @message.Timestamp.ToShortDateString() @message.Timestamp.ToShortTimeString()
+                                @message.Timestamp.ToLocalTime().ToShortDateString() @message.Timestamp.ToLocalTime().ToShortTimeString()
                             </MudText>
                         </MudPaper>
                     }
@@ -117,7 +117,7 @@
                                     </MudText>*@
                                 </div>
                                 <MudText Typo="Typo.caption" Style="white-space: nowrap;">
-                                    @chat.LastMessageAt.ToShortDateString() @chat.LastMessageAt.ToShortTimeString()
+                                    @chat.LastMessageAt.ToLocalTime().ToShortDateString() @chat.LastMessageAt.ToLocalTime().ToShortTimeString()
                                 </MudText>
                                 <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="@((e) => DeleteChat(chat))"></MudIconButton>
 

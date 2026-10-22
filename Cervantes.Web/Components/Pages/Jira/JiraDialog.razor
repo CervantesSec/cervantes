@@ -93,7 +93,7 @@
 				            <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
 				            <div>
 					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["createdDate"]</MudText>
-					            <MudText Typo="Typo.h5">@jira.JiraCreatedDate</MudText>
+					            <MudText Typo="Typo.h5">@jira.JiraCreatedDate?.ToLocalTime()</MudText>
 				            </div>
 			            </MudPaper>
 		            </MudItem>
@@ -103,7 +103,7 @@
 				            <MudIcon Icon="@Icons.Material.Filled.EditCalendar" Color="Color.Default" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
 				            <div>
 					            <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@localizer["updatedDate"]</MudText>
-					            <MudText Typo="Typo.h5">@jira.JiraUpdatedDate</MudText>
+					            <MudText Typo="Typo.h5">@jira.JiraUpdatedDate?.ToLocalTime()</MudText>
 				            </div>
 			            </MudPaper>
 		            </MudItem>
@@ -218,7 +218,7 @@
 												            </MudStack>
 											            </MudStack>
 											            <MudSpacer></MudSpacer>
-											            <MudText Typo="Typo.body2">@comment.CreatedDate</MudText>
+											            <MudText Typo="Typo.body2">@comment.CreatedDate?.ToLocalTime()</MudText>
 										            </MudCardHeader>
 										            <MudCardContent>
 											            <MudText Typo="Typo.body2">@comment.Body</MudText>

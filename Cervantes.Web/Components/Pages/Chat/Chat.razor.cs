@@ -223,7 +223,7 @@ public partial class Chat: ComponentBase
                 Content = _currentMessage,
                 IsUser = true,
                 ChatId = _currentChatId,
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.UtcNow
             };
             
             ChatMessageViewModel msg = new ChatMessageViewModel()
@@ -232,7 +232,7 @@ public partial class Chat: ComponentBase
                 ChatId = _currentChatId,
                 Content = Sanitizer.Sanitize(_currentMessage),
                 IsUser = true,
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.UtcNow
             };
             _messages.Add(msg);
             
@@ -248,7 +248,7 @@ public partial class Chat: ComponentBase
                 var currentChat = _chatList.FirstOrDefault(c => c.Id == _currentChatId);
                 if (currentChat != null)
                 {
-                    currentChat.LastMessageAt = DateTime.Now;
+                    currentChat.LastMessageAt = DateTime.UtcNow;
                 }
 
                 StateHasChanged();

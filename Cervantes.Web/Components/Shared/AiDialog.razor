@@ -35,7 +35,7 @@
                     <MudDivider/>
                     if (result != null)
                     {
-                        <MudText Typo="Typo.body2" Class="mt-6">@result</MudText>
+                        <MudText Typo="Typo.body2" Class="mt-6">@((MarkupString)result)</MudText>
                     }
                     <br/>
                     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="@Color.Primary" OnClick="Insert">@localizer["insert"]</MudButton>

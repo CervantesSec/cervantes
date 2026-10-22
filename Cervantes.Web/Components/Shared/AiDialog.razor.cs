@@ -1,4 +1,5 @@
 using Cervantes.CORE.Entities;
+using Cervantes.Web.Helpers;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
 using FluentValidation;
@@ -57,7 +58,7 @@ public partial class AiDialog: ComponentBase
         if (form.IsValid)
         {
             _isBusy = true;
-            var gen = await aiService.GenerateCustom(customModel.Prompt);
+            var gen = AiMarkdown.ToSafeHtml(await aiService.GenerateCustom(customModel.Prompt));
             result = gen.ToString();
             _isBusy = false;
 

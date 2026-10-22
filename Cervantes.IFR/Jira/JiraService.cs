@@ -557,7 +557,7 @@ public class JiraService: IJIraService
             if(ticket == null){return;}
 
             ticket.Reporter = issue.Reporter;
-            ticket.Assignee = issue.Assignee;
+            ticket.Assignee = issue.Assignee ?? "No Assigned";
             ticket.Name = issue.Summary;
             ticket.JiraType = _jiraConfiguration.TicketConfiguration.IssueType;
             ticket.Label = issue.Labels.Count == 0 ? "No Labels" : string.Join(",", issue.Labels);
