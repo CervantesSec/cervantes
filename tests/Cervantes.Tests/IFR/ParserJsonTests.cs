@@ -61,16 +61,69 @@ public class ParserJsonTests
     {
         var results = NucleiParser.Read(Fixture("Nuclei", "nuclei.jsonl"));
 
-        Assert.Equal(2, results.Count);
-        var rce = results[0];
-        Assert.Equal("CVE-2026-0002", rce.TemplateId);
-        Assert.Equal("Example App - Remote Code Execution", rce.Info.Name);
-        Assert.Equal("critical", rce.Info.Severity);
-        Assert.Equal("https://app.example/api/run", rce.MatchedAt);
-        Assert.Equal("https://app.example", rce.Host);
-        Assert.Equal("9.8", rce.Info.Classification.CvssScore);
-        Assert.Equal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", rce.Info.Classification.CvssVector);
-        Assert.Equal("uid=0(root)", rce.ExtractedResults[0]);
+        Assert.Equal(3, results.Count);
+        var headers = results[0];
+        Assert.Equal("http-missing-security-headers", headers.TemplateId);
+        Assert.Equal("HTTP Missing Security Headers", headers.Info.Name);
+        Assert.Equal("info", headers.Info.Severity);
+        Assert.Equal("172.19.0.3", headers.Host);
+        Assert.Equal("http://172.19.0.3:8080/", headers.MatchedAt);
+        var cve = results[2];
+        Assert.Equal("rs-cve-sample", cve.TemplateId);
+        Assert.Equal("critical", cve.Info.Severity);
+        Assert.Equal("7.5", cve.Info.Classification.CvssScore);
+        Assert.Equal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", cve.Info.Classification.CvssVector);
+    }
+
+    [Fact]
+    public void Nuclei_ReadsCveIds()
+    {
+        var results = NucleiParser.Read(Fixture("Nuclei", "nuclei.jsonl"));
+
+        Assert.Equal(new[] { "CVE-2021-41773" }, results[2].Info.Classification.Cves);
+        Assert.Empty(results[0].Info.Classification.Cves);
+    }
+
+    [Fact]
+    public void Nuclei_ReadsJsonExport()
+    {
+        var result = Assert.Single(NucleiParser.Read(Fixture("Nuclei", "nuclei-export.json")));
+
+        Assert.Equal("rs-cve-sample", result.TemplateId);
+        Assert.Equal(new[] { "CVE-2021-41773" }, result.Info.Classification.Cves);
+    }
+
+    [Fact]
+    public void Nuclei_TargetOfBareHost()
+    {
+        var results = NucleiParser.Read(Fixture("Nuclei", "nuclei.jsonl"));
+
+        Assert.Equal("172.19.0.3", NucleiParser.TargetOf(results[0]));
+        Assert.Equal("rs-target2", NucleiParser.TargetOf(results[1]));
+    }
+
+    [Fact]
+    public void Nuclei_TargetOfWithoutHostUsesMatchedAt()
+    {
+        var result = Assert.Single(NucleiParser.Read(Fixture("Nuclei", "nuclei-nohost.jsonl")));
+
+        Assert.Equal("", result.Host);
+        Assert.Equal("rs-target", NucleiParser.TargetOf(result));
+    }
+
+    [Fact]
+    public void Nuclei_TargetOfUrlHost()
+    {
+        Assert.Equal("app.example", NucleiParser.TargetOf(new NucleiResult { Host = "https://app.example:8443" }));
+        Assert.Equal("10.0.0.5", NucleiParser.TargetOf(new NucleiResult { Ip = "10.0.0.5" }));
+    }
+
+    [Fact]
+    public void Nuclei_ReadSkipsNonObjectLines()
+    {
+        var line = Fixture("Nuclei", "nuclei.jsonl").Split('\n')[0];
+
+        Assert.Single(NucleiParser.Read("42\n\"x\"\n" + line));
     }
 
     [Fact]

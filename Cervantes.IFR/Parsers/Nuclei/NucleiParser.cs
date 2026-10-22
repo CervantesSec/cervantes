@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Web;
 using Cervantes.Contracts;
@@ -72,23 +73,7 @@ public class NucleiParser : INucleiParser
                     }
 
                     // Parse target information
-                    string targetHost = "";
-                    int targetPort = 80;
-                    
-                    if (!string.IsNullOrEmpty(nucleiResult.Host))
-                    {
-                        try
-                        {
-                            var uri = new Uri(nucleiResult.Host);
-                            targetHost = uri.Host;
-                            targetPort = uri.Port;
-                        }
-                        catch
-                        {
-                            // If URI parsing fails, use the host as-is
-                            targetHost = nucleiResult.Host;
-                        }
-                    }
+                    string targetHost = TargetOf(nucleiResult);
 
                     // Create or find target
                     Target target = null;
@@ -150,7 +135,9 @@ public class NucleiParser : INucleiParser
                     }
                     if (!string.IsNullOrEmpty(nucleiResult.Response))
                     {
-                        poc += $"Response:\n{nucleiResult.Response}\n";
+                        // Responses are whole pages; keep the start, as the Burp import does
+                        var response = nucleiResult.Response.Length > 4000 ? nucleiResult.Response[..4000] + "\n[…]" : nucleiResult.Response;
+                        poc += $"Response:\n{response}\n";
                     }
 
                     // Build impact from template info
@@ -172,15 +159,15 @@ public class NucleiParser : INucleiParser
                     var vuln = new Vuln
                     {
                         Id = Guid.NewGuid(),
-                        Name = sanitizer.Sanitize(nucleiResult.Info?.Name ?? nucleiResult.TemplateId ?? "Unknown Nuclei Finding"),
-                        Description = sanitizer.Sanitize(description),
+                        Name = sanitizer.Sanitize(!string.IsNullOrEmpty(nucleiResult.Info?.Name) ? nucleiResult.Info.Name : !string.IsNullOrEmpty(nucleiResult.TemplateId) ? nucleiResult.TemplateId : "Unknown Nuclei Finding"),
+                        Description = sanitizer.Sanitize(WebUtility.HtmlEncode(description)),
                         Risk = risk,
                         Status = VulnStatus.Open,
-                        Remediation = sanitizer.Sanitize(nucleiResult.Info?.Remediation ?? "Review and remediate the identified vulnerability"),
+                        Remediation = sanitizer.Sanitize(WebUtility.HtmlEncode(!string.IsNullOrEmpty(nucleiResult.Info?.Remediation) ? nucleiResult.Info.Remediation : "Review and remediate the identified vulnerability")),
                         RemediationComplexity = RemediationComplexity.Medium,
                         RemediationPriority = RemediationPriority.Medium,
-                        Impact = sanitizer.Sanitize(impact),
-                        ProofOfConcept = sanitizer.Sanitize(poc),
+                        Impact = sanitizer.Sanitize(WebUtility.HtmlEncode(impact)),
+                        ProofOfConcept = sanitizer.Sanitize("<pre>" + WebUtility.HtmlEncode(poc) + "</pre>"),
                         Project = pro,
                         UserId = user,
                         Template = false,
@@ -199,7 +186,12 @@ public class NucleiParser : INucleiParser
                     // Set CVSSVector if available
                     if (!string.IsNullOrEmpty(nucleiResult.Info?.Classification?.CvssVector))
                     {
-                        vuln.CVSSVector = nucleiResult.Info.Classification.CvssVector;
+                        vuln.CVSSVector = sanitizer.Sanitize(nucleiResult.Info.Classification.CvssVector);
+                    }
+
+                    if (nucleiResult.Info?.Classification?.Cves?.Length > 0)
+                    {
+                        vuln.cve = sanitizer.Sanitize(string.Join(", ", nucleiResult.Info.Classification.Cves));
                     }
 
                     vuln.FindingId = findingIds.Next();
@@ -229,9 +221,33 @@ public class NucleiParser : INucleiParser
     }
 
     /// <summary>
-    /// Reads Nuclei output: JSON lines (`-jsonl`, `-json`) or a JSON array (`-je`). Field names changed between Nuclei
+    /// The target of a result: its <c>host</c> (a bare host in current Nuclei, a URL in older versions), else the host of
+    /// <c>matched-at</c>, else of <c>url</c>, else <c>ip</c>. Nuclei leaves <c>host</c> out for some inputs.
+    /// </summary>
+    public static string TargetOf(NucleiResult result)
+    {
+        static string? HostOf(string? value)
+        {
+            value = value?.Trim().TrimStart('/');
+            if (string.IsNullOrEmpty(value))
+            {
+                return null;
+            }
+            if (value.Contains("://"))
+            {
+                return Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Host.Length > 0 ? uri.Host : null;
+            }
+            // host or host:port
+            return Uri.TryCreate("http://" + value, UriKind.Absolute, out var bare) && bare.Host.Length > 0 ? bare.Host : value;
+        }
+
+        return HostOf(result.Host) ?? HostOf(result.MatchedAt) ?? HostOf(result.Url) ?? HostOf(result.Ip) ?? "";
+    }
+
+    /// <summary>
+    /// Reads Nuclei output: JSON lines (`-jsonl`) or a JSON array (`-je`). Field names changed between Nuclei
     /// versions (`templateID` / `template-id`, `matched` / `matched-at`), so each field is read under any of its names.
-    /// A line that is not JSON is skipped; if no line can be read the content is not Nuclei output and it throws.
+    /// A line that is not a JSON object is skipped; if no line can be read the content is not Nuclei output and it throws.
     /// </summary>
     public static System.Collections.Generic.IReadOnlyList<NucleiResult> Read(string content)
     {
@@ -239,7 +255,7 @@ public class NucleiParser : INucleiParser
         if (content.TrimStart().StartsWith("["))
         {
             using var array = JsonDocument.Parse(content, new JsonDocumentOptions { AllowTrailingCommas = true });
-            results.AddRange(array.RootElement.EnumerateArray().Select(FromJson));
+            results.AddRange(array.RootElement.EnumerateArray().Where(x => x.ValueKind == JsonValueKind.Object).Select(FromJson));
             return results;
         }
 
@@ -249,6 +265,10 @@ public class NucleiParser : INucleiParser
             try
             {
                 using var doc = JsonDocument.Parse(line);
+                if (doc.RootElement.ValueKind != JsonValueKind.Object)
+                {
+                    throw new JsonException("A Nuclei result is a JSON object");
+                }
                 results.Add(FromJson(doc.RootElement));
             }
             catch (JsonException e)
@@ -273,6 +293,8 @@ public class NucleiParser : INucleiParser
             Host = Text(e, "host") ?? "",
             MatchedAt = Text(e, "matched-at", "matched", "matchedAt") ?? "",
             ExtractedResults = Strings(e, "extracted-results", "extracted_results", "extractedResults"),
+            Url = Text(e, "url") ?? "",
+            Ip = Text(e, "ip") ?? "",
             Request = Text(e, "request") ?? "",
             Response = Text(e, "response") ?? "",
             Info = info is not { } inf ? new NucleiInfo() : new NucleiInfo
@@ -287,6 +309,7 @@ public class NucleiParser : INucleiParser
                     CvssScore = Text(c, "cvss-score", "cvssScore") ?? "",
                     CvssVector = Text(c, "cvss-metrics", "cvssMetrics", "cvssVector") ?? "",
                     Cwe = Strings(c, "cwe-id", "cweId", "cwe"),
+                    Cves = Strings(c, "cve-id", "cveId", "cve").Select(x => x.ToUpperInvariant()).ToArray(),
                 },
             },
         };
@@ -345,6 +368,8 @@ public class NucleiResult
     public NucleiInfo Info { get; set; } = new();
     public string Host { get; set; } = "";
     public string MatchedAt { get; set; } = "";
+    public string Url { get; set; } = "";
+    public string Ip { get; set; } = "";
     public string[] ExtractedResults { get; set; } = Array.Empty<string>();
     public string Request { get; set; } = "";
     public string Response { get; set; } = "";
@@ -365,4 +390,5 @@ public class NucleiClassification
     public string CvssScore { get; set; } = "";
     public string CvssVector { get; set; } = "";
     public string[] Cwe { get; set; } = Array.Empty<string>();
+    public string[] Cves { get; set; } = Array.Empty<string>();
 }
