@@ -69,7 +69,7 @@
                         }
                         <MudCardContent>
                             @{
-                                var progress = Math.Round((((DateTime.Today - @pro.StartDate) / (@pro.EndDate - @pro.StartDate)) * 100));
+                                var progress = CalendarDate.ProgressPercent(pro.StartDate, pro.EndDate, DateTime.Today);
                             }
                             @if (pro.Status == ProjectStatus.PendingReview)
                             {

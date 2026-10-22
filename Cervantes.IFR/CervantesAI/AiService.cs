@@ -1,3 +1,4 @@
+using Cervantes.CORE.Helpers;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -188,8 +189,8 @@ public class AiService : IAiService
                         }
 
                         prompt = message.Replace("{Client}", project.Client.Name).Replace("{Project}", project.Name)
-                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{StartDate}", project.StartDate.ToLocalDate().ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToLocalDate().ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members)
                             .Replace("{Scope}", targets).Replace("{Vulns}", vulns);
 
@@ -228,8 +229,8 @@ public class AiService : IAiService
 
                         prompt = message2.Replace("{Client}", project.Client.Name)
                             .Replace("{Project}", project.Name)
-                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{StartDate}", project.StartDate.ToLocalDate().ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToLocalDate().ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members2)
                             .Replace("{Scope}", targets2).Replace("{Vulns}", vulns2);
 
@@ -269,8 +270,8 @@ public class AiService : IAiService
 
                         prompt = message3.Replace("{Client}", project.Client.Name)
                             .Replace("{Project}", project.Name)
-                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{StartDate}", project.StartDate.ToLocalDate().ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToLocalDate().ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members3)
                             .Replace("{Scope}", targets3).Replace("{Vulns}", vulns3);
                         break;
@@ -308,8 +309,8 @@ public class AiService : IAiService
 
                         prompt = message4.Replace("{Client}", project.Client.Name)
                             .Replace("{Project}", project.Name)
-                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{StartDate}", project.StartDate.ToLocalDate().ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToLocalDate().ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members4)
                             .Replace("{Scope}", targets4).Replace("{Vulns}", vulns4);
                         break;
@@ -347,8 +348,8 @@ public class AiService : IAiService
 
                         prompt = message5.Replace("{Client}", project.Client.Name)
                             .Replace("{Project}", project.Name)
-                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{StartDate}", project.StartDate.ToLocalDate().ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToLocalDate().ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members5)
                             .Replace("{Scope}", targets5).Replace("{Vulns}", vulns5);
                         break;
@@ -386,8 +387,8 @@ public class AiService : IAiService
 
                         prompt = message6.Replace("{Client}", project.Client.Name)
                             .Replace("{Project}", project.Name)
-                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{StartDate}", project.StartDate.ToLocalDate().ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToLocalDate().ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members6)
                             .Replace("{Scope}", targets6).Replace("{Vulns}", vulns6);
                         break;
@@ -425,8 +426,8 @@ public class AiService : IAiService
 
                         prompt = message7.Replace("{Client}", project.Client.Name)
                             .Replace("{Project}", project.Name)
-                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{StartDate}", project.StartDate.ToLocalDate().ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToLocalDate().ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members7)
                             .Replace("{Scope}", targets7).Replace("{Vulns}", vulns7);
                         break;
@@ -464,8 +465,8 @@ public class AiService : IAiService
 
                         prompt = message8.Replace("{Client}", project.Client.Name)
                             .Replace("{Project}", project.Name)
-                            .Replace("{StartDate}", project.StartDate.ToShortDateString())
-                            .Replace("{EndDate}", project.EndDate.ToShortDateString())
+                            .Replace("{StartDate}", project.StartDate.ToLocalDate().ToShortDateString())
+                            .Replace("{EndDate}", project.EndDate.ToLocalDate().ToShortDateString())
                             .Replace("{ProjectDescription}", project.Description).Replace("{Members}", members8)
                             .Replace("{Scope}", targets8).Replace("{Vulns}", vulns8);
                         break;

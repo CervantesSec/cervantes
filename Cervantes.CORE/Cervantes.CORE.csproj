@@ -16,6 +16,8 @@
       <PackageReference Include="Pgvector.EntityFrameworkCore" Version="0.2.2" />
     </ItemGroup>
 
-
+    <ItemGroup>
+        <InternalsVisibleTo Include="Cervantes.Tests" />
+    </ItemGroup>
 
 </Project>

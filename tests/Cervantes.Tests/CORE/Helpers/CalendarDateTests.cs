@@ -1,6 +1,6 @@
-using Cervantes.Web.Helpers;
+using Cervantes.CORE.Helpers;
 
-namespace Cervantes.Tests.Web.Helpers;
+namespace Cervantes.Tests.CORE.Helpers;
 
 public class CalendarDateTests
 {
@@ -52,5 +52,39 @@ public class CalendarDateTests
     {
         Assert.Empty(CalendarDate.LocalDays(new DateTime(2026, 10, 20, 0, 0, 0, DateTimeKind.Utc),
             new DateTime(2026, 10, 18, 0, 0, 0, DateTimeKind.Utc), TimeZoneInfo.Utc));
+    }
+
+    [Fact]
+    public void ToLocalDate_KeepsLocalKind()
+    {
+        var stored = new DateTime(2026, 10, 19, 0, 0, 0, DateTimeKind.Local);
+        var date = CalendarDate.ToLocalDate(stored, Zone(2));
+        Assert.Equal(new DateTime(2026, 10, 19), date);
+        Assert.Equal(DateTimeKind.Unspecified, date.Kind);
+        Assert.Equal(new DateTime(2026, 10, 19), CalendarDate.ToLocalDate(new DateTime(2026, 10, 19, 23, 0, 0, DateTimeKind.Local), Zone(2)));
+        Assert.Equal(new DateTime(2026, 10, 19), CalendarDate.ToLocalDate(stored, Zone(-5)));
+    }
+
+    // Stored values are UTC midnights that stand for Madrid (UTC+2) dates.
+    private static DateTime Madrid(int day) => new DateTime(2026, 10, day, 0, 0, 0, DateTimeKind.Utc).AddHours(-2);
+
+    [Fact]
+    public void ProgressPercent_Midway()
+    {
+        Assert.Equal(50, CalendarDate.ProgressPercent(Madrid(1), Madrid(11), new DateTime(2026, 10, 6), Zone(2)));
+    }
+
+    [Fact]
+    public void ProgressPercent_ClampsBeforeAndAfter()
+    {
+        Assert.Equal(0, CalendarDate.ProgressPercent(Madrid(10), Madrid(20), new DateTime(2026, 10, 5), Zone(2)));
+        Assert.Equal(100, CalendarDate.ProgressPercent(Madrid(10), Madrid(20), new DateTime(2026, 10, 25), Zone(2)));
+    }
+
+    [Fact]
+    public void ProgressPercent_SameDay()
+    {
+        Assert.Equal(100, CalendarDate.ProgressPercent(Madrid(10), Madrid(10), new DateTime(2026, 10, 10), Zone(2)));
+        Assert.Equal(0, CalendarDate.ProgressPercent(Madrid(10), Madrid(10), new DateTime(2026, 10, 9), Zone(2)));
     }
 }
