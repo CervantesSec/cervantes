@@ -2806,4 +2806,7 @@
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Gli elementi che hanno già risultati in una checklist non possono essere rimossi dal modello.</value>
   </data>
+  <data name="requiredFieldsMissing" xml:space="preserve">
+    <value>Compila i campi obbligatori: {0}</value>
+  </data>
 </root>

@@ -144,6 +144,12 @@ public class ClientsController : ControllerBase
                 }
                 
             
+                var missingFields = MissingRequiredCustomFields(model.CustomFieldValues, null);
+                if (missingFields.Count > 0)
+                {
+                    return BadRequest($"Required fields: {string.Join(", ", missingFields)}");
+                }
+
                 var client = new CORE.Entities.Client();
                 client.Name = sanitizer.Sanitize(model.Name);
                 client.Url = sanitizer.Sanitize(model.Url);
@@ -441,6 +447,13 @@ public class ClientsController : ControllerBase
             {
                 return NotFound();
             }
+
+            // The submitted values replace the stored ones.
+            var missingValues = MissingRequiredCustomFields(customFieldData, null);
+            if (missingValues.Count > 0)
+            {
+                return BadRequest($"Required fields: {string.Join(", ", missingValues)}");
+            }
             
             // Remove existing custom field values
             var existingValues = clientCustomFieldValueManager.GetAll()
@@ -482,5 +495,17 @@ public class ClientsController : ControllerBase
                 clientId, aspNetUserId);
             return BadRequest("Error updating custom field values");
         }
+    }
+
+    // Labels of the active required client custom fields left empty. An edit keeps stored values it does not send.
+    private IReadOnlyList<string> MissingRequiredCustomFields(IReadOnlyDictionary<Guid, string>? submitted, Guid? entityId)
+    {
+        var fields = clientManager.Context.Set<CORE.Entities.ClientCustomField>().AsNoTracking().ToList()
+            .Select(f => (f.Id, f.Label, f.IsRequired, f.IsActive));
+        var stored = entityId == null
+            ? new List<KeyValuePair<Guid, string?>>()
+            : clientManager.Context.Set<CORE.Entities.ClientCustomFieldValue>().AsNoTracking().Where(v => v.ClientId == entityId)
+                .Select(v => new KeyValuePair<Guid, string?>(v.ClientCustomFieldId, v.Value)).ToList();
+        return CustomFieldRules.MissingRequired(fields, CustomFieldRules.Merge(stored, submitted));
     }
 }

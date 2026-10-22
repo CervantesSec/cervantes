@@ -2801,4 +2801,7 @@
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Elemente, die bereits Ergebnisse in einer Checkliste haben, können nicht aus der Vorlage entfernt werden.</value>
   </data>
+  <data name="requiredFieldsMissing" xml:space="preserve">
+    <value>Füllen Sie die Pflichtfelder aus: {0}</value>
+  </data>
 </root>

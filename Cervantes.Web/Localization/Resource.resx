@@ -3363,4 +3363,7 @@ Option 3</value>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Items that already have results in a checklist cannot be removed from the template.</value>
   </data>
+  <data name="requiredFieldsMissing" xml:space="preserve">
+    <value>Fill in the required fields: {0}</value>
+  </data>
 </root>

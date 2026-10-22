@@ -2770,4 +2770,7 @@
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Não é possível remover do modelo itens que já têm resultados numa checklist.</value>
   </data>
+  <data name="requiredFieldsMissing" xml:space="preserve">
+    <value>Preencha os campos obrigatórios: {0}</value>
+  </data>
 </root>

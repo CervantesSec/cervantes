@@ -260,6 +260,10 @@ public partial class CreateVulnDialog: ComponentBase
 	        {
 	            Snackbar.Add(@localizer["noInProject"], Severity.Warning);
 	        }
+	        else if (response is BadRequestObjectResult { Value: string text } && text.StartsWith("Required fields: ", StringComparison.Ordinal))
+	        {
+	            Snackbar.Add(localizer["requiredFieldsMissing", text["Required fields: ".Length..]], Severity.Warning);
+	        }
 	        else
 	        {
 		        Snackbar.Add(@localizer["vulnCreatedError"], Severity.Error);

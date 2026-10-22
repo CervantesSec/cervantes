@@ -167,6 +167,12 @@ public class TargetController : ControllerBase
                     return BadRequest("Access denied: User does not have permission to access this project");
                 }
                 
+                var missingFields = MissingRequiredCustomFields(model.CustomFieldValues, null);
+                if (missingFields.Count > 0)
+                {
+                    return BadRequest($"Required fields: {string.Join(", ", missingFields)}");
+                }
+
                 var target = new CORE.Entities.Target();
                 target.Id = Guid.NewGuid();
                 target.Name = sanitizer.Sanitize(model.Name);
@@ -870,6 +876,13 @@ public class TargetController : ControllerBase
                 return StatusCode(403, "Access denied: User does not have permission to access this project");
             }
 
+            // The submitted values replace the stored ones.
+            var missingValues = MissingRequiredCustomFields(customFieldData, null);
+            if (missingValues.Count > 0)
+            {
+                return BadRequest($"Required fields: {string.Join(", ", missingValues)}");
+            }
+
             // Remove existing custom field values
             var existingValues = targetCustomFieldValueManager.GetAll()
                 .Where(v => v.TargetId == targetId)
@@ -910,5 +923,17 @@ public class TargetController : ControllerBase
                 targetId, aspNetUserId);
             return BadRequest("Error updating custom field values");
         }
+    }
+
+    // Labels of the active required target custom fields left empty. An edit keeps stored values it does not send.
+    private IReadOnlyList<string> MissingRequiredCustomFields(IReadOnlyDictionary<Guid, string>? submitted, Guid? entityId)
+    {
+        var fields = targetManager.Context.Set<CORE.Entities.TargetCustomField>().AsNoTracking().ToList()
+            .Select(f => (f.Id, f.Label, f.IsRequired, f.IsActive));
+        var stored = entityId == null
+            ? new List<KeyValuePair<Guid, string?>>()
+            : targetManager.Context.Set<CORE.Entities.TargetCustomFieldValue>().AsNoTracking().Where(v => v.TargetId == entityId)
+                .Select(v => new KeyValuePair<Guid, string?>(v.TargetCustomFieldId, v.Value)).ToList();
+        return CustomFieldRules.MissingRequired(fields, CustomFieldRules.Merge(stored, submitted));
     }
 }

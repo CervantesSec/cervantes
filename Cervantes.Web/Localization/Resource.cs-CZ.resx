@@ -2801,4 +2801,7 @@
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Položky, které již mají výsledky v kontrolním seznamu, nelze ze šablony odebrat.</value>
   </data>
+  <data name="requiredFieldsMissing" xml:space="preserve">
+    <value>Vyplňte povinná pole: {0}</value>
+  </data>
 </root>

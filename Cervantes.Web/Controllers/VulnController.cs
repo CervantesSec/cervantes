@@ -299,6 +299,18 @@ public class VulnController: ControllerBase
         return projectUserManager.VerifyUser(projectId.Value, aspNetUserId) != null;
     }
 
+    // Labels of the active required vuln custom fields left empty. An edit keeps stored values it does not send.
+    private IReadOnlyList<string> MissingRequiredCustomFields(Dictionary<Guid, string>? submitted, Guid? vulnId)
+    {
+        var fields = vulnManager.Context.Set<VulnCustomField>().AsNoTracking().ToList()
+            .Select(f => (f.Id, f.Label, f.IsRequired, f.IsActive));
+        var stored = vulnId == null
+            ? new List<KeyValuePair<Guid, string?>>()
+            : vulnManager.Context.Set<VulnCustomFieldValue>().AsNoTracking().Where(v => v.VulnId == vulnId)
+                .Select(v => new KeyValuePair<Guid, string?>(v.VulnCustomFieldId, v.Value)).ToList();
+        return CustomFieldRules.MissingRequired(fields, CustomFieldRules.Merge(stored, submitted));
+    }
+
     /// <summary>
     /// True when every target exists and belongs to the given project (null for template vulns).
     /// A vuln is never linked to a target of another project.
@@ -332,7 +344,14 @@ public class VulnController: ControllerBase
                         return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
-                
+
+                var isTemplate = model.Template && (model.ProjectId == null || model.ProjectId == Guid.Empty);
+                var missingFields = isTemplate ? Array.Empty<string>() : MissingRequiredCustomFields(model.CustomFieldValues, null);
+                if (missingFields.Count > 0)
+                {
+                    return BadRequest($"Required fields: {string.Join(", ", missingFields)}");
+                }
+
                 var vuln = new Vuln();
                 // Only a vuln without a project can be a template.
                 vuln.Template = model.Template && (model.ProjectId == null || model.ProjectId == Guid.Empty);
@@ -504,6 +523,14 @@ public class VulnController: ControllerBase
                     _logger.LogWarning("Access denied editing vuln {VulnId}. User: {UserId}",
                         vuln.Id, aspNetUserId);
                     return StatusCode(403, "You do not have permission to access this project");
+                }
+                if (!vuln.Template)
+                {
+                    var missingFields = MissingRequiredCustomFields(model.CustomFieldValues, vuln.Id);
+                    if (missingFields.Count > 0)
+                    {
+                        return BadRequest($"Required fields: {string.Join(", ", missingFields)}");
+                    }
                 }
 
                 // An edit never moves a vuln to another project, or between a project and the templates.

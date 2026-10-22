@@ -3385,4 +3385,7 @@ Opción 3</value>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>No se pueden quitar de la plantilla ítems que ya tienen resultados en un checklist.</value>
   </data>
+  <data name="requiredFieldsMissing" xml:space="preserve">
+    <value>Rellena los campos obligatorios: {0}</value>
+  </data>
 </root>
