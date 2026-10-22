@@ -11,8 +11,7 @@ namespace Cervantes.Tests.IFR;
 // Fixtures are handwritten in each tool's real output format (field names, nesting and types).
 public class ParserJsonTests
 {
-    private static string Fixture(string tool, string file) =>
-        File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "IFR", "Fixtures", "Parsers", tool, file));
+    private static string Fixture(string tool, string file) => ParserFixtures.Text(tool, file);
 
     [Fact]
     public void Trivy_ReadsRealOutput()

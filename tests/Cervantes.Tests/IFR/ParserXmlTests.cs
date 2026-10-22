@@ -11,12 +11,7 @@ namespace Cervantes.Tests.IFR;
 // Fixtures are handwritten in each tool's real report format (element names, attributes and nesting).
 public class ParserXmlTests
 {
-    private static XmlDocument Fixture(string tool, string file)
-    {
-        var doc = new XmlDocument();
-        doc.Load(Path.Combine(AppContext.BaseDirectory, "IFR", "Fixtures", "Parsers", tool, file));
-        return doc;
-    }
+    private static XmlDocument Fixture(string tool, string file) => ParserFixtures.Xml(tool, file);
 
     [Fact]
     public void HostOf_IgnoresHostnameChild()
