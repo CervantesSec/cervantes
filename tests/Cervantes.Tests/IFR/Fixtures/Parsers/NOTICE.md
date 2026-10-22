@@ -31,6 +31,9 @@ The files listed below come from the test samples of DefectDojo (`https://github
 - `Qualys/qualys-scan-multiple.xml`: `qualys_infrascan_webgui/qualys_infrascan_webgui_multiple.xml`
 - `Qualys/qualys-asset-data.xml`: `qualys/empty.xml`
 - `Qualys/qualys-was.xml`: `qualys_webapp/qualys_webapp_one_vuln.xml`
+- `Acunetix/acunetix.xml`: `acunetix/XML_http_example_co_id_.xml` (report items 1, 5 and 6 and the first two crawler site files kept)
+- `Acunetix/acunetix-many.xml`: `acunetix/many_findings_with_port_number.xml`
+- `Acunetix/acunetix360.json`: `acunetix/acunetix360_one_finding.json`
 <!-- filled in by the tasks that add them -->
 
 > Copyright (c) 2015-2023 DefectDojo, Inc. All rights reserved.

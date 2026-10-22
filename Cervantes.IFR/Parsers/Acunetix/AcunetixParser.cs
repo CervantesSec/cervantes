@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Xml;
 using Cervantes.Contracts;
@@ -29,27 +30,84 @@ public class AcunetixParser : IAcunetixParser
     }
 
     /// <summary>
-    /// The target of an Acunetix finding: the host of the scan's start URL, or else the host of <paramref name="affects"/>
-    /// when it is an absolute URL (older exports), or else <paramref name="affects"/> itself.
+    /// The target of an Acunetix finding, from its own <c>Scan</c> (an export can hold several): the host of
+    /// <c>Crawler/@StartUrl</c>, else of <c>StartURL</c> (often written without a scheme, e.g. <c>host:8080</c>), else of
+    /// an absolute <c>Affects</c> (older exports), else <c>Affects</c> itself.
     /// </summary>
-    public static string TargetOf(string? startUrl, string? affects)
+    public static string TargetOf(XmlNode reportItem)
     {
-        if (Uri.TryCreate(startUrl?.Trim(), UriKind.Absolute, out var start) && !string.IsNullOrEmpty(start.Host))
+        static string? HostOf(string? url)
         {
-            return start.Host;
+            url = url?.Trim();
+            if (string.IsNullOrEmpty(url))
+            {
+                return null;
+            }
+            if (!url.Contains("://"))
+            {
+                url = "http://" + url;
+            }
+            return Uri.TryCreate(url, UriKind.Absolute, out var uri) && !string.IsNullOrEmpty(uri.Host) ? uri.Host : null;
         }
-        if (Uri.TryCreate(affects?.Trim(), UriKind.Absolute, out var affected) && !string.IsNullOrEmpty(affected.Host))
+
+        var scan = reportItem.SelectSingleNode("ancestor::Scan");
+        var affects = (reportItem.SelectSingleNode("Affects") ?? reportItem.SelectSingleNode("URL"))?.InnerText?.Trim() ?? "";
+        return HostOf(scan?.SelectSingleNode("Crawler/@StartUrl")?.Value)
+               ?? HostOf(scan?.SelectSingleNode("StartURL")?.InnerText)
+               ?? (affects.Contains("://") ? HostOf(affects) : null)
+               ?? affects;
+    }
+
+    /// <summary>The CVSS v3 score and vector of a finding (<c>CVSS3/Score</c>, <c>CVSS3/Descriptor</c>); the v2 block is not used.</summary>
+    public static (double? Score, string? Vector) CvssOf(XmlNode reportItem)
+    {
+        var cvss3 = reportItem.SelectSingleNode("CVSS3");
+        if (cvss3 == null)
         {
-            return affected.Host;
+            return (null, null);
         }
-        return affects?.Trim() ?? "";
+        double? score = double.TryParse(cvss3.SelectSingleNode("Score")?.InnerText, NumberStyles.Float, CultureInfo.InvariantCulture, out var value)
+            ? value
+            : null;
+        var vector = cvss3.SelectSingleNode("Descriptor")?.InnerText?.Trim();
+        return (score, string.IsNullOrEmpty(vector) ? null : vector);
+    }
+
+    /// <summary>The recorded HTTP request: <c>TechnicalDetails/Request</c>, or a direct <c>Request</c>/<c>HttpRequest</c> in older exports.</summary>
+    public static string RequestOf(XmlNode reportItem)
+    {
+        return (reportItem.SelectSingleNode("TechnicalDetails/Request")
+                ?? reportItem.SelectSingleNode("Request")
+                ?? reportItem.SelectSingleNode("HttpRequest"))?.InnerText ?? "";
+    }
+
+    /// <summary>Every <c>CWEList/CWE</c> (or a direct <c>CWE</c>), comma-separated.</summary>
+    public static string CwesOf(XmlNode reportItem)
+    {
+        var cwes = reportItem.SelectNodes("CWEList/CWE | CWE")!.Cast<XmlNode>().Select(x => x.InnerText.Trim()).Where(x => x.Length > 0);
+        return string.Join(", ", cwes.Distinct());
+    }
+
+    /// <summary>The references of a finding, one per line: <c>References/Reference</c> database name and URL.</summary>
+    public static string ReferencesOf(XmlNode reportItem)
+    {
+        return string.Join("\n", reportItem.SelectNodes("References/Reference")!.Cast<XmlNode>()
+            .Select(x => $"{x.SelectSingleNode("Database")?.InnerText?.Trim()} {x.SelectSingleNode("URL")?.InnerText?.Trim()}".Trim())
+            .Where(x => x.Length > 0));
+    }
+
+    /// <summary>Loads an Acunetix XML export; anything else (for example the JSON of Acunetix 360) throws <see cref="XmlException"/>.</summary>
+    public static XmlDocument LoadReport(string path)
+    {
+        var doc = new XmlDocument();
+        doc.Load(path);
+        return doc;
     }
 
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
-        XmlDocument doc = new XmlDocument();
-        doc.Load(path);
+        XmlDocument doc = LoadReport(path);
 
         // Acunetix puede tener diferentes estructuras XML, buscamos vulnerabilidades
         XmlNodeList vulnerabilities = doc.GetElementsByTagName("Vulnerability");
@@ -58,8 +116,6 @@ public class AcunetixParser : IAcunetixParser
             vulnerabilities = doc.GetElementsByTagName("ReportItem");
         }
 
-        // Real exports put the scanned site once, in Scan/StartURL; each ReportItem's Affects is a path on it
-        var startUrl = doc.SelectSingleNode("//StartURL")?.InnerText;
         var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
         if (project != null)
@@ -93,9 +149,9 @@ public class AcunetixParser : IAcunetixParser
                 string parameter = "";
                 if (vuln.SelectSingleNode("Parameter") != null) { parameter = vuln.SelectSingleNode("Parameter").InnerText; }
 
+                // Attack details (HTML); TechnicalDetails only holds the request, which goes to the PoC
                 string details = "";
-                if (vuln.SelectSingleNode("TechnicalDetails") != null) { details = vuln.SelectSingleNode("TechnicalDetails").InnerText; }
-                else if (vuln.SelectSingleNode("Details") != null) { details = vuln.SelectSingleNode("Details").InnerText; }
+                if (vuln.SelectSingleNode("Description") != null && vuln.SelectSingleNode("Details") != null) { details = vuln.SelectSingleNode("Details").InnerText; }
 
                 string impact = "";
                 if (vuln.SelectSingleNode("Impact") != null) { impact = vuln.SelectSingleNode("Impact").InnerText; }
@@ -104,20 +160,15 @@ public class AcunetixParser : IAcunetixParser
                 if (vuln.SelectSingleNode("Recommendation") != null) { recommendation = vuln.SelectSingleNode("Recommendation").InnerText; }
                 else if (vuln.SelectSingleNode("Recommendations") != null) { recommendation = vuln.SelectSingleNode("Recommendations").InnerText; }
 
-                string request = "";
-                if (vuln.SelectSingleNode("Request") != null) { request = vuln.SelectSingleNode("Request").InnerText; }
-                else if (vuln.SelectSingleNode("HttpRequest") != null) { request = vuln.SelectSingleNode("HttpRequest").InnerText; }
+                string request = RequestOf(vuln);
 
                 string response = "";
                 if (vuln.SelectSingleNode("Response") != null) { response = vuln.SelectSingleNode("Response").InnerText; }
                 else if (vuln.SelectSingleNode("HttpResponse") != null) { response = vuln.SelectSingleNode("HttpResponse").InnerText; }
 
-                string cwe = "";
-                if (vuln.SelectSingleNode("CWE") != null) { cwe = vuln.SelectSingleNode("CWE").InnerText; }
-
-                string cvss = "";
-                if (vuln.SelectSingleNode("CVSS") != null) { cvss = vuln.SelectSingleNode("CVSS").InnerText; }
-                else if (vuln.SelectSingleNode("CVSSScore") != null) { cvss = vuln.SelectSingleNode("CVSSScore").InnerText; }
+                string cwe = CwesOf(vuln);
+                string references = ReferencesOf(vuln);
+                var cvss = CvssOf(vuln);
 
                 // Parse risk level from Acunetix format
                 VulnRisk risk = VulnRisk.Info;
@@ -149,7 +200,7 @@ public class AcunetixParser : IAcunetixParser
                     }
                 }
 
-                string targetHost = TargetOf(startUrl, affects);
+                string targetHost = TargetOf(vuln);
 
                 // Create or find target
                 Target target = null;
@@ -182,36 +233,45 @@ public class AcunetixParser : IAcunetixParser
                 {
                     detailedDescription += $"\n\nVulnerability Type: {type}";
                 }
+                // Affects, parameter and the request are plain text (a parameter can be "<empty>"); Details is HTML
                 if (!string.IsNullOrEmpty(parameter))
                 {
-                    detailedDescription += $"\n\nParameter: {parameter}";
+                    detailedDescription += $"\n\nParameter: {WebUtility.HtmlEncode(parameter)}";
                 }
                 if (!string.IsNullOrEmpty(details))
                 {
-                    detailedDescription += $"\n\nTechnical Details:\n{details}";
+                    detailedDescription += $"\n\nAttack Details:\n{details}";
                 }
                 if (!string.IsNullOrEmpty(cwe))
                 {
-                    detailedDescription += $"\n\nCWE: {cwe}";
+                    detailedDescription += $"\n\nCWE: {WebUtility.HtmlEncode(cwe)}";
+                }
+                if (cvss.Vector != null)
+                {
+                    detailedDescription += $"\n\nCVSS v3: {cvss.Score?.ToString(CultureInfo.InvariantCulture)} {WebUtility.HtmlEncode(cvss.Vector)}";
+                }
+                if (!string.IsNullOrEmpty(references))
+                {
+                    detailedDescription += $"\n\nReferences:\n{WebUtility.HtmlEncode(references)}";
                 }
 
                 // Build proof of concept
                 string poc = "";
                 if (!string.IsNullOrEmpty(affects))
                 {
-                    poc += $"Affects: {affects}\n";
+                    poc += $"Affects: {WebUtility.HtmlEncode(affects)}\n";
                 }
                 if (!string.IsNullOrEmpty(parameter))
                 {
-                    poc += $"Parameter: {parameter}\n";
+                    poc += $"Parameter: {WebUtility.HtmlEncode(parameter)}\n";
                 }
                 if (!string.IsNullOrEmpty(request))
                 {
-                    poc += $"HTTP Request:\n{request}\n\n";
+                    poc += $"HTTP Request:\n<pre>{WebUtility.HtmlEncode(request)}</pre>\n";
                 }
                 if (!string.IsNullOrEmpty(response))
                 {
-                    poc += $"HTTP Response:\n{response}\n";
+                    poc += $"HTTP Response:\n<pre>{WebUtility.HtmlEncode(response)}</pre>\n";
                 }
 
                 // Skip if no name or description
@@ -241,15 +301,13 @@ public class AcunetixParser : IAcunetixParser
                 };
 
                 // Set CVSS if available
-                if (!string.IsNullOrEmpty(cvss) && double.TryParse(cvss, NumberStyles.Float, CultureInfo.InvariantCulture, out double cvssScore))
+                if (cvss.Score is { } cvssScore)
                 {
                     vulnerability.CVSS3 = cvssScore;
                 }
-
-                // Set CVE if available (some Acunetix reports include CVE)
-                if (!string.IsNullOrEmpty(cwe) && cwe.ToUpper().StartsWith("CVE-"))
+                if (cvss.Vector != null)
                 {
-                    vulnerability.cve = cwe;
+                    vulnerability.CVSSVector = sanitizer.Sanitize(cvss.Vector);
                 }
 
                 vulnerability.FindingId = findingIds.Next();

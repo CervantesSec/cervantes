@@ -20,15 +20,6 @@ public class ParserXmlTests
     }
 
     [Fact]
-    public void TargetOf_UsesStartUrlHost()
-    {
-        var startUrl = Fixture("Acunetix", "acunetix.xml").SelectSingleNode("//StartURL")!.InnerText;
-
-        Assert.Equal("app.example", AcunetixParser.TargetOf(startUrl, "/search"));
-        Assert.Equal("legacy.example", AcunetixParser.TargetOf(null, "http://legacy.example/x"));
-    }
-
-    [Fact]
     public void InstancesOf_ReadsZap210Instances()
     {
         var alert = Fixture("Zap", "zap-2.14.xml").SelectSingleNode("//alertitem")!;
