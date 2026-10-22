@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Xml;
 using Cervantes.Contracts;
@@ -26,6 +27,52 @@ public class NessusParser: INessusParser
         this.vulnTargetManager = vulnTargetManager;
         this.projectManager = projectManager;
     }
+    /// <summary>
+    /// The fields of one <c>ReportItem</c>, read from that item only (absent fields are empty or null). <c>Cves</c> joins
+    /// every <c>&lt;cve&gt;</c>; port, protocol and service come from the item's attributes.
+    /// </summary>
+    public static NessusItem ReadItem(XmlNode reportItem)
+    {
+        string Child(string name) => reportItem.SelectSingleNode(name)?.InnerText ?? "";
+        string Attribute(string name) => reportItem.Attributes?[name]?.Value ?? "";
+
+        var pluginName = Child("plugin_name");
+        double? cvss3 = double.TryParse(Child("cvss3_base_score"), NumberStyles.Float, CultureInfo.InvariantCulture, out var score)
+            ? score
+            : null;
+        var cves = reportItem.SelectNodes("cve")!.Cast<XmlNode>().Select(x => x.InnerText.Trim()).Where(x => x.Length > 0).Distinct();
+        return new NessusItem(
+            pluginName.Length > 0 ? pluginName : Attribute("pluginName"),
+            Child("risk_factor"),
+            Child("description"),
+            Child("solution"),
+            Child("synopsis"),
+            Child("plugin_output"),
+            Child("see_also"),
+            string.Join(", ", cves),
+            cvss3,
+            Child("cvss3_vector"),
+            Attribute("port"),
+            Attribute("protocol"),
+            Attribute("svc_name"));
+    }
+
+    /// <summary>The text of <c>HostProperties/tag[@name=…]</c> of a <c>ReportHost</c>, or "" when it has none.</summary>
+    public static string HostTag(XmlNode reportHost, string name)
+    {
+        foreach (XmlNode tag in reportHost.SelectNodes("HostProperties/tag")!)
+        {
+            if (tag.Attributes?["name"]?.Value == name)
+            {
+                return tag.InnerText;
+            }
+        }
+        return "";
+    }
+
+    // Plain report text for a rich-text field.
+    private static string Text(string value) => WebUtility.HtmlEncode(HttpUtility.HtmlDecode(value));
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -43,16 +90,8 @@ public class NessusParser: INessusParser
 
                 string hostName = "";
                 if(host.Attributes["name"] != null){hostName = host.Attributes["name"].Value; }
-                XmlNode hostPropertiesNode = host.SelectSingleNode("HostProperties");
-                XmlNodeList hostTags = hostPropertiesNode.SelectNodes("tag");
-
-                string os = "";
-                string hostIp = "";
-                foreach (XmlNode tag in hostTags)
-                {
-                    if(tag.Attributes["operating-system"] != null){os = tag.Attributes["operating-system"].InnerText;}
-                    if(tag.Attributes["host-ip"] != null){hostIp = tag.Attributes["host-ip"].InnerText;}
-                }
+                string os = HostTag(host, "operating-system");
+                string hostIp = HostTag(host, "host-ip");
                 
                 var targetName = sanitizer.Sanitize(HttpUtility.HtmlDecode(hostName));
                 var tar = targetManager.GetByName(targetName, project);
@@ -74,30 +113,20 @@ public class NessusParser: INessusParser
                 
                 XmlNodeList items = host.SelectNodes("ReportItem");
 
-                string description = "";
-                string pluginName = "";
-                string risk = "";
-                string solution = "";
-                string pluginOutput = "";
-                string cve = "";
-                string cvss = "";
-                string cvssVector = "";
-                string impact = "";
-                string refrences = "";
-                
                 foreach (XmlNode item in items)
                 {
-                    
-                    if(item.SelectSingleNode("risk_factor") != null){risk = item.SelectSingleNode("risk_factor").InnerText;}
-                    if(item.SelectSingleNode("plugin_name") != null){pluginName = item.SelectSingleNode("plugin_name").InnerText;}
-                    if(item.SelectSingleNode("description") != null){description = item.SelectSingleNode("description").InnerText;}
-                    if(item.SelectSingleNode("solution") != null){solution = item.SelectSingleNode("solution").InnerText;}
-                    if(item.SelectSingleNode("plugin_output") != null){pluginOutput = item.SelectSingleNode("plugin_output").InnerText;}
-                    if(item.SelectSingleNode("cve") != null){cve = item.SelectSingleNode("cve").InnerText;}
-                    if(item.SelectSingleNode("cvss3_base_score") != null){cvss = item.SelectSingleNode("cvss3_base_score").InnerText;}
-                    if(item.SelectSingleNode("cvss3_vector") != null){cvssVector = item.SelectSingleNode("cvss3_vector").InnerText;}
-                    if(item.SelectSingleNode("synopsis") != null){impact = item.SelectSingleNode("synopsis").InnerText;}
-                    if(item.SelectSingleNode("see_also") != null){refrences = item.SelectSingleNode("see_also").InnerText;}
+                    // Every field comes from this item only: a field it lacks must not keep the previous item's value
+                    var read = ReadItem(item);
+                    string description = read.Description;
+                    string pluginName = read.PluginName;
+                    string risk = read.RiskFactor;
+                    string solution = read.Solution;
+                    string pluginOutput = read.PluginOutput;
+                    string cve = read.Cves;
+                    string cvssVector = read.Cvss3Vector;
+                    string impact = read.Synopsis;
+                    string refrences = read.SeeAlso;
+                    string service = string.Join(" ", new[] { read.Port, read.Protocol, read.Service }.Where(x => !string.IsNullOrEmpty(x)));
                     
                     var vuln = new Vuln();
                     vuln.FindingId = findingIds.Next();
@@ -128,20 +157,15 @@ public class NessusParser: INessusParser
                     }
                     vuln.Status = VulnStatus.Open;
                     vuln.cve = sanitizer.Sanitize(HttpUtility.HtmlDecode(cve));
-                    vuln.Description = "<p>"+sanitizer.Sanitize(HttpUtility.HtmlDecode(description))+"</p>"+ "<p>References: " +"<p>"+sanitizer.Sanitize(HttpUtility.HtmlDecode(refrences))+"</p>";
-                    vuln.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginOutput));
-                    vuln.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(impact));
-                    if (cvss != "")
-                    {
-                        vuln.CVSS3 = float.Parse(cvss,CultureInfo.InvariantCulture);
-                    }
-                    else
-                    {
-                        vuln.CVSS3 = 0;
-                    }
-                    
+                    // Nessus fields are plain text: encode them so "<" in a plugin output is shown, not parsed
+                    vuln.Description = "<p>"+sanitizer.Sanitize(Text(description))+"</p>"+ "<p>References: " +"<p>"+sanitizer.Sanitize(Text(refrences))+"</p>";
+                    vuln.ProofOfConcept = sanitizer.Sanitize((service.Length > 0 ? "<p>Port: " + Text(service) + "</p>" : "") +
+                                                             (pluginOutput.Length > 0 ? "<pre>" + Text(pluginOutput) + "</pre>" : ""));
+                    vuln.Impact = sanitizer.Sanitize(Text(impact));
+                    vuln.CVSS3 = read.Cvss3 ?? 0;
+
                     vuln.CVSSVector = sanitizer.Sanitize(HttpUtility.HtmlDecode(cvssVector));
-                    vuln.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(solution));
+                    vuln.Remediation = sanitizer.Sanitize(Text(solution));
                     vuln.RemediationComplexity = RemediationComplexity.Low;
                     vuln.RemediationPriority = RemediationPriority.Low;
                     vuln.JiraCreated = false;
@@ -187,30 +211,20 @@ public class NessusParser: INessusParser
                 
                 XmlNodeList items = host.SelectNodes("ReportItem");
 
-                string description = "";
-                string pluginName = "";
-                string risk = "";
-                string solution = "";
-                string pluginOutput = "";
-                string cve = "";
-                string cvss = "";
-                string cvssVector = "";
-                string impact = "";
-                string refrences = "";
-                
                 foreach (XmlNode item in items)
                 {
-                    
-                    if(item.SelectSingleNode("risk_factor") != null){risk = item.SelectSingleNode("risk_factor").InnerText;}
-                    if(item.SelectSingleNode("plugin_name") != null){pluginName = item.SelectSingleNode("plugin_name").InnerText;}
-                    if(item.SelectSingleNode("description") != null){description = item.SelectSingleNode("description").InnerText;}
-                    if(item.SelectSingleNode("solution") != null){solution = item.SelectSingleNode("solution").InnerText;}
-                    if(item.SelectSingleNode("plugin_output") != null){pluginOutput = item.SelectSingleNode("plugin_output").InnerText;}
-                    if(item.SelectSingleNode("cve") != null){cve = item.SelectSingleNode("cve").InnerText;}
-                    if(item.SelectSingleNode("cvss3_base_score") != null){cvss = item.SelectSingleNode("cvss3_base_score").InnerText;}
-                    if(item.SelectSingleNode("cvss3_vector") != null){cvssVector = item.SelectSingleNode("cvss3_vector").InnerText;}
-                    if(item.SelectSingleNode("synopsis") != null){impact = item.SelectSingleNode("synopsis").InnerText;}
-                    if(item.SelectSingleNode("see_also") != null){refrences = item.SelectSingleNode("see_also").InnerText;}
+                    // Every field comes from this item only: a field it lacks must not keep the previous item's value
+                    var read = ReadItem(item);
+                    string description = read.Description;
+                    string pluginName = read.PluginName;
+                    string risk = read.RiskFactor;
+                    string solution = read.Solution;
+                    string pluginOutput = read.PluginOutput;
+                    string cve = read.Cves;
+                    string cvssVector = read.Cvss3Vector;
+                    string impact = read.Synopsis;
+                    string refrences = read.SeeAlso;
+                    string service = string.Join(" ", new[] { read.Port, read.Protocol, read.Service }.Where(x => !string.IsNullOrEmpty(x)));
                     
                     var vuln = new Vuln();
                     vuln.Template = true; // no project: imported as a template
@@ -241,20 +255,15 @@ public class NessusParser: INessusParser
                     }
                     vuln.Status = VulnStatus.Open;
                     vuln.cve = sanitizer.Sanitize(HttpUtility.HtmlDecode(cve));
-                    vuln.Description = "<p>"+sanitizer.Sanitize(HttpUtility.HtmlDecode(description))+"</p>"+ "<p>References: " +"<p>"+sanitizer.Sanitize(HttpUtility.HtmlDecode(refrences))+"</p>";
-                    vuln.ProofOfConcept = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginOutput));
-                    vuln.Impact = sanitizer.Sanitize(HttpUtility.HtmlDecode(impact));
-                    if (cvss != "")
-                    {
-                        vuln.CVSS3 = float.Parse(cvss,CultureInfo.InvariantCulture);
-                    }
-                    else
-                    {
-                        vuln.CVSS3 = 0;
-                    }
-                    
+                    // Nessus fields are plain text: encode them so "<" in a plugin output is shown, not parsed
+                    vuln.Description = "<p>"+sanitizer.Sanitize(Text(description))+"</p>"+ "<p>References: " +"<p>"+sanitizer.Sanitize(Text(refrences))+"</p>";
+                    vuln.ProofOfConcept = sanitizer.Sanitize((service.Length > 0 ? "<p>Port: " + Text(service) + "</p>" : "") +
+                                                             (pluginOutput.Length > 0 ? "<pre>" + Text(pluginOutput) + "</pre>" : ""));
+                    vuln.Impact = sanitizer.Sanitize(Text(impact));
+                    vuln.CVSS3 = read.Cvss3 ?? 0;
+
                     vuln.CVSSVector = sanitizer.Sanitize(HttpUtility.HtmlDecode(cvssVector));
-                    vuln.Remediation = sanitizer.Sanitize(HttpUtility.HtmlDecode(solution));
+                    vuln.Remediation = sanitizer.Sanitize(Text(solution));
                     vuln.RemediationComplexity = RemediationComplexity.Low;
                     vuln.RemediationPriority = RemediationPriority.Low;
                     vuln.JiraCreated = false;
@@ -276,3 +285,7 @@ public class NessusParser: INessusParser
         
     }
 }
+
+// One ReportItem of a .nessus report
+public sealed record NessusItem(string PluginName, string RiskFactor, string Description, string Solution, string Synopsis,
+    string PluginOutput, string SeeAlso, string Cves, double? Cvss3, string Cvss3Vector, string Port, string Protocol, string Service);

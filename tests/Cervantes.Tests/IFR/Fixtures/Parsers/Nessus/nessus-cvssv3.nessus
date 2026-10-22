@@ -1,0 +1,802 @@
+<?xml version="1.0" ?>
+<NessusClientData_v2>
+    <Policy>
+        <policyName>Basic Network Scan</policyName>
+        <Preferences>
+            <ServerPreferences>
+                <preference>
+                    <name>scan.enable_utf8_output</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>bw_prevent_core_updates</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>bw_prevent_plugin_updates</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>assessment_mode</name>
+                    <value>webapp_known</value>
+                </preference>
+                <preference>
+                    <name>TARGET</name>
+                    <value>testphp.vulnweb.com</value>
+                </preference>
+                <preference>
+                    <name>local_portscan.snmp</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>listen_address</name>
+                    <value>0.0.0.0</value>
+                </preference>
+                <preference>
+                    <name>severity_processed</name>
+                    <value>202203230748</value>
+                </preference>
+                <preference>
+                    <name>slice_network_addresses</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>disable_api</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>non_simult_ports</name>
+                    <value>139, 445, 3389</value>
+                </preference>
+                <preference>
+                    <name>local_portscan.netstat_ssh</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>ssl_mode</name>
+                    <value>tls_1_2</value>
+                </preference>
+                <preference>
+                    <name>max_checks</name>
+                    <value>4</value>
+                </preference>
+                <preference>
+                    <name>network_scanners.syn</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>stop_scan_on_disconnect</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>severity_basis</name>
+                    <value>cvss_v2</value>
+                </preference>
+                <preference>
+                    <name>report_crashes</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>scan_history_expiration_days</name>
+                    <value>0</value>
+                </preference>
+                <preference>
+                    <name>network_scanners.tcp</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>disable_guides</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>xmlrpc_listen_port</name>
+                    <value>443</value>
+                </preference>
+                <preference>
+                    <name>discovery_mode</name>
+                    <value>portscan_common</value>
+                </preference>
+                <preference>
+                    <name>report_cleanup_threshold_days</name>
+                    <value>30</value>
+                </preference>
+                <preference>
+                    <name>engine.max_hosts</name>
+                    <value>16</value>
+                </preference>
+                <preference>
+                    <name>name</name>
+                    <value>Basic Network Scan</value>
+                </preference>
+                <preference>
+                    <name>whoami</name>
+                    <value>dummy</value>
+                </preference>
+                <preference>
+                    <name>advanced_mode</name>
+                    <value>default</value>
+                </preference>
+                <preference>
+                    <name>scan_description</name>
+                    <value></value>
+                </preference>
+                <preference>
+                    <name>bw_prevent_agent_scans</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>reverse_lookup</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>track_unique_agents</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>optimize_test</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>engine.min</name>
+                    <value>4</value>
+                </preference>
+                <preference>
+                    <name>log_whole_attack</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>portscan.ping</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>cgi_path</name>
+                    <value>/cgi-bin:/scripts</value>
+                </preference>
+                <preference>
+                    <name>unscanned_closed</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>auto_update_ui</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>network_scanners.udp</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>auto_update</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>listen_port</name>
+                    <value>1241</value>
+                </preference>
+                <preference>
+                    <name>engine.max</name>
+                    <value>16</value>
+                </preference>
+                <preference>
+                    <name>local_portscan.netstat_wmi</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>checks_read_timeout</name>
+                    <value>5</value>
+                </preference>
+                <preference>
+                    <name>plugins_timeout</name>
+                    <value>320</value>
+                </preference>
+                <preference>
+                    <name>auto_enable_dependencies</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>safe_checks</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>report_task_id</name>
+                    <value>7cee556a-08ae-96c8-d6ec-eecc732e91999febddbb02223ba7</value>
+                </preference>
+                <preference>
+                    <name>allow_post_scan_editing</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>visibility</name>
+                    <value>private</value>
+                </preference>
+                <preference>
+                    <name>bw_permanent_blackout_window</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>wizard_uuid</name>
+                    <value>731a8e52-3ea6-a291-ec0a-d2ff0619c19d7bd788d6be818b65</value>
+                </preference>
+                <preference>
+                    <name>scan.unlimited</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>max_hosts</name>
+                    <value>30</value>
+                </preference>
+                <preference>
+                    <name>engine.max_checks</name>
+                    <value>64</value>
+                </preference>
+                <preference>
+                    <name>plugin_upload</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>reduce_connections_on_congestion</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>silent_dependencies</name>
+                    <value>yes</value>
+                </preference>
+                <preference>
+                    <name>scan_vulnerability_groups</name>
+                    <value>no</value>
+                </preference>
+                <preference>
+                    <name>feed_type</name>
+                    <value>ProFeed</value>
+                </preference>
+                <preference>
+                    <name>port_range</name>
+                    <value>default</value>
+                </preference>
+                <preference>
+                    <name>scan_vulnerability_groups_mixed</name>
+                    <value>yes</value>
+                </preference>
+            </ServerPreferences>
+            <PluginsPreferences>
+                <item>
+                    <pluginName>ADSI Settings</pluginName>
+                    <pluginId>60024</pluginId>
+                    <fullName>ADSI Settings[entry]:Domain Controller :</fullName>
+                    <preferenceName>Domain Controller :</preferenceName>
+                    <preferenceType>entry</preferenceType>
+                    <preferenceValues></preferenceValues>
+                    <selectedValue></selectedValue>
+                </item>
+                <item>
+                    <pluginName>ADSI Settings</pluginName>
+                    <pluginId>60024</pluginId>
+                    <fullName>ADSI Settings[entry]:Domain :</fullName>
+                    <preferenceName>Domain :</preferenceName>
+                    <preferenceType>entry</preferenceType>
+                    <preferenceValues></preferenceValues>
+                    <selectedValue></selectedValue>
+                </item>
+            </PluginsPreferences>
+        </Preferences>
+        <FamilySelection>
+            <FamilyItem>
+                <FamilyName>MacOS X Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>F5 Networks Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>DNS</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Gain a shell remotely</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Solaris Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Port scanners</FamilyName>
+                <Status>mixed</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Web Servers</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>SMTP problems</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Service detection</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>CGI abuses : XSS</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Debian Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Mandriva Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Databases</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Default Unix Accounts</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Denial of Service</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Settings</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Palo Alto Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>HP-UX Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Backdoors</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>VMware ESX Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>NewStart CGSL Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>SCADA</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Oracle Linux Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>General</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>PhotonOS Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Red Hat Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>FreeBSD Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>CGI abuses</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Rocky Linux Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Tenable.ot</FamilyName>
+                <Status>disabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Netware</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Windows : User management</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Amazon Linux Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Peer-To-Peer File Sharing</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Slackware Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>SNMP</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Fedora Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Gentoo Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Huawei Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Ubuntu Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Misc.</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Alma Linux Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Virtuozzo Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>FTP</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Firewalls</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Windows : Microsoft Bulletins</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Junos Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>SuSE Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Policy Compliance</FamilyName>
+                <Status>disabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Windows</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>OracleVM Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>RPC</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>CentOS Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>CISCO</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>AIX Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Scientific Linux Local Security Checks</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+            <FamilyItem>
+                <FamilyName>Mobile Devices</FamilyName>
+                <Status>enabled</Status>
+            </FamilyItem>
+        </FamilySelection>
+        <IndividualPluginSelection>
+            <PluginItem>
+                <PluginId>34220</PluginId>
+                <PluginName>Netstat Portscanner (WMI)</PluginName>
+                <Family>Netstat Portscanner (WMI)</Family>
+                <Status>enabled</Status>
+            </PluginItem>
+            <PluginItem>
+                <PluginId>14274</PluginId>
+                <PluginName>Nessus SNMP Scanner</PluginName>
+                <Family>Nessus SNMP Scanner</Family>
+                <Status>enabled</Status>
+            </PluginItem>
+            <PluginItem>
+                <PluginId>14272</PluginId>
+                <PluginName>Netstat Portscanner (SSH)</PluginName>
+                <Family>Netstat Portscanner (SSH)</Family>
+                <Status>enabled</Status>
+            </PluginItem>
+            <PluginItem>
+                <PluginId>10180</PluginId>
+                <PluginName>Ping the remote host</PluginName>
+                <Family>Ping the remote host</Family>
+                <Status>enabled</Status>
+            </PluginItem>
+            <PluginItem>
+                <PluginId>11219</PluginId>
+                <PluginName>Nessus SYN scanner</PluginName>
+                <Family>Nessus SYN scanner</Family>
+                <Status>enabled</Status>
+            </PluginItem>
+        </IndividualPluginSelection>
+    </Policy>
+    <Report name="dummy scan" xmlns:cm="http://www.nessus.org/cm">
+        <ReportHost name="testphp.vulnweb.com">
+            <HostProperties>
+                <tag name="HOST_END_TIMESTAMP">1648044472</tag>
+                <tag name="HOST_END">Wed Mar 23 15:07:52 2022</tag>
+                <tag name="cpe-5">cpe:/a:php:php:5.1.6 -&gt; PHP PHP</tag>
+                <tag name="LastUnauthenticatedResults">1648044472</tag>
+                <tag name="Credentialed_Scan">false</tag>
+                <tag name="policy-used">Basic Network Scan</tag>
+                <tag name="patch-summary-total-cves">138</tag>
+                <tag name="cpe-4">cpe:/a:nginx:nginx:1.19.0 -&gt; Nginx</tag>
+                <tag name="cpe-3">cpe:/a:php:php:5.6.40-38+ubuntu20.04.1+deb.sury.org+1 -&gt; PHP PHP</tag>
+                <tag name="patch-summary-cves-e6c83756995a506a166149a2bd8dccfb">CVE-2014-8626, CVE-2012-1172,
+                    CVE-2012-1171, CVE-2012-0831, CVE-2012-0789, CVE-2012-0788, CVE-2012-0781, CVE-2012-0057,
+                    CVE-2011-4885, CVE-2011-4566, CVE-2011-3379, CVE-2011-1398, CVE-2010-1130, CVE-2010-1129,
+                    CVE-2010-1128, CVE-2009-5016, CVE-2009-4143, CVE-2009-4142, CVE-2009-4018, CVE-2009-4017,
+                    CVE-2009-3558, CVE-2009-3557, CVE-2009-3294, CVE-2009-3293, CVE-2009-3292, CVE-2009-3291,
+                    CVE-2009-2687, CVE-2009-1272, CVE-2009-1271, CVE-2008-7068, CVE-2008-5658, CVE-2008-5625,
+                    CVE-2008-5624, CVE-2008-5557, CVE-2008-5498, CVE-2008-3660, CVE-2008-3659, CVE-2008-3658,
+                    CVE-2008-2829, CVE-2008-2666, CVE-2008-2665, CVE-2008-2371, CVE-2007-5424, CVE-2007-4663,
+                    CVE-2007-4662, CVE-2007-4661, CVE-2007-4660, CVE-2007-4659, CVE-2007-4658, CVE-2007-4652,
+                    CVE-2007-4586, CVE-2007-4507, CVE-2007-4441, CVE-2007-4255, CVE-2007-4033, CVE-2007-4010,
+                    CVE-2007-3806, CVE-2007-3799, CVE-2007-3790, CVE-2007-3378, CVE-2007-3294, CVE-2007-3007,
+                    CVE-2007-2872, CVE-2007-2844, CVE-2007-2756, CVE-2007-1900, CVE-2007-1890, CVE-2007-1889,
+                    CVE-2007-1888, CVE-2007-1887, CVE-2007-1886, CVE-2007-1885, CVE-2007-1884, CVE-2007-1835,
+                    CVE-2007-1825, CVE-2007-1824, CVE-2007-1718, CVE-2007-1717, CVE-2007-1701, CVE-2007-1700,
+                    CVE-2007-1649, CVE-2007-1584, CVE-2007-1583, CVE-2007-1454, CVE-2007-1453, CVE-2007-1452,
+                    CVE-2007-1413, CVE-2007-1383, CVE-2007-1381, CVE-2007-1380, CVE-2007-1376, CVE-2007-1001,
+                    CVE-2007-0988, CVE-2007-0910, CVE-2007-0909, CVE-2007-0908, CVE-2007-0907, CVE-2007-0906,
+                    CVE-2007-0905, CVE-2007-0448, CVE-2006-7205, CVE-2006-6383, CVE-2006-5706, CVE-2006-5465,
+                    CVE-2006-4812, CVE-2006-4625, CVE-2006-4486, CVE-2006-2660, CVE-2006-1549, CVE-2006-1015
+                </tag>
+                <tag name="patch-summary-cve-num-e6c83756995a506a166149a2bd8dccfb">110</tag>
+                <tag name="patch-summary-txt-e6c83756995a506a166149a2bd8dccfb">PHP &lt; 5.3.12 / 5.4.2 CGI Query String
+                    Code Execution: Upgrade to PHP version 5.3.12 / 5.4.2 or later. A &apos;mod_rewrite&apos; workaround
+                    is available as well.
+                </tag>
+                <tag name="cpe-2">cpe:/a:igor_sysoev:nginx:1.19.0 -&gt; Nginx</tag>
+                <tag name="cpe-1">cpe:/a:php:php:5.6.40 -&gt; PHP PHP</tag>
+                <tag name="cpe-0">cpe:/o:linux:linux_kernel -&gt; Linux Kernel</tag>
+                <tag name="cpe">cpe:/o:linux:linux_kernel</tag>
+                <tag name="os">linux</tag>
+                <tag name="operating-system-conf">65</tag>
+                <tag name="operating-system-method">SinFP</tag>
+                <tag name="host-fqdns">[{&quot;FQDN&quot;:&quot;testphp.vulnweb.com&quot;,&quot;sources&quot;:[&quot;get_host_report_name()&quot;,&quot;determine_fqdn()&quot;]},{&quot;FQDN&quot;:&quot;ec2-44-228-249-3.us-west-2.compute.amazonaws.com&quot;,&quot;sources&quot;:[&quot;get_host_fqdn()&quot;]}]</tag>
+                <tag name="system-type">general-purpose</tag>
+                <tag name="operating-system">Linux Kernel 2.6</tag>
+                <tag name="DDI_Dir_Scanner_Global_Duration">197</tag>
+                <tag name="DDI_Dir_Scanner_Port_80_Duration">197</tag>
+                <tag name="DDI_Dir_Scanner_Port_80_Pass_Start">1648042696</tag>
+                <tag name="DDI_Dir_Scanner_Port_80_Init">1648042695</tag>
+                <tag name="DDI_Dir_Scanner_Global_Init">1648042695</tag>
+                <tag name="traceroute-hop-8">?</tag>
+                <tag name="traceroute-hop-7">?</tag>
+                <tag name="traceroute-hop-6">?</tag>
+                <tag name="traceroute-hop-5">?</tag>
+                <tag name="traceroute-hop-4">?</tag>
+                <tag name="traceroute-hop-3">?</tag>
+                <tag name="traceroute-hop-2">?</tag>
+                <tag name="traceroute-hop-1">?</tag>
+                <tag name="traceroute-hop-0">10.20.0.254</tag>
+                <tag name="sinfp-ml-prediction">[{&quot;predicted-os&quot;: &quot;Microsoft Windows Server 2012 R2&quot;,
+                    &quot;confidence&quot;: 1},{&quot;predicted-os&quot;: &quot;Ubuntu 14.04 Linux Kernel 3.13&quot;,
+                    &quot;confidence&quot;: 6},{&quot;predicted-os&quot;: &quot;CentOS Linux 7 Linux Kernel 3.10&quot;,
+                    &quot;confidence&quot;: 1}]
+                </tag>
+                <tag name="sinfp-signature">
+                    P1:B10113:F0x12:W62727:O0204ffff:M1460:
+                    P2:B10113:F0x12:W62643:O0204ffff0402080affffffff4445414401030307:M1460:
+                    P3:B00000:F0x00:W0:O0:M0
+                    P4:190101_7_p=80R
+                </tag>
+                <tag name="host-fqdn">testphp.vulnweb.com</tag>
+                <tag name="host-rdns">ec2-44-228-249-3.us-west-2.compute.amazonaws.com</tag>
+                <tag name="host-ip">44.228.249.3</tag>
+                <tag name="HOST_START_TIMESTAMP">1648042311</tag>
+                <tag name="HOST_START">Wed Mar 23 14:31:51 2022</tag>
+            </HostProperties>
+            <ReportItem port="80" svc_name="www" protocol="tcp" severity="2" pluginID="40984"
+                        pluginName="Browsable Web Directories" pluginFamily="CGI abuses">
+                <cvss3_base_score>5.3</cvss3_base_score>
+                <cvss3_vector>CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N</cvss3_vector>
+                <cvss_base_score>5.0</cvss_base_score>
+                <cvss_vector>CVSS2#AV:N/AC:L/Au:N/C:P/I:N/A:N</cvss_vector>
+                <description>Multiple Nessus plugins identified directories on the web server that are browsable.
+                </description>
+                <fname>browsable_web_dir.nasl</fname>
+                <plugin_modification_date>2021/01/19</plugin_modification_date>
+                <plugin_name>Browsable Web Directories</plugin_name>
+                <plugin_publication_date>2009/09/15</plugin_publication_date>
+                <plugin_type>remote</plugin_type>
+                <risk_factor>Medium</risk_factor>
+                <script_version>1.10</script_version>
+                <see_also>http://www.nessus.org/u?0a35179e</see_also>
+                <solution>Make sure that browsable directories do not leak confidential information or give access to
+                    sensitive resources. Additionally, use access restrictions or disable directory indexing for any
+                    that do.
+                </solution>
+                <synopsis>Some directories on the remote web server are browsable.</synopsis>
+                <plugin_output>
+                    The following directories are browsable :
+
+                    http://testphp.vulnweb.com/CVS/
+                    http://testphp.vulnweb.com/Templates/
+                    http://testphp.vulnweb.com/admin/
+                    http://testphp.vulnweb.com/images/
+                </plugin_output>
+            </ReportItem>
+            <ReportItem port="0" svc_name="general" protocol="tcp" severity="0" pluginID="54615"
+                        pluginName="Device Type" pluginFamily="General">
+                <description>Based on the remote operating system, it is possible to determine what the remote system
+                    type is (eg: a printer, router, general-purpose computer, etc).
+                </description>
+                <fname>device_type.nasl</fname>
+                <plugin_modification_date>2011/05/23</plugin_modification_date>
+                <plugin_name>Device Type</plugin_name>
+                <plugin_publication_date>2011/05/23</plugin_publication_date>
+                <plugin_type>combined</plugin_type>
+                <risk_factor>None</risk_factor>
+                <script_version>$Revision: 1.1 $</script_version>
+                <solution>n/a</solution>
+                <synopsis>It is possible to guess the remote device type.</synopsis>
+                <plugin_output>Remote device type : general-purpose
+                    Confidence level : 65
+                </plugin_output>
+            </ReportItem>
+            <ReportItem port="80" svc_name="www" protocol="tcp" severity="2" pluginID="39480"
+                        pluginName="PHP &lt; 5.2.10 Multiple Vulnerabilities" pluginFamily="CGI abuses">
+                <age_of_vuln>730 days +</age_of_vuln>
+                <bid>35440</bid>
+                <bid>35435</bid>
+                <cpe>cpe:/a:php:php</cpe>
+                <cve>CVE-2009-2687</cve>
+                <cvssV3_impactScore>3.6</cvssV3_impactScore>
+                <cvss_base_score>5.1</cvss_base_score>
+                <cvss_temporal_score>3.8</cvss_temporal_score>
+                <cvss_temporal_vector>CVSS2#E:U/RL:OF/RC:C</cvss_temporal_vector>
+                <cvss_vector>CVSS2#AV:N/AC:H/Au:N/C:P/I:P/A:P</cvss_vector>
+                <cwe>20</cwe>
+                <description>According to its banner, the version of PHP installed on the remote host is older than
+                    5.2.10. Such versions are reportedly affected by multiple vulnerabilities :
+
+                    - Sufficient checks are not performed on fields reserved for offsets in function &apos;exif_read_data()&apos;.
+                    Successful exploitation of this issue could result in a denial of service condition. (bug 48378)
+
+                    - Provided &apos;safe_mode_exec_dir&apos; is not set (not set by default), it may be possible to
+                    bypass &apos;safe_mode&apos; restrictions by preceding a backslash in functions such as &apos;exec()&apos;,
+                    &apos;system()&apos;, &apos;shell_exec()&apos;, &apos;passthru()&apos; and &apos;popen()&apos; on a
+                    system running PHP on Windows. (bug 45997)
+                </description>
+                <exploit_available>false</exploit_available>
+                <exploit_code_maturity>Unproven</exploit_code_maturity>
+                <exploitability_ease>No exploit is required</exploitability_ease>
+                <fname>php_5_2_10.nasl</fname>
+                <patch_publication_date>2009/06/18</patch_publication_date>
+                <plugin_modification_date>2021/01/19</plugin_modification_date>
+                <plugin_name>PHP &lt; 5.2.10 Multiple Vulnerabilities</plugin_name>
+                <plugin_publication_date>2009/06/22</plugin_publication_date>
+                <plugin_type>remote</plugin_type>
+                <product_coverage>Low</product_coverage>
+                <risk_factor>Medium</risk_factor>
+                <script_version>1.13</script_version>
+                <secunia>35441</secunia>
+                <see_also>https://bugs.php.net/bug.php?id=45997
+                    https://bugs.php.net/bug.php?id=48378
+                    http://www.php.net/releases/5_2_10.php
+                    http://www.php.net/ChangeLog-5.php#5.2.10
+                </see_also>
+                <solution>Upgrade to PHP version 5.2.10 or later.</solution>
+                <synopsis>The remote web server uses a version of PHP that is affected by multiple vulnerabilities.
+                </synopsis>
+                <threat_intensity_last_28>Very Low</threat_intensity_last_28>
+                <threat_recency>No recorded events</threat_recency>
+                <threat_sources_last_28>No recorded events</threat_sources_last_28>
+                <vpr_score>3.6</vpr_score>
+                <vuln_publication_date>2009/05/24</vuln_publication_date>
+                <xref>Secunia:35441</xref>
+                <xref>CWE:20</xref>
+                <plugin_output>
+                    Version source : http://testphp.vulnweb.com/secured/phpinfo.php
+                    Installed version : 5.1.6
+                    Fixed version : 5.2.10
+                </plugin_output>
+            </ReportItem>
+            <ReportItem port="80" svc_name="www" protocol="tcp" severity="3" pluginID="17797"
+                        pluginName="PHP 5.x &lt; 5.2.2 Multiple vulnerabilities" pluginFamily="CGI abuses">
+                <age_of_vuln>730 days +</age_of_vuln>
+                <bid>23105</bid>
+                <bid>23357</bid>
+                <cpe>cpe:/a:php:php</cpe>
+                <cve>CVE-2007-1001</cve>
+                <cve>CVE-2007-1583</cve>
+                <cve>CVE-2007-1649</cve>
+                <cve>CVE-2007-1717</cve>
+                <cve>CVE-2007-1718</cve>
+                <cvss3_base_score>7.5</cvss3_base_score>
+                <cvss3_temporal_score>6.7</cvss3_temporal_score>
+                <cvss3_temporal_vector>CVSS:3.0/E:P/RL:O/RC:C</cvss3_temporal_vector>
+                <cvss3_vector>CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N</cvss3_vector>
+                <cvssV3_impactScore>5.8</cvssV3_impactScore>
+                <cvss_base_score>7.8</cvss_base_score>
+                <cvss_score_source>CVE-2007-1649</cvss_score_source>
+                <cvss_temporal_score>6.1</cvss_temporal_score>
+                <cvss_temporal_vector>CVSS2#E:POC/RL:OF/RC:C</cvss_temporal_vector>
+                <cvss_vector>CVSS2#AV:N/AC:L/Au:N/C:C/I:N/A:N</cvss_vector>
+                <description>According to its banner, the version of PHP 5.x installed on the remote host is older than
+                    5.2.2. It is, therefore, affected by multiple vulnerabilities:
+
+                    - A heap-based buffer overflow vulnerability was found in PHP&apos;s gd extension. A script that
+                    could be forced to process WBMP images from an untrusted source could result in arbitrary code
+                    execution. (CVE-2007-1001)
+
+                    - A vulnerability in the way the mbstring extension setglobal variables was discovered where a
+                    script using the mb_parse_str() function to set global variables could be forced to to enable the
+                    register_globals configuration option, possibly resulting in global variable injection.
+                    (CVE-2007-1583)
+
+                    - A context-dependent attacker could read portions of heap memory by executing certain scripts with
+                    a serialized data input string beginning with &apos;S:&apos;, which did not properly track the
+                    number of input bytes being processed. (CVE-2007-1649)
+
+                    - A vulnerability in how PHP&apos;s mail() function processed email messages, truncating potentially
+                    important information after the first ASCIIZ (\0) byte.
+                    (CVE-2007-1717)
+
+                    - A vulnerability in how PHP&apos;s mail() function processed header data was discovered. If a
+                    script sent mail using a subject header containing a string from an untrusted source, a remote
+                    attacker could send bulk email to unintended recipients (CVE-2007-1718).
+                </description>
+                <exploit_available>false</exploit_available>
+                <exploit_code_maturity>PoC</exploit_code_maturity>
+                <exploitability_ease>No exploit is required</exploitability_ease>
+                <fname>php_5_2_2.nasl</fname>
+                <patch_publication_date>2007/05/03</patch_publication_date>
+                <plugin_modification_date>2021/01/19</plugin_modification_date>
+                <plugin_name>PHP 5.x &lt; 5.2.2 Multiple vulnerabilities</plugin_name>
+                <plugin_publication_date>2012/01/11</plugin_publication_date>
+                <plugin_type>remote</plugin_type>
+                <product_coverage>Low</product_coverage>
+                <risk_factor>High</risk_factor>
+                <script_version>1.8</script_version>
+                <see_also>http://www.php.net/releases/5_2_2.php</see_also>
+                <solution>Upgrade to PHP version 5.2.2 or later.</solution>
+                <synopsis>The remote web server uses a version of PHP that is affected by multiple vulnerabilities.
+                </synopsis>
+                <threat_intensity_last_28>Very Low</threat_intensity_last_28>
+                <threat_recency>No recorded events</threat_recency>
+                <threat_sources_last_28>No recorded events</threat_sources_last_28>
+                <vpr_score>6.6</vpr_score>
+                <vuln_publication_date>2007/03/23</vuln_publication_date>
+                <plugin_output>
+                    Version source : http://testphp.vulnweb.com/secured/phpinfo.php
+                    Installed version : 5.1.6
+                    Fixed version : 5.2.2
+                </plugin_output>
+            </ReportItem>
+        </ReportHost>
+    </Report>
+</NessusClientData_v2>

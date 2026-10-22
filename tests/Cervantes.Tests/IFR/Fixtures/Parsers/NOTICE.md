@@ -34,6 +34,7 @@ The files listed below come from the test samples of DefectDojo (`https://github
 - `Acunetix/acunetix.xml`: `acunetix/XML_http_example_co_id_.xml` (report items 1, 5 and 6 and the first two crawler site files kept)
 - `Acunetix/acunetix-many.xml`: `acunetix/many_findings_with_port_number.xml`
 - `Acunetix/acunetix360.json`: `acunetix/acunetix360_one_finding.json`
+- `Nessus/nessus-cvssv3.nessus`: `tenable/nessus/nessus_with_cvssv3.nessus` (report items 4, 5, 13 and 17, the first two plugin preference items, and no `plugin_set` preference)
 <!-- filled in by the tasks that add them -->
 
 > Copyright (c) 2015-2023 DefectDojo, Inc. All rights reserved.
