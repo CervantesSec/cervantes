@@ -57,4 +57,21 @@ public class PwndocTests
 
         Assert.Equal("t", Assert.Single(vulns).Details[0].Title);
     }
+
+    [Theory]
+    // Text from real Pwndoc exports: escaped placeholders inside the HTML must stay text
+    [InlineData("<p>Query https://&lt;GIT_URL&gt;/api/graphql</p>", "&lt;GIT_URL&gt;")]
+    [InlineData("<p><code>&lt;!--#echo--&gt;</code></p>", "&lt;!--#echo--&gt;")]
+    [InlineData("<p>setspn -S &lt;SPN&gt; &lt;accountname&gt;</p>", "&lt;SPN&gt; &lt;accountname&gt;")]
+    public void HtmlOf_KeepsEscapedText(string html, string kept)
+    {
+        Assert.Contains(kept, PwndocParser.HtmlOf(html, "No Data", new Ganss.Xss.HtmlSanitizer()));
+    }
+
+    [Fact]
+    public void HtmlOf_EmptyIsTheFallback()
+    {
+        Assert.Equal("No Data", PwndocParser.HtmlOf(null, "No Data", new Ganss.Xss.HtmlSanitizer()));
+        Assert.Equal("No Data", PwndocParser.HtmlOf("", "No Data", new Ganss.Xss.HtmlSanitizer()));
+    }
 }

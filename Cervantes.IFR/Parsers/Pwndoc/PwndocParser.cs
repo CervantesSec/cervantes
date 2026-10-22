@@ -39,6 +39,15 @@ public class PwndocParser: IPwndocParser
         return deserializer.Deserialize<List<PwndocVuln>>(reader) ?? new List<PwndocVuln>();
     }
 
+    /// <summary>
+    /// A Pwndoc rich-text field as stored: the export already holds HTML, so it is only sanitized. Decoding it first
+    /// would turn escaped text such as <c>&amp;lt;GIT_URL&amp;gt;</c> into tags the sanitizer then removes.
+    /// </summary>
+    public static string HtmlOf(string? html, string empty, HtmlSanitizer sanitizer)
+    {
+        return string.IsNullOrEmpty(html) ? empty : sanitizer.Sanitize(html);
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -57,8 +66,8 @@ public class PwndocParser: IPwndocParser
                     Vuln vuln = new Vuln();
                     vuln.Name = string.IsNullOrEmpty(vul.Details[i].Title) ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title));
                     vuln.cve = "No Data";
-                    vuln.Description = string.IsNullOrEmpty(vul.Details[i].Description) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
-                    vuln.Impact = string.IsNullOrEmpty(vul.Details[i].Observation) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
+                    vuln.Description = HtmlOf(vul.Details[i].Description, "No Data", sanitizer);
+                    vuln.Impact = HtmlOf(vul.Details[i].Observation, "No Data", sanitizer);
                     switch (vul.Priority)
                     {
                         case 1:
@@ -79,7 +88,7 @@ public class PwndocParser: IPwndocParser
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                     vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
-                    vuln.Remediation = string.IsNullOrEmpty(vul.Details[i].Remediation) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
+                    vuln.Remediation = HtmlOf(vul.Details[i].Remediation, "No Data", sanitizer);
                     switch (vul.Priority)
                     {
                         case 1:
@@ -140,8 +149,8 @@ public class PwndocParser: IPwndocParser
                     vuln.Template = true; // no project: imported as a template
                     vuln.FindingId = "No Project";
                     vuln.cve = "No Data";
-                    vuln.Description = string.IsNullOrEmpty(vul.Details[i].Description) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
-                    vuln.Impact = string.IsNullOrEmpty(vul.Details[i].Observation) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
+                    vuln.Description = HtmlOf(vul.Details[i].Description, "No Data", sanitizer);
+                    vuln.Impact = HtmlOf(vul.Details[i].Observation, "No Data", sanitizer);
                     switch (vul.Priority)
                     {
                         case 1:
@@ -162,7 +171,7 @@ public class PwndocParser: IPwndocParser
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                     vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
-                    vuln.Remediation = string.IsNullOrEmpty(vul.Details[i].Remediation) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
+                    vuln.Remediation = HtmlOf(vul.Details[i].Remediation, "No Data", sanitizer);
                     switch (vul.Priority)
                     {
                         case 1:
