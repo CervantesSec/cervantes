@@ -1,0 +1,58 @@
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N'
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: EN
+      title: Stored Cross-Site Scripting
+      vulnType: Injection
+      description: >-
+        <p>User input is stored and later written to pages without being
+        encoded.</p>
+      observation: >-
+        <p>The comment field of the support form accepts and stores
+        script.</p>
+      remediation: <p>Encode output for the context it is written to.</p>
+      references:
+        - https://owasp.org/www-community/attacks/xss/
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+      customFields: []
+    - locale: FR
+      title: Cross-Site Scripting stocké
+      vulnType: Injection
+      description: <p>Les entrées utilisateur sont stockées puis affichées sans encodage.</p>
+      observation: <p>Le champ commentaire accepte et stocke du script.</p>
+      remediation: <p>Encoder les sorties selon leur contexte.</p>
+      references: []
+      customFields: []
+  category: Web Application
+- cvssv3: ''
+  cvssv4: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N'
+  priority: 4
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Exposed Database Backup
+      vulnType: Information Disclosure
+      description: <p>A database backup is downloadable without authentication.</p>
+      observation: <p>/backup/db.sql.gz answers 200 to anonymous requests.</p>
+      remediation: <p>Remove the backup from the web root.</p>
+      references: []
+      customFields:
+        - customField: 64f1c2a9e4b0a1b2c3d4e5f6
+          text: Production
+        - customField: 64f1c2a9e4b0a1b2c3d4e5f7
+          text:
+            - PCI
+            - GDPR
+  category: Infrastructure
+- cvssv3: 'CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N'
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Server Version Disclosure
+      vulnType: Information Disclosure
+      description: <p>The Server header reveals the exact web server version.</p>
+      remediation: <p>Remove the version from the Server header.</p>
+      references: []
+      customFields: []
+  category: Infrastructure

@@ -26,16 +26,24 @@ public class PwndocParser: IPwndocParser
         this.projectManager = projectManager;
     }
 
+    /// <summary>
+    /// Reads a Pwndoc vulnerabilities export (YAML, camelCase). Keys this model does not know (newer Pwndoc versions add
+    /// some) are ignored; malformed YAML throws <see cref="YamlDotNet.Core.YamlException"/>.
+    /// </summary>
+    public static List<PwndocVuln> Read(TextReader reader)
+    {
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
+            .Build();
+        return deserializer.Deserialize<List<PwndocVuln>>(reader) ?? new List<PwndocVuln>();
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
         using (var reader = new StreamReader(path)) {
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance) 
-                .Build();
-
-            //yml contains a string containing your YAML
-           var vulns = deserializer.Deserialize<List<PwndocVuln>>(reader);
+           var vulns = Read(reader);
            var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
            
             if (project != null)
@@ -44,12 +52,13 @@ public class PwndocParser: IPwndocParser
                 findingIds = FindingIdGenerator.Start(vulnManager, pro);
                 foreach (var vul in vulns)
                 {
+                    if (vul.Details == null || vul.Details.Count == 0) continue; // an item without details has nothing to import
                     int i = 0;
                     Vuln vuln = new Vuln();
-                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title));
+                    vuln.Name = string.IsNullOrEmpty(vul.Details[i].Title) ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title));
                     vuln.cve = "No Data";
-                    vuln.Description = vul.Details[i].Description  == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
-                    vuln.Impact = vul.Details[i].Observation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
+                    vuln.Description = string.IsNullOrEmpty(vul.Details[i].Description) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
+                    vuln.Impact = string.IsNullOrEmpty(vul.Details[i].Observation) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
                     switch (vul.Priority)
                     {
                         case 1:
@@ -70,7 +79,7 @@ public class PwndocParser: IPwndocParser
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                     vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
-                    vuln.Remediation = vul.Details[i].Remediation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
+                    vuln.Remediation = string.IsNullOrEmpty(vul.Details[i].Remediation) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
                     switch (vul.Priority)
                     {
                         case 1:
@@ -106,7 +115,7 @@ public class PwndocParser: IPwndocParser
                     vuln.ProjectId = project;
                     vuln.ProofOfConcept = "No Data";
                     vuln.UserId = user;
-                    vuln.CVSSVector = vul.Cvssv3 == null ? "No Data" : vul.Cvssv3;
+                    vuln.CVSSVector = sanitizer.Sanitize(!string.IsNullOrEmpty(vul.Cvssv3) ? vul.Cvssv3 : !string.IsNullOrEmpty(vul.Cvssv4) ? vul.Cvssv4 : "No Data");
                     vuln.FindingId = findingIds.Next();
                     vuln.OWASPRisk = "No Data";
                     vuln.OWASPImpact = "No Data";
@@ -124,14 +133,15 @@ public class PwndocParser: IPwndocParser
             {
                 foreach (var vul in vulns)
                 {
+                    if (vul.Details == null || vul.Details.Count == 0) continue; // an item without details has nothing to import
                     int i = 0;
                     Vuln vuln = new Vuln();
-                    vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title));
+                    vuln.Name = string.IsNullOrEmpty(vul.Details[i].Title) ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title));
                     vuln.Template = true; // no project: imported as a template
                     vuln.FindingId = "No Project";
                     vuln.cve = "No Data";
-                    vuln.Description = vul.Details[i].Description  == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
-                    vuln.Impact = vul.Details[i].Observation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
+                    vuln.Description = string.IsNullOrEmpty(vul.Details[i].Description) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));
+                    vuln.Impact = string.IsNullOrEmpty(vul.Details[i].Observation) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Observation));
                     switch (vul.Priority)
                     {
                         case 1:
@@ -152,7 +162,7 @@ public class PwndocParser: IPwndocParser
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
                     vuln.ModifiedDate = DateTime.Now.ToUniversalTime();
                     vuln.JiraCreated = false;
-                    vuln.Remediation = vul.Details[i].Remediation == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
+                    vuln.Remediation = string.IsNullOrEmpty(vul.Details[i].Remediation) ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Remediation));
                     switch (vul.Priority)
                     {
                         case 1:
@@ -188,7 +198,7 @@ public class PwndocParser: IPwndocParser
                     vuln.ProjectId = null;
                     vuln.ProofOfConcept = "No Data";
                     vuln.UserId = user;
-                    vuln.CVSSVector = vul.Cvssv3 == null ? "No Data" : vul.Cvssv3;
+                    vuln.CVSSVector = sanitizer.Sanitize(!string.IsNullOrEmpty(vul.Cvssv3) ? vul.Cvssv3 : !string.IsNullOrEmpty(vul.Cvssv4) ? vul.Cvssv4 : "No Data");
                     vuln.OWASPRisk = "No Data";
                     vuln.OWASPImpact = "No Data";
                     vuln.OWASPLikehood = "No Data";

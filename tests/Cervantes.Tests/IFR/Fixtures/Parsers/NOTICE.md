@@ -19,6 +19,7 @@ Files whose structure was copied from a public report but whose content is ours 
 
 - `Prowler/prowler-v3.csv`: header and column layout of a Prowler v3 CSV report (`;`-separated); rows written for Cervantes.
 - `DependencyCheck/dependency-check.json`: structure of a Dependency-Check 8.2 JSON report, plus a `cvssv4` block shaped as in the official `jsonReport.vsl` template; content written for Cervantes.
+- `Pwndoc/vulnerabilities.yml`: structure of real Pwndoc vulnerability exports (`vulnerabilities.yml`) and of the `customField` schema in Pwndoc `backend/src/models/vulnerability.js`; content written for Cervantes.
 <!-- filled in by the tasks that add them -->
 
 ## Files from DefectDojo
