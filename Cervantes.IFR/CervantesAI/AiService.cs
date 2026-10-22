@@ -1058,8 +1058,8 @@ public class AiService : IAiService
                     tasksInfo.Append($"## Task\n");
                     tasksInfo.Append($"### Name\n{item.Task.Name}\n");
                     tasksInfo.Append($"### Description\n{converter.Convert(item.Task.Description)}\n");
-                    tasksInfo.Append($"### Start Date\n{item.Task.StartDate.ToShortDateString()}\n");
-                    tasksInfo.Append($"### End Date\n{item.Task.EndDate.ToShortDateString()}\n");
+                    tasksInfo.Append($"### Start Date\n{item.Task.StartDate.ToLocalDate().ToShortDateString()}\n");
+                    tasksInfo.Append($"### End Date\n{item.Task.EndDate.ToLocalDate().ToShortDateString()}\n");
                     tasksInfo.Append($"### Status\n{item.Task.Status}\n");
                     tasksInfo.Append($"### Asigned To\n- {item.Task.AsignedTo.FullName}\n- {item.Task.AsignedTo.Position}\n");
                     tasksInfo.Append($"### Created By\n- {item.Task.CreatedBy.FullName}\n- {item.Task.CreatedBy.Position}\n");
@@ -1109,9 +1109,9 @@ public class AiService : IAiService
                 ## Description: 
                 {converter.Convert(project.Project.Description)};
                 ## Start Date:
-                {project.Project.StartDate.ToShortDateString()}
+                {project.Project.StartDate.ToLocalDate().ToShortDateString()}
                 ## End Date:    
-                {project.Project.EndDate.ToShortDateString()}
+                {project.Project.EndDate.ToLocalDate().ToShortDateString()}
                 ## Score:
                 {project.Project.Score}
                 ## Status:

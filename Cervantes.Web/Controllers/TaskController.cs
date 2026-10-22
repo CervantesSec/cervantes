@@ -194,8 +194,8 @@ public class TaskController: ControllerBase
                 task.Template = false;
                 task.Name = sanitizer.Sanitize(model.Name);
                 task.Description = sanitizer.Sanitize(model.Description);
-                task.StartDate = model.StartDate;
-                task.EndDate = model.EndDate;
+                task.StartDate = model.StartDate.ToUniversalTime();
+                task.EndDate = model.EndDate.ToUniversalTime();
                 if (model.ProjectId != null)
                 {
                     task.ProjectId = model.ProjectId.Value;

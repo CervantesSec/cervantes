@@ -301,8 +301,8 @@ public class TargetCustomFieldController : ControllerBase
                         TargetCustomFieldId = kvp.Key,
                         Value = sanitizer.Sanitize(kvp.Value),
                         UserId = aspNetUserId,
-                        CreatedDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow
                     };
 
                     await customFieldValueManager.AddAsync(customFieldValue);
