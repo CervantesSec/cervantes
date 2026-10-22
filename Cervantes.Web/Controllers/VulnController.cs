@@ -1553,7 +1553,7 @@ public class VulnController: ControllerBase
                 );
             return BadRequest(new { message = "Validation failed", errors });
         }
-        catch (Exception e) when (e is CsvHelper.CsvHelperException or System.Xml.XmlException or System.Text.Json.JsonException)
+        catch (Exception e) when (ImportFile.IsUnreadable(e))
         {
             _logger.LogWarning(e, "A vuln import file could not be read. User: {0}", aspNetUserId);
             return BadRequest("Invalid file format");

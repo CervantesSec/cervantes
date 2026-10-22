@@ -49,22 +49,20 @@ public class DependencyCheckParser : IDependencyCheckParser
             {
                 ParseXmlFormat(path, pro, user, sanitizer);
             }
+            else
+            {
+                throw new System.IO.InvalidDataException("Not a Dependency-Check JSON or XML report");
+            }
         }
     }
 
     private void ParseJsonFormat(string fileContent, Project pro, string user, HtmlSanitizer sanitizer)
     {
-        try
+        // Malformed JSON throws, so the import answers 400 instead of reporting success with nothing imported
+        var dependencyCheckReport = Read(fileContent).FirstOrDefault();
+        if (dependencyCheckReport != null)
         {
-            var dependencyCheckReport = Read(fileContent).FirstOrDefault();
-            if (dependencyCheckReport != null)
-            {
-                ProcessDependencyCheckReport(dependencyCheckReport, pro, user, sanitizer);
-            }
-        }
-        catch (JsonException ex)
-        {
-            Console.WriteLine($"Error parsing Dependency-Check JSON: {ex.Message}");
+            ProcessDependencyCheckReport(dependencyCheckReport, pro, user, sanitizer);
         }
     }
 

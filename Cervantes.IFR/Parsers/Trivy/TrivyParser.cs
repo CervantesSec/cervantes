@@ -39,18 +39,11 @@ public class TrivyParser : ITrivyParser
             findingIds = FindingIdGenerator.Start(vulnManager, pro);
             var fileContent = System.IO.File.ReadAllText(path);
             
-            try
+            // Malformed JSON throws, so the import answers 400 instead of reporting success with nothing imported
+            var trivyReport = Read(fileContent).FirstOrDefault();
+            if (trivyReport != null)
             {
-                var trivyReport = Read(fileContent).FirstOrDefault();
-                if (trivyReport != null)
-                {
-                    ProcessTrivyReport(trivyReport, pro, user, sanitizer);
-                }
-            }
-            catch (JsonException ex)
-            {
-                // Log error but don't throw - might be malformed JSON
-                Console.WriteLine($"Error parsing Trivy JSON: {ex.Message}");
+                ProcessTrivyReport(trivyReport, pro, user, sanitizer);
             }
         }
     }

@@ -41,18 +41,11 @@ public class BanditParser : IBanditParser
             findingIds = FindingIdGenerator.Start(vulnManager, pro);
             var fileContent = System.IO.File.ReadAllText(path);
             
-            try
+            // Malformed JSON throws, so the import answers 400 instead of reporting success with nothing imported
+            var banditReport = Read(fileContent).FirstOrDefault();
+            if (banditReport != null)
             {
-                var banditReport = Read(fileContent).FirstOrDefault();
-                if (banditReport != null)
-                {
-                    ProcessBanditReport(banditReport, pro, user, sanitizer);
-                }
-            }
-            catch (JsonException ex)
-            {
-                // Log error but don't throw - might be malformed JSON
-                Console.WriteLine($"Error parsing Bandit JSON: {ex.Message}");
+                ProcessBanditReport(banditReport, pro, user, sanitizer);
             }
         }
     }

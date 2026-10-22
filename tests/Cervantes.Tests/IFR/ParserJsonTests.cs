@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Cervantes.IFR.Parsers.Bandit;
 using Cervantes.IFR.Parsers.DependencyCheck;
 using Cervantes.IFR.Parsers.Masscan;
@@ -107,5 +108,43 @@ public class ParserJsonTests
         Assert.Equal(8080, host.Port);
         Assert.Equal(2, host.Vulnerabilities.Length);
         Assert.Equal("999986", host.Vulnerabilities[0].Id);
+    }
+
+    [Theory]
+    [InlineData("Trivy")]
+    [InlineData("Nuclei")]
+    [InlineData("Bandit")]
+    [InlineData("DependencyCheck")]
+    public void Read_MalformedThrows(string tool)
+    {
+        const string broken = "{\"Results\": [ {\"Target\": ";
+        Func<object> read = tool switch
+        {
+            "Trivy" => () => TrivyParser.Read(broken),
+            "Nuclei" => () => NucleiParser.Read(broken),
+            "Bandit" => () => BanditParser.Read(broken),
+            _ => () => DependencyCheckParser.Read(broken),
+        };
+
+        Assert.ThrowsAny<JsonException>(read);
+    }
+
+    [Fact]
+    public void Nuclei_Read_SkipsOneBadLine()
+    {
+        var lines = Fixture("Nuclei", "nuclei.jsonl").Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+        var results = NucleiParser.Read(lines[0] + "\n{\"template-id\": \n" + lines[1]);
+
+        Assert.Equal(2, results.Count);
+    }
+
+    [Fact]
+    public void Import_EmptyReportIsNotAnError()
+    {
+        Assert.Empty(Assert.Single(TrivyParser.Read("{\"SchemaVersion\": 2, \"Results\": []}")).Results);
+        Assert.Empty(NucleiParser.Read("[]"));
+        Assert.Empty(NucleiParser.Read(""));
+        Assert.Empty(Assert.Single(BanditParser.Read("{\"errors\": [], \"results\": []}")).Results);
     }
 }
