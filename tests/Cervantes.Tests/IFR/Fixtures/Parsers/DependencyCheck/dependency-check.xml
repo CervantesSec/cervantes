@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis xmlns="https://jeremylong.github.io/DependencyCheck/dependency-check.4.0.xsd">
+  <scanInfo>
+    <engineVersion>9.0.9</engineVersion>
+  </scanInfo>
+  <projectInfo>
+    <name>example-app</name>
+    <reportDate>2026-10-22T10:00:00.000Z</reportDate>
+  </projectInfo>
+  <dependencies>
+    <dependency isVirtual="false">
+      <fileName>log4j-core-2.14.1.jar</fileName>
+      <filePath>/app/lib/log4j-core-2.14.1.jar</filePath>
+      <md5>00000000000000000000000000000000</md5>
+      <vulnerabilities>
+        <vulnerability source="NVD">
+          <name>CVE-2021-44228</name>
+          <severity>CRITICAL</severity>
+          <cvssV3>
+            <baseScore>10.0</baseScore>
+            <attackVector>NETWORK</attackVector>
+            <baseSeverity>CRITICAL</baseSeverity>
+          </cvssV3>
+          <cwes>
+            <cwe>CWE-502</cwe>
+          </cwes>
+          <description>Apache Log4j2 JNDI features do not protect against attacker controlled LDAP endpoints.</description>
+        </vulnerability>
+      </vulnerabilities>
+    </dependency>
+    <dependency isVirtual="false">
+      <fileName>commons-lang3-3.12.0.jar</fileName>
+      <filePath>/app/lib/commons-lang3-3.12.0.jar</filePath>
+    </dependency>
+  </dependencies>
+</analysis>

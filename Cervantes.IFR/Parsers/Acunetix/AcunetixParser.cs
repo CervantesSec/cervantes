@@ -28,6 +28,23 @@ public class AcunetixParser : IAcunetixParser
         this.projectManager = projectManager;
     }
 
+    /// <summary>
+    /// The target of an Acunetix finding: the host of the scan's start URL, or else the host of <paramref name="affects"/>
+    /// when it is an absolute URL (older exports), or else <paramref name="affects"/> itself.
+    /// </summary>
+    public static string TargetOf(string? startUrl, string? affects)
+    {
+        if (Uri.TryCreate(startUrl?.Trim(), UriKind.Absolute, out var start) && !string.IsNullOrEmpty(start.Host))
+        {
+            return start.Host;
+        }
+        if (Uri.TryCreate(affects?.Trim(), UriKind.Absolute, out var affected) && !string.IsNullOrEmpty(affected.Host))
+        {
+            return affected.Host;
+        }
+        return affects?.Trim() ?? "";
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -41,6 +58,8 @@ public class AcunetixParser : IAcunetixParser
             vulnerabilities = doc.GetElementsByTagName("ReportItem");
         }
 
+        // Real exports put the scanned site once, in Scan/StartURL; each ReportItem's Affects is a path on it
+        var startUrl = doc.SelectSingleNode("//StartURL")?.InnerText;
         var sanitizer = new HtmlSanitizer().AllowDataImagesOnly();
 
         if (project != null)
@@ -130,48 +149,7 @@ public class AcunetixParser : IAcunetixParser
                     }
                 }
 
-                // Parse target information from affects/URL
-                string targetHost = "";
-                int targetPort = 80;
-                
-                if (!string.IsNullOrEmpty(affects))
-                {
-                    try
-                    {
-                        var uri = new Uri(affects);
-                        targetHost = uri.Host;
-                        targetPort = uri.Port;
-                    }
-                    catch
-                    {
-                        // If URI parsing fails, extract host manually
-                        if (affects.Contains("://"))
-                        {
-                            var parts = affects.Split(new[] { "://" }, StringSplitOptions.None);
-                            if (parts.Length > 1)
-                            {
-                                var hostPart = parts[1].Split('/')[0];
-                                if (hostPart.Contains(':'))
-                                {
-                                    var hostPortParts = hostPart.Split(':');
-                                    targetHost = hostPortParts[0];
-                                    if (hostPortParts.Length > 1 && int.TryParse(hostPortParts[1], out int parsedPort))
-                                    {
-                                        targetPort = parsedPort;
-                                    }
-                                }
-                                else
-                                {
-                                    targetHost = hostPart;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            targetHost = affects;
-                        }
-                    }
-                }
+                string targetHost = TargetOf(startUrl, affects);
 
                 // Create or find target
                 Target target = null;

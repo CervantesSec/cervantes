@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCAN SYSTEM "https://qualysguard.qualys.com/scan-1.dtd">
+<SCAN value="scan/1761127200.12345">
+  <HEADER>
+    <KEY value="USERNAME">example_user</KEY>
+    <KEY value="DATE">2026-10-22T10:00:00Z</KEY>
+    <KEY value="TITLE"><![CDATA[Example scan]]></KEY>
+    <KEY value="TARGET">10.6.6.6</KEY>
+  </HEADER>
+  <IP value="10.6.6.6" name="app.example">
+    <OS><![CDATA[Linux 5.x]]></OS>
+    <VULNS>
+      <CAT value="Web server" port="443" protocol="tcp">
+        <VULN number="11827" severity="4" cveid="CVE-2026-0010">
+          <TITLE><![CDATA[Apache HTTP Server Path Traversal]]></TITLE>
+          <LAST_UPDATE><![CDATA[2026-10-01T00:00:00Z]]></LAST_UPDATE>
+          <CVSS_BASE source="service">7.5</CVSS_BASE>
+          <CVSS3_BASE>7.5</CVSS3_BASE>
+          <PCI_FLAG>1</PCI_FLAG>
+          <DIAGNOSIS><![CDATA[The Apache HTTP Server version on this host is affected by a path traversal flaw.]]></DIAGNOSIS>
+          <CONSEQUENCE><![CDATA[An attacker can read files outside the document root.]]></CONSEQUENCE>
+          <SOLUTION><![CDATA[Upgrade to the latest Apache HTTP Server release.]]></SOLUTION>
+          <RESULT><![CDATA[Server: Apache/2.4.49]]></RESULT>
+        </VULN>
+        <VULN number="38170" severity="2">
+          <TITLE><![CDATA[SSL Certificate - Subject Common Name Does Not Match Server FQDN]]></TITLE>
+          <DIAGNOSIS><![CDATA[The certificate common name does not match the host name.]]></DIAGNOSIS>
+          <CONSEQUENCE><![CDATA[Clients may warn about the certificate.]]></CONSEQUENCE>
+          <SOLUTION><![CDATA[Use a certificate issued for the server FQDN.]]></SOLUTION>
+        </VULN>
+      </CAT>
+    </VULNS>
+  </IP>
+</SCAN>

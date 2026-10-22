@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report id="6f3c2b1a-0000-4000-8000-000000000001" format_id="a994b278-1f62-11e1-96ac-406186ea4fc5" extension="xml" content_type="text/xml">
+  <name>2026-10-22T10:00:00Z</name>
+  <report id="6f3c2b1a-0000-4000-8000-000000000001">
+    <gmp><version>22.4</version></gmp>
+    <results start="1" max="100">
+      <result id="0a1b2c3d-0000-4000-8000-000000000002">
+        <name>SSL/TLS: Deprecated TLSv1.0 and TLSv1.1 Protocol Detection</name>
+        <host>10.5.5.5<asset asset_id="5e1f7a2b-0000-4000-8000-000000000003"/><hostname>web.example</hostname></host>
+        <port>443/tcp</port>
+        <nvt oid="1.3.6.1.4.1.25623.1.0.117274">
+          <type>nvt</type>
+          <name>SSL/TLS: Deprecated TLSv1.0 and TLSv1.1 Protocol Detection</name>
+          <family>SSL and TLS</family>
+          <cvss_base>4.3</cvss_base>
+          <severities score="4.3">
+            <severity type="cvss_base_v3"><origin/><date>2026-01-01T00:00:00Z</date><score>4.3</score><value>CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:L/A:N</value></severity>
+          </severities>
+          <tags>summary=It was possible to detect the usage of the deprecated TLSv1.0 and/or TLSv1.1 protocol on this system.|solution_type=Mitigation</tags>
+          <solution type="Mitigation">Disable the deprecated TLSv1.0 and/or TLSv1.1 protocols in favour of TLSv1.2+.</solution>
+          <refs>
+            <ref type="cve" id="CVE-2011-3389"/>
+            <ref type="url" id="https://datatracker.ietf.org/doc/rfc8996/"/>
+          </refs>
+        </nvt>
+        <scan_nvt_version>2026-01-01T00:00:00Z</scan_nvt_version>
+        <threat>Medium</threat>
+        <severity>4.3</severity>
+        <qod><value>98</value><type>remote_app</type></qod>
+        <description>In addition to TLSv1.2+ the service is also providing the deprecated TLSv1.0 protocol.</description>
+      </result>
+    </results>
+  </report>
+</report>

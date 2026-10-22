@@ -28,6 +28,18 @@ public class OpenVASParser : IOpenVASParser
         this.projectManager = projectManager;
     }
 
+    /// <summary>
+    /// The address of an OpenVAS/GVM <c>&lt;host&gt;</c>: its own text. GVM nests <c>&lt;asset&gt;</c> and
+    /// <c>&lt;hostname&gt;</c> inside it, so <c>InnerText</c> would glue the hostname to the address.
+    /// </summary>
+    public static string HostOf(XmlNode host)
+    {
+        var text = string.Concat(host.ChildNodes.OfType<XmlNode>()
+            .Where(x => x.NodeType is XmlNodeType.Text or XmlNodeType.CDATA)
+            .Select(x => x.Value)).Trim();
+        return text.Length > 0 ? text : host.SelectSingleNode("hostname")?.InnerText.Trim() ?? "";
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -77,11 +89,7 @@ public class OpenVASParser : IOpenVASParser
                 XmlNode hostNode = result.SelectSingleNode("host");
                 if (hostNode != null)
                 {
-                    host = hostNode.InnerText;
-                    if (string.IsNullOrEmpty(host) && hostNode.Attributes["asset"] != null)
-                    {
-                        host = hostNode.Attributes["asset"].Value;
-                    }
+                    host = HostOf(hostNode);
                 }
 
                 string nvtOid = "";

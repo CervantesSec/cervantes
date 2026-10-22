@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScanGroup ExportedOn="22/10/2026, 10:00:00">
+  <Scan>
+    <Name><![CDATA[app.example]]></Name>
+    <ShortName><![CDATA[app.example]]></ShortName>
+    <StartURL><![CDATA[https://app.example/]]></StartURL>
+    <StartTime><![CDATA[22/10/2026, 09:00:00]]></StartTime>
+    <FinishTime><![CDATA[22/10/2026, 09:30:00]]></FinishTime>
+    <ScanTime><![CDATA[30 minutes]]></ScanTime>
+    <Aborted><![CDATA[False]]></Aborted>
+    <Responsive><![CDATA[True]]></Responsive>
+    <Banner><![CDATA[nginx]]></Banner>
+    <Os><![CDATA[Unix]]></Os>
+    <WebServer><![CDATA[nginx]]></WebServer>
+    <ReportItems>
+      <ReportItem id="0" color="red">
+        <Name><![CDATA[Cross site scripting]]></Name>
+        <ModuleName><![CDATA[Scripting (XSS.script)]]></ModuleName>
+        <Details><![CDATA[URL encoded GET input <b>q</b> was set to <b>&lt;script&gt;alert(1)&lt;/script&gt;</b>]]></Details>
+        <Affects><![CDATA[/search]]></Affects>
+        <Parameter><![CDATA[q]]></Parameter>
+        <AOP_SourceFile><![CDATA[]]></AOP_SourceFile>
+        <AOP_SourceLine></AOP_SourceLine>
+        <AOP_Additional><![CDATA[]]></AOP_Additional>
+        <IsFalsePositive><![CDATA[False]]></IsFalsePositive>
+        <Severity><![CDATA[high]]></Severity>
+        <Type><![CDATA[xss]]></Type>
+        <Impact><![CDATA[Malicious JavaScript runs in the victim's browser.]]></Impact>
+        <Description><![CDATA[This script is possibly vulnerable to Cross Site Scripting (XSS) attacks.]]></Description>
+        <DetailedInformation><![CDATA[]]></DetailedInformation>
+        <Recommendation><![CDATA[Escape user input before writing it to the page.]]></Recommendation>
+        <TechnicalDetails>
+          <Request><![CDATA[GET /search?q=%3Cscript%3Ealert(1)%3C/script%3E HTTP/1.1
+Host: app.example]]></Request>
+          <Response><![CDATA[]]></Response>
+        </TechnicalDetails>
+        <CWEList>
+          <CWE id="79"><![CDATA[CWE-79]]></CWE>
+        </CWEList>
+        <CVEList></CVEList>
+        <CVSS3 Descriptor="CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N">
+          <Score><![CDATA[6.1]]></Score>
+        </CVSS3>
+        <References></References>
+      </ReportItem>
+    </ReportItems>
+  </Scan>
+</ScanGroup>

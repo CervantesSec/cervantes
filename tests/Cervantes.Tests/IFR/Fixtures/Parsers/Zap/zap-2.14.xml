@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<OWASPZAPReport programName="ZAP" version="2.14.0" generated="Wed, 22 Oct 2026 10:00:00">
+  <site name="https://app.example" host="app.example" port="443" ssl="true">
+    <alerts>
+      <alertitem>
+        <pluginid>10202</pluginid>
+        <alertRef>10202</alertRef>
+        <alert>Absence of Anti-CSRF Tokens</alert>
+        <name>Absence of Anti-CSRF Tokens</name>
+        <riskcode>2</riskcode>
+        <confidence>1</confidence>
+        <riskdesc>Medium (Low)</riskdesc>
+        <confidencedesc>Low</confidencedesc>
+        <desc>&lt;p&gt;No Anti-CSRF tokens were found in a HTML submission form.&lt;/p&gt;</desc>
+        <instances>
+          <instance>
+            <uri>https://app.example/login</uri>
+            <method>GET</method>
+            <param></param>
+            <attack></attack>
+            <evidence>&lt;form action="/login" method="post"&gt;</evidence>
+            <otherinfo>No known Anti-CSRF token was found in the form.</otherinfo>
+          </instance>
+          <instance>
+            <uri>https://app.example/search</uri>
+            <method>GET</method>
+            <param>q</param>
+            <attack></attack>
+            <evidence>&lt;form action="/search"&gt;</evidence>
+            <otherinfo></otherinfo>
+          </instance>
+        </instances>
+        <count>2</count>
+        <solution>&lt;p&gt;Use a vetted library or framework that does not allow this weakness to occur.&lt;/p&gt;</solution>
+        <otherinfo>No known Anti-CSRF token was found in the form.</otherinfo>
+        <reference>&lt;p&gt;https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html&lt;/p&gt;</reference>
+        <cweid>352</cweid>
+        <wascid>9</wascid>
+        <sourceid>1</sourceid>
+      </alertitem>
+    </alerts>
+  </site>
+</OWASPZAPReport>

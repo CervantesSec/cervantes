@@ -28,6 +28,51 @@ public class QualysParser : IQualysParser
         this.projectManager = projectManager;
     }
 
+    /// <summary>
+    /// The host of a vulnerability: the nearest <c>&lt;IP value="…" name="…"&gt;</c> ancestor of a scan report, or the
+    /// <c>IP</c>/<c>DNS</c> children (or <c>ip</c>/<c>hostname</c> attributes) of the host element in other exports.
+    /// </summary>
+    public static (string Ip, string? Name) HostOf(XmlNode vuln)
+    {
+        for (var node = vuln.ParentNode; node is XmlElement element; node = node.ParentNode)
+        {
+            if (element.Name == "IP" && element.HasAttribute("value"))
+            {
+                var name = element.GetAttribute("name");
+                return (element.GetAttribute("value"), name.Length > 0 ? name : null);
+            }
+
+            var ip = element.SelectSingleNode("IP")?.InnerText ?? element.Attributes["ip"]?.Value;
+            if (!string.IsNullOrEmpty(ip))
+            {
+                var dns = element.SelectSingleNode("DNS")?.InnerText ?? element.Attributes["hostname"]?.Value;
+                return (ip, string.IsNullOrEmpty(dns) ? null : dns);
+            }
+        }
+        return ("", null);
+    }
+
+    /// <summary>Qualys severity 1-5 (attribute <c>severity</c> or child <c>SEVERITY</c>): 5 Critical, 4 High, 3 Medium, 2 Low, else Info.</summary>
+    public static VulnRisk SeverityOf(XmlNode vuln)
+    {
+        return SeverityText(vuln).Trim() switch
+        {
+            "5" => VulnRisk.Critical,
+            "4" => VulnRisk.High,
+            "3" => VulnRisk.Medium,
+            "2" => VulnRisk.Low,
+            _ => VulnRisk.Info,
+        };
+    }
+
+    private static string SeverityText(XmlNode vuln)
+    {
+        return vuln.Attributes?["severity"]?.Value
+            ?? vuln.SelectSingleNode("SEVERITY")?.InnerText
+            ?? vuln.SelectSingleNode("severity")?.InnerText
+            ?? "";
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -61,9 +106,7 @@ public class QualysParser : IQualysParser
                 if (vuln.SelectSingleNode("CATEGORY") != null) { category = vuln.SelectSingleNode("CATEGORY").InnerText; }
                 else if (vuln.SelectSingleNode("category") != null) { category = vuln.SelectSingleNode("category").InnerText; }
 
-                string severity = "";
-                if (vuln.SelectSingleNode("SEVERITY") != null) { severity = vuln.SelectSingleNode("SEVERITY").InnerText; }
-                else if (vuln.SelectSingleNode("severity") != null) { severity = vuln.SelectSingleNode("severity").InnerText; }
+                string severity = SeverityText(vuln);
 
                 string cvssBase = "";
                 if (vuln.SelectSingleNode("CVSS_BASE") != null) { cvssBase = vuln.SelectSingleNode("CVSS_BASE").InnerText; }
@@ -90,32 +133,21 @@ public class QualysParser : IQualysParser
                 if (vuln.SelectSingleNode("COMPLIANCE") != null) { compliance = vuln.SelectSingleNode("COMPLIANCE").InnerText; }
                 else if (vuln.SelectSingleNode("compliance") != null) { compliance = vuln.SelectSingleNode("compliance").InnerText; }
 
-                // Get host information - can be in parent or sibling nodes
-                string hostIp = "";
-                string hostName = "";
+                var (hostIp, ipName) = HostOf(vuln);
+                string hostName = ipName ?? "";
                 string port = "";
                 string protocol = "";
                 string service = "";
 
-                // Look for host info in parent HOST_LIST_VM_DETECTION or similar
-                XmlNode hostNode = vuln.ParentNode;
-                while (hostNode != null && string.IsNullOrEmpty(hostIp))
-                {
-                    if (hostNode.SelectSingleNode("IP") != null) { hostIp = hostNode.SelectSingleNode("IP").InnerText; }
-                    else if (hostNode.Attributes["ip"] != null) { hostIp = hostNode.Attributes["ip"].Value; }
-                    
-                    if (hostNode.SelectSingleNode("DNS") != null) { hostName = hostNode.SelectSingleNode("DNS").InnerText; }
-                    else if (hostNode.Attributes["hostname"] != null) { hostName = hostNode.Attributes["hostname"].Value; }
-
-                    hostNode = hostNode.ParentNode;
-                }
-
-                // Look for port/service info in current node or siblings
+                // Port and protocol: on the VULN in legacy exports, on the enclosing CAT in scan reports
+                var cat = vuln.ParentNode?.Name == "CAT" ? vuln.ParentNode : null;
                 if (vuln.SelectSingleNode("PORT") != null) { port = vuln.SelectSingleNode("PORT").InnerText; }
                 else if (vuln.Attributes["port"] != null) { port = vuln.Attributes["port"].Value; }
+                else if (cat?.Attributes?["port"] != null) { port = cat.Attributes["port"].Value; }
 
                 if (vuln.SelectSingleNode("PROTOCOL") != null) { protocol = vuln.SelectSingleNode("PROTOCOL").InnerText; }
                 else if (vuln.Attributes["protocol"] != null) { protocol = vuln.Attributes["protocol"].Value; }
+                else if (cat?.Attributes?["protocol"] != null) { protocol = cat.Attributes["protocol"].Value; }
 
                 if (vuln.SelectSingleNode("SERVICE") != null) { service = vuln.SelectSingleNode("SERVICE").InnerText; }
 
@@ -123,24 +155,7 @@ public class QualysParser : IQualysParser
                 VulnRisk risk = VulnRisk.Info;
                 if (!string.IsNullOrEmpty(severity))
                 {
-                    switch (severity)
-                    {
-                        case "5":
-                            risk = VulnRisk.Critical;
-                            break;
-                        case "4":
-                            risk = VulnRisk.High;
-                            break;
-                        case "3":
-                            risk = VulnRisk.Medium;
-                            break;
-                        case "2":
-                            risk = VulnRisk.Low;
-                            break;
-                        case "1":
-                            risk = VulnRisk.Info;
-                            break;
-                    }
+                    risk = SeverityOf(vuln);
                 }
                 else if (!string.IsNullOrEmpty(cvssBase))
                 {

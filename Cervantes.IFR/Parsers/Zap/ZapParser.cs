@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -26,6 +27,29 @@ public class ZapParser : IZapParser
         this.vulnManager = vulnManager;
         this.vulnTargetManager = vulnTargetManager;
         this.projectManager = projectManager;
+    }
+
+    /// <summary>
+    /// The places an alert was found: <c>instances/instance</c> since ZAP 2.10, or the <c>uri</c>, <c>param</c> and
+    /// <c>evidence</c> written directly on the alert by older versions.
+    /// </summary>
+    public static IReadOnlyList<(string Uri, string? Param, string? Evidence)> InstancesOf(XmlNode alertItem)
+    {
+        static string? Text(XmlNode node, string name)
+        {
+            var text = node.SelectSingleNode(name)?.InnerText;
+            return string.IsNullOrEmpty(text) ? null : text;
+        }
+
+        var instances = alertItem.SelectNodes("instances/instance")!.Cast<XmlNode>()
+            .Select(x => (Text(x, "uri") ?? "", Text(x, "param"), Text(x, "evidence")))
+            .Where(x => x.Item1.Length > 0)
+            .ToList();
+        if (instances.Count == 0 && Text(alertItem, "uri") is { } uri)
+        {
+            instances.Add((uri, Text(alertItem, "param"), Text(alertItem, "evidence")));
+        }
+        return instances;
     }
 
     public void Parse(Guid? project, string user, string path)
@@ -58,17 +82,11 @@ public class ZapParser : IZapParser
 
 
 
-                string uri = "";
-                if (alert.SelectSingleNode("uri") != null) { uri = alert.SelectSingleNode("uri").InnerText; }
-
-                string param = "";
-                if (alert.SelectSingleNode("param") != null) { param = alert.SelectSingleNode("param").InnerText; }
+                var instances = InstancesOf(alert);
+                string uri = instances.Count > 0 ? instances[0].Uri : "";
 
                 string attack = "";
                 if (alert.SelectSingleNode("attack") != null) { attack = alert.SelectSingleNode("attack").InnerText; }
-
-                string evidence = "";
-                if (alert.SelectSingleNode("evidence") != null) { evidence = alert.SelectSingleNode("evidence").InnerText; }
 
                 string otherinfo = "";
                 if (alert.SelectSingleNode("otherinfo") != null) { otherinfo = alert.SelectSingleNode("otherinfo").InnerText; }
@@ -130,6 +148,13 @@ public class ZapParser : IZapParser
                     }
                 }
 
+                // Reports group alerts by <site host="…">; the host there wins over the one taken from the URL
+                var siteHost = alert.SelectSingleNode("ancestor::site")?.Attributes?["host"]?.Value;
+                if (!string.IsNullOrEmpty(siteHost))
+                {
+                    targetHost = siteHost;
+                }
+
                 // Create or find target
                 Target target = null;
                 if (!string.IsNullOrEmpty(targetHost))
@@ -159,28 +184,26 @@ public class ZapParser : IZapParser
                 {
                     detailedDescription += "\n\nAdditional Information:\n" + otherinfo;
                 }
-                if (!string.IsNullOrEmpty(param))
+                // Build proof of concept
+                string poc = "";
+                // The description is HTML; evidence is often markup (a form, a header) that must show as text
+                foreach (var instance in instances)
                 {
-                    detailedDescription += "\n\nParameter: " + param;
+                    detailedDescription += "\n\nURL: " + HttpUtility.HtmlEncode(instance.Uri);
+                    poc += "URL: " + instance.Uri + "\n";
+                    if (!string.IsNullOrEmpty(instance.Param))
+                    {
+                        detailedDescription += "\nParameter: " + HttpUtility.HtmlEncode(instance.Param);
+                        poc += "Parameter: " + instance.Param + "\n";
+                    }
+                    if (!string.IsNullOrEmpty(instance.Evidence))
+                    {
+                        detailedDescription += "\nEvidence: " + HttpUtility.HtmlEncode(instance.Evidence);
+                    }
                 }
                 if (!string.IsNullOrEmpty(attack))
                 {
                     detailedDescription += "\n\nAttack: " + attack;
-                }
-                if (!string.IsNullOrEmpty(evidence))
-                {
-                    detailedDescription += "\n\nEvidence: " + evidence;
-                }
-
-                // Build proof of concept
-                string poc = "";
-                if (!string.IsNullOrEmpty(uri))
-                {
-                    poc += "URL: " + uri + "\n";
-                }
-                if (!string.IsNullOrEmpty(param))
-                {
-                    poc += "Parameter: " + param + "\n";
                 }
                 if (!string.IsNullOrEmpty(attack))
                 {

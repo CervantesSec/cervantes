@@ -83,19 +83,37 @@ public class DependencyCheckParser : IDependencyCheckParser
         // Crear target para dependencias
         Target target = CreateDependenciesTarget(pro, user);
 
-        XmlNodeList dependencies = doc.GetElementsByTagName("dependency");
-        
-        foreach (XmlNode dependency in dependencies)
+        foreach (var finding in ReadXml(doc))
         {
-            string fileName = dependency.SelectSingleNode("fileName")?.InnerText ?? "";
-            string filePath = dependency.SelectSingleNode("filePath")?.InnerText ?? "";
-            
-            XmlNodeList vulnerabilities = dependency.SelectNodes(".//vulnerability");
-            foreach (XmlNode vulnerability in vulnerabilities)
+            ProcessXmlVulnerability(finding, target, pro, user, sanitizer);
+        }
+    }
+
+    /// <summary>
+    /// Reads the vulnerabilities of a Dependency-Check XML report. Real reports declare a default namespace
+    /// (<c>dependency-check.N.xsd</c>), so elements are matched by local name. The score is the old
+    /// <c>cvssScore</c>, else <c>cvssV3/baseScore</c>, else <c>cvssV2/score</c>.
+    /// </summary>
+    public static IReadOnlyList<DependencyCheckXmlFinding> ReadXml(XmlDocument doc)
+    {
+        static string Text(XmlNode node, string path) =>
+            node.SelectSingleNode(string.Join("/", path.Split('/').Select(x => $"*[local-name()='{x}']")))?.InnerText ?? "";
+
+        var findings = new List<DependencyCheckXmlFinding>();
+        foreach (XmlNode dependency in doc.SelectNodes("//*[local-name()='dependency']")!)
+        {
+            var fileName = Text(dependency, "fileName");
+            var filePath = Text(dependency, "filePath");
+            foreach (XmlNode vulnerability in dependency.SelectNodes("*[local-name()='vulnerabilities']/*[local-name()='vulnerability']")!)
             {
-                ProcessXmlVulnerability(vulnerability, fileName, filePath, target, pro, user, sanitizer);
+                var score = Text(vulnerability, "cvssScore");
+                if (score.Length == 0) score = Text(vulnerability, "cvssV3/baseScore");
+                if (score.Length == 0) score = Text(vulnerability, "cvssV2/score");
+                findings.Add(new DependencyCheckXmlFinding(fileName, filePath, Text(vulnerability, "name"),
+                    Text(vulnerability, "description"), Text(vulnerability, "severity"), score));
             }
         }
+        return findings;
     }
 
     private void ProcessDependencyCheckReport(DependencyCheckReport report, Project pro, string user, HtmlSanitizer sanitizer)
@@ -271,13 +289,10 @@ public class DependencyCheckParser : IDependencyCheckParser
         vulnTargetManager.Context.SaveChanges();
     }
 
-    private void ProcessXmlVulnerability(XmlNode vulnNode, string fileName, string filePath, 
+    private void ProcessXmlVulnerability(DependencyCheckXmlFinding finding,
                                        Target target, Project pro, string user, HtmlSanitizer sanitizer)
     {
-        string name = vulnNode.SelectSingleNode("name")?.InnerText ?? "";
-        string description = vulnNode.SelectSingleNode("description")?.InnerText ?? "";
-        string severity = vulnNode.SelectSingleNode("severity")?.InnerText ?? "";
-        string cvssScore = vulnNode.SelectSingleNode("cvssScore")?.InnerText ?? "";
+        var (fileName, filePath, name, description, severity, cvssScore) = finding;
         
         if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(description))
             return;
@@ -372,6 +387,10 @@ public class DependencyCheckParser : IDependencyCheckParser
         }
     }
 }
+
+// One vulnerability of a dependency in the XML report
+public record DependencyCheckXmlFinding(string FileName, string FilePath, string Name, string Description,
+    string Severity, string CvssScore);
 
 // Modelos para JSON de Dependency-Check
 public class DependencyCheckReport
