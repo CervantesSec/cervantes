@@ -2796,4 +2796,10 @@
   <data name="findingId" xml:space="preserve">
     <value>Bulgu ID</value>
   </data>
+  <data name="reportTemplateError" xml:space="preserve">
+    <value>Rapor şablonunda bir hata var: {0}</value>
+  </data>
+  <data name="reportComponentCssHelp" xml:space="preserve">
+    <value>Bu CSS tüm rapora uygulanır. Bir tablo satırını her öğe için tekrarlamak için o satırın bir hücresine {{tablerow item in Collection}} … {{end}} yazın.</value>
+  </data>
 </root>

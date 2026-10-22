@@ -2792,4 +2792,10 @@
   <data name="findingId" xml:space="preserve">
     <value>Schwachstellen-ID</value>
   </data>
+  <data name="reportTemplateError" xml:space="preserve">
+    <value>Die Berichtsvorlage enthält einen Fehler: {0}</value>
+  </data>
+  <data name="reportComponentCssHelp" xml:space="preserve">
+    <value>Dieses CSS gilt für den gesamten Bericht. Um eine Tabellenzeile für jedes Element zu wiederholen, setzen Sie {{tablerow item in Collection}} … {{end}} in eine Zelle dieser Zeile.</value>
+  </data>
 </root>

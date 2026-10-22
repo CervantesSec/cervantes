@@ -3354,4 +3354,10 @@ Option 3</value>
   <data name="findingId" xml:space="preserve">
     <value>Finding ID</value>
   </data>
+  <data name="reportTemplateError" xml:space="preserve">
+    <value>The report template has an error: {0}</value>
+  </data>
+  <data name="reportComponentCssHelp" xml:space="preserve">
+    <value>This CSS applies to the whole report. To repeat a table row for each item, put {{tablerow item in Collection}} … {{end}} inside a cell of that row.</value>
+  </data>
 </root>

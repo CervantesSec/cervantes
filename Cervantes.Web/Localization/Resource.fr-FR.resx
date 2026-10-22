@@ -2792,4 +2792,10 @@
   <data name="findingId" xml:space="preserve">
     <value>ID du résultat</value>
   </data>
+  <data name="reportTemplateError" xml:space="preserve">
+    <value>Le modèle de rapport contient une erreur : {0}</value>
+  </data>
+  <data name="reportComponentCssHelp" xml:space="preserve">
+    <value>Ce CSS s'applique à tout le rapport. Pour répéter une ligne de tableau pour chaque élément, placez {{tablerow item in Collection}} … {{end}} dans une cellule de cette ligne.</value>
+  </data>
 </root>

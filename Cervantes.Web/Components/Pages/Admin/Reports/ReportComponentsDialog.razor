@@ -85,6 +85,7 @@
                             <ChildContent>
                                 <MudStack>
                                     <StandaloneCodeEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" CssClass="editor-class"/>
+                                    <MudText Typo="Typo.caption" Class="mt-1">@localizer["reportComponentCssHelp"]</MudText>
                                     <MudStack Row="true" Justify="Justify.FlexEnd">
                                         <MudButton  Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Css" Color="@Color.Primary" OnClick="UpdateCss">@localizer["updateStyle"]</MudButton>
 

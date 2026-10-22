@@ -764,11 +764,13 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Header)
                              .OrderBy(x => x.Order))
                 {
-                    var parsed = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    // The component CSS goes in as a stylesheet so selectors that depend on the rendered report
+                    // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
+                    var componentHtml = ReportCss.ToStyleBlock(part.Component.ContentCss) + part.Component.Content;
                     string pattern = @"<html\s*(?:[^>]*)\s*>";
                     string pattern2 = @"<body\s*(?:[^>]*)\s*>";
                     string pattern3 = @"<head\s*(?:[^>]*)\s*>";
-                    string html = parsed.Html;
+                    string html = componentHtml;
                     html = Regex.Replace(html, pattern, "", RegexOptions.IgnoreCase);
                     html = Regex.Replace(html, pattern2, "", RegexOptions.IgnoreCase);
                     html = Regex.Replace(html, pattern3, "", RegexOptions.IgnoreCase);
@@ -785,11 +787,13 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Cover)
                              .OrderBy(x => x.Order))
                 {
-                    var parsed = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    // The component CSS goes in as a stylesheet so selectors that depend on the rendered report
+                    // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
+                    var componentHtml = ReportCss.ToStyleBlock(part.Component.ContentCss) + part.Component.Content;
                     string pattern = @"<html\s*(?:[^>]*)\s*>";
                     string pattern2 = @"<body\s*(?:[^>]*)\s*>";
                     string pattern3 = @"<head\s*(?:[^>]*)\s*>";
-                    string html = parsed.Html;
+                    string html = componentHtml;
                     html = Regex.Replace(html, pattern, "", RegexOptions.IgnoreCase);
                     html = Regex.Replace(html, pattern2, "", RegexOptions.IgnoreCase);
                     html = Regex.Replace(html, pattern3, "", RegexOptions.IgnoreCase);
@@ -805,11 +809,13 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Body)
                              .OrderBy(x => x.Order))
                 {
-                    var parsed = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    // The component CSS goes in as a stylesheet so selectors that depend on the rendered report
+                    // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
+                    var componentHtml = ReportCss.ToStyleBlock(part.Component.ContentCss) + part.Component.Content;
                     string pattern = @"<html\s*(?:[^>]*)\s*>";
                     string pattern2 = @"<body\s*(?:[^>]*)\s*>";
                     string pattern3 = @"<head\s*(?:[^>]*)\s*>";
-                    string html = parsed.Html;
+                    string html = componentHtml;
                     html = Regex.Replace(html, pattern, "", RegexOptions.IgnoreCase);
                     html = Regex.Replace(html, pattern2, "", RegexOptions.IgnoreCase);
                     html = Regex.Replace(html, pattern3, "", RegexOptions.IgnoreCase);
@@ -844,11 +850,13 @@ public class ReportController : ControllerBase
                 foreach (var part in reportParts.Where(x => x.Component.ComponentType == ReportPartType.Footer)
                              .OrderBy(x => x.Order))
                 {
-                    var parsed = PreMailer.Net.PreMailer.MoveCssInline(part.Component.Content, css: part.Component.ContentCss);
+                    // The component CSS goes in as a stylesheet so selectors that depend on the rendered report
+                    // (pseudo-elements, variables, :nth-child over loops, classes built from data) still apply.
+                    var componentHtml = ReportCss.ToStyleBlock(part.Component.ContentCss) + part.Component.Content;
                     string pattern = @"<html\s*(?:[^>]*)\s*>";
                     string pattern2 = @"<body\s*(?:[^>]*)\s*>";
                     string pattern3 = @"<head\s*(?:[^>]*)\s*>";
-                    string html = parsed.Html;
+                    string html = componentHtml;
                     html = Regex.Replace(html, pattern, "", RegexOptions.IgnoreCase);
                     html = Regex.Replace(html, pattern2, "", RegexOptions.IgnoreCase);
                     html = Regex.Replace(html, pattern3, "", RegexOptions.IgnoreCase);
@@ -990,7 +998,7 @@ public class ReportController : ControllerBase
                         {"VulnRisk", vuln.Risk.ToString()},
                         {"VulnStatus", vuln.Status.ToString()},
                         {"VulnImpact", vuln.Impact},
-                        {"VulnCvss", vuln.CVSS3.ToString(CultureInfo.InvariantCulture)},
+                        {"VulnCvss", vuln.CVSS3.ToString("0.0", CultureInfo.InvariantCulture)},
                         {"VulnCvssVector", vuln.CVSSVector},
                         {"VulnCvssSeverity", VulnCvssSeverity},
                         {"VulnRemediation", vuln.Remediation},
@@ -1280,16 +1288,23 @@ public class ReportController : ControllerBase
                 source = HttpUtility.HtmlDecode(source);
                 //Console.WriteLine(source);
                 var templateScriban = Template.Parse(source);
-                // Check for any errors
-                if (templateScriban.HasErrors)
+                var templateErrors = ReportCss.TemplateErrors(templateScriban);
+                if (templateErrors.Count > 0)
                 {
-                    foreach(var error in templateScriban.Messages)
-                    {
-                        Console.WriteLine(error);
-                    }
+                    _logger.LogWarning("Report template errors: {Errors}. User: {UserId}", string.Join("; ", templateErrors), aspNetUserId);
+                    return BadRequest(new { errors = templateErrors });
                 }
-                
-                var result = await templateScriban.RenderAsync(context);
+
+                string result;
+                try
+                {
+                    result = await templateScriban.RenderAsync(context);
+                }
+                catch (Scriban.Syntax.ScriptRuntimeException templateError)
+                {
+                    _logger.LogWarning("Report template error: {Error}. User: {UserId}", templateError.Message, aspNetUserId);
+                    return BadRequest(new { errors = new[] { templateError.Message } });
+                }
 
                 rep.HtmlCode = result;
                 
@@ -1449,7 +1464,8 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                     
                                     // Parse the HTML code to extract the header, footer, and cover
                                     var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-                                    htmlDoc.LoadHtml(report.HtmlCode);
+                                    // Word ignores <style>: inline the report's stylesheets (component CSS included) first.
+                                    htmlDoc.LoadHtml(PreMailer.Net.PreMailer.MoveCssInline(report.HtmlCode, removeStyleElements: true).Html);
                                     var headerHtml = htmlDoc.DocumentNode.SelectSingleNode("//header")?.InnerHtml;
                                     var footerHtml = htmlDoc.DocumentNode.SelectSingleNode("//footer")?.InnerHtml;
                                     var coverHtml =

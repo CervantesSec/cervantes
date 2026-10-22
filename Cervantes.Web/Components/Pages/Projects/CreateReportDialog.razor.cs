@@ -94,6 +94,10 @@ public partial class CreateReportDialog: ComponentBase
 			    Snackbar.Add(@localizer["reportCreated"], Severity.Success);
 			    MudDialog.Close(DialogResult.Ok(true));
 		    }
+		    else if (response is BadRequestObjectResult { Value: { } body } && TemplateError(body) is { } error)
+		    {
+			    Snackbar.Add(localizer["reportTemplateError", error], Severity.Error);
+		    }
 		    else
 		    {
 			    Snackbar.Add(@localizer["reportCreatedError"], Severity.Error);
@@ -147,5 +151,11 @@ public partial class CreateReportDialog: ComponentBase
                 return Array.Empty<string>();
             return result.Errors.Select(e => e.ErrorMessage);
         };
+    }
+
+    // The first message of the { errors = [...] } body GenerateNewReport returns for a broken template.
+    internal static string? TemplateError(object body)
+    {
+        return body.GetType().GetProperty("errors")?.GetValue(body) is IEnumerable<string> errors ? errors.FirstOrDefault() : null;
     }
 }

@@ -2792,4 +2792,10 @@
   <data name="findingId" xml:space="preserve">
     <value>ID nálezu</value>
   </data>
+  <data name="reportTemplateError" xml:space="preserve">
+    <value>Šablona zprávy obsahuje chybu: {0}</value>
+  </data>
+  <data name="reportComponentCssHelp" xml:space="preserve">
+    <value>Toto CSS platí pro celou zprávu. Chcete-li opakovat řádek tabulky pro každou položku, vložte {{tablerow item in Collection}} … {{end}} do buňky tohoto řádku.</value>
+  </data>
 </root>
