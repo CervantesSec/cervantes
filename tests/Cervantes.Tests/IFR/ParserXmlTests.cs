@@ -47,6 +47,32 @@ public class ParserXmlTests
     }
 
     [Fact]
+    public void ZapDescriptionOf_ShowsInstanceMarkupAsText()
+    {
+        var instances = new[] { new ZapInstance("http://t/s?q=1", "GET", "q", "<script>alert(1)</script>", "<form action=\"/x\">", null) };
+
+        var description = ZapParser.DescriptionOf("<p>Reflected XSS</p>", "", instances);
+        var poc = ZapParser.PocOf(instances);
+
+        Assert.StartsWith("<p>Reflected XSS</p>", description);
+        Assert.Contains("Attack: &lt;script&gt;alert(1)&lt;/script&gt;", description);
+        Assert.Contains("Evidence: &lt;form action=&quot;/x&quot;&gt;", description);
+        Assert.Contains("Attack Vector: &lt;script&gt;", poc);
+        Assert.DoesNotContain("<script>", description + poc);
+    }
+
+    [Fact]
+    public void ZapDescriptionOf_OtherInfoOnceWhenAlertAndInstanceRepeatIt()
+    {
+        var alert = Fixture("Zap", "zap-baseline.xml").SelectSingleNode("//alertitem")!;
+        var otherInfo = alert.SelectSingleNode("otherinfo")!.InnerText;
+
+        var description = ZapParser.DescriptionOf("<p>d</p>", otherInfo, ZapParser.InstancesOf(alert));
+
+        Assert.Single(System.Text.RegularExpressions.Regex.Matches(description, "No known Anti-CSRF token"));
+    }
+
+    [Fact]
     public void InstancesOf_LegacyAlertLevelFields()
     {
         var doc = new XmlDocument();

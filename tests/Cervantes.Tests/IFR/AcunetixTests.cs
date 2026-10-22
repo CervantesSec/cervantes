@@ -80,4 +80,29 @@ public class AcunetixTests
     {
         Assert.Throws<XmlException>(() => AcunetixParser.LoadReport(ParserFixtures.Path("Acunetix", "acunetix360.json")));
     }
+
+    [Fact]
+    public void PocOf_ShowsMarkupAsText()
+    {
+        var item = Item("acunetix.xml", "1");
+
+        var poc = AcunetixParser.PocOf(item);
+
+        Assert.Contains("Parameter: &lt;empty&gt;", poc);
+        Assert.Contains("<pre>GET /h/search HTTP/1.1", poc);
+        Assert.DoesNotContain("<empty>", poc);
+    }
+
+    [Fact]
+    public void PocOf_EncodesRequestMarkup()
+    {
+        var doc = Inline("<ScanGroup><Scan><ReportItems><ReportItem id=\"0\"><Affects>/s</Affects><TechnicalDetails>" +
+                         "<Request><![CDATA[GET /s?q=<script>alert(1)</script> HTTP/1.1]]></Request></TechnicalDetails>" +
+                         "</ReportItem></ReportItems></Scan></ScanGroup>");
+
+        var poc = AcunetixParser.PocOf(doc.SelectSingleNode("//ReportItem")!);
+
+        Assert.Contains("q=&lt;script&gt;alert(1)&lt;/script&gt;", poc);
+        Assert.DoesNotContain("<script>", poc);
+    }
 }

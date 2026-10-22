@@ -80,6 +80,13 @@ public class BurpParser: IBurpParser
         return string.Join("\n\n", blocks);
     }
 
+    /// <summary>The proof of concept as stored: <see cref="PocOf"/> encoded inside <c>&lt;pre&gt;</c>, so markup in a response shows as text.</summary>
+    public static string PocHtml(XmlNode issue)
+    {
+        var poc = PocOf(issue);
+        return poc.Length > 0 ? "<pre>" + WebUtility.HtmlEncode(poc) + "</pre>" : "";
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -131,7 +138,6 @@ public class BurpParser: IBurpParser
                 string classifications = "";
                 if(issue.SelectSingleNode("vulnerabilityClassifications") != null){classifications = issue.SelectSingleNode("vulnerabilityClassifications").InnerText;}
                 
-                string poc = PocOf(issue);
                 string detailItems = string.Join("<br>", issue.SelectNodes("issueDetailItems/issueDetailItem")!.Cast<XmlNode>()
                     .Select(x => WebUtility.HtmlEncode(x.InnerText)));
 
@@ -188,7 +194,7 @@ public class BurpParser: IBurpParser
                 vuln.Description = sanitizer.Sanitize(issueBack + "<br><p>Path: " + WebUtility.HtmlEncode(pathIssue) +
                     "</p><p>Location: " + WebUtility.HtmlEncode(location) + "</p><br><p>References</p>" +
                     references + classifications);
-                vuln.ProofOfConcept = poc.Length > 0 ? sanitizer.Sanitize("<pre>" + WebUtility.HtmlEncode(poc) + "</pre>") : "";
+                vuln.ProofOfConcept = sanitizer.Sanitize(PocHtml(issue));
                 vuln.Impact = sanitizer.Sanitize(detailItems.Length > 0 ? issueDet + "<p>" + detailItems + "</p>" : issueDet);
                 vuln.CVSS3 = 0;
                 vuln.CVSSVector = "";
@@ -269,7 +275,6 @@ public class BurpParser: IBurpParser
                 string classifications = "";
                 if(issue.SelectSingleNode("vulnerabilityClassifications") != null){classifications = issue.SelectSingleNode("vulnerabilityClassifications").InnerText;}
                 
-                string poc = PocOf(issue);
                 string detailItems = string.Join("<br>", issue.SelectNodes("issueDetailItems/issueDetailItem")!.Cast<XmlNode>()
                     .Select(x => WebUtility.HtmlEncode(x.InnerText)));
                 
@@ -306,7 +311,7 @@ public class BurpParser: IBurpParser
                 vuln.Description = sanitizer.Sanitize(issueBack + "<br><p>Path: " + WebUtility.HtmlEncode(pathIssue) +
                     "</p><p>Location: " + WebUtility.HtmlEncode(location) + "</p><br><p>References</p>" +
                     references + classifications);
-                vuln.ProofOfConcept = poc.Length > 0 ? sanitizer.Sanitize("<pre>" + WebUtility.HtmlEncode(poc) + "</pre>") : "";
+                vuln.ProofOfConcept = sanitizer.Sanitize(PocHtml(issue));
                 vuln.Impact = sanitizer.Sanitize(detailItems.Length > 0 ? issueDet + "<p>" + detailItems + "</p>" : issueDet);
                 vuln.CVSS3 = 0;
                 vuln.CVSSVector = "";

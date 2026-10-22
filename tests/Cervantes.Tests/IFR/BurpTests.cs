@@ -59,4 +59,18 @@ public class BurpTests
     {
         Assert.Equal("", BurpParser.PocOf(Inline("<name>n</name>")));
     }
+
+    [Fact]
+    public void PocHtml_ShowsMarkupAsText()
+    {
+        var issue = Inline("<requestresponse><request base64=\"true\">" + B64("GET / HTTP/1.1") + "</request>" +
+                           "<response base64=\"true\">" + B64("HTTP/1.1 200 OK\n\n<script>alert(1)</script>") + "</response></requestresponse>");
+
+        var html = BurpParser.PocHtml(issue);
+
+        Assert.StartsWith("<pre>", html);
+        Assert.Contains("&lt;script&gt;alert(1)&lt;/script&gt;", html);
+        Assert.DoesNotContain("<script>", html);
+        Assert.Equal("", BurpParser.PocHtml(Inline("<name>n</name>")));
+    }
 }

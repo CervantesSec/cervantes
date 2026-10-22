@@ -57,6 +57,51 @@ public class ZapParser : IZapParser
         return instances;
     }
 
+    /// <summary>
+    /// The description of a ZAP alert: its HTML <c>desc</c>, its other information, and every instance's URL, method,
+    /// parameter, attack, evidence and other information as encoded text (evidence is often markup: a form, a header).
+    /// An instance's other information that only repeats the alert's is left out (ZAP 2.17 writes it in both places).
+    /// </summary>
+    public static string DescriptionOf(string description, string otherInfo, IReadOnlyList<ZapInstance> instances)
+    {
+        var text = description;
+        if (!string.IsNullOrEmpty(otherInfo))
+        {
+            text += "\n\nAdditional Information:\n" + otherInfo;
+        }
+        foreach (var instance in instances)
+        {
+            text += "\n\nURL: " + HttpUtility.HtmlEncode(instance.Uri);
+            if (!string.IsNullOrEmpty(instance.Method)) text += "\nMethod: " + HttpUtility.HtmlEncode(instance.Method);
+            if (!string.IsNullOrEmpty(instance.Param)) text += "\nParameter: " + HttpUtility.HtmlEncode(instance.Param);
+            if (!string.IsNullOrEmpty(instance.Attack)) text += "\nAttack: " + HttpUtility.HtmlEncode(instance.Attack);
+            if (!string.IsNullOrEmpty(instance.Evidence)) text += "\nEvidence: " + HttpUtility.HtmlEncode(instance.Evidence);
+            if (!string.IsNullOrEmpty(instance.OtherInfo) && PlainText(instance.OtherInfo) != PlainText(otherInfo))
+            {
+                text += "\nOther Information: " + HttpUtility.HtmlEncode(instance.OtherInfo);
+            }
+        }
+        return text;
+    }
+
+    // The alert writes its other information as HTML (<p>...</p>), the instance as plain text: compare the words only.
+    private static string PlainText(string value) =>
+        System.Text.RegularExpressions.Regex.Replace(HttpUtility.HtmlDecode(System.Text.RegularExpressions.Regex.Replace(value, "<[^>]+>", " ")), @"\s+", " ").Trim();
+
+    /// <summary>The proof of concept of a ZAP alert: URL, method, parameter and attack of every instance, encoded.</summary>
+    public static string PocOf(IReadOnlyList<ZapInstance> instances)
+    {
+        var poc = "";
+        foreach (var instance in instances)
+        {
+            poc += "URL: " + HttpUtility.HtmlEncode(instance.Uri) + "\n";
+            if (!string.IsNullOrEmpty(instance.Method)) poc += "Method: " + HttpUtility.HtmlEncode(instance.Method) + "\n";
+            if (!string.IsNullOrEmpty(instance.Param)) poc += "Parameter: " + HttpUtility.HtmlEncode(instance.Param) + "\n";
+            if (!string.IsNullOrEmpty(instance.Attack)) poc += "Attack Vector: " + HttpUtility.HtmlEncode(instance.Attack) + "\n";
+        }
+        return poc;
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -180,43 +225,8 @@ public class ZapParser : IZapParser
                     }
                 }
 
-                // Build detailed description
-                string detailedDescription = description;
-                if (!string.IsNullOrEmpty(otherinfo))
-                {
-                    detailedDescription += "\n\nAdditional Information:\n" + otherinfo;
-                }
-                // Build proof of concept
-                string poc = "";
-                // The description is HTML; evidence is often markup (a form, a header) that must show as text
-                foreach (var instance in instances)
-                {
-                    detailedDescription += "\n\nURL: " + HttpUtility.HtmlEncode(instance.Uri);
-                    poc += "URL: " + HttpUtility.HtmlEncode(instance.Uri) + "\n";
-                    if (!string.IsNullOrEmpty(instance.Method))
-                    {
-                        detailedDescription += "\nMethod: " + HttpUtility.HtmlEncode(instance.Method);
-                        poc += "Method: " + HttpUtility.HtmlEncode(instance.Method) + "\n";
-                    }
-                    if (!string.IsNullOrEmpty(instance.Param))
-                    {
-                        detailedDescription += "\nParameter: " + HttpUtility.HtmlEncode(instance.Param);
-                        poc += "Parameter: " + HttpUtility.HtmlEncode(instance.Param) + "\n";
-                    }
-                    if (!string.IsNullOrEmpty(instance.Attack))
-                    {
-                        detailedDescription += "\nAttack: " + HttpUtility.HtmlEncode(instance.Attack);
-                        poc += "Attack Vector: " + HttpUtility.HtmlEncode(instance.Attack) + "\n";
-                    }
-                    if (!string.IsNullOrEmpty(instance.Evidence))
-                    {
-                        detailedDescription += "\nEvidence: " + HttpUtility.HtmlEncode(instance.Evidence);
-                    }
-                    if (!string.IsNullOrEmpty(instance.OtherInfo))
-                    {
-                        detailedDescription += "\nOther Information: " + HttpUtility.HtmlEncode(instance.OtherInfo);
-                    }
-                }
+                string detailedDescription = DescriptionOf(description, otherinfo, instances);
+                string poc = PocOf(instances);
 
 
                 // Create vulnerability

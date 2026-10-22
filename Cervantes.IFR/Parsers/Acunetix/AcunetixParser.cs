@@ -96,6 +96,25 @@ public class AcunetixParser : IAcunetixParser
             .Where(x => x.Length > 0));
     }
 
+    /// <summary>
+    /// The proof of concept of a finding as stored (HTML): affected path and parameter, then the request and any
+    /// response in <c>&lt;pre&gt;</c>. All of it is plain text from the report (a parameter can be "&lt;empty&gt;"), so it is encoded.
+    /// </summary>
+    public static string PocOf(XmlNode reportItem)
+    {
+        var affects = (reportItem.SelectSingleNode("Affects") ?? reportItem.SelectSingleNode("URL"))?.InnerText ?? "";
+        var parameter = reportItem.SelectSingleNode("Parameter")?.InnerText ?? "";
+        var request = RequestOf(reportItem);
+        var response = (reportItem.SelectSingleNode("Response") ?? reportItem.SelectSingleNode("HttpResponse"))?.InnerText ?? "";
+
+        var poc = "";
+        if (affects.Length > 0) poc += $"Affects: {WebUtility.HtmlEncode(affects)}\n";
+        if (parameter.Length > 0) poc += $"Parameter: {WebUtility.HtmlEncode(parameter)}\n";
+        if (request.Length > 0) poc += $"HTTP Request:\n<pre>{WebUtility.HtmlEncode(request)}</pre>\n";
+        if (response.Length > 0) poc += $"HTTP Response:\n<pre>{WebUtility.HtmlEncode(response)}</pre>\n";
+        return poc;
+    }
+
     /// <summary>Loads an Acunetix XML export; anything else (for example the JSON of Acunetix 360) throws <see cref="XmlException"/>.</summary>
     public static XmlDocument LoadReport(string path)
     {
@@ -159,12 +178,6 @@ public class AcunetixParser : IAcunetixParser
                 string recommendation = "";
                 if (vuln.SelectSingleNode("Recommendation") != null) { recommendation = vuln.SelectSingleNode("Recommendation").InnerText; }
                 else if (vuln.SelectSingleNode("Recommendations") != null) { recommendation = vuln.SelectSingleNode("Recommendations").InnerText; }
-
-                string request = RequestOf(vuln);
-
-                string response = "";
-                if (vuln.SelectSingleNode("Response") != null) { response = vuln.SelectSingleNode("Response").InnerText; }
-                else if (vuln.SelectSingleNode("HttpResponse") != null) { response = vuln.SelectSingleNode("HttpResponse").InnerText; }
 
                 string cwe = CwesOf(vuln);
                 string references = ReferencesOf(vuln);
@@ -255,24 +268,7 @@ public class AcunetixParser : IAcunetixParser
                     detailedDescription += $"\n\nReferences:\n{WebUtility.HtmlEncode(references)}";
                 }
 
-                // Build proof of concept
-                string poc = "";
-                if (!string.IsNullOrEmpty(affects))
-                {
-                    poc += $"Affects: {WebUtility.HtmlEncode(affects)}\n";
-                }
-                if (!string.IsNullOrEmpty(parameter))
-                {
-                    poc += $"Parameter: {WebUtility.HtmlEncode(parameter)}\n";
-                }
-                if (!string.IsNullOrEmpty(request))
-                {
-                    poc += $"HTTP Request:\n<pre>{WebUtility.HtmlEncode(request)}</pre>\n";
-                }
-                if (!string.IsNullOrEmpty(response))
-                {
-                    poc += $"HTTP Response:\n<pre>{WebUtility.HtmlEncode(response)}</pre>\n";
-                }
+                string poc = PocOf(vuln);
 
                 // Skip if no name or description
                 if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(description))
