@@ -37,6 +37,7 @@ The files listed below come from the test samples of DefectDojo (`https://github
 - `Nessus/nessus-cvssv3.nessus`: `tenable/nessus/nessus_with_cvssv3.nessus` (report items 4, 5, 13 and 17, the first two plugin preference items, and no `plugin_set` preference)
 - `OpenVAS/openvas.xml`: `openvas/report_detail_v2.xml`
 - `OpenVAS/openvas-gmp9.xml`: `openvas/one_vuln.xml`
+- `Burp/burp-cwe.xml`: `burp/one_finding_with_cwe.xml`
 <!-- filled in by the tasks that add them -->
 
 > Copyright (c) 2015-2023 DefectDojo, Inc. All rights reserved.

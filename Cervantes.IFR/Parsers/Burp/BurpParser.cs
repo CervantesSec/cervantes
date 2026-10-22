@@ -28,6 +28,58 @@ public class BurpParser: IBurpParser
         this.vulnTargetManager = vulnTargetManager;
         this.projectManager = projectManager;
     }
+    // A recorded request or response longer than this is cut: responses often hold whole pages or binaries
+    private const int MaxMessageLength = 4000;
+
+    /// <summary>
+    /// The proof of concept of an issue as plain text: each <c>requestresponse</c> as <c>Request:</c> and
+    /// <c>Response:</c> blocks, base64-decoded when <c>base64="true"</c> and cut to 4000 characters, plus a legacy
+    /// <c>poc</c> element if present; "" when the issue recorded nothing.
+    /// </summary>
+    public static string PocOf(XmlNode issue)
+    {
+        static string Message(XmlNode? node)
+        {
+            if (node == null || string.IsNullOrEmpty(node.InnerText))
+            {
+                return "";
+            }
+            var text = node.InnerText;
+            if (node.Attributes?["base64"]?.Value == "true")
+            {
+                try
+                {
+                    text = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(node.InnerText.Trim()));
+                }
+                catch (FormatException)
+                {
+                    // Keep the text as it is: a damaged message should not fail the whole import
+                }
+            }
+            return text.Length > MaxMessageLength ? text[..MaxMessageLength] + "\n[…]" : text;
+        }
+
+        var blocks = new System.Collections.Generic.List<string>();
+        foreach (XmlNode pair in issue.SelectNodes("requestresponse")!)
+        {
+            var request = Message(pair.SelectSingleNode("request"));
+            var response = Message(pair.SelectSingleNode("response"));
+            if (request.Length > 0)
+            {
+                blocks.Add("Request:\n" + request);
+            }
+            if (response.Length > 0)
+            {
+                blocks.Add("Response:\n" + response);
+            }
+        }
+        if (issue.SelectSingleNode("poc")?.InnerText is { Length: > 0 } legacy)
+        {
+            blocks.Add(legacy);
+        }
+        return string.Join("\n\n", blocks);
+    }
+
     public void Parse(Guid? project, string user, string path)
     {
         findingIds = FindingIdSequence.Empty;
@@ -79,8 +131,9 @@ public class BurpParser: IBurpParser
                 string classifications = "";
                 if(issue.SelectSingleNode("vulnerabilityClassifications") != null){classifications = issue.SelectSingleNode("vulnerabilityClassifications").InnerText;}
                 
-                string poc = "";
-                if(issue.SelectSingleNode("poc") != null){poc = issue.SelectSingleNode("poc").InnerText;}
+                string poc = PocOf(issue);
+                string detailItems = string.Join("<br>", issue.SelectNodes("issueDetailItems/issueDetailItem")!.Cast<XmlNode>()
+                    .Select(x => WebUtility.HtmlEncode(x.InnerText)));
 
 
                 host = sanitizer.Sanitize(host);
@@ -135,8 +188,8 @@ public class BurpParser: IBurpParser
                 vuln.Description = sanitizer.Sanitize(issueBack + "<br><p>Path: " + WebUtility.HtmlEncode(pathIssue) +
                     "</p><p>Location: " + WebUtility.HtmlEncode(location) + "</p><br><p>References</p>" +
                     references + classifications);
-                vuln.ProofOfConcept = sanitizer.Sanitize(poc);
-                vuln.Impact = sanitizer.Sanitize(issueDet);
+                vuln.ProofOfConcept = poc.Length > 0 ? sanitizer.Sanitize("<pre>" + WebUtility.HtmlEncode(poc) + "</pre>") : "";
+                vuln.Impact = sanitizer.Sanitize(detailItems.Length > 0 ? issueDet + "<p>" + detailItems + "</p>" : issueDet);
                 vuln.CVSS3 = 0;
                 vuln.CVSSVector = "";
                 vuln.Remediation = sanitizer.Sanitize(remediation + remediationDet);
@@ -216,8 +269,9 @@ public class BurpParser: IBurpParser
                 string classifications = "";
                 if(issue.SelectSingleNode("vulnerabilityClassifications") != null){classifications = issue.SelectSingleNode("vulnerabilityClassifications").InnerText;}
                 
-                string poc = "";
-                if(issue.SelectSingleNode("poc") != null){poc = issue.SelectSingleNode("poc").InnerText;}
+                string poc = PocOf(issue);
+                string detailItems = string.Join("<br>", issue.SelectNodes("issueDetailItems/issueDetailItem")!.Cast<XmlNode>()
+                    .Select(x => WebUtility.HtmlEncode(x.InnerText)));
                 
                 var vuln = new Vuln();
                 vuln.Template = true; // no project: imported as a template
@@ -252,8 +306,8 @@ public class BurpParser: IBurpParser
                 vuln.Description = sanitizer.Sanitize(issueBack + "<br><p>Path: " + WebUtility.HtmlEncode(pathIssue) +
                     "</p><p>Location: " + WebUtility.HtmlEncode(location) + "</p><br><p>References</p>" +
                     references + classifications);
-                vuln.ProofOfConcept = sanitizer.Sanitize(poc);
-                vuln.Impact = sanitizer.Sanitize(issueDet);
+                vuln.ProofOfConcept = poc.Length > 0 ? sanitizer.Sanitize("<pre>" + WebUtility.HtmlEncode(poc) + "</pre>") : "";
+                vuln.Impact = sanitizer.Sanitize(detailItems.Length > 0 ? issueDet + "<p>" + detailItems + "</p>" : issueDet);
                 vuln.CVSS3 = 0;
                 vuln.CVSSVector = "";
                 vuln.Remediation = sanitizer.Sanitize(remediation + remediationDet);
