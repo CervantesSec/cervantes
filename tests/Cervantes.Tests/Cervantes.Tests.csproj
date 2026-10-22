@@ -23,4 +23,8 @@
         <ProjectReference Include="..\..\Cervantes.IFR\Cervantes.IFR.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="IFR/Fixtures/**" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
 </Project>

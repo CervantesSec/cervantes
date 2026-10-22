@@ -56,7 +56,7 @@ public class DependencyCheckParser : IDependencyCheckParser
     {
         try
         {
-            var dependencyCheckReport = JsonSerializer.Deserialize<DependencyCheckReport>(fileContent);
+            var dependencyCheckReport = Read(fileContent).FirstOrDefault();
             if (dependencyCheckReport != null)
             {
                 ProcessDependencyCheckReport(dependencyCheckReport, pro, user, sanitizer);
@@ -66,6 +66,13 @@ public class DependencyCheckParser : IDependencyCheckParser
         {
             Console.WriteLine($"Error parsing Dependency-Check JSON: {ex.Message}");
         }
+    }
+
+    /// <summary>Reads a Dependency-Check JSON report (`--format JSON`). Throws <see cref="JsonException"/> if it is not valid JSON.</summary>
+    public static System.Collections.Generic.IReadOnlyList<DependencyCheckReport> Read(string content)
+    {
+        var report = JsonSerializer.Deserialize<DependencyCheckReport>(content, ParserJson.Options);
+        return report == null ? Array.Empty<DependencyCheckReport>() : new[] { report };
     }
 
     private void ParseXmlFormat(string path, Project pro, string user, HtmlSanitizer sanitizer)
@@ -370,8 +377,9 @@ public class DependencyCheckParser : IDependencyCheckParser
 public class DependencyCheckReport
 {
     public string ReportSchema { get; set; } = "";
-    public string ScanInfo { get; set; } = "";
-    public string ProjectInfo { get; set; } = "";
+    // Objects in the real report (engine version, data sources); not used by the import.
+    public JsonElement ScanInfo { get; set; }
+    public JsonElement ProjectInfo { get; set; }
     public DependencyCheckDependency[] Dependencies { get; set; } = Array.Empty<DependencyCheckDependency>();
 }
 
@@ -402,7 +410,14 @@ public class DependencyCheckVulnerability
     public string Notes { get; set; } = "";
     public DependencyCheckCvss CvssV2 { get; set; } = new();
     public DependencyCheckCvssV3 CvssV3 { get; set; } = new();
-    public string[] References { get; set; } = Array.Empty<string>();
+    public DependencyCheckReference[] References { get; set; } = Array.Empty<DependencyCheckReference>();
+}
+
+public class DependencyCheckReference
+{
+    public string Source { get; set; } = "";
+    public string Url { get; set; } = "";
+    public string Name { get; set; } = "";
 }
 
 public class DependencyCheckCvss

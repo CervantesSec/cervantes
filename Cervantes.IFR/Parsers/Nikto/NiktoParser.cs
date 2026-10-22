@@ -62,14 +62,13 @@ public class NiktoParser : INiktoParser
     {
         try
         {
-            var niktoResult = JsonSerializer.Deserialize<NiktoJsonResult>(fileContent);
-            if (niktoResult?.host != null)
+            foreach (var host in Read(fileContent))
             {
-                foreach (var vulnerability in niktoResult.vulnerabilities ?? new NiktoVulnerability[0])
+                foreach (var vulnerability in host.Vulnerabilities ?? Array.Empty<NiktoVulnerability>())
                 {
-                    ProcessVulnerability(vulnerability.id, vulnerability.method, vulnerability.url, 
-                                       vulnerability.msg, niktoResult.host.ip, niktoResult.host.hostname, 
-                                       niktoResult.host.port.ToString(), pro, user, sanitizer);
+                    ProcessVulnerability(vulnerability.Id, vulnerability.Method, vulnerability.Url,
+                                       vulnerability.Msg, host.Ip, host.Host,
+                                       host.Port.ToString(), pro, user, sanitizer);
                 }
             }
         }
@@ -78,6 +77,20 @@ public class NiktoParser : INiktoParser
             // Si falla JSON, intentar como texto plano
             ParseTextFormat(fileContent, pro, user, sanitizer);
         }
+    }
+
+    /// <summary>
+    /// Reads Nikto JSON (`-Format json`): an array of hosts, or a single host object. Throws <see cref="JsonException"/>
+    /// if it is not valid JSON.
+    /// </summary>
+    public static System.Collections.Generic.IReadOnlyList<NiktoJsonResult> Read(string content)
+    {
+        if (content.TrimStart().StartsWith("["))
+        {
+            return JsonSerializer.Deserialize<NiktoJsonResult[]>(content, ParserJson.Options) ?? Array.Empty<NiktoJsonResult>();
+        }
+        var single = JsonSerializer.Deserialize<NiktoJsonResult>(content, ParserJson.Options);
+        return single == null ? Array.Empty<NiktoJsonResult>() : new[] { single };
     }
 
     private void ParseXmlFormat(string path, Project pro, string user, HtmlSanitizer sanitizer)
@@ -297,24 +310,22 @@ public class NiktoParser : INiktoParser
     }
 }
 
-// Modelos para JSON de Nikto
+// Modelos para JSON de Nikto (`-Format json`): one object per scanned host, port written as a string.
 public class NiktoJsonResult
 {
-    public NiktoHost host { get; set; } = new();
-    public NiktoVulnerability[] vulnerabilities { get; set; } = Array.Empty<NiktoVulnerability>();
-}
-
-public class NiktoHost
-{
-    public string ip { get; set; } = "";
-    public string hostname { get; set; } = "";
-    public int port { get; set; } = 80;
+    public string Host { get; set; } = "";
+    public string Ip { get; set; } = "";
+    public int Port { get; set; } = 80;
+    public string Banner { get; set; } = "";
+    public NiktoVulnerability[] Vulnerabilities { get; set; } = Array.Empty<NiktoVulnerability>();
 }
 
 public class NiktoVulnerability
 {
-    public string id { get; set; } = "";
-    public string method { get; set; } = "";
-    public string url { get; set; } = "";
-    public string msg { get; set; } = "";
+    public string Id { get; set; } = "";
+    public string Method { get; set; } = "";
+    public string Url { get; set; } = "";
+    public string Msg { get; set; } = "";
+    // A string, or a list in some Nikto versions; not used by the import.
+    public JsonElement References { get; set; }
 }

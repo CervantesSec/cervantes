@@ -1,0 +1,12 @@
+[
+  {
+    "host": "app.example",
+    "ip": "10.3.3.3",
+    "port": "8080",
+    "banner": "nginx",
+    "vulnerabilities": [
+      { "id": "999986", "references": "", "method": "GET", "url": "/", "msg": "The anti-clickjacking X-Frame-Options header is not present." },
+      { "id": "000726", "references": "https://cve.example/CVE-2026-0004", "method": "GET", "url": "/backup/", "msg": "Directory indexing found." }
+    ]
+  }
+]

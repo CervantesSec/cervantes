@@ -1,0 +1,43 @@
+{
+  "errors": [],
+  "generated_at": "2026-10-22T10:00:00Z",
+  "metrics": {
+    "_totals": {
+      "CONFIDENCE.HIGH": 1,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 1,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 42,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "app/views.py": {
+      "CONFIDENCE.HIGH": 1,
+      "SEVERITY.HIGH": 1,
+      "loc": 42,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": [
+    {
+      "code": "9 def run(cmd):\n10     subprocess.Popen(cmd, shell=True)\n",
+      "col_offset": 4,
+      "end_col_offset": 37,
+      "filename": "app/views.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": { "id": 78, "link": "https://cwe.example/data/definitions/78.html" },
+      "issue_severity": "HIGH",
+      "issue_text": "subprocess call with shell=True identified, security issue.",
+      "line_number": 10,
+      "line_range": [ 10 ],
+      "more_info": "https://bandit.example/plugins/b602.html",
+      "test_id": "B602",
+      "test_name": "subprocess_popen_with_shell_equals_true"
+    }
+  ]
+}

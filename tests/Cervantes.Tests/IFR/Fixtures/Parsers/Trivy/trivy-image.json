@@ -1,0 +1,47 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2026-10-22T10:00:00.000000000Z",
+  "ArtifactName": "registry.example/app:1.0",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "OS": { "Family": "alpine", "Name": "3.18.4" },
+    "ImageID": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "Results": [
+    {
+      "Target": "registry.example/app:1.0 (alpine 3.18.4)",
+      "Class": "os-pkgs",
+      "Type": "alpine",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2026-0001",
+          "PkgID": "libcrypto3@3.1.3-r0",
+          "PkgName": "libcrypto3",
+          "InstalledVersion": "3.1.3-r0",
+          "FixedVersion": "3.1.4-r0",
+          "Status": "fixed",
+          "Layer": { "DiffID": "sha256:1111111111111111111111111111111111111111111111111111111111111111" },
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.example/nvd/cve-2026-0001",
+          "DataSource": { "ID": "alpine", "Name": "Alpine Secdb", "URL": "https://secdb.example/" },
+          "Title": "openssl: example flaw in a test fixture",
+          "Description": "Example description written for a test fixture.",
+          "Severity": "HIGH",
+          "CweIDs": [ "CWE-325" ],
+          "VendorSeverity": { "nvd": 3, "redhat": 2 },
+          "CVSS": {
+            "nvd": { "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", "V3Score": 7.5 }
+          },
+          "References": [ "https://advisories.example/CVE-2026-0001" ],
+          "PublishedDate": "2026-01-10T00:00:00Z",
+          "LastModifiedDate": "2026-02-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "Target": "app/package-lock.json",
+      "Class": "lang-pkgs",
+      "Type": "npm"
+    }
+  ]
+}

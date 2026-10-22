@@ -1,0 +1,43 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "9.0.9",
+    "dataSource": [ { "name": "NVD API Last Checked", "timestamp": "2026-10-22T10:00:00Z" } ]
+  },
+  "projectInfo": {
+    "name": "example-app",
+    "reportDate": "2026-10-22T10:00:00.000Z",
+    "credits": { "NVD": "This product uses the NVD API but is not endorsed or certified by the NVD." }
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "log-lib-2.14.1.jar",
+      "filePath": "/app/lib/log-lib-2.14.1.jar",
+      "md5": "00000000000000000000000000000000",
+      "sha1": "0000000000000000000000000000000000000000",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "evidenceCollected": { "vendorEvidence": [], "productEvidence": [], "versionEvidence": [] },
+      "packages": [ { "id": "pkg:maven/org.example/log-lib@2.14.1", "confidence": "HIGH", "url": "https://ossindex.example/component/pkg:maven/org.example/log-lib@2.14.1" } ],
+      "vulnerabilities": [
+        {
+          "source": "NVD",
+          "name": "CVE-2026-0003",
+          "severity": "CRITICAL",
+          "cvssv2": { "score": 9.3, "accessVector": "NETWORK", "accessComplexity": "MEDIUM", "authenticationr": "NONE", "confidentialImpact": "COMPLETE", "integrityImpact": "COMPLETE", "availabilityImpact": "COMPLETE", "severity": "HIGH", "version": "2.0" },
+          "cvssv3": { "baseScore": 10.0, "attackVector": "NETWORK", "attackComplexity": "LOW", "privilegesRequired": "NONE", "userInteraction": "NONE", "scope": "CHANGED", "confidentialityImpact": "HIGH", "integrityImpact": "HIGH", "availabilityImpact": "HIGH", "baseSeverity": "CRITICAL", "exploitabilityScore": "3.9", "impactScore": "6.0", "version": "3.1" },
+          "cwes": [ "CWE-502" ],
+          "description": "Example deserialization flaw written for a test fixture.",
+          "notes": "",
+          "references": [ { "source": "MISC", "url": "https://advisories.example/CVE-2026-0003", "name": "advisory" } ],
+          "vulnerableSoftware": [ { "software": { "id": "cpe:2.3:a:example:log-lib:*:*:*:*:*:*:*:*", "vulnerabilityIdMatched": "true" } } ]
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "clean-lib-1.0.jar",
+      "filePath": "/app/lib/clean-lib-1.0.jar"
+    }
+  ]
+}

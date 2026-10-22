@@ -41,16 +41,10 @@ public class NucleiParser : INucleiParser
             var fileContent = System.IO.File.ReadAllText(path);
             
             // Nuclei puede generar múltiples líneas JSON (JSONL) o un array JSON
-            var lines = fileContent.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            
-            foreach (var line in lines)
+            foreach (var nucleiResult in Read(fileContent))
             {
-                if (string.IsNullOrWhiteSpace(line)) continue;
-                
                 try
                 {
-                    var nucleiResult = JsonSerializer.Deserialize<NucleiResult>(line);
-                    if (nucleiResult == null) continue;
 
                     // Parse severity to risk level
                     VulnRisk risk = VulnRisk.Info;
@@ -232,6 +226,115 @@ public class NucleiParser : INucleiParser
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Reads Nuclei output: JSON lines (`-jsonl`, `-json`) or a JSON array (`-je`). Field names changed between Nuclei
+    /// versions (`templateID` / `template-id`, `matched` / `matched-at`), so each field is read under any of its names.
+    /// A line that is not JSON is skipped; if no line can be read the content is not Nuclei output and it throws.
+    /// </summary>
+    public static System.Collections.Generic.IReadOnlyList<NucleiResult> Read(string content)
+    {
+        var results = new System.Collections.Generic.List<NucleiResult>();
+        if (content.TrimStart().StartsWith("["))
+        {
+            using var array = JsonDocument.Parse(content, new JsonDocumentOptions { AllowTrailingCommas = true });
+            results.AddRange(array.RootElement.EnumerateArray().Select(FromJson));
+            return results;
+        }
+
+        JsonException? firstError = null;
+        foreach (var line in content.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            try
+            {
+                using var doc = JsonDocument.Parse(line);
+                results.Add(FromJson(doc.RootElement));
+            }
+            catch (JsonException e)
+            {
+                firstError ??= e;
+            }
+        }
+        if (results.Count == 0 && firstError != null)
+        {
+            throw firstError;
+        }
+        return results;
+    }
+
+    private static NucleiResult FromJson(JsonElement e)
+    {
+        var info = Field(e, "info");
+        var classification = info is { } i ? Field(i, "classification") : null;
+        return new NucleiResult
+        {
+            TemplateId = Text(e, "template-id", "templateID") ?? "",
+            Host = Text(e, "host") ?? "",
+            MatchedAt = Text(e, "matched-at", "matched", "matchedAt") ?? "",
+            ExtractedResults = Strings(e, "extracted-results", "extracted_results", "extractedResults"),
+            Request = Text(e, "request") ?? "",
+            Response = Text(e, "response") ?? "",
+            Info = info is not { } inf ? new NucleiInfo() : new NucleiInfo
+            {
+                Name = Text(inf, "name") ?? "",
+                Description = Text(inf, "description") ?? "",
+                Severity = Text(inf, "severity") ?? "",
+                Tags = Strings(inf, "tags"),
+                Remediation = Text(inf, "remediation") ?? "",
+                Classification = classification is not { } c ? new NucleiClassification() : new NucleiClassification
+                {
+                    CvssScore = Text(c, "cvss-score", "cvssScore") ?? "",
+                    CvssVector = Text(c, "cvss-metrics", "cvssMetrics", "cvssVector") ?? "",
+                    Cwe = Strings(c, "cwe-id", "cweId", "cwe"),
+                },
+            },
+        };
+    }
+
+    // The value of the first of the names present on the object, ignoring case.
+    private static JsonElement? Field(JsonElement obj, params string[] names)
+    {
+        if (obj.ValueKind != JsonValueKind.Object)
+        {
+            return null;
+        }
+        foreach (var name in names)
+        {
+            foreach (var property in obj.EnumerateObject())
+            {
+                if (string.Equals(name, property.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return property.Value;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static string? Text(JsonElement obj, params string[] names)
+    {
+        return Field(obj, names) switch
+        {
+            { ValueKind: JsonValueKind.String } v => v.GetString(),
+            { ValueKind: JsonValueKind.Number } v => v.GetRawText(),
+            { ValueKind: JsonValueKind.True } => "true",
+            { ValueKind: JsonValueKind.False } => "false",
+            _ => null,
+        };
+    }
+
+    // An array of strings; older Nuclei versions write some of them (tags) as one comma-separated string.
+    private static string[] Strings(JsonElement obj, params string[] names)
+    {
+        return Field(obj, names) switch
+        {
+            { ValueKind: JsonValueKind.Array } v => v.EnumerateArray()
+                .Select(x => x.ValueKind == JsonValueKind.String ? x.GetString() ?? "" : x.GetRawText()).ToArray(),
+            { ValueKind: JsonValueKind.String } v => (v.GetString() ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+            _ => Array.Empty<string>(),
+        };
     }
 }
 

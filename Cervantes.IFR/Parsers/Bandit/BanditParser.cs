@@ -2,7 +2,9 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Cervantes.Contracts;
 using Cervantes.CORE;
 using Cervantes.CORE.Entities;
@@ -41,7 +43,7 @@ public class BanditParser : IBanditParser
             
             try
             {
-                var banditReport = JsonSerializer.Deserialize<BanditReport>(fileContent);
+                var banditReport = Read(fileContent).FirstOrDefault();
                 if (banditReport != null)
                 {
                     ProcessBanditReport(banditReport, pro, user, sanitizer);
@@ -53,6 +55,13 @@ public class BanditParser : IBanditParser
                 Console.WriteLine($"Error parsing Bandit JSON: {ex.Message}");
             }
         }
+    }
+
+    /// <summary>Reads a Bandit JSON report (`bandit -f json`). Throws <see cref="JsonException"/> if it is not valid JSON.</summary>
+    public static IReadOnlyList<BanditReport> Read(string content)
+    {
+        var report = JsonSerializer.Deserialize<BanditReport>(content, ParserJson.Options);
+        return report == null ? Array.Empty<BanditReport>() : new[] { report };
     }
 
     private void ProcessBanditReport(BanditReport report, Project pro, string user, HtmlSanitizer sanitizer)
@@ -298,12 +307,14 @@ public class BanditParser : IBanditParser
     }
 }
 
-// Modelos para JSON de Bandit
+// Modelos para JSON de Bandit (`bandit -f json`, snake_case)
 public class BanditReport
 {
     public BanditError[] Errors { get; set; } = Array.Empty<BanditError>();
-    public string[] GeneratedAt { get; set; } = Array.Empty<string>();
-    public BanditMetrics Metrics { get; set; } = new();
+    [JsonPropertyName("generated_at")]
+    public JsonElement GeneratedAt { get; set; }
+    // Per-file and "_totals" counters; not used by the import.
+    public JsonElement Metrics { get; set; }
     public BanditResult[] Results { get; set; } = Array.Empty<BanditResult>();
 }
 
@@ -313,23 +324,22 @@ public class BanditError
     public string Reason { get; set; } = "";
 }
 
-public class BanditMetrics
-{
-    public Dictionary<string, int> ConfidenceLevels { get; set; } = new();
-    public Dictionary<string, int> SeverityLevels { get; set; } = new();
-    public int TotalLinesOfCode { get; set; }
-    public int TotalIssues { get; set; }
-}
-
 public class BanditResult
 {
     public string Code { get; set; } = "";
     public string Filename { get; set; } = "";
+    [JsonPropertyName("issue_text")]
     public string Issue { get; set; } = "";
+    [JsonPropertyName("issue_confidence")]
     public string IssueConfidence { get; set; } = "";
+    [JsonPropertyName("issue_severity")]
     public string IssueSeverity { get; set; } = "";
+    [JsonPropertyName("line_number")]
     public int LineNumber { get; set; }
+    [JsonPropertyName("line_range")]
     public int[] LineRange { get; set; } = Array.Empty<int>();
+    [JsonPropertyName("test_id")]
     public string TestId { get; set; } = "";
+    [JsonPropertyName("test_name")]
     public string TestName { get; set; } = "";
 }

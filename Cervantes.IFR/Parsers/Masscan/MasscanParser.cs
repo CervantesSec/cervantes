@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Xml;
 using Cervantes.Contracts;
@@ -61,22 +62,9 @@ public class MasscanParser : IMasscanParser
     {
         try
         {
-            // Masscan JSON puede ser un array de hosts
-            if (fileContent.TrimStart().StartsWith("["))
+            foreach (var result in Read(fileContent))
             {
-                var masscanResults = JsonSerializer.Deserialize<MasscanJsonResult[]>(fileContent);
-                foreach (var result in masscanResults ?? new MasscanJsonResult[0])
-                {
-                    ProcessMasscanResult(result, pro, user, sanitizer);
-                }
-            }
-            else
-            {
-                var masscanResult = JsonSerializer.Deserialize<MasscanJsonResult>(fileContent);
-                if (masscanResult != null)
-                {
-                    ProcessMasscanResult(masscanResult, pro, user, sanitizer);
-                }
+                ProcessMasscanResult(result, pro, user, sanitizer);
             }
         }
         catch (JsonException)
@@ -84,6 +72,20 @@ public class MasscanParser : IMasscanParser
             // Si falla JSON, intentar como texto plano
             ParseTextFormat(fileContent, pro, user, sanitizer);
         }
+    }
+
+    /// <summary>
+    /// Reads Masscan JSON (`-oJ`): an array of hosts, or a single host object. Throws <see cref="JsonException"/> if it
+    /// is not valid JSON.
+    /// </summary>
+    public static IReadOnlyList<MasscanJsonResult> Read(string content)
+    {
+        if (content.TrimStart().StartsWith("["))
+        {
+            return JsonSerializer.Deserialize<MasscanJsonResult[]>(content, ParserJson.Options) ?? Array.Empty<MasscanJsonResult>();
+        }
+        var single = JsonSerializer.Deserialize<MasscanJsonResult>(content, ParserJson.Options);
+        return single == null ? Array.Empty<MasscanJsonResult>() : new[] { single };
     }
 
     private void ParseXmlFormat(string path, Project pro, string user, HtmlSanitizer sanitizer)
@@ -406,7 +408,9 @@ public class MasscanPort
     public int Port { get; set; }
     public string Proto { get; set; } = "";
     public string Status { get; set; } = "";
-    public int Reason { get; set; }
+    // Masscan writes the reason as text ("syn-ack").
+    [System.Text.Json.Serialization.JsonConverter(typeof(FlexibleStringConverter))]
+    public string Reason { get; set; } = "";
     public int Ttl { get; set; }
     public string Service { get; set; } = "";
 }

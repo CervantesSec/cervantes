@@ -41,7 +41,7 @@ public class TrivyParser : ITrivyParser
             
             try
             {
-                var trivyReport = JsonSerializer.Deserialize<TrivyReport>(fileContent);
+                var trivyReport = Read(fileContent).FirstOrDefault();
                 if (trivyReport != null)
                 {
                     ProcessTrivyReport(trivyReport, pro, user, sanitizer);
@@ -53,6 +53,13 @@ public class TrivyParser : ITrivyParser
                 Console.WriteLine($"Error parsing Trivy JSON: {ex.Message}");
             }
         }
+    }
+
+    /// <summary>Reads a Trivy JSON report (`trivy ... --format json`). Throws <see cref="JsonException"/> if it is not valid JSON.</summary>
+    public static System.Collections.Generic.IReadOnlyList<TrivyReport> Read(string content)
+    {
+        var report = JsonSerializer.Deserialize<TrivyReport>(content, ParserJson.Options);
+        return report == null ? Array.Empty<TrivyReport>() : new[] { report };
     }
 
     private void ProcessTrivyReport(TrivyReport report, Project pro, string user, HtmlSanitizer sanitizer)
@@ -353,6 +360,8 @@ public class TrivyParser : ITrivyParser
 // Modelos para JSON de Trivy
 public class TrivyReport
 {
+    // Trivy writes a number (2); older samples used a string.
+    [System.Text.Json.Serialization.JsonConverter(typeof(FlexibleStringConverter))]
     public string SchemaVersion { get; set; } = "";
     public string ArtifactName { get; set; } = "";
     public string ArtifactType { get; set; } = "";
