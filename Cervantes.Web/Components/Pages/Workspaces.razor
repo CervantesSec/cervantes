@@ -48,7 +48,7 @@
                                 </MudStack>
                             </CardHeaderContent>
                         </MudCardHeader>
-                        @if (pro.Client.ImagePath != "None")
+                        @if (ImagePaths.IsSet(pro.Client.ImagePath))
                         {
                             <MudCardMedia Image="@pro.Client.ImagePath" Height="250" Style="background-size: contain;"/>
 

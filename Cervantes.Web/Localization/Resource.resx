@@ -3351,4 +3351,7 @@ Option 3</value>
   <data name="userHasContent" xml:space="preserve">
     <value>This user owns projects, vulnerabilities or other shared content, so it cannot be deleted. Lock the user instead.</value>
   </data>
+  <data name="findingId" xml:space="preserve">
+    <value>Finding ID</value>
+  </data>
 </root>

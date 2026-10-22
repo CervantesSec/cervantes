@@ -2789,4 +2789,7 @@
   <data name="userHasContent" xml:space="preserve">
     <value>Tento uživatel vlastní projekty, zranitelnosti nebo jiný sdílený obsah, a proto jej nelze smazat. Místo toho jej zablokujte.</value>
   </data>
+  <data name="findingId" xml:space="preserve">
+    <value>ID nálezu</value>
+  </data>
 </root>

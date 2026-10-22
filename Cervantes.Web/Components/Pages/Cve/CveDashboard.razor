@@ -200,6 +200,10 @@
                 {
                     <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
                 }
+                else if (GetSeverityChartData().All(v => v == 0))
+                {
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
+                }
                 else
                 {
                     <MudChart ChartType="ChartType.Donut"
@@ -278,6 +282,10 @@
                 @if (loading)
                 {
                     <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
+                }
+                else if (GetEpssChartData().All(v => v == 0))
+                {
+                    <MudText Typo="Typo.subtitle1">@localizer["noData"]</MudText>
                 }
                 else
                 {

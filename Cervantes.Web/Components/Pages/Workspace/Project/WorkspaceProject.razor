@@ -484,6 +484,7 @@
 							<SelectColumn T="Vuln"/>
 
 							<PropertyColumn Property="x => x.Name" Title="@localizer["name"]"/>
+<PropertyColumn Property="x => x.FindingId" Title="@localizer["findingId"]"/>
 							<PropertyColumn Property="x => x.Language" Title="@localizer["language"]">
 								<CellTemplate>
 									@switch (@context.Item.Language)

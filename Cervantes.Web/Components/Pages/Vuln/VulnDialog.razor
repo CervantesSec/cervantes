@@ -111,6 +111,10 @@
                                 }
 
                                 <MudTextField @bind-Value="model.Name" For="@(() => model.Name)" Immediate="true" Label="@localizer["name"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.BugReport"/>
+                                @if (!string.IsNullOrEmpty(vuln.FindingId))
+                                {
+                                    <MudTextField Value="@vuln.FindingId" ReadOnly="true" Label="@localizer["findingId"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Tag"/>
+                                }
                                 <MudSelect @bind-Value="model.Language" For="@(() => model.Language)" Label="@localizer["language"]" AdornmentIcon="@Icons.Material.Filled.Language" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
                                     @foreach (Language item in Enum.GetValues(typeof(Language)))
                                     {
@@ -276,6 +280,10 @@
 							<MudCard Elevation="25">
 								<MudCardContent>
 									<MudList T="string" Dense="true">
+										@if (!string.IsNullOrEmpty(vuln.FindingId))
+										{
+											<MudListItem T="string" Text="@($"{localizer["findingId"]}: {vuln.FindingId}")" Icon="@Icons.Material.Filled.Tag"/>
+										}
 										<MudListItem T="string" Text="@vuln.Risk.ToString()" Icon="@Icons.Material.Filled.CrisisAlert"/>
 										@if (vuln.VulnCategory != null)
 										{

@@ -23,13 +23,14 @@ public partial class DeleteVulnBulkDialog: ComponentBase
         await form.Validate();
         if (form.IsValid)
         {
-        foreach (var vuln in vulns)
+        var anyDeleted = false;
+        foreach (var vuln in vulns.ToList())
         {
             var response = await _vulnController.DeleteVuln(vuln.Id);
             if (response is NoContentResult)
             {
                 Snackbar.Add(@localizer["deletedVuln"], Severity.Success);
-                MudDialog.Close(DialogResult.Ok(true));
+                anyDeleted = true;
             }
             else if (response is ObjectResult { StatusCode: 403 })
             {
@@ -40,7 +41,12 @@ public partial class DeleteVulnBulkDialog: ComponentBase
                 Snackbar.Add(@localizer["deletedVulnError"], Severity.Error);
             }
         }
-            
+
+        // Close once every delete has finished, so the caller reloads its grid with the final data.
+        if (anyDeleted)
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+        }
         }
     }
 }

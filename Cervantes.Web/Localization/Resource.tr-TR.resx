@@ -2793,4 +2793,7 @@
   <data name="userHasContent" xml:space="preserve">
     <value>Bu kullanıcının projeleri, zafiyetleri veya başka paylaşılan içerikleri olduğu için silinemez. Bunun yerine kullanıcıyı kilitleyin.</value>
   </data>
+  <data name="findingId" xml:space="preserve">
+    <value>Bulgu ID</value>
+  </data>
 </root>

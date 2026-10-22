@@ -3373,4 +3373,7 @@ Opción 3</value>
   <data name="userHasContent" xml:space="preserve">
     <value>Este usuario tiene proyectos, vulnerabilidades u otro contenido compartido, así que no se puede eliminar. Bloquéalo en su lugar.</value>
   </data>
+  <data name="findingId" xml:space="preserve">
+    <value>ID del hallazgo</value>
+  </data>
 </root>
