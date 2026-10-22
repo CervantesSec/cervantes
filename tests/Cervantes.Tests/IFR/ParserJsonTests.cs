@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Cervantes.CORE.Entities;
 using Cervantes.IFR.Parsers.Bandit;
 using Cervantes.IFR.Parsers.DependencyCheck;
 using Cervantes.IFR.Parsers.Masscan;
@@ -91,10 +92,54 @@ public class ParserJsonTests
 
         Assert.Equal(2, report.Dependencies.Length);
         Assert.Equal("log-lib-2.14.1.jar", report.Dependencies[0].FileName);
-        var vuln = Assert.Single(report.Dependencies[0].Vulnerabilities);
+        Assert.Equal(2, report.Dependencies[0].Vulnerabilities.Length);
+        var vuln = report.Dependencies[0].Vulnerabilities[0];
         Assert.Equal("CVE-2026-0003", vuln.Name);
         Assert.Equal(10.0, vuln.CvssV3.BaseScore);
         Assert.Empty(report.Dependencies[1].Vulnerabilities);
+    }
+
+    [Fact]
+    public void DependencyCheck_VectorOfBuildsCvss31()
+    {
+        var report = Assert.Single(DependencyCheckParser.Read(Fixture("DependencyCheck", "dependency-check.json")));
+
+        Assert.Equal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+            DependencyCheckParser.VectorOf(report.Dependencies[0].Vulnerabilities[0].CvssV3));
+    }
+
+    [Fact]
+    public void DependencyCheck_VectorOfPrefersVectorString()
+    {
+        var v = new DependencyCheckCvssV3 { VectorString = "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", AttackVector = "NETWORK" };
+
+        Assert.Equal("CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", DependencyCheckParser.VectorOf(v));
+    }
+
+    [Fact]
+    public void DependencyCheck_VectorOfMissingMetricIsEmpty()
+    {
+        Assert.Equal("", DependencyCheckParser.VectorOf(new DependencyCheckCvssV3 { BaseScore = 5, AttackVector = "NETWORK" }));
+    }
+
+    [Fact]
+    public void DependencyCheck_ReadsCvssV4()
+    {
+        var report = Assert.Single(DependencyCheckParser.Read(Fixture("DependencyCheck", "dependency-check.json")));
+
+        var v4 = report.Dependencies[0].Vulnerabilities[1].CvssV4;
+        Assert.Equal(6.9, v4.BaseScore);
+        Assert.Equal("CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N", v4.VectorString);
+    }
+
+    [Theory]
+    [InlineData("Moderate", VulnRisk.Medium)]
+    [InlineData("CRITICAL", VulnRisk.Critical)]
+    [InlineData("LOW", VulnRisk.Low)]
+    [InlineData("unknown", VulnRisk.Info)]
+    public void DependencyCheck_RiskOf(string severity, VulnRisk expected)
+    {
+        Assert.Equal(expected, DependencyCheckParser.RiskOf(severity));
     }
 
     [Fact]

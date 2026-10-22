@@ -17,8 +17,13 @@
       "md5": "00000000000000000000000000000000",
       "sha1": "0000000000000000000000000000000000000000",
       "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "description": "Example logging library written for a test fixture.",
+      "license": "Apache-2.0",
+      "projectReferences": [ "example-app:compile" ],
+      "includedBy": [ { "reference": "pkg:maven/org.example/example-app@1.0.0" } ],
       "evidenceCollected": { "vendorEvidence": [], "productEvidence": [], "versionEvidence": [] },
       "packages": [ { "id": "pkg:maven/org.example/log-lib@2.14.1", "confidence": "HIGH", "url": "https://ossindex.example/component/pkg:maven/org.example/log-lib@2.14.1" } ],
+      "vulnerabilityIds": [ { "id": "cpe:2.3:a:example:log-lib:*:*:*:*:*:*:*:*", "confidence": "HIGHEST", "url": "https://nvd.example/search?cpe=example:log-lib" } ],
       "vulnerabilities": [
         {
           "source": "NVD",
@@ -31,6 +36,17 @@
           "notes": "",
           "references": [ { "source": "MISC", "url": "https://advisories.example/CVE-2026-0003", "name": "advisory" } ],
           "vulnerableSoftware": [ { "software": { "id": "cpe:2.3:a:example:log-lib:*:*:*:*:*:*:*:*", "vulnerabilityIdMatched": "true" } } ]
+        },
+        {
+          "source": "NVD",
+          "name": "CVE-2026-0004",
+          "severity": "MEDIUM",
+          "cvssv4": { "vectorString": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N", "source": "nvd@nist.gov", "type": "Primary", "version": "4.0", "attackVector": "NETWORK", "attackComplexity": "LOW", "attackRequirements": "NONE", "privilegesRequired": "NONE", "userInteraction": "NONE", "vulnerableSystemConfidentiality": "LOW", "vulnerableSystemIntegrity": "NONE", "vulnerableSystemAvailability": "NONE", "subsequentSystemConfidentiality": "NONE", "subsequentSystemIntegrity": "NONE", "subsequentSystemAvailability": "NONE", "baseScore": 6.9, "baseSeverity": "MEDIUM" },
+          "cwes": [ "CWE-200" ],
+          "description": "Example information disclosure scored only with CVSS v4, written for a test fixture.",
+          "notes": "",
+          "references": [],
+          "vulnerableSoftware": []
         }
       ]
     },

@@ -29,11 +29,23 @@ public class ParserXmlTests
     {
         var finding = Assert.Single(DependencyCheckParser.ReadXml(Fixture("DependencyCheck", "dependency-check.xml")));
 
-        Assert.Equal("log4j-core-2.14.1.jar", finding.FileName);
-        Assert.Equal("/app/lib/log4j-core-2.14.1.jar", finding.FilePath);
-        Assert.Equal("CVE-2021-44228", finding.Name);
-        Assert.Equal("CRITICAL", finding.Severity);
-        Assert.Equal("10.0", finding.CvssScore);
-        Assert.StartsWith("Apache Log4j2", finding.Description);
+        Assert.Equal("log4j-api-2.12.4.jar", finding.FileName);
+        Assert.Equal("/home/user/vulnerabilities/apache-log4j-2.12.4-bin/log4j-api-2.12.4.jar", finding.FilePath);
+        Assert.Equal("CVE-2020-9488", finding.Name);
+        Assert.Equal("LOW", finding.Severity);
+        Assert.Equal("3.7", finding.CvssScore);
+        Assert.Equal("CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N", finding.Vector);
+        Assert.StartsWith("Improper validation of certificate", finding.Description);
+    }
+
+    [Fact]
+    public void DependencyCheckXml_Schema13WithCvssScore()
+    {
+        var finding = Assert.Single(DependencyCheckParser.ReadXml(Fixture("DependencyCheck", "dependency-check-1.3.xml")));
+
+        Assert.Equal("CVE-0000-0001", finding.Name);
+        Assert.Equal("Moderate", finding.Severity);
+        Assert.Equal("7.5", finding.CvssScore);
+        Assert.Equal("", finding.Vector);
     }
 }

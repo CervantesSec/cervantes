@@ -107,11 +107,86 @@ public class DependencyCheckParser : IDependencyCheckParser
                 var score = Text(vulnerability, "cvssScore");
                 if (score.Length == 0) score = Text(vulnerability, "cvssV3/baseScore");
                 if (score.Length == 0) score = Text(vulnerability, "cvssV2/score");
+                // Only a v3 (else v4) score goes into the CVSS3 field; cvssScore and cvssV2 are version 2
+                var cvss3 = Text(vulnerability, "cvssV3/baseScore");
+                var vector = "";
+                if (cvss3.Length > 0)
+                {
+                    vector = Text(vulnerability, "cvssV3/vectorString");
+                    if (vector.Length == 0)
+                    {
+                        vector = Vector(Text(vulnerability, "cvssV3/version"), Text(vulnerability, "cvssV3/attackVector"),
+                            Text(vulnerability, "cvssV3/attackComplexity"), Text(vulnerability, "cvssV3/privilegesRequired"),
+                            Text(vulnerability, "cvssV3/userInteraction"), Text(vulnerability, "cvssV3/scope"),
+                            Text(vulnerability, "cvssV3/confidentialityImpact"), Text(vulnerability, "cvssV3/integrityImpact"),
+                            Text(vulnerability, "cvssV3/availabilityImpact"));
+                    }
+                }
+                else
+                {
+                    cvss3 = Text(vulnerability, "cvssV4/baseScore");
+                    vector = cvss3.Length > 0 ? Text(vulnerability, "cvssV4/vectorString") : "";
+                }
+                if (score.Length == 0) score = cvss3;
                 findings.Add(new DependencyCheckXmlFinding(fileName, filePath, Text(vulnerability, "name"),
-                    Text(vulnerability, "description"), Text(vulnerability, "severity"), score));
+                    Text(vulnerability, "description"), Text(vulnerability, "severity"), score, cvss3, vector));
             }
         }
         return findings;
+    }
+
+    /// <summary>
+    /// The CVSS v3 vector of a vulnerability: the report's <c>vectorString</c> (recent Dependency-Check), else one built from
+    /// the eight metrics (older reports only have those), else "" when a metric is missing.
+    /// </summary>
+    public static string VectorOf(DependencyCheckCvssV3 v)
+    {
+        if (!string.IsNullOrWhiteSpace(v.VectorString))
+        {
+            return v.VectorString.Trim();
+        }
+        return Vector(v.Version, v.AttackVector, v.AttackComplexity, v.PrivilegesRequired, v.UserInteraction, v.Scope,
+            v.ConfidentialityImpact, v.IntegrityImpact, v.AvailabilityImpact);
+    }
+
+    // CVSS:3.x/AV:_/AC:_/PR:_/UI:_/S:_/C:_/I:_/A:_ from the metric names Dependency-Check writes (NETWORK, LOW, ...).
+    private static string Vector(string? version, params string?[] metrics)
+    {
+        string[] keys = { "AV", "AC", "PR", "UI", "S", "C", "I", "A" };
+        var letters = metrics.Select(x => (x ?? "").Trim().ToUpperInvariant() switch
+        {
+            "NETWORK" => "N",
+            "ADJACENT_NETWORK" or "ADJACENT" => "A",
+            "LOCAL" => "L",
+            "PHYSICAL" => "P",
+            "LOW" => "L",
+            "HIGH" => "H",
+            "NONE" => "N",
+            "REQUIRED" => "R",
+            "UNCHANGED" => "U",
+            "CHANGED" => "C",
+            _ => "",
+        }).ToArray();
+        if (letters.Length != keys.Length || letters.Any(x => x.Length == 0))
+        {
+            return "";
+        }
+        var prefix = string.IsNullOrWhiteSpace(version) ? "3.1" : version.Trim();
+        return $"CVSS:{prefix}/" + string.Join("/", keys.Select((key, i) => $"{key}:{letters[i]}"));
+    }
+
+    /// <summary>The risk of a Dependency-Check severity; the old reports' <c>Moderate</c> is Medium.</summary>
+    public static VulnRisk RiskOf(string severity)
+    {
+        switch (severity.Trim().ToLowerInvariant())
+        {
+            case "critical": return VulnRisk.Critical;
+            case "high": return VulnRisk.High;
+            case "medium":
+            case "moderate": return VulnRisk.Medium;
+            case "low": return VulnRisk.Low;
+            default: return VulnRisk.Info;
+        }
     }
 
     private void ProcessDependencyCheckReport(DependencyCheckReport report, Project pro, string user, HtmlSanitizer sanitizer)
@@ -165,6 +240,10 @@ public class DependencyCheckParser : IDependencyCheckParser
         {
             double cvssScore = vuln.CvssV3.BaseScore.Value;
             risk = MapCvssToRisk(cvssScore);
+        }
+        else if (vuln.CvssV4?.BaseScore != null)
+        {
+            risk = MapCvssToRisk(vuln.CvssV4.BaseScore.Value);
         }
         else if (vuln.CvssV2?.Score != null)
         {
@@ -266,10 +345,13 @@ public class DependencyCheckParser : IDependencyCheckParser
         if (vuln.CvssV3?.BaseScore != null)
         {
             vulnerability.CVSS3 = vuln.CvssV3.BaseScore.Value;
-            if (!string.IsNullOrEmpty(vuln.CvssV3.AttackVector))
-            {
-                vulnerability.CVSSVector = vuln.CvssV3.AttackVector;
-            }
+            vulnerability.CVSSVector = sanitizer.Sanitize(VectorOf(vuln.CvssV3));
+        }
+        else if (vuln.CvssV4?.BaseScore != null)
+        {
+            // No v3 score: the v4 one is the best there is (never the v2 score)
+            vulnerability.CVSS3 = vuln.CvssV4.BaseScore.Value;
+            vulnerability.CVSSVector = sanitizer.Sanitize(vuln.CvssV4.VectorString ?? "");
         }
 
         vulnerability.FindingId = findingIds.Next();
@@ -290,7 +372,7 @@ public class DependencyCheckParser : IDependencyCheckParser
     private void ProcessXmlVulnerability(DependencyCheckXmlFinding finding,
                                        Target target, Project pro, string user, HtmlSanitizer sanitizer)
     {
-        var (fileName, filePath, name, description, severity, cvssScore) = finding;
+        var (fileName, filePath, name, description, severity, cvssScore, _, _) = finding;
         
         if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(description))
             return;
@@ -345,9 +427,13 @@ public class DependencyCheckParser : IDependencyCheckParser
             vulnerability.cve = name;
         }
 
-        if (!string.IsNullOrEmpty(cvssScore) && double.TryParse(cvssScore, NumberStyles.Float, CultureInfo.InvariantCulture, out double parsedScore))
+        if (double.TryParse(finding.Cvss3Score, NumberStyles.Float, CultureInfo.InvariantCulture, out double parsedScore))
         {
             vulnerability.CVSS3 = parsedScore;
+        }
+        if (!string.IsNullOrEmpty(finding.Vector))
+        {
+            vulnerability.CVSSVector = sanitizer.Sanitize(finding.Vector);
         }
 
         vulnerability.FindingId = findingIds.Next();
@@ -373,22 +459,12 @@ public class DependencyCheckParser : IDependencyCheckParser
         return VulnRisk.Info;
     }
 
-    private VulnRisk MapSeverityToRisk(string severity)
-    {
-        switch (severity.ToLower())
-        {
-            case "critical": return VulnRisk.Critical;
-            case "high": return VulnRisk.High;
-            case "medium": return VulnRisk.Medium;
-            case "low": return VulnRisk.Low;
-            default: return VulnRisk.Info;
-        }
-    }
+    private VulnRisk MapSeverityToRisk(string severity) => RiskOf(severity);
 }
 
 // One vulnerability of a dependency in the XML report
 public record DependencyCheckXmlFinding(string FileName, string FilePath, string Name, string Description,
-    string Severity, string CvssScore);
+    string Severity, string CvssScore, string Cvss3Score = "", string Vector = "");
 
 // Modelos para JSON de Dependency-Check
 public class DependencyCheckReport
@@ -427,6 +503,7 @@ public class DependencyCheckVulnerability
     public string Notes { get; set; } = "";
     public DependencyCheckCvss CvssV2 { get; set; } = new();
     public DependencyCheckCvssV3 CvssV3 { get; set; } = new();
+    public DependencyCheckCvssV4 CvssV4 { get; set; } = new();
     public DependencyCheckReference[] References { get; set; } = Array.Empty<DependencyCheckReference>();
 }
 
@@ -452,6 +529,8 @@ public class DependencyCheckCvss
 public class DependencyCheckCvssV3
 {
     public double? BaseScore { get; set; }
+    public string VectorString { get; set; } = "";
+    public string Version { get; set; } = "";
     public string AttackVector { get; set; } = "";
     public string AttackComplexity { get; set; } = "";
     public string PrivilegesRequired { get; set; } = "";
@@ -460,5 +539,13 @@ public class DependencyCheckCvssV3
     public string ConfidentialityImpact { get; set; } = "";
     public string IntegrityImpact { get; set; } = "";
     public string AvailabilityImpact { get; set; } = "";
+    public string BaseSeverity { get; set; } = "";
+}
+
+// CVSS v4 block (cvssv4), written by Dependency-Check 10+
+public class DependencyCheckCvssV4
+{
+    public double? BaseScore { get; set; }
+    public string VectorString { get; set; } = "";
     public string BaseSeverity { get; set; } = "";
 }
