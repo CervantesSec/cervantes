@@ -88,6 +88,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
                 {"menubar", "file edit view insert format tools table help"},
                 {"toolbar", "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media link anchor codesample | ltr rtl"},
                 {"toolbar_sticky", true},
+                {"ui_mode", "split"},
                 {"image_advtab", true},
                 {"height", 300},
                 {"image_caption", true},
