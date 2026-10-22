@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using System.Xml.Linq;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
+using Cervantes.IFR.Parsers;
 using Cervantes.Web.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
@@ -57,10 +58,24 @@ public partial class ImportVulnDialog: ComponentBase
     }
     */
 
+    // Only CSV, Pwndoc, Burp and Nessus can be imported without a project (as templates)
+    private bool ProjectRequired => ImportScope.RequiresProject(model.Type);
+
+    private string? ValidateProject(Guid project)
+    {
+        return ProjectRequired && project == Guid.Empty ? localizer["importProjectRequired"].Value : null;
+    }
+
     private bool importLoading = false;
     private async System.Threading.Tasks.Task Submit()
     {
         await form.Validate();
+        if (ValidateProject(Project) is { } projectError)
+        {
+            // The project field keeps its last validation when only the type changes, so check it here as well
+            Snackbar.Add(projectError, Severity.Warning);
+            return;
+        }
 
         if (form.IsValid)
         {

@@ -127,6 +127,7 @@ public class PwndocParser: IPwndocParser
                     int i = 0;
                     Vuln vuln = new Vuln();
                     vuln.Name = vul.Details[i].Title == "" ? "No Name" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Title));
+                    vuln.Template = true; // no project: imported as a template
                     vuln.FindingId = "No Project";
                     vuln.cve = "No Data";
                     vuln.Description = vul.Details[i].Description  == "" ? "No Data" : sanitizer.Sanitize(HttpUtility.HtmlDecode(vul.Details[i].Description));

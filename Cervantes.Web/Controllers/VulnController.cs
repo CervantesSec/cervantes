@@ -1306,7 +1306,12 @@ public class VulnController: ControllerBase
                         return StatusCode(403, "You do not have permission to access this project");
                     }
                 }
-                
+                else if (ImportScope.RequiresProject(model.Type))
+                {
+                    // Without a project only template-capable formats are accepted; the others would import nothing
+                    return BadRequest("ProjectRequired");
+                }
+
                 var path = "";
                 var unique = "";
                 var file = "";

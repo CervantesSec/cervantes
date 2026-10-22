@@ -26,7 +26,7 @@
 							    <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
 						    }
 					    </MudSelect>
-					    <MudSelect @bind-Value="@Project" Label="@localizer["project"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
+					    <MudSelect @bind-Value="@Project" Label="@localizer["project"]" Required="@ProjectRequired" Validation="@(new Func<Guid, string?>(ValidateProject))" HelperText="@localizer["importReimportDuplicates"]" AdornmentIcon="@Icons.Material.Filled.Folder" Adornment="Adornment.Start" TransformOrigin="Origin.BottomCenter" AnchorOrigin="Origin.BottomCenter" PopoverClass="fixed">
 						    <MudSelectItem Value="Guid.Empty">@localizer["selectProject"]</MudSelectItem>
 						    @foreach (var project in Projects)
 						    {

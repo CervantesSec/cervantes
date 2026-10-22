@@ -3377,4 +3377,10 @@
   <data name="fileTypeNotAllowed" xml:space="preserve">
     <value>Tento typ souboru není povolen.</value>
   </data>
+  <data name="importReimportDuplicates" xml:space="preserve">
+    <value>Opětovný import stejného souboru vytvoří nová zjištění; již importovaná neaktualizuje.</value>
+  </data>
+  <data name="importProjectRequired" xml:space="preserve">
+    <value>Tento typ importu vyžaduje projekt. Bez projektu lze jako šablony importovat pouze CSV, Pwndoc, Burp a Nessus.</value>
+  </data>
 </root>

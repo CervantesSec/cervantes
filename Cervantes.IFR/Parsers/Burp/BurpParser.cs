@@ -220,7 +220,7 @@ public class BurpParser: IBurpParser
                 if(issue.SelectSingleNode("poc") != null){poc = issue.SelectSingleNode("poc").InnerText;}
                 
                 var vuln = new Vuln();
-                vuln.Template = false;
+                vuln.Template = true; // no project: imported as a template
                 vuln.Name = sanitizer.Sanitize(name);
                 vuln.FindingId = "No Project";
                 vuln.CreatedDate = DateTime.Now.ToUniversalTime();

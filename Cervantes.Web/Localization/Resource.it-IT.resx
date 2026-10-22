@@ -3382,4 +3382,10 @@
   <data name="fileTypeNotAllowed" xml:space="preserve">
     <value>Questo tipo di file non è consentito.</value>
   </data>
+  <data name="importReimportDuplicates" xml:space="preserve">
+    <value>Importare di nuovo lo stesso file crea nuove vulnerabilità; non aggiorna quelle già importate.</value>
+  </data>
+  <data name="importProjectRequired" xml:space="preserve">
+    <value>Questo tipo di importazione richiede un progetto. Solo CSV, Pwndoc, Burp e Nessus possono essere importati senza progetto, come modelli.</value>
+  </data>
 </root>

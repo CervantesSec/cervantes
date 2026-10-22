@@ -3390,4 +3390,10 @@
   <data name="fileTypeNotAllowed" xml:space="preserve">
     <value>Bu dosya türüne izin verilmiyor.</value>
   </data>
+  <data name="importReimportDuplicates" xml:space="preserve">
+    <value>Aynı dosyayı yeniden içe aktarmak yeni bulgular oluşturur; daha önce içe aktarılanları güncellemez.</value>
+  </data>
+  <data name="importProjectRequired" xml:space="preserve">
+    <value>Bu içe aktarma türü bir proje gerektirir. Yalnızca CSV, Pwndoc, Burp ve Nessus proje olmadan şablon olarak içe aktarılabilir.</value>
+  </data>
 </root>

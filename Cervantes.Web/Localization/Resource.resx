@@ -3606,4 +3606,10 @@ Option 3</value>
   <data name="fileTypeNotAllowed" xml:space="preserve">
     <value>This file type is not allowed.</value>
   </data>
+  <data name="importReimportDuplicates" xml:space="preserve">
+    <value>Importing the same file again creates new findings; it does not update the ones already imported.</value>
+  </data>
+  <data name="importProjectRequired" xml:space="preserve">
+    <value>This import type needs a project. Only CSV, Pwndoc, Burp and Nessus can be imported without one, as templates.</value>
+  </data>
 </root>

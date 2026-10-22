@@ -213,7 +213,7 @@ public class NessusParser: INessusParser
                     if(item.SelectSingleNode("see_also") != null){refrences = item.SelectSingleNode("see_also").InnerText;}
                     
                     var vuln = new Vuln();
-                    vuln.Template = false;
+                    vuln.Template = true; // no project: imported as a template
                     vuln.Name = sanitizer.Sanitize(HttpUtility.HtmlDecode(pluginName));
                     vuln.FindingId = "No Project";
                     vuln.CreatedDate = DateTime.Now.ToUniversalTime();
