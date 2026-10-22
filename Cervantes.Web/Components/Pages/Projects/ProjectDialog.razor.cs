@@ -501,19 +501,7 @@ protected override async Task OnInitializedAsync()
 
     private Func<CORE.Entities.Task, bool> _quickFilterTasks => element =>
     {
-        if (string.IsNullOrWhiteSpace(searchStringTask))
-            return true;
-        if (element.Name.Contains(searchStringTask, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.AsignedUser.FullName.Contains(searchStringTask, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Status.ToString().Contains(searchStringTask, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (DateSearch.MatchesCalendarDate(element.StartDate, "d", searchStringTask))
-            return true;
-        if (DateSearch.MatchesCalendarDate(element.EndDate, "d", searchStringTask))
-            return true;
-        return false;
+        return TaskSearch.Matches(element, searchStringTask);
     };
 
     void SelectedTasksChanged(HashSet<CORE.Entities.Task> items)

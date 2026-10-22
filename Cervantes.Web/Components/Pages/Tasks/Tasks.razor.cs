@@ -140,19 +140,7 @@ public partial class Tasks: ComponentBase
     
     private Func<CORE.Entities.Task, bool> _quickFilter => element =>
     {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.AsignedUser.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Status.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (DateSearch.MatchesCalendarDate(element.StartDate, "d", searchString))
-            return true;
-        if (DateSearch.MatchesCalendarDate(element.EndDate, "d", searchString))
-            return true;
-        return false;
+        return TaskSearch.Matches(element, searchString);
     };
     DialogOptionsEx middleWidthEx = new DialogOptionsEx() 
     {

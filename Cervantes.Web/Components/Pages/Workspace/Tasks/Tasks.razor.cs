@@ -213,21 +213,9 @@ public partial class Tasks: ComponentBase
     
     private Func<CORE.Entities.Task, bool> _quickFilter => element =>
     {
-        if (string.IsNullOrWhiteSpace(searchString))
+        if (TaskSearch.Matches(element, searchString))
             return true;
-        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.AsignedUser.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Status.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Project.Name.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (DateSearch.MatchesCalendarDate(element.StartDate, "d", searchString))
-            return true;
-        if (DateSearch.MatchesCalendarDate(element.EndDate, "d", searchString))
-            return true;
-        return false;
+        return element.Project?.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
     };
     
     private async Task Export(int id)
