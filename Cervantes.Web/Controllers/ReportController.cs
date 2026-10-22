@@ -1413,7 +1413,7 @@ private static string ReplaceTableRowWithFor(string htmlContent)
     [HttpPost]
     [Route("Download")]
     [HasPermission(Permissions.ReportsDownload)]
-    public async Task<ActionResult<FileContentResult>> DownloadReport([FromBody] ReportDownloadModel model)
+    public async Task<IActionResult> DownloadReport([FromBody] ReportDownloadModel model)
     {
         try
         {
