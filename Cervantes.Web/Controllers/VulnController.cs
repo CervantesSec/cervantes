@@ -1294,6 +1294,8 @@ public class VulnController: ControllerBase
     [HasPermission(Permissions.VulnsImport)]
     public async Task<IActionResult> Import(VulnImportViewModel model)
     {
+        // The uploaded copy is only needed while the parser reads it
+        string? importFile = null;
         try
         {
             if (ModelState.IsValid)
@@ -1322,6 +1324,7 @@ public class VulnController: ControllerBase
                         unique = Guid.NewGuid().ToString()+"."+fileCheck.GetExtension(model.FileContent);
                         path = $"{env.WebRootPath}/Attachments/Imports";
                         file = $"{env.WebRootPath}/Attachments/Imports/{unique}";
+                        importFile = file;
                         if (Directory.Exists(path))
                         {
                             var fs = System.IO.File.Create(file);
@@ -1568,6 +1571,13 @@ public class VulnController: ControllerBase
             _logger.LogError(e, "An error ocurred importing vulns. User: {0}",
                 aspNetUserId);
             return StatusCode(500, "An error occurred while importing vulnerabilities. Please try again later.");
+        }
+        finally
+        {
+            if (importFile != null && System.IO.File.Exists(importFile))
+            {
+                System.IO.File.Delete(importFile);
+            }
         }
     }
     
