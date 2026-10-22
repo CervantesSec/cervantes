@@ -17,12 +17,16 @@ Produced on 2026-10-22 by running the tools in Docker against throwaway local co
 
 Files whose structure was copied from a public report but whose content is ours (the source is not redistributed):
 
+- `Prowler/prowler-v3.csv`: header and column layout of a Prowler v3 CSV report (`;`-separated); rows written for Cervantes.
 <!-- filled in by the tasks that add them -->
 
 ## Files from DefectDojo
 
 The files listed below come from the test samples of DefectDojo (`https://github.com/DefectDojo/django-DefectDojo`, folder `unittests/scans`), trimmed as described above. They are distributed under the following license:
 
+- `Prowler/prowler-v3.json`: `aws_prowler_v3plus/many_vuln.json`
+- `Prowler/prowler-v4.ocsf.json`: `prowler/example_output_aws.ocsf.json`
+- `Prowler/prowler-v4.csv`: `prowler/example_output_aws.csv`
 <!-- filled in by the tasks that add them -->
 
 > Copyright (c) 2015-2023 DefectDojo, Inc. All rights reserved.
