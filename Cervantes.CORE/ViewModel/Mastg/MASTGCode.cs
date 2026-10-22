@@ -4,9 +4,9 @@ namespace Cervantes.CORE.ViewModel.Mastg;
 
 public class MASTGCode
 {
-    public string Code1Note {get; set;}
+    public string? Code1Note {get; set;}
     public MASTGStatus Code1Status {get; set;}
-    public string Code2Note {get; set;}
+    public string? Code2Note {get; set;}
     public MASTGStatus Code2Status {get; set;}
     public string Code2Note1 {get; set;}
     public string Code2Note2 {get; set;}
@@ -14,11 +14,11 @@ public class MASTGCode
     public MASTGStatus Code2Status2 { get; set; }
     public string Code3Note1 {get; set;}
     public string Code3Note2 {get; set;}
-    public string Code3Note {get; set;}
+    public string? Code3Note {get; set;}
     public MASTGStatus Code3Status {get; set;}
     public MASTGStatus Code3Status1 {get; set;}
     public MASTGStatus Code3Status2 {get; set;}
-    public string Code4Note {get; set;}
+    public string? Code4Note {get; set;}
     public MASTGStatus Code4Status {get; set;}
     public string Code4Note1 {get; set;}
     public string Code4Note2 {get; set;}

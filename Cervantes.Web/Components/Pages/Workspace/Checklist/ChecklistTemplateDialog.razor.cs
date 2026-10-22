@@ -148,11 +148,13 @@ public partial class ChecklistTemplateDialog: ComponentBase
             // Map categories and items
             model.Categories = template.Categories?.Select(c => new ChecklistCategoryCreateViewModel
             {
+                Id = c.Id,
                 Name = c.Name,
                 Description = c.Description,
                 Order = c.Order,
                 Items = c.Items?.Select(i => new ChecklistItemCreateViewModel
                 {
+                    Id = i.Id,
                     Code = i.Code,
                     Name = i.Name,
                     Description = i.Description,
@@ -182,6 +184,10 @@ public partial class ChecklistTemplateDialog: ComponentBase
                 {
                     Snackbar.Add(@localizer["templateUpdated"], Severity.Success);
                     MudDialog.Close(DialogResult.Ok(true));
+                }
+                else if (response.Result is Microsoft.AspNetCore.Mvc.ConflictObjectResult)
+                {
+                    Snackbar.Add(@localizer["checklistItemsHaveExecutions"], Severity.Warning);
                 }
                 else
                 {

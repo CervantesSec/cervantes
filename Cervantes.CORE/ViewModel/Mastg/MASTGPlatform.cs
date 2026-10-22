@@ -4,7 +4,7 @@ namespace Cervantes.CORE.ViewModel.Mastg;
 
 public class MASTGPlatform
 {
-    public string Platform1Note {get; set;}
+    public string? Platform1Note {get; set;}
     public MASTGStatus Platform1Status {get; set;}
     public string Platform1Note1 {get; set;}
     public string Platform1Note2 {get; set;}
@@ -32,7 +32,7 @@ public class MASTGPlatform
     public MASTGStatus Platform1Status11 {get; set;}
     public MASTGStatus Platform1Status12 {get; set;}
     public MASTGStatus Platform1Status13 {get; set;}
-    public string Platform2Note {get; set;}
+    public string? Platform2Note {get; set;}
     public MASTGStatus Platform2Status {get; set;}
     public string Platform2Note1 {get; set;}
     public string Platform2Note2 {get; set;}
@@ -48,7 +48,7 @@ public class MASTGPlatform
     public MASTGStatus Platform2Status5 {get; set;}
     public MASTGStatus Platform2Status6 {get; set;}
     public MASTGStatus Platform2Status7 {get; set;}
-    public string Platform3Note {get; set;}
+    public string? Platform3Note {get; set;}
     public MASTGStatus Platform3Status {get; set;}
     public string Platform3Note1 {get; set;}
     public string Platform3Note2 {get; set;}

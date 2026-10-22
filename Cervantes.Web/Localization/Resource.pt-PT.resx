@@ -2767,4 +2767,7 @@
   <data name="reportComponentCssHelp" xml:space="preserve">
     <value>Este CSS aplica-se a todo o relatório. Para repetir uma linha da tabela por cada elemento, coloque {{tablerow item in Collection}} … {{end}} dentro de uma célula dessa linha.</value>
   </data>
+  <data name="checklistItemsHaveExecutions" xml:space="preserve">
+    <value>Não é possível remover do modelo itens que já têm resultados numa checklist.</value>
+  </data>
 </root>

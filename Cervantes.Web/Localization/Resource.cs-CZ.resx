@@ -2798,4 +2798,7 @@
   <data name="reportComponentCssHelp" xml:space="preserve">
     <value>Toto CSS platí pro celou zprávu. Chcete-li opakovat řádek tabulky pro každou položku, vložte {{tablerow item in Collection}} … {{end}} do buňky tohoto řádku.</value>
   </data>
+  <data name="checklistItemsHaveExecutions" xml:space="preserve">
+    <value>Položky, které již mají výsledky v kontrolním seznamu, nelze ze šablony odebrat.</value>
+  </data>
 </root>

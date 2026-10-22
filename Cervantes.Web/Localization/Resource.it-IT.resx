@@ -2803,4 +2803,7 @@
   <data name="reportComponentCssHelp" xml:space="preserve">
     <value>Questo CSS si applica all'intero report. Per ripetere una riga di tabella per ogni elemento, inserisci {{tablerow item in Collection}} … {{end}} in una cella di quella riga.</value>
   </data>
+  <data name="checklistItemsHaveExecutions" xml:space="preserve">
+    <value>Gli elementi che hanno già risultati in una checklist non possono essere rimossi dal modello.</value>
+  </data>
 </root>

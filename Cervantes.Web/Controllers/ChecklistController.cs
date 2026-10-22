@@ -1022,7 +1022,7 @@ public class ChecklistController : ControllerBase
                 reportManager.Context.SaveChanges();
                 _logger.LogInformation("Report MASVS generated successfully. User: {0}",
                     aspNetUserId);
-                return Created($"/api/Checklist/Report/{rep.Id}", rep.Id);
+                return Created($"/api/Checklist/Report/{rep.Id}", rep);
                
            }
            
@@ -1393,53 +1393,37 @@ public class ChecklistController : ControllerBase
             template.Version = Sanitizer.Sanitize(model.Version);
             template.ModifiedDate = DateTime.UtcNow;
 
-            // Clear existing categories and items (the cascade delete in the DB will handle the deletion)
-            template.Categories?.Clear();
-            if (template.Categories == null)
+            // Update categories and items in place: executions point to item ids, so they must survive an edit.
+            var itemIds = template.Categories.SelectMany(c => c.Items).Select(i => i.Id).ToList();
+            var itemsWithExecutions = (await _checklistExecutionManager.GetAll()
+                .Where(e => itemIds.Contains(e.ChecklistItemId)).Select(e => e.ChecklistItemId).Distinct().ToListAsync()).ToHashSet();
+            var sync = ChecklistTemplateSync.Apply(template, model, itemsWithExecutions, SanitizeOptional);
+            if (sync.BlockedItemIds.Count > 0)
             {
-                template.Categories = new List<ChecklistCategory>();
+                // Apply changed nothing: the tracked template is still as it was loaded.
+                await _checklistTemplateManager.Context.Entry(template).ReloadAsync();
+                return Conflict(new { message = "Items with executions cannot be removed", items = sync.BlockedItemIds });
             }
 
-            // Add new categories and items
-            foreach (var categoryModel in model.Categories)
+            foreach (var category in sync.AddedCategories)
             {
-                var category = new ChecklistCategory
-                {
-                    Id = Guid.NewGuid(),
-                    Name = Sanitizer.Sanitize(categoryModel.Name),
-                    Description = SanitizeOptional(categoryModel.Description),
-                    Order = categoryModel.Order,
-                    ChecklistTemplateId = template.Id,
-                    Items = new List<ChecklistItem>()
-                };
-
-                foreach (var itemModel in categoryModel.Items)
-                {
-                    var item = new ChecklistItem
-                    {
-                        Id = Guid.NewGuid(),
-                        Code = Sanitizer.Sanitize(itemModel.Code),
-                        Name = Sanitizer.Sanitize(itemModel.Name),
-                        Description = SanitizeOptional(itemModel.Description),
-                        Objectives = SanitizeOptional(itemModel.Objectives),
-                        TestProcedure = SanitizeOptional(itemModel.TestProcedure),
-                        PassCriteria = SanitizeOptional(itemModel.PassCriteria),
-                        Order = itemModel.Order,
-                        IsRequired = itemModel.IsRequired,
-                        Severity = itemModel.Severity,
-                        References = SanitizeOptional(itemModel.References),
-                        ChecklistCategoryId = category.Id
-                    };
-
-                    category.Items.Add(item);
-                }
-
-                template.Categories.Add(category);
+                _checklistTemplateManager.Context.Set<ChecklistCategory>().Add(category);
             }
-
-            var updatedTemplate = _checklistTemplateManager.Update(template);
+            foreach (var item in sync.AddedItems)
+            {
+                _checklistTemplateManager.Context.Set<ChecklistItem>().Add(item);
+            }
+            foreach (var item in sync.RemovedItems)
+            {
+                _checklistTemplateManager.Context.Set<ChecklistItem>().Remove(item);
+            }
+            foreach (var category in sync.RemovedCategories)
+            {
+                _checklistTemplateManager.Context.Set<ChecklistItem>().RemoveRange(category.Items);
+                _checklistTemplateManager.Context.Set<ChecklistCategory>().Remove(category);
+            }
             await _checklistTemplateManager.Context.SaveChangesAsync();
-            return Ok(updatedTemplate);
+            return Ok(template);
         }
         catch (Exception ex)
         {

@@ -4,7 +4,7 @@ namespace Cervantes.CORE.ViewModel.Mastg;
 
 public class MASTGStorage
 {
-    public string Storage1Note {get; set;}
+    public string? Storage1Note {get; set;}
     public MASTGStatus Storage1Status {get; set;}
     public string Storage1Note1 {get; set;}
     public string Storage1Note2 {get; set;}
@@ -12,7 +12,7 @@ public class MASTGStorage
     public MASTGStatus Storage1Status1 {get; set;}
     public MASTGStatus Storage1Status2 {get; set;}
     public MASTGStatus Storage1Status3 {get; set;}
-    public string Storage2Note {get; set;}
+    public string? Storage2Note {get; set;}
     public MASTGStatus Storage2Status {get; set;}
     public string Storage2Note1 {get; set;}
     public string Storage2Note2 {get; set;}

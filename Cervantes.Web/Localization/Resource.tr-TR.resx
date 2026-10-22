@@ -2802,4 +2802,7 @@
   <data name="reportComponentCssHelp" xml:space="preserve">
     <value>Bu CSS tüm rapora uygulanır. Bir tablo satırını her öğe için tekrarlamak için o satırın bir hücresine {{tablerow item in Collection}} … {{end}} yazın.</value>
   </data>
+  <data name="checklistItemsHaveExecutions" xml:space="preserve">
+    <value>Bir kontrol listesinde sonucu olan öğeler şablondan kaldırılamaz.</value>
+  </data>
 </root>

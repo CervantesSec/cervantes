@@ -4,25 +4,25 @@ namespace Cervantes.CORE.ViewModel.Wstg;
 
 public class WSTGInpv
 {
-    public string Inpv01Note {get; set;}
-    public string Inpv02Note {get; set;}
-    public string Inpv03Note {get; set;}
-    public string Inpv04Note {get; set;}
-    public string Inpv05Note {get; set;}
-    public string Inpv06Note {get; set;}
-    public string Inpv07Note {get; set;}
-    public string Inpv08Note {get; set;}
-    public string Inpv09Note {get; set;}
-    public string Inpv10Note {get; set;}
-    public string Inpv11Note {get; set;}
-    public string Inpv12Note {get; set;}
-    public string Inpv13Note {get; set;}
-    public string Inpv14Note {get; set;}
-    public string Inpv15Note {get; set;}
-    public string Inpv16Note {get; set;}
-    public string Inpv17Note {get; set;}
-    public string Inpv18Note {get; set;}
-    public string Inpv19Note {get; set;}
+    public string? Inpv01Note {get; set;}
+    public string? Inpv02Note {get; set;}
+    public string? Inpv03Note {get; set;}
+    public string? Inpv04Note {get; set;}
+    public string? Inpv05Note {get; set;}
+    public string? Inpv06Note {get; set;}
+    public string? Inpv07Note {get; set;}
+    public string? Inpv08Note {get; set;}
+    public string? Inpv09Note {get; set;}
+    public string? Inpv10Note {get; set;}
+    public string? Inpv11Note {get; set;}
+    public string? Inpv12Note {get; set;}
+    public string? Inpv13Note {get; set;}
+    public string? Inpv14Note {get; set;}
+    public string? Inpv15Note {get; set;}
+    public string? Inpv16Note {get; set;}
+    public string? Inpv17Note {get; set;}
+    public string? Inpv18Note {get; set;}
+    public string? Inpv19Note {get; set;}
     public WSTGStatus Inpv01Status {get; set;}
     public WSTGStatus Inpv02Status {get; set;}
     public WSTGStatus Inpv03Status {get; set;}

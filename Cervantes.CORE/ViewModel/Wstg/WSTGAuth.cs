@@ -4,16 +4,16 @@ namespace Cervantes.CORE.ViewModel.Wstg;
 
 public class WSTGAuth
 {
-    public string Athn01Note {get; set;}
-    public string Athn02Note {get; set;}
-    public string Athn03Note {get; set;}
-    public string Athn04Note {get; set;}
-    public string Athn05Note {get; set;}
-    public string Athn06Note {get; set;}
-    public string Athn07Note {get; set;}
-    public string Athn08Note {get; set;}
-    public string Athn09Note {get; set;}
-    public string Athn10Note {get; set;}
+    public string? Athn01Note {get; set;}
+    public string? Athn02Note {get; set;}
+    public string? Athn03Note {get; set;}
+    public string? Athn04Note {get; set;}
+    public string? Athn05Note {get; set;}
+    public string? Athn06Note {get; set;}
+    public string? Athn07Note {get; set;}
+    public string? Athn08Note {get; set;}
+    public string? Athn09Note {get; set;}
+    public string? Athn10Note {get; set;}
     public WSTGStatus Athn01Status {get; set;}
     public WSTGStatus Athn02Status {get; set;}
     public WSTGStatus Athn03Status {get; set;}

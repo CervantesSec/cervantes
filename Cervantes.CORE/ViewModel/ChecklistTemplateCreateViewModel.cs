@@ -24,6 +24,9 @@ public class ChecklistTemplateCreateViewModel
 
 public class ChecklistCategoryCreateViewModel
 {
+    // Set when the entry already exists, so an update keeps its id (and the executions that point to it).
+    public Guid? Id { get; set; }
+
     [Required]
     [MaxLength(255)]
     public string Name { get; set; }
@@ -37,6 +40,9 @@ public class ChecklistCategoryCreateViewModel
 
 public class ChecklistItemCreateViewModel
 {
+    // Set when the entry already exists, so an update keeps its id (and the executions that point to it).
+    public Guid? Id { get; set; }
+
     [Required]
     [MaxLength(100)]
     public string Code { get; set; }

@@ -3382,4 +3382,7 @@ Opción 3</value>
   <data name="reportComponentCssHelp" xml:space="preserve">
     <value>Este CSS se aplica a todo el informe. Para repetir una fila de tabla por cada elemento, pon {{tablerow item in Collection}} … {{end}} dentro de una celda de esa fila.</value>
   </data>
+  <data name="checklistItemsHaveExecutions" xml:space="preserve">
+    <value>No se pueden quitar de la plantilla ítems que ya tienen resultados en un checklist.</value>
+  </data>
 </root>

@@ -4,15 +4,15 @@ namespace Cervantes.CORE.ViewModel.Wstg;
 
 public class WSTGSess
 {
-    public string Sess01Note {get; set;}
-    public string Sess02Note {get; set;}
-    public string Sess03Note {get; set;}
-    public string Sess04Note {get; set;}
-    public string Sess05Note {get; set;}
-    public string Sess06Note {get; set;}
-    public string Sess07Note {get; set;}
-    public string Sess08Note {get; set;}
-    public string Sess09Note {get; set;}
+    public string? Sess01Note {get; set;}
+    public string? Sess02Note {get; set;}
+    public string? Sess03Note {get; set;}
+    public string? Sess04Note {get; set;}
+    public string? Sess05Note {get; set;}
+    public string? Sess06Note {get; set;}
+    public string? Sess07Note {get; set;}
+    public string? Sess08Note {get; set;}
+    public string? Sess09Note {get; set;}
     public WSTGStatus Sess01Status {get; set;}
     public WSTGStatus Sess02Status {get; set;}
     public WSTGStatus Sess03Status {get; set;}
