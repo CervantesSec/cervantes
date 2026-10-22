@@ -27,7 +27,7 @@ public class VulnImportCsv
     [Index(8)]
     public string Impact { get; set; }
     [Index(9)]
-    public float? CVSS3 { get; set; }
+    public double? CVSS3 { get; set; }
     [Index(10)]
     public string CVSSVector { get; set; }
     [Index(11)]
