@@ -14,23 +14,20 @@ public class EditorConfigTests
         return dir?.FullName ?? throw new InvalidOperationException("Cervantes.sln not found above the test output.");
     }
 
-    // TinyMCE's sticky toolbar docks against the window by default; inside a scrolling dialog it fades the toolbar out
-    // and never brings it back. "split" makes it dock on the container's scroll too.
+    // A sticky toolbar works out its visibility when the editor starts. Dialogs slide in, so at that moment the editor is
+    // off screen: TinyMCE fades the toolbar out (tox-editor-dock-fadeout) and only shows it again on the next scroll.
+    // Every editor has a fixed height and scrolls inside itself, so its toolbar is always on top anyway.
     [Fact]
-    public void EveryStickyEditorUsesSplitUiMode()
+    public void NoEditorUsesAStickyToolbar()
     {
         var components = Path.Combine(RepoRoot(), "Cervantes.Web", "Components");
         var offenders = Directory.EnumerateFiles(components, "*.razor*", SearchOption.AllDirectories)
             .Where(f => f.EndsWith(".razor") || f.EndsWith(".razor.cs"))
-            .Where(f =>
-            {
-                var text = File.ReadAllText(f);
-                return text.Contains("\"toolbar_sticky\", true") && !text.Contains("\"ui_mode\", \"split\"");
-            })
+            .Where(f => Regex.IsMatch(File.ReadAllText(f), "\"toolbar_sticky\"\\s*,\\s*true"))
             .Select(f => Path.GetRelativePath(components, f))
             .ToList();
 
-        Assert.True(offenders.Count == 0, "Sticky TinyMCE configs without ui_mode split: " + string.Join(", ", offenders));
+        Assert.True(offenders.Count == 0, $"{offenders.Count} TinyMCE configs with a sticky toolbar: " + string.Join(", ", offenders));
     }
 
     // Self-hosted TinyMCE 7 runs in evaluation mode, with a console warning, unless the config declares the GPL key.
