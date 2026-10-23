@@ -31,7 +31,10 @@ public class CveSubscriptionViewModel
     
     [Range(0.0, 1.0)]
     public double? MinEpssScore { get; set; }
-    
+
+    [Range(0.0, 1.0)]
+    public double? MaxEpssScore { get; set; }
+
     public bool OnlyKnownExploited { get; set; } = false;
     
     public List<string>? Keywords { get; set; } = new();
@@ -60,6 +63,7 @@ public class CveSubscriptionViewModel
         MinCvssScore = null;
         MaxCvssScore = null;
         MinEpssScore = null;
+        MaxEpssScore = null;
         OnlyKnownExploited = false;
         Keywords = new List<string>();
         CweFilter = new List<string>();
@@ -82,6 +86,7 @@ public class CveSubscriptionViewModel
             MinCvssScore = MinCvssScore,
             MaxCvssScore = MaxCvssScore,
             MinEpssScore = MinEpssScore,
+            MaxEpssScore = MaxEpssScore,
             OnlyKnownExploited = OnlyKnownExploited,
             Keywords = Keywords is { Count: > 0 } ? JsonSerializer.Serialize(Keywords) : "[]",
             CweFilter = CweFilter is { Count: > 0 } ? JsonSerializer.Serialize(CweFilter) : "[]",
@@ -106,6 +111,7 @@ public class CveSubscriptionViewModel
             MinCvssScore = entity.MinCvssScore,
             MaxCvssScore = entity.MaxCvssScore,
             MinEpssScore = entity.MinEpssScore,
+            MaxEpssScore = entity.MaxEpssScore,
             OnlyKnownExploited = entity.OnlyKnownExploited,
             NotificationFrequency = entity.NotificationFrequency,
             NotificationMethod = entity.NotificationMethod,
@@ -169,6 +175,16 @@ public class CveSubscriptionViewModel
         if (MinEpssScore.HasValue && (MinEpssScore < 0 || MinEpssScore > 1))
         {
             errors.Add("Minimum EPSS score must be between 0.0 and 1.0");
+        }
+
+        if (MaxEpssScore.HasValue && (MaxEpssScore < 0 || MaxEpssScore > 1))
+        {
+            errors.Add("Maximum EPSS score must be between 0.0 and 1.0");
+        }
+
+        if (MinEpssScore.HasValue && MaxEpssScore.HasValue && MinEpssScore > MaxEpssScore)
+        {
+            errors.Add("Minimum EPSS score cannot be greater than maximum EPSS score");
         }
 
         if (NotificationMethod == "Webhook" && string.IsNullOrEmpty(WebhookUrl))

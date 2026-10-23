@@ -1133,6 +1133,9 @@ namespace Cervantes.DAL.Migrations
                     b.Property<double?>("MaxCvssScore")
                         .HasColumnType("double precision");
 
+                    b.Property<double?>("MaxEpssScore")
+                        .HasColumnType("double precision");
+
                     b.Property<double?>("MinCvssScore")
                         .HasColumnType("double precision");
 
