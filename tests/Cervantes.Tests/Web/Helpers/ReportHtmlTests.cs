@@ -145,4 +145,16 @@ public class ReportHtmlTests
     {
         Assert.Equal("", ReportHtml.Stylesheets("<p>no styles</p>"));
     }
+
+    // The PDF page has no side margin, so the running header and footer would touch the paper edge; they take the same
+    // side padding as the body container.
+    [Fact]
+    public void PdfPageCss_HeaderAndFooterAlignWithTheBody()
+    {
+        var css = ReportHtml.PdfPageCss;
+
+        Assert.Matches(@"#document-body-container\s*\{[^}]*margin:\s*0\.10in 0\.60in 0\.10in 0\.60in", css);
+        Assert.Matches(@"#header\s*\{[^}]*position:\s*running\(header\);[^}]*padding:\s*0 0\.60in", css);
+        Assert.Matches(@"#footer\s*\{[^}]*position:\s*running\(footer\);[^}]*padding:\s*0 0\.60in", css);
+    }
 }

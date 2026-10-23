@@ -1739,45 +1739,7 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                 }
                            
                                 // Process main content
-                                string cssStyle2 = @"
-                                  <style>
-                                    @page {
-                                        margin: 0.60in 0 0.60in 0;
-                                        size: A4;
-                                    }
-                                    body {
-                                        margin: 0;
-                                        padding: 0;
-                                    }
-                                    table { page-break-inside: avoid; }
-                                    #header {
-                                        position: running(header);
-                                    }
-                                    #footer {
-                                        position: running(footer);
-                                    }
-                                #document-body-container {
-                                        margin: 0.10in 0.60in 0.10in 0.60in;
-                                    }
-                                    @page {
-                                        @top-center {
-                                            content: element(header);
-                                        }
-                                        @bottom-center {
-                                            content: element(footer);
-                                        }
-                                    }
-                                    #current-page::before {
-                                        content: counter(page);
-                                    }
-                                    #total-pages::before {
-                                        content: counter(pages);
-                                    }
-                                h1 { bookmark-level: 1; bookmark-state: open; }
-                                h2 { bookmark-level: 2; bookmark-state: open; }
-                                h3 { bookmark-level: 3; bookmark-state: open; }
-                                </style>";
-                                mainContent = ReportHtml.BuildPdfBody(mainContent, cssStyle2);
+                                mainContent = ReportHtml.BuildPdfBody(mainContent, ReportHtml.PdfPageCss);
 
                                 // Convert main content to PDF. Like the cover, it loads nothing outside the stored HTML;
                                 // inline data: images still render.

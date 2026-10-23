@@ -20,6 +20,52 @@ public static class ReportHtml
     }
 
     /// <summary>
+    /// Page CSS of the PDF body: A4 with no side margin, the report's header and footer run into the top and bottom
+    /// margins, and the body container keeps 0.60in at the sides. The header and footer get the same side padding, or
+    /// they would reach the edge of the paper.
+    /// </summary>
+    public const string PdfPageCss = @"
+      <style>
+        @page {
+            margin: 0.60in 0 0.60in 0;
+            size: A4;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        table { page-break-inside: avoid; }
+        #header {
+            position: running(header);
+            padding: 0 0.60in;
+        }
+        #footer {
+            position: running(footer);
+            padding: 0 0.60in;
+        }
+        #document-body-container {
+            margin: 0.10in 0.60in 0.10in 0.60in;
+        }
+        @page {
+            @top-center {
+                content: element(header);
+            }
+            @bottom-center {
+                content: element(footer);
+            }
+        }
+        #current-page::before {
+            content: counter(page);
+        }
+        #total-pages::before {
+            content: counter(pages);
+        }
+        h1 { bookmark-level: 1; bookmark-state: open; }
+        h2 { bookmark-level: 2; bookmark-state: open; }
+        h3 { bookmark-level: 3; bookmark-state: open; }
+      </style>";
+
+    /// <summary>
     /// Every &lt;style&gt; of the report outside &lt;cover&gt;, in document order. The PDF export converts the cover as a
     /// document of its own, which needs these stylesheets (the component CSS among them) to look like the HTML report.
     /// </summary>
