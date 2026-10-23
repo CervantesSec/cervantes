@@ -28,7 +28,8 @@ public static class ChecklistTemplateSync
         var removedCategories = categories.Where(c => !modelCategoryIds.Contains(c.Id)).ToList();
         var removedItems = categories.Except(removedCategories)
             .SelectMany(c => c.Items).Where(i => !modelItemIds.Contains(i.Id)).ToList();
-        var blocked = removedCategories.SelectMany(c => c.Items).Concat(removedItems)
+        // Items the model moves out of a removed category are kept, so they do not block it.
+        var blocked = removedCategories.SelectMany(c => c.Items).Where(i => !modelItemIds.Contains(i.Id)).Concat(removedItems)
             .Where(i => itemIdsWithExecutions.Contains(i.Id)).Select(i => i.Id).ToList();
         if (blocked.Count > 0)
         {
@@ -52,7 +53,14 @@ public static class ChecklistTemplateSync
 
             foreach (var itemModel in categoryModel.Items)
             {
-                var item = itemModel.Id is { } itemId ? category.Items.FirstOrDefault(i => i.Id == itemId) : null;
+                // Look in every category: an item sent under another one is moved there with its id.
+                var item = itemModel.Id is { } itemId ? categories.SelectMany(c => c.Items).FirstOrDefault(i => i.Id == itemId) : null;
+                if (item != null && item.ChecklistCategoryId != category.Id)
+                {
+                    categories.First(c => c.Id == item.ChecklistCategoryId).Items.Remove(item);
+                    item.ChecklistCategoryId = category.Id;
+                    category.Items.Add(item);
+                }
                 if (item == null)
                 {
                     item = new ChecklistItem { Id = Guid.NewGuid(), ChecklistCategoryId = category.Id };

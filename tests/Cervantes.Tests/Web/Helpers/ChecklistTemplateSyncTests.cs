@@ -103,4 +103,49 @@ public class ChecklistTemplateSyncTests
         Assert.Equal(new[] { kept.Id }, result.BlockedItemIds);
         Assert.Empty(result.RemovedCategories);
     }
+
+    private static ChecklistCategory AddSession(ChecklistTemplate template)
+    {
+        var session = new ChecklistCategory { Id = Guid.NewGuid(), Name = "Session", ChecklistTemplateId = template.Id, Items = new List<ChecklistItem>() };
+        template.Categories.Add(session);
+        return session;
+    }
+
+    // The item keeps its id, so the executions that point to it survive the move.
+    [Fact]
+    public void Apply_MovesItemSentUnderAnotherCategory()
+    {
+        var (template, category, kept, other) = Existing();
+        var session = AddSession(template);
+        var model = Model(
+            new ChecklistCategoryCreateViewModel { Id = category.Id, Name = "Auth", Items = { Item(other.Id, "A-2", "Logout") } },
+            new ChecklistCategoryCreateViewModel { Id = session.Id, Name = "Session", Items = { Item(kept.Id, "S-1", "Login") } });
+
+        var result = ChecklistTemplateSync.Apply(template, model, new HashSet<Guid> { kept.Id }, Same);
+
+        Assert.Empty(result.BlockedItemIds);
+        Assert.Same(kept, Assert.Single(session.Items));
+        Assert.Equal(session.Id, kept.ChecklistCategoryId);
+        Assert.Equal("S-1", kept.Code);
+        Assert.DoesNotContain(kept, category.Items);
+        Assert.Empty(result.AddedItems);
+        Assert.Empty(result.RemovedItems);
+        Assert.Equal(2, template.Categories.SelectMany(c => c.Items).Count());
+    }
+
+    [Fact]
+    public void Apply_MovingItemOutOfRemovedCategoryIsNotBlocked()
+    {
+        var (template, category, kept, other) = Existing();
+        var session = AddSession(template);
+        var model = Model(new ChecklistCategoryCreateViewModel { Id = session.Id, Name = "Session", Items = { Item(kept.Id, "A-1", "Login") } });
+
+        var result = ChecklistTemplateSync.Apply(template, model, new HashSet<Guid> { kept.Id }, Same);
+
+        Assert.Empty(result.BlockedItemIds);
+        Assert.Same(kept, Assert.Single(session.Items));
+        Assert.Equal(session.Id, kept.ChecklistCategoryId);
+        Assert.Same(category, Assert.Single(result.RemovedCategories));
+        Assert.DoesNotContain(kept, category.Items);
+    }
 }
