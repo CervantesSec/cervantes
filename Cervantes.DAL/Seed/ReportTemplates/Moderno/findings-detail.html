@@ -1,0 +1,11 @@
+{{PageBreak}}{{ riesgo = {Critical: "Crítico", High: "Alto", Medium: "Medio", Low: "Bajo", Info: "Informativo"} }}{{ estado = {Open: "Abierto", Confirmed: "Confirmado", Accepted: "Aceptado", Resolved: "Resuelto", OutOfScope: "Fuera de alcance", Invalid: "No válido"} }}<h1 class="h1">Detalle de Hallazgos</h1>
+{{for vuln in Vulns}}
+<table class="fd"><tbody>
+<tr><td class="fd-head" colspan="4">{{vuln.VulnFindingId}}  {{vuln.VulnName}}</td></tr>
+<tr><td class="fd-meta risk-{{vuln.VulnRisk}}">Riesgo: {{ riesgo[vuln.VulnRisk] }}</td><td class="fd-meta fd-soft">CVSS {{vuln.VulnCvss}}</td><td class="fd-meta fd-soft">Estado: {{ estado[vuln.VulnStatus] }}</td><td class="fd-meta fd-soft">{{vuln.VulnCategory}}</td></tr>
+<tr><td class="fd-facts" colspan="4"><p class="fd-fact"><strong>Objetivos:</strong> {{vuln.VulnTargets}}</p><p class="fd-fact"><strong>Vector CVSS:</strong> {{vuln.VulnCvssVector}}</p><p class="fd-fact"><strong>CWE:</strong> {{vuln.VulnCwes}}</p></td></tr>
+<tr><td class="fd-body" colspan="4"><p class="fd-label">Descripción</p><div class="rich">{{vuln.VulnDescription}}</div><p class="fd-label">Impacto</p><div class="rich">{{vuln.VulnImpact}}</div><p class="fd-label">Prueba de concepto</p><div class="rich">{{vuln.VulnPoc}}</div></td></tr>
+<tr><td class="fd-fix" colspan="4"><p class="fd-label">Remediación</p><div class="rich">{{vuln.VulnRemediation}}</div></td></tr>
+</tbody></table>
+<p class="fd-gap"> </p>
+{{end}}

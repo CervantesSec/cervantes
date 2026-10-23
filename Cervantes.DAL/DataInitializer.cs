@@ -25,7 +25,7 @@ public class DataInitializer
         SeedVulnCategories(vulnCategoryManager);
         SeedOrganization(organizationManager);
         SeedTemplates(reportTemplateManager,userManager,reportComponentsManager,reportsPartsManager);
-        // Added after the default templates on new and existing installs; skipped once it is there (see ModernReportTemplate).
+        // Modern templates (English and Spanish), added on new and existing installs; each is skipped once it is there.
         var owner = userManager.FindByEmailAsync("admin@cervantes.local").Result;
         if (owner != null)
         {

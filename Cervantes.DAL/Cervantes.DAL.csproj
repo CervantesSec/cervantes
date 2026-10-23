@@ -27,8 +27,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <!-- HTML and CSS of the "Modern Pentest Report (EN)" template that DataInitializer seeds (ModernReportTemplate) -->
+      <!-- Modern report templates that DataInitializer seeds (ModernReportTemplate): English HTML and the shared CSS in
+           Modern, Spanish HTML in Moderno -->
       <EmbeddedResource Include="Seed\ReportTemplates\Modern\*.html;Seed\ReportTemplates\Modern\*.css" LogicalName="Cervantes.DAL.Seed.Modern.%(Filename)%(Extension)" />
+      <EmbeddedResource Include="Seed\ReportTemplates\Moderno\*.html" LogicalName="Cervantes.DAL.Seed.Moderno.%(Filename)%(Extension)" />
     </ItemGroup>
 
 </Project>

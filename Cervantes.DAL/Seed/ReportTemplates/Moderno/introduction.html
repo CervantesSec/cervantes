@@ -1,0 +1,10 @@
+{{PageBreak}}<h1 class="h1">Introducción</h1>
+<p class="p">{{OrganizationName}} fue contratada por {{ClientName}} para evaluar la seguridad de {{ProjectName}} entre el {{StartDate}} y el {{EndDate}}. Este informe describe el alcance, el enfoque y cada hallazgo, con una valoración de riesgo y una remediación recomendada para cada uno.</p>
+<div class="rich">{{ProjectDescription}}</div>
+{{ tipo = {IP: "IP", Hostname: "Nombre de host", CIDR: "CIDR", URL: "URL", Binary: "Binario"} }}
+<h2 class="h2">Alcance</h2>
+<table class="tbl"><thead><tr><th class="c-target">Objetivo</th><th class="c-type">Tipo</th><th>Descripción</th></tr></thead>
+<tbody><tr><td class="c-target">{{tablerow target in Targets}}{{target.TargetName}}</td><td class="c-type">{{ tipo[target.TargetType] }}</td><td>{{target.TargetDescription}}{{end}}</td></tr></tbody></table>
+<h2 class="h2">Equipo</h2>
+<table class="tbl"><thead><tr><th class="c-name">Nombre</th><th class="c-role">Puesto</th><th>Correo electrónico</th></tr></thead>
+<tbody><tr><td class="c-name">{{tablerow member in Users}}{{member.UserFullName}}</td><td class="c-role">{{member.UserPosition}}</td><td>{{member.UserEmail}}{{end}}</td></tr></tbody></table>
