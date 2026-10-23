@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Cervantes.Web.Helpers;
 using Microsoft.JSInterop;
 using BlazorMonaco.Editor;
 using Cervantes.CORE.ViewModel;
@@ -231,9 +232,11 @@ public partial class ReportComponentsDialog: ComponentBase
     {
         if (firstRender)
         {
-            await jsRuntime.InvokeVoidAsync("cervantesMonaco.ensure");
-            monacoReady = true;
-            StateHasChanged();
+            monacoReady = await MonacoScripts.EnsureAsync(jsRuntime);
+            if (monacoReady)
+            {
+                StateHasChanged();
+            }
         }
     }
     private string _valueToSet = "";
