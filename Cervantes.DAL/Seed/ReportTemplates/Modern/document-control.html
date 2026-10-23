@@ -1,0 +1,10 @@
+<h1 class="h1">Document Control</h1>
+<h2 class="h2">Contacts</h2>
+<table class="dc"><tbody><tr>
+<td class="dc-cell"><p class="dc-label">Prepared by</p><p class="dc-name">{{OrganizationName}}</p><p class="dc-line">{{OrganizationContactName}}</p><p class="dc-line">{{OrganizationEmail}}</p><p class="dc-line">{{OrganizationPhone}}</p></td>
+<td class="dc-gap"> </td>
+<td class="dc-cell"><p class="dc-label">Prepared for</p><p class="dc-name">{{ClientName}}</p><p class="dc-line">{{ClientContactName}}</p><p class="dc-line">{{ClientEmail}}</p><p class="dc-line">{{ClientPhone}}</p></td>
+</tr></tbody></table>
+<h2 class="h2">Version history</h2>
+<table class="tbl"><thead><tr><th class="c-ver">Version</th><th>Document</th><th class="c-date">Date</th><th>Description</th></tr></thead>
+<tbody><tr><td class="c-ver">{{tablerow doc in Documents}}{{doc.DocumentVersion}}</td><td>{{doc.DocumentName}}</td><td class="c-date">{{doc.DocumentCreatedDate}}</td><td>{{doc.DocumentDescription}}{{end}}</td></tr></tbody></table>

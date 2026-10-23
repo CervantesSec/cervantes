@@ -26,4 +26,9 @@
       <PackageReference Include="Pgvector.EntityFrameworkCore" Version="0.2.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <!-- HTML and CSS of the "Modern Pentest Report (EN)" template that DataInitializer seeds (ModernReportTemplate) -->
+      <EmbeddedResource Include="Seed\ReportTemplates\Modern\*.html;Seed\ReportTemplates\Modern\*.css" LogicalName="Cervantes.DAL.Seed.Modern.%(Filename)%(Extension)" />
+    </ItemGroup>
+
 </Project>

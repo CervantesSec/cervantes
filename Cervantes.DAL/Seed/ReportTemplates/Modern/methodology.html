@@ -1,0 +1,18 @@
+{{PageBreak}}<h1 class="h1">Methodology</h1>
+<p class="p">The assessment combined automated scanning with manual testing. Testing followed recognised industry guidance (OWASP Testing Guides, PTES and NIST SP 800-115) and was adapted to the agreed scope.</p>
+<table class="tbl"><thead><tr><th class="c-act">Activity</th><th>What it covers</th></tr></thead><tbody>
+<tr><td class="c-act">Reconnaissance</td><td>Gathering public and provided information about the targets, technologies and exposed services.</td></tr>
+<tr><td class="c-act">Discovery</td><td>Mapping the attack surface: hosts, ports, endpoints, roles and data flows.</td></tr>
+<tr><td class="c-act">Exploitation</td><td>Confirming vulnerabilities by safely demonstrating their impact.</td></tr>
+<tr><td class="c-act">Post-exploitation</td><td>Assessing what an attacker could reach from a compromised position.</td></tr>
+<tr><td class="c-act">Reporting</td><td>Documenting every finding with evidence, a risk rating and a remediation.</td></tr>
+</tbody></table>
+<h2 class="h2">Risk rating</h2>
+<p class="p">Each finding is rated with CVSS 3.1. The rating sets the order in which findings should be addressed.</p>
+<table class="tbl"><thead><tr><th class="c-sev">Risk</th><th class="c-cvss">CVSS</th><th>Meaning</th></tr></thead><tbody>
+<tr><td class="c-sev risk-Critical">Critical</td><td class="c-cvss">9.0 - 10.0</td><td>Direct compromise of systems or data is likely. Fix immediately.</td></tr>
+<tr><td class="c-sev risk-High">High</td><td class="c-cvss">7.0 - 8.9</td><td>Serious impact with limited preconditions. Fix as a priority.</td></tr>
+<tr><td class="c-sev risk-Medium">Medium</td><td class="c-cvss">4.0 - 6.9</td><td>Meaningful impact that needs specific conditions. Plan a fix.</td></tr>
+<tr><td class="c-sev risk-Low">Low</td><td class="c-cvss">0.1 - 3.9</td><td>Limited impact. Fix during regular maintenance.</td></tr>
+<tr><td class="c-sev risk-Info">Info</td><td class="c-cvss">0.0</td><td>No direct risk. Good-practice observation.</td></tr>
+</tbody></table>

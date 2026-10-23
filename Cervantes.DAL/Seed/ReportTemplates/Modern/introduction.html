@@ -1,0 +1,9 @@
+{{PageBreak}}<h1 class="h1">Introduction</h1>
+<p class="p">{{OrganizationName}} was engaged by {{ClientName}} to assess the security of {{ProjectName}} between {{StartDate}} and {{EndDate}}. This report describes the scope, the approach and every finding, with a risk rating and a recommended remediation for each one.</p>
+<div class="rich">{{ProjectDescription}}</div>
+<h2 class="h2">Scope</h2>
+<table class="tbl"><thead><tr><th class="c-target">Target</th><th class="c-type">Type</th><th>Description</th></tr></thead>
+<tbody><tr><td class="c-target">{{tablerow target in Targets}}{{target.TargetName}}</td><td class="c-type">{{target.TargetType}}</td><td>{{target.TargetDescription}}{{end}}</td></tr></tbody></table>
+<h2 class="h2">Team</h2>
+<table class="tbl"><thead><tr><th class="c-name">Name</th><th class="c-role">Role</th><th>Email</th></tr></thead>
+<tbody><tr><td class="c-name">{{tablerow member in Users}}{{member.UserFullName}}</td><td class="c-role">{{member.UserPosition}}</td><td>{{member.UserEmail}}{{end}}</td></tr></tbody></table>

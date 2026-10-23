@@ -1,0 +1,17 @@
+.h1 { font-family: Helvetica, Arial, sans-serif; font-size: 22px; font-weight: bold; color: #111827; border-bottom: 2px solid #4F46E5; padding-bottom: 6px; margin: 0 0 14px 0; }
+.h2 { font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; color: #4338CA; margin: 20px 0 8px 0; page-break-after: avoid; }
+.p { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #1F2937; line-height: 1.5; margin: 0 0 8px 0; }
+.rich p, .rich li { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #1F2937; line-height: 1.5; }
+.tbl { border-collapse: collapse; width: 100%; page-break-inside: auto; }
+.tbl th { font-family: Helvetica, Arial, sans-serif; font-size: 9px; font-weight: bold; color: #ffffff; background-color: #111827; text-align: left; padding: 6px 8px; }
+.tbl td { font-family: Helvetica, Arial, sans-serif; font-size: 10px; color: #1F2937; border-bottom: 1px solid #E5E7EB; padding: 6px 8px; vertical-align: top; }
+
+.c-id { width: 12%; font-weight: bold; color: #4338CA; }
+.c-risk { width: 12%; font-weight: bold; text-align: center; }
+.c-score { width: 9%; text-align: right; }
+.c-status { width: 14%; }
+td.risk-Critical, .risk-Critical { background-color: #BE185D; color: #ffffff; }
+td.risk-High, .risk-High { background-color: #DC2626; color: #ffffff; }
+td.risk-Medium, .risk-Medium { background-color: #B45309; color: #ffffff; }
+td.risk-Low, .risk-Low { background-color: #047857; color: #ffffff; }
+td.risk-Info, .risk-Info { background-color: #2563EB; color: #ffffff; }

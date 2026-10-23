@@ -1,0 +1,24 @@
+.h1 { font-family: Helvetica, Arial, sans-serif; font-size: 22px; font-weight: bold; color: #111827; border-bottom: 2px solid #4F46E5; padding-bottom: 6px; margin: 0 0 14px 0; }
+.h2 { font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; color: #4338CA; margin: 20px 0 8px 0; page-break-after: avoid; }
+.p { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #1F2937; line-height: 1.5; margin: 0 0 8px 0; }
+.rich p, .rich li { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #1F2937; line-height: 1.5; }
+.tbl { border-collapse: collapse; width: 100%; page-break-inside: auto; }
+.tbl th { font-family: Helvetica, Arial, sans-serif; font-size: 9px; font-weight: bold; color: #ffffff; background-color: #111827; text-align: left; padding: 6px 8px; }
+.tbl td { font-family: Helvetica, Arial, sans-serif; font-size: 10px; color: #1F2937; border-bottom: 1px solid #E5E7EB; padding: 6px 8px; vertical-align: top; }
+
+.fd { border-collapse: collapse; width: 100%; page-break-inside: avoid; }
+.fd td { font-family: Helvetica, Arial, sans-serif; color: #1F2937; }
+td.fd-head { background-color: #111827; color: #ffffff; font-size: 13px; font-weight: bold; padding: 9px 12px; }
+.fd-meta { width: 25%; font-size: 9px; font-weight: bold; padding: 5px 12px; }
+td.fd-soft { background-color: #F3F4F6; color: #1F2937; }
+.fd-facts { border-left: 1px solid #E5E7EB; border-right: 1px solid #E5E7EB; padding: 8px 12px 0 12px; }
+.fd-fact { font-family: Helvetica, Arial, sans-serif; font-size: 9px; color: #6B7280; margin: 0 0 3px 0; }
+.fd-body { border-left: 1px solid #E5E7EB; border-right: 1px solid #E5E7EB; padding: 4px 12px 8px 12px; }
+.fd-fix { background-color: #EEF2FF; border-left: 4px solid #4F46E5; padding: 6px 12px 8px 12px; }
+.fd-label { font-family: Helvetica, Arial, sans-serif; font-size: 9px; font-weight: bold; color: #4338CA; margin: 10px 0 3px 0; }
+.fd-gap { font-size: 8px; margin: 0; }
+td.risk-Critical, .risk-Critical { background-color: #BE185D; color: #ffffff; }
+td.risk-High, .risk-High { background-color: #DC2626; color: #ffffff; }
+td.risk-Medium, .risk-Medium { background-color: #B45309; color: #ffffff; }
+td.risk-Low, .risk-Low { background-color: #047857; color: #ffffff; }
+td.risk-Info, .risk-Info { background-color: #2563EB; color: #ffffff; }

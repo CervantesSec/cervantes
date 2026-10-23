@@ -1,0 +1,11 @@
+{{PageBreak}}<h1 class="h1">Findings in Detail</h1>
+{{for vuln in Vulns}}
+<table class="fd"><tbody>
+<tr><td class="fd-head" colspan="4">{{vuln.VulnFindingId}}  {{vuln.VulnName}}</td></tr>
+<tr><td class="fd-meta risk-{{vuln.VulnRisk}}">Risk: {{vuln.VulnRisk}}</td><td class="fd-meta fd-soft">CVSS {{vuln.VulnCvss}}</td><td class="fd-meta fd-soft">Status: {{vuln.VulnStatus}}</td><td class="fd-meta fd-soft">{{vuln.VulnCategory}}</td></tr>
+<tr><td class="fd-facts" colspan="4"><p class="fd-fact"><strong>Targets:</strong> {{vuln.VulnTargets}}</p><p class="fd-fact"><strong>CVSS vector:</strong> {{vuln.VulnCvssVector}}</p><p class="fd-fact"><strong>CWE:</strong> {{vuln.VulnCwes}}</p></td></tr>
+<tr><td class="fd-body" colspan="4"><p class="fd-label">Description</p><div class="rich">{{vuln.VulnDescription}}</div><p class="fd-label">Impact</p><div class="rich">{{vuln.VulnImpact}}</div><p class="fd-label">Proof of concept</p><div class="rich">{{vuln.VulnPoc}}</div></td></tr>
+<tr><td class="fd-fix" colspan="4"><p class="fd-label">Remediation</p><div class="rich">{{vuln.VulnRemediation}}</div></td></tr>
+</tbody></table>
+<p class="fd-gap"> </p>
+{{end}}

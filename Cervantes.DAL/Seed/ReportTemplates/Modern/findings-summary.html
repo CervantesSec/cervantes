@@ -1,0 +1,3 @@
+{{PageBreak}}<h1 class="h1">Findings Summary</h1>
+<table class="tbl"><thead><tr><th class="c-id">ID</th><th>Finding</th><th class="c-risk">Risk</th><th class="c-score">CVSS</th><th class="c-status">Status</th></tr></thead>
+<tbody><tr><td class="c-id">{{tablerow vuln in Vulns}}{{vuln.VulnFindingId}}</td><td>{{vuln.VulnName}}</td><td class="c-risk risk-{{vuln.VulnRisk}}">{{vuln.VulnRisk}}</td><td class="c-score">{{vuln.VulnCvss}}</td><td class="c-status">{{vuln.VulnStatus}}{{end}}</td></tr></tbody></table>

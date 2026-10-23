@@ -1,0 +1,5 @@
+.hd, .hd td { border: none; }
+.hd { border-collapse: collapse; width: 100%; }
+.hd td { font-family: Helvetica, Arial, sans-serif; font-size: 8px; color: #6B7280; border-bottom: 1px solid #E5E7EB; padding: 0 0 4px 0; width: 50%; }
+.hd-l { text-align: left; font-weight: bold; color: #111827; }
+.hd-r { text-align: right; }

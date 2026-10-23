@@ -1,0 +1,13 @@
+.cv, .cv td, .cv-meta, .cv-meta td { border: none; }
+.cv { border-collapse: collapse; width: 100%; }
+.cv td { font-family: Helvetica, Arial, sans-serif; color: #1F2937; padding: 0; }
+.cv-bar { background-color: #4F46E5; font-size: 4px; }
+.cv-org { font-size: 12px; font-weight: bold; color: #111827; padding-top: 14px; vertical-align: top; }
+.cv-kind { font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: bold; color: #4338CA; margin: 0 0 10px 0; }
+.cv-title { font-family: Helvetica, Arial, sans-serif; font-size: 36px; font-weight: bold; color: #111827; line-height: 1.15; margin: 0 0 12px 0; }
+.cv-client { font-family: Helvetica, Arial, sans-serif; font-size: 15px; color: #6B7280; margin: 0; }
+.cv-meta { border-collapse: collapse; width: 100%; }
+.cv-cell { width: 33%; border-top: 3px solid #4F46E5; background-color: #F3F4F6; padding: 10px 12px; vertical-align: top; }
+.cv-label { font-family: Helvetica, Arial, sans-serif; font-size: 9px; font-weight: bold; color: #6B7280; margin: 0 0 3px 0; }
+.cv-value { font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: bold; color: #111827; margin: 0; }
+.cv-foot { font-size: 9px; color: #6B7280; border-top: 1px solid #E5E7EB; padding-top: 8px; }

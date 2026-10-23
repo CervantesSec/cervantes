@@ -1,0 +1,5 @@
+.ft, .ft td { border: none; }
+.ft { border-collapse: collapse; width: 100%; }
+.ft td { font-family: Helvetica, Arial, sans-serif; font-size: 8px; color: #6B7280; border-top: 1px solid #E5E7EB; padding: 4px 0 0 0; }
+.ft-l { text-align: left; }
+.ft-r { text-align: right; }

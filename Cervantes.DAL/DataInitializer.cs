@@ -25,6 +25,12 @@ public class DataInitializer
         SeedVulnCategories(vulnCategoryManager);
         SeedOrganization(organizationManager);
         SeedTemplates(reportTemplateManager,userManager,reportComponentsManager,reportsPartsManager);
+        // Added after the default templates on new and existing installs; skipped once it is there (see ModernReportTemplate).
+        var owner = userManager.FindByEmailAsync("admin@cervantes.local").Result;
+        if (owner != null)
+        {
+            ModernReportTemplate.Seed(reportTemplateManager, reportComponentsManager, reportsPartsManager, owner.Id);
+        }
         SeedCwe(cweManager,cwe);
     }
     

@@ -1,0 +1,17 @@
+.h1 { font-family: Helvetica, Arial, sans-serif; font-size: 22px; font-weight: bold; color: #111827; border-bottom: 2px solid #4F46E5; padding-bottom: 6px; margin: 0 0 14px 0; }
+.h2 { font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; color: #4338CA; margin: 20px 0 8px 0; page-break-after: avoid; }
+.p { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #1F2937; line-height: 1.5; margin: 0 0 8px 0; }
+.rich p, .rich li { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #1F2937; line-height: 1.5; }
+.tbl { border-collapse: collapse; width: 100%; page-break-inside: auto; }
+.tbl th { font-family: Helvetica, Arial, sans-serif; font-size: 9px; font-weight: bold; color: #ffffff; background-color: #111827; text-align: left; padding: 6px 8px; }
+.tbl td { font-family: Helvetica, Arial, sans-serif; font-size: 10px; color: #1F2937; border-bottom: 1px solid #E5E7EB; padding: 6px 8px; vertical-align: top; }
+
+.dc, .dc td { border: none; }
+.c-ver { width: 12%; }
+.c-date { width: 16%; }
+.dc { border-collapse: collapse; width: 100%; }
+.dc-cell { width: 48%; background-color: #F3F4F6; border-left: 3px solid #4F46E5; padding: 10px 12px; vertical-align: top; }
+.dc-gap { width: 4%; }
+.dc-label { font-family: Helvetica, Arial, sans-serif; font-size: 9px; font-weight: bold; color: #6B7280; margin: 0 0 4px 0; }
+.dc-name { font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: bold; color: #111827; margin: 0 0 4px 0; }
+.dc-line { font-family: Helvetica, Arial, sans-serif; font-size: 10px; color: #1F2937; margin: 0; }
