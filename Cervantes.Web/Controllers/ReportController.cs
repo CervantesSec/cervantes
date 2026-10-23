@@ -1259,7 +1259,7 @@ public class ReportController : ControllerBase
                 scriptObject.Add("ChecklistsOnHoldCount", Checklists.Count(c => c.Status == ChecklistStatus.OnHold));
                 scriptObject.Add("ChecklistsCancelledCount", Checklists.Count(c => c.Status == ChecklistStatus.Cancelled));
                 scriptObject.Add("TableOfContents", tocList);
-                scriptObject.Add("PageBreak", @"<div style=""page-break-after: always;""></div>");
+                scriptObject.Add("PageBreak", ReportHtml.PageBreak);
                 scriptObject.Add("Today", DateTime.Now.ToShortDateString());
                 scriptObject.Add("CurrentPage", @"<span id=""current-page""></span>" );
                 scriptObject.Add("TotalPages", @"<span id=""total-pages""></span>" );

@@ -988,7 +988,7 @@ public class ChecklistController : ControllerBase
                 scriptObject.Add("TargetName", target.Name);
                 scriptObject.Add("TargetDescription", target.Description);
                 scriptObject.Add("TargetType", target.Type.ToString());
-                scriptObject.Add("PageBreak", @"<span style=""page-break-after: always;""></span>");
+                scriptObject.Add("PageBreak", ReportHtml.PageBreak);
                 scriptObject.Add("Today", DateTime.Now.ToShortDateString());
                 scriptObject.Add("ProjectName", pro.Name);
                 scriptObject.Add("ProjectDescription", pro.Description);
@@ -1159,7 +1159,7 @@ public class ChecklistController : ControllerBase
                 scriptObject.Add("TargetName", target.Name);
                 scriptObject.Add("TargetDescription", target.Description);
                 scriptObject.Add("TargetType", target.Type.ToString());
-                scriptObject.Add("PageBreak", @"<span style=""page-break-after: always;""></span>");
+                scriptObject.Add("PageBreak", ReportHtml.PageBreak);
                 scriptObject.Add("Today", DateTime.Now.ToShortDateString());
                 scriptObject.Add("ProjectName", pro.Name);
                 scriptObject.Add("ProjectDescription", pro.Description);

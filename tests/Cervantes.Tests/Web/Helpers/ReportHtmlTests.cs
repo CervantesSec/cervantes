@@ -157,4 +157,29 @@ public class ReportHtmlTests
         Assert.Matches(@"#header\s*\{[^}]*position:\s*running\(header\);[^}]*padding:\s*0 0\.60in", css);
         Assert.Matches(@"#footer\s*\{[^}]*position:\s*running\(footer\);[^}]*padding:\s*0 0\.60in", css);
     }
+
+    // {{PageBreak}} used page-break-after, which HtmlToOpenXml ignores: Word reports had no page breaks at all.
+    [Fact]
+    public async System.Threading.Tasks.Task PageBreak_BreaksTheDocxPage()
+    {
+        using var stream = new MemoryStream();
+        using var docx = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+        var main = docx.AddMainDocumentPart();
+        new DocumentFormat.OpenXml.Wordprocessing.Document(new DocumentFormat.OpenXml.Wordprocessing.Body()).Save(main);
+
+        await new HtmlToOpenXml.HtmlConverter(main).ParseBody("<p>one</p>" + ReportHtml.PageBreak + "<p>two</p>");
+
+        Assert.Single(main.Document.Body!.Descendants<DocumentFormat.OpenXml.Wordprocessing.Break>(),
+            b => b.Type?.Value == DocumentFormat.OpenXml.Wordprocessing.BreakValues.Page);
+    }
+
+    [Fact]
+    public void PageBreak_BreaksThePdfPage()
+    {
+        using var stream = new MemoryStream();
+        iText.Html2pdf.HtmlConverter.ConvertToPdf("<html><body><p>one</p>" + ReportHtml.PageBreak + "<p>two</p></body></html>", stream);
+
+        using var pdf = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfReader(new MemoryStream(stream.ToArray())));
+        Assert.Equal(2, pdf.GetNumberOfPages());
+    }
 }

@@ -20,6 +20,12 @@ public static class ReportHtml
     }
 
     /// <summary>
+    /// The {{PageBreak}} report variable. page-break-before, because HtmlToOpenXml ignores page-break-after and the DOCX
+    /// had no page breaks; iText honours both.
+    /// </summary>
+    public const string PageBreak = @"<div style=""page-break-before: always;""></div>";
+
+    /// <summary>
     /// Page CSS of the PDF body: A4 with no side margin, the report's header and footer run into the top and bottom
     /// margins, and the body container keeps 0.60in at the sides. The header and footer get the same side padding, or
     /// they would reach the edge of the paper.
