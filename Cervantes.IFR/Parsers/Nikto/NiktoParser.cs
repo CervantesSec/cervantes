@@ -323,9 +323,6 @@ public class NiktoJsonResult
     public string Ip { get; set; } = "";
     public int Port { get; set; } = 80;
     public string Banner { get; set; } = "";
-    // Nikto 2.6 writes the banner as server_banner (often null)
-    [System.Text.Json.Serialization.JsonPropertyName("server_banner")]
-    public string? ServerBanner { get; set; }
     public NiktoVulnerability[] Vulnerabilities { get; set; } = Array.Empty<NiktoVulnerability>();
 }
 

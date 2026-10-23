@@ -91,6 +91,20 @@ public class ProwlerTests
         Assert.DoesNotContain(results, ProwlerParser.IsFinding);
     }
 
+    // Prowler mutelist docs: a muted finding in JSON-OCSF keeps status_code FAIL and carries status "Suppressed" (status_id 3).
+    [Fact]
+    public void Read_OcsfSuppressedIsMuted()
+    {
+        var json = ParserFixtures.Text("Prowler", "prowler-v4.ocsf.json");
+        var first = json.IndexOf("\"status\": \"New\"", StringComparison.Ordinal);
+        var suppressed = json[..first] + "\"status\": \"Suppressed\"" + json[(first + "\"status\": \"New\"".Length)..];
+
+        var results = ProwlerParser.Read(suppressed);
+
+        Assert.True(results[0].Muted);
+        Assert.All(results.Skip(1), r => Assert.False(r.Muted));
+    }
+
     [Fact]
     public void IsFinding_SkipsMuted()
     {

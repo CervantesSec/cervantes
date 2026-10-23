@@ -40,6 +40,13 @@ public class FileCheckTests
         Assert.False(check.CheckAttachment(bytes));
     }
 
+    // The root decides: an XHTML document is refused even when the rest of it is not well-formed.
+    [Fact]
+    public void CheckAttachment_RejectsXhtmlRootWithBrokenBody()
+    {
+        Assert.False(check.CheckAttachment(Bytes("<?xml version=\"1.0\"?><html xmlns=\"http://www.w3.org/1999/xhtml\"><body><p></body>")));
+    }
+
     [Theory]
     [InlineData(PlainXml)]
     [InlineData(NmapXml)]

@@ -64,4 +64,12 @@ public class NessusTests
         Assert.Equal("Linux Kernel 2.6", NessusParser.HostTag(host, "operating-system"));
         Assert.Equal("", NessusParser.HostTag(host, "no-such-tag"));
     }
+
+    // InnerText is already XML-decoded: decoding it again turned a literal "&amp;" in a plugin output into "&".
+    [Fact]
+    public void Text_KeepsLiteralEntities()
+    {
+        Assert.Equal("a &amp;amp; b", NessusParser.Text("a &amp; b"));
+        Assert.Equal("&lt;b&gt;", NessusParser.Text("<b>"));
+    }
 }

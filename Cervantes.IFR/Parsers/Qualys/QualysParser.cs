@@ -235,6 +235,12 @@ public class QualysParser : IQualysParser
                     }
                 }
 
+                // Skip if no title or description, before its target is created
+                if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(description))
+                {
+                    continue;
+                }
+
                 // Create or find target
                 Target target = null;
                 string targetName = ImportedTarget.Name(sanitizer, !string.IsNullOrEmpty(hostName) ? hostName : hostIp);
@@ -335,12 +341,6 @@ public class QualysParser : IQualysParser
                 if (!string.IsNullOrEmpty(refs))
                 {
                     detailedDescription += "\n\n" + refs.TrimEnd('\n');
-                }
-
-                // Skip if no title or description
-                if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(description))
-                {
-                    continue;
                 }
 
                 // Create vulnerability

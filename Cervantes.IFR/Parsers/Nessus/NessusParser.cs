@@ -71,7 +71,8 @@ public class NessusParser: INessusParser
     }
 
     // Plain report text for a rich-text field.
-    private static string Text(string value) => WebUtility.HtmlEncode(HttpUtility.HtmlDecode(value));
+    // InnerText is already XML-decoded, so the text is only encoded for HTML.
+    internal static string Text(string value) => WebUtility.HtmlEncode(value);
 
     public void Parse(Guid? project, string user, string path)
     {

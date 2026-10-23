@@ -127,6 +127,9 @@ public class ProwlerParser : IProwlerParser
             CheckID = Field(e, "metadata") is { } metadata ? Text(metadata, "event_code") : "",
             CheckTitle = Field(e, "finding_info") is { } title ? Text(title, "title") : "",
             Status = Text(e, "status_code"),
+            // A mutelisted finding keeps status_code FAIL and is marked Suppressed (status_id 3)
+            Muted = Text(e, "status").Equals("Suppressed", StringComparison.OrdinalIgnoreCase)
+                    || (Field(e, "status_id") is { ValueKind: JsonValueKind.Number } statusId && statusId.TryGetInt32(out var id) && id == 3),
             Severity = Text(e, "severity"),
             Service = resource is { } res && Field(res, "group") is { } group ? Text(group, "name") : "",
             Region = cloud is { } cl ? Text(cl, "region") : "",

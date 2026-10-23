@@ -59,38 +59,9 @@ public class FileCheck: IFileCheck
             return true;
         }
 
-        try
-        {
-            var settings = new XmlReaderSettings
-            {
-                DtdProcessing = DtdProcessing.Ignore,
-                XmlResolver = null
-            };
-            using var stream = new MemoryStream(file);
-            using var reader = XmlReader.Create(stream, settings);
-            while (reader.Read())
-            {
-                if (reader.NodeType != XmlNodeType.Element)
-                {
-                    continue;
-                }
-
-                if (reader.NamespaceURI is "http://www.w3.org/1999/xhtml" or "http://www.w3.org/2000/svg")
-                {
-                    return false;
-                }
-
-                return !(reader.NamespaceURI.Length == 0 &&
-                         (reader.LocalName.Equals("html", StringComparison.OrdinalIgnoreCase) ||
-                          reader.LocalName.Equals("svg", StringComparison.OrdinalIgnoreCase)));
-            }
-        }
-        catch (XmlException)
-        {
-            // Not well-formed XML: the CheckFile result stands.
-        }
-
-        return true;
+        // Only the root matters; XML that is not well-formed before it keeps the CheckFile result.
+        var root = XmlRoot(file, readToEnd: false);
+        return root == null || !IsActiveRoot(root.Value.Namespace, root.Value.Name);
     }
 
     // For scanner reports given to the import parsers. MimeDetective reads some real XML reports as other formats
