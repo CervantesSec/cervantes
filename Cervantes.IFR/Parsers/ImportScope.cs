@@ -12,4 +12,10 @@ public static class ImportScope
     {
         return type is not (VulnImportType.CSV or VulnImportType.Pwndoc or VulnImportType.Burp or VulnImportType.Nessus);
     }
+
+    /// <summary>The project an import targets: an empty id, as API clients send it, means no project.</summary>
+    public static Guid? ProjectOf(Guid? project)
+    {
+        return project == Guid.Empty ? null : project;
+    }
 }

@@ -31,4 +31,19 @@ public class ImportScopeTests
     {
         Assert.True(ImportScope.RequiresProject(type));
     }
+
+    [Fact]
+    public void ProjectOf_EmptyIsNoProject()
+    {
+        Assert.Null(ImportScope.ProjectOf(Guid.Empty));
+        Assert.Null(ImportScope.ProjectOf(null));
+    }
+
+    [Fact]
+    public void ProjectOf_KeepsRealIds()
+    {
+        var id = Guid.NewGuid();
+
+        Assert.Equal(id, ImportScope.ProjectOf(id));
+    }
 }

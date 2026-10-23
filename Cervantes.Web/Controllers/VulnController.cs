@@ -1300,7 +1300,8 @@ public class VulnController: ControllerBase
         {
             if (ModelState.IsValid)
             {
-                if (model.Project != null && model.Project != Guid.Empty)
+                model.Project = ImportScope.ProjectOf(model.Project);
+                if (model.Project != null)
                 {
                     var user = projectUserManager.VerifyUser(model.Project.Value, aspNetUserId);
                     if (user == null)
@@ -1327,22 +1328,8 @@ public class VulnController: ControllerBase
                         path = $"{env.WebRootPath}/Attachments/Imports";
                         file = $"{env.WebRootPath}/Attachments/Imports/{unique}";
                         importFile = file;
-                        if (Directory.Exists(path))
-                        {
-                            var fs = System.IO.File.Create(file);
-                            fs.Write(model.FileContent, 0,
-                                model.FileContent.Length);
-                            fs.Close();
-                        }
-                        else
-                        {
-                            Directory.CreateDirectory(path);
-                            var fs = System.IO.File.Create(file);
-                            fs.Write(model.FileContent, 0,
-                                model.FileContent.Length);
-                            fs.Close();
-                        }
-
+                        Directory.CreateDirectory(path);
+                        System.IO.File.WriteAllBytes(file, model.FileContent);
                     }
                     else
                     {
@@ -1576,9 +1563,18 @@ public class VulnController: ControllerBase
         }
         finally
         {
-            if (importFile != null && System.IO.File.Exists(importFile))
+            // A file that cannot be deleted must not replace the import's answer
+            try
             {
-                System.IO.File.Delete(importFile);
+                if (importFile != null && System.IO.File.Exists(importFile))
+                {
+                    System.IO.File.Delete(importFile);
+                }
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                _logger.LogWarning(e, "The vuln import file {File} could not be deleted. User: {UserId}",
+                    Path.GetFileName(importFile), aspNetUserId);
             }
         }
     }
