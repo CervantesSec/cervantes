@@ -14,11 +14,12 @@ public class AccountController : ControllerBase
     private readonly SignInManager<ApplicationUser> _signInManager;
     private IAuditManager auditManager;
     
-    public AccountController(ILogger<AccountController> logger, SignInManager<ApplicationUser> signInManager, IAuditManager auditManager)
+    public AccountController(ILogger<AccountController> logger, SignInManager<ApplicationUser> signInManager, IAuditManager auditManager, IHttpContextAccessor httpContextAccessor)
     {
         _logger = logger;
         _signInManager = signInManager;
         this.auditManager = auditManager;
+        HttpContextAccessor = httpContextAccessor;
     }
     
     [HttpPost]
