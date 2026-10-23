@@ -1674,6 +1674,7 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                         <meta charset='utf-8'/>
                                         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                                         <title></title>
+                                        " + ReportHtml.Stylesheets(report.HtmlCode) + @"
                                         <style>
                                             @page { 
                                                 size: A4; 

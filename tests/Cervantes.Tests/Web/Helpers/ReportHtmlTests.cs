@@ -120,4 +120,29 @@ public class ReportHtmlTests
         Assert.Equal("only", body.SelectSingleNode("./div[@id='document-body-container']/p").InnerText);
         Assert.Equal("style", body.ChildNodes.First(n => n.NodeType == HtmlAgilityPack.HtmlNodeType.Element).Name);
     }
+
+    // The PDF cover is converted on its own, so it needs the report's stylesheets (component CSS included).
+    [Fact]
+    public void Stylesheets_CollectsEveryStyleInOrder()
+    {
+        const string html = "<html><head><style>.a{}</style></head><body><style>.b{}</style><header>h</header>" +
+                            "<cover><div class=\"cover\">c</div></cover><p>x</p><style>.c{}</style></body></html>";
+
+        Assert.Equal("<style>.a{}</style><style>.b{}</style><style>.c{}</style>", ReportHtml.Stylesheets(html));
+    }
+
+    // A style inside the cover already travels with the cover's own HTML.
+    [Fact]
+    public void Stylesheets_SkipsStylesInsideTheCover()
+    {
+        const string html = "<html><body><style>.b{}</style><cover><style>.in{}</style><div>c</div></cover></body></html>";
+
+        Assert.Equal("<style>.b{}</style>", ReportHtml.Stylesheets(html));
+    }
+
+    [Fact]
+    public void Stylesheets_NoneIsEmpty()
+    {
+        Assert.Equal("", ReportHtml.Stylesheets("<p>no styles</p>"));
+    }
 }

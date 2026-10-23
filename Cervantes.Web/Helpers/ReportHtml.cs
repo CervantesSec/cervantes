@@ -20,6 +20,18 @@ public static class ReportHtml
     }
 
     /// <summary>
+    /// Every &lt;style&gt; of the report outside &lt;cover&gt;, in document order. The PDF export converts the cover as a
+    /// document of its own, which needs these stylesheets (the component CSS among them) to look like the HTML report.
+    /// </summary>
+    public static string Stylesheets(string html)
+    {
+        var doc = new HtmlAgilityPack.HtmlDocument();
+        doc.LoadHtml(html);
+        var styles = doc.DocumentNode.SelectNodes("//style[not(ancestor::cover)]");
+        return styles == null ? string.Empty : string.Concat(styles.Select(s => s.OuterHtml));
+    }
+
+    /// <summary>
     /// The body the PDF export converts: <paramref name="pageCss"/> first, then the report's &lt;header&gt; and &lt;footer&gt;
     /// content as <c>div#header</c> and <c>div#footer</c> (the page CSS runs them into the page margins), then everything
     /// else in <c>div#document-body-container</c>. &lt;cover&gt; is dropped: the export renders it on its own page. Built on
