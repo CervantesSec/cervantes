@@ -202,6 +202,9 @@ public class ZapParser : IZapParser
                     targetHost = siteHost;
                 }
 
+                targetHost = ImportedTarget.Name(sanitizer, targetHost);
+
+
                 // Create or find target
                 Target target = null;
                 if (!string.IsNullOrEmpty(targetHost))

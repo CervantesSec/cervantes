@@ -86,7 +86,7 @@ public class TrivyParser : ITrivyParser
 
         // Crear target basado en el artefacto escaneado
         Target target = null;
-        string targetName = report.ArtifactName ?? "Unknown Container";
+        string targetName = ImportedTarget.Name(sanitizer, report.ArtifactName ?? "Unknown Container");
         
         if (!string.IsNullOrEmpty(targetName))
         {

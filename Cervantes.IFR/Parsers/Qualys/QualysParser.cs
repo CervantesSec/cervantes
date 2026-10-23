@@ -237,7 +237,7 @@ public class QualysParser : IQualysParser
 
                 // Create or find target
                 Target target = null;
-                string targetName = !string.IsNullOrEmpty(hostName) ? hostName : hostIp;
+                string targetName = ImportedTarget.Name(sanitizer, !string.IsNullOrEmpty(hostName) ? hostName : hostIp);
                 if (!string.IsNullOrEmpty(targetName))
                 {
                     var targets = targetManager.GetAll().Where(x => x.Project.Id == project).ToList();

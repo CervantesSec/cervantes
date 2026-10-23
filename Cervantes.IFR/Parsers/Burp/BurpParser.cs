@@ -142,7 +142,7 @@ public class BurpParser: IBurpParser
                     .Select(x => WebUtility.HtmlEncode(x.InnerText)));
 
 
-                host = sanitizer.Sanitize(host);
+                host = ImportedTarget.Name(sanitizer, host);
                 var tar = targetManager.GetByName(host, project);
                 Target target = null;
                 if (tar == null)

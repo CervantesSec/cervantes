@@ -207,7 +207,7 @@ public class NiktoParser : INiktoParser
 
         // Crear o encontrar target
         Target target = null;
-        string hostToUse = !string.IsNullOrEmpty(targetHostname) ? targetHostname : targetHost;
+        string hostToUse = ImportedTarget.Name(sanitizer, !string.IsNullOrEmpty(targetHostname) ? targetHostname : targetHost);
         
         if (!string.IsNullOrEmpty(hostToUse))
         {

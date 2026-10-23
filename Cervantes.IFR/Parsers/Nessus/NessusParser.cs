@@ -93,7 +93,7 @@ public class NessusParser: INessusParser
                 string os = HostTag(host, "operating-system");
                 string hostIp = HostTag(host, "host-ip");
                 
-                var targetName = sanitizer.Sanitize(HttpUtility.HtmlDecode(hostName));
+                var targetName = ImportedTarget.Name(sanitizer, HttpUtility.HtmlDecode(hostName));
                 var tar = targetManager.GetByName(targetName, project);
                 Target target = null;
                 if (tar == null)

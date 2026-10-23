@@ -218,15 +218,16 @@ public class MasscanParser : IMasscanParser
     {
         // Crear o encontrar target
         Target target = null;
+        var targetName = ImportedTarget.Name(sanitizer, ip);
         var targets = targetManager.GetAll().Where(x => x.Project.Id == pro.Id).ToList();
-        target = targets.FirstOrDefault(x => x.Name == ip);
+        target = targets.FirstOrDefault(x => x.Name == targetName);
 
         if (target == null)
         {
             target = new Target
             {
                 Id = Guid.NewGuid(),
-                Name = ip,
+                Name = targetName,
                 Description = $"Host imported from Masscan scan",
                 Type = TargetType.IP,
                 Project = pro,

@@ -73,7 +73,7 @@ public class NucleiParser : INucleiParser
                     }
 
                     // Parse target information
-                    string targetHost = TargetOf(nucleiResult);
+                    string targetHost = ImportedTarget.Name(sanitizer, TargetOf(nucleiResult));
 
                     // Create or find target
                     Target target = null;

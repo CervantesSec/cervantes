@@ -213,7 +213,7 @@ public class AcunetixParser : IAcunetixParser
                     }
                 }
 
-                string targetHost = TargetOf(vuln);
+                string targetHost = ImportedTarget.Name(sanitizer, TargetOf(vuln));
 
                 // Create or find target
                 Target target = null;

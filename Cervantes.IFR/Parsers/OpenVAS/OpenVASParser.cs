@@ -208,6 +208,9 @@ public class OpenVASParser : IOpenVASParser
                     continue;
                 }
 
+                host = ImportedTarget.Name(sanitizer, host);
+
+
                 // Create or find target
                 Target target = null;
                 if (!string.IsNullOrEmpty(host))

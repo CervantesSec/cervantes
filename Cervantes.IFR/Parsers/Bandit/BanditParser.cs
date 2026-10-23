@@ -78,7 +78,7 @@ public class BanditParser : IBanditParser
 
         // Crear target basado en el proyecto de código
         Target target = null;
-        string targetName = TargetNameOf(report.Results.First().Filename);
+        string targetName = ImportedTarget.Name(sanitizer, TargetNameOf(report.Results.First().Filename));
 
         var targets = targetManager.GetAll().Where(x => x.Project.Id == pro.Id).ToList();
         target = targets.FirstOrDefault(x => x.Name == targetName);

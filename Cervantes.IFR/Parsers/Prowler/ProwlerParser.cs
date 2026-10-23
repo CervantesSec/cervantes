@@ -240,6 +240,8 @@ public class ProwlerParser : IProwlerParser
             targetName = result.Account;
         }
 
+        targetName = ImportedTarget.Name(sanitizer, targetName);
+
         if (!string.IsNullOrEmpty(targetName))
         {
             var targets = targetManager.GetAll().Where(x => x.Project.Id == pro.Id).ToList();
