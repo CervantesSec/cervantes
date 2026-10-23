@@ -2796,7 +2796,7 @@
     <value>Šablona zprávy obsahuje chybu: {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>Toto CSS platí pro celou zprávu. Chcete-li opakovat řádek tabulky pro každou položku, vložte {{tablerow item in Collection}} … {{end}} do buňky tohoto řádku. Proměnné CSS (--nazev) se odstraní při úpravě a uložení vygenerované zprávy: použijte pevné hodnoty nebo var(--nazev, náhrada), aby se použila náhradní hodnota. PDF nevykresluje proměnné CSS a v záhlaví a zápatí ani flex: použijte tam display: table a display: table-cell.</value>
+    <value>Toto CSS platí pro celou zprávu. Chcete-li opakovat řádek tabulky pro každou položku, vložte {{tablerow item in Collection}} … {{end}} do buňky tohoto řádku. Proměnné CSS (--nazev) se odstraní při úpravě a uložení vygenerované zprávy: použijte pevné hodnoty nebo var(--nazev, náhrada), aby se použila náhradní hodnota. PDF nevykresluje proměnné CSS a v záhlaví a zápatí ani flex: použijte tam display: table a display: table-cell. Titulní strana má stejné okraje stránky 0.60in jako zbytek zprávy. Chcete-li pevně nastavit výšku, zadejte ji v pt u řádku (tr) i u buňky (td); height: 100% nefunguje.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Položky, které již mají výsledky v kontrolním seznamu, nelze ze šablony odebrat.</value>

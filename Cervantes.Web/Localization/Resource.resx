@@ -3358,7 +3358,7 @@ Option 3</value>
     <value>The report template has an error: {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>This CSS applies to the whole report. To repeat a table row for each item, put {{tablerow item in Collection}} … {{end}} inside a cell of that row. CSS variables (--name) are removed when a generated report is edited and saved: use literal values, or var(--name, fallback) so the fallback applies. The PDF does not render CSS variables, and its header and footer do not render flex either: use display: table and display: table-cell there.</value>
+    <value>This CSS applies to the whole report. To repeat a table row for each item, put {{tablerow item in Collection}} … {{end}} inside a cell of that row. CSS variables (--name) are removed when a generated report is edited and saved: use literal values, or var(--name, fallback) so the fallback applies. The PDF does not render CSS variables, and its header and footer do not render flex either: use display: table and display: table-cell there. The cover has the same 0.60in page margins as the rest of the report. To fix a height, give it in pt to both the row (tr) and the cell (td); height: 100% does not work.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Items that already have results in a checklist cannot be removed from the template.</value>

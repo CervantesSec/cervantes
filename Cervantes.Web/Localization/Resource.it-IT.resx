@@ -2801,7 +2801,7 @@
     <value>Il modello del report contiene un errore: {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>Questo CSS si applica all'intero report. Per ripetere una riga di tabella per ogni elemento, inserisci {{tablerow item in Collection}} … {{end}} in una cella di quella riga. Le variabili CSS (--nome) vengono rimosse quando un report generato viene modificato e salvato: usa valori letterali, oppure var(--nome, alternativa) perché si applichi l'alternativa. Il PDF non mostra le variabili CSS, e nell'intestazione e nel piè di pagina nemmeno flex: lì usa display: table e display: table-cell.</value>
+    <value>Questo CSS si applica all'intero report. Per ripetere una riga di tabella per ogni elemento, inserisci {{tablerow item in Collection}} … {{end}} in una cella di quella riga. Le variabili CSS (--nome) vengono rimosse quando un report generato viene modificato e salvato: usa valori letterali, oppure var(--nome, alternativa) perché si applichi l'alternativa. Il PDF non mostra le variabili CSS, e nell'intestazione e nel piè di pagina nemmeno flex: lì usa display: table e display: table-cell. La copertina ha gli stessi margini di pagina di 0.60in del resto del report. Per fissare un'altezza, indicala in pt sia sulla riga (tr) sia sulla cella (td); height: 100% non funziona.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Gli elementi che hanno già risultati in una checklist non possono essere rimossi dal modello.</value>

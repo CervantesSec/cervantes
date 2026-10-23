@@ -3380,7 +3380,7 @@ Opción 3</value>
     <value>La plantilla del informe tiene un error: {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>Este CSS se aplica a todo el informe. Para repetir una fila de tabla por cada elemento, pon {{tablerow item in Collection}} … {{end}} dentro de una celda de esa fila. Las variables CSS (--nombre) se eliminan al editar y guardar un informe generado: usa valores literales, o var(--nombre, respaldo) para que se aplique el respaldo. El PDF no pinta variables CSS, y en su cabecera y pie tampoco flex: usa ahí display: table y display: table-cell.</value>
+    <value>Este CSS se aplica a todo el informe. Para repetir una fila de tabla por cada elemento, pon {{tablerow item in Collection}} … {{end}} dentro de una celda de esa fila. Las variables CSS (--nombre) se eliminan al editar y guardar un informe generado: usa valores literales, o var(--nombre, respaldo) para que se aplique el respaldo. El PDF no pinta variables CSS, y en su cabecera y pie tampoco flex: usa ahí display: table y display: table-cell. La portada tiene los mismos márgenes de página de 0.60in que el resto del informe. Para fijar una altura, ponla en pt en la fila (tr) y en la celda (td); height: 100% no funciona.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>No se pueden quitar de la plantilla ítems que ya tienen resultados en un checklist.</value>

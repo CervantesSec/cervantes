@@ -2800,7 +2800,7 @@
     <value>Rapor şablonunda bir hata var: {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>Bu CSS tüm rapora uygulanır. Bir tablo satırını her öğe için tekrarlamak için o satırın bir hücresine {{tablerow item in Collection}} … {{end}} yazın. CSS değişkenleri (--ad), oluşturulmuş bir rapor düzenlenip kaydedildiğinde kaldırılır: sabit değerler veya yedek değerin uygulanması için var(--ad, yedek) kullanın. PDF, CSS değişkenlerini göstermez; üst ve alt bilgide flex düzeni de gösterilmez: orada display: table ve display: table-cell kullanın.</value>
+    <value>Bu CSS tüm rapora uygulanır. Bir tablo satırını her öğe için tekrarlamak için o satırın bir hücresine {{tablerow item in Collection}} … {{end}} yazın. CSS değişkenleri (--ad), oluşturulmuş bir rapor düzenlenip kaydedildiğinde kaldırılır: sabit değerler veya yedek değerin uygulanması için var(--ad, yedek) kullanın. PDF, CSS değişkenlerini göstermez; üst ve alt bilgide flex düzeni de gösterilmez: orada display: table ve display: table-cell kullanın. Kapak sayfası, raporun geri kalanıyla aynı 0.60in sayfa kenar boşluklarına sahiptir. Bir yüksekliği sabitlemek için satıra (tr) ve hücreye (td) pt cinsinden verin; height: 100% çalışmaz.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Bir kontrol listesinde sonucu olan öğeler şablondan kaldırılamaz.</value>

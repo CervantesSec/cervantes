@@ -2765,7 +2765,7 @@
     <value>O modelo do relatório tem um erro: {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>Este CSS aplica-se a todo o relatório. Para repetir uma linha da tabela por cada elemento, coloque {{tablerow item in Collection}} … {{end}} dentro de uma célula dessa linha. As variáveis CSS (--nome) são removidas ao editar e guardar um relatório gerado: use valores literais, ou var(--nome, alternativa) para que se aplique a alternativa. O PDF não mostra variáveis CSS, e no cabeçalho e no rodapé também não mostra flex: use aí display: table e display: table-cell.</value>
+    <value>Este CSS aplica-se a todo o relatório. Para repetir uma linha da tabela por cada elemento, coloque {{tablerow item in Collection}} … {{end}} dentro de uma célula dessa linha. As variáveis CSS (--nome) são removidas ao editar e guardar um relatório gerado: use valores literais, ou var(--nome, alternativa) para que se aplique a alternativa. O PDF não mostra variáveis CSS, e no cabeçalho e no rodapé também não mostra flex: use aí display: table e display: table-cell. A capa tem as mesmas margens de página de 0.60in que o resto do relatório. Para fixar uma altura, indique-a em pt na linha (tr) e na célula (td); height: 100% não funciona.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Não é possível remover do modelo itens que já têm resultados numa checklist.</value>

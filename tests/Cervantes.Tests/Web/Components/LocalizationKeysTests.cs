@@ -61,7 +61,8 @@ public class LocalizationKeysTests
         var missing = Directory.EnumerateFiles(Path.Combine(web, "Localization"), "Resource*.resx")
             .Where(resx => !((string)XDocument.Load(resx).Root!.Elements("data")
                 .Single(d => (string)d.Attribute("name")! == "reportComponentCssHelp").Element("value")!).Contains("var(--") || !((string)XDocument.Load(resx).Root!.Elements("data")
-                .Single(d => (string)d.Attribute("name")! == "reportComponentCssHelp").Element("value")!).Contains("table-cell"))
+                .Single(d => (string)d.Attribute("name")! == "reportComponentCssHelp").Element("value")!).Contains("table-cell") || !((string)XDocument.Load(resx).Root!.Elements("data")
+                .Single(d => (string)d.Attribute("name")! == "reportComponentCssHelp").Element("value")!).Contains("height: 100%"))
             .Select(Path.GetFileName)
             .ToList();
 
