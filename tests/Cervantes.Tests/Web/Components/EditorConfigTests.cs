@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace Cervantes.Tests.Web.Components;
 
 public class EditorConfigTests
@@ -29,5 +31,24 @@ public class EditorConfigTests
             .ToList();
 
         Assert.True(offenders.Count == 0, "Sticky TinyMCE configs without ui_mode split: " + string.Join(", ", offenders));
+    }
+
+    // Self-hosted TinyMCE 7 runs in evaluation mode, with a console warning, unless the config declares the GPL key.
+    [Fact]
+    public void EveryEditorDeclaresGplLicenseKey()
+    {
+        var components = Path.Combine(RepoRoot(), "Cervantes.Web", "Components");
+        var offenders = Directory.EnumerateFiles(components, "*.razor*", SearchOption.AllDirectories)
+            .Where(f => f.EndsWith(".razor") || f.EndsWith(".razor.cs"))
+            .Where(f =>
+            {
+                var text = File.ReadAllText(f);
+                return text.Contains("\"toolbar_sticky\"") &&
+                       !Regex.IsMatch(text, "\\{\\s*\"license_key\"\\s*,\\s*\"gpl\"\\s*\\}");
+            })
+            .Select(f => Path.GetRelativePath(components, f))
+            .ToList();
+
+        Assert.True(offenders.Count == 0, $"{offenders.Count} TinyMCE configs without the GPL licence key: " + string.Join(", ", offenders));
     }
 }
