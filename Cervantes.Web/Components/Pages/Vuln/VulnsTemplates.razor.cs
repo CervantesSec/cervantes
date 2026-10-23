@@ -31,7 +31,6 @@ public partial class VulnsTemplates : ComponentBase
     private string selectedLanguage = "All";
     [Inject] private JiraController _jiraController { get; set; }
 
-    [Parameter] public Guid vuln { get; set; }
     [Inject] private VulnController VulnController { get; set; }
 [Inject] private IExportToCsv ExportToCsv { get; set; }
 [Inject] private UserController userController { get; set; }
@@ -86,35 +85,10 @@ private ClaimsPrincipal userAth;
         };
         await Update();
         //Projects = await Http.GetFromJsonAsync<List<CORE.Entities.Project>>("api/Project");
-        if (vuln != Guid.Empty)
-        {
-            if (navigationManager.Uri.Contains($"/vulns/{vuln}"))
-            {
-                var pro = model.FirstOrDefault(x => x.Id == vuln);
-                if (pro != null)
-                {
-                    // A dialog cannot open while prerendering; OnAfterRenderAsync opens it.
-                    deepLinkVuln = pro;
-                }
 
-            }
-        }
-        
-        user = userController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier)); 
+        user = userController.GetUser(_accessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier));
         jiraEnabled = JiraService.JiraEnabled();
 
-    }
-
-    private CORE.Entities.Vuln? deepLinkVuln;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (deepLinkVuln != null)
-        {
-            var item = deepLinkVuln;
-            deepLinkVuln = null;
-            await OpenDetails(item);
-        }
     }
 
 

@@ -3385,7 +3385,7 @@
     <value>Geri çekildi</value>
   </data>
   <data name="deleteSelectedCount" xml:space="preserve">
-    <value>Seçili {0} öğeyi silmek istediğinizden emin misiniz?</value>
+    <value>Seçili öğeleri ({0}) silmek istediğinizden emin misiniz?</value>
   </data>
   <data name="fileTypeNotAllowed" xml:space="preserve">
     <value>Bu dosya türüne izin verilmiyor.</value>

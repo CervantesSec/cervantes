@@ -3372,7 +3372,7 @@
     <value>Staženo</value>
   </data>
   <data name="deleteSelectedCount" xml:space="preserve">
-    <value>Opravdu chcete smazat {0} vybrané položky?</value>
+    <value>Opravdu chcete smazat vybrané položky ({0})?</value>
   </data>
   <data name="fileTypeNotAllowed" xml:space="preserve">
     <value>Tento typ souboru není povolen.</value>

@@ -1447,178 +1447,187 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                 FileDownloadName = fileName
                             };
                         case ReportFileType.Docx:
-                            using (MemoryStream generatedDocument = new MemoryStream())
+                            try
                             {
-                                using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument,
-                                           WordprocessingDocumentType.Document))
+                                using (MemoryStream generatedDocument = new MemoryStream())
                                 {
-                                    MainDocumentPart mainPart = package.MainDocumentPart;
-                                    if (mainPart == null)
+                                    using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument,
+                                               WordprocessingDocumentType.Document))
                                     {
-                                        mainPart = package.AddMainDocumentPart();
-                                        new Document(new Body()).Save(mainPart);
-                                    }
-                                    
-                                    // Parse the HTML code to extract the header, footer, and cover
-                                    var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-                                    // Word ignores <style>: inline the report's stylesheets (component CSS included) first.
-                                    htmlDoc.LoadHtml(PreMailer.Net.PreMailer.MoveCssInline(report.HtmlCode, removeStyleElements: true).Html);
-                                    var headerHtml = htmlDoc.DocumentNode.SelectSingleNode("//header")?.InnerHtml;
-                                    var footerHtml = htmlDoc.DocumentNode.SelectSingleNode("//footer")?.InnerHtml;
-                                    var coverHtml =
-                                        htmlDoc.DocumentNode.SelectSingleNode("//cover")
-                                            ?.InnerHtml; // Assuming the cover is in a <cover> tag
-                                    
-                                    // Create a HeaderPart, FooterPart, and a Body for the cover
-                                    HeaderPart headerPart = mainPart.AddNewPart<HeaderPart>();
-                                    FooterPart footerPart = mainPart.AddNewPart<FooterPart>();
-                                    Body body = mainPart.Document.Body;
-
-                                    // Convert the header, footer, and cover HTML to OpenXML elements.
-                                    // The export loads nothing outside the stored HTML; inline data: images still render.
-                                    HtmlToOpenXml.HtmlConverter converter = new HtmlToOpenXml.HtmlConverter(mainPart, new OfflineWebRequest()){ ContinueNumbering = false };
-
-                                    // check if the report has a cover page
-                                    bool hasCover;
-                                    if (!string.IsNullOrWhiteSpace(coverHtml))
-                                    {
-                                        hasCover = true;
-                                    }
-                                    else
-                                    {
-                                        hasCover = false;
-                                    }
-                                    
-                                    // Add cover page if it exists
-                                    if (hasCover)
-                                    {
-                                        var coverElements = converter.Parse(coverHtml);
-                                        foreach (var element in coverElements)
+                                        MainDocumentPart mainPart = package.MainDocumentPart;
+                                        if (mainPart == null)
                                         {
-                                            body.AppendChild(element.CloneNode(true));
+                                            mainPart = package.AddMainDocumentPart();
+                                            new Document(new Body()).Save(mainPart);
                                         }
+                                    
+                                        // Parse the HTML code to extract the header, footer, and cover
+                                        var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+                                        // Word ignores <style>: inline the report's stylesheets (component CSS included) first.
+                                        htmlDoc.LoadHtml(PreMailer.Net.PreMailer.MoveCssInline(report.HtmlCode, removeStyleElements: true).Html);
+                                        var headerHtml = htmlDoc.DocumentNode.SelectSingleNode("//header")?.InnerHtml;
+                                        var footerHtml = htmlDoc.DocumentNode.SelectSingleNode("//footer")?.InnerHtml;
+                                        var coverHtml =
+                                            htmlDoc.DocumentNode.SelectSingleNode("//cover")
+                                                ?.InnerHtml; // Assuming the cover is in a <cover> tag
+                                    
+                                        // Create a HeaderPart, FooterPart, and a Body for the cover
+                                        HeaderPart headerPart = mainPart.AddNewPart<HeaderPart>();
+                                        FooterPart footerPart = mainPart.AddNewPart<FooterPart>();
+                                        Body body = mainPart.Document.Body;
 
-                                        // Add a section break after the cover page
-                                        Paragraph sectionBreak = new Paragraph(
-                                            new ParagraphProperties(
-                                                new SectionProperties(
-                                                    new SectionType() { Val = SectionMarkValues.NextPage }
+                                        // Convert the header, footer, and cover HTML to OpenXML elements.
+                                        // The export loads nothing outside the stored HTML; inline data: images still render.
+                                        HtmlToOpenXml.HtmlConverter converter = new HtmlToOpenXml.HtmlConverter(mainPart, new OfflineWebRequest()){ ContinueNumbering = false };
+
+                                        // check if the report has a cover page
+                                        bool hasCover;
+                                        if (!string.IsNullOrWhiteSpace(coverHtml))
+                                        {
+                                            hasCover = true;
+                                        }
+                                        else
+                                        {
+                                            hasCover = false;
+                                        }
+                                    
+                                        // Add cover page if it exists
+                                        if (hasCover)
+                                        {
+                                            var coverElements = converter.Parse(coverHtml);
+                                            foreach (var element in coverElements)
+                                            {
+                                                body.AppendChild(element.CloneNode(true));
+                                            }
+
+                                            // Add a section break after the cover page
+                                            Paragraph sectionBreak = new Paragraph(
+                                                new ParagraphProperties(
+                                                    new SectionProperties(
+                                                        new SectionType() { Val = SectionMarkValues.NextPage }
+                                                    )
                                                 )
-                                            )
-                                        );
-                                        body.AppendChild(sectionBreak);
-                                    }
+                                            );
+                                            body.AppendChild(sectionBreak);
+                                        }
                                     
 
-                                    // Select all <header>, <footer>, and <cover> nodes
-                                    var headerNodes = htmlDoc.DocumentNode.SelectNodes("//header");
-                                    var footerNodes = htmlDoc.DocumentNode.SelectNodes("//footer");
-                                    var coverNodes = htmlDoc.DocumentNode.SelectNodes("//cover");
+                                        // Select all <header>, <footer>, and <cover> nodes
+                                        var headerNodes = htmlDoc.DocumentNode.SelectNodes("//header");
+                                        var footerNodes = htmlDoc.DocumentNode.SelectNodes("//footer");
+                                        var coverNodes = htmlDoc.DocumentNode.SelectNodes("//cover");
 
-                                    // Remove all the nodes
-                                    if (headerNodes != null)
-                                    {
-                                        foreach (var node in headerNodes)
+                                        // Remove all the nodes
+                                        if (headerNodes != null)
                                         {
-                                            node.Remove();
+                                            foreach (var node in headerNodes)
+                                            {
+                                                node.Remove();
+                                            }
                                         }
-                                    }
 
-                                    if (footerNodes != null)
-                                    {
-                                        foreach (var node in footerNodes)
+                                        if (footerNodes != null)
                                         {
-                                            node.Remove();
+                                            foreach (var node in footerNodes)
+                                            {
+                                                node.Remove();
+                                            }
                                         }
-                                    }
 
-                                    if (coverNodes != null)
-                                    {
-                                        foreach (var node in coverNodes)
+                                        if (coverNodes != null)
                                         {
-                                            node.Remove();
+                                            foreach (var node in coverNodes)
+                                            {
+                                                node.Remove();
+                                            }
                                         }
-                                    }
 
-                                    string updatedHtmlCode = htmlDoc.DocumentNode.OuterHtml;
+                                        string updatedHtmlCode = htmlDoc.DocumentNode.OuterHtml;
                                     
-                                    if (!string.IsNullOrEmpty(headerHtml))
-                                    {
-                                        await converter.ParseHeader(headerHtml);
-                                    }
-                                    
-                                    if (!string.IsNullOrEmpty(footerHtml))
-                                    {
-                                        await converter.ParseFooter(footerHtml);
-                                    }
-                                    
-                                    //get images from body and checks if there's any img without style width
-                                    var htmlDoc3 = new HtmlDocument();
-                                    htmlDoc3.LoadHtml(updatedHtmlCode);
-
-                                    var images = htmlDoc3.DocumentNode.SelectNodes("//img");
-                                    if (images != null)
-                                    {
-                                        foreach (var img in images)
+                                        if (!string.IsNullOrEmpty(headerHtml))
                                         {
-                                            var style = img.GetAttributeValue("style", "");
-                                            var styleDict = style.Split(';')
-                                                .Where(s => !string.IsNullOrWhiteSpace(s))
-                                                .Select(s => s.Split(':'))
-                                                .Where(p => p.Length == 2)
-                                                .ToDictionary(
-                                                    p => p[0].Trim().ToLower(),
-                                                    p => p[1].Trim(),
-                                                    StringComparer.OrdinalIgnoreCase);
-
-                                            // Asegurar width:100% si no está definido
-                                            if (!styleDict.ContainsKey("width"))
-                                                styleDict["width"] = "100%";
-
-                                            // Asegurar height:auto para mantener proporciones
-                                            if (!styleDict.ContainsKey("height"))
-                                                styleDict["height"] = "auto";
-
-                                            // Asegurar max-width:100% para responsividad
-                                            /*if (!styleDict.ContainsKey("max-width"))
-                                                styleDict["max-width"] = "100%";*/
-
-                                            // Reconstruir el atributo style
-                                            img.SetAttributeValue("style", 
-                                                string.Join("; ", styleDict.Select(kv => $"{kv.Key}: {kv.Value}")));
+                                            await converter.ParseHeader(headerHtml);
                                         }
-                                    }
-
-                                    // HtmlToOpenXml writes a <style> in the body as document text, and Word ignores
-                                    // stylesheets anyway; the report's style now lives in the body (it used to sit in
-                                    // the head, which the converter skipped).
-                                    var styleNodes = htmlDoc3.DocumentNode.SelectNodes("//style");
-                                    if (styleNodes != null)
-                                    {
-                                        foreach (var styleNode in styleNodes)
+                                    
+                                        if (!string.IsNullOrEmpty(footerHtml))
                                         {
-                                            styleNode.Remove();
+                                            await converter.ParseFooter(footerHtml);
                                         }
+                                    
+                                        //get images from body and checks if there's any img without style width
+                                        var htmlDoc3 = new HtmlDocument();
+                                        htmlDoc3.LoadHtml(updatedHtmlCode);
+
+                                        var images = htmlDoc3.DocumentNode.SelectNodes("//img");
+                                        if (images != null)
+                                        {
+                                            foreach (var img in images)
+                                            {
+                                                var style = img.GetAttributeValue("style", "");
+                                                var styleDict = style.Split(';')
+                                                    .Where(s => !string.IsNullOrWhiteSpace(s))
+                                                    .Select(s => s.Split(':'))
+                                                    .Where(p => p.Length == 2)
+                                                    .ToDictionary(
+                                                        p => p[0].Trim().ToLower(),
+                                                        p => p[1].Trim(),
+                                                        StringComparer.OrdinalIgnoreCase);
+
+                                                // Asegurar width:100% si no está definido
+                                                if (!styleDict.ContainsKey("width"))
+                                                    styleDict["width"] = "100%";
+
+                                                // Asegurar height:auto para mantener proporciones
+                                                if (!styleDict.ContainsKey("height"))
+                                                    styleDict["height"] = "auto";
+
+                                                // Asegurar max-width:100% para responsividad
+                                                /*if (!styleDict.ContainsKey("max-width"))
+                                                    styleDict["max-width"] = "100%";*/
+
+                                                // Reconstruir el atributo style
+                                                img.SetAttributeValue("style", 
+                                                    string.Join("; ", styleDict.Select(kv => $"{kv.Key}: {kv.Value}")));
+                                            }
+                                        }
+
+                                        // HtmlToOpenXml writes a <style> in the body as document text, and Word ignores
+                                        // stylesheets anyway; the report's style now lives in the body (it used to sit in
+                                        // the head, which the converter skipped).
+                                        var styleNodes = htmlDoc3.DocumentNode.SelectNodes("//style");
+                                        if (styleNodes != null)
+                                        {
+                                            foreach (var styleNode in styleNodes)
+                                            {
+                                                styleNode.Remove();
+                                            }
+                                        }
+
+                                        updatedHtmlCode = htmlDoc3.DocumentNode.OuterHtml;
+                                        await converter.ParseBody(updatedHtmlCode);
+
+                                        mainPart.Document.Save();
                                     }
 
-                                    updatedHtmlCode = htmlDoc3.DocumentNode.OuterHtml;
-                                    await converter.ParseBody(updatedHtmlCode);
+                                    string fileName2 = report.Name + "_" + report.Version + ".docx";
 
-                                    mainPart.Document.Save();
+                                    var fileBytes2 = generatedDocument.ToArray();
+                                    var mimeType2 =
+                                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                                    _logger.LogInformation("Report downloaded successfully. User: {0}",
+                                        aspNetUserId);
+
+                                    return new FileContentResult(fileBytes2, mimeType2)
+                                    {
+                                        FileDownloadName = fileName2
+                                    };
                                 }
-
-                                string fileName2 = report.Name + "_" + report.Version + ".docx";
-
-                                var fileBytes2 = generatedDocument.ToArray();
-                                var mimeType2 =
-                                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-                                _logger.LogInformation("Report downloaded successfully. User: {0}",
-                                    aspNetUserId);
-
-                                return new FileContentResult(fileBytes2, mimeType2)
-                                {
-                                    FileDownloadName = fileName2
-                                };
+                            }
+                            catch (Exception docxError)
+                            {
+                                // PreMailer or HtmlToOpenXml can throw on markup they cannot convert.
+                                _logger.LogError(docxError, "Report {ReportId} could not be converted to DOCX. User: {UserId}", report.Id, aspNetUserId);
+                                return StatusCode(500, "The report could not be converted to DOCX");
                             }
                             break;
                         case ReportFileType.Pdf:

@@ -140,7 +140,8 @@ public partial class TasksKanban : ComponentBase
         var result = await dlgReference.Result;
         if (!result.Canceled)
         {
-            await Update();
+            // Keep the active filters, as after closing a task's detail
+            Reload();
             StateHasChanged();
         }
         

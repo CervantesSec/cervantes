@@ -3377,7 +3377,7 @@
     <value>Ritirato</value>
   </data>
   <data name="deleteSelectedCount" xml:space="preserve">
-    <value>Eliminare davvero i {0} elementi selezionati?</value>
+    <value>Eliminare davvero gli elementi selezionati ({0})?</value>
   </data>
   <data name="fileTypeNotAllowed" xml:space="preserve">
     <value>Questo tipo di file non è consentito.</value>

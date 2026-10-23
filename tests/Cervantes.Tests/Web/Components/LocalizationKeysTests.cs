@@ -34,4 +34,18 @@ public class LocalizationKeysTests
 
         Assert.True(missing.Count == 0, $"{missing.Count} missing: " + string.Join(", ", missing.OrderBy(x => x).Take(60)));
     }
+
+    // The count goes in parentheses so the sentence reads the same for one item ("los 1 elementos" read wrong).
+    [Fact]
+    public void DeleteSelectedCountPutsTheCountInParentheses()
+    {
+        var web = Path.Combine(RepoRoot(), "Cervantes.Web");
+        var wrong = Directory.EnumerateFiles(Path.Combine(web, "Localization"), "Resource*.resx")
+            .Where(resx => !((string)XDocument.Load(resx).Root!.Elements("data")
+                .Single(d => (string)d.Attribute("name")! == "deleteSelectedCount").Element("value")!).Contains("({0})"))
+            .Select(Path.GetFileName)
+            .ToList();
+
+        Assert.True(wrong.Count == 0, "deleteSelectedCount without \"({0})\": " + string.Join(", ", wrong));
+    }
 }

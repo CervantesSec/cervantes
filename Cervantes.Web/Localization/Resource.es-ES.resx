@@ -3635,7 +3635,7 @@ Opción 3</value>
     <value>Visible</value>
   </data>
   <data name="deleteSelectedCount" xml:space="preserve">
-    <value>¿Seguro que quieres eliminar los {0} elementos seleccionados?</value>
+    <value>¿Seguro que quieres eliminar los elementos seleccionados ({0})?</value>
   </data>
   <data name="fileTypeNotAllowed" xml:space="preserve">
     <value>Este tipo de fichero no está permitido.</value>
