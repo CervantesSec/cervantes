@@ -1500,13 +1500,9 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                                 body.AppendChild(element.CloneNode(true));
                                             }
 
-                                            // Add a section break after the cover page
+                                            // Add a section break after the cover page: A4 without margins, like the PDF cover
                                             Paragraph sectionBreak = new Paragraph(
-                                                new ParagraphProperties(
-                                                    new SectionProperties(
-                                                        new SectionType() { Val = SectionMarkValues.NextPage }
-                                                    )
-                                                )
+                                                new ParagraphProperties(WordPageSetup.CoverSection())
                                             );
                                             body.AppendChild(sectionBreak);
                                         }
@@ -1606,6 +1602,9 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                                         updatedHtmlCode = htmlDoc3.DocumentNode.OuterHtml;
                                         await converter.ParseBody(updatedHtmlCode);
 
+                                        // HtmlToOpenXml sets no page size: A4 and the body margins, matching the PDF
+                                        WordPageSetup.ApplyBodyPage(mainPart.Document.Body);
+
                                         mainPart.Document.Save();
                                     }
 
@@ -1666,76 +1665,9 @@ private static string ReplaceTableRowWithFor(string htmlContent)
                             try
                             {
                                 List<byte[]> pdfParts = new List<byte[]>();
-                                 if (!string.IsNullOrEmpty(coverHtml2))
+                                if (!string.IsNullOrEmpty(coverHtml2))
                                 {
-                                    string fullCoverHtml = @"<!DOCTYPE HTML>
-                                    <html lang='en' xmlns='http://www.w3.org/1999/xhtml'>
-                                    <head>
-                                        <meta charset='utf-8'/>
-                                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                                        <title></title>
-                                        " + ReportHtml.Stylesheets(report.HtmlCode) + @"
-                                        <style>
-                                            @page { 
-                                                size: A4; 
-                                                margin: 0; 
-                                            }
-                                            html, body { 
-                                                width: 210mm;
-                                        height: 297mm;
-                                        margin: 0;
-                                        padding: 0;
-                                            }
-                                            body {
-                                                display: flex;
-                                                flex-direction: column;
-                                                justify-content: space-between;
-                                            }
-                                            * {
-                                                box-sizing: border-box;
-                                            }
-                                        </style>
-                                    </head>
-                                    <body>" + coverHtml2 + @"</body>
-                                    </html>";
-
-                                    using (MemoryStream intermediateStream = new MemoryStream())
-                                    {
-                                        PdfWriter writer = new PdfWriter(intermediateStream);
-                                        PdfDocument pdfDoc = new PdfDocument(writer);
-                                        pdfDoc.SetDefaultPageSize(PageSize.A4);
-
-                                        ConverterProperties converterProperties = new ConverterProperties().SetResourceRetriever(new OfflineResourceRetriever());
-                                        iText.Html2pdf.HtmlConverter.ConvertToPdf(fullCoverHtml, pdfDoc, converterProperties);
-                                        pdfDoc.Close();
-
-                                        using (MemoryStream scaledStream = new MemoryStream())
-                                        {
-                                            PdfDocument scaledDoc = new PdfDocument(new PdfWriter(scaledStream));
-                                            scaledDoc.SetDefaultPageSize(PageSize.A4);
-                                            PdfPage newPage = scaledDoc.AddNewPage();
-
-                                            PdfDocument sourceDoc = new PdfDocument(new PdfReader(new MemoryStream(intermediateStream.ToArray())));
-                                            PdfFormXObject pageCopy = sourceDoc.GetFirstPage().CopyAsFormXObject(scaledDoc);
-
-                                            Rectangle pageSize = newPage.GetPageSize();
-                                            Rectangle xObjectRect = pageCopy.GetBBox().ToRectangle();
-
-                                            float scale = Math.Min(pageSize.GetWidth() / xObjectRect.GetWidth(),
-                                                                   pageSize.GetHeight() / xObjectRect.GetHeight());
-
-                                            float x = (pageSize.GetWidth() - xObjectRect.GetWidth() * scale) / 2;
-                                            float y = (pageSize.GetHeight() - xObjectRect.GetHeight() * scale) / 2;
-
-                                            new PdfCanvas(newPage)
-                                                .AddXObjectFittedIntoRectangle(pageCopy, new Rectangle(x, y, xObjectRect.GetWidth() * scale, xObjectRect.GetHeight() * scale));
-
-                                            scaledDoc.Close();
-                                            sourceDoc.Close();
-
-                                            pdfParts.Add(scaledStream.ToArray());
-                                        }
-                                    }
+                                    pdfParts.Add(ReportPdf.RenderCover(ReportHtml.Stylesheets(report.HtmlCode), coverHtml2));
                                 }
                            
                                 // Process main content
