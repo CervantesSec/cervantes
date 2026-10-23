@@ -17,8 +17,8 @@ td.fd-soft { background-color: #F3F4F6; color: #1F2937; }
 .fd-fix { background-color: #EEF2FF; border-left: 4px solid #4F46E5; padding: 6px 12px 8px 12px; }
 .fd-label { font-family: Helvetica, Arial, sans-serif; font-size: 9px; font-weight: bold; color: #4338CA; margin: 10px 0 3px 0; }
 .fd-gap { font-size: 8px; margin: 0; }
-td.risk-Critical, .risk-Critical { background-color: #BE185D; color: #ffffff; }
-td.risk-High, .risk-High { background-color: #DC2626; color: #ffffff; }
-td.risk-Medium, .risk-Medium { background-color: #B45309; color: #ffffff; }
-td.risk-Low, .risk-Low { background-color: #047857; color: #ffffff; }
-td.risk-Info, .risk-Info { background-color: #2563EB; color: #ffffff; }
+.tbl td.risk-Critical, .fd td.risk-Critical, td.risk-Critical, .risk-Critical { background-color: #BE185D; color: #ffffff; }
+.tbl td.risk-High, .fd td.risk-High, td.risk-High, .risk-High { background-color: #DC2626; color: #ffffff; }
+.tbl td.risk-Medium, .fd td.risk-Medium, td.risk-Medium, .risk-Medium { background-color: #B45309; color: #ffffff; }
+.tbl td.risk-Low, .fd td.risk-Low, td.risk-Low, .risk-Low { background-color: #047857; color: #ffffff; }
+.tbl td.risk-Info, .fd td.risk-Info, td.risk-Info, .risk-Info { background-color: #2563EB; color: #ffffff; }
