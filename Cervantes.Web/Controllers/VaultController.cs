@@ -39,21 +39,17 @@ public class VaultController : ControllerBase
     [HttpGet]
     [Route("Project/{id}")]
     [HasPermission(Permissions.VaultRead)]
-    public IEnumerable<CORE.Entities.Vault> GetByProject(Guid id)
+    public ActionResult<IEnumerable<CORE.Entities.Vault>> GetByProject(Guid id)
     {
-        IEnumerable<CORE.Entities.Vault> model = vaultManager.GetAll().Where(x => x.ProjectId == id).ToArray();
-        if (model != null)
+        var user = projectUserManager.VerifyUser(id, aspNetUserId);
+        if (user == null)
         {
-            var user = projectUserManager.VerifyUser(id, aspNetUserId);
-            if (user == null)
-            {
-                return null;
-            }
-            
-            return model;
-
+            _logger.LogWarning("Access denied to the vault of project {ProjectId}. User: {UserId}", id, aspNetUserId);
+            return StatusCode(403, "You do not have permission to access this project");
         }
-        return null;
+
+        // Wrapped explicitly: C# has no implicit conversion to ActionResult<T> from an interface type
+        return new ActionResult<IEnumerable<CORE.Entities.Vault>>(vaultManager.GetAll().Where(x => x.ProjectId == id).ToArray());
     }
     
     [NonAction]

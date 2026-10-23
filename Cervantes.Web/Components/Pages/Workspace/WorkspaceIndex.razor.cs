@@ -51,7 +51,7 @@ public partial class WorkspaceIndex: ComponentBase
         Project = _ProjectController.GetById(project);
         Tasks = userAth.HasPermission(Permissions.TasksRead) ? _TaskController.GetByUser(project).ToList() : new List<CORE.Entities.Task>();
         Vulns = userAth.HasPermission(Permissions.VulnsRead) ? _VulnController.GetByProject(project).ToList() : new List<CORE.Entities.Vuln>();
-        Vaults = userAth.HasPermission(Permissions.VaultRead) ? _VaultController.GetByProject(project).ToList() : new List<CORE.Entities.Vault>();
+        Vaults = userAth.HasPermission(Permissions.VaultRead) ? (_VaultController.GetByProject(project).Value ?? Enumerable.Empty<CORE.Entities.Vault>()).ToList() : new List<CORE.Entities.Vault>();
         Targets = userAth.HasPermission(Permissions.TargetsRead) ? _TargetController.GetByProjectId(project).ToList() : new List<CORE.Entities.Target>();
         canReadMembers = userAth.HasPermission(Permissions.ProjectMembersRead);
         _items = new List<BreadcrumbItem>

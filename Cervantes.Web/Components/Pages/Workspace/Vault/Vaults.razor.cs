@@ -85,7 +85,7 @@ public partial class Vaults: ComponentBase
     protected async Task Update()
     {
 
-        model = _VaultController.GetByProject(project).ToList();
+        model = (_VaultController.GetByProject(project).Value ?? Enumerable.Empty<CORE.Entities.Vault>()).ToList();
         
     }
 

@@ -82,18 +82,19 @@ public class ChecklistController : ControllerBase
     [HttpGet]
     [Route("WSTG/Project/{projectId}")]
     [HasPermission(Permissions.ChecklistsRead)]
-    public IEnumerable<CORE.Entities.WSTG> GetWSTG(Guid projectId)
+    public ActionResult<IEnumerable<CORE.Entities.WSTG>> GetWSTG(Guid projectId)
     {
         try
         {
             var user = projectUserManager.VerifyUser(projectId, aspNetUserId);
             if (user == null)
             {
-                return null;
+                return ProjectAccessDenied(projectId);
             }
-            IEnumerable<CORE.Entities.WSTG> model = wstgManager.GetAll().Where(x => x.ProjectId == projectId).Include(x => x.User).Include(x => x.Target).ToArray();
-          
-            return model;
+            var model = wstgManager.GetAll().Where(x => x.ProjectId == projectId).Include(x => x.User).Include(x => x.Target).ToArray();
+
+            // Wrapped explicitly: C# has no implicit conversion to ActionResult<T> from an interface type
+            return new ActionResult<IEnumerable<CORE.Entities.WSTG>>(model);
         }
         catch (Exception e)
         {
@@ -132,21 +133,18 @@ public class ChecklistController : ControllerBase
     [HttpGet]
     [Route("MASTG/Project/{projectId}")]
     [HasPermission(Permissions.ChecklistsRead)]
-    public IEnumerable<CORE.Entities.MASTG> GetMSTG(Guid projectId)
+    public ActionResult<IEnumerable<CORE.Entities.MASTG>> GetMSTG(Guid projectId)
     {
         try
         {
-            
-            IEnumerable<CORE.Entities.MASTG> model = mastgManager.GetAll().Where(x => x.ProjectId == projectId).Include(x => x.User).Include(x => x.Target).ToArray();
-            if (model != null)
+            var user = projectUserManager.VerifyUser(projectId, aspNetUserId);
+            if (user == null)
             {
-                var user = projectUserManager.VerifyUser(projectId, aspNetUserId);
-                if (user == null)
-                {
-                    return null;
-                }
+                return ProjectAccessDenied(projectId);
             }
-            return model;
+            var model = mastgManager.GetAll().Where(x => x.ProjectId == projectId).Include(x => x.User).Include(x => x.Target).ToArray();
+
+            return new ActionResult<IEnumerable<CORE.Entities.MASTG>>(model);
         }
         catch (Exception e)
         {

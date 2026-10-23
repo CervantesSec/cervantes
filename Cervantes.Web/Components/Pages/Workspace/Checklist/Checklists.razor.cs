@@ -96,8 +96,8 @@ public partial class Checklists: ComponentBase
     private async Task UpdateLegacyChecklists()
     {
         legacyModel.RemoveAll(item => true);
-        var wstg = _checklistController.GetWSTG(project);
-        var mstg = _checklistController.GetMSTG(project);
+        var wstg = _checklistController.GetWSTG(project).Value ?? Enumerable.Empty<CORE.Entities.WSTG>();
+        var mstg = _checklistController.GetMSTG(project).Value ?? Enumerable.Empty<CORE.Entities.MASTG>();
         Project = new CORE.Entities.Project();
         Project = _ProjectController.GetById(project);
         
