@@ -278,6 +278,13 @@ public class ProjectCustomFieldController : ControllerBase
                 return StatusCode(403, "You do not have permission to access this project");
             }
 
+            // The submitted values replace the stored ones.
+            var missingValues = MissingRequired(customFieldValues);
+            if (missingValues.Count > 0)
+            {
+                return BadRequest($"Required fields: {string.Join(", ", missingValues)}");
+            }
+
             // Remove existing values
             var existingValues = customFieldValueManager.GetAll()
                 .Where(cfv => cfv.ProjectId == projectId)
@@ -338,5 +345,12 @@ public class ProjectCustomFieldController : ControllerBase
             _logger.LogError(ex, "An error occurred while checking custom field name");
             return BadRequest(new { message = "An error occurred while checking custom field name" });
         }
+    }
+
+    // Labels of the active required project custom fields that the submitted values leave empty.
+    private IReadOnlyList<string> MissingRequired(IReadOnlyDictionary<Guid, string>? submitted)
+    {
+        var fields = customFieldManager.GetAll().AsNoTracking().ToList().Select(f => (f.Id, f.Label, f.IsRequired, f.IsActive));
+        return CustomFieldRules.MissingRequired(fields, submitted);
     }
 }

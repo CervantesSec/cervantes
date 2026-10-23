@@ -264,6 +264,16 @@ public class TargetController : ControllerBase
                         return BadRequest("A target cannot be moved to another project");
                     }
 
+                    // Values sent with the edit replace the stored ones; an edit without values keeps them.
+                    if (model.CustomFieldValues != null && model.CustomFieldValues.Any())
+                    {
+                        var missingFields = MissingRequiredCustomFields(model.CustomFieldValues, null);
+                        if (missingFields.Count > 0)
+                        {
+                            return BadRequest($"Required fields: {string.Join(", ", missingFields)}");
+                        }
+                    }
+
                     result.Name = sanitizer.Sanitize(model.Name);
                     result.Description = sanitizer.Sanitize(model.Description);
                     result.Type = model.Type;
@@ -936,7 +946,7 @@ public class TargetController : ControllerBase
     // Labels of the active required target custom fields left empty. An edit keeps stored values it does not send.
     private IReadOnlyList<string> MissingRequiredCustomFields(IReadOnlyDictionary<Guid, string>? submitted, Guid? entityId)
     {
-        var fields = targetManager.Context.Set<CORE.Entities.TargetCustomField>().AsNoTracking().ToList()
+        var fields = targetCustomFieldManager.GetAll().AsNoTracking().ToList()
             .Select(f => (f.Id, f.Label, f.IsRequired, f.IsActive));
         var stored = entityId == null
             ? new List<KeyValuePair<Guid, string?>>()

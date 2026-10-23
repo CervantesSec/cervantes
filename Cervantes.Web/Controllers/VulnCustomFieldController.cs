@@ -283,6 +283,13 @@ public class VulnCustomFieldController : ControllerBase
                     return accessResult;
                 }
 
+                // The submitted values replace the stored ones. Templates are exempt, as when a vuln is created.
+                var missingValues = vulnManager.GetById(vulnId).Template ? Array.Empty<string>() : MissingRequired(values);
+                if (missingValues.Count > 0)
+                {
+                    return BadRequest($"Required fields: {string.Join(", ", missingValues)}");
+                }
+
                 // Remove existing values
                 var existingValues = customFieldValueManager.GetAll().Where(x => x.VulnId == vulnId);
                 foreach (var existingValue in existingValues)
@@ -370,4 +377,11 @@ public class VulnCustomFieldController : ControllerBase
         return null;
     }
 
+
+    // Labels of the active required vuln custom fields that the submitted values leave empty.
+    private IReadOnlyList<string> MissingRequired(IReadOnlyDictionary<Guid, string>? submitted)
+    {
+        var fields = customFieldManager.GetAll().AsNoTracking().ToList().Select(f => (f.Id, f.Label, f.IsRequired, f.IsActive));
+        return CustomFieldRules.MissingRequired(fields, submitted);
+    }
 }

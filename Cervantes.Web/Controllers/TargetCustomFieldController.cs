@@ -280,6 +280,13 @@ public class TargetCustomFieldController : ControllerBase
                 return accessResult;
             }
 
+            // The submitted values replace the stored ones.
+            var missingValues = MissingRequired(customFieldValues);
+            if (missingValues.Count > 0)
+            {
+                return BadRequest($"Required fields: {string.Join(", ", missingValues)}");
+            }
+
             // Remove existing values
             var existingValues = customFieldValueManager.GetAll()
                 .Where(cfv => cfv.TargetId == targetId)
@@ -364,5 +371,12 @@ public class TargetCustomFieldController : ControllerBase
         }
 
         return null;
+    }
+
+    // Labels of the active required target custom fields that the submitted values leave empty.
+    private IReadOnlyList<string> MissingRequired(IReadOnlyDictionary<Guid, string>? submitted)
+    {
+        var fields = customFieldManager.GetAll().AsNoTracking().ToList().Select(f => (f.Id, f.Label, f.IsRequired, f.IsActive));
+        return CustomFieldRules.MissingRequired(fields, submitted);
     }
 }
