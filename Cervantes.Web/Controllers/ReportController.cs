@@ -1051,21 +1051,7 @@ public class ReportController : ControllerBase
                 
                 foreach (var tas in Tasks)
                 {
-                    string asigned = null;
-                    if (tas.AsignedUser == null)
-                    {
-                        asigned = "";
-                    }
-                    TargetList.Add(new Dictionary<string, string>
-                    {
-                        {"TaskName", tas.Name},
-                        {"TaskDescription", tas.Description},
-                        {"TaskStatus", tas.Status.ToString()},
-                        {"TaskStartDate", tas.StartDate.ToLocalDate().ToString("dd/MM/yyyy")},
-                        {"TaskEndDate", tas.EndDate.ToLocalDate().ToString("dd/MM/yyyy")},
-                        {"TaskAssignedTo", asigned},
-                        {"TaskCreatedBy", tas.CreatedUser.FullName},
-                    });
+                    TasksList.Add(ReportRows.Task(tas));
                 }
                 
                 var VaultsList = new List<Dictionary<string, string>>();
