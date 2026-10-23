@@ -201,6 +201,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddIdentityCore<ApplicationUser>().AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
 

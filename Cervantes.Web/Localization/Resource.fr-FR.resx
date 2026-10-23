@@ -3383,4 +3383,25 @@
   <data name="importProjectRequired" xml:space="preserve">
     <value>Ce type d'import nécessite un projet. Seuls CSV, Pwndoc, Burp et Nessus peuvent être importés sans projet, comme modèles.</value>
   </data>
+  <data name="passwordMinLength" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins 8 caractères.</value>
+  </data>
+  <data name="passwordUppercase" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins une lettre majuscule.</value>
+  </data>
+  <data name="passwordLowercase" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins une lettre minuscule.</value>
+  </data>
+  <data name="passwordDigit" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins un chiffre.</value>
+  </data>
+  <data name="passwordSymbol" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins un de ces symboles : ! ? * .</value>
+  </data>
+  <data name="passwordIncorrect" xml:space="preserve">
+    <value>Mot de passe incorrect.</value>
+  </data>
+  <data name="passwordsDoNotMatch" xml:space="preserve">
+    <value>Les mots de passe ne correspondent pas</value>
+  </data>
 </root>

@@ -1,4 +1,6 @@
 using System.Net;
+using Microsoft.Extensions.Localization;
+using Cervantes.Web.Helpers;
 using Microsoft.AspNetCore.Components;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +79,8 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
 
     MudForm form;
 
-    UserModelFluentValidator clientValidator = new UserModelFluentValidator();
+    UserModelFluentValidator? _clientValidator;
+    UserModelFluentValidator clientValidator => _clientValidator ??= new UserModelFluentValidator(localizer);
     private long maxFileSize = 1024 * 1024 * 5;
 
     UserCreateViewModel model = new UserCreateViewModel();
@@ -154,7 +157,7 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
     /// <typeparam name="ClientModel"></typeparam>
     public class UserModelFluentValidator : AbstractValidator<UserCreateViewModel>
     {
-        public UserModelFluentValidator()
+        public UserModelFluentValidator(IStringLocalizer? localizer = null)
         {
             RuleFor(x => x.FullName)
                 .NotEmpty()
@@ -165,21 +168,12 @@ private Dictionary<string, object> editorConf = new Dictionary<string, object>{
 	            .EmailAddress();
             When(x => !x.ExternalLogin, () =>
             {
-	            RuleFor(p => p.Password).NotEmpty()
-		            .MinimumLength(8).WithMessage("Your password length must be at least 8.")
-		            .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
-		            .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
-		            .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
-		            .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
+	            RuleFor(p => p.Password).NotEmpty().Strong(localizer);
 
-	            RuleFor(x => x.ConfirmPassword).NotEmpty()
-		            .MinimumLength(8).WithMessage("Your password length must be at least 8.")
-		            .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
-		            .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
-		            .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
-		            .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
+	            RuleFor(x => x.ConfirmPassword).NotEmpty().Strong(localizer);
 
-	            RuleFor(x => x.ConfirmPassword).Equal(x => x.Password).WithMessage("Passwords do not match");
+	            RuleFor(x => x.ConfirmPassword).Equal(x => x.Password)
+		            .WithMessage(localizer?["passwordsDoNotMatch"] ?? "Passwords do not match");
             });
 	        RuleFor(x => x.Role)
 		        .NotEmpty();

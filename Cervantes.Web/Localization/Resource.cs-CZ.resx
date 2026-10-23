@@ -3383,4 +3383,25 @@
   <data name="importProjectRequired" xml:space="preserve">
     <value>Tento typ importu vyžaduje projekt. Bez projektu lze jako šablony importovat pouze CSV, Pwndoc, Burp a Nessus.</value>
   </data>
+  <data name="passwordMinLength" xml:space="preserve">
+    <value>Heslo musí mít alespoň 8 znaků.</value>
+  </data>
+  <data name="passwordUppercase" xml:space="preserve">
+    <value>Heslo musí obsahovat alespoň jedno velké písmeno.</value>
+  </data>
+  <data name="passwordLowercase" xml:space="preserve">
+    <value>Heslo musí obsahovat alespoň jedno malé písmeno.</value>
+  </data>
+  <data name="passwordDigit" xml:space="preserve">
+    <value>Heslo musí obsahovat alespoň jednu číslici.</value>
+  </data>
+  <data name="passwordSymbol" xml:space="preserve">
+    <value>Heslo musí obsahovat alespoň jeden z těchto znaků: ! ? * .</value>
+  </data>
+  <data name="passwordIncorrect" xml:space="preserve">
+    <value>Nesprávné heslo.</value>
+  </data>
+  <data name="passwordsDoNotMatch" xml:space="preserve">
+    <value>Hesla se neshodují</value>
+  </data>
 </root>

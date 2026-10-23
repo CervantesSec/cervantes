@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Localization;
+using Cervantes.Web.Helpers;
 using System.Globalization;
 using System.Security.Claims;
 using System.Text;
@@ -439,19 +441,15 @@ public partial class Index: ComponentBase
     
     #region Change Password
     
-    ChangePasswordFluentValidator changeFluentValidator = new ChangePasswordFluentValidator();
+    ChangePasswordFluentValidator? _changeFluentValidator;
+    ChangePasswordFluentValidator changeFluentValidator => _changeFluentValidator ??= new ChangePasswordFluentValidator(localizer);
 
     public class ChangePasswordFluentValidator : AbstractValidator<ChangePasswordModel>
     {
-        public ChangePasswordFluentValidator()
+        public ChangePasswordFluentValidator(IStringLocalizer? localizer = null)
         {
             RuleFor(p => p.OldPassword).NotEmpty();
-            RuleFor(p => p.NewPassword).NotEmpty()
-                .MinimumLength(8).WithMessage("Your password length must be at least 8.")
-                .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
-                .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
-                .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
-                .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
+            RuleFor(p => p.NewPassword).NotEmpty().Strong(localizer);
         }
         public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
         {

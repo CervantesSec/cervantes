@@ -1,4 +1,5 @@
 using Cervantes.Web.Helpers;
+using Microsoft.Extensions.Localization;
 using System.Security.Claims;
 using Cervantes.CORE.Entities;
 using Cervantes.CORE.ViewModel;
@@ -221,11 +222,12 @@ public partial class UserDialog: ComponentBase
             
         }
     }
-    UserModelFluentValidator userModelFluentValidator = new UserModelFluentValidator();
+    UserModelFluentValidator? _userModelFluentValidator;
+    UserModelFluentValidator userModelFluentValidator => _userModelFluentValidator ??= new UserModelFluentValidator(localizer);
 
     public class UserModelFluentValidator : AbstractValidator<UserEditViewModel>
     {
-        public UserModelFluentValidator()
+        public UserModelFluentValidator(IStringLocalizer? localizer = null)
         {
             RuleFor(x => x.FullName)
                 .NotEmpty()
@@ -234,19 +236,10 @@ public partial class UserDialog: ComponentBase
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .EmailAddress();
-            RuleFor(p => p.Password)
-                .MinimumLength(8).WithMessage("Your password length must be at least 8.")
-                .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
-                .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
-                .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
-                .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
-            RuleFor(x => x.ConfirmPassword)
-                .MinimumLength(8).WithMessage("Your password length must be at least 8.")
-                .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
-                .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
-                .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
-                .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
-            RuleFor(x => x.ConfirmPassword).Equal(x => x.Password).WithMessage("Passwords do not match");
+            RuleFor(p => p.Password).Strong(localizer);
+            RuleFor(x => x.ConfirmPassword).Strong(localizer);
+            RuleFor(x => x.ConfirmPassword).Equal(x => x.Password)
+                .WithMessage(localizer?["passwordsDoNotMatch"] ?? "Passwords do not match");
 
             RuleFor(x => x.Role).NotEmpty();
         }

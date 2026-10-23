@@ -20,9 +20,12 @@ public class LocalizationKeysTests
     public void EveryLocalizerKeyExistsInEveryCulture()
     {
         var web = Path.Combine(RepoRoot(), "Cervantes.Web");
-        var keys = Directory.EnumerateFiles(Path.Combine(web, "Components"), "*.razor*", SearchOption.AllDirectories)
+        var sources = Directory.EnumerateFiles(Path.Combine(web, "Components"), "*.razor*", SearchOption.AllDirectories)
             .Where(f => f.EndsWith(".razor") || f.EndsWith(".razor.cs"))
-            .SelectMany(f => Regex.Matches(File.ReadAllText(f), "localizer\\[\"([^\"]+)\"").Select(m => m.Groups[1].Value))
+            .Concat(Directory.EnumerateFiles(Path.Combine(web, "Helpers"), "*.cs", SearchOption.AllDirectories));
+        // Validators take an optional localizer and index it with localizer?["key"].
+        var keys = sources
+            .SelectMany(f => Regex.Matches(File.ReadAllText(f), "localizer\\??\\[\"([^\"]+)\"").Select(m => m.Groups[1].Value))
             .ToHashSet();
 
         var missing = new List<string>();

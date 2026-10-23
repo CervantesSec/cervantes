@@ -3396,4 +3396,25 @@
   <data name="importProjectRequired" xml:space="preserve">
     <value>Bu içe aktarma türü bir proje gerektirir. Yalnızca CSV, Pwndoc, Burp ve Nessus proje olmadan şablon olarak içe aktarılabilir.</value>
   </data>
+  <data name="passwordMinLength" xml:space="preserve">
+    <value>Parolanız en az 8 karakter uzunluğunda olmalıdır.</value>
+  </data>
+  <data name="passwordUppercase" xml:space="preserve">
+    <value>Parolanız en az bir büyük harf içermelidir.</value>
+  </data>
+  <data name="passwordLowercase" xml:space="preserve">
+    <value>Parolanız en az bir küçük harf içermelidir.</value>
+  </data>
+  <data name="passwordDigit" xml:space="preserve">
+    <value>Parolanız en az bir rakam içermelidir.</value>
+  </data>
+  <data name="passwordSymbol" xml:space="preserve">
+    <value>Parolanız şu simgelerden en az birini içermelidir: ! ? * .</value>
+  </data>
+  <data name="passwordIncorrect" xml:space="preserve">
+    <value>Parola yanlış.</value>
+  </data>
+  <data name="passwordsDoNotMatch" xml:space="preserve">
+    <value>Parolalar eşleşmiyor</value>
+  </data>
 </root>

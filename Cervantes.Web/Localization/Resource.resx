@@ -3612,4 +3612,25 @@ Option 3</value>
   <data name="importProjectRequired" xml:space="preserve">
     <value>This import type needs a project. Only CSV, Pwndoc, Burp and Nessus can be imported without one, as templates.</value>
   </data>
+  <data name="passwordMinLength" xml:space="preserve">
+    <value>Your password length must be at least 8.</value>
+  </data>
+  <data name="passwordUppercase" xml:space="preserve">
+    <value>Your password must contain at least one uppercase letter.</value>
+  </data>
+  <data name="passwordLowercase" xml:space="preserve">
+    <value>Your password must contain at least one lowercase letter.</value>
+  </data>
+  <data name="passwordDigit" xml:space="preserve">
+    <value>Your password must contain at least one number.</value>
+  </data>
+  <data name="passwordSymbol" xml:space="preserve">
+    <value>Your password must contain at least one (!? *.).</value>
+  </data>
+  <data name="passwordIncorrect" xml:space="preserve">
+    <value>Incorrect password.</value>
+  </data>
+  <data name="passwordsDoNotMatch" xml:space="preserve">
+    <value>Passwords do not match</value>
+  </data>
 </root>
