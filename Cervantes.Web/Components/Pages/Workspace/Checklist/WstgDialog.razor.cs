@@ -69,7 +69,14 @@ public partial class WstgDialog: ComponentBase
     protected override async Task OnInitializedAsync()
     {
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
-        var wstg = _checklistController.GetWSTGById(checklist.Id);
+        var wstg = _checklistController.GetWSTGById(checklist.Id).Value;
+        if (wstg == null)
+        {
+            // Gone, or the user is no longer a member of its project: close, and fill the form from an empty one so it still renders
+            Snackbar.Add(localizer["noInProject"], Severity.Warning);
+            MudDialog.Cancel();
+            wstg = new CORE.Entities.WSTG();
+        }
         model = new WSTGViewModel();
 
            model.Info = new WSTGInfo

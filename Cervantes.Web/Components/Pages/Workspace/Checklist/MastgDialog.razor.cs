@@ -71,7 +71,14 @@ public partial class MastgDialog: ComponentBase
     {
         await base.OnInitializedAsync();
         userAth = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
-        var mastg = _checklistController.GetMASTGById(checklist.Id);
+        var mastg = _checklistController.GetMASTGById(checklist.Id).Value;
+        if (mastg == null)
+        {
+            // Gone, or the user is no longer a member of its project: close, and fill the form from an empty one so it still renders
+            Snackbar.Add(localizer["noInProject"], Severity.Warning);
+            MudDialog.Cancel();
+            mastg = new CORE.Entities.MASTG();
+        }
         model = new MastgViewModel();
         model.Id = checklist.Id;
         model.MobilePlatform = mastg.MobilePlatform;

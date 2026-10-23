@@ -108,16 +108,19 @@ public class ChecklistController : ControllerBase
     [HttpGet]
     [Route("WSTG/{checklistId}")]
     [HasPermission(Permissions.ChecklistsRead)]
-    public CORE.Entities.WSTG GetWSTGById(Guid checklistId)
+    public ActionResult<CORE.Entities.WSTG> GetWSTGById(Guid checklistId)
     {
         try
         {
-            
             CORE.Entities.WSTG model = wstgManager.GetById(checklistId);
+            if (model == null)
+            {
+                return NotFound();
+            }
             var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
             if (user == null)
             {
-                return null;
+                return ProjectAccessDenied(model.ProjectId);
             }
             return model;
         }
@@ -157,23 +160,21 @@ public class ChecklistController : ControllerBase
     [HttpGet]
     [Route("MASTG/{checklistId}")]
     [HasPermission(Permissions.ChecklistsRead)]
-    public CORE.Entities.MASTG GetMASTGById(Guid checklistId)
+    public ActionResult<CORE.Entities.MASTG> GetMASTGById(Guid checklistId)
     {
         try
         {
-            
             CORE.Entities.MASTG model = mastgManager.GetById(checklistId);
-            if (model != null)
+            if (model == null)
             {
-                var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
-                if (user == null)
-                {
-                    return null;
-                }
-                return model;
+                return NotFound();
             }
-
-            return null;
+            var user = projectUserManager.VerifyUser(model.ProjectId, aspNetUserId);
+            if (user == null)
+            {
+                return ProjectAccessDenied(model.ProjectId);
+            }
+            return model;
         }
         catch (Exception e)
         {

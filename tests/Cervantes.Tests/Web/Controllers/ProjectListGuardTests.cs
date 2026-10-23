@@ -59,4 +59,56 @@ public class ProjectListGuardTests
 
         Assert.Equal(403, Assert.IsType<ObjectResult>(result.Result).StatusCode);
     }
+
+    private sealed class WstgList : ListManager<WSTG>, IWSTGManager
+    {
+        public WSTG GetTargetId(Guid project, Guid target) => throw new NotSupportedException();
+    }
+
+    private sealed class MastgList : ListManager<MASTG>, IMASTGManager
+    {
+        public MASTG GetTargetId(Guid project, Guid target) => throw new NotSupportedException();
+    }
+
+    private static ChecklistController Checklists(IWSTGManager wstg, IMASTGManager mastg) => new(null!, new NoMembership(), null!,
+        NullLogger<ChecklistController>.Instance, wstg, mastg, null!, null!, null!, Accessor(), null!, null!, null!, null!,
+        null!, null!, null!, null!);
+
+    [Fact]
+    public void GetWSTGById_Unknown_Returns404()
+    {
+        var result = Checklists(new WstgList(), new MastgList()).GetWSTGById(Guid.NewGuid());
+
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public void GetWSTGById_NonMember_Returns403()
+    {
+        var wstg = new WstgList();
+        wstg.Items.Add(new WSTG { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid() });
+
+        var result = Checklists(wstg, new MastgList()).GetWSTGById(wstg.Items[0].Id);
+
+        Assert.Equal(403, Assert.IsType<ObjectResult>(result.Result).StatusCode);
+    }
+
+    [Fact]
+    public void GetMASTGById_Unknown_Returns404()
+    {
+        var result = Checklists(new WstgList(), new MastgList()).GetMASTGById(Guid.NewGuid());
+
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public void GetMASTGById_NonMember_Returns403()
+    {
+        var mastg = new MastgList();
+        mastg.Items.Add(new MASTG { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid() });
+
+        var result = Checklists(new WstgList(), mastg).GetMASTGById(mastg.Items[0].Id);
+
+        Assert.Equal(403, Assert.IsType<ObjectResult>(result.Result).StatusCode);
+    }
 }
