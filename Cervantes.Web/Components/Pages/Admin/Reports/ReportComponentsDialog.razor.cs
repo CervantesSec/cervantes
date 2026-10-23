@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.JSInterop;
 using BlazorMonaco.Editor;
 using Cervantes.CORE.ViewModel;
 using Cervantes.IFR.CervantesAI;
@@ -222,7 +223,19 @@ public partial class ReportComponentsDialog: ComponentBase
         
     }
     
-    private StandaloneCodeEditor _editor = null!;
+    private StandaloneCodeEditor? _editor;
+    // Monaco loads on first use (lib/monaco-loader.js); the editor renders once its scripts are there.
+    private bool monacoReady;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await jsRuntime.InvokeVoidAsync("cervantesMonaco.ensure");
+            monacoReady = true;
+            StateHasChanged();
+        }
+    }
     private string _valueToSet = "";
 
     private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
@@ -240,6 +253,10 @@ public partial class ReportComponentsDialog: ComponentBase
     
     private async Task UpdateCss()
     {
+        if (_editor == null)
+        {
+            return;
+        }
         model.CssContent = await _editor.GetValue();
         cssCode = model.CssContent;
         Editors.RemoveAt(0);
@@ -256,7 +273,7 @@ public partial class ReportComponentsDialog: ComponentBase
     
     private async Task SetCss()
     {
-        if (!string.IsNullOrEmpty(model.CssContent))
+        if (_editor != null && !string.IsNullOrEmpty(model.CssContent))
         {
             await _editor.SetValue(model.CssContent);
 
