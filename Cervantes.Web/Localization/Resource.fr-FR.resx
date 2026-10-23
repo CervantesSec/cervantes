@@ -2796,7 +2796,7 @@
     <value>Le modèle de rapport contient une erreur : {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>Ce CSS s'applique à tout le rapport. Pour répéter une ligne de tableau pour chaque élément, placez {{tablerow item in Collection}} … {{end}} dans une cellule de cette ligne.</value>
+    <value>Ce CSS s'applique à tout le rapport. Pour répéter une ligne de tableau pour chaque élément, placez {{tablerow item in Collection}} … {{end}} dans une cellule de cette ligne. Les variables CSS (--nom) sont supprimées lorsqu'un rapport généré est modifié et enregistré : utilisez des valeurs littérales, ou var(--nom, secours) pour que la valeur de secours s'applique. L'en-tête et le pied de page du PDF n'affichent ni les variables CSS ni flex.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Les éléments qui ont déjà des résultats dans une checklist ne peuvent pas être retirés du modèle.</value>

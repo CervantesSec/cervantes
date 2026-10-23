@@ -51,4 +51,19 @@ public class LocalizationKeysTests
 
         Assert.True(wrong.Count == 0, "deleteSelectedCount without \"({0})\": " + string.Join(", ", wrong));
     }
+
+    // The report sanitizer drops custom property declarations when a generated report is edited (FIXES 19), so the
+    // component CSS help must say how to write CSS that survives it.
+    [Fact]
+    public void ReportComponentCssHelpWarnsAboutCssVariables()
+    {
+        var web = Path.Combine(RepoRoot(), "Cervantes.Web");
+        var missing = Directory.EnumerateFiles(Path.Combine(web, "Localization"), "Resource*.resx")
+            .Where(resx => !((string)XDocument.Load(resx).Root!.Elements("data")
+                .Single(d => (string)d.Attribute("name")! == "reportComponentCssHelp").Element("value")!).Contains("var(--"))
+            .Select(Path.GetFileName)
+            .ToList();
+
+        Assert.True(missing.Count == 0, "reportComponentCssHelp without the CSS variables note: " + string.Join(", ", missing));
+    }
 }

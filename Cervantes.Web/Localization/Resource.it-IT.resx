@@ -2801,7 +2801,7 @@
     <value>Il modello del report contiene un errore: {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>Questo CSS si applica all'intero report. Per ripetere una riga di tabella per ogni elemento, inserisci {{tablerow item in Collection}} … {{end}} in una cella di quella riga.</value>
+    <value>Questo CSS si applica all'intero report. Per ripetere una riga di tabella per ogni elemento, inserisci {{tablerow item in Collection}} … {{end}} in una cella di quella riga. Le variabili CSS (--nome) vengono rimosse quando un report generato viene modificato e salvato: usa valori letterali, oppure var(--nome, alternativa) perché si applichi l'alternativa. Intestazione e piè di pagina del PDF non mostrano variabili CSS né flex.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Gli elementi che hanno già risultati in una checklist non possono essere rimossi dal modello.</value>
