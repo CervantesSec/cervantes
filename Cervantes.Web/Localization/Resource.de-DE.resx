@@ -2796,7 +2796,7 @@
     <value>Die Berichtsvorlage enthält einen Fehler: {0}</value>
   </data>
   <data name="reportComponentCssHelp" xml:space="preserve">
-    <value>Dieses CSS gilt für den gesamten Bericht. Um eine Tabellenzeile für jedes Element zu wiederholen, setzen Sie {{tablerow item in Collection}} … {{end}} in eine Zelle dieser Zeile. CSS-Variablen (--name) werden entfernt, wenn ein erzeugter Bericht bearbeitet und gespeichert wird: Verwenden Sie feste Werte oder var(--name, Ersatzwert), damit der Ersatzwert gilt. Kopf- und Fußzeile des PDF stellen weder CSS-Variablen noch flex dar.</value>
+    <value>Dieses CSS gilt für den gesamten Bericht. Um eine Tabellenzeile für jedes Element zu wiederholen, setzen Sie {{tablerow item in Collection}} … {{end}} in eine Zelle dieser Zeile. CSS-Variablen (--name) werden entfernt, wenn ein erzeugter Bericht bearbeitet und gespeichert wird: Verwenden Sie feste Werte oder var(--name, Ersatzwert), damit der Ersatzwert gilt. Das PDF stellt keine CSS-Variablen dar, und in Kopf- und Fußzeile auch kein flex: Verwenden Sie dort display: table und display: table-cell.</value>
   </data>
   <data name="checklistItemsHaveExecutions" xml:space="preserve">
     <value>Elemente, die bereits Ergebnisse in einer Checkliste haben, können nicht aus der Vorlage entfernt werden.</value>

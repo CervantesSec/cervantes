@@ -60,10 +60,11 @@ public class LocalizationKeysTests
         var web = Path.Combine(RepoRoot(), "Cervantes.Web");
         var missing = Directory.EnumerateFiles(Path.Combine(web, "Localization"), "Resource*.resx")
             .Where(resx => !((string)XDocument.Load(resx).Root!.Elements("data")
-                .Single(d => (string)d.Attribute("name")! == "reportComponentCssHelp").Element("value")!).Contains("var(--"))
+                .Single(d => (string)d.Attribute("name")! == "reportComponentCssHelp").Element("value")!).Contains("var(--") || !((string)XDocument.Load(resx).Root!.Elements("data")
+                .Single(d => (string)d.Attribute("name")! == "reportComponentCssHelp").Element("value")!).Contains("table-cell"))
             .Select(Path.GetFileName)
             .ToList();
 
-        Assert.True(missing.Count == 0, "reportComponentCssHelp without the CSS variables note: " + string.Join(", ", missing));
+        Assert.True(missing.Count == 0, "reportComponentCssHelp without the CSS variables and PDF header note: " + string.Join(", ", missing));
     }
 }
